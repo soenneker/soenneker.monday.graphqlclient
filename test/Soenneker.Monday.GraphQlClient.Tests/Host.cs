@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
@@ -9,7 +8,7 @@ namespace Soenneker.Monday.GraphQlClient.Tests;
 
 public sealed class Host : UnitTestHost
 {
-    public override Task InitializeAsync()
+    public override System.Threading.Tasks.Task InitializeAsync()
     {
         SetupIoC(Services);
 
