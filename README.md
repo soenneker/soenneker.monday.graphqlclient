@@ -10,3 +10,10 @@
 ```
 dotnet add package Soenneker.Monday.GraphQlClient
 ```
+
+Create a separate GraphQL client from each configured HTTP connection:
+
+```csharp
+HttpClient tenantHttpClient = await mondayGraphQlHttpClient.Get(tenantApiKey, tenantBaseUrl);
+var tenantClient = new MondayGraphQlClient(tenantHttpClient);
+```
