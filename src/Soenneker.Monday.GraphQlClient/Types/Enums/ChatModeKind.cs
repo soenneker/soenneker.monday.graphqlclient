@@ -9,6 +9,8 @@ public enum ChatModeKind
 {
     BUILD,
 
-    ASK
+    ASK,
+
+    PLAN
 
 }

@@ -1132,6 +1132,10 @@ type Mutation {
   """
   update_directory_resources_attributes(attribute: DirectoryResourceAttribute!, values: [String!]!, resource_ids: [ID!]!): UpdateDirectoryResourceAttributesResponse
   """
+  Execute an integration block with the provided field values
+  """
+  execute_integration_block(block_instance_id: ID!, inbound_field_values: JSON!): IntegrationExecutionResult
+  """
   Add workspace object to favorites
   """
   create_favorite(input: CreateFavoriteInput!): CreateFavoriteResultType
@@ -1179,10 +1183,6 @@ type Mutation {
   Delete a specific object relation or all relations for an object. Returns the number of relations deleted.
   """
   delete_object_relation(source_object_id: ID!, relation_id: ID): Int
-  """
-  Execute an integration block with the provided field values
-  """
-  execute_integration_block(block_instance_id: ID!, inbound_field_values: JSON!): IntegrationExecutionResult
   """
   Enroll multiple items to a single sequence. Maximum 50 items per request.
   """
@@ -3407,6 +3407,2231 @@ type UtilizationReportUngrouped {
 }
 
 """
+Response from AI action request
+"""
+type AiActionResponse {
+  """
+  The structured response data from the AI
+  """
+  data: JSON
+  """
+  Whether the request was successful
+  """
+  success: Boolean
+  """
+  Token usage information
+  """
+  usage: TokenUsage
+}
+
+"""
+Response from document AI extraction request
+"""
+type AiDocumentActionResponse {
+  """
+  The structured extraction result from the AI
+  """
+  data: JSON
+  """
+  Whether the request was successful
+  """
+  success: Boolean
+  """
+  Token usage information
+  """
+  usage: TokenUsage
+  """
+  Warnings encountered during processing (e.g. skipped assets)
+  """
+  warnings: [String!]
+}
+
+"""
+Allowed MIME types for file uploads
+"""
+enum AllowedFileMime {
+  IMAGE_PNG
+  IMAGE_JPEG
+  IMAGE_GIF
+  IMAGE_WEBP
+  IMAGE_AVIF
+  IMAGE_HEIC
+  IMAGE_SVG
+  VIDEO_MP4
+  VIDEO_WEBM
+  VIDEO_QUICKTIME
+  VIDEO_OGG
+  APPLICATION_PDF
+  TEXT_CSV
+  APPLICATION_XLSX
+  TEXT_MARKDOWN
+  TEXT_PLAIN
+}
+
+"""
+An audit record for app actions
+"""
+type AppAudit {
+  """
+  Unique identifier for the audit record
+  """
+  id: ID!
+  """
+  The account ID associated with the audit
+  """
+  account_id: ID!
+  """
+  The user ID who performed the action
+  """
+  user_id: ID!
+  """
+  Whether the user who performed the action is an admin
+  """
+  is_admin: Boolean!
+  """
+  The type of audit action
+  """
+  type: AppAuditKind
+  """
+  The app ID that was audited
+  """
+  app_id: ID!
+  """
+  The date and time the audit record was created
+  """
+  created_at: Date
+}
+
+"""
+The type of app audit action
+"""
+enum AppAuditKind {
+  UNPUBLISH
+}
+
+"""
+AI captioning status of a vibe asset
+"""
+enum AssetCaptionStatus {
+  NONE
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+"""
+ETag for a completed S3 upload part
+"""
+input AssetCompletePartInput {
+  """
+  Part number matching the part returned by asset_upload
+  """
+  part_number: Int!
+  """
+  ETag header value returned by S3 after uploading the part
+  """
+  etag: String!
+}
+
+"""
+Input for completing a multipart asset upload
+"""
+input AssetCompleteUploadInput {
+  """
+  Upload session ID from asset_upload
+  """
+  upload_id: ID!
+  """
+  Resolved filename from asset_upload
+  """
+  filename: String!
+  """
+  MIME type of the asset
+  """
+  content_type: String!
+  """
+  File size in bytes
+  """
+  file_size: Int!
+  """
+  Completed part ETags from S3
+  """
+  parts: [AssetCompletePartInput!]!
+}
+
+"""
+Presigned S3 URL for a single multipart upload part
+"""
+type AssetPartUrl {
+  """
+  Part number for multipart upload ordering
+  """
+  part_number: Int
+  """
+  Presigned S3 URL to upload this part directly
+  """
+  url: String
+  """
+  Byte range this part should contain
+  """
+  size_range: AssetSizeRange!
+}
+
+"""
+Byte range for a multipart upload part
+"""
+type AssetSizeRange {
+  """
+  Start byte offset of this upload part
+  """
+  start: Int
+  """
+  End byte offset of this upload part
+  """
+  end: Int
+}
+
+"""
+Result of initiating a multipart asset upload
+"""
+type AssetUploadResult {
+  """
+  Upload session ID — pass to asset_complete_upload once all parts are uploaded
+  """
+  upload_id: ID
+  """
+  Resolved filename (may differ from input if a collision was auto-suffixed)
+  """
+  filename: String
+  """
+  Presigned S3 URLs for each upload part
+  """
+  parts: [AssetPartUrl!]!
+}
+
+"""
+Billing cycle information for the AI credits bucket of the current account
+"""
+type BillingCycleDates {
+  """
+  Start date of the current billing cycle (ISO 8601). Null when no AI credits bucket is provisioned
+  """
+  start_date: String
+  """
+  End date of the current billing cycle (ISO 8601). Null when no AI credits bucket is provisioned
+  """
+  end_date: String
+}
+
+"""
+Input for specifying a board data source (type is always BOARD)
+"""
+input BoardDataSourceInput {
+  """
+  The ID of the board
+  """
+  id: String!
+}
+
+"""
+Prompt suggestions for a single board
+"""
+type BoardPromptSuggestions {
+  """
+  The ID of the board these suggestions are for
+  """
+  board_id: ID
+  """
+  The prompt suggestions for this board
+  """
+  suggestions: [PromptSuggestion!]
+}
+
+"""
+Permission result for creating views on a specific board
+"""
+type BoardViewPermission {
+  """
+  The board ID
+  """
+  board_id: ID
+  """
+  Whether the user can create views on this board
+  """
+  can_create: Boolean
+}
+
+"""
+A chat message in a conversation
+"""
+type ChatMessage {
+  """
+  Unique identifier for the chat message
+  """
+  id: Int
+  """
+  ID of the Vibe app this message belongs to
+  """
+  vibe_app_id: Int
+  """
+  ID of the account that owns this message
+  """
+  account_id: Int
+  """
+  ID of the user who sent or received this message
+  """
+  user_id: Int
+  """
+  Who sent this message
+  """
+  sender: ChatSender
+  """
+  The message content
+  """
+  message: JSON
+  """
+  The type of message
+  """
+  message_type: ChatMessageKind
+  """
+  The mode of the message (BUILD or ASK)
+  """
+  mode: ChatModeKind
+  """
+  ID of the code version associated with this message
+  """
+  code_version_id: String
+  """
+  ID of the version that was live when this user message initiated code generation
+  """
+  rollback_version_id: String
+  """
+  AI credits charged for generating the response to this user message.
+  """
+  credits_used: Int
+  """
+  LangSmith trace id for the turn that produced this message. Exposed only to users with the trace-exposure flag enabled; populated only in environments where tracing is on. Clients build the trace URL from this id.
+  """
+  langsmith_trace_id: ID
+  """
+  Temporal workflow run id for the turn that produced this message. Gated behind the same trace-exposure flag as langsmith_trace_id. The workflow id is the vibe app id; clients build the Temporal UI URL from the run id, namespace, app id, env and region.
+  """
+  temporal_run_id: ID
+  """
+  Temporal namespace for the turn that produced this message (`vibe`, or `default` under monday-mirror). Gated behind the same trace-exposure flag as langsmith_trace_id.
+  """
+  temporal_namespace: String
+  """
+  User feedback for this chat message
+  """
+  feedbacks: [UserFeedback!]!
+  """
+  Files attached to this message
+  """
+  files: [ChatMessageFile!]!
+  """
+  UI element references attached to this message
+  """
+  component_references: [ChatMessageComponentReference!]!
+  """
+  The date and time the object was created
+  """
+  created_at: Date
+  """
+  The date and time the object was last updated
+  """
+  updated_at: Date
+}
+
+"""
+A UI element reference attached to a chat message
+"""
+type ChatMessageComponentReference {
+  """
+  Human-readable element label shown in the UI chip
+  """
+  title: String
+  """
+  Clearest locator for the agent, e.g. "src/components/Hero.tsx:42"
+  """
+  component_path: String
+  """
+  React component display name, when resolvable
+  """
+  component_name: String
+  """
+  Source file relative to the app project root, when resolvable
+  """
+  source_file: String
+  """
+  1-based line number in the source file, when resolvable
+  """
+  line: Int
+  """
+  React owner-stack string (render path), when resolvable
+  """
+  stack: String
+  """
+  Outer HTML snippet of the picked element (smart-elided by the app)
+  """
+  html: String
+  """
+  Trimmed visible text of the picked element, when present
+  """
+  text: String
+}
+
+"""
+Input for a UI element reference attached to a chat message
+"""
+input ChatMessageComponentReferenceInput {
+  """
+  Human-readable element label shown in the UI chip
+  """
+  title: String!
+  """
+  Clearest locator for the agent, e.g. "src/components/Hero.tsx:42"
+  """
+  component_path: String!
+  """
+  React component display name, when resolvable
+  """
+  component_name: String
+  """
+  Source file relative to the app project root, when resolvable
+  """
+  source_file: String
+  """
+  1-based line number in the source file, when resolvable
+  """
+  line: Int
+  """
+  React owner-stack string (render path), when resolvable
+  """
+  stack: String
+  """
+  Outer HTML snippet of the picked element (smart-elided by the app)
+  """
+  html: String
+  """
+  Trimmed visible text of the picked element, when present
+  """
+  text: String
+}
+
+"""
+A file attached to a chat message
+"""
+type ChatMessageFile {
+  """
+  The original file name
+  """
+  file_name: String
+  """
+  The MIME type of the file
+  """
+  mime_type: AllowedFileMime
+  """
+  Presigned URL to download the file
+  """
+  download_url: String
+}
+
+"""
+Input for a file attached to a chat message
+"""
+input ChatMessageFileInput {
+  """
+  The S3 key where the file is stored
+  """
+  s3_key: String!
+  """
+  The original file name
+  """
+  file_name: String!
+  """
+  The MIME type of the file
+  """
+  mime_type: AllowedFileMime!
+}
+
+"""
+The type of chat message
+"""
+enum ChatMessageKind {
+  PROCESSING
+  TEXT
+  REASONING
+  ERROR
+  INDICATION
+  CTA
+  TOOL_CALL
+  BOARD_CONNECTED
+  BOARD_DISCONNECTED
+  CHIPS
+}
+
+"""
+Input for paginating chat messages
+"""
+input ChatMessagePaginationInput {
+  """
+  Maximum number of messages to retrieve (default: 10)
+  """
+  limit: Int = 10
+  """
+  Fetch messages starting from this Date (inclusive)
+  """
+  fromDate: Date
+  """
+  Fetch messages before this Date (exclusive)
+  """
+  beforeDate: Date
+}
+
+"""
+The mode of a chat message
+"""
+enum ChatModeKind {
+  BUILD
+  ASK
+  PLAN
+}
+
+"""
+The sender of a chat message
+"""
+enum ChatSender {
+  USER
+  VIBE
+}
+
+"""
+A generated code file
+"""
+type CodeFile {
+  """
+  File path (e.g. src/generated/App.jsx)
+  """
+  path: String
+  """
+  File content
+  """
+  content: String
+}
+
+"""
+Permission result for a connected board
+"""
+type ConnectedBoardPermission {
+  """
+  The board ID
+  """
+  board_id: ID
+  """
+  Whether the user can access and edit content in this board
+  """
+  can_edit: Boolean
+}
+
+"""
+Mode for creating a new vibe app
+"""
+enum CreateAppModeInput {
+  BUILD
+  ASK
+  PLAN
+}
+
+"""
+Result of creating a board view instance for a pre-built vibe
+"""
+type CreateBoardViewPreBuiltResult {
+  """
+  Whether the operation was successful
+  """
+  success: Boolean
+  """
+  ID of the created view
+  """
+  view_id: ID!
+}
+
+"""
+Input for handling credentials created event
+"""
+input CredentialsCreatedInput {
+  """
+  The ID of the AI app
+  """
+  ai_app_id: ID!
+  """
+  The ID of the CTA message
+  """
+  message_id: ID!
+  """
+  The ID of the block instance
+  """
+  block_instance_id: ID!
+  """
+  The key for the credentials
+  """
+  credentials_key: String!
+  """
+  The reference ID for the credentials
+  """
+  credentials_reference_id: ID!
+  """
+  The ID of the created credentials
+  """
+  credentials_id: ID!
+  """
+  Optional variable key for updating existing variable
+  """
+  variable_key: ID
+}
+
+"""
+Result of handling credentials created event
+"""
+type CredentialsCreatedResult {
+  """
+  The ID of the AI app
+  """
+  ai_app_id: ID
+  """
+  The variable key (unique within aiAppId) for referencing this credential
+  """
+  variable_key: Int
+}
+
+"""
+The current public-template-link share token if one exists for the app's live code version
+"""
+type CurrentPublicTemplateLinkResult {
+  """
+  The share token for the public template link
+  """
+  share_token: String
+}
+
+"""
+Input for specifying a data source for a multi-board vibe app
+"""
+input DataSourceInput {
+  """
+  The ID of the data source (e.g. board ID)
+  """
+  id: String!
+  """
+  The type of data source
+  """
+  type: MondayDataSourceType!
+}
+
+"""
+Result of a deployment operation
+"""
+type DeploymentResult {
+  """
+  Whether the operation was successful
+  """
+  success: Boolean
+}
+
+"""
+Result of enhancing a prompt with AI capabilities
+"""
+type EnhancedPromptResult {
+  """
+  The original user prompt
+  """
+  original: String
+  """
+  The AI capabilities text that was added
+  """
+  addition: String
+}
+
+"""
+The sentiment of user feedback
+"""
+enum FeedbackSentiment {
+  POSITIVE
+  NEGATIVE
+}
+
+"""
+Presigned URL for uploading a file to S3
+"""
+type FileUploadUrl {
+  """
+  Presigned URL to upload the file directly to S3
+  """
+  upload_url: String
+  """
+  S3 key where the file will be stored
+  """
+  s3_key: String
+  """
+  When the presigned URL expires
+  """
+  expires_at: Date
+  """
+  Assets-core upload session — present when vibe-assets-upload flag is ON and file_size was provided. Pass upload_id and part ETags to vibe.asset_complete_upload after uploading to each part URL.
+  """
+  asset_upload_result: AssetUploadResult
+}
+
+"""
+Result of generating a marketplace template for a vibe app
+"""
+type GenerateMarketplaceTemplateResult {
+  """
+  The share token for the marketplace template
+  """
+  share_token: String
+}
+
+"""
+Result of generating a public template link for a vibe app
+"""
+type GeneratePublicTemplateLinkResult {
+  """
+  The share token for the public template link
+  """
+  share_token: String
+}
+
+"""
+Result of generating a public template link for a vibe app (deprecated alias)
+"""
+type GenerateRemixLinkResult {
+  """
+  The share token for the public template link
+  """
+  share_token: String
+}
+
+"""
+Types of entities that can host an AI app instance
+"""
+enum HostEntityType {
+  BOARD
+  ITEM
+  WORKSPACE
+  DASHBOARD
+  BOARD_VIEW
+}
+
+"""
+Input for specifying the host target where the app will be installed
+"""
+input HostTargetInput {
+  """
+  The type of host entity (e.g. board)
+  """
+  type: String!
+  """
+  The ID of the host entity
+  """
+  id: String
+}
+
+"""
+A curated design/style inspiration for app creation
+"""
+type InspirationItem {
+  """
+  The inspiration identifier
+  """
+  id: ID!
+  """
+  Style name, e.g. "Minimal SaaS"
+  """
+  style: String!
+  """
+  Use case tagline, e.g. "Clean, airy, lots of whitespace"
+  """
+  use_case: String!
+  """
+  Absolute CDN URL for the thumbnail image
+  """
+  thumbnail_url: String!
+}
+
+"""
+Result of installing an app from a public template link
+"""
+type InstallFromPublicTemplateLinkResult {
+  """
+  The ID of the newly created app
+  """
+  ai_app_id: ID
+  """
+  The number of boards included in the installed template
+  """
+  boards_count: Int
+}
+
+"""
+Result of installing an app from a public template link (deprecated alias)
+"""
+type InstallFromRemixResult {
+  """
+  The ID of the newly created app
+  """
+  ai_app_id: ID
+  """
+  The number of boards included in the installed template
+  """
+  boards_count: Int
+}
+
+"""
+Result of executing an integration block
+"""
+type IntegrationExecutionResult {
+  """
+  The output fields returned by the integration block execution
+  """
+  output_fields: JSON
+}
+
+"""
+An integration variable (credentials or field value)
+"""
+type IntegrationVariable {
+  """
+  Unique identifier for the variable
+  """
+  id: ID
+  """
+  ID of the AI app this variable belongs to
+  """
+  ai_app_id: ID
+  """
+  The variable key slot
+  """
+  variable_key: Int
+  """
+  Type of variable: AppFeatureCredentials or AppFeatureFieldType
+  """
+  app_feature_type: String
+  """
+  Reference ID of the app feature
+  """
+  app_feature_reference_id: ID
+  """
+  The date and time the object was created
+  """
+  created_at: Date
+  """
+  The date and time the object was last updated
+  """
+  updated_at: Date
+}
+
+"""
+Available LLM models for code generation
+"""
+enum LLMModelInput {
+  CLAUDE_4_5_SONNET
+  CLAUDE_4_6_SONNET
+  CLAUDE_5_SONNET
+  CLAUDE_HAIKU_4_5
+  CLAUDE_OPUS_4_6
+  GEMINI_3_1_PRO
+  GEMINI_3_5_FLASH
+  GEMINI_3_1_FLASH_LITE
+  GPT_5_NANO
+  GPT_5
+  GPT_5_MINI
+  GPT_5_1
+  GPT_5_2
+}
+
+"""
+Message type for sending chat messages
+"""
+enum MessageTypeInput {
+  TEXT
+  ASK
+  ERROR
+}
+
+"""
+Reference to a monday.com file-column asset for document extraction
+"""
+input MondayAssetDocumentSourceInput {
+  """
+  The monday.com asset ID (obtained from BoardSDK file-column queries)
+  """
+  asset_id: ID!
+}
+
+"""
+Types of Monday.com entities that can be used as data sources
+"""
+enum MondayDataSourceType {
+  BOARD
+  ITEM
+  OBJECT
+}
+
+"""
+A prompt suggestion for a vibe
+"""
+type PromptSuggestion {
+  """
+  The name of the prompt suggestion
+  """
+  name: String
+  """
+  The prompt suggestion
+  """
+  prompt: String
+}
+
+"""
+The type of context for generating prompt suggestions
+"""
+enum PromptSuggestionFor {
+  USER
+  BOARD
+  ITEM
+  OBJECT
+  SEARCH_QUERY
+  WIDGET
+}
+
+"""
+The platform requesting prompt suggestions
+"""
+enum PromptSuggestionPlatform {
+  WEB
+  MOBILE
+}
+
+"""
+Display metadata for a public-template-link, used on the install preview card
+"""
+type PublicTemplateLinkPreviewResult {
+  """
+  The name of the source app
+  """
+  name: String
+  """
+  A short description of the source app. Currently always null until tagline backfill ships.
+  """
+  description: String
+  """
+  The vibe variant of the source app
+  """
+  variant: String
+  """
+  Image URLs for the install card. Null until SharedTemplates.images is populated.
+  """
+  images: [String!]
+  """
+  The id of the source AI app the template was created from
+  """
+  source_ai_app_id: ID
+}
+
+"""
+Paginated result for published community apps
+"""
+type PublishedCommunityAppsResult {
+  """
+  The apps on the current page
+  """
+  items: [SharedTemplate!]
+  """
+  Whether there are more apps beyond this page
+  """
+  has_next_page: Boolean
+}
+
+"""
+Fields available for sorting published_community_apps results
+"""
+enum PublishedCommunityAppsSortBy {
+  DOWNLOADS
+  UPDATED_AT
+}
+
+"""
+Response from queue_message mutation
+"""
+type QueueMessageResponse {
+  """
+  The ID assigned to the queued message
+  """
+  message_id: ID
+}
+
+"""
+A message waiting in the queue while the agent is busy
+"""
+type QueuedMessage {
+  """
+  The id assigned to the queued message
+  """
+  message_id: ID
+  """
+  The message content
+  """
+  message: String
+  """
+  Whether this is a chat-mode (discuss) message
+  """
+  is_chat_mode: Boolean
+  """
+  LLM model selected for code generation
+  """
+  model: String
+  """
+  When the message was queued (epoch milliseconds)
+  """
+  created_at: Float
+  """
+  Files attached to the queued message
+  """
+  files: [QueuedMessageFile!]!
+}
+
+"""
+A file attached to a queued message
+"""
+type QueuedMessageFile {
+  """
+  The S3 key where the file is stored
+  """
+  s3_key: String
+  """
+  The original file name
+  """
+  file_name: String
+  """
+  The MIME type of the file
+  """
+  mime_type: AllowedFileMime
+}
+
+"""
+A recently visited Vibe app with per-user visit timestamps
+"""
+type RecentVibeApp {
+  """
+  The Vibe app
+  """
+  vibe_app: VibeApp
+  """
+  When the user last VIEW-visited this app (null if never viewed)
+  """
+  last_viewed_at: Date
+  """
+  When the user last BUILD-visited this app (null if never built)
+  """
+  last_built_at: Date
+}
+
+"""
+A board-relevant prompt suggestion, render-ready with a thumbnail style
+"""
+type RelevantPromptSuggestion {
+  """
+  Short suggestion title (badge)
+  """
+  name: String
+  """
+  The prompt text the user submits
+  """
+  prompt: String
+  """
+  Thumbnail layout style token (one of the known thumbnail styles, e.g. "data_table")
+  """
+  style: String
+  """
+  Short preview label for the thumbnail
+  """
+  title: String
+  """
+  Board attribution (single-element today, may be multiple later)
+  """
+  board_ids: [ID!]
+  """
+  Board name(s) for the chip shown on the card
+  """
+  board_names: [String!]
+}
+
+"""
+A vibe app shared as a community template
+"""
+type SharedTemplate {
+  """
+  Unique identifier of the shared template
+  """
+  id: ID
+  """
+  Display name of the shared template
+  """
+  name: String
+  """
+  Description of what the template does
+  """
+  description: String
+  """
+  The vibe variant of the template
+  """
+  variant: String
+  """
+  Tags associated with this template
+  """
+  tags: [String!]
+  """
+  Image URLs for this template
+  """
+  images: [String!]
+  """
+  The UI framework used by this template
+  """
+  ui_framework: String!
+  """
+  The kind of this template
+  """
+  kind: SharedTemplateKind
+  """
+  The publication status of this template
+  """
+  status: SharedTemplateStatus
+  """
+  Number of times this template has been downloaded
+  """
+  downloads: Int
+  """
+  The date and time the template was created
+  """
+  created_at: Date
+  """
+  The date and time the template was last updated
+  """
+  updated_at: Date
+}
+
+"""
+The kind of shared template
+"""
+enum SharedTemplateKind {
+  REMIX
+  MARKETPLACE
+}
+
+"""
+The publication status of a shared template
+"""
+enum SharedTemplateStatus {
+  DRAFT
+  PENDING_REVIEW
+  PUBLISHED
+  REJECTED
+  UNLISTED
+  ARCHIVED
+}
+
+"""
+Sort order direction
+"""
+enum SortOrder {
+  ASC
+  DESC
+}
+
+"""
+Standard success response for mutations
+"""
+type SuccessResponse {
+  """
+  Whether the operation was successful
+  """
+  success: Boolean
+  """
+  Optional message describing the result
+  """
+  message: String
+}
+
+"""
+Full ThemeDefinition (used for extracted/custom themes). The radii/light/dark fields are JSON-encoded — radii must contain sm/md/lg/xl/2xl, and light/dark must contain the full ThemeColorTokens map. Validated server-side via resolveTheme.
+"""
+input ThemeDefinitionInput {
+  """
+  The theme identifier (e.g. extracted_<8-char-hash>)
+  """
+  id: ID!
+  """
+  Theme display name
+  """
+  name: String!
+  """
+  Base border radius CSS length (e.g. "12px")
+  """
+  radius: String!
+  """
+  Primary font family name
+  """
+  font_family: String!
+  """
+  Secondary font family name
+  """
+  font_family_secondary: String!
+  """
+  Border radius scale as a JSON object with sm/md/lg/xl/2xl CSS length values
+  """
+  radii: JSON!
+  """
+  Light mode CSS token values (HSL strings keyed by CSS variable name)
+  """
+  light: JSON!
+  """
+  Dark mode CSS token values (HSL strings keyed by CSS variable name)
+  """
+  dark: JSON!
+}
+
+"""
+Theme selection input for app creation. Provide either `id` (preset) or `definition` (extracted).
+"""
+input ThemeInput {
+  """
+  Predefined theme ID (e.g., "gen_z", "ios_26", "monday_com").
+  """
+  id: ID
+  """
+  Full ThemeDefinition for an extracted theme (used when id is omitted).
+  """
+  definition: ThemeDefinitionInput
+}
+
+"""
+Token usage details from AI request
+"""
+type TokenUsage {
+  """
+  Total tokens used in the request
+  """
+  total_tokens: Int
+  """
+  Tokens used in the prompt
+  """
+  prompt_tokens: Int
+  """
+  Tokens used in the completion
+  """
+  completion_tokens: Int
+}
+
+"""
+Decision for a tool call requiring human approval
+"""
+enum ToolCallDecision {
+  APPROVED
+  REJECTED
+}
+
+"""
+Input for responding to a tool call that requires human input
+"""
+input ToolCallResponseInput {
+  """
+  The ID of the tool call to respond to
+  """
+  tool_call_id: String!
+  """
+  Whether to approve or reject the tool call
+  """
+  decision: ToolCallDecision!
+  """
+  Additional data to pass to the tool execution (merged with tool input)
+  """
+  payload: JSON
+}
+
+"""
+Result of checking eligibility to transition a vibe app to external mode
+"""
+type TransitionToExternalEligibility {
+  """
+  Whether the current user owns all boards connected to this app
+  """
+  is_eligible: Boolean
+}
+
+"""
+Result of updating marketplace template data
+"""
+type UpdateMarketplaceDataResult {
+  """
+  The share token of the updated marketplace template
+  """
+  share_token: String
+}
+
+"""
+User feedback for AI chat messages
+"""
+type UserFeedback {
+  """
+  Unique identifier for the feedback
+  """
+  id: ID
+  """
+  The account ID associated with the feedback
+  """
+  accountId: Int
+  """
+  The user ID who provided the feedback
+  """
+  userId: Int
+  """
+  The sentiment of the feedback (positive or negative)
+  """
+  feedbackSentiment: FeedbackSentiment
+  """
+  The feedback message text content
+  """
+  feedbackMessage: String
+  """
+  The ID of the chat message this feedback relates to
+  """
+  messageId: ID
+  """
+  When the feedback was created
+  """
+  createdAt: Date
+  """
+  When the feedback was last updated
+  """
+  updatedAt: Date
+}
+
+"""
+A user request for various operations
+"""
+type UserRequest {
+  """
+  Unique identifier for the request
+  """
+  id: ID!
+  """
+  The account ID associated with the request
+  """
+  account_id: Int!
+  """
+  The user ID who created the request
+  """
+  user_id: Int!
+  """
+  The type of request
+  """
+  type: UserRequestKind
+  """
+  The date and time the object was created
+  """
+  created_at: Date
+  """
+  The date and time the object was last updated
+  """
+  updated_at: Date
+  """
+  The date and time the object was deleted
+  """
+  deleted_at: Date
+}
+
+"""
+The type of user request
+"""
+enum UserRequestKind {
+  request_to_upgrade_plan
+  notify_plan_close_to_limit
+  request_to_make_app_public
+  request_to_upgrade_board_connection
+}
+
+"""
+A vibe app created by the AI app builder
+"""
+type VibeApp {
+  """
+  The unique identifier of the vibe app
+  """
+  id: Int
+  """
+  The user ID of the vibe app creator
+  """
+  user_id: Int
+  """
+  The current status of the vibe app
+  """
+  status: VibeAppStatus
+  """
+  Whether the current version returned to the user is preview of a draft or live version
+  """
+  is_preview_mode: Boolean!
+  """
+  The live frontend deployment URL
+  """
+  deployment_url: String
+  """
+  The draft deployment URL for the frontend
+  """
+  deployment_draft_url: String
+  """
+  The CDN subdomain assigned to this app
+  """
+  cdn_key: String
+  """
+  A short AI-generated tagline describing what the app does
+  """
+  tagline: String
+  """
+  The name of the vibe app
+  """
+  name: String
+  """
+  Whether the current app version is published to live
+  """
+  is_published: Boolean!
+  """
+  The lifecycle state of the vibe app
+  """
+  state: VibeAppState!
+  """
+  The UI metadata of the vibe app
+  """
+  ui_metadata: VibeAppUIMetadata!
+  """
+  Configuration settings for the vibe app
+  """
+  config: VibeAppConfig!
+  """
+  The date when the vibe app was published
+  """
+  published_at: Date
+  """
+  The app feature reference ID corresponding to this vibe app
+  """
+  app_feature_reference_id: ID
+  """
+  The variant of the vibe app (GraphQL wire key, e.g. VIBE_ITEM_VIEW)
+  """
+  variant: String
+  """
+  The date and time the object was created
+  """
+  created_at: Date
+  """
+  The date and time the object was last updated
+  """
+  updated_at: Date
+  """
+  The ID of the first chat message for this app, or null if no messages exist
+  """
+  first_chat_message_id: ID
+  """
+  The owner of this Vibe app, or null if the user could not be resolved
+  """
+  owner: VibeAppOwner
+  """
+  Chat messages for this app. Returns messages in chronological order (oldest to newest)
+  """
+  chat_messages(pagination: ChatMessagePaginationInput = {limit: 10}): [ChatMessage!]!
+  """
+  Instances of this vibe app deployed to different Monday.com entities
+  """
+  instances(account_level: Boolean): [VibeAppInstance!]!
+  """
+  All active code versions for this vibe app, ordered by version number descending
+  """
+  code_versions(limit: Int = 50, where: VibeCodeVersionWhereInput): [VibeCodeVersion!]!
+  """
+  Audit records for this app
+  """
+  audits(type: AppAuditKind, limit: Int, page: Int): [AppAudit!]!
+}
+
+"""
+Public access info for a vibe app, keyed by the app's mapped vibe user id (the board member id).
+"""
+type VibeAppAccess {
+  """
+  The vibe user id this app is mapped to (the board member id).
+  """
+  vibe_user_id: ID
+  """
+  The vibe app id. Used by the client to build the builder/edit link.
+  """
+  app_id: ID
+  """
+  The vibe app name.
+  """
+  name: String
+  """
+  The public deployment URL of the app, if deployed.
+  """
+  public_link: String
+}
+
+"""
+Configuration settings for the vibe app
+"""
+type VibeAppConfig {
+  """
+  Whether the app should automatically promote new versions to live
+  """
+  auto_promote: Boolean
+}
+
+"""
+Input for updating vibe app configuration
+"""
+input VibeAppConfigInput {
+  """
+  Whether the app should automatically promote new versions to live
+  """
+  auto_promote: Boolean
+}
+
+"""
+Counts of vibe apps by publish status
+"""
+type VibeAppCounts {
+  """
+  Total number of apps
+  """
+  total: Int
+  """
+  Number of published apps
+  """
+  live: Int
+  """
+  Number of unpublished apps
+  """
+  draft: Int
+}
+
+"""
+An instance of a vibe app deployed to a specific Monday.com entity
+"""
+type VibeAppInstance {
+  """
+  Unique identifier for the app instance
+  """
+  id: Int
+  """
+  Type of the entity hosting this app instance
+  """
+  host_entity_type: HostEntityType
+  """
+  ID of the specific entity hosting this app instance
+  """
+  host_entity_id: String
+  """
+  Type of the entity used as data source
+  """
+  data_source_entity_type: MondayDataSourceType
+  """
+  IDs of the specific entities used as data sources
+  """
+  data_source_entity_ids: [String!]
+  """
+  External instance identifier
+  """
+  instance_id: String
+  """
+  ID of the folder containing this app instance
+  """
+  folder_id: ID
+  """
+  The date and time the object was created
+  """
+  created_at: Date
+  """
+  The date and time the object was last updated
+  """
+  updated_at: Date
+}
+
+"""
+The owner of a Vibe app
+"""
+type VibeAppOwner {
+  """
+  The owner user ID
+  """
+  id: ID
+  """
+  The owner display name
+  """
+  name: String
+  """
+  The owner profile photo URLs
+  """
+  photo_url: VibeAppOwnerPhotoUrl
+}
+
+"""
+Photo URL variants for a Vibe app owner (original, small, thumb)
+"""
+type VibeAppOwnerPhotoUrl {
+  """
+  Full-resolution photo URL
+  """
+  original: String
+  """
+  Small photo URL
+  """
+  small: String
+  """
+  Thumbnail photo URL
+  """
+  thumb: String
+}
+
+"""
+Status of a vibe app including existence and publish state
+"""
+type VibeAppPublishStatus {
+  """
+  Whether the app exists in the database
+  """
+  exists: Boolean
+  """
+  Whether the app is published (only meaningful if exists is true)
+  """
+  is_published: Boolean
+}
+
+"""
+Visibility scope for searching Vibe apps
+"""
+enum VibeAppSearchScope {
+  ALL
+  MY
+  ACCOUNT
+}
+
+"""
+Fields available for sorting search_apps results
+"""
+enum VibeAppSearchSortField {
+  UPDATED_AT
+  CREATED_AT
+  NAME
+}
+
+"""
+Sort options for search_apps
+"""
+input VibeAppSearchSortInput {
+  """
+  Field to sort by (default: UPDATED_AT)
+  """
+  field: VibeAppSearchSortField = UPDATED_AT
+  """
+  Sort direction (default: DESC)
+  """
+  order: SortOrder = DESC
+}
+
+"""
+Field to sort vibe apps by
+"""
+enum VibeAppSortField {
+  UPDATED_AT
+  CREATED_AT
+  IS_PUBLISHED
+  PUBLISHED_AT
+  NAME
+  STATE
+}
+
+"""
+Input for sorting vibe apps
+"""
+input VibeAppSortInput {
+  """
+  Field to sort by
+  """
+  field: VibeAppSortField = UPDATED_AT
+  """
+  Sort order
+  """
+  order: SortOrder = DESC
+}
+
+"""
+The lifecycle state of a vibe app
+"""
+enum VibeAppState {
+  PRIVATE
+  INTERNAL
+  EXTERNAL
+  OLD_PRIVATE
+  OLD_INTERNAL
+}
+
+"""
+Counts of vibe apps by lifecycle state
+"""
+type VibeAppStateCounts {
+  """
+  Total number of apps
+  """
+  total: Int
+  """
+  Number of publicly accessible apps
+  """
+  public: Int
+  """
+  Number of apps published within the account
+  """
+  internal: Int
+  """
+  Number of private/draft apps
+  """
+  draft: Int
+}
+
+"""
+The status of an AI-generated app
+"""
+enum VibeAppStatus {
+  CREATED
+  GENERATING
+  PROCESSING_MESSAGE
+  DEPLOYING
+  READY
+}
+
+"""
+The UI metadata of the vibe app
+"""
+type VibeAppUIMetadata {
+  """
+  The color of the app card
+  """
+  app_card_color: String
+  """
+  The source of the app creation
+  """
+  source: String
+}
+
+"""
+The current user's access verdict for a specific vibe app.
+"""
+type VibeAppUserAccess {
+  """
+  The vibe app id.
+  """
+  ai_app_id: ID
+  """
+  True iff the user has 'read' on every connected board AND (for OBJECT / OBJECT_FULLSTACK variants) 'read' on the app's object.
+  """
+  has_access: Boolean
+  """
+  Connected board ids the user does NOT have read access to. Empty when all connected boards are authorized. Drives a request-board-access flow on the client.
+  """
+  unauthorized_board_ids: [ID!]
+  """
+  The object id (= app instance_id) the user does NOT have read access to. Null when the app is not an object variant OR the user is authorized on the object. Drives a request-object-access flow on the client.
+  """
+  unauthorized_object_id: ID
+}
+
+"""
+The status of a code version
+"""
+enum VibeAppVersionStatus {
+  DRAFT
+  LIVE
+  RETIRED
+  INTERRUPTED
+}
+
+"""
+The type of visit when a user opens a Vibe app
+"""
+enum VibeAppVisitKind {
+  VIEW
+  BUILD
+}
+
+"""
+An image or media asset uploaded to and shared across the account
+"""
+type VibeAsset {
+  """
+  Unique identifier for the vibe asset
+  """
+  id: ID
+  """
+  Vibe app this asset is scoped to, or null for account-level assets
+  """
+  app_id: ID
+  """
+  Asset ID in the assets-core platform service
+  """
+  asset_id: ID
+  """
+  Original filename of the uploaded asset
+  """
+  filename: String
+  """
+  MIME type of the asset (e.g. image/png)
+  """
+  mime_type: String
+  """
+  File size in bytes
+  """
+  file_size: Int
+  """
+  Permanent public CDN URL for the asset
+  """
+  cdn_url: String
+  """
+  Image width in pixels, populated after captioning
+  """
+  width: Int
+  """
+  Image height in pixels, populated after captioning
+  """
+  height: Int
+  """
+  AI-generated caption describing the asset content
+  """
+  description: String
+  """
+  AI-generated alt text for accessibility
+  """
+  alt_text: String
+  """
+  Current status of the AI captioning process
+  """
+  caption_status: AssetCaptionStatus
+  """
+  Timestamp when the asset was uploaded
+  """
+  created_at: Date
+  """
+  Timestamp when the asset was last updated
+  """
+  updated_at: Date
+}
+
+"""
+A code version of a vibe app
+"""
+type VibeCodeVersion {
+  """
+  The unique identifier of the code version
+  """
+  id: String
+  """
+  The status of this code version
+  """
+  status: VibeAppVersionStatus
+  """
+  The sequential version number for this code version
+  """
+  version_number: Int
+  """
+  A descriptive name for this version
+  """
+  version_name: String
+  """
+  When this version was deployed to live (if applicable)
+  """
+  deployed_at: Date
+  """
+  When this version was retired (if applicable)
+  """
+  retired_at: Date
+  """
+  The CDN deployment URL for this version
+  """
+  deployment_url: String
+  """
+  Generated code files for this version (from src/generated/ directory)
+  """
+  files: [CodeFile!]!
+  """
+  The date and time the object was created
+  """
+  created_at: Date
+  """
+  The date and time the object was last updated
+  """
+  updated_at: Date
+}
+
+"""
+Filter input for code versions
+"""
+input VibeCodeVersionWhereInput {
+  """
+  Filter by version status (DRAFT, LIVE, RETIRED)
+  """
+  status: VibeAppVersionStatus
+}
+
+"""
+Namespace for all vibe-related mutations
+"""
+type VibeMutations {
+  """
+  Rollback an AI app to an older specific version
+  """
+  rollback_to_version(id: ID!, version_id: String!): SuccessResponse
+  """
+  Execute an AI action and get a structured response
+  """
+  ai_actions(prompt: String!, schema: JSON, systemPrompt: String, appId: ID, useWebSearch: WebSearchConfigInput, session_tracker: String): AiActionResponse!
+  """
+  Extract structured data from document files using AI
+  """
+  document_ai_action(prompt: String!, schema: JSON, system_prompt: String, app_id: ID!, monday_assets: [MondayAssetDocumentSourceInput!]!): AiDocumentActionResponse!
+  """
+  Enhance a user prompt to include AI capabilities
+  """
+  enhance_prompt(prompt: String!): EnhancedPromptResult!
+  """
+  Get a presigned URL to upload a file to S3
+  """
+  file_upload_url(file_name: String!, mime_type: AllowedFileMime!, file_size: Int): FileUploadUrl
+  """
+  Initiate a multipart upload for a vibe asset
+  """
+  asset_upload(filename: String!, content_type: String!, file_size: Int!): AssetUploadResult
+  """
+  Complete a multipart asset upload and persist the asset
+  """
+  asset_complete_upload(input: AssetCompleteUploadInput!): VibeAsset
+  """
+  Delete a vibe asset
+  """
+  asset_delete(id: ID!): Boolean
+}
+
+"""
+Permissions for vibe related actions
+"""
+type VibePermissions {
+  """
+  Permission to create open workspaces
+  """
+  create_open_workspace: Boolean
+  """
+  Permission to publish vibe apps as trusted apps
+  """
+  can_publish_trusted_app: Boolean
+  """
+  Permission to create or edit vibe apps
+  """
+  can_create_or_edit_vibe_app: Boolean
+  """
+  Permission to publish vibe apps to the public web
+  """
+  can_publish_to_public_web: Boolean
+  """
+  Permission to generate public vibe template links
+  """
+  can_generate_public_vibe_templates: Boolean
+  """
+  Permission to create views on the specified boards
+  """
+  create_board_views(board_ids: [ID!]!): [BoardViewPermission!]
+  """
+  Permission to view the connected boards for an AI app
+  """
+  connected_boards(ai_app_id: ID, app_feature_reference_id: ID): [ConnectedBoardPermission!]
+}
+
+"""
+Filter apps by published status
+"""
+enum VibePublishedStatusFilter {
+  ALL
+  PUBLISHED
+  NOT_PUBLISHED
+}
+
+"""
+Namespace for all vibe-related queries
+"""
+type VibeQueries {
+  """
+  Get this vibe app details
+  """
+  app(id: ID, appFeatureReferenceId: ID, account_level: Boolean): VibeApp
+  """
+  Get a list of vibe apps for the current user
+  """
+  apps(status: VibeAppStatus, published_status: VibePublishedStatusFilter, states: [VibeAppState!], limit: Int = 25, page: Int = 1, search_term: String, searchTerm: String @deprecated(reason: "Use search_term instead"), sort_by: VibeAppSortInput, as_admin: Boolean): [VibeApp!]
+  """
+  Get a list of vibe apps by app feature reference IDs
+  """
+  apps_by_feature_reference(app_feature_reference_ids: [ID!]!, sort_by: VibeAppSortInput, as_admin: Boolean): [VibeApp!]
+  """
+  Get all user feedback for the current user
+  """
+  user_feedback_by_user(limit: Int): [UserFeedback!]
+  """
+  Permissions for vibe related actions
+  """
+  permissions: VibePermissions
+  """
+  Get account's current Monday Vibe subscription data
+  """
+  subscription: VibeSubscription
+  """
+  Get count of vibe apps by status
+  """
+  apps_count(status: VibeAppStatus, search_term: String, account_level: Boolean, as_admin: Boolean): VibeAppCounts
+  """
+  Get count of vibe apps grouped by lifecycle state
+  """
+  apps_state_count(search_term: String, as_admin: Boolean): VibeAppStateCounts
+  """
+  Get chat messages for a vibe app. Returns messages in chronological order (oldest to newest)
+  """
+  chat_messages(app_id: ID!, pagination: ChatMessagePaginationInput = {limit: 10}): [ChatMessage!]!
+  """
+  Get all user requests for the current user
+  """
+  user_requests(type: UserRequestKind, limit: Int, page: Int): [UserRequest!]
+  """
+  List of available predefined themes with full styling tokens
+  """
+  themes: [VibeTheme!]
+  """
+  Check if a vibe app is published by appFeatureReferenceId
+  """
+  is_app_published(app_feature_reference_id: ID, app_id: ID): Boolean
+  """
+  Get the existence and publish status of a vibe app
+  """
+  app_publish_status(app_feature_reference_id: ID, app_id: ID): VibeAppPublishStatus
+  """
+  Get published community apps, optionally filtered by tags
+  """
+  published_community_apps(tags: [String!], limit: Int, sort_by: PublishedCommunityAppsSortBy = DOWNLOADS, sort_direction: SortOrder = DESC, text_search: String, page: Int): PublishedCommunityAppsResult
+  """
+  Get published community apps filtered by unique IDs
+  """
+  published_community_apps_by_id(ids: [ID!]!): [SharedTemplate!]
+  """
+  Get the version token for the latest non-deleted version of a community app
+  """
+  get_version_token(template_id: ID!): String
+  """
+  Get the billing cycle start and end dates for the AI credits bucket of the current account
+  """
+  ai_credits_billing_cycle: BillingCycleDates
+  """
+  List of active curated inspirations for app creation
+  """
+  inspirations: [InspirationItem!]
+  """
+  List vibe assets. When app_id is provided, returns assets scoped to that app; otherwise returns all assets for the current account.
+  """
+  assets(app_id: ID): [VibeAsset!]
+  """
+  List of Vibe What's New entries
+  """
+  whats_new: [WhatsNewItem!]
+}
+
+"""
+A number of currently published apps and the maximum allowed limit
+"""
+type VibeSubscription {
+  """
+  Current number of published apps
+  """
+  publishedApps: Int
+  """
+  Maximum number of published apps
+  """
+  maxPublishedApps: Int
+}
+
+"""
+A predefined vibe theme with full styling tokens
+"""
+type VibeTheme {
+  """
+  The theme identifier
+  """
+  id: ID
+  """
+  Theme display name
+  """
+  name: String
+  """
+  User-friendly display name
+  """
+  label: String
+  """
+  Representative colors [primary, accent, secondary] as HSL strings
+  """
+  colors: [String!]
+  """
+  Base border radius value
+  """
+  radius: String
+  """
+  Primary font family name
+  """
+  font_family: String
+  """
+  Secondary font family name
+  """
+  font_family_secondary: String
+  """
+  Light mode CSS token values (HSL strings keyed by CSS variable name)
+  """
+  light: JSON
+  """
+  Dark mode CSS token values (HSL strings keyed by CSS variable name)
+  """
+  dark: JSON
+}
+
+"""
+The variant/platform target for vibe apps
+"""
+enum VibeVariant {
+  BOARD_VIEW
+  ITEM_VIEW
+  VIBE_ITEM_VIEW
+  OBJECT
+  OBJECT_FULLSTACK
+}
+
+"""
+Configuration for enabling web search in AI requests
+"""
+input WebSearchConfigInput {
+  """
+  Whether web search is enabled for this request
+  """
+  allowed: Boolean!
+  """
+  Optional configuration for web search behavior
+  """
+  options: WebSearchOptionsInput
+}
+
+"""
+Configuration options for web search functionality
+"""
+input WebSearchOptionsInput {
+  """
+  Hint for max number of sources to consider (default: 5). Interpreted as guidance — the model decides retrieval breadth.
+  """
+  topK: Int
+  """
+  Hint to prioritize content from the last N days. Interpreted as guidance — not a hard filter.
+  """
+  recencyDays: Int
+}
+
+"""
+A single entry from the Vibe What's New board
+"""
+type WhatsNewItem {
+  """
+  Unique identifier of the What's New item (the board item id)
+  """
+  id: ID!
+  """
+  Headline of the What's New entry
+  """
+  title: String!
+  """
+  Publish date of the entry, as stored on the board
+  """
+  date: String
+  """
+  Rollout status of the feature (e.g. released, in progress)
+  """
+  release_status: String
+  """
+  Audience the entry is visible to
+  """
+  visibility: String
+  """
+  Category/type of the entry (e.g. feature, fix)
+  """
+  type: String
+  """
+  Full description of the entry
+  """
+  description: String
+  """
+  Short summary of the entry
+  """
+  short_description: String
+  """
+  Link target of the entry's call-to-action
+  """
+  announcement_url: String
+  """
+  Label of the entry's call-to-action
+  """
+  announcement_text: String
+  """
+  Monday asset id of the entry image, if any
+  """
+  image_asset_id: ID
+  """
+  Public CDN URL of the entry image
+  """
+  image_cdn_url: String
+  """
+  Public CDN URL of the entry video
+  """
+  video_cdn_url: String
+  """
+  Categories/tags associated with the entry
+  """
+  categories: [String!]!
+  """
+  Number of likes the entry has received
+  """
+  likes: Int
+}
+
+"""
+A group of related boards in a workspace
+"""
+type WorkspaceBoardGroup {
+  """
+  The IDs of the boards in this group
+  """
+  board_ids: [ID!]
+  """
+  The reasoning for grouping these boards together
+  """
+  reasoning: String
+}
+
+"""
 An item (table row).
 """
 type Item {
@@ -5119,2229 +7344,6 @@ type WorkflowStep {
   Display title of the step
   """
   title: String
-}
-
-"""
-Response from AI action request
-"""
-type AiActionResponse {
-  """
-  The structured response data from the AI
-  """
-  data: JSON
-  """
-  Whether the request was successful
-  """
-  success: Boolean
-  """
-  Token usage information
-  """
-  usage: TokenUsage
-}
-
-"""
-Response from document AI extraction request
-"""
-type AiDocumentActionResponse {
-  """
-  The structured extraction result from the AI
-  """
-  data: JSON
-  """
-  Whether the request was successful
-  """
-  success: Boolean
-  """
-  Token usage information
-  """
-  usage: TokenUsage
-  """
-  Warnings encountered during processing (e.g. skipped assets)
-  """
-  warnings: [String!]
-}
-
-"""
-Allowed MIME types for file uploads
-"""
-enum AllowedFileMime {
-  IMAGE_PNG
-  IMAGE_JPEG
-  IMAGE_GIF
-  IMAGE_WEBP
-  IMAGE_AVIF
-  IMAGE_HEIC
-  IMAGE_SVG
-  VIDEO_MP4
-  VIDEO_WEBM
-  VIDEO_QUICKTIME
-  VIDEO_OGG
-  APPLICATION_PDF
-  TEXT_CSV
-  APPLICATION_XLSX
-  TEXT_MARKDOWN
-  TEXT_PLAIN
-}
-
-"""
-An audit record for app actions
-"""
-type AppAudit {
-  """
-  Unique identifier for the audit record
-  """
-  id: ID!
-  """
-  The account ID associated with the audit
-  """
-  account_id: ID!
-  """
-  The user ID who performed the action
-  """
-  user_id: ID!
-  """
-  Whether the user who performed the action is an admin
-  """
-  is_admin: Boolean!
-  """
-  The type of audit action
-  """
-  type: AppAuditKind
-  """
-  The app ID that was audited
-  """
-  app_id: ID!
-  """
-  The date and time the audit record was created
-  """
-  created_at: Date
-}
-
-"""
-The type of app audit action
-"""
-enum AppAuditKind {
-  UNPUBLISH
-}
-
-"""
-AI captioning status of a vibe asset
-"""
-enum AssetCaptionStatus {
-  NONE
-  PENDING
-  COMPLETED
-  FAILED
-}
-
-"""
-ETag for a completed S3 upload part
-"""
-input AssetCompletePartInput {
-  """
-  Part number matching the part returned by asset_upload
-  """
-  part_number: Int!
-  """
-  ETag header value returned by S3 after uploading the part
-  """
-  etag: String!
-}
-
-"""
-Input for completing a multipart asset upload
-"""
-input AssetCompleteUploadInput {
-  """
-  Upload session ID from asset_upload
-  """
-  upload_id: ID!
-  """
-  Resolved filename from asset_upload
-  """
-  filename: String!
-  """
-  MIME type of the asset
-  """
-  content_type: String!
-  """
-  File size in bytes
-  """
-  file_size: Int!
-  """
-  Completed part ETags from S3
-  """
-  parts: [AssetCompletePartInput!]!
-}
-
-"""
-Presigned S3 URL for a single multipart upload part
-"""
-type AssetPartUrl {
-  """
-  Part number for multipart upload ordering
-  """
-  part_number: Int
-  """
-  Presigned S3 URL to upload this part directly
-  """
-  url: String
-  """
-  Byte range this part should contain
-  """
-  size_range: AssetSizeRange!
-}
-
-"""
-Byte range for a multipart upload part
-"""
-type AssetSizeRange {
-  """
-  Start byte offset of this upload part
-  """
-  start: Int
-  """
-  End byte offset of this upload part
-  """
-  end: Int
-}
-
-"""
-Result of initiating a multipart asset upload
-"""
-type AssetUploadResult {
-  """
-  Upload session ID — pass to asset_complete_upload once all parts are uploaded
-  """
-  upload_id: ID
-  """
-  Resolved filename (may differ from input if a collision was auto-suffixed)
-  """
-  filename: String
-  """
-  Presigned S3 URLs for each upload part
-  """
-  parts: [AssetPartUrl!]!
-}
-
-"""
-Billing cycle information for the AI credits bucket of the current account
-"""
-type BillingCycleDates {
-  """
-  Start date of the current billing cycle (ISO 8601). Null when no AI credits bucket is provisioned
-  """
-  start_date: String
-  """
-  End date of the current billing cycle (ISO 8601). Null when no AI credits bucket is provisioned
-  """
-  end_date: String
-}
-
-"""
-Input for specifying a board data source (type is always BOARD)
-"""
-input BoardDataSourceInput {
-  """
-  The ID of the board
-  """
-  id: String!
-}
-
-"""
-Prompt suggestions for a single board
-"""
-type BoardPromptSuggestions {
-  """
-  The ID of the board these suggestions are for
-  """
-  board_id: ID
-  """
-  The prompt suggestions for this board
-  """
-  suggestions: [PromptSuggestion!]
-}
-
-"""
-Permission result for creating views on a specific board
-"""
-type BoardViewPermission {
-  """
-  The board ID
-  """
-  board_id: ID
-  """
-  Whether the user can create views on this board
-  """
-  can_create: Boolean
-}
-
-"""
-A chat message in a conversation
-"""
-type ChatMessage {
-  """
-  Unique identifier for the chat message
-  """
-  id: Int
-  """
-  ID of the Vibe app this message belongs to
-  """
-  vibe_app_id: Int
-  """
-  ID of the account that owns this message
-  """
-  account_id: Int
-  """
-  ID of the user who sent or received this message
-  """
-  user_id: Int
-  """
-  Who sent this message
-  """
-  sender: ChatSender
-  """
-  The message content
-  """
-  message: JSON
-  """
-  The type of message
-  """
-  message_type: ChatMessageKind
-  """
-  The mode of the message (BUILD or ASK)
-  """
-  mode: ChatModeKind
-  """
-  ID of the code version associated with this message
-  """
-  code_version_id: String
-  """
-  ID of the version that was live when this user message initiated code generation
-  """
-  rollback_version_id: String
-  """
-  AI credits charged for generating the response to this user message.
-  """
-  credits_used: Int
-  """
-  LangSmith trace id for the turn that produced this message. Exposed only to users with the trace-exposure flag enabled; populated only in environments where tracing is on. Clients build the trace URL from this id.
-  """
-  langsmith_trace_id: ID
-  """
-  Temporal workflow run id for the turn that produced this message. Gated behind the same trace-exposure flag as langsmith_trace_id. The workflow id is the vibe app id; clients build the Temporal UI URL from the run id, namespace, app id, env and region.
-  """
-  temporal_run_id: ID
-  """
-  Temporal namespace for the turn that produced this message (`vibe`, or `default` under monday-mirror). Gated behind the same trace-exposure flag as langsmith_trace_id.
-  """
-  temporal_namespace: String
-  """
-  User feedback for this chat message
-  """
-  feedbacks: [UserFeedback!]!
-  """
-  Files attached to this message
-  """
-  files: [ChatMessageFile!]!
-  """
-  UI element references attached to this message
-  """
-  component_references: [ChatMessageComponentReference!]!
-  """
-  The date and time the object was created
-  """
-  created_at: Date
-  """
-  The date and time the object was last updated
-  """
-  updated_at: Date
-}
-
-"""
-A UI element reference attached to a chat message
-"""
-type ChatMessageComponentReference {
-  """
-  Human-readable element label shown in the UI chip
-  """
-  title: String
-  """
-  Clearest locator for the agent, e.g. "src/components/Hero.tsx:42"
-  """
-  component_path: String
-  """
-  React component display name, when resolvable
-  """
-  component_name: String
-  """
-  Source file relative to the app project root, when resolvable
-  """
-  source_file: String
-  """
-  1-based line number in the source file, when resolvable
-  """
-  line: Int
-  """
-  React owner-stack string (render path), when resolvable
-  """
-  stack: String
-  """
-  Outer HTML snippet of the picked element (smart-elided by the app)
-  """
-  html: String
-  """
-  Trimmed visible text of the picked element, when present
-  """
-  text: String
-}
-
-"""
-Input for a UI element reference attached to a chat message
-"""
-input ChatMessageComponentReferenceInput {
-  """
-  Human-readable element label shown in the UI chip
-  """
-  title: String!
-  """
-  Clearest locator for the agent, e.g. "src/components/Hero.tsx:42"
-  """
-  component_path: String!
-  """
-  React component display name, when resolvable
-  """
-  component_name: String
-  """
-  Source file relative to the app project root, when resolvable
-  """
-  source_file: String
-  """
-  1-based line number in the source file, when resolvable
-  """
-  line: Int
-  """
-  React owner-stack string (render path), when resolvable
-  """
-  stack: String
-  """
-  Outer HTML snippet of the picked element (smart-elided by the app)
-  """
-  html: String
-  """
-  Trimmed visible text of the picked element, when present
-  """
-  text: String
-}
-
-"""
-A file attached to a chat message
-"""
-type ChatMessageFile {
-  """
-  The original file name
-  """
-  file_name: String
-  """
-  The MIME type of the file
-  """
-  mime_type: AllowedFileMime
-  """
-  Presigned URL to download the file
-  """
-  download_url: String
-}
-
-"""
-Input for a file attached to a chat message
-"""
-input ChatMessageFileInput {
-  """
-  The S3 key where the file is stored
-  """
-  s3_key: String!
-  """
-  The original file name
-  """
-  file_name: String!
-  """
-  The MIME type of the file
-  """
-  mime_type: AllowedFileMime!
-}
-
-"""
-The type of chat message
-"""
-enum ChatMessageKind {
-  PROCESSING
-  TEXT
-  REASONING
-  ERROR
-  INDICATION
-  CTA
-  TOOL_CALL
-  BOARD_CONNECTED
-  BOARD_DISCONNECTED
-  CHIPS
-}
-
-"""
-Input for paginating chat messages
-"""
-input ChatMessagePaginationInput {
-  """
-  Maximum number of messages to retrieve (default: 10)
-  """
-  limit: Int = 10
-  """
-  Fetch messages starting from this Date (inclusive)
-  """
-  fromDate: Date
-  """
-  Fetch messages before this Date (exclusive)
-  """
-  beforeDate: Date
-}
-
-"""
-The mode of a chat message
-"""
-enum ChatModeKind {
-  BUILD
-  ASK
-}
-
-"""
-The sender of a chat message
-"""
-enum ChatSender {
-  USER
-  VIBE
-}
-
-"""
-A generated code file
-"""
-type CodeFile {
-  """
-  File path (e.g. src/generated/App.jsx)
-  """
-  path: String
-  """
-  File content
-  """
-  content: String
-}
-
-"""
-Permission result for a connected board
-"""
-type ConnectedBoardPermission {
-  """
-  The board ID
-  """
-  board_id: ID
-  """
-  Whether the user can access and edit content in this board
-  """
-  can_edit: Boolean
-}
-
-"""
-Mode for creating a new vibe app
-"""
-enum CreateAppModeInput {
-  BUILD
-  ASK
-}
-
-"""
-Result of creating a board view instance for a pre-built vibe
-"""
-type CreateBoardViewPreBuiltResult {
-  """
-  Whether the operation was successful
-  """
-  success: Boolean
-  """
-  ID of the created view
-  """
-  view_id: ID!
-}
-
-"""
-Input for handling credentials created event
-"""
-input CredentialsCreatedInput {
-  """
-  The ID of the AI app
-  """
-  ai_app_id: ID!
-  """
-  The ID of the CTA message
-  """
-  message_id: ID!
-  """
-  The ID of the block instance
-  """
-  block_instance_id: ID!
-  """
-  The key for the credentials
-  """
-  credentials_key: String!
-  """
-  The reference ID for the credentials
-  """
-  credentials_reference_id: ID!
-  """
-  The ID of the created credentials
-  """
-  credentials_id: ID!
-  """
-  Optional variable key for updating existing variable
-  """
-  variable_key: ID
-}
-
-"""
-Result of handling credentials created event
-"""
-type CredentialsCreatedResult {
-  """
-  The ID of the AI app
-  """
-  ai_app_id: ID
-  """
-  The variable key (unique within aiAppId) for referencing this credential
-  """
-  variable_key: Int
-}
-
-"""
-The current public-template-link share token if one exists for the app's live code version
-"""
-type CurrentPublicTemplateLinkResult {
-  """
-  The share token for the public template link
-  """
-  share_token: String
-}
-
-"""
-Input for specifying a data source for a multi-board vibe app
-"""
-input DataSourceInput {
-  """
-  The ID of the data source (e.g. board ID)
-  """
-  id: String!
-  """
-  The type of data source
-  """
-  type: MondayDataSourceType!
-}
-
-"""
-Result of a deployment operation
-"""
-type DeploymentResult {
-  """
-  Whether the operation was successful
-  """
-  success: Boolean
-}
-
-"""
-Result of enhancing a prompt with AI capabilities
-"""
-type EnhancedPromptResult {
-  """
-  The original user prompt
-  """
-  original: String
-  """
-  The AI capabilities text that was added
-  """
-  addition: String
-}
-
-"""
-The sentiment of user feedback
-"""
-enum FeedbackSentiment {
-  POSITIVE
-  NEGATIVE
-}
-
-"""
-Presigned URL for uploading a file to S3
-"""
-type FileUploadUrl {
-  """
-  Presigned URL to upload the file directly to S3
-  """
-  upload_url: String
-  """
-  S3 key where the file will be stored
-  """
-  s3_key: String
-  """
-  When the presigned URL expires
-  """
-  expires_at: Date
-  """
-  Assets-core upload session — present when vibe-assets-upload flag is ON and file_size was provided. Pass upload_id and part ETags to vibe.asset_complete_upload after uploading to each part URL.
-  """
-  asset_upload_result: AssetUploadResult
-}
-
-"""
-Result of generating a marketplace template for a vibe app
-"""
-type GenerateMarketplaceTemplateResult {
-  """
-  The share token for the marketplace template
-  """
-  share_token: String
-}
-
-"""
-Result of generating a public template link for a vibe app
-"""
-type GeneratePublicTemplateLinkResult {
-  """
-  The share token for the public template link
-  """
-  share_token: String
-}
-
-"""
-Result of generating a public template link for a vibe app (deprecated alias)
-"""
-type GenerateRemixLinkResult {
-  """
-  The share token for the public template link
-  """
-  share_token: String
-}
-
-"""
-Types of entities that can host an AI app instance
-"""
-enum HostEntityType {
-  BOARD
-  ITEM
-  WORKSPACE
-  DASHBOARD
-  BOARD_VIEW
-}
-
-"""
-Input for specifying the host target where the app will be installed
-"""
-input HostTargetInput {
-  """
-  The type of host entity (e.g. board)
-  """
-  type: String!
-  """
-  The ID of the host entity
-  """
-  id: String
-}
-
-"""
-A curated design/style inspiration for app creation
-"""
-type InspirationItem {
-  """
-  The inspiration identifier
-  """
-  id: ID!
-  """
-  Style name, e.g. "Minimal SaaS"
-  """
-  style: String!
-  """
-  Use case tagline, e.g. "Clean, airy, lots of whitespace"
-  """
-  use_case: String!
-  """
-  Absolute CDN URL for the thumbnail image
-  """
-  thumbnail_url: String!
-}
-
-"""
-Result of installing an app from a public template link
-"""
-type InstallFromPublicTemplateLinkResult {
-  """
-  The ID of the newly created app
-  """
-  ai_app_id: ID
-  """
-  The number of boards included in the installed template
-  """
-  boards_count: Int
-}
-
-"""
-Result of installing an app from a public template link (deprecated alias)
-"""
-type InstallFromRemixResult {
-  """
-  The ID of the newly created app
-  """
-  ai_app_id: ID
-  """
-  The number of boards included in the installed template
-  """
-  boards_count: Int
-}
-
-"""
-Result of executing an integration block
-"""
-type IntegrationExecutionResult {
-  """
-  The output fields returned by the integration block execution
-  """
-  output_fields: JSON
-}
-
-"""
-An integration variable (credentials or field value)
-"""
-type IntegrationVariable {
-  """
-  Unique identifier for the variable
-  """
-  id: ID
-  """
-  ID of the AI app this variable belongs to
-  """
-  ai_app_id: ID
-  """
-  The variable key slot
-  """
-  variable_key: Int
-  """
-  Type of variable: AppFeatureCredentials or AppFeatureFieldType
-  """
-  app_feature_type: String
-  """
-  Reference ID of the app feature
-  """
-  app_feature_reference_id: ID
-  """
-  The date and time the object was created
-  """
-  created_at: Date
-  """
-  The date and time the object was last updated
-  """
-  updated_at: Date
-}
-
-"""
-Available LLM models for code generation
-"""
-enum LLMModelInput {
-  CLAUDE_4_5_SONNET
-  CLAUDE_4_6_SONNET
-  CLAUDE_5_SONNET
-  CLAUDE_HAIKU_4_5
-  CLAUDE_OPUS_4_6
-  GEMINI_3_1_PRO
-  GEMINI_3_5_FLASH
-  GEMINI_3_1_FLASH_LITE
-  GPT_5_NANO
-  GPT_5
-  GPT_5_MINI
-  GPT_5_1
-  GPT_5_2
-}
-
-"""
-Message type for sending chat messages
-"""
-enum MessageTypeInput {
-  TEXT
-  ASK
-  ERROR
-}
-
-"""
-Reference to a monday.com file-column asset for document extraction
-"""
-input MondayAssetDocumentSourceInput {
-  """
-  The monday.com asset ID (obtained from BoardSDK file-column queries)
-  """
-  asset_id: ID!
-}
-
-"""
-Types of Monday.com entities that can be used as data sources
-"""
-enum MondayDataSourceType {
-  BOARD
-  ITEM
-  OBJECT
-}
-
-"""
-A prompt suggestion for a vibe
-"""
-type PromptSuggestion {
-  """
-  The name of the prompt suggestion
-  """
-  name: String
-  """
-  The prompt suggestion
-  """
-  prompt: String
-}
-
-"""
-The type of context for generating prompt suggestions
-"""
-enum PromptSuggestionFor {
-  USER
-  BOARD
-  ITEM
-  OBJECT
-  SEARCH_QUERY
-  WIDGET
-}
-
-"""
-The platform requesting prompt suggestions
-"""
-enum PromptSuggestionPlatform {
-  WEB
-  MOBILE
-}
-
-"""
-Display metadata for a public-template-link, used on the install preview card
-"""
-type PublicTemplateLinkPreviewResult {
-  """
-  The name of the source app
-  """
-  name: String
-  """
-  A short description of the source app. Currently always null until tagline backfill ships.
-  """
-  description: String
-  """
-  The vibe variant of the source app
-  """
-  variant: String
-  """
-  Image URLs for the install card. Null until SharedTemplates.images is populated.
-  """
-  images: [String!]
-  """
-  The id of the source AI app the template was created from
-  """
-  source_ai_app_id: ID
-}
-
-"""
-Paginated result for published community apps
-"""
-type PublishedCommunityAppsResult {
-  """
-  The apps on the current page
-  """
-  items: [SharedTemplate!]
-  """
-  Whether there are more apps beyond this page
-  """
-  has_next_page: Boolean
-}
-
-"""
-Fields available for sorting published_community_apps results
-"""
-enum PublishedCommunityAppsSortBy {
-  DOWNLOADS
-  UPDATED_AT
-}
-
-"""
-Response from queue_message mutation
-"""
-type QueueMessageResponse {
-  """
-  The ID assigned to the queued message
-  """
-  message_id: ID
-}
-
-"""
-A message waiting in the queue while the agent is busy
-"""
-type QueuedMessage {
-  """
-  The id assigned to the queued message
-  """
-  message_id: ID
-  """
-  The message content
-  """
-  message: String
-  """
-  Whether this is a chat-mode (discuss) message
-  """
-  is_chat_mode: Boolean
-  """
-  LLM model selected for code generation
-  """
-  model: String
-  """
-  When the message was queued (epoch milliseconds)
-  """
-  created_at: Float
-  """
-  Files attached to the queued message
-  """
-  files: [QueuedMessageFile!]!
-}
-
-"""
-A file attached to a queued message
-"""
-type QueuedMessageFile {
-  """
-  The S3 key where the file is stored
-  """
-  s3_key: String
-  """
-  The original file name
-  """
-  file_name: String
-  """
-  The MIME type of the file
-  """
-  mime_type: AllowedFileMime
-}
-
-"""
-A recently visited Vibe app with per-user visit timestamps
-"""
-type RecentVibeApp {
-  """
-  The Vibe app
-  """
-  vibe_app: VibeApp
-  """
-  When the user last VIEW-visited this app (null if never viewed)
-  """
-  last_viewed_at: Date
-  """
-  When the user last BUILD-visited this app (null if never built)
-  """
-  last_built_at: Date
-}
-
-"""
-A board-relevant prompt suggestion, render-ready with a thumbnail style
-"""
-type RelevantPromptSuggestion {
-  """
-  Short suggestion title (badge)
-  """
-  name: String
-  """
-  The prompt text the user submits
-  """
-  prompt: String
-  """
-  Thumbnail layout style token (one of the known thumbnail styles, e.g. "data_table")
-  """
-  style: String
-  """
-  Short preview label for the thumbnail
-  """
-  title: String
-  """
-  Board attribution (single-element today, may be multiple later)
-  """
-  board_ids: [ID!]
-  """
-  Board name(s) for the chip shown on the card
-  """
-  board_names: [String!]
-}
-
-"""
-A vibe app shared as a community template
-"""
-type SharedTemplate {
-  """
-  Unique identifier of the shared template
-  """
-  id: ID
-  """
-  Display name of the shared template
-  """
-  name: String
-  """
-  Description of what the template does
-  """
-  description: String
-  """
-  The vibe variant of the template
-  """
-  variant: String
-  """
-  Tags associated with this template
-  """
-  tags: [String!]
-  """
-  Image URLs for this template
-  """
-  images: [String!]
-  """
-  The UI framework used by this template
-  """
-  ui_framework: String!
-  """
-  The kind of this template
-  """
-  kind: SharedTemplateKind
-  """
-  The publication status of this template
-  """
-  status: SharedTemplateStatus
-  """
-  Number of times this template has been downloaded
-  """
-  downloads: Int
-  """
-  The date and time the template was created
-  """
-  created_at: Date
-  """
-  The date and time the template was last updated
-  """
-  updated_at: Date
-}
-
-"""
-The kind of shared template
-"""
-enum SharedTemplateKind {
-  REMIX
-  MARKETPLACE
-}
-
-"""
-The publication status of a shared template
-"""
-enum SharedTemplateStatus {
-  DRAFT
-  PENDING_REVIEW
-  PUBLISHED
-  REJECTED
-  UNLISTED
-  ARCHIVED
-}
-
-"""
-Sort order direction
-"""
-enum SortOrder {
-  ASC
-  DESC
-}
-
-"""
-Standard success response for mutations
-"""
-type SuccessResponse {
-  """
-  Whether the operation was successful
-  """
-  success: Boolean
-  """
-  Optional message describing the result
-  """
-  message: String
-}
-
-"""
-Full ThemeDefinition (used for extracted/custom themes). The radii/light/dark fields are JSON-encoded — radii must contain sm/md/lg/xl/2xl, and light/dark must contain the full ThemeColorTokens map. Validated server-side via resolveTheme.
-"""
-input ThemeDefinitionInput {
-  """
-  The theme identifier (e.g. extracted_<8-char-hash>)
-  """
-  id: ID!
-  """
-  Theme display name
-  """
-  name: String!
-  """
-  Base border radius CSS length (e.g. "12px")
-  """
-  radius: String!
-  """
-  Primary font family name
-  """
-  font_family: String!
-  """
-  Secondary font family name
-  """
-  font_family_secondary: String!
-  """
-  Border radius scale as a JSON object with sm/md/lg/xl/2xl CSS length values
-  """
-  radii: JSON!
-  """
-  Light mode CSS token values (HSL strings keyed by CSS variable name)
-  """
-  light: JSON!
-  """
-  Dark mode CSS token values (HSL strings keyed by CSS variable name)
-  """
-  dark: JSON!
-}
-
-"""
-Theme selection input for app creation. Provide either `id` (preset) or `definition` (extracted).
-"""
-input ThemeInput {
-  """
-  Predefined theme ID (e.g., "gen_z", "ios_26", "monday_com").
-  """
-  id: ID
-  """
-  Full ThemeDefinition for an extracted theme (used when id is omitted).
-  """
-  definition: ThemeDefinitionInput
-}
-
-"""
-Token usage details from AI request
-"""
-type TokenUsage {
-  """
-  Total tokens used in the request
-  """
-  total_tokens: Int
-  """
-  Tokens used in the prompt
-  """
-  prompt_tokens: Int
-  """
-  Tokens used in the completion
-  """
-  completion_tokens: Int
-}
-
-"""
-Decision for a tool call requiring human approval
-"""
-enum ToolCallDecision {
-  APPROVED
-  REJECTED
-}
-
-"""
-Input for responding to a tool call that requires human input
-"""
-input ToolCallResponseInput {
-  """
-  The ID of the tool call to respond to
-  """
-  tool_call_id: String!
-  """
-  Whether to approve or reject the tool call
-  """
-  decision: ToolCallDecision!
-  """
-  Additional data to pass to the tool execution (merged with tool input)
-  """
-  payload: JSON
-}
-
-"""
-Result of checking eligibility to transition a vibe app to external mode
-"""
-type TransitionToExternalEligibility {
-  """
-  Whether the current user owns all boards connected to this app
-  """
-  is_eligible: Boolean
-}
-
-"""
-Result of updating marketplace template data
-"""
-type UpdateMarketplaceDataResult {
-  """
-  The share token of the updated marketplace template
-  """
-  share_token: String
-}
-
-"""
-User feedback for AI chat messages
-"""
-type UserFeedback {
-  """
-  Unique identifier for the feedback
-  """
-  id: ID
-  """
-  The account ID associated with the feedback
-  """
-  accountId: Int
-  """
-  The user ID who provided the feedback
-  """
-  userId: Int
-  """
-  The sentiment of the feedback (positive or negative)
-  """
-  feedbackSentiment: FeedbackSentiment
-  """
-  The feedback message text content
-  """
-  feedbackMessage: String
-  """
-  The ID of the chat message this feedback relates to
-  """
-  messageId: ID
-  """
-  When the feedback was created
-  """
-  createdAt: Date
-  """
-  When the feedback was last updated
-  """
-  updatedAt: Date
-}
-
-"""
-A user request for various operations
-"""
-type UserRequest {
-  """
-  Unique identifier for the request
-  """
-  id: ID!
-  """
-  The account ID associated with the request
-  """
-  account_id: Int!
-  """
-  The user ID who created the request
-  """
-  user_id: Int!
-  """
-  The type of request
-  """
-  type: UserRequestKind
-  """
-  The date and time the object was created
-  """
-  created_at: Date
-  """
-  The date and time the object was last updated
-  """
-  updated_at: Date
-  """
-  The date and time the object was deleted
-  """
-  deleted_at: Date
-}
-
-"""
-The type of user request
-"""
-enum UserRequestKind {
-  request_to_upgrade_plan
-  notify_plan_close_to_limit
-  request_to_make_app_public
-  request_to_upgrade_board_connection
-}
-
-"""
-A vibe app created by the AI app builder
-"""
-type VibeApp {
-  """
-  The unique identifier of the vibe app
-  """
-  id: Int
-  """
-  The user ID of the vibe app creator
-  """
-  user_id: Int
-  """
-  The current status of the vibe app
-  """
-  status: VibeAppStatus
-  """
-  Whether the current version returned to the user is preview of a draft or live version
-  """
-  is_preview_mode: Boolean!
-  """
-  The live frontend deployment URL
-  """
-  deployment_url: String
-  """
-  The draft deployment URL for the frontend
-  """
-  deployment_draft_url: String
-  """
-  The CDN subdomain assigned to this app
-  """
-  cdn_key: String
-  """
-  A short AI-generated tagline describing what the app does
-  """
-  tagline: String
-  """
-  The name of the vibe app
-  """
-  name: String
-  """
-  Whether the current app version is published to live
-  """
-  is_published: Boolean!
-  """
-  The lifecycle state of the vibe app
-  """
-  state: VibeAppState!
-  """
-  The UI metadata of the vibe app
-  """
-  ui_metadata: VibeAppUIMetadata!
-  """
-  Configuration settings for the vibe app
-  """
-  config: VibeAppConfig!
-  """
-  The date when the vibe app was published
-  """
-  published_at: Date
-  """
-  The app feature reference ID corresponding to this vibe app
-  """
-  app_feature_reference_id: ID
-  """
-  The variant of the vibe app (GraphQL wire key, e.g. VIBE_ITEM_VIEW)
-  """
-  variant: String
-  """
-  The date and time the object was created
-  """
-  created_at: Date
-  """
-  The date and time the object was last updated
-  """
-  updated_at: Date
-  """
-  The ID of the first chat message for this app, or null if no messages exist
-  """
-  first_chat_message_id: ID
-  """
-  The owner of this Vibe app, or null if the user could not be resolved
-  """
-  owner: VibeAppOwner
-  """
-  Chat messages for this app. Returns messages in chronological order (oldest to newest)
-  """
-  chat_messages(pagination: ChatMessagePaginationInput = {limit: 10}): [ChatMessage!]!
-  """
-  Instances of this vibe app deployed to different Monday.com entities
-  """
-  instances(account_level: Boolean): [VibeAppInstance!]!
-  """
-  All active code versions for this vibe app, ordered by version number descending
-  """
-  code_versions(limit: Int = 50, where: VibeCodeVersionWhereInput): [VibeCodeVersion!]!
-  """
-  Audit records for this app
-  """
-  audits(type: AppAuditKind, limit: Int, page: Int): [AppAudit!]!
-}
-
-"""
-Public access info for a vibe app, keyed by the app's mapped vibe user id (the board member id).
-"""
-type VibeAppAccess {
-  """
-  The vibe user id this app is mapped to (the board member id).
-  """
-  vibe_user_id: ID
-  """
-  The vibe app id. Used by the client to build the builder/edit link.
-  """
-  app_id: ID
-  """
-  The vibe app name.
-  """
-  name: String
-  """
-  The public deployment URL of the app, if deployed.
-  """
-  public_link: String
-}
-
-"""
-Configuration settings for the vibe app
-"""
-type VibeAppConfig {
-  """
-  Whether the app should automatically promote new versions to live
-  """
-  auto_promote: Boolean
-}
-
-"""
-Input for updating vibe app configuration
-"""
-input VibeAppConfigInput {
-  """
-  Whether the app should automatically promote new versions to live
-  """
-  auto_promote: Boolean
-}
-
-"""
-Counts of vibe apps by publish status
-"""
-type VibeAppCounts {
-  """
-  Total number of apps
-  """
-  total: Int
-  """
-  Number of published apps
-  """
-  live: Int
-  """
-  Number of unpublished apps
-  """
-  draft: Int
-}
-
-"""
-An instance of a vibe app deployed to a specific Monday.com entity
-"""
-type VibeAppInstance {
-  """
-  Unique identifier for the app instance
-  """
-  id: Int
-  """
-  Type of the entity hosting this app instance
-  """
-  host_entity_type: HostEntityType
-  """
-  ID of the specific entity hosting this app instance
-  """
-  host_entity_id: String
-  """
-  Type of the entity used as data source
-  """
-  data_source_entity_type: MondayDataSourceType
-  """
-  IDs of the specific entities used as data sources
-  """
-  data_source_entity_ids: [String!]
-  """
-  External instance identifier
-  """
-  instance_id: String
-  """
-  ID of the folder containing this app instance
-  """
-  folder_id: ID
-  """
-  The date and time the object was created
-  """
-  created_at: Date
-  """
-  The date and time the object was last updated
-  """
-  updated_at: Date
-}
-
-"""
-The owner of a Vibe app
-"""
-type VibeAppOwner {
-  """
-  The owner user ID
-  """
-  id: ID
-  """
-  The owner display name
-  """
-  name: String
-  """
-  The owner profile photo URLs
-  """
-  photo_url: VibeAppOwnerPhotoUrl
-}
-
-"""
-Photo URL variants for a Vibe app owner (original, small, thumb)
-"""
-type VibeAppOwnerPhotoUrl {
-  """
-  Full-resolution photo URL
-  """
-  original: String
-  """
-  Small photo URL
-  """
-  small: String
-  """
-  Thumbnail photo URL
-  """
-  thumb: String
-}
-
-"""
-Status of a vibe app including existence and publish state
-"""
-type VibeAppPublishStatus {
-  """
-  Whether the app exists in the database
-  """
-  exists: Boolean
-  """
-  Whether the app is published (only meaningful if exists is true)
-  """
-  is_published: Boolean
-}
-
-"""
-Visibility scope for searching Vibe apps
-"""
-enum VibeAppSearchScope {
-  ALL
-  MY
-  ACCOUNT
-}
-
-"""
-Fields available for sorting search_apps results
-"""
-enum VibeAppSearchSortField {
-  UPDATED_AT
-  CREATED_AT
-  NAME
-}
-
-"""
-Sort options for search_apps
-"""
-input VibeAppSearchSortInput {
-  """
-  Field to sort by (default: UPDATED_AT)
-  """
-  field: VibeAppSearchSortField = UPDATED_AT
-  """
-  Sort direction (default: DESC)
-  """
-  order: SortOrder = DESC
-}
-
-"""
-Field to sort vibe apps by
-"""
-enum VibeAppSortField {
-  UPDATED_AT
-  CREATED_AT
-  IS_PUBLISHED
-  PUBLISHED_AT
-  NAME
-  STATE
-}
-
-"""
-Input for sorting vibe apps
-"""
-input VibeAppSortInput {
-  """
-  Field to sort by
-  """
-  field: VibeAppSortField = UPDATED_AT
-  """
-  Sort order
-  """
-  order: SortOrder = DESC
-}
-
-"""
-The lifecycle state of a vibe app
-"""
-enum VibeAppState {
-  PRIVATE
-  INTERNAL
-  EXTERNAL
-  OLD_PRIVATE
-  OLD_INTERNAL
-}
-
-"""
-Counts of vibe apps by lifecycle state
-"""
-type VibeAppStateCounts {
-  """
-  Total number of apps
-  """
-  total: Int
-  """
-  Number of publicly accessible apps
-  """
-  public: Int
-  """
-  Number of apps published within the account
-  """
-  internal: Int
-  """
-  Number of private/draft apps
-  """
-  draft: Int
-}
-
-"""
-The status of an AI-generated app
-"""
-enum VibeAppStatus {
-  CREATED
-  GENERATING
-  PROCESSING_MESSAGE
-  DEPLOYING
-  READY
-}
-
-"""
-The UI metadata of the vibe app
-"""
-type VibeAppUIMetadata {
-  """
-  The color of the app card
-  """
-  app_card_color: String
-  """
-  The source of the app creation
-  """
-  source: String
-}
-
-"""
-The current user's access verdict for a specific vibe app.
-"""
-type VibeAppUserAccess {
-  """
-  The vibe app id.
-  """
-  ai_app_id: ID
-  """
-  True iff the user has 'read' on every connected board AND (for OBJECT / OBJECT_FULLSTACK variants) 'read' on the app's object.
-  """
-  has_access: Boolean
-  """
-  Connected board ids the user does NOT have read access to. Empty when all connected boards are authorized. Drives a request-board-access flow on the client.
-  """
-  unauthorized_board_ids: [ID!]
-  """
-  The object id (= app instance_id) the user does NOT have read access to. Null when the app is not an object variant OR the user is authorized on the object. Drives a request-object-access flow on the client.
-  """
-  unauthorized_object_id: ID
-}
-
-"""
-The status of a code version
-"""
-enum VibeAppVersionStatus {
-  DRAFT
-  LIVE
-  RETIRED
-  INTERRUPTED
-}
-
-"""
-The type of visit when a user opens a Vibe app
-"""
-enum VibeAppVisitKind {
-  VIEW
-  BUILD
-}
-
-"""
-An image or media asset uploaded to and shared across the account
-"""
-type VibeAsset {
-  """
-  Unique identifier for the vibe asset
-  """
-  id: ID
-  """
-  Vibe app this asset is scoped to, or null for account-level assets
-  """
-  app_id: ID
-  """
-  Asset ID in the assets-core platform service
-  """
-  asset_id: ID
-  """
-  Original filename of the uploaded asset
-  """
-  filename: String
-  """
-  MIME type of the asset (e.g. image/png)
-  """
-  mime_type: String
-  """
-  File size in bytes
-  """
-  file_size: Int
-  """
-  Permanent public CDN URL for the asset
-  """
-  cdn_url: String
-  """
-  Image width in pixels, populated after captioning
-  """
-  width: Int
-  """
-  Image height in pixels, populated after captioning
-  """
-  height: Int
-  """
-  AI-generated caption describing the asset content
-  """
-  description: String
-  """
-  AI-generated alt text for accessibility
-  """
-  alt_text: String
-  """
-  Current status of the AI captioning process
-  """
-  caption_status: AssetCaptionStatus
-  """
-  Timestamp when the asset was uploaded
-  """
-  created_at: Date
-  """
-  Timestamp when the asset was last updated
-  """
-  updated_at: Date
-}
-
-"""
-A code version of a vibe app
-"""
-type VibeCodeVersion {
-  """
-  The unique identifier of the code version
-  """
-  id: String
-  """
-  The status of this code version
-  """
-  status: VibeAppVersionStatus
-  """
-  The sequential version number for this code version
-  """
-  version_number: Int
-  """
-  A descriptive name for this version
-  """
-  version_name: String
-  """
-  When this version was deployed to live (if applicable)
-  """
-  deployed_at: Date
-  """
-  When this version was retired (if applicable)
-  """
-  retired_at: Date
-  """
-  The CDN deployment URL for this version
-  """
-  deployment_url: String
-  """
-  Generated code files for this version (from src/generated/ directory)
-  """
-  files: [CodeFile!]!
-  """
-  The date and time the object was created
-  """
-  created_at: Date
-  """
-  The date and time the object was last updated
-  """
-  updated_at: Date
-}
-
-"""
-Filter input for code versions
-"""
-input VibeCodeVersionWhereInput {
-  """
-  Filter by version status (DRAFT, LIVE, RETIRED)
-  """
-  status: VibeAppVersionStatus
-}
-
-"""
-Namespace for all vibe-related mutations
-"""
-type VibeMutations {
-  """
-  Rollback an AI app to an older specific version
-  """
-  rollback_to_version(id: ID!, version_id: String!): SuccessResponse
-  """
-  Execute an AI action and get a structured response
-  """
-  ai_actions(prompt: String!, schema: JSON, systemPrompt: String, appId: ID, useWebSearch: WebSearchConfigInput, session_tracker: String): AiActionResponse!
-  """
-  Extract structured data from document files using AI
-  """
-  document_ai_action(prompt: String!, schema: JSON, system_prompt: String, app_id: ID!, monday_assets: [MondayAssetDocumentSourceInput!]!): AiDocumentActionResponse!
-  """
-  Enhance a user prompt to include AI capabilities
-  """
-  enhance_prompt(prompt: String!): EnhancedPromptResult!
-  """
-  Get a presigned URL to upload a file to S3
-  """
-  file_upload_url(file_name: String!, mime_type: AllowedFileMime!, file_size: Int): FileUploadUrl
-  """
-  Initiate a multipart upload for a vibe asset
-  """
-  asset_upload(filename: String!, content_type: String!, file_size: Int!): AssetUploadResult
-  """
-  Complete a multipart asset upload and persist the asset
-  """
-  asset_complete_upload(input: AssetCompleteUploadInput!): VibeAsset
-  """
-  Delete a vibe asset
-  """
-  asset_delete(id: ID!): Boolean
-}
-
-"""
-Permissions for vibe related actions
-"""
-type VibePermissions {
-  """
-  Permission to create open workspaces
-  """
-  create_open_workspace: Boolean
-  """
-  Permission to publish vibe apps as trusted apps
-  """
-  can_publish_trusted_app: Boolean
-  """
-  Permission to create or edit vibe apps
-  """
-  can_create_or_edit_vibe_app: Boolean
-  """
-  Permission to publish vibe apps to the public web
-  """
-  can_publish_to_public_web: Boolean
-  """
-  Permission to generate public vibe template links
-  """
-  can_generate_public_vibe_templates: Boolean
-  """
-  Permission to create views on the specified boards
-  """
-  create_board_views(board_ids: [ID!]!): [BoardViewPermission!]
-  """
-  Permission to view the connected boards for an AI app
-  """
-  connected_boards(ai_app_id: ID, app_feature_reference_id: ID): [ConnectedBoardPermission!]
-}
-
-"""
-Filter apps by published status
-"""
-enum VibePublishedStatusFilter {
-  ALL
-  PUBLISHED
-  NOT_PUBLISHED
-}
-
-"""
-Namespace for all vibe-related queries
-"""
-type VibeQueries {
-  """
-  Get this vibe app details
-  """
-  app(id: ID, appFeatureReferenceId: ID, account_level: Boolean): VibeApp
-  """
-  Get a list of vibe apps for the current user
-  """
-  apps(status: VibeAppStatus, published_status: VibePublishedStatusFilter, states: [VibeAppState!], limit: Int = 25, page: Int = 1, search_term: String, searchTerm: String @deprecated(reason: "Use search_term instead"), sort_by: VibeAppSortInput, as_admin: Boolean): [VibeApp!]
-  """
-  Get a list of vibe apps by app feature reference IDs
-  """
-  apps_by_feature_reference(app_feature_reference_ids: [ID!]!, sort_by: VibeAppSortInput, as_admin: Boolean): [VibeApp!]
-  """
-  Get all user feedback for the current user
-  """
-  user_feedback_by_user(limit: Int): [UserFeedback!]
-  """
-  Permissions for vibe related actions
-  """
-  permissions: VibePermissions
-  """
-  Get account's current Monday Vibe subscription data
-  """
-  subscription: VibeSubscription
-  """
-  Get count of vibe apps by status
-  """
-  apps_count(status: VibeAppStatus, search_term: String, account_level: Boolean, as_admin: Boolean): VibeAppCounts
-  """
-  Get count of vibe apps grouped by lifecycle state
-  """
-  apps_state_count(search_term: String, as_admin: Boolean): VibeAppStateCounts
-  """
-  Get chat messages for a vibe app. Returns messages in chronological order (oldest to newest)
-  """
-  chat_messages(app_id: ID!, pagination: ChatMessagePaginationInput = {limit: 10}): [ChatMessage!]!
-  """
-  Get all user requests for the current user
-  """
-  user_requests(type: UserRequestKind, limit: Int, page: Int): [UserRequest!]
-  """
-  List of available predefined themes with full styling tokens
-  """
-  themes: [VibeTheme!]
-  """
-  Check if a vibe app is published by appFeatureReferenceId
-  """
-  is_app_published(app_feature_reference_id: ID, app_id: ID): Boolean
-  """
-  Get the existence and publish status of a vibe app
-  """
-  app_publish_status(app_feature_reference_id: ID, app_id: ID): VibeAppPublishStatus
-  """
-  Get published community apps, optionally filtered by tags
-  """
-  published_community_apps(tags: [String!], limit: Int, sort_by: PublishedCommunityAppsSortBy = DOWNLOADS, sort_direction: SortOrder = DESC, text_search: String, page: Int): PublishedCommunityAppsResult
-  """
-  Get published community apps filtered by unique IDs
-  """
-  published_community_apps_by_id(ids: [ID!]!): [SharedTemplate!]
-  """
-  Get the version token for the latest non-deleted version of a community app
-  """
-  get_version_token(template_id: ID!): String
-  """
-  Get the billing cycle start and end dates for the AI credits bucket of the current account
-  """
-  ai_credits_billing_cycle: BillingCycleDates
-  """
-  List of active curated inspirations for app creation
-  """
-  inspirations: [InspirationItem!]
-  """
-  List vibe assets. When app_id is provided, returns assets scoped to that app; otherwise returns all assets for the current account.
-  """
-  assets(app_id: ID): [VibeAsset!]
-  """
-  List of Vibe What's New entries
-  """
-  whats_new: [WhatsNewItem!]
-}
-
-"""
-A number of currently published apps and the maximum allowed limit
-"""
-type VibeSubscription {
-  """
-  Current number of published apps
-  """
-  publishedApps: Int
-  """
-  Maximum number of published apps
-  """
-  maxPublishedApps: Int
-}
-
-"""
-A predefined vibe theme with full styling tokens
-"""
-type VibeTheme {
-  """
-  The theme identifier
-  """
-  id: ID
-  """
-  Theme display name
-  """
-  name: String
-  """
-  User-friendly display name
-  """
-  label: String
-  """
-  Representative colors [primary, accent, secondary] as HSL strings
-  """
-  colors: [String!]
-  """
-  Base border radius value
-  """
-  radius: String
-  """
-  Primary font family name
-  """
-  font_family: String
-  """
-  Secondary font family name
-  """
-  font_family_secondary: String
-  """
-  Light mode CSS token values (HSL strings keyed by CSS variable name)
-  """
-  light: JSON
-  """
-  Dark mode CSS token values (HSL strings keyed by CSS variable name)
-  """
-  dark: JSON
-}
-
-"""
-The variant/platform target for vibe apps
-"""
-enum VibeVariant {
-  BOARD_VIEW
-  ITEM_VIEW
-  VIBE_ITEM_VIEW
-  OBJECT
-  OBJECT_FULLSTACK
-}
-
-"""
-Configuration for enabling web search in AI requests
-"""
-input WebSearchConfigInput {
-  """
-  Whether web search is enabled for this request
-  """
-  allowed: Boolean!
-  """
-  Optional configuration for web search behavior
-  """
-  options: WebSearchOptionsInput
-}
-
-"""
-Configuration options for web search functionality
-"""
-input WebSearchOptionsInput {
-  """
-  Hint for max number of sources to consider (default: 5). Interpreted as guidance — the model decides retrieval breadth.
-  """
-  topK: Int
-  """
-  Hint to prioritize content from the last N days. Interpreted as guidance — not a hard filter.
-  """
-  recencyDays: Int
-}
-
-"""
-A single entry from the Vibe What's New board
-"""
-type WhatsNewItem {
-  """
-  Unique identifier of the What's New item (the board item id)
-  """
-  id: ID!
-  """
-  Headline of the What's New entry
-  """
-  title: String!
-  """
-  Publish date of the entry, as stored on the board
-  """
-  date: String
-  """
-  Rollout status of the feature (e.g. released, in progress)
-  """
-  release_status: String
-  """
-  Audience the entry is visible to
-  """
-  visibility: String
-  """
-  Category/type of the entry (e.g. feature, fix)
-  """
-  type: String
-  """
-  Full description of the entry
-  """
-  description: String
-  """
-  Short summary of the entry
-  """
-  short_description: String
-  """
-  Link target of the entry's call-to-action
-  """
-  announcement_url: String
-  """
-  Label of the entry's call-to-action
-  """
-  announcement_text: String
-  """
-  Monday asset id of the entry image, if any
-  """
-  image_asset_id: ID
-  """
-  Public CDN URL of the entry image
-  """
-  image_cdn_url: String
-  """
-  Public CDN URL of the entry video
-  """
-  video_cdn_url: String
-  """
-  Categories/tags associated with the entry
-  """
-  categories: [String!]!
-  """
-  Number of likes the entry has received
-  """
-  likes: Int
-}
-
-"""
-A group of related boards in a workspace
-"""
-type WorkspaceBoardGroup {
-  """
-  The IDs of the boards in this group
-  """
-  board_ids: [ID!]
-  """
-  The reasoning for grouping these boards together
-  """
-  reasoning: String
 }
 
 """

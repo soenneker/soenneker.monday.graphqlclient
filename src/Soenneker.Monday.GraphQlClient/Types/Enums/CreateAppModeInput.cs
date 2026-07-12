@@ -9,6 +9,8 @@ public enum CreateAppModeInput
 {
     BUILD,
 
-    ASK
+    ASK,
+
+    PLAN
 
 }

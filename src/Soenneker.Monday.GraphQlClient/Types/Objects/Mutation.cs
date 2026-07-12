@@ -17,6 +17,12 @@ public sealed partial class Mutation
     public UpdateDirectoryResourceAttributesResponse? UpdateDirectoryResourcesAttributes { get; init; }
 
     /// <summary>
+    /// Execute an integration block with the provided field values
+    /// </summary>
+    [JsonPropertyName("execute_integration_block")]
+    public IntegrationExecutionResult? ExecuteIntegrationBlock { get; init; }
+
+    /// <summary>
     /// Add workspace object to favorites
     /// </summary>
     [JsonPropertyName("create_favorite")]
@@ -87,12 +93,6 @@ public sealed partial class Mutation
     /// </summary>
     [JsonPropertyName("delete_object_relation")]
     public int? DeleteObjectRelation { get; init; }
-
-    /// <summary>
-    /// Execute an integration block with the provided field values
-    /// </summary>
-    [JsonPropertyName("execute_integration_block")]
-    public IntegrationExecutionResult? ExecuteIntegrationBlock { get; init; }
 
     /// <summary>
     /// Enroll multiple items to a single sequence. Maximum 50 items per request.
