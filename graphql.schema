@@ -1184,15 +1184,15 @@ type Mutation {
   """
   delete_object_relation(source_object_id: ID!, relation_id: ID): Int
   """
-  Enroll multiple items to a single sequence. Maximum 50 items per request.
-  """
-  enroll_items_to_sequence(input: EnrollToSequenceInput!): EnrollToSequenceResult
-  """
   Create a marketplace app discount
   """
   create_marketplace_app_discount(app_id: ID!, account_slug: String!, discount_data: CreateMarketplaceAppDiscountInput!): CreateMarketplaceAppDiscountResult!
   delete_marketplace_app_discount(app_id: ID!, account_slug: String!): DeleteMarketplaceAppDiscountResult!
   grant_marketplace_app_discount(app_id: ID!, account_slug: String!, data: GrantMarketplaceAppDiscountData!): GrantMarketplaceAppDiscountResult!
+  """
+  Enroll multiple items to a single sequence. Maximum 50 items per request.
+  """
+  enroll_items_to_sequence(input: EnrollToSequenceInput!): EnrollToSequenceResult
   """
   Convert an existing monday.com board into a project with enhanced project management capabilities. This mutation transforms a regular board by applying project-specific features and configurations through column mappings that define how existing board columns should be interpreted in the project context. The conversion process is asynchronous and returns a process_id for tracking completion. Optionally accepts a callback URL for notification when the conversion completes. Use this when you have an existing board with data that needs to be upgraded to a full project with advanced project management features like Resource Planner integration.
   """
@@ -1201,58 +1201,6 @@ type Mutation {
   Create a new project in monday.com from scratch. This mutation initiates asynchronous project creation with comprehensive customization options including: privacy settings (private/public - share is currently not supported), optional companions like Resource Planner for enhanced project management capabilities, workspace assignment for organizational structure, folder placement for better organization, and template selection for predefined project structures. Since project creation is asynchronous, you can optionally provide a callback_url where the project ID will be sent via POST request once creation completes. The callback will receive: { is_success: boolean, process_id: string, project_id?: number }. Returns a process_id for tracking the creation request.
   """
   create_project(input: CreateProjectInput!): CreateProjectResult
-  """
-  Update form properties including title, description, or question order.
-  """
-  update_form(formToken: String!, input: UpdateFormInput!): ResponseForm
-  """
-  Update form configuration including features, appearance, and accessibility options.
-  """
-  update_form_settings(formToken: String!, settings: UpdateFormSettingsInput!): ResponseForm
-  """
-  Create a new question within a form. Returns the created question with auto-generated ID.
-  """
-  create_form_question(formToken: String!, question: CreateQuestionInput!): FormQuestion
-  """
-  Update an existing question properties including title, type, or settings. Requires question ID.
-  """
-  update_form_question(formToken: String!, questionId: String!, question: UpdateQuestionInput!): FormQuestion
-  """
-  Permanently remove a question from a form. This action cannot be undone.
-  """
-  delete_question(formToken: String!, questionId: String!): Boolean
-  """
-  Activate a form to make it visible to users and accept new submissions.
-  """
-  activate_form(formToken: String!): Boolean
-  """
-  Deactivate a form to hide it from users and stop accepting submissions. Form data is preserved.
-  """
-  deactivate_form(formToken: String!): Boolean
-  """
-  Shorten a URL for a form and store it in the form settings. Returns the shortened link object.
-  """
-  shorten_form_url(formToken: String!): FormShortenedLink
-  """
-  Create a new tag for a form. Tags are used to categorize and track responses. (e.g. UTM tags)
-  """
-  create_form_tag(formToken: String!, tag: CreateFormTagInput!): FormTag
-  """
-  Update an existing tag in a form
-  """
-  update_form_tag(formToken: String!, tagId: String!, tag: UpdateFormTagInput!): Boolean @deprecated(reason: "Updating tag values is no longer supported after version 2026-07.")
-  """
-  Delete a tag from a form
-  """
-  delete_form_tag(formToken: String!, tagId: String!, options: DeleteFormTagInput): Boolean
-  """
-  Create a new form with specified configuration. Returns the created form with its unique token.
-  """
-  create_form(destination_workspace_id: ID!, destination_folder_id: ID, destination_folder_name: String, board_kind: BoardKind, destination_name: String, board_owner_ids: [ID!], board_owner_team_ids: [ID!], board_subscriber_ids: [ID!], board_subscriber_teams_ids: [ID!]): DehydratedFormResponse
-  """
-  Set a password on a form to restrict access. This will enable password protection for the form.
-  """
-  set_form_password(formToken: String!, input: SetFormPasswordInput!): ResponseForm
   """
   Creates a new team.
   """
@@ -1305,6 +1253,58 @@ type Mutation {
   Creates a new service user.
   """
   create_service_user(name: String!, title: String): CreateServiceUserResult
+  """
+  Update form properties including title, description, or question order.
+  """
+  update_form(formToken: String!, input: UpdateFormInput!): ResponseForm
+  """
+  Update form configuration including features, appearance, and accessibility options.
+  """
+  update_form_settings(formToken: String!, settings: UpdateFormSettingsInput!): ResponseForm
+  """
+  Create a new question within a form. Returns the created question with auto-generated ID.
+  """
+  create_form_question(formToken: String!, question: CreateQuestionInput!): FormQuestion
+  """
+  Update an existing question properties including title, type, or settings. Requires question ID.
+  """
+  update_form_question(formToken: String!, questionId: String!, question: UpdateQuestionInput!): FormQuestion
+  """
+  Permanently remove a question from a form. This action cannot be undone.
+  """
+  delete_question(formToken: String!, questionId: String!): Boolean
+  """
+  Activate a form to make it visible to users and accept new submissions.
+  """
+  activate_form(formToken: String!): Boolean
+  """
+  Deactivate a form to hide it from users and stop accepting submissions. Form data is preserved.
+  """
+  deactivate_form(formToken: String!): Boolean
+  """
+  Shorten a URL for a form and store it in the form settings. Returns the shortened link object.
+  """
+  shorten_form_url(formToken: String!): FormShortenedLink
+  """
+  Create a new tag for a form. Tags are used to categorize and track responses. (e.g. UTM tags)
+  """
+  create_form_tag(formToken: String!, tag: CreateFormTagInput!): FormTag
+  """
+  Update an existing tag in a form
+  """
+  update_form_tag(formToken: String!, tagId: String!, tag: UpdateFormTagInput!): Boolean @deprecated(reason: "Updating tag values is no longer supported after version 2026-07.")
+  """
+  Delete a tag from a form
+  """
+  delete_form_tag(formToken: String!, tagId: String!, options: DeleteFormTagInput): Boolean
+  """
+  Create a new form with specified configuration. Returns the created form with its unique token.
+  """
+  create_form(destination_workspace_id: ID!, destination_folder_id: ID, destination_folder_name: String, board_kind: BoardKind, destination_name: String, board_owner_ids: [ID!], board_owner_team_ids: [ID!], board_subscriber_ids: [ID!], board_subscriber_teams_ids: [ID!]): DehydratedFormResponse
+  """
+  Set a password on a form to restrict access. This will enable password protection for the form.
+  """
+  set_form_password(formToken: String!, input: SetFormPasswordInput!): ResponseForm
   """
   Create managed column of type dropdown mutation.
   """
@@ -1941,6 +1941,8 @@ type Query {
   Fetch relations for a specific object
   """
   object_relations(object_id: ID!, kind: RelationKind, direction: RelationDirection = OUTGOING): [ObjectRelation!]
+  marketplace_app_discounts(app_id: ID!): [MarketplaceAppDiscount!]!
+  app_subscriptions(app_id: ID!, status: SubscriptionStatus, account_id: Int, cursor: String, limit: Int): AppSubscriptions!
   """
   Placeholder query field for automations-test microservice.
     This can be replaced with actual queries as the service evolves.
@@ -2014,28 +2016,22 @@ type Query {
   Get aggregated automation runs statistics grouped by entity Ids
   """
   account_triggers_statistics_by_entity_id(run_status: TriggerEventState!, filters: AccountTriggersByEntityIdFiltersInput): AccountTriggersByEntityId
-  marketplace_app_discounts(app_id: ID!): [MarketplaceAppDiscount!]!
-  app_subscriptions(app_id: ID!, status: SubscriptionStatus, account_id: Int, cursor: String, limit: Int): AppSubscriptions!
-  """
-  Search for marketplace apps using vector similarity
-  """
-  marketplace_vector_search(input: MarketplaceSearchInput!): MarketplaceSearchResults!
-  """
-  Search for marketplace apps using full-text search
-  """
-  marketplace_fulltext_search(input: MarketplaceSearchInput!): MarketplaceSearchResults!
-  """
-  Search for marketplace apps using a combination of vector and full-text search
-  """
-  marketplace_hybrid_search(input: MarketplaceSearchInput!): MarketplaceSearchResults!
-  """
-  Search for marketplace apps using AI
-  """
-  marketplace_ai_search(input: MarketplaceAiSearchInput!): MarketplaceAiSearchResults!
   """
   Get board candidates based on workspace and usage type
   """
   board_candidates(workspaceId: String!, usageType: BoardUsage!): [Board!]
+  """
+  Get all roles for the account
+  """
+  account_roles: [AccountRole!]
+  """
+  Retrieves API tokens for the given service users.
+  """
+  service_user_tokens(service_user_ids: [ID!]!): [ServiceUserToken!]
+  """
+  Retrieves all service users in the account with their token last activity.
+  """
+  service_users: [ServiceUser!]
   """
   Fetch a form by its token. The returned form includes all the details of the form such as its settings, questions, title, etc. Use this endpoint when you need to retrieve complete form data for display or processing. Requires that the requesting user has read access to the associated board.
   """
@@ -2064,18 +2060,6 @@ type Query {
   Get board IDs that are linked to a specific connection.
   """
   connection_board_ids(connection_id: ID!): [ID!]!
-  """
-  Get all roles for the account
-  """
-  account_roles: [AccountRole!]
-  """
-  Retrieves API tokens for the given service users.
-  """
-  service_user_tokens(service_user_ids: [ID!]!): [ServiceUserToken!]
-  """
-  Retrieves all service users in the account with their token last activity.
-  """
-  service_users: [ServiceUser!]
   """
   Get managed column data.
   """
@@ -6991,6 +6975,275 @@ input UpdateObjectInput {
 }
 
 """
+Subscription object
+"""
+type AppSubscriptionDetails {
+  """
+  The ID of an account
+  """
+  account_id: Int!
+  """
+  The ID of a pricing plan
+  """
+  plan_id: String!
+  """
+  The ID of a pricing version
+  """
+  pricing_version_id: Int!
+  """
+  The monthly price of the product purchased in the given currency, after applying discounts
+  """
+  monthly_price: Float!
+  """
+  The currency, in which the product was purchased
+  """
+  currency: String!
+  period_type: SubscriptionPeriodType!
+  """
+  The date the active subscription is set to renew. Equals to null for inactive subscriptions
+  """
+  renewal_date: String
+  """
+  The date the the inactive subscription ended. Equals to null for active subscriptions
+  """
+  end_date: String
+  status: SubscriptionStatus!
+  discounts: [SubscriptionDiscount!]!
+  """
+  The number of days left until the subscription ends
+  """
+  days_left: Int!
+  """
+  The subscribed unit quantity. Null for feature-based plans
+  """
+  max_units: Int
+}
+
+type AppSubscriptions {
+  subscriptions: [AppSubscriptionDetails!]!
+  """
+  Total number of subscriptions matching the given parameters
+  """
+  total_count: Int!
+  """
+  The value, which identifies the exact point to continue fetching the subscriptions from
+  """
+  cursor: String
+}
+
+"""
+A granted marketplace app discount offer
+"""
+type CreateMarketplaceAppDiscount {
+  """
+  Number of days a discount will be valid
+  """
+  days_valid: Int!
+  """
+  Percentage value of a discount
+  """
+  discount: Int!
+  """
+  Is discount recurring
+  """
+  is_recurring: Boolean!
+  """
+  The period of a discount
+  """
+  period: DiscountPeriod
+  """
+  List of app plan ids
+  """
+  app_plan_ids: [ID!]
+  """
+  The id of an app
+  """
+  app_id: ID!
+}
+
+"""
+Input data for creating a marketplace app discount
+"""
+input CreateMarketplaceAppDiscountInput {
+  """
+  Number of days a discount will be valid
+  """
+  days_valid: Int!
+  """
+  Percentage value of a discount
+  """
+  discount: Int!
+  """
+  The period of a discount
+  """
+  period: DiscountPeriod
+  """
+  List of app plan ids
+  """
+  app_plan_ids: [ID!]!
+}
+
+"""
+Result of granting a marketplace app discount offer
+"""
+type CreateMarketplaceAppDiscountResult {
+  """
+  The granted discount offer
+  """
+  granted_discount: CreateMarketplaceAppDiscount!
+}
+
+type DeleteMarketplaceAppDiscount {
+  """
+  Slug of an account
+  """
+  account_slug: String!
+  """
+  The id of an app
+  """
+  app_id: ID!
+}
+
+type DeleteMarketplaceAppDiscountResult {
+  deleted_discount: DeleteMarketplaceAppDiscount!
+}
+
+"""
+The period of a discount
+"""
+enum DiscountPeriod {
+  MONTHLY
+  YEARLY
+}
+
+type GrantMarketplaceAppDiscount {
+  """
+  Number of days a discount will be valid
+  """
+  days_valid: Int!
+  """
+  Percentage value of a discount
+  """
+  discount: Int!
+  """
+  Is discount recurring
+  """
+  is_recurring: Boolean!
+  period: DiscountPeriod
+  """
+  List of app plan ids
+  """
+  app_plan_ids: [String!]!
+  """
+  The id of an app
+  """
+  app_id: ID!
+}
+
+input GrantMarketplaceAppDiscountData {
+  """
+  Number of days a discount will be valid
+  """
+  days_valid: Int!
+  """
+  Percentage value of a discount
+  """
+  discount: Int!
+  """
+  Is discount recurring
+  """
+  is_recurring: Boolean!
+  """
+  The period of a discount
+  """
+  period: DiscountPeriod
+  """
+  List of app plan ids
+  """
+  app_plan_ids: [String!]!
+}
+
+type GrantMarketplaceAppDiscountResult {
+  granted_discount: GrantMarketplaceAppDiscount!
+}
+
+type MarketplaceAppDiscount {
+  """
+  Slug of an account
+  """
+  account_slug: String!
+  """
+  The ID of an account
+  """
+  account_id: ID!
+  """
+  Percentage value of a discount
+  """
+  discount: Int!
+  """
+  Is discount recurring
+  """
+  is_recurring: Boolean!
+  """
+  List of app plan ids
+  """
+  app_plan_ids: [String!]!
+  period: DiscountPeriod
+  """
+  Date until a discount is valid
+  """
+  valid_until: String!
+  """
+  Date when a discount was created
+  """
+  created_at: String!
+}
+
+"""
+The discounts granted to the subscription
+"""
+type SubscriptionDiscount {
+  """
+  The value of the discount in percentage (e.g. the value 80 refers to 80%)
+  """
+  value: Int!
+  discount_model_type: SubscriptionDiscountModelType!
+  discount_type: SubscriptionDiscountType!
+}
+
+"""
+The information whether the discount is percentage or nominal
+"""
+enum SubscriptionDiscountModelType {
+  percent
+  nominal
+}
+
+"""
+The information whether the discount has been granted one time or recurring
+"""
+enum SubscriptionDiscountType {
+  recurring
+  one_time
+}
+
+"""
+The billing period of the subscription. Possible values: monthly, yearly
+"""
+enum SubscriptionPeriodType {
+  monthly
+  yearly
+}
+
+"""
+The status of the subscription. Possible values: active, inactive.
+"""
+enum SubscriptionStatus {
+  active
+  inactive
+}
+
+"""
 An artifact produced by or associated with a workstream run
 """
 type Artifact {
@@ -8635,387 +8888,6 @@ type TriggerEventsPage {
 }
 
 """
-Subscription object
-"""
-type AppSubscriptionDetails {
-  """
-  The ID of an account
-  """
-  account_id: Int!
-  """
-  The ID of a pricing plan
-  """
-  plan_id: String!
-  """
-  The ID of a pricing version
-  """
-  pricing_version_id: Int!
-  """
-  The monthly price of the product purchased in the given currency, after applying discounts
-  """
-  monthly_price: Float!
-  """
-  The currency, in which the product was purchased
-  """
-  currency: String!
-  period_type: SubscriptionPeriodType!
-  """
-  The date the active subscription is set to renew. Equals to null for inactive subscriptions
-  """
-  renewal_date: String
-  """
-  The date the the inactive subscription ended. Equals to null for active subscriptions
-  """
-  end_date: String
-  status: SubscriptionStatus!
-  discounts: [SubscriptionDiscount!]!
-  """
-  The number of days left until the subscription ends
-  """
-  days_left: Int!
-  """
-  The subscribed unit quantity. Null for feature-based plans
-  """
-  max_units: Int
-}
-
-type AppSubscriptions {
-  subscriptions: [AppSubscriptionDetails!]!
-  """
-  Total number of subscriptions matching the given parameters
-  """
-  total_count: Int!
-  """
-  The value, which identifies the exact point to continue fetching the subscriptions from
-  """
-  cursor: String
-}
-
-"""
-A granted marketplace app discount offer
-"""
-type CreateMarketplaceAppDiscount {
-  """
-  Number of days a discount will be valid
-  """
-  days_valid: Int!
-  """
-  Percentage value of a discount
-  """
-  discount: Int!
-  """
-  Is discount recurring
-  """
-  is_recurring: Boolean!
-  """
-  The period of a discount
-  """
-  period: DiscountPeriod
-  """
-  List of app plan ids
-  """
-  app_plan_ids: [ID!]
-  """
-  The id of an app
-  """
-  app_id: ID!
-}
-
-"""
-Input data for creating a marketplace app discount
-"""
-input CreateMarketplaceAppDiscountInput {
-  """
-  Number of days a discount will be valid
-  """
-  days_valid: Int!
-  """
-  Percentage value of a discount
-  """
-  discount: Int!
-  """
-  The period of a discount
-  """
-  period: DiscountPeriod
-  """
-  List of app plan ids
-  """
-  app_plan_ids: [ID!]!
-}
-
-"""
-Result of granting a marketplace app discount offer
-"""
-type CreateMarketplaceAppDiscountResult {
-  """
-  The granted discount offer
-  """
-  granted_discount: CreateMarketplaceAppDiscount!
-}
-
-type DeleteMarketplaceAppDiscount {
-  """
-  Slug of an account
-  """
-  account_slug: String!
-  """
-  The id of an app
-  """
-  app_id: ID!
-}
-
-type DeleteMarketplaceAppDiscountResult {
-  deleted_discount: DeleteMarketplaceAppDiscount!
-}
-
-"""
-The period of a discount
-"""
-enum DiscountPeriod {
-  MONTHLY
-  YEARLY
-}
-
-type GrantMarketplaceAppDiscount {
-  """
-  Number of days a discount will be valid
-  """
-  days_valid: Int!
-  """
-  Percentage value of a discount
-  """
-  discount: Int!
-  """
-  Is discount recurring
-  """
-  is_recurring: Boolean!
-  period: DiscountPeriod
-  """
-  List of app plan ids
-  """
-  app_plan_ids: [String!]!
-  """
-  The id of an app
-  """
-  app_id: ID!
-}
-
-input GrantMarketplaceAppDiscountData {
-  """
-  Number of days a discount will be valid
-  """
-  days_valid: Int!
-  """
-  Percentage value of a discount
-  """
-  discount: Int!
-  """
-  Is discount recurring
-  """
-  is_recurring: Boolean!
-  """
-  The period of a discount
-  """
-  period: DiscountPeriod
-  """
-  List of app plan ids
-  """
-  app_plan_ids: [String!]!
-}
-
-type GrantMarketplaceAppDiscountResult {
-  granted_discount: GrantMarketplaceAppDiscount!
-}
-
-input MarketplaceAiSearchInput {
-  """
-  The search query term
-  """
-  query: String!
-  """
-  Maximum number of search results to return
-  """
-  limit: Int
-}
-
-type MarketplaceAiSearchResult {
-  """
-  The ID of the marketplace app
-  """
-  marketplace_app_id: ID!
-  """
-  The name of the marketplace app
-  """
-  name: String!
-  """
-  How well the app matches the user query (0-100)
-  """
-  match_percentage: Float!
-  """
-  List of relevant features that match the user needs
-  """
-  features: [String!]!
-}
-
-type MarketplaceAiSearchResults {
-  results: [MarketplaceAiSearchResult!]!
-}
-
-type MarketplaceAppDiscount {
-  """
-  Slug of an account
-  """
-  account_slug: String!
-  """
-  The ID of an account
-  """
-  account_id: ID!
-  """
-  Percentage value of a discount
-  """
-  discount: Int!
-  """
-  Is discount recurring
-  """
-  is_recurring: Boolean!
-  """
-  List of app plan ids
-  """
-  app_plan_ids: [String!]!
-  period: DiscountPeriod
-  """
-  Date until a discount is valid
-  """
-  valid_until: String!
-  """
-  Date when a discount was created
-  """
-  created_at: String!
-}
-
-type MarketplaceAppMetadata {
-  """
-  The average rating of the marketplace app
-  """
-  rating: Float!
-  """
-  The number of ratings for the marketplace app
-  """
-  ratingCount: Int!
-  """
-  The number of installs for the marketplace app
-  """
-  installsCount: Int!
-}
-
-type MarketplaceSearchAppDocument {
-  """
-  The ID of the marketplace app
-  """
-  marketplace_app_id: ID!
-  """
-  The name of the marketplace app
-  """
-  name: String!
-  """
-  The description of the marketplace app
-  """
-  description: String!
-  """
-  The short description of the marketplace app
-  """
-  short_description: String!
-  """
-  The keywords associated with the marketplace app
-  """
-  keywords: String!
-  metadata: MarketplaceAppMetadata!
-}
-
-type MarketplaceSearchHit {
-  """
-  The unique identifier of the search result
-  """
-  id: String!
-  """
-  The relevance score of the search result
-  """
-  score: Float!
-  document: MarketplaceSearchAppDocument!
-}
-
-input MarketplaceSearchInput {
-  """
-  The search query term
-  """
-  query: String!
-  """
-  Maximum number of search results to return
-  """
-  limit: Int
-  """
-  Number of search results to skip
-  """
-  offset: Int
-}
-
-type MarketplaceSearchResults {
-  hits: [MarketplaceSearchHit!]!
-  """
-  The total number of search results
-  """
-  count: Int!
-  """
-  The time taken to perform the search
-  """
-  elapsed: String!
-}
-
-"""
-The discounts granted to the subscription
-"""
-type SubscriptionDiscount {
-  """
-  The value of the discount in percentage (e.g. the value 80 refers to 80%)
-  """
-  value: Int!
-  discount_model_type: SubscriptionDiscountModelType!
-  discount_type: SubscriptionDiscountType!
-}
-
-"""
-The information whether the discount is percentage or nominal
-"""
-enum SubscriptionDiscountModelType {
-  percent
-  nominal
-}
-
-"""
-The information whether the discount has been granted one time or recurring
-"""
-enum SubscriptionDiscountType {
-  recurring
-  one_time
-}
-
-"""
-The billing period of the subscription. Possible values: monthly, yearly
-"""
-enum SubscriptionPeriodType {
-  monthly
-  yearly
-}
-
-"""
-The status of the subscription. Possible values: active, inactive.
-"""
-enum SubscriptionStatus {
-  active
-  inactive
-}
-
-"""
 The result of the connect_migration_job mutation.
 """
 type ConnectMigrationJobResult {
@@ -9562,6 +9434,685 @@ type CreateProjectResult {
   Unique process ID for tracking this creation request. This will be included in the callback when creation completes.
   """
   process_id: ID
+}
+
+"""
+A role in the account
+"""
+type AccountRole {
+  """
+  The ID of the role
+  """
+  id: ID
+  """
+  The name of the role
+  """
+  name: String
+  """
+  The type of the role
+  """
+  roleType: String
+}
+
+"""
+Error that occurred during activation.
+"""
+type ActivateUsersError {
+  """
+  The error message.
+  """
+  message: String
+  """
+  The error code.
+  """
+  code: ActivateUsersErrorCode
+  """
+  The id of the user that caused the error.
+  """
+  user_id: ID
+}
+
+"""
+Error codes for activating users.
+"""
+enum ActivateUsersErrorCode {
+  EXCEEDS_BATCH_LIMIT
+  INVALID_INPUT
+  USER_NOT_FOUND
+  CANNOT_UPDATE_SELF
+  FAILED
+}
+
+"""
+Result of activating users.
+"""
+type ActivateUsersResult {
+  """
+  The users that were activated.
+  """
+  activated_users: [User!]
+  """
+  Errors that occurred during activation.
+  """
+  errors: [ActivateUsersError!]
+}
+
+"""
+The level of access a user or team has for an agent.
+"""
+enum AgentMembershipRole {
+  OWNER
+  MEMBER
+}
+
+"""
+A subscriber of an agent — a user or team with an assigned role.
+"""
+type AgentSubscriber {
+  """
+  The role assigned to the subscribed entity.
+  """
+  role: AgentMembershipRole
+  """
+  Whether the subscribed entity is a user or a team.
+  """
+  type: AgentSubscriberKind
+  """
+  The subscribed user or team.
+  """
+  entity: AgentSubscriberEntity!
+}
+
+"""
+The user or team subscribed to an agent.
+"""
+union AgentSubscriberEntity = User | Team
+
+"""
+The type of entity subscribed to an agent.
+"""
+enum AgentSubscriberKind {
+  USER
+  TEAM
+}
+
+"""
+Maps an API app to an API-app-backed user within an account.
+"""
+type ApiAppUserMapping {
+  """
+  The mapped user.
+  """
+  user: User!
+}
+
+"""
+The kind of API-app-backed user to create.
+"""
+enum ApiAppUserMappingKind {
+  AGENT_MEMBER
+  VIBE_USER
+}
+
+"""
+Error that occurred while changing team owners.
+"""
+type AssignTeamOwnersError {
+  """
+  The error message.
+  """
+  message: String
+  """
+  The error code.
+  """
+  code: AssignTeamOwnersErrorCode
+  """
+  The id of the user that caused the error.
+  """
+  user_id: ID
+}
+
+"""
+Error codes that can occur while changing team owners.
+"""
+enum AssignTeamOwnersErrorCode {
+  VIEWERS_OR_GUESTS
+  USER_NOT_MEMBER_OF_TEAM
+  EXCEEDS_BATCH_LIMIT
+  INVALID_INPUT
+  USER_NOT_FOUND
+  CANNOT_UPDATE_SELF
+  FAILED
+}
+
+"""
+Result of changing the team's ownership.
+"""
+type AssignTeamOwnersResult {
+  """
+  The team for which the owners were changed.
+  """
+  team: Team
+  """
+  Errors that occurred while changing team owners.
+  """
+  errors: [AssignTeamOwnersError!]
+}
+
+"""
+The role of the user.
+"""
+enum BaseRoleName {
+  GUEST
+  VIEW_ONLY
+  MEMBER
+  ADMIN
+}
+
+"""
+The result of creating a service user.
+"""
+type CreateServiceUserResult {
+  """
+  The created service user.
+  """
+  user: User
+}
+
+"""
+Attributes of the team to be created.
+"""
+input CreateTeamAttributesInput {
+  """
+  The team's name.
+  """
+  name: String!
+  """
+  Whether the team can contain guest users.
+  """
+  is_guest_team: Boolean
+  """
+  The parent team identifier.
+  """
+  parent_team_id: ID
+  """
+  The team members. Must not be empty, unless allow_empty_team is set.
+  """
+  subscriber_ids: [ID!]
+}
+
+"""
+Options for creating a team.
+"""
+input CreateTeamOptionsInput {
+  """
+  Whether to allow a team without any subscribers.
+  """
+  allow_empty_team: Boolean
+}
+
+"""
+Error that occurred during deactivation.
+"""
+type DeactivateUsersError {
+  """
+  The error message.
+  """
+  message: String
+  """
+  The error code.
+  """
+  code: DeactivateUsersErrorCode
+  """
+  The id of the user that caused the error.
+  """
+  user_id: ID
+}
+
+"""
+Error codes for deactivating users.
+"""
+enum DeactivateUsersErrorCode {
+  EXCEEDS_BATCH_LIMIT
+  INVALID_INPUT
+  USER_NOT_FOUND
+  CANNOT_UPDATE_SELF
+  FAILED
+}
+
+"""
+Result of deactivating users.
+"""
+type DeactivateUsersResult {
+  """
+  The users that were deactivated.
+  """
+  deactivated_users: [User!]
+  """
+  Errors that occurred during deactivation.
+  """
+  errors: [DeactivateUsersError!]
+}
+
+"""
+Error that occurred while inviting users
+"""
+type InviteUsersError {
+  """
+  The error message.
+  """
+  message: String
+  """
+  The error code.
+  """
+  code: InviteUsersErrorCode
+  """
+  The email address for the user that caused the error.
+  """
+  email: ID
+}
+
+"""
+Error codes that can occur while changing email domain.
+"""
+enum InviteUsersErrorCode {
+  ERROR
+}
+
+"""
+Result of inviting users to the account.
+"""
+type InviteUsersResult {
+  """
+  The users that were successfully invited.
+  """
+  invited_users: [User!]
+  """
+  Errors that occurred while inviting users
+  """
+  errors: [InviteUsersError!]
+}
+
+"""
+The product to invite the users to.
+"""
+enum Product {
+  work_management
+  crm
+  dev
+  service
+  whiteboard
+  knowledge
+  forms
+  workflows
+}
+
+"""
+Error that occurred while removing team owners.
+"""
+type RemoveTeamOwnersError {
+  """
+  The error message.
+  """
+  message: String
+  """
+  The error code.
+  """
+  code: RemoveTeamOwnersErrorCode
+  """
+  The id of the user that caused the error.
+  """
+  user_id: ID
+}
+
+"""
+Error codes that can occur while removing team owners.
+"""
+enum RemoveTeamOwnersErrorCode {
+  VIEWERS_OR_GUESTS
+  USER_NOT_MEMBER_OF_TEAM
+  EXCEEDS_BATCH_LIMIT
+  INVALID_INPUT
+  USER_NOT_FOUND
+  CANNOT_UPDATE_SELF
+  FAILED
+}
+
+"""
+Result of removing the team's ownership.
+"""
+type RemoveTeamOwnersResult {
+  """
+  The team for which the owners were removed.
+  """
+  team: Team
+  """
+  Errors that occurred while removing team owners.
+  """
+  errors: [RemoveTeamOwnersError!]
+}
+
+"""
+A service user in the account.
+"""
+type ServiceUser {
+  """
+  The ID of the service user.
+  """
+  id: ID
+  """
+  The display name of the service user.
+  """
+  name: String
+  """
+  The title/description of the service user.
+  """
+  title: String
+  """
+  Whether the service user is active.
+  """
+  enabled: Boolean
+  """
+  The ID of the user who created this service user.
+  """
+  invited_by_id: ID
+  """
+  When the service user was created.
+  """
+  created_at: String
+  """
+  The last time the service user token was used for an API request.
+  """
+  last_token_activity: String
+  """
+  Whether the service user currently has an active API token.
+  """
+  has_token: Boolean
+}
+
+"""
+A service user token result.
+"""
+type ServiceUserToken {
+  """
+  The ID of the service user.
+  """
+  service_user_id: ID
+  """
+  The API token.
+  """
+  token: String
+}
+
+"""
+Result of the subscribe_teams_to_agent mutation.
+"""
+type SubscribeTeamsToAgentResult {
+  """
+  Whether all teams were successfully subscribed to the agent.
+  """
+  is_successful: Boolean
+}
+
+"""
+Result of the subscribe_users_to_agent mutation.
+"""
+type SubscribeUsersToAgentResult {
+  """
+  Whether all users were successfully subscribed to the agent.
+  """
+  is_successful: Boolean
+}
+
+"""
+A team of users.
+"""
+type Team {
+  """
+  The team's unique identifier.
+  """
+  id: ID!
+  """
+  Whether the team is a guest team
+  """
+  is_guest: Boolean
+  """
+  The team's name.
+  """
+  name: String!
+  """
+  The team's creation date as an ISO 8601 string.
+  """
+  created_at: String
+  """
+  The users who are the owners of the team.
+  """
+  owners(ids: [ID!]): [User!]!
+  """
+  The team's picture url.
+  """
+  picture_url: String
+  """
+  The users in the team.
+  """
+  users(emails: [String], ids: [ID!], kind: UserKind, limit: Int, name: String, newest_first: Boolean, non_active: Boolean, page: Int): [User]
+}
+
+"""
+Result of the unsubscribe_teams_from_agent mutation.
+"""
+type UnsubscribeTeamsFromAgentResult {
+  """
+  Whether all teams were successfully unsubscribed from the agent.
+  """
+  is_successful: Boolean
+}
+
+"""
+Result of the unsubscribe_users_from_agent mutation.
+"""
+type UnsubscribeUsersFromAgentResult {
+  """
+  Whether all users were successfully unsubscribed from the agent.
+  """
+  is_successful: Boolean
+}
+
+"""
+Attributes of the email domain to be updated.
+"""
+input UpdateEmailDomainAttributesInput {
+  """
+  The user identifiers (max 200)
+  """
+  user_ids: [ID!]!
+  """
+  The new email domain.
+  """
+  new_domain: String!
+}
+
+"""
+Error that occurred while changing email domain.
+"""
+type UpdateEmailDomainError {
+  """
+  The error message.
+  """
+  message: String
+  """
+  The error code.
+  """
+  code: UpdateEmailDomainErrorCode
+  """
+  The id of the user that caused the error.
+  """
+  user_id: ID
+}
+
+"""
+Error codes that can occur while changing email domain.
+"""
+enum UpdateEmailDomainErrorCode {
+  UPDATE_EMAIL_DOMAIN_ERROR
+  EXCEEDS_BATCH_LIMIT
+  INVALID_INPUT
+  USER_NOT_FOUND
+  CANNOT_UPDATE_SELF
+  FAILED
+}
+
+"""
+Result of updating the email domain for the specified users.
+"""
+type UpdateEmailDomainResult {
+  """
+  The users for which the email domain was updated.
+  """
+  updated_users: [User!]
+  """
+  Errors that occurred during the update.
+  """
+  errors: [UpdateEmailDomainError!]
+}
+
+"""
+Error that occurred while updating users attributes.
+"""
+type UpdateUserAttributesError {
+  """
+  The error message.
+  """
+  message: String
+  """
+  The error code.
+  """
+  code: UpdateUserAttributesErrorCode
+  """
+  The id of the user that caused the error.
+  """
+  user_id: ID
+}
+
+"""
+Error codes that can occur while updating user attributes.
+"""
+enum UpdateUserAttributesErrorCode {
+  INVALID_FIELD
+}
+
+"""
+The result of updating users attributes.
+"""
+type UpdateUserAttributesResult {
+  """
+  The users that were updated.
+  """
+  updated_users: [User!]
+  """
+  Errors that occurred during the update.
+  """
+  errors: [UpdateUserAttributesError!]
+}
+
+"""
+Error that occurred during updating users role.
+"""
+type UpdateUsersRoleError {
+  """
+  The error message.
+  """
+  message: String
+  """
+  The error code.
+  """
+  code: UpdateUsersRoleErrorCode
+  """
+  The id of the user that caused the error.
+  """
+  user_id: ID
+}
+
+"""
+Error codes for updating users roles.
+"""
+enum UpdateUsersRoleErrorCode {
+  EXCEEDS_BATCH_LIMIT
+  INVALID_INPUT
+  USER_NOT_FOUND
+  CANNOT_UPDATE_SELF
+  FAILED
+}
+
+"""
+Result of updating users role.
+"""
+type UpdateUsersRoleResult {
+  """
+  The users that were updated.
+  """
+  updated_users: [User!]
+  """
+  Errors that occurred during updating users role.
+  """
+  errors: [UpdateUsersRoleError!]
+}
+
+"""
+The attributes to update for a user.
+"""
+input UserAttributesInput {
+  """
+  The birthday of the user.
+  """
+  birthday: String
+  """
+  The email of the user.
+  """
+  email: String
+  """
+  The join date of the user.
+  """
+  join_date: String
+  """
+  The name of the user.
+  """
+  name: String
+  """
+  The location of the user.
+  """
+  location: String
+  """
+  The mobile phone of the user.
+  """
+  mobile_phone: String
+  """
+  The phone of the user.
+  """
+  phone: String
+  """
+  The title of the user.
+  """
+  title: String
+  """
+  The department of the user.
+  """
+  department: String
+}
+
+"""
+The role of the user.
+"""
+enum UserRole {
+  GUEST
+  VIEW_ONLY
+  MEMBER
+  ADMIN
+}
+
+input UserUpdateInput {
+  user_id: ID!
+  user_attribute_updates: UserAttributesInput!
 }
 
 enum Action {
@@ -12732,694 +13283,6 @@ input WorkflowsPaginationInput {
   Cursor of the last item from the previous page; pass `page_info.end_cursor` from the previous response
   """
   last_id: ID
-}
-
-"""
-A role in the account
-"""
-type AccountRole {
-  """
-  The ID of the role
-  """
-  id: ID
-  """
-  The name of the role
-  """
-  name: String
-  """
-  The type of the role
-  """
-  roleType: String
-}
-
-"""
-Error that occurred during activation.
-"""
-type ActivateUsersError {
-  """
-  The error message.
-  """
-  message: String
-  """
-  The error code.
-  """
-  code: ActivateUsersErrorCode
-  """
-  The id of the user that caused the error.
-  """
-  user_id: ID
-}
-
-"""
-Error codes for activating users.
-"""
-enum ActivateUsersErrorCode {
-  EXCEEDS_BATCH_LIMIT
-  INVALID_INPUT
-  USER_NOT_FOUND
-  CANNOT_UPDATE_SELF
-  FAILED
-}
-
-"""
-Result of activating users.
-"""
-type ActivateUsersResult {
-  """
-  The users that were activated.
-  """
-  activated_users: [User!]
-  """
-  Errors that occurred during activation.
-  """
-  errors: [ActivateUsersError!]
-}
-
-"""
-The level of access a user or team has for an agent.
-"""
-enum AgentMembershipRole {
-  OWNER
-  MEMBER
-}
-
-"""
-A subscriber of an agent — a user or team with an assigned role.
-"""
-type AgentSubscriber {
-  """
-  The role assigned to the subscribed entity.
-  """
-  role: AgentMembershipRole
-  """
-  Whether the subscribed entity is a user or a team.
-  """
-  type: AgentSubscriberKind
-  """
-  The subscribed user or team.
-  """
-  entity: AgentSubscriberEntity!
-}
-
-"""
-The user or team subscribed to an agent.
-"""
-union AgentSubscriberEntity = User | Team
-
-"""
-The type of entity subscribed to an agent.
-"""
-enum AgentSubscriberKind {
-  USER
-  TEAM
-}
-
-"""
-Maps an API app to an API-app-backed user within an account.
-"""
-type ApiAppUserMapping {
-  """
-  The mapped user.
-  """
-  user: User!
-}
-
-"""
-The kind of API-app-backed user to create.
-"""
-enum ApiAppUserMappingKind {
-  AGENT_MEMBER
-  VIBE_USER
-}
-
-"""
-Error that occurred while changing team owners.
-"""
-type AssignTeamOwnersError {
-  """
-  The error message.
-  """
-  message: String
-  """
-  The error code.
-  """
-  code: AssignTeamOwnersErrorCode
-  """
-  The id of the user that caused the error.
-  """
-  user_id: ID
-}
-
-"""
-Error codes that can occur while changing team owners.
-"""
-enum AssignTeamOwnersErrorCode {
-  VIEWERS_OR_GUESTS
-  USER_NOT_MEMBER_OF_TEAM
-  EXCEEDS_BATCH_LIMIT
-  INVALID_INPUT
-  USER_NOT_FOUND
-  CANNOT_UPDATE_SELF
-  FAILED
-}
-
-"""
-Result of changing the team's ownership.
-"""
-type AssignTeamOwnersResult {
-  """
-  The team for which the owners were changed.
-  """
-  team: Team
-  """
-  Errors that occurred while changing team owners.
-  """
-  errors: [AssignTeamOwnersError!]
-}
-
-"""
-The role of the user.
-"""
-enum BaseRoleName {
-  GUEST
-  VIEW_ONLY
-  MEMBER
-  ADMIN
-}
-
-"""
-The result of creating a service user.
-"""
-type CreateServiceUserResult {
-  """
-  The created service user.
-  """
-  user: User
-}
-
-"""
-Attributes of the team to be created.
-"""
-input CreateTeamAttributesInput {
-  """
-  The team's name.
-  """
-  name: String!
-  """
-  Whether the team can contain guest users.
-  """
-  is_guest_team: Boolean
-  """
-  The parent team identifier.
-  """
-  parent_team_id: ID
-  """
-  The team members. Must not be empty, unless allow_empty_team is set.
-  """
-  subscriber_ids: [ID!]
-}
-
-"""
-Options for creating a team.
-"""
-input CreateTeamOptionsInput {
-  """
-  Whether to allow a team without any subscribers.
-  """
-  allow_empty_team: Boolean
-}
-
-"""
-Error that occurred during deactivation.
-"""
-type DeactivateUsersError {
-  """
-  The error message.
-  """
-  message: String
-  """
-  The error code.
-  """
-  code: DeactivateUsersErrorCode
-  """
-  The id of the user that caused the error.
-  """
-  user_id: ID
-}
-
-"""
-Error codes for deactivating users.
-"""
-enum DeactivateUsersErrorCode {
-  EXCEEDS_BATCH_LIMIT
-  INVALID_INPUT
-  USER_NOT_FOUND
-  CANNOT_UPDATE_SELF
-  FAILED
-}
-
-"""
-Result of deactivating users.
-"""
-type DeactivateUsersResult {
-  """
-  The users that were deactivated.
-  """
-  deactivated_users: [User!]
-  """
-  Errors that occurred during deactivation.
-  """
-  errors: [DeactivateUsersError!]
-}
-
-"""
-Error that occurred while inviting users
-"""
-type InviteUsersError {
-  """
-  The error message.
-  """
-  message: String
-  """
-  The error code.
-  """
-  code: InviteUsersErrorCode
-  """
-  The email address for the user that caused the error.
-  """
-  email: ID
-}
-
-"""
-Error codes that can occur while changing email domain.
-"""
-enum InviteUsersErrorCode {
-  ERROR
-}
-
-"""
-Result of inviting users to the account.
-"""
-type InviteUsersResult {
-  """
-  The users that were successfully invited.
-  """
-  invited_users: [User!]
-  """
-  Errors that occurred while inviting users
-  """
-  errors: [InviteUsersError!]
-}
-
-"""
-The product to invite the users to.
-"""
-enum Product {
-  work_management
-  crm
-  dev
-  service
-  whiteboard
-  knowledge
-  forms
-  workflows
-}
-
-"""
-Error that occurred while removing team owners.
-"""
-type RemoveTeamOwnersError {
-  """
-  The error message.
-  """
-  message: String
-  """
-  The error code.
-  """
-  code: RemoveTeamOwnersErrorCode
-  """
-  The id of the user that caused the error.
-  """
-  user_id: ID
-}
-
-"""
-Error codes that can occur while removing team owners.
-"""
-enum RemoveTeamOwnersErrorCode {
-  VIEWERS_OR_GUESTS
-  USER_NOT_MEMBER_OF_TEAM
-  EXCEEDS_BATCH_LIMIT
-  INVALID_INPUT
-  USER_NOT_FOUND
-  CANNOT_UPDATE_SELF
-  FAILED
-}
-
-"""
-Result of removing the team's ownership.
-"""
-type RemoveTeamOwnersResult {
-  """
-  The team for which the owners were removed.
-  """
-  team: Team
-  """
-  Errors that occurred while removing team owners.
-  """
-  errors: [RemoveTeamOwnersError!]
-}
-
-"""
-A service user in the account.
-"""
-type ServiceUser {
-  """
-  The ID of the service user.
-  """
-  id: ID
-  """
-  The display name of the service user.
-  """
-  name: String
-  """
-  The title/description of the service user.
-  """
-  title: String
-  """
-  Whether the service user is active.
-  """
-  enabled: Boolean
-  """
-  The ID of the user who created this service user.
-  """
-  invited_by_id: ID
-  """
-  When the service user was created.
-  """
-  created_at: String
-  """
-  The last time the service user token was used for an API request.
-  """
-  last_token_activity: String
-  """
-  Whether the service user currently has an active API token.
-  """
-  has_token: Boolean
-}
-
-"""
-A service user token result.
-"""
-type ServiceUserToken {
-  """
-  The ID of the service user.
-  """
-  service_user_id: ID
-  """
-  The API token.
-  """
-  token: String
-}
-
-"""
-Result of the subscribe_teams_to_agent mutation.
-"""
-type SubscribeTeamsToAgentResult {
-  """
-  Whether all teams were successfully subscribed to the agent.
-  """
-  is_successful: Boolean
-}
-
-"""
-Result of the subscribe_users_to_agent mutation.
-"""
-type SubscribeUsersToAgentResult {
-  """
-  Whether all users were successfully subscribed to the agent.
-  """
-  is_successful: Boolean
-}
-
-"""
-A team of users.
-"""
-type Team {
-  """
-  The team's unique identifier.
-  """
-  id: ID!
-  """
-  Whether the team is a guest team
-  """
-  is_guest: Boolean
-  """
-  The team's name.
-  """
-  name: String!
-  """
-  The team's creation date as an ISO 8601 string.
-  """
-  created_at: String
-  """
-  The users who are the owners of the team.
-  """
-  owners(ids: [ID!]): [User!]!
-  """
-  The team's picture url.
-  """
-  picture_url: String
-  """
-  The users in the team.
-  """
-  users(emails: [String], ids: [ID!], kind: UserKind, limit: Int, name: String, newest_first: Boolean, non_active: Boolean, page: Int): [User]
-}
-
-"""
-Result of the unsubscribe_teams_from_agent mutation.
-"""
-type UnsubscribeTeamsFromAgentResult {
-  """
-  Whether all teams were successfully unsubscribed from the agent.
-  """
-  is_successful: Boolean
-}
-
-"""
-Result of the unsubscribe_users_from_agent mutation.
-"""
-type UnsubscribeUsersFromAgentResult {
-  """
-  Whether all users were successfully unsubscribed from the agent.
-  """
-  is_successful: Boolean
-}
-
-"""
-Attributes of the email domain to be updated.
-"""
-input UpdateEmailDomainAttributesInput {
-  """
-  The user identifiers (max 200)
-  """
-  user_ids: [ID!]!
-  """
-  The new email domain.
-  """
-  new_domain: String!
-}
-
-"""
-Error that occurred while changing email domain.
-"""
-type UpdateEmailDomainError {
-  """
-  The error message.
-  """
-  message: String
-  """
-  The error code.
-  """
-  code: UpdateEmailDomainErrorCode
-  """
-  The id of the user that caused the error.
-  """
-  user_id: ID
-}
-
-"""
-Error codes that can occur while changing email domain.
-"""
-enum UpdateEmailDomainErrorCode {
-  UPDATE_EMAIL_DOMAIN_ERROR
-  EXCEEDS_BATCH_LIMIT
-  INVALID_INPUT
-  USER_NOT_FOUND
-  CANNOT_UPDATE_SELF
-  FAILED
-}
-
-"""
-Result of updating the email domain for the specified users.
-"""
-type UpdateEmailDomainResult {
-  """
-  The users for which the email domain was updated.
-  """
-  updated_users: [User!]
-  """
-  Errors that occurred during the update.
-  """
-  errors: [UpdateEmailDomainError!]
-}
-
-"""
-Error that occurred while updating users attributes.
-"""
-type UpdateUserAttributesError {
-  """
-  The error message.
-  """
-  message: String
-  """
-  The error code.
-  """
-  code: UpdateUserAttributesErrorCode
-  """
-  The id of the user that caused the error.
-  """
-  user_id: ID
-}
-
-"""
-Error codes that can occur while updating user attributes.
-"""
-enum UpdateUserAttributesErrorCode {
-  INVALID_FIELD
-}
-
-"""
-The result of updating users attributes.
-"""
-type UpdateUserAttributesResult {
-  """
-  The users that were updated.
-  """
-  updated_users: [User!]
-  """
-  Errors that occurred during the update.
-  """
-  errors: [UpdateUserAttributesError!]
-}
-
-"""
-Error that occurred during updating users role.
-"""
-type UpdateUsersRoleError {
-  """
-  The error message.
-  """
-  message: String
-  """
-  The error code.
-  """
-  code: UpdateUsersRoleErrorCode
-  """
-  The id of the user that caused the error.
-  """
-  user_id: ID
-}
-
-"""
-Error codes for updating users roles.
-"""
-enum UpdateUsersRoleErrorCode {
-  EXCEEDS_BATCH_LIMIT
-  INVALID_INPUT
-  USER_NOT_FOUND
-  CANNOT_UPDATE_SELF
-  FAILED
-}
-
-"""
-Result of updating users role.
-"""
-type UpdateUsersRoleResult {
-  """
-  The users that were updated.
-  """
-  updated_users: [User!]
-  """
-  Errors that occurred during updating users role.
-  """
-  errors: [UpdateUsersRoleError!]
-}
-
-"""
-The attributes to update for a user.
-"""
-input UserAttributesInput {
-  """
-  The birthday of the user.
-  """
-  birthday: String
-  """
-  The email of the user.
-  """
-  email: String
-  """
-  The join date of the user.
-  """
-  join_date: String
-  """
-  The name of the user.
-  """
-  name: String
-  """
-  The location of the user.
-  """
-  location: String
-  """
-  The mobile phone of the user.
-  """
-  mobile_phone: String
-  """
-  The phone of the user.
-  """
-  phone: String
-  """
-  The title of the user.
-  """
-  title: String
-  """
-  The department of the user.
-  """
-  department: String
-}
-
-"""
-The role of the user.
-"""
-enum UserRole {
-  GUEST
-  VIEW_ONLY
-  MEMBER
-  ADMIN
-}
-
-"""
-The activation status of a user.
-"""
-enum UserStatus {
-  ACTIVE
-  INACTIVE
-  PENDING
-}
-
-input UserUpdateInput {
-  user_id: ID!
-  user_attribute_updates: UserAttributesInput!
 }
 
 """
@@ -23372,6 +23235,15 @@ enum UserKindValue {
   DEPENDENCIES_API_USER
   HISTORICAL_TRACKING_BACKFILL_API_USER
   ENTITY_KNOWLEDGE_API_USER
+}
+
+"""
+The activation status of a user.
+"""
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  PENDING
 }
 
 """

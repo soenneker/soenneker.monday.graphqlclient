@@ -98,10 +98,6 @@ public sealed partial class MondayGraphQlClient
     public GetBuilder Get => new GetBuilder(_graphQlClient);
 
     /// <summary>
-    /// Builds and executes grouped requests for the 'marketplace' resource.</summary>
-    public MarketplaceBuilder Marketplace => new MarketplaceBuilder(_graphQlClient);
-
-    /// <summary>
     /// Builds and executes grouped requests for the 'moveItemTo' resource.</summary>
     public MoveItemToBuilder MoveItemTo => new MoveItemToBuilder(_graphQlClient);
 
@@ -312,6 +308,10 @@ public sealed partial class MondayGraphQlClient
     /// <summary>
     /// Builds and executes requests for the 'managed_column' query.</summary>
     public GetManagedColumnRequestBuilder GetManagedColumn => new GetManagedColumnRequestBuilder(_graphQlClient);
+
+    /// <summary>
+    /// Builds and executes requests for the 'marketplace_app_discounts' query.</summary>
+    public GetMarketplaceAppDiscountsRequestBuilder GetMarketplaceAppDiscounts => new GetMarketplaceAppDiscountsRequestBuilder(_graphQlClient);
 
     /// <summary>
     /// Builds and executes requests for the 'me' query.</summary>

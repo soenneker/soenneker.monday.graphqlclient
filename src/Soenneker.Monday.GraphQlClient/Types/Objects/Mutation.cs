@@ -95,12 +95,6 @@ public sealed partial class Mutation
     public int? DeleteObjectRelation { get; init; }
 
     /// <summary>
-    /// Enroll multiple items to a single sequence. Maximum 50 items per request.
-    /// </summary>
-    [JsonPropertyName("enroll_items_to_sequence")]
-    public EnrollToSequenceResult? EnrollItemsToSequence { get; init; }
-
-    /// <summary>
     /// Create a marketplace app discount
     /// </summary>
     [JsonPropertyName("create_marketplace_app_discount")]
@@ -113,6 +107,12 @@ public sealed partial class Mutation
     public GrantMarketplaceAppDiscountResult GrantMarketplaceAppDiscount { get; init; } = null!;
 
     /// <summary>
+    /// Enroll multiple items to a single sequence. Maximum 50 items per request.
+    /// </summary>
+    [JsonPropertyName("enroll_items_to_sequence")]
+    public EnrollToSequenceResult? EnrollItemsToSequence { get; init; }
+
+    /// <summary>
     /// Convert an existing monday.com board into a project with enhanced project management capabilities. This mutation transforms a regular board by applying project-specific features and configurations through column mappings that define how existing board columns should be interpreted in the project context. The conversion process is asynchronous and returns a process_id for tracking completion. Optionally accepts a callback URL for notification when the conversion completes. Use this when you have an existing board with data that needs to be upgraded to a full project with advanced project management features like Resource Planner integration.
     /// </summary>
     [JsonPropertyName("convert_board_to_project")]
@@ -123,84 +123,6 @@ public sealed partial class Mutation
     /// </summary>
     [JsonPropertyName("create_project")]
     public CreateProjectResult? CreateProject { get; init; }
-
-    /// <summary>
-    /// Update form properties including title, description, or question order.
-    /// </summary>
-    [JsonPropertyName("update_form")]
-    public ResponseForm? UpdateForm { get; init; }
-
-    /// <summary>
-    /// Update form configuration including features, appearance, and accessibility options.
-    /// </summary>
-    [JsonPropertyName("update_form_settings")]
-    public ResponseForm? UpdateFormSettings { get; init; }
-
-    /// <summary>
-    /// Create a new question within a form. Returns the created question with auto-generated ID.
-    /// </summary>
-    [JsonPropertyName("create_form_question")]
-    public FormQuestion? CreateFormQuestion { get; init; }
-
-    /// <summary>
-    /// Update an existing question properties including title, type, or settings. Requires question ID.
-    /// </summary>
-    [JsonPropertyName("update_form_question")]
-    public FormQuestion? UpdateFormQuestion { get; init; }
-
-    /// <summary>
-    /// Permanently remove a question from a form. This action cannot be undone.
-    /// </summary>
-    [JsonPropertyName("delete_question")]
-    public bool? DeleteQuestion { get; init; }
-
-    /// <summary>
-    /// Activate a form to make it visible to users and accept new submissions.
-    /// </summary>
-    [JsonPropertyName("activate_form")]
-    public bool? ActivateForm { get; init; }
-
-    /// <summary>
-    /// Deactivate a form to hide it from users and stop accepting submissions. Form data is preserved.
-    /// </summary>
-    [JsonPropertyName("deactivate_form")]
-    public bool? DeactivateForm { get; init; }
-
-    /// <summary>
-    /// Shorten a URL for a form and store it in the form settings. Returns the shortened link object.
-    /// </summary>
-    [JsonPropertyName("shorten_form_url")]
-    public FormShortenedLink? ShortenFormUrl { get; init; }
-
-    /// <summary>
-    /// Create a new tag for a form. Tags are used to categorize and track responses. (e.g. UTM tags)
-    /// </summary>
-    [JsonPropertyName("create_form_tag")]
-    public FormTag? CreateFormTag { get; init; }
-
-    /// <summary>
-    /// Update an existing tag in a form
-    /// </summary>
-    [JsonPropertyName("update_form_tag")]
-    public bool? UpdateFormTag { get; init; }
-
-    /// <summary>
-    /// Delete a tag from a form
-    /// </summary>
-    [JsonPropertyName("delete_form_tag")]
-    public bool? DeleteFormTag { get; init; }
-
-    /// <summary>
-    /// Create a new form with specified configuration. Returns the created form with its unique token.
-    /// </summary>
-    [JsonPropertyName("create_form")]
-    public DehydratedFormResponse? CreateForm { get; init; }
-
-    /// <summary>
-    /// Set a password on a form to restrict access. This will enable password protection for the form.
-    /// </summary>
-    [JsonPropertyName("set_form_password")]
-    public ResponseForm? SetFormPassword { get; init; }
 
     /// <summary>
     /// Creates a new team.
@@ -279,6 +201,84 @@ public sealed partial class Mutation
     /// </summary>
     [JsonPropertyName("create_service_user")]
     public CreateServiceUserResult? CreateServiceUser { get; init; }
+
+    /// <summary>
+    /// Update form properties including title, description, or question order.
+    /// </summary>
+    [JsonPropertyName("update_form")]
+    public ResponseForm? UpdateForm { get; init; }
+
+    /// <summary>
+    /// Update form configuration including features, appearance, and accessibility options.
+    /// </summary>
+    [JsonPropertyName("update_form_settings")]
+    public ResponseForm? UpdateFormSettings { get; init; }
+
+    /// <summary>
+    /// Create a new question within a form. Returns the created question with auto-generated ID.
+    /// </summary>
+    [JsonPropertyName("create_form_question")]
+    public FormQuestion? CreateFormQuestion { get; init; }
+
+    /// <summary>
+    /// Update an existing question properties including title, type, or settings. Requires question ID.
+    /// </summary>
+    [JsonPropertyName("update_form_question")]
+    public FormQuestion? UpdateFormQuestion { get; init; }
+
+    /// <summary>
+    /// Permanently remove a question from a form. This action cannot be undone.
+    /// </summary>
+    [JsonPropertyName("delete_question")]
+    public bool? DeleteQuestion { get; init; }
+
+    /// <summary>
+    /// Activate a form to make it visible to users and accept new submissions.
+    /// </summary>
+    [JsonPropertyName("activate_form")]
+    public bool? ActivateForm { get; init; }
+
+    /// <summary>
+    /// Deactivate a form to hide it from users and stop accepting submissions. Form data is preserved.
+    /// </summary>
+    [JsonPropertyName("deactivate_form")]
+    public bool? DeactivateForm { get; init; }
+
+    /// <summary>
+    /// Shorten a URL for a form and store it in the form settings. Returns the shortened link object.
+    /// </summary>
+    [JsonPropertyName("shorten_form_url")]
+    public FormShortenedLink? ShortenFormUrl { get; init; }
+
+    /// <summary>
+    /// Create a new tag for a form. Tags are used to categorize and track responses. (e.g. UTM tags)
+    /// </summary>
+    [JsonPropertyName("create_form_tag")]
+    public FormTag? CreateFormTag { get; init; }
+
+    /// <summary>
+    /// Update an existing tag in a form
+    /// </summary>
+    [JsonPropertyName("update_form_tag")]
+    public bool? UpdateFormTag { get; init; }
+
+    /// <summary>
+    /// Delete a tag from a form
+    /// </summary>
+    [JsonPropertyName("delete_form_tag")]
+    public bool? DeleteFormTag { get; init; }
+
+    /// <summary>
+    /// Create a new form with specified configuration. Returns the created form with its unique token.
+    /// </summary>
+    [JsonPropertyName("create_form")]
+    public DehydratedFormResponse? CreateForm { get; init; }
+
+    /// <summary>
+    /// Set a password on a form to restrict access. This will enable password protection for the form.
+    /// </summary>
+    [JsonPropertyName("set_form_password")]
+    public ResponseForm? SetFormPassword { get; init; }
 
     /// <summary>
     /// Create managed column of type dropdown mutation.

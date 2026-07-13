@@ -47,6 +47,12 @@ public sealed partial class Query
     [JsonPropertyName("object_relations")]
     public List<ObjectRelation>? ObjectRelations { get; init; }
 
+    [JsonPropertyName("marketplace_app_discounts")]
+    public List<MarketplaceAppDiscount> MarketplaceAppDiscounts { get; init; } = [];
+
+    [JsonPropertyName("app_subscriptions")]
+    public AppSubscriptions AppSubscriptions { get; init; } = null!;
+
     /// <summary>
     /// Placeholder query field for automations-test microservice.
     ///   This can be replaced with actual queries as the service evolves.
@@ -156,41 +162,29 @@ public sealed partial class Query
     [JsonPropertyName("account_triggers_statistics_by_entity_id")]
     public AccountTriggersByEntityId? AccountTriggersStatisticsByEntityId { get; init; }
 
-    [JsonPropertyName("marketplace_app_discounts")]
-    public List<MarketplaceAppDiscount> MarketplaceAppDiscounts { get; init; } = [];
-
-    [JsonPropertyName("app_subscriptions")]
-    public AppSubscriptions AppSubscriptions { get; init; } = null!;
-
-    /// <summary>
-    /// Search for marketplace apps using vector similarity
-    /// </summary>
-    [JsonPropertyName("marketplace_vector_search")]
-    public MarketplaceSearchResults MarketplaceVectorSearch { get; init; } = null!;
-
-    /// <summary>
-    /// Search for marketplace apps using full-text search
-    /// </summary>
-    [JsonPropertyName("marketplace_fulltext_search")]
-    public MarketplaceSearchResults MarketplaceFulltextSearch { get; init; } = null!;
-
-    /// <summary>
-    /// Search for marketplace apps using a combination of vector and full-text search
-    /// </summary>
-    [JsonPropertyName("marketplace_hybrid_search")]
-    public MarketplaceSearchResults MarketplaceHybridSearch { get; init; } = null!;
-
-    /// <summary>
-    /// Search for marketplace apps using AI
-    /// </summary>
-    [JsonPropertyName("marketplace_ai_search")]
-    public MarketplaceAiSearchResults MarketplaceAiSearch { get; init; } = null!;
-
     /// <summary>
     /// Get board candidates based on workspace and usage type
     /// </summary>
     [JsonPropertyName("board_candidates")]
     public List<Board>? BoardCandidates { get; init; }
+
+    /// <summary>
+    /// Get all roles for the account
+    /// </summary>
+    [JsonPropertyName("account_roles")]
+    public List<AccountRole>? AccountRoles { get; init; }
+
+    /// <summary>
+    /// Retrieves API tokens for the given service users.
+    /// </summary>
+    [JsonPropertyName("service_user_tokens")]
+    public List<ServiceUserToken>? ServiceUserTokens { get; init; }
+
+    /// <summary>
+    /// Retrieves all service users in the account with their token last activity.
+    /// </summary>
+    [JsonPropertyName("service_users")]
+    public List<ServiceUser>? ServiceUsers { get; init; }
 
     /// <summary>
     /// Fetch a form by its token. The returned form includes all the details of the form such as its settings, questions, title, etc. Use this endpoint when you need to retrieve complete form data for display or processing. Requires that the requesting user has read access to the associated board.
@@ -233,24 +227,6 @@ public sealed partial class Query
     /// </summary>
     [JsonPropertyName("connection_board_ids")]
     public List<string> ConnectionBoardIds { get; init; } = [];
-
-    /// <summary>
-    /// Get all roles for the account
-    /// </summary>
-    [JsonPropertyName("account_roles")]
-    public List<AccountRole>? AccountRoles { get; init; }
-
-    /// <summary>
-    /// Retrieves API tokens for the given service users.
-    /// </summary>
-    [JsonPropertyName("service_user_tokens")]
-    public List<ServiceUserToken>? ServiceUserTokens { get; init; }
-
-    /// <summary>
-    /// Retrieves all service users in the account with their token last activity.
-    /// </summary>
-    [JsonPropertyName("service_users")]
-    public List<ServiceUser>? ServiceUsers { get; init; }
 
     /// <summary>
     /// Get managed column data.
