@@ -60,6 +60,12 @@ public sealed partial class VibeCodeVersion
     public List<CodeFile> Files { get; init; } = [];
 
     /// <summary>
+    /// Presigned URL for the app screenshot (generated on request)
+    /// </summary>
+    [JsonPropertyName("screenshot_url")]
+    public string? ScreenshotUrl { get; init; }
+
+    /// <summary>
     /// The date and time the object was created
     /// </summary>
     [JsonPropertyName("created_at")]

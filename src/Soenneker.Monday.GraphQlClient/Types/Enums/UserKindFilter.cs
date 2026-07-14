@@ -65,6 +65,8 @@ public enum UserKindFilter
 
     ENTITYKNOWLEDGEAPIUSER,
 
+    ORGHUBAPIUSER,
+
     BASIC
 
 }

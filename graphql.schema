@@ -176,6 +176,62 @@ type User {
   """
   activity_logs(from: String, to: String, board_ids: [ID!], limit: Int, event_types: [String!], cursor: String): UserActivityLogsPage
   """
+  The unique identifier of the account the user belongs to.
+  """
+  account_id: ID!
+  """
+  The activation status of the user.
+  """
+  status: UserStatus!
+  """
+  The method by which the user was added to the account.
+  """
+  invitation_method: InvitationMethod!
+  """
+  The user registration sequence number.
+  """
+  serial_number: Int
+  """
+  Whether the user has been soft-deleted.
+  """
+  is_deleted: Boolean!
+  """
+  URLs for the user's profile photo in various sizes.
+  """
+  photo_url: PhotoUrl
+  """
+  The date and time when the user became active.
+  """
+  became_active_at: ISO8601DateTime
+  """
+  The BigBrain visitor ID associated with the user.
+  """
+  bb_visitor_id: ID!
+  """
+  Whether the user has confirmed their email address.
+  """
+  is_email_confirmed: Boolean!
+  """
+  The user's config based on their kind.
+  """
+  user_config: UserConfig!
+  """
+  The user's email address.
+  """
+  email: String!
+  """
+  The user's full name.
+  """
+  name: String!
+  """
+  The kind of the user.
+  """
+  kind: String!
+  """
+  The user's creation date.
+  """
+  created_at: ISO8601DateTime!
+  """
   The user's title.
   """
   title: String!
@@ -303,62 +359,6 @@ type User {
   The department the user is a member of (if any)
   """
   department: Department
-  """
-  The unique identifier of the account the user belongs to.
-  """
-  account_id: ID!
-  """
-  The activation status of the user.
-  """
-  status: UserStatus!
-  """
-  The method by which the user was added to the account.
-  """
-  invitation_method: InvitationMethod!
-  """
-  The user registration sequence number.
-  """
-  serial_number: Int
-  """
-  Whether the user has been soft-deleted.
-  """
-  is_deleted: Boolean!
-  """
-  URLs for the user's profile photo in various sizes.
-  """
-  photo_url: PhotoUrl
-  """
-  The date and time when the user became active.
-  """
-  became_active_at: ISO8601DateTime
-  """
-  The BigBrain visitor ID associated with the user.
-  """
-  bb_visitor_id: ID!
-  """
-  Whether the user has confirmed their email address.
-  """
-  is_email_confirmed: Boolean!
-  """
-  The user's config based on their kind.
-  """
-  user_config: UserConfig!
-  """
-  The user's email address.
-  """
-  email: String!
-  """
-  The user's full name.
-  """
-  name: String!
-  """
-  The kind of the user.
-  """
-  kind: String!
-  """
-  The user's creation date.
-  """
-  created_at: ISO8601DateTime!
 }
 
 """
@@ -376,472 +376,78 @@ type UserActivityLogsPage {
 }
 
 """
-The account-level default work schedule and time off schedule
+Result of creating an API user.
 """
-type AccountAvailabilityDefaults {
+type CreateApiUserResult {
   """
-  The account-level default work schedule
+  The user ID of the created API user.
   """
-  work_schedule: WorkSchedule!
-  """
-  The account-level default time off schedule
-  """
-  time_off: TimeOff!
+  id: ID
 }
 
 """
-Response containing per-item results for adding allocations to resources
+Result of creating multiple users.
 """
-type AddAllocationsToResourcesResponse {
+type CreateMultipleUsersResult {
   """
-  Per-item results for each allocation in the request
+  Successfully created users.
   """
-  results: [AllocationToResourceResult!]!
+  created_users: [User!]
+  """
+  Users that could not be created.
+  """
+  uncreated_users: [UncreatedUser!]
 }
 
 """
-A successfully added allocated resource
+Input for creating a single user.
 """
-type AddedAllocatedResource {
+input CreateUserInput {
   """
-  The resource ID (includes placeholder index for placeholders, e.g. "134007785_1")
+  The kind of user to create.
   """
-  resource_id: ID!
+  kind: UserKindValue!
   """
-  Type of resource: USER or PLACEHOLDER
-  """
-  resource_type: PlannerResourceKind!
-}
-
-"""
-A unique resource present in the planner
-"""
-type AllocatedResource {
-  """
-  The Resource id
-  """
-  resource_id: ID!
-  """
-  Type of resource
-  """
-  resource_type: PlannerResourceKind!
-  """
-  The Resource's name
-  """
-  resource_name: String!
-}
-
-"""
-A resource to add to the planner without allocations
-"""
-input AllocatedResourceInput {
-  """
-  Resource or placeholder ID
-  """
-  id: ID!
-  """
-  Type of resource: USER or PLACEHOLDER
-  """
-  resource_type: PlannerResourceKind!
-}
-
-"""
-Result of an individual resource allocation operation
-"""
-type AllocatedResourceOperationResult {
-  """
-  Whether the resource was successfully added
-  """
-  success: Boolean!
-  """
-  The successfully added resource, present when success is true
-  """
-  resource: AddedAllocatedResource
-  """
-  Error details, present when success is false
-  """
-  error: Error
-}
-
-"""
-A single allocation in the planner
-"""
-type Allocation {
-  """
-  The allocation ID
-  """
-  id: ID!
-  """
-  The resource allocated
-  """
-  resource: AllocationResource!
-  """
-  The allocation timeline
-  """
-  timeline: AllocationTimeline!
-  """
-  Effort allocation data
-  """
-  effort: AllocationEffort!
-}
-
-"""
-Effort allocation data
-"""
-type AllocationEffort {
-  """
-  Total effort of the allocation
-  """
-  total_effort: Float!
-  """
-  Calculated effort for the period
-  """
-  effort_per_period: Float
-}
-
-"""
-The resource allocated
-"""
-type AllocationResource {
-  """
-  Resource ID
-  """
-  id: ID!
-  """
-  Type of resource
-  """
-  type: PlannerResourceKind!
-  """
-  Resource Name
-  """
-  name: String!
-}
-
-"""
-A timeline with start and end dates
-"""
-type AllocationTimeline {
-  """
-  Start date
-  """
-  from: Date!
-  """
-  End date
-  """
-  to: Date!
-}
-
-"""
-An allocation to add to an existing resource on the planner
-"""
-input AllocationToResourceInput {
-  """
-  Resource ID (plain "123" for users, "456_2" for placeholder #2)
-  """
-  resource_id: ID!
-  """
-  Type of resource
-  """
-  resource_type: PlannerResourceKind!
-  """
-  Effort value (e.g., 1 FTE, 8 hours). Must be greater than 0
-  """
-  effort: Float!
-  """
-  Unit of effort: DAILY, WEEKLY, MONTHLY, FTE, or TOTAL
-  """
-  effort_type: EffortUnit!
-  """
-  Start date (ISO 8601 format: YYYY-MM-DD)
-  """
-  from: String!
-  """
-  End date (ISO 8601 format: YYYY-MM-DD)
-  """
-  to: String!
-}
-
-"""
-Result of adding a single allocation to a resource
-"""
-type AllocationToResourceResult {
-  """
-  Resource ID
-  """
-  resource_id: ID!
-  """
-  The created allocation item ID, null if creation failed
-  """
-  allocation_id: ID
-  """
-  Whether the allocation was created successfully
-  """
-  success: Boolean!
-  """
-  Error details if the allocation failed
-  """
-  error: Error
-}
-
-"""
-A single allocation update. All fields except allocation_id are optional - only provided fields will be updated.
-"""
-input AllocationUpdateInput {
-  """
-  ID of the allocation to update
-  """
-  allocation_id: ID!
-  """
-  New effort value
-  """
-  effort: Float
-  """
-  New effort unit: DAILY, WEEKLY, MONTHLY, FTE, or TOTAL
-  """
-  effort_type: EffortUnit
-  """
-  New start date (ISO 8601 format: YYYY-MM-DD)
-  """
-  from: String
-  """
-  New end date (ISO 8601 format: YYYY-MM-DD)
-  """
-  to: String
-  """
-  Reassign allocation to a different resource (must exist in the planner)
-  """
-  resource_id: ID
-}
-
-"""
-Input for assigning a time off schedule to multiple users and/or teams
-"""
-input AssignTimeOffInput {
-  """
-  IDs of the users to assign the time off schedule to; maximum 100 per call
-  """
-  user_ids: [ID!]
-  """
-  IDs of the teams to assign the time off schedule to; maximum 100 per call
-  """
-  team_ids: [ID!]
-  """
-  ID of the time off schedule to assign; pass the account default time off ID to revert the resource to the account default
-  """
-  time_off_id: ID!
-}
-
-"""
-Per-resource outcomes of a time off assignment, split by resource kind
-"""
-type AssignTimeOffResult {
-  """
-  One result per user id passed to the mutation
-  """
-  users: [AssignTimeOffUserResult!]!
-  """
-  One result per team id passed to the mutation
-  """
-  teams: [AssignTimeOffTeamResult!]!
-}
-
-"""
-Result of a time off assignment for a single team. Batch mutations return one of these per requested team, allowing partial success.
-"""
-type AssignTimeOffTeamResult {
-  """
-  ID of the team this result applies to
-  """
-  team_id: ID!
-  """
-  Whether the operation succeeded
-  """
-  success: Boolean!
-  """
-  Structured error details, null if the operation succeeded
-  """
-  error: Error
-}
-
-"""
-Result of a time off assignment for a single user. Batch mutations return one of these per requested user, allowing partial success.
-"""
-type AssignTimeOffUserResult {
-  """
-  ID of the user this result applies to
-  """
-  user_id: ID!
-  """
-  Whether the operation succeeded
-  """
-  success: Boolean!
-  """
-  Structured error details, null if the operation succeeded
-  """
-  error: Error
-}
-
-"""
-Input for assigning a work schedule to multiple users and/or teams
-"""
-input AssignWorkScheduleInput {
-  """
-  IDs of the users to assign the work schedule to; maximum 100 per call
-  """
-  user_ids: [ID!]
-  """
-  IDs of the teams to assign the work schedule to; maximum 100 per call
-  """
-  team_ids: [ID!]
-  """
-  ID of the work schedule to assign; pass the account default schedule ID to revert to the account default
-  """
-  work_schedule_id: ID!
-}
-
-"""
-Per-resource outcomes of a work schedule assignment, split by resource kind
-"""
-type AssignWorkScheduleResult {
-  """
-  One result per user id passed to the mutation
-  """
-  users: [AssignWorkScheduleUserResult!]
-  """
-  One result per team id passed to the mutation
-  """
-  teams: [AssignWorkScheduleTeamResult!]
-}
-
-"""
-Per-team outcome of a work schedule assignment
-"""
-type AssignWorkScheduleTeamResult {
-  """
-  ID of the team this result applies to
-  """
-  team_id: ID
-  """
-  Whether the operation succeeded
-  """
-  success: Boolean!
-  """
-  Structured error details, null if the operation succeeded
-  """
-  error: Error
-}
-
-"""
-Per-user outcome of a work schedule assignment
-"""
-type AssignWorkScheduleUserResult {
-  """
-  ID of the user this result applies to
-  """
-  user_id: ID
-  """
-  Whether the operation succeeded
-  """
-  success: Boolean!
-  """
-  Structured error details, null if the operation succeeded
-  """
-  error: Error
-}
-
-"""
-Represents a single attribute type option for a resource
-"""
-type Attribute {
-  """
-  Unique identifier for the attribute
-  """
-  id: ID!
-  """
-  Name of the attribute
+  The name for the user.
   """
   name: String!
   """
-  Whether the attribute is enabled and can be used
+  The email for the user.
   """
-  is_active: Boolean!
+  email: String!
+  """
+  The title for the user.
+  """
+  title: String
+  """
+  The user creation flow to use.
+  """
+  user_creation_flow: UserCreationFlow!
+  """
+  The invitation method for the user.
+  """
+  invitation_method: CreateUserInvitationMethod!
+  """
+  The activation status for the user.
+  """
+  status: UserStatus = ACTIVE
+  """
+  Whether the email is confirmed.
+  """
+  confirmed_email: Boolean = true
+  """
+  Photo URL for the user (HTTPS only).
+  """
+  photo_url: String
 }
 
 """
-A string or number value for comparison
+The invitation method allowed when creating a user via create_multiple_users.
 """
-scalar CompareValue
-
-"""
-Input for creating a PTO entry for a user
-"""
-input CreatePtoEntryInput {
-  """
-  ID of the user to create the PTO entry for
-  """
-  user_id: ID!
-  """
-  Start date of the PTO period in YYYY-MM-DD format; must be within 1 year in the past and 20 years in the future
-  """
-  start: String!
-  """
-  End date of the PTO period in YYYY-MM-DD format; must be within 1 year in the past and 20 years in the future
-  """
-  end: String!
-}
-
-"""
-Input for adding a non-working date entry to a time off schedule
-"""
-input CreateTimeOffEntryInput {
-  """
-  ID of the time off schedule to add this entry to
-  """
-  time_off_id: ID!
-  """
-  Display name for this time off entry
-  """
-  name: String!
-  """
-  Start date of the non-working period in YYYY-MM-DD format; must be within 1 year in the past and 20 years in the future
-  """
-  start: String!
-  """
-  Type of the time off entry. Defaults to CUSTOM when omitted.
-  """
-  type: TimeOffEntryKind
-  """
-  End date of the non-working period in YYYY-MM-DD format; must be within 1 year in the past and 20 years in the future
-  """
-  end: String!
-}
-
-"""
-Input for creating a new time off schedule
-"""
-input CreateTimeOffInput {
-  """
-  Display name for the new time off schedule
-  """
-  name: String!
-  """
-  Non-working date entries to create alongside the schedule. Subsequent additions/updates use the dedicated time off entry mutations.
-  """
-  entries: [TimeOffEntryInput!]
-}
-
-"""
-Input for creating a new work schedule
-"""
-input CreateWorkScheduleInput {
-  """
-  Display name for the new work schedule
-  """
-  name: String!
-  """
-  Per-weekday working hours; if omitted, all seven days are created as inactive
-  """
-  days: [WorkScheduleDayInput!]
+enum CreateUserInvitationMethod {
+  API_USER_CREATION
+  AGENT_USER_CREATION
+  SYSTEM_CREATION
 }
 
 """
@@ -850,168 +456,9 @@ A date.
 scalar Date
 
 """
-Response indicating whether the allocation deletion succeeded
-"""
-type DeleteAllocationResponse {
-  """
-  Indicates whether the allocation was successfully deleted.
-  """
-  success: Boolean!
-  """
-  The ID of the allocation that was targeted for deletion.
-  """
-  allocation_id: ID!
-}
-
-"""
-Response indicating whether the planner resource deletion succeeded
-"""
-type DeletePlannerResourceResponse {
-  """
-  Indicates whether the resource was successfully deleted.
-  """
-  success: Boolean!
-  """
-  The ID of the resource that was targeted for deletion.
-  """
-  resource_id: ID!
-  """
-  Number of allocation items that were deleted.
-  """
-  deleted_allocation_count: Int!
-}
-
-"""
-A resource from the directory
-"""
-type DirectoryResource {
-  """
-  The identifier of the directory resource.
-  """
-  id: ID!
-  """
-  The name of the directory resource.
-  """
-  name: String!
-  """
-  The email address of the directory resource.
-  """
-  email: String
-  """
-  The job role of the directory resource.
-  """
-  job_role: String
-  """
-  The skills of the directory resource.
-  """
-  skills: [String!]
-  """
-  The location of the directory resource.
-  """
-  location: String
-  """
-  The type of the resource (user, viewer, or guest).
-  """
-  resource_type: DirectoryResourceKind
-}
-
-"""
-Attributes that can be updated on a resource directory entry
-"""
-enum DirectoryResourceAttribute {
-  JOB_ROLE
-  SKILLS
-  LOCATION
-}
-
-"""
-The type of a directory resource
-"""
-enum DirectoryResourceKind {
-  USER
-  VIEWER
-  GUEST
-}
-
-"""
-Paginated response containing directory resources and cursor for next page
-"""
-type DirectoryResourcesResponse {
-  """
-  Response identifier
-  """
-  id: ID!
-  """
-  List of directory resources
-  """
-  resources: [DirectoryResource!]!
-  """
-  Cursor for fetching the next page of results
-  """
-  cursor: String
-}
-
-"""
-Unit of effort calculation
-"""
-enum EffortUnit {
-  DAILY
-  WEEKLY
-  MONTHLY
-  FTE
-  TOTAL
-}
-
-"""
-User-facing error with code and optional path
-"""
-type Error {
-  """
-  Human-readable error message
-  """
-  message: String!
-  """
-  Machine-readable error code for client handling
-  """
-  code: String!
-  """
-  Field path that caused the error (e.g., ["input", "from"])
-  """
-  path: [String!]
-}
-
-"""
 A multipart file
 """
 scalar File
-
-"""
-Paginated response containing allocations
-"""
-type GetAllocationsResponse {
-  """
-  List of allocations
-  """
-  allocations: [Allocation!]
-  """
-  Cursor for fetching the next page of results
-  """
-  cursor: String
-}
-
-"""
-Successful response containing available attribute options for a specific attribute type
-"""
-type GetAttributesResponse {
-  """
-  The attribute type for which attributes were fetched
-  """
-  attribute_type: String!
-  """
-  List of available attributes containing id, name, and is_active
-  """
-  attributes: [Attribute!]!
-}
 
 """
 An ISO 8601-encoded datetime (e.g., 2024-04-09T13:45:30Z)
@@ -1019,103 +466,22 @@ An ISO 8601-encoded datetime (e.g., 2024-04-09T13:45:30Z)
 scalar ISO8601DateTime
 
 """
-The direction to order the items by
+The method by which a user was added to the account.
 """
-enum ItemsOrderByDirection {
-  asc
-  desc
-}
-
-input ItemsQuery {
-  """
-  A list of rules
-  """
-  rules: [ItemsQueryRule!]
-  """
-  A list of rule groups
-  """
-  groups: [ItemsQueryGroup!]
-  """
-  The operator to use for the query rules or rule groups. Default: AND
-  """
-  operator: ItemsQueryOperator = and
-  """
-  A list of item IDs to fetch. Use this to fetch a specific set of items by their IDs. Limited to 100 IDs in ItemsQuery
-  """
-  ids: [ID!]
-  """
-  Sort the results by specified columns
-  """
-  order_by: [ItemsQueryOrderBy!]
-}
-
-"""
-A group of rules or rule groups
-"""
-input ItemsQueryGroup {
-  """
-  A list of rules
-  """
-  rules: [ItemsQueryRule!]
-  """
-  A list of rule groups
-  """
-  groups: [ItemsQueryGroup!]
-  """
-  The operator to use for the query rules or rule groups. Default: AND
-  """
-  operator: ItemsQueryOperator = and
-}
-
-"""
-The condition between the query rules
-"""
-enum ItemsQueryOperator {
-  or
-  and
-}
-
-"""
-Sort the results by specified columns
-"""
-input ItemsQueryOrderBy {
-  column_id: String!
-  """
-  Sort direction (defaults to ASC)
-  """
-  direction: ItemsOrderByDirection = asc
-}
-
-"""
-A rule to filter items by a specific column
-"""
-input ItemsQueryRule {
-  column_id: ID!
-  compare_value: CompareValue!
-  compare_attribute: String
-  operator: ItemsQueryRuleOperator = any_of
-}
-
-"""
-The operator to use for the value comparison
-"""
-enum ItemsQueryRuleOperator {
-  any_of
-  not_any_of
-  is_empty
-  is_not_empty
-  within_the_last
-  within_the_next
-  greater_than
-  greater_than_or_equals
-  lower_than
-  lower_than_or_equal
-  between
-  starts_with
-  ends_with
-  contains_text
-  contains_terms
-  not_contains_text
+enum InvitationMethod {
+  USER
+  SCIM
+  SSO
+  AUTH_DOMAIN
+  FIRST_USER
+  CONSOLIDATION
+  INTERNAL_CREATION
+  UNKNOWN
+  SERVICE_PORTAL_AUTH_DOMAIN
+  SERVICE_PORTAL_USER_INVITATION
+  API_USER_CREATION
+  AGENT_USER_CREATION
+  SYSTEM_CREATION
 }
 
 """
@@ -1876,47 +1242,43 @@ type Mutation {
 }
 
 """
-Type of resource in the planner
+URLs for the user's profile photo in various sizes.
 """
-enum PlannerResourceKind {
-  USER
-  PLACEHOLDER
-}
-
-"""
-A personal time off entry for a user
-"""
-type PtoEntry {
+type PhotoUrl {
   """
-  Unique identifier of the time off entry
+  The user's photo in original size.
   """
-  id: ID!
+  original: String
   """
-  Start date of the non-working period in YYYY-MM-DD format
+  The user's photo in small size (150x150).
   """
-  start: String!
+  small: String
   """
-  End date of the non-working period in YYYY-MM-DD format
+  The user's photo in thumbnail size (100x100).
   """
-  end: String!
+  thumb: String
   """
-  ID of the user who created this entry
+  The user's photo in small thumbnail size (50x50).
   """
-  created_by: ID!
+  thumb_small: String
   """
-  ISO 8601 timestamp when this record was created
+  The user's photo in tiny size (30x30).
   """
-  created_at: Date!
-  """
-  ISO 8601 timestamp when this record was last updated
-  """
-  updated_at: Date!
+  tiny: String
 }
 
 """
 Root query type for the Dependencies service
 """
 type Query {
+  """
+  Get all user configs for the account.
+  """
+  user_configs(kinds: [String!], visibility: String, behaviors: [String!]): [UserConfig!]
+  """
+  Get users.
+  """
+  users(ids: [ID!], name: String, emails: [String!], user_kind: UserKindFilterInput, sort: [UsersSortInput!], visibility: String, status: [UserStatus!], limit: Int = 200, page: Int = 1, kind: UserKind @deprecated(reason: "Use user_kind instead."), non_active: Boolean @deprecated(reason: "Use status instead."), newest_first: Boolean @deprecated(reason: "Use sort instead.")): [User!]
   """
   Fetch resources information from the resource directory
   """
@@ -2331,14 +1693,1058 @@ type Query {
   Search knowledge base snippets.
   """
   knowledge_base_search(query: String!, limit: Int = 5): KnowledgeBaseAnswer
+}
+
+"""
+A user that could not be created, returning the original input and failure reason.
+"""
+type UncreatedUser {
   """
-  Get all user configs for the account.
+  The kind of user to create.
   """
-  user_configs(kinds: [String!], visibility: String, behaviors: [String!]): [UserConfig!]
+  kind: String
   """
-  Get users.
+  The name for the user.
   """
-  users(ids: [ID!], name: String, emails: [String!], user_kind: UserKindFilterInput, sort: [UsersSortInput!], visibility: String, status: [UserStatus!], limit: Int = 200, page: Int = 1, kind: UserKind @deprecated(reason: "Use user_kind instead."), non_active: Boolean @deprecated(reason: "Use status instead."), newest_first: Boolean @deprecated(reason: "Use sort instead.")): [User!]
+  name: String
+  """
+  The email for the user.
+  """
+  email: String
+  """
+  The title for the user.
+  """
+  title: String
+  """
+  The activation status for the user.
+  """
+  status: UserStatus
+  """
+  Whether the email is confirmed.
+  """
+  confirmed_email: Boolean
+  """
+  Photo URL for the user (HTTPS only).
+  """
+  photo_url: String
+  """
+  The reason the user could not be created.
+  """
+  reason: String
+}
+
+"""
+A user that could not be updated, returning the original input and failure reason.
+"""
+type UnupdatedUser {
+  """
+  The user ID that failed to update.
+  """
+  id: ID!
+  """
+  The name that was requested.
+  """
+  name: String
+  """
+  The title that was requested.
+  """
+  title: String
+  """
+  The photo URL that was requested.
+  """
+  photo_url: String
+  """
+  The status that was requested.
+  """
+  status: UpdatableUserStatus
+  """
+  The reason the user could not be updated.
+  """
+  reason: String
+}
+
+"""
+Activation status values that can be set via mutations.
+"""
+enum UpdatableUserStatus {
+  ACTIVE
+  INACTIVE
+}
+
+"""
+Input for updating a single user.
+"""
+input UpdateUserInput {
+  """
+  The user ID to update.
+  """
+  id: ID!
+  """
+  New name for the user.
+  """
+  name: String
+  """
+  New title for the user.
+  """
+  title: String
+  """
+  New photo URL for the user (HTTPS only).
+  """
+  photo_url: String
+  """
+  New activation status (ACTIVE or INACTIVE).
+  """
+  status: UpdatableUserStatus
+}
+
+"""
+Result of updating multiple users.
+"""
+type UpdateUsersResult {
+  """
+  Successfully updated users.
+  """
+  updated_users: [User!]
+  """
+  Users that could not be updated.
+  """
+  unupdated_users: [UnupdatedUser!]
+}
+
+"""
+User config of a user kind within the account.
+"""
+type UserConfig {
+  """
+  The user kind for the user config.
+  """
+  kind: String!
+  """
+  The role ID associated with this user config.
+  """
+  role_id: ID!
+  """
+  The visibility for this user config.
+  """
+  visibility: [String!]!
+  """
+  The behavior IDs that are true for this user kind.
+  """
+  behaviors: [String!]!
+  """
+  The group this user config belongs to.
+  """
+  group: String!
+}
+
+"""
+The user creation flow/context type.
+"""
+enum UserCreationFlow {
+  API_USER_CREATION
+  AGENT_USER_CREATION
+  SYSTEM_CREATION
+}
+
+"""
+@deprecated Use UserKindFilter with the user_kind arg instead. The kind to search users by.
+"""
+enum UserKind {
+  all
+  non_guests
+  guests
+  non_pending
+}
+
+"""
+Filter for user kinds, including kind groups.
+"""
+enum UserKindFilter {
+  ADMIN
+  MEMBER
+  GUEST
+  VIEW_ONLY
+  AGENT_MEMBER
+  PERSONAL_AGENT_MEMBER
+  AGENT_SIGNUP_USER
+  WORK_MANAGEMENT_AGENT_MEMBER
+  EXTERNAL_AGENT_MEMBER
+  EXTERNAL_AGENT_DETACHED_MEMBER
+  WORKSPACE_PRIMARY_AGENT_MEMBER
+  SERVICE_USER
+  VIBE_USER
+  PORTAL
+  PORTFOLIO_API_USER
+  NEXUS_API_USER
+  RESOURCE_DIRECTORY_API_USER
+  OMNICHANNEL_API_USER
+  GOALS_API_USER
+  PROJECTS_API_USER
+  SPRINT_MANAGEMENT_API_USER
+  CRM_COMMERCE_API_USER
+  CAMPAIGNS_API_USER
+  DATA_RETENTION_API_USER
+  MONDAY_SERVICE_API_USER
+  AI_PLATFORM_AGENT_API_USER
+  DEPENDENCIES_API_USER
+  HISTORICAL_TRACKING_BACKFILL_API_USER
+  ENTITY_KNOWLEDGE_API_USER
+  ORG_HUB_API_USER
+  BASIC
+}
+
+"""
+Filter users by kind. Supports individual kinds and groups (e.g. BASIC = admin, member, guest, view_only). The not_in values are removed from the expanded in set.
+"""
+input UserKindFilterInput {
+  """
+  Include users matching these kinds or kind groups.
+  """
+  in: [UserKindFilter!]
+  """
+  Exclude users matching these kinds or kind groups.
+  """
+  not_in: [UserKindFilter!]
+}
+
+"""
+A specific user kind value.
+"""
+enum UserKindValue {
+  ADMIN
+  MEMBER
+  GUEST
+  VIEW_ONLY
+  AGENT_MEMBER
+  PERSONAL_AGENT_MEMBER
+  AGENT_SIGNUP_USER
+  WORK_MANAGEMENT_AGENT_MEMBER
+  EXTERNAL_AGENT_MEMBER
+  EXTERNAL_AGENT_DETACHED_MEMBER
+  WORKSPACE_PRIMARY_AGENT_MEMBER
+  SERVICE_USER
+  VIBE_USER
+  PORTAL
+  PORTFOLIO_API_USER
+  NEXUS_API_USER
+  RESOURCE_DIRECTORY_API_USER
+  OMNICHANNEL_API_USER
+  GOALS_API_USER
+  PROJECTS_API_USER
+  SPRINT_MANAGEMENT_API_USER
+  CRM_COMMERCE_API_USER
+  CAMPAIGNS_API_USER
+  DATA_RETENTION_API_USER
+  MONDAY_SERVICE_API_USER
+  AI_PLATFORM_AGENT_API_USER
+  DEPENDENCIES_API_USER
+  HISTORICAL_TRACKING_BACKFILL_API_USER
+  ENTITY_KNOWLEDGE_API_USER
+  ORG_HUB_API_USER
+}
+
+"""
+The activation status of a user.
+"""
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  PENDING
+}
+
+"""
+The direction to sort users.
+"""
+enum UsersSortDirection {
+  ASC
+  DESC
+}
+
+"""
+The field to sort users by.
+"""
+enum UsersSortField {
+  CREATED_AT
+}
+
+"""
+Input for sorting users.
+"""
+input UsersSortInput {
+  """
+  The field to sort by.
+  """
+  field: UsersSortField!
+  """
+  The sort direction.
+  """
+  direction: UsersSortDirection!
+}
+
+"""
+The account-level default work schedule and time off schedule
+"""
+type AccountAvailabilityDefaults {
+  """
+  The account-level default work schedule
+  """
+  work_schedule: WorkSchedule!
+  """
+  The account-level default time off schedule
+  """
+  time_off: TimeOff!
+}
+
+"""
+Response containing per-item results for adding allocations to resources
+"""
+type AddAllocationsToResourcesResponse {
+  """
+  Per-item results for each allocation in the request
+  """
+  results: [AllocationToResourceResult!]!
+}
+
+"""
+A successfully added allocated resource
+"""
+type AddedAllocatedResource {
+  """
+  The resource ID (includes placeholder index for placeholders, e.g. "134007785_1")
+  """
+  resource_id: ID!
+  """
+  Type of resource: USER or PLACEHOLDER
+  """
+  resource_type: PlannerResourceKind!
+}
+
+"""
+A unique resource present in the planner
+"""
+type AllocatedResource {
+  """
+  The Resource id
+  """
+  resource_id: ID!
+  """
+  Type of resource
+  """
+  resource_type: PlannerResourceKind!
+  """
+  The Resource's name
+  """
+  resource_name: String!
+}
+
+"""
+A resource to add to the planner without allocations
+"""
+input AllocatedResourceInput {
+  """
+  Resource or placeholder ID
+  """
+  id: ID!
+  """
+  Type of resource: USER or PLACEHOLDER
+  """
+  resource_type: PlannerResourceKind!
+}
+
+"""
+Result of an individual resource allocation operation
+"""
+type AllocatedResourceOperationResult {
+  """
+  Whether the resource was successfully added
+  """
+  success: Boolean!
+  """
+  The successfully added resource, present when success is true
+  """
+  resource: AddedAllocatedResource
+  """
+  Error details, present when success is false
+  """
+  error: Error
+}
+
+"""
+A single allocation in the planner
+"""
+type Allocation {
+  """
+  The allocation ID
+  """
+  id: ID!
+  """
+  The resource allocated
+  """
+  resource: AllocationResource!
+  """
+  The allocation timeline
+  """
+  timeline: AllocationTimeline!
+  """
+  Effort allocation data
+  """
+  effort: AllocationEffort!
+}
+
+"""
+Effort allocation data
+"""
+type AllocationEffort {
+  """
+  Total effort of the allocation
+  """
+  total_effort: Float!
+  """
+  Calculated effort for the period
+  """
+  effort_per_period: Float
+}
+
+"""
+The resource allocated
+"""
+type AllocationResource {
+  """
+  Resource ID
+  """
+  id: ID!
+  """
+  Type of resource
+  """
+  type: PlannerResourceKind!
+  """
+  Resource Name
+  """
+  name: String!
+}
+
+"""
+A timeline with start and end dates
+"""
+type AllocationTimeline {
+  """
+  Start date
+  """
+  from: Date!
+  """
+  End date
+  """
+  to: Date!
+}
+
+"""
+An allocation to add to an existing resource on the planner
+"""
+input AllocationToResourceInput {
+  """
+  Resource ID (plain "123" for users, "456_2" for placeholder #2)
+  """
+  resource_id: ID!
+  """
+  Type of resource
+  """
+  resource_type: PlannerResourceKind!
+  """
+  Effort value (e.g., 1 FTE, 8 hours). Must be greater than 0
+  """
+  effort: Float!
+  """
+  Unit of effort: DAILY, WEEKLY, MONTHLY, FTE, or TOTAL
+  """
+  effort_type: EffortUnit!
+  """
+  Start date (ISO 8601 format: YYYY-MM-DD)
+  """
+  from: String!
+  """
+  End date (ISO 8601 format: YYYY-MM-DD)
+  """
+  to: String!
+}
+
+"""
+Result of adding a single allocation to a resource
+"""
+type AllocationToResourceResult {
+  """
+  Resource ID
+  """
+  resource_id: ID!
+  """
+  The created allocation item ID, null if creation failed
+  """
+  allocation_id: ID
+  """
+  Whether the allocation was created successfully
+  """
+  success: Boolean!
+  """
+  Error details if the allocation failed
+  """
+  error: Error
+}
+
+"""
+A single allocation update. All fields except allocation_id are optional - only provided fields will be updated.
+"""
+input AllocationUpdateInput {
+  """
+  ID of the allocation to update
+  """
+  allocation_id: ID!
+  """
+  New effort value
+  """
+  effort: Float
+  """
+  New effort unit: DAILY, WEEKLY, MONTHLY, FTE, or TOTAL
+  """
+  effort_type: EffortUnit
+  """
+  New start date (ISO 8601 format: YYYY-MM-DD)
+  """
+  from: String
+  """
+  New end date (ISO 8601 format: YYYY-MM-DD)
+  """
+  to: String
+  """
+  Reassign allocation to a different resource (must exist in the planner)
+  """
+  resource_id: ID
+}
+
+"""
+Input for assigning a time off schedule to multiple users and/or teams
+"""
+input AssignTimeOffInput {
+  """
+  IDs of the users to assign the time off schedule to; maximum 100 per call
+  """
+  user_ids: [ID!]
+  """
+  IDs of the teams to assign the time off schedule to; maximum 100 per call
+  """
+  team_ids: [ID!]
+  """
+  ID of the time off schedule to assign; pass the account default time off ID to revert the resource to the account default
+  """
+  time_off_id: ID!
+}
+
+"""
+Per-resource outcomes of a time off assignment, split by resource kind
+"""
+type AssignTimeOffResult {
+  """
+  One result per user id passed to the mutation
+  """
+  users: [AssignTimeOffUserResult!]!
+  """
+  One result per team id passed to the mutation
+  """
+  teams: [AssignTimeOffTeamResult!]!
+}
+
+"""
+Result of a time off assignment for a single team. Batch mutations return one of these per requested team, allowing partial success.
+"""
+type AssignTimeOffTeamResult {
+  """
+  ID of the team this result applies to
+  """
+  team_id: ID!
+  """
+  Whether the operation succeeded
+  """
+  success: Boolean!
+  """
+  Structured error details, null if the operation succeeded
+  """
+  error: Error
+}
+
+"""
+Result of a time off assignment for a single user. Batch mutations return one of these per requested user, allowing partial success.
+"""
+type AssignTimeOffUserResult {
+  """
+  ID of the user this result applies to
+  """
+  user_id: ID!
+  """
+  Whether the operation succeeded
+  """
+  success: Boolean!
+  """
+  Structured error details, null if the operation succeeded
+  """
+  error: Error
+}
+
+"""
+Input for assigning a work schedule to multiple users and/or teams
+"""
+input AssignWorkScheduleInput {
+  """
+  IDs of the users to assign the work schedule to; maximum 100 per call
+  """
+  user_ids: [ID!]
+  """
+  IDs of the teams to assign the work schedule to; maximum 100 per call
+  """
+  team_ids: [ID!]
+  """
+  ID of the work schedule to assign; pass the account default schedule ID to revert to the account default
+  """
+  work_schedule_id: ID!
+}
+
+"""
+Per-resource outcomes of a work schedule assignment, split by resource kind
+"""
+type AssignWorkScheduleResult {
+  """
+  One result per user id passed to the mutation
+  """
+  users: [AssignWorkScheduleUserResult!]
+  """
+  One result per team id passed to the mutation
+  """
+  teams: [AssignWorkScheduleTeamResult!]
+}
+
+"""
+Per-team outcome of a work schedule assignment
+"""
+type AssignWorkScheduleTeamResult {
+  """
+  ID of the team this result applies to
+  """
+  team_id: ID
+  """
+  Whether the operation succeeded
+  """
+  success: Boolean!
+  """
+  Structured error details, null if the operation succeeded
+  """
+  error: Error
+}
+
+"""
+Per-user outcome of a work schedule assignment
+"""
+type AssignWorkScheduleUserResult {
+  """
+  ID of the user this result applies to
+  """
+  user_id: ID
+  """
+  Whether the operation succeeded
+  """
+  success: Boolean!
+  """
+  Structured error details, null if the operation succeeded
+  """
+  error: Error
+}
+
+"""
+Represents a single attribute type option for a resource
+"""
+type Attribute {
+  """
+  Unique identifier for the attribute
+  """
+  id: ID!
+  """
+  Name of the attribute
+  """
+  name: String!
+  """
+  Whether the attribute is enabled and can be used
+  """
+  is_active: Boolean!
+}
+
+"""
+A string or number value for comparison
+"""
+scalar CompareValue
+
+"""
+Input for creating a PTO entry for a user
+"""
+input CreatePtoEntryInput {
+  """
+  ID of the user to create the PTO entry for
+  """
+  user_id: ID!
+  """
+  Start date of the PTO period in YYYY-MM-DD format; must be within 1 year in the past and 20 years in the future
+  """
+  start: String!
+  """
+  End date of the PTO period in YYYY-MM-DD format; must be within 1 year in the past and 20 years in the future
+  """
+  end: String!
+}
+
+"""
+Input for adding a non-working date entry to a time off schedule
+"""
+input CreateTimeOffEntryInput {
+  """
+  ID of the time off schedule to add this entry to
+  """
+  time_off_id: ID!
+  """
+  Display name for this time off entry
+  """
+  name: String!
+  """
+  Start date of the non-working period in YYYY-MM-DD format; must be within 1 year in the past and 20 years in the future
+  """
+  start: String!
+  """
+  Type of the time off entry. Defaults to CUSTOM when omitted.
+  """
+  type: TimeOffEntryKind
+  """
+  End date of the non-working period in YYYY-MM-DD format; must be within 1 year in the past and 20 years in the future
+  """
+  end: String!
+}
+
+"""
+Input for creating a new time off schedule
+"""
+input CreateTimeOffInput {
+  """
+  Display name for the new time off schedule
+  """
+  name: String!
+  """
+  Non-working date entries to create alongside the schedule. Subsequent additions/updates use the dedicated time off entry mutations.
+  """
+  entries: [TimeOffEntryInput!]
+}
+
+"""
+Input for creating a new work schedule
+"""
+input CreateWorkScheduleInput {
+  """
+  Display name for the new work schedule
+  """
+  name: String!
+  """
+  Per-weekday working hours; if omitted, all seven days are created as inactive
+  """
+  days: [WorkScheduleDayInput!]
+}
+
+"""
+Response indicating whether the allocation deletion succeeded
+"""
+type DeleteAllocationResponse {
+  """
+  Indicates whether the allocation was successfully deleted.
+  """
+  success: Boolean!
+  """
+  The ID of the allocation that was targeted for deletion.
+  """
+  allocation_id: ID!
+}
+
+"""
+Response indicating whether the planner resource deletion succeeded
+"""
+type DeletePlannerResourceResponse {
+  """
+  Indicates whether the resource was successfully deleted.
+  """
+  success: Boolean!
+  """
+  The ID of the resource that was targeted for deletion.
+  """
+  resource_id: ID!
+  """
+  Number of allocation items that were deleted.
+  """
+  deleted_allocation_count: Int!
+}
+
+"""
+A resource from the directory
+"""
+type DirectoryResource {
+  """
+  The identifier of the directory resource.
+  """
+  id: ID!
+  """
+  The name of the directory resource.
+  """
+  name: String!
+  """
+  The email address of the directory resource.
+  """
+  email: String
+  """
+  The job role of the directory resource.
+  """
+  job_role: String
+  """
+  The skills of the directory resource.
+  """
+  skills: [String!]
+  """
+  The location of the directory resource.
+  """
+  location: String
+  """
+  The type of the resource (user, viewer, or guest).
+  """
+  resource_type: DirectoryResourceKind
+}
+
+"""
+Attributes that can be updated on a resource directory entry
+"""
+enum DirectoryResourceAttribute {
+  JOB_ROLE
+  SKILLS
+  LOCATION
+}
+
+"""
+The type of a directory resource
+"""
+enum DirectoryResourceKind {
+  USER
+  VIEWER
+  GUEST
+}
+
+"""
+Paginated response containing directory resources and cursor for next page
+"""
+type DirectoryResourcesResponse {
+  """
+  Response identifier
+  """
+  id: ID!
+  """
+  List of directory resources
+  """
+  resources: [DirectoryResource!]!
+  """
+  Cursor for fetching the next page of results
+  """
+  cursor: String
+}
+
+"""
+Unit of effort calculation
+"""
+enum EffortUnit {
+  DAILY
+  WEEKLY
+  MONTHLY
+  FTE
+  TOTAL
+}
+
+"""
+User-facing error with code and optional path
+"""
+type Error {
+  """
+  Human-readable error message
+  """
+  message: String!
+  """
+  Machine-readable error code for client handling
+  """
+  code: String!
+  """
+  Field path that caused the error (e.g., ["input", "from"])
+  """
+  path: [String!]
+}
+
+"""
+Paginated response containing allocations
+"""
+type GetAllocationsResponse {
+  """
+  List of allocations
+  """
+  allocations: [Allocation!]
+  """
+  Cursor for fetching the next page of results
+  """
+  cursor: String
+}
+
+"""
+Successful response containing available attribute options for a specific attribute type
+"""
+type GetAttributesResponse {
+  """
+  The attribute type for which attributes were fetched
+  """
+  attribute_type: String!
+  """
+  List of available attributes containing id, name, and is_active
+  """
+  attributes: [Attribute!]!
+}
+
+"""
+The direction to order the items by
+"""
+enum ItemsOrderByDirection {
+  asc
+  desc
+}
+
+input ItemsQuery {
+  """
+  A list of rules
+  """
+  rules: [ItemsQueryRule!]
+  """
+  A list of rule groups
+  """
+  groups: [ItemsQueryGroup!]
+  """
+  The operator to use for the query rules or rule groups. Default: AND
+  """
+  operator: ItemsQueryOperator = and
+  """
+  A list of item IDs to fetch. Use this to fetch a specific set of items by their IDs. Limited to 100 IDs in ItemsQuery
+  """
+  ids: [ID!]
+  """
+  Sort the results by specified columns
+  """
+  order_by: [ItemsQueryOrderBy!]
+}
+
+"""
+A group of rules or rule groups
+"""
+input ItemsQueryGroup {
+  """
+  A list of rules
+  """
+  rules: [ItemsQueryRule!]
+  """
+  A list of rule groups
+  """
+  groups: [ItemsQueryGroup!]
+  """
+  The operator to use for the query rules or rule groups. Default: AND
+  """
+  operator: ItemsQueryOperator = and
+}
+
+"""
+The condition between the query rules
+"""
+enum ItemsQueryOperator {
+  or
+  and
+}
+
+"""
+Sort the results by specified columns
+"""
+input ItemsQueryOrderBy {
+  column_id: String!
+  """
+  Sort direction (defaults to ASC)
+  """
+  direction: ItemsOrderByDirection = asc
+}
+
+"""
+A rule to filter items by a specific column
+"""
+input ItemsQueryRule {
+  column_id: ID!
+  compare_value: CompareValue!
+  compare_attribute: String
+  operator: ItemsQueryRuleOperator = any_of
+}
+
+"""
+The operator to use for the value comparison
+"""
+enum ItemsQueryRuleOperator {
+  any_of
+  not_any_of
+  is_empty
+  is_not_empty
+  within_the_last
+  within_the_next
+  greater_than
+  greater_than_or_equals
+  lower_than
+  lower_than_or_equal
+  between
+  starts_with
+  ends_with
+  contains_text
+  contains_terms
+  not_contains_text
+}
+
+"""
+Type of resource in the planner
+"""
+enum PlannerResourceKind {
+  USER
+  PLACEHOLDER
+}
+
+"""
+A personal time off entry for a user
+"""
+type PtoEntry {
+  """
+  Unique identifier of the time off entry
+  """
+  id: ID!
+  """
+  Start date of the non-working period in YYYY-MM-DD format
+  """
+  start: String!
+  """
+  End date of the non-working period in YYYY-MM-DD format
+  """
+  end: String!
+  """
+  ID of the user who created this entry
+  """
+  created_by: ID!
+  """
+  ISO 8601 timestamp when this record was created
+  """
+  created_at: Date!
+  """
+  ISO 8601 timestamp when this record was last updated
+  """
+  updated_at: Date!
 }
 
 """
@@ -3388,6 +3794,555 @@ type UtilizationReportUngrouped {
   Total number of resources across all pages (before pagination).
   """
   total_resource_count: Int
+}
+
+"""
+An item (table row).
+"""
+type Item {
+  """
+  The item's unique identifier.
+  """
+  id: ID!
+  """
+  The item's assets/files.
+  """
+  assets(assets_source: AssetsSource, column_ids: [String]): [Asset]
+  """
+  The board that contains this item.
+  """
+  board: Board
+  """
+  The item's column values.
+  """
+  column_values(capabilities: [ColumnCapability!], ids: [String!], types: [ColumnType!]): [ColumnValue!]!
+  """
+  The item's create date.
+  """
+  created_at: Date
+  """
+  The item's creator.
+  """
+  creator: User
+  """
+  The unique identifier of the item creator.
+  """
+  creator_id: String!
+  """
+  The item's description
+  """
+  description: ItemDescription
+  """
+  The item's email.
+  """
+  email: String!
+  """
+  The group that contains this item.
+  """
+  group: Group
+  """
+  The item's linked items
+  """
+  linked_items(link_to_item_column_id: String!, linked_board_id: ID!): [Item!]!
+  """
+  The item's name.
+  """
+  name: String!
+  """
+  The parent item of a subitem.
+  """
+  parent_item: Item
+  """
+  The item's relative path
+  """
+  relative_link: String
+  """
+  The item's state (all / active / archived / deleted).
+  """
+  state: State
+  """
+  The item's subitems.
+  """
+  subitems: [Item]
+  """
+  The pulses's subscribers.
+  """
+  subscribers: [User]!
+  """
+  The item's last update date.
+  """
+  updated_at: Date
+  """
+  The item's link
+  """
+  url: String!
+  """
+  The item's updates with cursor-based pagination.
+  """
+  updates_page(limit: Int = 25, cursor: String): UpdatesPage
+  """
+  The item's updates.
+  """
+  updates(limit: Int = 25, page: Int = 1, ids: [ID!]): [Update!]
+}
+
+"""
+A monday dev sprint.
+"""
+type Sprint {
+  """
+  monday dev sprint unique identifier
+  """
+  id: ID!
+  """
+  monday dev sprint name
+  """
+  name: String
+  """
+  items associated with the monday dev sprint
+  """
+  items: [Item!]
+  """
+  date at which the monday dev sprint start action was performed, null if the sprint was never started
+  """
+  start_date: Date
+  """
+  date at which the monday dev sprint complete action was performed, null if the sprint was never completed
+  """
+  end_date: Date
+  """
+  user-editable planned timeline for the monday dev sprint, which may differ from its start and complete dates
+  """
+  timeline: SprintTimeline
+  """
+  current state of the monday dev sprint
+  """
+  state: SprintState
+  """
+  snapshots of the monday dev sprint
+  """
+  snapshots(type: [SprintSnapshotKind!]): [SprintSnapshot!]
+}
+
+"""
+A monday dev sprint snapshot.
+"""
+type SprintSnapshot {
+  """
+  monday dev sprint snapshot unique identifier
+  """
+  id: ID
+  """
+  monday dev sprint snapshot kind
+  """
+  type: SprintSnapshotKind
+  """
+  monday dev sprint snapshot items
+  """
+  items: [SprintSnapshotItem!]
+  """
+  monday dev sprint snapshot columns metadata
+  """
+  columns_metadata: [SprintSnapshotColumnMetadata!]
+  """
+  monday dev sprint unique identifier
+  """
+  sprint_id: ID
+  """
+  date and time when the object was created
+  """
+  created_at: Date
+  """
+  date and time when the object was last updated
+  """
+  updated_at: Date
+}
+
+"""
+A monday dev sprint snapshot column metadata.
+"""
+type SprintSnapshotColumnMetadata {
+  """
+  monday dev sprint snapshot column id
+  """
+  id: String!
+  """
+  monday dev sprint snapshot status column done status indexes
+  """
+  done_status_indexes: [Int!]!
+}
+
+"""
+A monday dev sprint snapshot item.
+"""
+type SprintSnapshotItem {
+  """
+  monday dev sprint item unique identifier
+  """
+  id: ID!
+  """
+  monday dev sprint item column values
+  """
+  column_values: [SprintSnapshotItemColumnValue!]
+}
+
+"""
+A monday dev sprint snapshot item column value.
+"""
+type SprintSnapshotItemColumnValue {
+  """
+  monday dev sprint snapshot item column id
+  """
+  id: String!
+  """
+  monday dev sprint snapshot item column type
+  """
+  type: String!
+  """
+  monday dev sprint snapshot item column value
+  """
+  value: JSON
+}
+
+"""
+The kind of sprint snapshot.
+"""
+enum SprintSnapshotKind {
+  START
+  COMPLETE
+}
+
+"""
+current state of the monday dev sprint.
+"""
+enum SprintState {
+  PLANNED
+  ACTIVE
+  COMPLETED
+}
+
+"""
+user-editable planned timeline for the monday dev sprint, which may differ from its start and complete dates
+"""
+type SprintTimeline {
+  """
+  user-editable start date of the monday dev sprint timeline, may be different than the sprint start date
+  """
+  from: Date
+  """
+  user-editable complete date of the monday dev sprint timeline, may be different than the sprint complete date
+  """
+  to: Date
+}
+
+"""
+A monday.com board.
+"""
+type Board {
+  """
+  The unique identifier of the board.
+  """
+  id: ID!
+  """
+  Inferred metadata associated with this board
+  """
+  inferred_metadata: BoardInferredMetadata
+  """
+  Manually set metadata associated with this board
+  """
+  manual_metadata: BoardManualMetadata
+  """
+  The board's visible columns.
+  """
+  columns(ids: [String], types: [ColumnType!], capabilities: [ColumnCapability]): [Column]
+  """
+  The user's permission level for this board (view / edit).
+  """
+  access_level: BoardAccessLevel!
+  """
+  The board log events.
+  """
+  activity_logs(column_ids: [String], from: ISO8601DateTime, group_ids: [String], item_ids: [ID!], limit: Int = 25, page: Int = 1, to: ISO8601DateTime, user_ids: [ID!]): [ActivityLogType]
+  """
+  The board's folder unique identifier.
+  """
+  board_folder_id: ID
+  """
+  The board's kind (public / private / share).
+  """
+  board_kind: BoardKind!
+  """
+  The board's columns namespace.
+  """
+  columns_namespace: String
+  """
+  Get the board communication value - typically meeting ID
+  """
+  communication: JSON
+  """
+  The time the board was created at.
+  """
+  created_at: ISO8601DateTime
+  """
+  The board's source board unique identifier (the board from which this board was created)
+  """
+  created_from_board_id: ID
+  """
+  The creator of the board.
+  """
+  creator: User!
+  """
+  The board's description.
+  """
+  description: String
+  """
+  The folder that contains this board, or null if it isn't in any folder.
+  """
+  folder: Folder
+  """
+  The board's visible groups.
+  """
+  groups(ids: [String]): [Group]
+  """
+  The hierarchy type of the board
+  """
+  hierarchy_type: BoardHierarchy
+  """
+  The Board's item nickname, one of a predefined set of values, or a custom user value
+  """
+  item_terminology: String
+  """
+  The number of items on the board
+  """
+  items_count: Int
+  """
+  The maximum number of items this board can have
+  """
+  items_limit: Int
+  """
+  The board's items (rows).
+  """
+  items_page(cursor: String, hierarchy_scope_config: String, limit: Int! = 25, query_params: ItemsQuery): ItemsResponse!
+  """
+  The board's name.
+  """
+  name: String!
+  """
+  The Board's object type unique key
+  """
+  object_type_unique_key: String
+  """
+  The owner of the board.
+  """
+  owner: User! @deprecated(reason: "This field returned creator of the board. Please use \u0027creator\u0027 or \u0027owners\u0027 fields instead.")
+  """
+  List of user board owners
+  """
+  owners: [User]!
+  """
+  The board's permissions.
+  """
+  permissions: String!
+  """
+  The board's state (all / active / archived / deleted).
+  """
+  state: State!
+  """
+  The board's subscribers.
+  """
+  subscribers: [User]!
+  """
+  The board's specific tags.
+  """
+  tags: [Tag]
+  """
+  List of team board owners
+  """
+  team_owners(limit: Int = 25, page: Int = 1): [Team!]
+  """
+  The board's team subscribers.
+  """
+  team_subscribers(limit: Int = 25, page: Int = 1): [Team!]
+  """
+  The top group at this board.
+  """
+  top_group: Group!
+  """
+  The board object type.
+  """
+  type: BoardObjectType
+  """
+  The last time the board was updated at.
+  """
+  updated_at: ISO8601DateTime
+  """
+  The Board's url
+  """
+  url: String!
+  """
+  The board's views.
+  """
+  views(ids: [ID!], type: String): [BoardView]
+  """
+  The workspace that contains this board (null for main workspace).
+  """
+  workspace: Workspace
+  """
+  The board's workspace unique identifier (null for main workspace).
+  """
+  workspace_id: ID
+  """
+  The board's updates with cursor-based pagination.
+  """
+  updates_page(limit: Int = 25, cursor: String): UpdatesPage
+  """
+  The board's updates.
+  """
+  updates(limit: Int = 25, page: Int = 1, ids: [ID!], board_updates_only: Boolean, from_date: ISO8601DateTime, to_date: ISO8601DateTime): [Update!]
+}
+
+"""
+Inferred metadata associated with a board, such as custom terminology settings.
+"""
+type BoardInferredMetadata {
+  """
+  The custom terminology used for items in this board
+  """
+  item_type: String
+}
+
+"""
+Manually set metadata associated with a board.
+"""
+type BoardManualMetadata {
+  """
+  Markdown content describing the board
+  """
+  board_md: String
+}
+
+"""
+A suggested AI agent based on user activity patterns
+"""
+type SuggestedAgent {
+  """
+  The title of the suggested agent
+  """
+  title: String
+  """
+  A hook/one-liner for the agent
+  """
+  pitch: String
+  """
+  A user-friendly explanation of why this agent is suggested
+  """
+  description: String
+  """
+  List of 3rd-party connectors this agent uses (e.g., Jira, Google Calendar)
+  """
+  connectors: [String!]
+  """
+  Whether this agent should have web search capabilities
+  """
+  include_web_search: Boolean
+  """
+  Confidence score (0.0–1.0) that the user will benefit from this agent
+  """
+  confidence: Float
+  """
+  A ready-to-use prompt for creating this agent via monday-agents
+  """
+  seed_prompt: String
+  """
+  List of triggers that define when this agent should run
+  """
+  triggers: [SuggestedTrigger!]
+}
+
+"""
+A trigger that defines when a suggested agent should run
+"""
+type SuggestedTrigger {
+  """
+  Automations framework block reference ID for this trigger
+  """
+  block_reference_id: ID
+  """
+  JSON-encoded field values matching the automations API format: { fieldKey: { value, fieldTypeReferenceId } }
+  """
+  field_values: String
+}
+
+"""
+Input for updating a single board's inferred metadata
+"""
+input UpdateBoardInferredMetadataInput {
+  """
+  The ID of the board to update
+  """
+  board_id: ID!
+  """
+  The custom terminology for items in this board
+  """
+  item_type: String!
+}
+
+"""
+Result of a single board inferred metadata update within a bulk operation
+"""
+type UpdateBoardInferredMetadataResult {
+  """
+  The ID of the board that was updated
+  """
+  board_id: ID
+  """
+  The updated inferred metadata for the board
+  """
+  inferred_metadata: BoardInferredMetadata
+  """
+  Error message if the update failed
+  """
+  error: String
+  """
+  Whether the update succeeded
+  """
+  success: Boolean
+}
+
+"""
+Input for updating a single board's manual metadata
+"""
+input UpdateBoardManualMetadataInput {
+  """
+  The ID of the board to update
+  """
+  board_id: ID!
+  """
+  Markdown content describing the board
+  """
+  board_md: String!
+}
+
+"""
+Result of a single board manual metadata update within a bulk operation
+"""
+type UpdateBoardManualMetadataResult {
+  """
+  The ID of the board that was updated
+  """
+  board_id: ID
+  """
+  The updated manual metadata for the board
+  """
+  manual_metadata: BoardManualMetadata
+  """
+  Error message if the update failed
+  """
+  error: String
+  """
+  Whether the update succeeded
+  """
+  success: Boolean
 }
 
 """
@@ -4746,6 +5701,31 @@ enum UserRequestKind {
 }
 
 """
+One aggregate bucket. `key` is null for an ungrouped aggregate.
+"""
+type VibeAggregateBucket {
+  """
+  Group key; null for an ungrouped aggregate.
+  """
+  key: JSON
+  """
+  Computed aggregate value.
+  """
+  value: Float
+}
+
+"""
+Aggregate function computed over matching documents.
+"""
+enum VibeAggregateFn {
+  COUNT
+  SUM
+  AVG
+  MIN
+  MAX
+}
+
+"""
 A vibe app created by the AI app builder
 """
 type VibeApp {
@@ -5102,6 +6082,24 @@ enum VibeAppStatus {
 }
 
 """
+An app's App DO storage overview: usage, quota, and its collections.
+"""
+type VibeAppStorage {
+  """
+  Bytes currently used by this app.
+  """
+  storage_bytes: Float
+  """
+  Soft storage quota in bytes.
+  """
+  quota_bytes: Float
+  """
+  Collections in this app's storage.
+  """
+  collections: [VibeCollection!]
+}
+
+"""
 The UI metadata of the vibe app
 """
 type VibeAppUIMetadata {
@@ -5218,6 +6216,28 @@ type VibeAsset {
 }
 
 """
+A single operation within a batch write.
+"""
+input VibeBatchOpInput {
+  """
+  One of 'insert' | 'upsert' | 'update' | 'delete'.
+  """
+  op: String!
+  """
+  Target collection.
+  """
+  collection: String!
+  """
+  Document id (required for upsert/update/delete).
+  """
+  id: ID
+  """
+  Document payload (for insert/upsert/update).
+  """
+  data: JSON
+}
+
+"""
 A code version of a vibe app
 """
 type VibeCodeVersion {
@@ -5254,6 +6274,10 @@ type VibeCodeVersion {
   """
   files: [CodeFile!]!
   """
+  Presigned URL for the app screenshot (generated on request)
+  """
+  screenshot_url: String
+  """
   The date and time the object was created
   """
   created_at: Date
@@ -5271,6 +6295,126 @@ input VibeCodeVersionWhereInput {
   Filter by version status (DRAFT, LIVE, RETIRED)
   """
   status: VibeAppVersionStatus
+}
+
+"""
+A document collection within an app's App DO storage.
+"""
+type VibeCollection {
+  """
+  Collection name.
+  """
+  name: String
+  """
+  Number of documents in the collection.
+  """
+  doc_count: Int
+  """
+  Inferred field schema, sampled on demand. Empty for empty collections.
+  """
+  fields(sample_size: Int): [VibeCollectionField!]
+}
+
+"""
+An inferred field of a collection (from sampling documents).
+"""
+type VibeCollectionField {
+  """
+  Dot-path of the field.
+  """
+  path: String
+  """
+  JSON types observed for this field across the sample.
+  """
+  types: [String!]
+  """
+  Fraction of sampled docs containing this field (0..1).
+  """
+  presence: Float
+  """
+  A sample value for this field, if any.
+  """
+  sample: JSON
+}
+
+"""
+One App DO document. `data` is the opaque app-defined JSON payload.
+"""
+type VibeDocument {
+  """
+  Document id (unique within its collection).
+  """
+  id: ID
+  """
+  Opaque app-defined JSON payload.
+  """
+  data: JSON
+  """
+  Creation time (epoch milliseconds).
+  """
+  created_at: Float
+  """
+  Last-update time (epoch milliseconds).
+  """
+  updated_at: Float
+  """
+  Actor that created the document.
+  """
+  created_by: String
+  """
+  Actor that last updated the document.
+  """
+  updated_by: String
+}
+
+"""
+A page of documents with an opaque forward cursor.
+"""
+type VibeDocumentConnection {
+  """
+  Documents in this page.
+  """
+  nodes: [VibeDocument!]
+  """
+  Cursor to fetch the next page; null when there are no more.
+  """
+  end_cursor: String
+  """
+  Whether another page exists.
+  """
+  has_next_page: Boolean
+}
+
+"""
+A single AND-ed filter. `field` is a dot-path (e.g. `address.city`).
+"""
+input VibeFilterInput {
+  """
+  Dot-path to the document field to filter on.
+  """
+  field: String!
+  """
+  Comparison operator.
+  """
+  op: VibeFilterOp!
+  """
+  Omit / null for IS NULL checks; array for IN.
+  """
+  value: JSON
+}
+
+"""
+Comparison operator for a document filter. Filters combine with AND only.
+"""
+enum VibeFilterOp {
+  EQ
+  NEQ
+  LT
+  LTE
+  GT
+  GTE
+  IN
+  ARRAY_CONTAINS
 }
 
 """
@@ -5309,6 +6453,20 @@ type VibeMutations {
   Delete a vibe asset
   """
   asset_delete(id: ID!): Boolean
+}
+
+"""
+Ordering clause for a document query.
+"""
+input VibeOrderByInput {
+  """
+  Dot-path to order by.
+  """
+  field: String!
+  """
+  Sort direction; defaults to ASC.
+  """
+  dir: VibeSortDir
 }
 
 """
@@ -5438,6 +6596,14 @@ type VibeQueries {
   List of Vibe What's New entries
   """
   whats_new: [WhatsNewItem!]
+}
+
+"""
+Sort direction for an order-by clause.
+"""
+enum VibeSortDir {
+  ASC
+  DESC
 }
 
 """
@@ -5613,555 +6779,6 @@ type WorkspaceBoardGroup {
   The reasoning for grouping these boards together
   """
   reasoning: String
-}
-
-"""
-An item (table row).
-"""
-type Item {
-  """
-  The item's unique identifier.
-  """
-  id: ID!
-  """
-  The item's assets/files.
-  """
-  assets(assets_source: AssetsSource, column_ids: [String]): [Asset]
-  """
-  The board that contains this item.
-  """
-  board: Board
-  """
-  The item's column values.
-  """
-  column_values(capabilities: [ColumnCapability!], ids: [String!], types: [ColumnType!]): [ColumnValue!]!
-  """
-  The item's create date.
-  """
-  created_at: Date
-  """
-  The item's creator.
-  """
-  creator: User
-  """
-  The unique identifier of the item creator.
-  """
-  creator_id: String!
-  """
-  The item's description
-  """
-  description: ItemDescription
-  """
-  The item's email.
-  """
-  email: String!
-  """
-  The group that contains this item.
-  """
-  group: Group
-  """
-  The item's linked items
-  """
-  linked_items(link_to_item_column_id: String!, linked_board_id: ID!): [Item!]!
-  """
-  The item's name.
-  """
-  name: String!
-  """
-  The parent item of a subitem.
-  """
-  parent_item: Item
-  """
-  The item's relative path
-  """
-  relative_link: String
-  """
-  The item's state (all / active / archived / deleted).
-  """
-  state: State
-  """
-  The item's subitems.
-  """
-  subitems: [Item]
-  """
-  The pulses's subscribers.
-  """
-  subscribers: [User]!
-  """
-  The item's last update date.
-  """
-  updated_at: Date
-  """
-  The item's link
-  """
-  url: String!
-  """
-  The item's updates with cursor-based pagination.
-  """
-  updates_page(limit: Int = 25, cursor: String): UpdatesPage
-  """
-  The item's updates.
-  """
-  updates(limit: Int = 25, page: Int = 1, ids: [ID!]): [Update!]
-}
-
-"""
-A monday dev sprint.
-"""
-type Sprint {
-  """
-  monday dev sprint unique identifier
-  """
-  id: ID!
-  """
-  monday dev sprint name
-  """
-  name: String
-  """
-  items associated with the monday dev sprint
-  """
-  items: [Item!]
-  """
-  date at which the monday dev sprint start action was performed, null if the sprint was never started
-  """
-  start_date: Date
-  """
-  date at which the monday dev sprint complete action was performed, null if the sprint was never completed
-  """
-  end_date: Date
-  """
-  user-editable planned timeline for the monday dev sprint, which may differ from its start and complete dates
-  """
-  timeline: SprintTimeline
-  """
-  current state of the monday dev sprint
-  """
-  state: SprintState
-  """
-  snapshots of the monday dev sprint
-  """
-  snapshots(type: [SprintSnapshotKind!]): [SprintSnapshot!]
-}
-
-"""
-A monday dev sprint snapshot.
-"""
-type SprintSnapshot {
-  """
-  monday dev sprint snapshot unique identifier
-  """
-  id: ID
-  """
-  monday dev sprint snapshot kind
-  """
-  type: SprintSnapshotKind
-  """
-  monday dev sprint snapshot items
-  """
-  items: [SprintSnapshotItem!]
-  """
-  monday dev sprint snapshot columns metadata
-  """
-  columns_metadata: [SprintSnapshotColumnMetadata!]
-  """
-  monday dev sprint unique identifier
-  """
-  sprint_id: ID
-  """
-  date and time when the object was created
-  """
-  created_at: Date
-  """
-  date and time when the object was last updated
-  """
-  updated_at: Date
-}
-
-"""
-A monday dev sprint snapshot column metadata.
-"""
-type SprintSnapshotColumnMetadata {
-  """
-  monday dev sprint snapshot column id
-  """
-  id: String!
-  """
-  monday dev sprint snapshot status column done status indexes
-  """
-  done_status_indexes: [Int!]!
-}
-
-"""
-A monday dev sprint snapshot item.
-"""
-type SprintSnapshotItem {
-  """
-  monday dev sprint item unique identifier
-  """
-  id: ID!
-  """
-  monday dev sprint item column values
-  """
-  column_values: [SprintSnapshotItemColumnValue!]
-}
-
-"""
-A monday dev sprint snapshot item column value.
-"""
-type SprintSnapshotItemColumnValue {
-  """
-  monday dev sprint snapshot item column id
-  """
-  id: String!
-  """
-  monday dev sprint snapshot item column type
-  """
-  type: String!
-  """
-  monday dev sprint snapshot item column value
-  """
-  value: JSON
-}
-
-"""
-The kind of sprint snapshot.
-"""
-enum SprintSnapshotKind {
-  START
-  COMPLETE
-}
-
-"""
-current state of the monday dev sprint.
-"""
-enum SprintState {
-  PLANNED
-  ACTIVE
-  COMPLETED
-}
-
-"""
-user-editable planned timeline for the monday dev sprint, which may differ from its start and complete dates
-"""
-type SprintTimeline {
-  """
-  user-editable start date of the monday dev sprint timeline, may be different than the sprint start date
-  """
-  from: Date
-  """
-  user-editable complete date of the monday dev sprint timeline, may be different than the sprint complete date
-  """
-  to: Date
-}
-
-"""
-A monday.com board.
-"""
-type Board {
-  """
-  The unique identifier of the board.
-  """
-  id: ID!
-  """
-  Inferred metadata associated with this board
-  """
-  inferred_metadata: BoardInferredMetadata
-  """
-  Manually set metadata associated with this board
-  """
-  manual_metadata: BoardManualMetadata
-  """
-  The board's visible columns.
-  """
-  columns(ids: [String], types: [ColumnType!], capabilities: [ColumnCapability]): [Column]
-  """
-  The user's permission level for this board (view / edit).
-  """
-  access_level: BoardAccessLevel!
-  """
-  The board log events.
-  """
-  activity_logs(column_ids: [String], from: ISO8601DateTime, group_ids: [String], item_ids: [ID!], limit: Int = 25, page: Int = 1, to: ISO8601DateTime, user_ids: [ID!]): [ActivityLogType]
-  """
-  The board's folder unique identifier.
-  """
-  board_folder_id: ID
-  """
-  The board's kind (public / private / share).
-  """
-  board_kind: BoardKind!
-  """
-  The board's columns namespace.
-  """
-  columns_namespace: String
-  """
-  Get the board communication value - typically meeting ID
-  """
-  communication: JSON
-  """
-  The time the board was created at.
-  """
-  created_at: ISO8601DateTime
-  """
-  The board's source board unique identifier (the board from which this board was created)
-  """
-  created_from_board_id: ID
-  """
-  The creator of the board.
-  """
-  creator: User!
-  """
-  The board's description.
-  """
-  description: String
-  """
-  The folder that contains this board, or null if it isn't in any folder.
-  """
-  folder: Folder
-  """
-  The board's visible groups.
-  """
-  groups(ids: [String]): [Group]
-  """
-  The hierarchy type of the board
-  """
-  hierarchy_type: BoardHierarchy
-  """
-  The Board's item nickname, one of a predefined set of values, or a custom user value
-  """
-  item_terminology: String
-  """
-  The number of items on the board
-  """
-  items_count: Int
-  """
-  The maximum number of items this board can have
-  """
-  items_limit: Int
-  """
-  The board's items (rows).
-  """
-  items_page(cursor: String, hierarchy_scope_config: String, limit: Int! = 25, query_params: ItemsQuery): ItemsResponse!
-  """
-  The board's name.
-  """
-  name: String!
-  """
-  The Board's object type unique key
-  """
-  object_type_unique_key: String
-  """
-  The owner of the board.
-  """
-  owner: User! @deprecated(reason: "This field returned creator of the board. Please use \u0027creator\u0027 or \u0027owners\u0027 fields instead.")
-  """
-  List of user board owners
-  """
-  owners: [User]!
-  """
-  The board's permissions.
-  """
-  permissions: String!
-  """
-  The board's state (all / active / archived / deleted).
-  """
-  state: State!
-  """
-  The board's subscribers.
-  """
-  subscribers: [User]!
-  """
-  The board's specific tags.
-  """
-  tags: [Tag]
-  """
-  List of team board owners
-  """
-  team_owners(limit: Int = 25, page: Int = 1): [Team!]
-  """
-  The board's team subscribers.
-  """
-  team_subscribers(limit: Int = 25, page: Int = 1): [Team!]
-  """
-  The top group at this board.
-  """
-  top_group: Group!
-  """
-  The board object type.
-  """
-  type: BoardObjectType
-  """
-  The last time the board was updated at.
-  """
-  updated_at: ISO8601DateTime
-  """
-  The Board's url
-  """
-  url: String!
-  """
-  The board's views.
-  """
-  views(ids: [ID!], type: String): [BoardView]
-  """
-  The workspace that contains this board (null for main workspace).
-  """
-  workspace: Workspace
-  """
-  The board's workspace unique identifier (null for main workspace).
-  """
-  workspace_id: ID
-  """
-  The board's updates with cursor-based pagination.
-  """
-  updates_page(limit: Int = 25, cursor: String): UpdatesPage
-  """
-  The board's updates.
-  """
-  updates(limit: Int = 25, page: Int = 1, ids: [ID!], board_updates_only: Boolean, from_date: ISO8601DateTime, to_date: ISO8601DateTime): [Update!]
-}
-
-"""
-Inferred metadata associated with a board, such as custom terminology settings.
-"""
-type BoardInferredMetadata {
-  """
-  The custom terminology used for items in this board
-  """
-  item_type: String
-}
-
-"""
-Manually set metadata associated with a board.
-"""
-type BoardManualMetadata {
-  """
-  Markdown content describing the board
-  """
-  board_md: String
-}
-
-"""
-A suggested AI agent based on user activity patterns
-"""
-type SuggestedAgent {
-  """
-  The title of the suggested agent
-  """
-  title: String
-  """
-  A hook/one-liner for the agent
-  """
-  pitch: String
-  """
-  A user-friendly explanation of why this agent is suggested
-  """
-  description: String
-  """
-  List of 3rd-party connectors this agent uses (e.g., Jira, Google Calendar)
-  """
-  connectors: [String!]
-  """
-  Whether this agent should have web search capabilities
-  """
-  include_web_search: Boolean
-  """
-  Confidence score (0.0–1.0) that the user will benefit from this agent
-  """
-  confidence: Float
-  """
-  A ready-to-use prompt for creating this agent via monday-agents
-  """
-  seed_prompt: String
-  """
-  List of triggers that define when this agent should run
-  """
-  triggers: [SuggestedTrigger!]
-}
-
-"""
-A trigger that defines when a suggested agent should run
-"""
-type SuggestedTrigger {
-  """
-  Automations framework block reference ID for this trigger
-  """
-  block_reference_id: ID
-  """
-  JSON-encoded field values matching the automations API format: { fieldKey: { value, fieldTypeReferenceId } }
-  """
-  field_values: String
-}
-
-"""
-Input for updating a single board's inferred metadata
-"""
-input UpdateBoardInferredMetadataInput {
-  """
-  The ID of the board to update
-  """
-  board_id: ID!
-  """
-  The custom terminology for items in this board
-  """
-  item_type: String!
-}
-
-"""
-Result of a single board inferred metadata update within a bulk operation
-"""
-type UpdateBoardInferredMetadataResult {
-  """
-  The ID of the board that was updated
-  """
-  board_id: ID
-  """
-  The updated inferred metadata for the board
-  """
-  inferred_metadata: BoardInferredMetadata
-  """
-  Error message if the update failed
-  """
-  error: String
-  """
-  Whether the update succeeded
-  """
-  success: Boolean
-}
-
-"""
-Input for updating a single board's manual metadata
-"""
-input UpdateBoardManualMetadataInput {
-  """
-  The ID of the board to update
-  """
-  board_id: ID!
-  """
-  Markdown content describing the board
-  """
-  board_md: String!
-}
-
-"""
-Result of a single board manual metadata update within a bulk operation
-"""
-type UpdateBoardManualMetadataResult {
-  """
-  The ID of the board that was updated
-  """
-  board_id: ID
-  """
-  The updated manual metadata for the board
-  """
-  manual_metadata: BoardManualMetadata
-  """
-  Error message if the update failed
-  """
-  error: String
-  """
-  Whether the update succeeded
-  """
-  success: Boolean
 }
 
 """
@@ -18712,16 +19329,6 @@ input UpdateWorkspaceAttributesInput {
 }
 
 """
-@deprecated Use UserKindFilter with the user_kind arg instead. The kind to search users by.
-"""
-enum UserKind {
-  all
-  guests
-  non_guests
-  non_pending
-}
-
-"""
 A single user permit/action with its permission status
 """
 type UserPermit {
@@ -22879,400 +23486,6 @@ enum AiColumnTone {
   casual
   friendly
   same
-}
-
-"""
-Result of creating an API user.
-"""
-type CreateApiUserResult {
-  """
-  The user ID of the created API user.
-  """
-  id: ID
-}
-
-"""
-Result of creating multiple users.
-"""
-type CreateMultipleUsersResult {
-  """
-  Successfully created users.
-  """
-  created_users: [User!]
-  """
-  Users that could not be created.
-  """
-  uncreated_users: [UncreatedUser!]
-}
-
-"""
-Input for creating a single user.
-"""
-input CreateUserInput {
-  """
-  The kind of user to create.
-  """
-  kind: UserKindValue!
-  """
-  The name for the user.
-  """
-  name: String!
-  """
-  The email for the user.
-  """
-  email: String!
-  """
-  The title for the user.
-  """
-  title: String
-  """
-  The user creation flow to use.
-  """
-  user_creation_flow: UserCreationFlow!
-  """
-  The invitation method for the user.
-  """
-  invitation_method: CreateUserInvitationMethod!
-  """
-  The activation status for the user.
-  """
-  status: UserStatus = ACTIVE
-  """
-  Whether the email is confirmed.
-  """
-  confirmed_email: Boolean = true
-  """
-  Photo URL for the user (HTTPS only).
-  """
-  photo_url: String
-}
-
-"""
-The invitation method allowed when creating a user via create_multiple_users.
-"""
-enum CreateUserInvitationMethod {
-  API_USER_CREATION
-  AGENT_USER_CREATION
-  SYSTEM_CREATION
-}
-
-"""
-The method by which a user was added to the account.
-"""
-enum InvitationMethod {
-  USER
-  SCIM
-  SSO
-  AUTH_DOMAIN
-  FIRST_USER
-  CONSOLIDATION
-  INTERNAL_CREATION
-  UNKNOWN
-  SERVICE_PORTAL_AUTH_DOMAIN
-  SERVICE_PORTAL_USER_INVITATION
-  API_USER_CREATION
-  AGENT_USER_CREATION
-  SYSTEM_CREATION
-}
-
-"""
-URLs for the user's profile photo in various sizes.
-"""
-type PhotoUrl {
-  """
-  The user's photo in original size.
-  """
-  original: String
-  """
-  The user's photo in small size (150x150).
-  """
-  small: String
-  """
-  The user's photo in thumbnail size (100x100).
-  """
-  thumb: String
-  """
-  The user's photo in small thumbnail size (50x50).
-  """
-  thumb_small: String
-  """
-  The user's photo in tiny size (30x30).
-  """
-  tiny: String
-}
-
-"""
-A user that could not be created, returning the original input and failure reason.
-"""
-type UncreatedUser {
-  """
-  The kind of user to create.
-  """
-  kind: String
-  """
-  The name for the user.
-  """
-  name: String
-  """
-  The email for the user.
-  """
-  email: String
-  """
-  The title for the user.
-  """
-  title: String
-  """
-  The activation status for the user.
-  """
-  status: UserStatus
-  """
-  Whether the email is confirmed.
-  """
-  confirmed_email: Boolean
-  """
-  Photo URL for the user (HTTPS only).
-  """
-  photo_url: String
-  """
-  The reason the user could not be created.
-  """
-  reason: String
-}
-
-"""
-A user that could not be updated, returning the original input and failure reason.
-"""
-type UnupdatedUser {
-  """
-  The user ID that failed to update.
-  """
-  id: ID!
-  """
-  The name that was requested.
-  """
-  name: String
-  """
-  The title that was requested.
-  """
-  title: String
-  """
-  The photo URL that was requested.
-  """
-  photo_url: String
-  """
-  The status that was requested.
-  """
-  status: UpdatableUserStatus
-  """
-  The reason the user could not be updated.
-  """
-  reason: String
-}
-
-"""
-Activation status values that can be set via mutations.
-"""
-enum UpdatableUserStatus {
-  ACTIVE
-  INACTIVE
-}
-
-"""
-Input for updating a single user.
-"""
-input UpdateUserInput {
-  """
-  The user ID to update.
-  """
-  id: ID!
-  """
-  New name for the user.
-  """
-  name: String
-  """
-  New title for the user.
-  """
-  title: String
-  """
-  New photo URL for the user (HTTPS only).
-  """
-  photo_url: String
-  """
-  New activation status (ACTIVE or INACTIVE).
-  """
-  status: UpdatableUserStatus
-}
-
-"""
-Result of updating multiple users.
-"""
-type UpdateUsersResult {
-  """
-  Successfully updated users.
-  """
-  updated_users: [User!]
-  """
-  Users that could not be updated.
-  """
-  unupdated_users: [UnupdatedUser!]
-}
-
-"""
-User config of a user kind within the account.
-"""
-type UserConfig {
-  """
-  The user kind for the user config.
-  """
-  kind: String!
-  """
-  The role ID associated with this user config.
-  """
-  role_id: ID!
-  """
-  The visibility for this user config.
-  """
-  visibility: [String!]!
-  """
-  The behavior IDs that are true for this user kind.
-  """
-  behaviors: [String!]!
-  """
-  The group this user config belongs to.
-  """
-  group: String!
-}
-
-"""
-The user creation flow/context type.
-"""
-enum UserCreationFlow {
-  API_USER_CREATION
-  AGENT_USER_CREATION
-  SYSTEM_CREATION
-}
-
-"""
-Filter for user kinds, including kind groups.
-"""
-enum UserKindFilter {
-  ADMIN
-  MEMBER
-  GUEST
-  VIEW_ONLY
-  AGENT_MEMBER
-  PERSONAL_AGENT_MEMBER
-  AGENT_SIGNUP_USER
-  WORK_MANAGEMENT_AGENT_MEMBER
-  EXTERNAL_AGENT_MEMBER
-  EXTERNAL_AGENT_DETACHED_MEMBER
-  WORKSPACE_PRIMARY_AGENT_MEMBER
-  SERVICE_USER
-  VIBE_USER
-  PORTAL
-  PORTFOLIO_API_USER
-  NEXUS_API_USER
-  RESOURCE_DIRECTORY_API_USER
-  OMNICHANNEL_API_USER
-  GOALS_API_USER
-  PROJECTS_API_USER
-  SPRINT_MANAGEMENT_API_USER
-  CRM_COMMERCE_API_USER
-  CAMPAIGNS_API_USER
-  DATA_RETENTION_API_USER
-  MONDAY_SERVICE_API_USER
-  AI_PLATFORM_AGENT_API_USER
-  DEPENDENCIES_API_USER
-  HISTORICAL_TRACKING_BACKFILL_API_USER
-  ENTITY_KNOWLEDGE_API_USER
-  BASIC
-}
-
-"""
-Filter users by kind. Supports individual kinds and groups (e.g. BASIC = admin, member, guest, view_only). The not_in values are removed from the expanded in set.
-"""
-input UserKindFilterInput {
-  """
-  Include users matching these kinds or kind groups.
-  """
-  in: [UserKindFilter!]
-  """
-  Exclude users matching these kinds or kind groups.
-  """
-  not_in: [UserKindFilter!]
-}
-
-"""
-A specific user kind value.
-"""
-enum UserKindValue {
-  ADMIN
-  MEMBER
-  GUEST
-  VIEW_ONLY
-  AGENT_MEMBER
-  PERSONAL_AGENT_MEMBER
-  AGENT_SIGNUP_USER
-  WORK_MANAGEMENT_AGENT_MEMBER
-  EXTERNAL_AGENT_MEMBER
-  EXTERNAL_AGENT_DETACHED_MEMBER
-  WORKSPACE_PRIMARY_AGENT_MEMBER
-  SERVICE_USER
-  VIBE_USER
-  PORTAL
-  PORTFOLIO_API_USER
-  NEXUS_API_USER
-  RESOURCE_DIRECTORY_API_USER
-  OMNICHANNEL_API_USER
-  GOALS_API_USER
-  PROJECTS_API_USER
-  SPRINT_MANAGEMENT_API_USER
-  CRM_COMMERCE_API_USER
-  CAMPAIGNS_API_USER
-  DATA_RETENTION_API_USER
-  MONDAY_SERVICE_API_USER
-  AI_PLATFORM_AGENT_API_USER
-  DEPENDENCIES_API_USER
-  HISTORICAL_TRACKING_BACKFILL_API_USER
-  ENTITY_KNOWLEDGE_API_USER
-}
-
-"""
-The activation status of a user.
-"""
-enum UserStatus {
-  ACTIVE
-  INACTIVE
-  PENDING
-}
-
-"""
-The direction to sort users.
-"""
-enum UsersSortDirection {
-  ASC
-  DESC
-}
-
-"""
-The field to sort users by.
-"""
-enum UsersSortField {
-  CREATED_AT
-}
-
-"""
-Input for sorting users.
-"""
-input UsersSortInput {
-  """
-  The field to sort by.
-  """
-  field: UsersSortField!
-  """
-  The sort direction.
-  """
-  direction: UsersSortDirection!
 }
 
 """

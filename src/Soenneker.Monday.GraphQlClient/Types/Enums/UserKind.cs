@@ -9,9 +9,9 @@ public enum UserKind
 {
     All,
 
-    Guests,
-
     NonGuests,
+
+    Guests,
 
     NonPending
 

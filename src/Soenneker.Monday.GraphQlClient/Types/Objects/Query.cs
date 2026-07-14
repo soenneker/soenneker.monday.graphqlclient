@@ -12,6 +12,18 @@ namespace Soenneker.Monday.GraphQlClient;
 public sealed partial class Query
 {
     /// <summary>
+    /// Get all user configs for the account.
+    /// </summary>
+    [JsonPropertyName("user_configs")]
+    public List<UserConfig>? UserConfigs { get; init; }
+
+    /// <summary>
+    /// Get users.
+    /// </summary>
+    [JsonPropertyName("users")]
+    public List<User>? Users { get; init; }
+
+    /// <summary>
     /// Fetch resources information from the resource directory
     /// </summary>
     [JsonPropertyName("get_directory_resources")]
@@ -612,17 +624,5 @@ public sealed partial class Query
     /// </summary>
     [JsonPropertyName("knowledge_base_search")]
     public KnowledgeBaseAnswer? KnowledgeBaseSearch { get; init; }
-
-    /// <summary>
-    /// Get all user configs for the account.
-    /// </summary>
-    [JsonPropertyName("user_configs")]
-    public List<UserConfig>? UserConfigs { get; init; }
-
-    /// <summary>
-    /// Get users.
-    /// </summary>
-    [JsonPropertyName("users")]
-    public List<User>? Users { get; init; }
 
 }

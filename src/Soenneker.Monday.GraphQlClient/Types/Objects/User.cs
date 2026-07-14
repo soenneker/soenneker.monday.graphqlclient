@@ -24,6 +24,90 @@ public sealed partial class User
     public UserActivityLogsPage? ActivityLogs { get; init; }
 
     /// <summary>
+    /// The unique identifier of the account the user belongs to.
+    /// </summary>
+    [JsonPropertyName("account_id")]
+    public string AccountId { get; init; } = null!;
+
+    /// <summary>
+    /// The activation status of the user.
+    /// </summary>
+    [JsonPropertyName("status")]
+    public UserStatus Status { get; init; }
+
+    /// <summary>
+    /// The method by which the user was added to the account.
+    /// </summary>
+    [JsonPropertyName("invitation_method")]
+    public InvitationMethod InvitationMethod { get; init; }
+
+    /// <summary>
+    /// The user registration sequence number.
+    /// </summary>
+    [JsonPropertyName("serial_number")]
+    public int? SerialNumber { get; init; }
+
+    /// <summary>
+    /// Whether the user has been soft-deleted.
+    /// </summary>
+    [JsonPropertyName("is_deleted")]
+    public bool IsDeleted { get; init; }
+
+    /// <summary>
+    /// URLs for the user's profile photo in various sizes.
+    /// </summary>
+    [JsonPropertyName("photo_url")]
+    public PhotoUrl? PhotoUrl { get; init; }
+
+    /// <summary>
+    /// The date and time when the user became active.
+    /// </summary>
+    [JsonPropertyName("became_active_at")]
+    public string? BecameActiveAt { get; init; }
+
+    /// <summary>
+    /// The BigBrain visitor ID associated with the user.
+    /// </summary>
+    [JsonPropertyName("bb_visitor_id")]
+    public string BbVisitorId { get; init; } = null!;
+
+    /// <summary>
+    /// Whether the user has confirmed their email address.
+    /// </summary>
+    [JsonPropertyName("is_email_confirmed")]
+    public bool IsEmailConfirmed { get; init; }
+
+    /// <summary>
+    /// The user's config based on their kind.
+    /// </summary>
+    [JsonPropertyName("user_config")]
+    public UserConfig UserConfig { get; init; } = null!;
+
+    /// <summary>
+    /// The user's email address.
+    /// </summary>
+    [JsonPropertyName("email")]
+    public string Email { get; init; } = null!;
+
+    /// <summary>
+    /// The user's full name.
+    /// </summary>
+    [JsonPropertyName("name")]
+    public string Name { get; init; } = null!;
+
+    /// <summary>
+    /// The kind of the user.
+    /// </summary>
+    [JsonPropertyName("kind")]
+    public string Kind { get; init; } = null!;
+
+    /// <summary>
+    /// The user's creation date.
+    /// </summary>
+    [JsonPropertyName("created_at")]
+    public string CreatedAt { get; init; } = null!;
+
+    /// <summary>
     /// The user's title.
     /// </summary>
     [JsonPropertyName("title")]
@@ -214,89 +298,5 @@ public sealed partial class User
     /// </summary>
     [JsonPropertyName("department")]
     public Department? Department { get; init; }
-
-    /// <summary>
-    /// The unique identifier of the account the user belongs to.
-    /// </summary>
-    [JsonPropertyName("account_id")]
-    public string AccountId { get; init; } = null!;
-
-    /// <summary>
-    /// The activation status of the user.
-    /// </summary>
-    [JsonPropertyName("status")]
-    public UserStatus Status { get; init; }
-
-    /// <summary>
-    /// The method by which the user was added to the account.
-    /// </summary>
-    [JsonPropertyName("invitation_method")]
-    public InvitationMethod InvitationMethod { get; init; }
-
-    /// <summary>
-    /// The user registration sequence number.
-    /// </summary>
-    [JsonPropertyName("serial_number")]
-    public int? SerialNumber { get; init; }
-
-    /// <summary>
-    /// Whether the user has been soft-deleted.
-    /// </summary>
-    [JsonPropertyName("is_deleted")]
-    public bool IsDeleted { get; init; }
-
-    /// <summary>
-    /// URLs for the user's profile photo in various sizes.
-    /// </summary>
-    [JsonPropertyName("photo_url")]
-    public PhotoUrl? PhotoUrl { get; init; }
-
-    /// <summary>
-    /// The date and time when the user became active.
-    /// </summary>
-    [JsonPropertyName("became_active_at")]
-    public string? BecameActiveAt { get; init; }
-
-    /// <summary>
-    /// The BigBrain visitor ID associated with the user.
-    /// </summary>
-    [JsonPropertyName("bb_visitor_id")]
-    public string BbVisitorId { get; init; } = null!;
-
-    /// <summary>
-    /// Whether the user has confirmed their email address.
-    /// </summary>
-    [JsonPropertyName("is_email_confirmed")]
-    public bool IsEmailConfirmed { get; init; }
-
-    /// <summary>
-    /// The user's config based on their kind.
-    /// </summary>
-    [JsonPropertyName("user_config")]
-    public UserConfig UserConfig { get; init; } = null!;
-
-    /// <summary>
-    /// The user's email address.
-    /// </summary>
-    [JsonPropertyName("email")]
-    public string Email { get; init; } = null!;
-
-    /// <summary>
-    /// The user's full name.
-    /// </summary>
-    [JsonPropertyName("name")]
-    public string Name { get; init; } = null!;
-
-    /// <summary>
-    /// The kind of the user.
-    /// </summary>
-    [JsonPropertyName("kind")]
-    public string Kind { get; init; } = null!;
-
-    /// <summary>
-    /// The user's creation date.
-    /// </summary>
-    [JsonPropertyName("created_at")]
-    public string CreatedAt { get; init; } = null!;
 
 }
