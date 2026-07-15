@@ -28,6 +28,12 @@ public sealed partial class DataViewColumn
     public string? Type { get; init; }
 
     /// <summary>
+    /// For mirror/lookup columns, the type of the column being displayed.
+    /// </summary>
+    [JsonPropertyName("sub_type")]
+    public string? SubType { get; init; }
+
+    /// <summary>
     /// The column settings.
     /// </summary>
     [JsonPropertyName("settings")]

@@ -17,10 +17,148 @@ public sealed partial class Mutation
     public UpdateDirectoryResourceAttributesResponse? UpdateDirectoryResourcesAttributes { get; init; }
 
     /// <summary>
-    /// Execute an integration block with the provided field values
+    /// Create managed column of type dropdown mutation.
     /// </summary>
-    [JsonPropertyName("execute_integration_block")]
-    public IntegrationExecutionResult? ExecuteIntegrationBlock { get; init; }
+    [JsonPropertyName("create_dropdown_managed_column")]
+    public DropdownManagedColumn? CreateDropdownManagedColumn { get; init; }
+
+    /// <summary>
+    /// Create managed column of type status mutation.
+    /// </summary>
+    [JsonPropertyName("create_status_managed_column")]
+    public StatusManagedColumn? CreateStatusManagedColumn { get; init; }
+
+    /// <summary>
+    /// Update managed column of type dropdown mutation.
+    /// </summary>
+    [JsonPropertyName("update_dropdown_managed_column")]
+    public DropdownManagedColumn? UpdateDropdownManagedColumn { get; init; }
+
+    /// <summary>
+    /// Update managed column of type status mutation.
+    /// </summary>
+    [JsonPropertyName("update_status_managed_column")]
+    public StatusManagedColumn? UpdateStatusManagedColumn { get; init; }
+
+    /// <summary>
+    /// Activate managed column mutation.
+    /// </summary>
+    [JsonPropertyName("activate_managed_column")]
+    public ManagedColumn? ActivateManagedColumn { get; init; }
+
+    /// <summary>
+    /// Deactivate managed column mutation.
+    /// </summary>
+    [JsonPropertyName("deactivate_managed_column")]
+    public ManagedColumn? DeactivateManagedColumn { get; init; }
+
+    /// <summary>
+    /// Delete managed column mutation.
+    /// </summary>
+    [JsonPropertyName("delete_managed_column")]
+    public ManagedColumn? DeleteManagedColumn { get; init; }
+
+    /// <summary>
+    /// Updates a status column's properties including title, description, and status label settings. Status columns allow users to track item progress through customizable labels (e.g., "Working on it", "Done", "Stuck"). This mutation is specifically for status/color columns and provides type-safe updates.
+    /// </summary>
+    [JsonPropertyName("update_status_column")]
+    public Column? UpdateStatusColumn { get; init; }
+
+    /// <summary>
+    /// Updates a dropdown column's properties including title, description, and dropdown label settings. Dropdown columns allow users to select from a predefined list of options. This mutation is specifically for dropdown columns and provides type-safe updates.
+    /// </summary>
+    [JsonPropertyName("update_dropdown_column")]
+    public Column? UpdateDropdownColumn { get; init; }
+
+    /// <summary>
+    /// Generic mutation for updating any column type with validation. Supports updating column properties like title, description, and type-specific defaults/settings. The mutation validates input against the column type's schema before applying changes. Use get_column_type_schema query to understand available properties for each column type.
+    /// </summary>
+    [JsonPropertyName("update_column")]
+    public Column? UpdateColumn { get; init; }
+
+    /// <summary>
+    /// Creates a new status column with strongly typed settings. Status columns allow users to track item progress through customizable labels (e.g., "Working on it", "Done", "Stuck"). This mutation is specifically for status/color columns and provides type-safe creation with label configuration.
+    /// </summary>
+    [JsonPropertyName("create_status_column")]
+    public Column? CreateStatusColumn { get; init; }
+
+    /// <summary>
+    /// Creates a new dropdown column with strongly typed settings. Dropdown columns allow users to select from a predefined list of options. This mutation is specifically for dropdown columns and provides type-safe creation with dropdown options configuration.
+    /// </summary>
+    [JsonPropertyName("create_dropdown_column")]
+    public Column? CreateDropdownColumn { get; init; }
+
+    /// <summary>
+    /// Generic mutation for creating any column type with validation. Supports creating column with properties like title, description, and type-specific defaults/settings. The mutation validates input against the column type's schema before applying changes. Use get_column_type_schema query to understand available properties for each column type.
+    /// </summary>
+    [JsonPropertyName("create_column")]
+    public Column? CreateColumn { get; init; }
+
+    /// <summary>
+    /// Creates a new status column in a board that is linked to a managed column. The column data and settings are controlled by the managed column. Only title and description can be overridden locally.
+    /// </summary>
+    [JsonPropertyName("attach_status_managed_column")]
+    public Column? AttachStatusManagedColumn { get; init; }
+
+    /// <summary>
+    /// Creates a new dropdown column in a board that is linked to a managed column. The column data and settings are controlled by the managed column. Title, description, and dropdown-specific settings (limit_select, label_limit_count) can be overridden locally.
+    /// </summary>
+    [JsonPropertyName("attach_dropdown_managed_column")]
+    public Column? AttachDropdownManagedColumn { get; init; }
+
+    /// <summary>
+    /// Create a new account object schema.
+    /// </summary>
+    [JsonPropertyName("create_object_schema")]
+    public ObjectSchema? CreateObjectSchema { get; init; }
+
+    /// <summary>
+    /// Update an account object schema.
+    /// </summary>
+    [JsonPropertyName("update_object_schema")]
+    public ObjectSchema? UpdateObjectSchema { get; init; }
+
+    /// <summary>
+    /// Delete an account object schema. Can only delete if there are no boards attached to the object schema. Object schemas define the structure and columns of boards.
+    /// </summary>
+    [JsonPropertyName("delete_object_schema")]
+    public ObjectSchema? DeleteObjectSchema { get; init; }
+
+    /// <summary>
+    /// Connect a board to an object schema.
+    /// </summary>
+    [JsonPropertyName("connect_board_to_object_schema")]
+    public BoardConnection? ConnectBoardToObjectSchema { get; init; }
+
+    /// <summary>
+    /// Create columns on an account object schema.
+    /// </summary>
+    [JsonPropertyName("create_object_schema_columns")]
+    public ObjectSchema? CreateObjectSchemaColumns { get; init; }
+
+    /// <summary>
+    /// Deactivate or reactivate a column on an account object schema.
+    /// </summary>
+    [JsonPropertyName("set_object_schema_column_active_state")]
+    public ObjectSchema? SetObjectSchemaColumnActiveState { get; init; }
+
+    /// <summary>
+    /// Detach boards from their object schemas.
+    /// </summary>
+    [JsonPropertyName("detach_boards_from_object_schema")]
+    public List<BulkDetachBoardResult>? DetachBoardsFromObjectSchema { get; init; }
+
+    /// <summary>
+    /// Update columns on an account object schema.
+    /// </summary>
+    [JsonPropertyName("update_object_schema_columns")]
+    public ObjectSchema? UpdateObjectSchemaColumns { get; init; }
+
+    /// <summary>
+    /// Execute multiple object schema column actions in a single request. Actions are executed sequentially in the order provided. If any action fails, execution stops and an error is returned.
+    /// </summary>
+    [JsonPropertyName("bulk_object_schema_column_actions")]
+    public List<ObjectSchemaActionResult>? BulkObjectSchemaColumnActions { get; init; }
 
     /// <summary>
     /// Add workspace object to favorites
@@ -105,6 +243,12 @@ public sealed partial class Mutation
 
     [JsonPropertyName("grant_marketplace_app_discount")]
     public GrantMarketplaceAppDiscountResult GrantMarketplaceAppDiscount { get; init; } = null!;
+
+    /// <summary>
+    /// Execute an integration block with the provided field values
+    /// </summary>
+    [JsonPropertyName("execute_integration_block")]
+    public IntegrationExecutionResult? ExecuteIntegrationBlock { get; init; }
 
     /// <summary>
     /// Enroll multiple items to a single sequence. Maximum 50 items per request.
@@ -279,150 +423,6 @@ public sealed partial class Mutation
     /// </summary>
     [JsonPropertyName("set_form_password")]
     public ResponseForm? SetFormPassword { get; init; }
-
-    /// <summary>
-    /// Create managed column of type dropdown mutation.
-    /// </summary>
-    [JsonPropertyName("create_dropdown_managed_column")]
-    public DropdownManagedColumn? CreateDropdownManagedColumn { get; init; }
-
-    /// <summary>
-    /// Create managed column of type status mutation.
-    /// </summary>
-    [JsonPropertyName("create_status_managed_column")]
-    public StatusManagedColumn? CreateStatusManagedColumn { get; init; }
-
-    /// <summary>
-    /// Update managed column of type dropdown mutation.
-    /// </summary>
-    [JsonPropertyName("update_dropdown_managed_column")]
-    public DropdownManagedColumn? UpdateDropdownManagedColumn { get; init; }
-
-    /// <summary>
-    /// Update managed column of type status mutation.
-    /// </summary>
-    [JsonPropertyName("update_status_managed_column")]
-    public StatusManagedColumn? UpdateStatusManagedColumn { get; init; }
-
-    /// <summary>
-    /// Activate managed column mutation.
-    /// </summary>
-    [JsonPropertyName("activate_managed_column")]
-    public ManagedColumn? ActivateManagedColumn { get; init; }
-
-    /// <summary>
-    /// Deactivate managed column mutation.
-    /// </summary>
-    [JsonPropertyName("deactivate_managed_column")]
-    public ManagedColumn? DeactivateManagedColumn { get; init; }
-
-    /// <summary>
-    /// Delete managed column mutation.
-    /// </summary>
-    [JsonPropertyName("delete_managed_column")]
-    public ManagedColumn? DeleteManagedColumn { get; init; }
-
-    /// <summary>
-    /// Updates a status column's properties including title, description, and status label settings. Status columns allow users to track item progress through customizable labels (e.g., "Working on it", "Done", "Stuck"). This mutation is specifically for status/color columns and provides type-safe updates.
-    /// </summary>
-    [JsonPropertyName("update_status_column")]
-    public Column? UpdateStatusColumn { get; init; }
-
-    /// <summary>
-    /// Updates a dropdown column's properties including title, description, and dropdown label settings. Dropdown columns allow users to select from a predefined list of options. This mutation is specifically for dropdown columns and provides type-safe updates.
-    /// </summary>
-    [JsonPropertyName("update_dropdown_column")]
-    public Column? UpdateDropdownColumn { get; init; }
-
-    /// <summary>
-    /// Generic mutation for updating any column type with validation. Supports updating column properties like title, description, and type-specific defaults/settings. The mutation validates input against the column type's schema before applying changes. Use get_column_type_schema query to understand available properties for each column type.
-    /// </summary>
-    [JsonPropertyName("update_column")]
-    public Column? UpdateColumn { get; init; }
-
-    /// <summary>
-    /// Creates a new status column with strongly typed settings. Status columns allow users to track item progress through customizable labels (e.g., "Working on it", "Done", "Stuck"). This mutation is specifically for status/color columns and provides type-safe creation with label configuration.
-    /// </summary>
-    [JsonPropertyName("create_status_column")]
-    public Column? CreateStatusColumn { get; init; }
-
-    /// <summary>
-    /// Creates a new dropdown column with strongly typed settings. Dropdown columns allow users to select from a predefined list of options. This mutation is specifically for dropdown columns and provides type-safe creation with dropdown options configuration.
-    /// </summary>
-    [JsonPropertyName("create_dropdown_column")]
-    public Column? CreateDropdownColumn { get; init; }
-
-    /// <summary>
-    /// Generic mutation for creating any column type with validation. Supports creating column with properties like title, description, and type-specific defaults/settings. The mutation validates input against the column type's schema before applying changes. Use get_column_type_schema query to understand available properties for each column type.
-    /// </summary>
-    [JsonPropertyName("create_column")]
-    public Column? CreateColumn { get; init; }
-
-    /// <summary>
-    /// Creates a new status column in a board that is linked to a managed column. The column data and settings are controlled by the managed column. Only title and description can be overridden locally.
-    /// </summary>
-    [JsonPropertyName("attach_status_managed_column")]
-    public Column? AttachStatusManagedColumn { get; init; }
-
-    /// <summary>
-    /// Creates a new dropdown column in a board that is linked to a managed column. The column data and settings are controlled by the managed column. Title, description, and dropdown-specific settings (limit_select, label_limit_count) can be overridden locally.
-    /// </summary>
-    [JsonPropertyName("attach_dropdown_managed_column")]
-    public Column? AttachDropdownManagedColumn { get; init; }
-
-    /// <summary>
-    /// Create a new account object schema.
-    /// </summary>
-    [JsonPropertyName("create_object_schema")]
-    public ObjectSchema? CreateObjectSchema { get; init; }
-
-    /// <summary>
-    /// Update an account object schema.
-    /// </summary>
-    [JsonPropertyName("update_object_schema")]
-    public ObjectSchema? UpdateObjectSchema { get; init; }
-
-    /// <summary>
-    /// Delete an account object schema. Can only delete if there are no boards attached to the object schema. Object schemas define the structure and columns of boards.
-    /// </summary>
-    [JsonPropertyName("delete_object_schema")]
-    public ObjectSchema? DeleteObjectSchema { get; init; }
-
-    /// <summary>
-    /// Connect a board to an object schema.
-    /// </summary>
-    [JsonPropertyName("connect_board_to_object_schema")]
-    public BoardConnection? ConnectBoardToObjectSchema { get; init; }
-
-    /// <summary>
-    /// Create columns on an account object schema.
-    /// </summary>
-    [JsonPropertyName("create_object_schema_columns")]
-    public ObjectSchema? CreateObjectSchemaColumns { get; init; }
-
-    /// <summary>
-    /// Deactivate or reactivate a column on an account object schema.
-    /// </summary>
-    [JsonPropertyName("set_object_schema_column_active_state")]
-    public ObjectSchema? SetObjectSchemaColumnActiveState { get; init; }
-
-    /// <summary>
-    /// Detach boards from their object schemas.
-    /// </summary>
-    [JsonPropertyName("detach_boards_from_object_schema")]
-    public List<BulkDetachBoardResult>? DetachBoardsFromObjectSchema { get; init; }
-
-    /// <summary>
-    /// Update columns on an account object schema.
-    /// </summary>
-    [JsonPropertyName("update_object_schema_columns")]
-    public ObjectSchema? UpdateObjectSchemaColumns { get; init; }
-
-    /// <summary>
-    /// Execute multiple object schema column actions in a single request. Actions are executed sequentially in the order provided. If any action fails, execution stops and an error is returned.
-    /// </summary>
-    [JsonPropertyName("bulk_object_schema_column_actions")]
-    public List<ObjectSchemaActionResult>? BulkObjectSchemaColumnActions { get; init; }
 
     /// <summary>
     /// Creates a new app with the specified configuration.

@@ -17,6 +17,12 @@ public sealed partial class Board
     public string Id { get; init; } = null!;
 
     /// <summary>
+    /// The board's visible columns.
+    /// </summary>
+    [JsonPropertyName("columns")]
+    public List<Column>? Columns { get; init; }
+
+    /// <summary>
     /// Inferred metadata associated with this board
     /// </summary>
     [JsonPropertyName("inferred_metadata")]
@@ -27,12 +33,6 @@ public sealed partial class Board
     /// </summary>
     [JsonPropertyName("manual_metadata")]
     public BoardManualMetadata? ManualMetadata { get; init; }
-
-    /// <summary>
-    /// The board's visible columns.
-    /// </summary>
-    [JsonPropertyName("columns")]
-    public List<Column>? Columns { get; init; }
 
     /// <summary>
     /// The user's permission level for this board (view / edit).
