@@ -33,4 +33,10 @@ public sealed partial class ItemsPageInput
     [JsonPropertyName("group_id")]
     public string? GroupId { get; init; }
 
+    /// <summary>
+    /// For multi-level boards: controls how filters apply across the item hierarchy. Use "allItems" to evaluate filters against parents and subitems and return matches at every level. Accepted values: allItems, parentItems.
+    /// </summary>
+    [JsonPropertyName("hierarchy_scope_config")]
+    public string? HierarchyScopeConfig { get; init; }
+
 }

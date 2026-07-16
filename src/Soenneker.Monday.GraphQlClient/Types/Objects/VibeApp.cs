@@ -60,6 +60,12 @@ public sealed partial class VibeApp
     public string? Tagline { get; init; }
 
     /// <summary>
+    /// Presigned URL for the screenshot of the app's latest live version. The owner and members with full access to all connected boards/objects receive the full image; other members receive a blurred variant. Null when there is no live version or no stored screenshot.
+    /// </summary>
+    [JsonPropertyName("screenshot_url")]
+    public string? ScreenshotUrl { get; init; }
+
+    /// <summary>
     /// The name of the vibe app
     /// </summary>
     [JsonPropertyName("name")]

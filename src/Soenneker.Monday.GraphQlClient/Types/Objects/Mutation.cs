@@ -245,12 +245,6 @@ public sealed partial class Mutation
     public GrantMarketplaceAppDiscountResult GrantMarketplaceAppDiscount { get; init; } = null!;
 
     /// <summary>
-    /// Execute an integration block with the provided field values
-    /// </summary>
-    [JsonPropertyName("execute_integration_block")]
-    public IntegrationExecutionResult? ExecuteIntegrationBlock { get; init; }
-
-    /// <summary>
     /// Enroll multiple items to a single sequence. Maximum 50 items per request.
     /// </summary>
     [JsonPropertyName("enroll_items_to_sequence")]
@@ -483,6 +477,12 @@ public sealed partial class Mutation
     /// </summary>
     [JsonPropertyName("update_mute_board_settings")]
     public List<BoardMuteSettings>? UpdateMuteBoardSettings { get; init; }
+
+    /// <summary>
+    /// Execute an integration block with the provided field values
+    /// </summary>
+    [JsonPropertyName("execute_integration_block")]
+    public IntegrationExecutionResult? ExecuteIntegrationBlock { get; init; }
 
     /// <summary>
     /// Add a file to a column value.

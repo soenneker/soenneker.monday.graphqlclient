@@ -54,6 +54,12 @@ public sealed partial class Query
     public List<Sprint>? Sprints { get; init; }
 
     /// <summary>
+    /// Performs aggregation operations on board data
+    /// </summary>
+    [JsonPropertyName("aggregate")]
+    public AggregateQueryResult? Aggregate { get; init; }
+
+    /// <summary>
     /// Get all personal list items by list ID
     /// </summary>
     [JsonPropertyName("favorites")]
@@ -520,12 +526,6 @@ public sealed partial class Query
     /// </summary>
     [JsonPropertyName("job_status")]
     public AsyncJobStatus JobStatus { get; init; } = null!;
-
-    /// <summary>
-    /// Performs aggregation operations on board data
-    /// </summary>
-    [JsonPropertyName("aggregate")]
-    public AggregateQueryResult? Aggregate { get; init; }
 
     /// <summary>
     /// Returns all available widget schemas for documentation and validation purposes

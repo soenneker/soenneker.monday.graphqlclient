@@ -34,6 +34,18 @@ public sealed partial class ItemsPageVoteValue : ItemsPageColumnValue
     public string? Value { get; init; }
 
     /// <summary>
+    /// Multi-level boards: whether this item is a leaf (has no subitems).
+    /// </summary>
+    [JsonPropertyName("is_leaf")]
+    public bool IsLeaf { get; init; }
+
+    /// <summary>
+    /// Column capabilities (calculated/rollup metadata on multi-level boards).
+    /// </summary>
+    [JsonPropertyName("capabilities")]
+    public ItemsPageColumnCapabilities? Capabilities { get; init; }
+
+    /// <summary>
     /// Number of votes
     /// </summary>
     [JsonPropertyName("vote_count")]

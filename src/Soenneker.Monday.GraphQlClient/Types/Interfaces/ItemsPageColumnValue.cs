@@ -27,4 +27,14 @@ public interface ItemsPageColumnValue
     /// </summary>
     string? Value { get; }
 
+    /// <summary>
+    /// Multi-level boards: whether this item is a leaf (has no subitems).
+    /// </summary>
+    bool IsLeaf { get; }
+
+    /// <summary>
+    /// Column capabilities (calculated/rollup metadata on multi-level boards).
+    /// </summary>
+    ItemsPageColumnCapabilities? Capabilities { get; }
+
 }
