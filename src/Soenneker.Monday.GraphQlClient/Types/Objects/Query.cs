@@ -12,18 +12,6 @@ namespace Soenneker.Monday.GraphQlClient;
 public sealed partial class Query
 {
     /// <summary>
-    /// Get all user configs for the account.
-    /// </summary>
-    [JsonPropertyName("user_configs")]
-    public List<UserConfig>? UserConfigs { get; init; }
-
-    /// <summary>
-    /// Get users.
-    /// </summary>
-    [JsonPropertyName("users")]
-    public List<User>? Users { get; init; }
-
-    /// <summary>
     /// Fetch resources information from the resource directory
     /// </summary>
     [JsonPropertyName("get_directory_resources")]
@@ -205,24 +193,6 @@ public sealed partial class Query
     public List<Board>? BoardCandidates { get; init; }
 
     /// <summary>
-    /// Get all roles for the account
-    /// </summary>
-    [JsonPropertyName("account_roles")]
-    public List<AccountRole>? AccountRoles { get; init; }
-
-    /// <summary>
-    /// Retrieves API tokens for the given service users.
-    /// </summary>
-    [JsonPropertyName("service_user_tokens")]
-    public List<ServiceUserToken>? ServiceUserTokens { get; init; }
-
-    /// <summary>
-    /// Retrieves all service users in the account with their token last activity.
-    /// </summary>
-    [JsonPropertyName("service_users")]
-    public List<ServiceUser>? ServiceUsers { get; init; }
-
-    /// <summary>
     /// Fetch a form by its token. The returned form includes all the details of the form such as its settings, questions, title, etc. Use this endpoint when you need to retrieve complete form data for display or processing. Requires that the requesting user has read access to the associated board.
     /// </summary>
     [JsonPropertyName("form")]
@@ -263,6 +233,24 @@ public sealed partial class Query
     /// </summary>
     [JsonPropertyName("connection_board_ids")]
     public List<string> ConnectionBoardIds { get; init; } = [];
+
+    /// <summary>
+    /// Get all roles for the account
+    /// </summary>
+    [JsonPropertyName("account_roles")]
+    public List<AccountRole>? AccountRoles { get; init; }
+
+    /// <summary>
+    /// Retrieves API tokens for the given service users.
+    /// </summary>
+    [JsonPropertyName("service_user_tokens")]
+    public List<ServiceUserToken>? ServiceUserTokens { get; init; }
+
+    /// <summary>
+    /// Retrieves all service users in the account with their token last activity.
+    /// </summary>
+    [JsonPropertyName("service_users")]
+    public List<ServiceUser>? ServiceUsers { get; init; }
 
     /// <summary>
     /// Search API. Each field searches a single entity type with tailored filters.
@@ -520,6 +508,18 @@ public sealed partial class Query
     /// </summary>
     [JsonPropertyName("fetch_job_status")]
     public JobStatus FetchJobStatus { get; init; } = null!;
+
+    /// <summary>
+    /// Get all user configs for the account.
+    /// </summary>
+    [JsonPropertyName("user_configs")]
+    public List<UserConfig>? UserConfigs { get; init; }
+
+    /// <summary>
+    /// Get users.
+    /// </summary>
+    [JsonPropertyName("users")]
+    public List<User>? Users { get; init; }
 
     /// <summary>
     /// Get the status of an async job by its external ID
