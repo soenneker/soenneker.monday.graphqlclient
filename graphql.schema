@@ -4,378 +4,6 @@ Directs the executor to defer this fragment when the if argument is true or unde
 directive @defer(label: String, if: Boolean! = true) on FRAGMENT_SPREAD | INLINE_FRAGMENT
 
 """
-Dimension to group event counts by
-"""
-enum ActivityGroupBy {
-  BOARD
-  USER
-}
-
-"""
-Represents a single activity log entry
-"""
-type ActivityLog {
-  """
-  The unique identifier of the activity log entry
-  """
-  id: ID
-  """
-  The account this activity log entry belongs to
-  """
-  account_id: ID
-  """
-  The user who performed the action
-  """
-  user_id: ID
-  """
-  The type of event that occurred
-  """
-  event: String
-  """
-  The entity type that was affected
-  """
-  entity: String
-  """
-  Additional data associated with the event as a JSON string
-  """
-  data: String
-  """
-  The timestamp when the activity log entry was created
-  """
-  created_at: String
-}
-
-"""
-Entry point for internal activity log queries
-"""
-type ActivityLogInternalQueries {
-  """
-  Internal activity log entries for boards or users — skips authorization, entity whitelisting, and always includes boardless events
-  """
-  logs(board_ids: [ID!], user_ids: [ID!], from: String, to: String, event_types: [String!], correlation_ids: [ID!], entities: [String!], search: String, limit: Int, cursor: String): ActivityLogsPage
-  """
-  Event counts grouped by board or user in a single aggregation request (no per-entity fan-out). board_ids is always required. Provide user_ids to count specific users; omit them (with group_by USER) to discover the top-N users active on the given boards.
-  """
-  event_counts(group_by: ActivityGroupBy!, limit: Int, board_ids: [ID!]!, user_ids: [ID!], from: String, to: String, event_types: [String!], correlation_ids: [ID!], entities: [String!], search: String): EventCountsResult
-}
-
-"""
-Entry point for all activity log queries
-"""
-type ActivityLogQueries {
-  """
-  Activity log entries for boards or users
-  """
-  logs(board_ids: [ID!], user_ids: [ID!], from: String, to: String, limit: Int, event_types: [String!], cursor: String): ActivityLogsPage
-  """
-  Top N most active boards by action count
-  """
-  top_boards(from: String, to: String, limit: Int): TopBoardsResult
-  """
-  Top N event types by frequency
-  """
-  top_event_types(from: String, to: String, limit: Int): TopEventTypesResult
-}
-
-"""
-A page of activity log entries with a cursor for fetching the next page
-"""
-type ActivityLogsPage {
-  """
-  The activity log entries for this page
-  """
-  logs: [ActivityLog!]
-  """
-  Cursor to pass to fetch the next page, null if this is the last page
-  """
-  cursor: String
-}
-
-"""
-Event counts grouped by the requested dimension
-"""
-type EventCountsResult {
-  """
-  Explicit mode (IDs supplied): one bucket per requested ID, count 0 for IDs with no events. Discovery mode (group_by USER without user_ids): top-N users active on the given boards.
-  """
-  buckets: [GroupCountBucket!]
-}
-
-"""
-A grouped entity and its event count
-"""
-type GroupCountBucket {
-  """
-  The grouped entity ID (board ID or user ID, depending on group_by)
-  """
-  key: ID
-  """
-  Number of events for this entity within the filtered range
-  """
-  count: Int
-}
-
-"""
-A board and its total action count
-"""
-type TopBoardEntry {
-  """
-  The board ID
-  """
-  board_id: ID
-  """
-  Number of actions performed on this board
-  """
-  count: Int
-}
-
-"""
-Top N most active boards by action count
-"""
-type TopBoardsResult {
-  """
-  List of boards sorted by action count descending
-  """
-  boards: [TopBoardEntry!]
-}
-
-"""
-An event type and its total occurrence count
-"""
-type TopEventTypeEntry {
-  """
-  The event type name
-  """
-  event_type: String
-  """
-  Number of times this event type occurred
-  """
-  count: Int
-}
-
-"""
-Top N event types by frequency
-"""
-type TopEventTypesResult {
-  """
-  List of event types sorted by frequency descending
-  """
-  event_types: [TopEventTypeEntry!]
-}
-
-"""
-A monday.com user.
-"""
-type User {
-  """
-  The user's unique identifier.
-  """
-  id: ID!
-  """
-  Activity log entries for the user
-  """
-  activity_logs(from: String, to: String, board_ids: [ID!], limit: Int, event_types: [String!], cursor: String): UserActivityLogsPage
-  """
-  The user's title.
-  """
-  title: String!
-  """
-  The user's phone number.
-  """
-  phone: String
-  """
-  The user's location.
-  """
-  location: String
-  """
-  The user's birthday.
-  """
-  birthday: String
-  """
-  The user's mobile phone number.
-  """
-  mobile_phone: String
-  """
-  The user's country code.
-  """
-  country_code: String
-  """
-  The current user's language
-  """
-  current_language: String
-  """
-  The user's timezone identifier.
-  """
-  time_zone_identifier: String
-  """
-  The user's utc hours difference.
-  """
-  utc_hours_diff: Float
-  """
-  The user's profile url.
-  """
-  url: String!
-  """
-  The user's account.
-  """
-  account: Account!
-  """
-  The products the user is assigned to.
-  """
-  account_products: [AccountProduct!]
-  """
-  The custom field metas of the user profile.
-  """
-  custom_field_metas: [CustomFieldMetas]
-  """
-  The custom field values of the user profile.
-  """
-  custom_field_values: [CustomFieldValue]
-  """
-  Is the user enabled or not.
-  """
-  enabled: Boolean! @deprecated(reason: "This field is deprecated. Please use status instead.")
-  """
-  The token of the user for email to board.
-  """
-  encrypt_api_token: String @deprecated(reason: "This field is deprecated and will be removed in later versions.")
-  """
-  Is the user an account admin.
-  """
-  is_admin: Boolean @deprecated(reason: "This field is deprecated. Please use kind instead.")
-  """
-  Is the user a guest or not.
-  """
-  is_guest: Boolean @deprecated(reason: "This field is deprecated. Please use kind instead.")
-  """
-  Is the user a pending user
-  """
-  is_pending: Boolean @deprecated(reason: "This field is deprecated. Please use status instead.")
-  """
-  Is user verified his email.
-  """
-  is_verified: Boolean @deprecated(reason: "This field is deprecated. Please use is_email_confirmed instead.")
-  """
-  Is the user a view only user or not.
-  """
-  is_view_only: Boolean @deprecated(reason: "This field is deprecated. Please use kind instead.")
-  """
-  The date the user joined the account.
-  """
-  join_date: Date @deprecated(reason: "This field is deprecated. Please use became_active_at instead.")
-  """
-  Last date & time when user was active
-  """
-  last_activity: Date
-  """
-  The user's out of office status.
-  """
-  out_of_office: OutOfOffice
-  """
-  The user's photo in the original size.
-  """
-  photo_original: String @deprecated(reason: "This field is deprecated. Please use photo_url.original instead.")
-  """
-  The user's photo in small size (150x150).
-  """
-  photo_small: String @deprecated(reason: "This field is deprecated. Please use photo_url.small instead.")
-  """
-  The user's photo in thumbnail size (100x100).
-  """
-  photo_thumb: String @deprecated(reason: "This field is deprecated. Please use photo_url.thumb instead.")
-  """
-  The user's photo in small thumbnail size (50x50).
-  """
-  photo_thumb_small: String @deprecated(reason: "This field is deprecated. Please use photo_url.thumb_small instead.")
-  """
-  The user's photo in tiny size (30x30).
-  """
-  photo_tiny: String @deprecated(reason: "This field is deprecated. Please use photo_url.tiny instead.")
-  """
-  The product to which the user signed up to first.
-  """
-  sign_up_product_kind: String @deprecated(reason: "This field is deprecated and will be removed in later versions.")
-  """
-  The teams the user is a member in.
-  """
-  teams(ids: [ID!]): [Team]
-  """
-  The department the user is a member of (if any)
-  """
-  department: Department
-  """
-  The unique identifier of the account the user belongs to.
-  """
-  account_id: ID!
-  """
-  The activation status of the user.
-  """
-  status: UserStatus!
-  """
-  The method by which the user was added to the account.
-  """
-  invitation_method: InvitationMethod!
-  """
-  The user registration sequence number.
-  """
-  serial_number: Int
-  """
-  Whether the user has been soft-deleted.
-  """
-  is_deleted: Boolean!
-  """
-  URLs for the user's profile photo in various sizes.
-  """
-  photo_url: PhotoUrl
-  """
-  The date and time when the user became active.
-  """
-  became_active_at: ISO8601DateTime
-  """
-  The BigBrain visitor ID associated with the user.
-  """
-  bb_visitor_id: ID!
-  """
-  Whether the user has confirmed their email address.
-  """
-  is_email_confirmed: Boolean!
-  """
-  The user's config based on their kind.
-  """
-  user_config: UserConfig!
-  """
-  The user's email address.
-  """
-  email: String!
-  """
-  The user's full name.
-  """
-  name: String!
-  """
-  The kind of the user.
-  """
-  kind: String!
-  """
-  The user's creation date.
-  """
-  created_at: ISO8601DateTime!
-}
-
-"""
-A page of activity log entries with a cursor for fetching the next page
-"""
-type UserActivityLogsPage {
-  """
-  The activity log entries for this page
-  """
-  logs: [ActivityLog!]
-  """
-  Cursor to pass to fetch the next page, null if this is the last page
-  """
-  cursor: String
-}
-
-"""
 The account-level default work schedule and time off schedule
 """
 type AccountAvailabilityDefaults {
@@ -6422,6 +6050,204 @@ input UpdateObjectInput {
   Optional relations to add to the object
   """
   relations: [ObjectRelationInput!]
+}
+
+"""
+A monday.com user.
+"""
+type User {
+  """
+  The user's unique identifier.
+  """
+  id: ID!
+  """
+  The user's title.
+  """
+  title: String!
+  """
+  The user's phone number.
+  """
+  phone: String
+  """
+  The user's location.
+  """
+  location: String
+  """
+  The user's birthday.
+  """
+  birthday: String
+  """
+  The user's mobile phone number.
+  """
+  mobile_phone: String
+  """
+  The user's country code.
+  """
+  country_code: String
+  """
+  The current user's language
+  """
+  current_language: String
+  """
+  The user's timezone identifier.
+  """
+  time_zone_identifier: String
+  """
+  The user's utc hours difference.
+  """
+  utc_hours_diff: Float
+  """
+  The user's profile url.
+  """
+  url: String!
+  """
+  The user's account.
+  """
+  account: Account!
+  """
+  The products the user is assigned to.
+  """
+  account_products: [AccountProduct!]
+  """
+  The custom field metas of the user profile.
+  """
+  custom_field_metas: [CustomFieldMetas]
+  """
+  The custom field values of the user profile.
+  """
+  custom_field_values: [CustomFieldValue]
+  """
+  Is the user enabled or not.
+  """
+  enabled: Boolean! @deprecated(reason: "This field is deprecated. Please use status instead.")
+  """
+  The token of the user for email to board.
+  """
+  encrypt_api_token: String @deprecated(reason: "This field is deprecated and will be removed in later versions.")
+  """
+  Is the user an account admin.
+  """
+  is_admin: Boolean @deprecated(reason: "This field is deprecated. Please use kind instead.")
+  """
+  Is the user a guest or not.
+  """
+  is_guest: Boolean @deprecated(reason: "This field is deprecated. Please use kind instead.")
+  """
+  Is the user a pending user
+  """
+  is_pending: Boolean @deprecated(reason: "This field is deprecated. Please use status instead.")
+  """
+  Is user verified his email.
+  """
+  is_verified: Boolean @deprecated(reason: "This field is deprecated. Please use is_email_confirmed instead.")
+  """
+  Is the user a view only user or not.
+  """
+  is_view_only: Boolean @deprecated(reason: "This field is deprecated. Please use kind instead.")
+  """
+  The date the user joined the account.
+  """
+  join_date: Date @deprecated(reason: "This field is deprecated. Please use became_active_at instead.")
+  """
+  Last date & time when user was active
+  """
+  last_activity: Date
+  """
+  The user's out of office status.
+  """
+  out_of_office: OutOfOffice
+  """
+  The user's photo in the original size.
+  """
+  photo_original: String @deprecated(reason: "This field is deprecated. Please use photo_url.original instead.")
+  """
+  The user's photo in small size (150x150).
+  """
+  photo_small: String @deprecated(reason: "This field is deprecated. Please use photo_url.small instead.")
+  """
+  The user's photo in thumbnail size (100x100).
+  """
+  photo_thumb: String @deprecated(reason: "This field is deprecated. Please use photo_url.thumb instead.")
+  """
+  The user's photo in small thumbnail size (50x50).
+  """
+  photo_thumb_small: String @deprecated(reason: "This field is deprecated. Please use photo_url.thumb_small instead.")
+  """
+  The user's photo in tiny size (30x30).
+  """
+  photo_tiny: String @deprecated(reason: "This field is deprecated. Please use photo_url.tiny instead.")
+  """
+  The product to which the user signed up to first.
+  """
+  sign_up_product_kind: String @deprecated(reason: "This field is deprecated and will be removed in later versions.")
+  """
+  The teams the user is a member in.
+  """
+  teams(ids: [ID!]): [Team]
+  """
+  The department the user is a member of (if any)
+  """
+  department: Department
+  """
+  The unique identifier of the account the user belongs to.
+  """
+  account_id: ID!
+  """
+  The activation status of the user.
+  """
+  status: UserStatus!
+  """
+  The method by which the user was added to the account.
+  """
+  invitation_method: InvitationMethod!
+  """
+  The user registration sequence number.
+  """
+  serial_number: Int
+  """
+  Whether the user has been soft-deleted.
+  """
+  is_deleted: Boolean!
+  """
+  URLs for the user's profile photo in various sizes.
+  """
+  photo_url: PhotoUrl
+  """
+  The date and time when the user became active.
+  """
+  became_active_at: ISO8601DateTime
+  """
+  The BigBrain visitor ID associated with the user.
+  """
+  bb_visitor_id: ID!
+  """
+  Whether the user has confirmed their email address.
+  """
+  is_email_confirmed: Boolean!
+  """
+  The user's config based on their kind.
+  """
+  user_config: UserConfig!
+  """
+  The user's email address.
+  """
+  email: String!
+  """
+  The user's full name.
+  """
+  name: String!
+  """
+  The kind of the user.
+  """
+  kind: String!
+  """
+  The user's creation date.
+  """
+  created_at: ISO8601DateTime!
+  """
+  Activity log entries for the user
+  """
+  activity_logs(from: String, to: String, board_ids: [ID!], limit: Int, event_types: [String!], cursor: String): UserActivityLogsPage
 }
 
 """
@@ -21495,6 +21321,124 @@ type TimelineResponse {
   Paginated set of timeline items and a cursor to get the next page
   """
   timeline_items_page(cursor: String = null, limit: Int = 25): TimelineItemsPage!
+}
+
+"""
+Dimension to group event counts by
+"""
+enum ActivityGroupBy {
+  BOARD
+  USER
+}
+
+"""
+Represents a single activity log entry
+"""
+type ActivityLog {
+  """
+  The unique identifier of the activity log entry
+  """
+  id: ID
+  """
+  The account this activity log entry belongs to
+  """
+  account_id: ID
+  """
+  The user who performed the action
+  """
+  user_id: ID
+  """
+  The type of event that occurred
+  """
+  event: String
+  """
+  The entity type that was affected
+  """
+  entity: String
+  """
+  Additional data associated with the event as a JSON string
+  """
+  data: String
+  """
+  The timestamp when the activity log entry was created
+  """
+  created_at: String
+}
+
+"""
+Entry point for internal activity log queries
+"""
+type ActivityLogInternalQueries {
+  """
+  Internal activity log entries for boards or users — skips authorization, entity whitelisting, and always includes boardless events
+  """
+  logs(board_ids: [ID!], user_ids: [ID!], from: String, to: String, event_types: [String!], correlation_ids: [ID!], entities: [String!], search: String, limit: Int, cursor: String): ActivityLogsPage
+  """
+  Event counts grouped by board or user in a single aggregation request (no per-entity fan-out). board_ids is always required. Provide user_ids to count specific users; omit them (with group_by USER) to discover the top-N users active on the given boards.
+  """
+  event_counts(group_by: ActivityGroupBy!, limit: Int, board_ids: [ID!]!, user_ids: [ID!], from: String, to: String, event_types: [String!], correlation_ids: [ID!], entities: [String!], search: String): EventCountsResult
+}
+
+"""
+Entry point for all activity log queries
+"""
+type ActivityLogQueries {
+  """
+  Activity log entries for boards or users
+  """
+  logs(board_ids: [ID!], user_ids: [ID!], from: String, to: String, limit: Int, event_types: [String!], cursor: String): ActivityLogsPage
+}
+
+"""
+A page of activity log entries with a cursor for fetching the next page
+"""
+type ActivityLogsPage {
+  """
+  The activity log entries for this page
+  """
+  logs: [ActivityLog!]
+  """
+  Cursor to pass to fetch the next page, null if this is the last page
+  """
+  cursor: String
+}
+
+"""
+Event counts grouped by the requested dimension
+"""
+type EventCountsResult {
+  """
+  Explicit mode (IDs supplied): one bucket per requested ID, count 0 for IDs with no events. Discovery mode (group_by USER without user_ids): top-N users active on the given boards.
+  """
+  buckets: [GroupCountBucket!]
+}
+
+"""
+A grouped entity and its event count
+"""
+type GroupCountBucket {
+  """
+  The grouped entity ID (board ID or user ID, depending on group_by)
+  """
+  key: ID
+  """
+  Number of events for this entity within the filtered range
+  """
+  count: Int
+}
+
+"""
+A page of activity log entries with a cursor for fetching the next page
+"""
+type UserActivityLogsPage {
+  """
+  The activity log entries for this page
+  """
+  logs: [ActivityLog!]
+  """
+  Cursor to pass to fetch the next page, null if this is the last page
+  """
+  cursor: String
 }
 
 """

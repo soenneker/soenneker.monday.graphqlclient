@@ -15,16 +15,4 @@ public sealed partial class ActivityLogQueries
     [JsonPropertyName("logs")]
     public ActivityLogsPage? Logs { get; init; }
 
-    /// <summary>
-    /// Top N most active boards by action count
-    /// </summary>
-    [JsonPropertyName("top_boards")]
-    public TopBoardsResult? TopBoards { get; init; }
-
-    /// <summary>
-    /// Top N event types by frequency
-    /// </summary>
-    [JsonPropertyName("top_event_types")]
-    public TopEventTypesResult? TopEventTypes { get; init; }
-
 }
