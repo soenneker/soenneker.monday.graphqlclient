@@ -14681,6 +14681,152 @@ type RunPromptResult {
 }
 
 """
+API usage data.
+"""
+type DailyAnalytics {
+  """
+  Last time the API usage data was updated.
+  """
+  last_updated: ISO8601DateTime
+  """
+  API usage per day.
+  """
+  by_day: [PlatformApiDailyAnalyticsByDay!]
+  """
+  API usage per app.
+  """
+  by_app: [PlatformApiDailyAnalyticsByApp!]
+  """
+  API usage per user.
+  """
+  by_user: [PlatformApiDailyAnalyticsByUser!]
+}
+
+"""
+Platform API daily limit.
+"""
+type DailyLimit {
+  """
+  Base daily limit.
+  """
+  base: Int
+  """
+  Total daily limit.
+  """
+  total: Int
+  """
+  Daily-limit add-on details for the account.
+  """
+  addon: DailyLimitAddon
+}
+
+"""
+Platform API daily-limit add-on details.
+"""
+type DailyLimitAddon {
+  """
+  Whether the account owns an active daily-limit add-on.
+  """
+  is_active: Boolean!
+  """
+  Number of daily-limit add-on units the account owns.
+  """
+  quantity: Int!
+}
+
+"""
+The Platform API's data.
+"""
+type PlatformApi {
+  """
+  Platform API daily limit.
+  """
+  daily_limit: DailyLimit
+  """
+  API analytics.
+  """
+  daily_analytics: DailyAnalytics
+}
+
+"""
+API usage per app.
+"""
+type PlatformApiDailyAnalyticsByApp {
+  """
+  Application.
+  """
+  app: AppType
+  """
+  API usage for the app.
+  """
+  usage: Int!
+  """
+  API app id
+  """
+  api_app_id: ID!
+}
+
+"""
+API usage per day.
+"""
+type PlatformApiDailyAnalyticsByDay {
+  """
+  Day.
+  """
+  day: String!
+  """
+  API usage for the day.
+  """
+  usage: Int!
+}
+
+"""
+API usage per user.
+"""
+type PlatformApiDailyAnalyticsByUser {
+  """
+  User.
+  """
+  user: User
+  """
+  API usage for the user.
+  """
+  usage: Int!
+}
+
+"""
+An object containing the API version details
+"""
+type Version {
+  """
+  The type of the API version
+  """
+  kind: VersionKind!
+  """
+  Version string that can be used in API-Version header
+  """
+  value: String!
+  """
+  The display name of the API version
+  """
+  display_name: String!
+}
+
+"""
+All possible API version types
+"""
+enum VersionKind {
+  maintenance
+  current
+  release_candidate
+  dev
+  deprecated
+  old__maintenance
+  old_previous_maintenance
+  previous_maintenance
+}
+
+"""
 Response from AI action request
 """
 type AiActionResponse {
@@ -17118,152 +17264,6 @@ type WorkspaceBoardGroup {
   The reasoning for grouping these boards together
   """
   reasoning: String
-}
-
-"""
-API usage data.
-"""
-type DailyAnalytics {
-  """
-  Last time the API usage data was updated.
-  """
-  last_updated: ISO8601DateTime
-  """
-  API usage per day.
-  """
-  by_day: [PlatformApiDailyAnalyticsByDay!]
-  """
-  API usage per app.
-  """
-  by_app: [PlatformApiDailyAnalyticsByApp!]
-  """
-  API usage per user.
-  """
-  by_user: [PlatformApiDailyAnalyticsByUser!]
-}
-
-"""
-Platform API daily limit.
-"""
-type DailyLimit {
-  """
-  Base daily limit.
-  """
-  base: Int
-  """
-  Total daily limit.
-  """
-  total: Int
-  """
-  Daily-limit add-on details for the account.
-  """
-  addon: DailyLimitAddon
-}
-
-"""
-Platform API daily-limit add-on details.
-"""
-type DailyLimitAddon {
-  """
-  Whether the account owns an active daily-limit add-on.
-  """
-  is_active: Boolean!
-  """
-  Number of daily-limit add-on units the account owns.
-  """
-  quantity: Int!
-}
-
-"""
-The Platform API's data.
-"""
-type PlatformApi {
-  """
-  Platform API daily limit.
-  """
-  daily_limit: DailyLimit
-  """
-  API analytics.
-  """
-  daily_analytics: DailyAnalytics
-}
-
-"""
-API usage per app.
-"""
-type PlatformApiDailyAnalyticsByApp {
-  """
-  Application.
-  """
-  app: AppType
-  """
-  API usage for the app.
-  """
-  usage: Int!
-  """
-  API app id
-  """
-  api_app_id: ID!
-}
-
-"""
-API usage per day.
-"""
-type PlatformApiDailyAnalyticsByDay {
-  """
-  Day.
-  """
-  day: String!
-  """
-  API usage for the day.
-  """
-  usage: Int!
-}
-
-"""
-API usage per user.
-"""
-type PlatformApiDailyAnalyticsByUser {
-  """
-  User.
-  """
-  user: User
-  """
-  API usage for the user.
-  """
-  usage: Int!
-}
-
-"""
-An object containing the API version details
-"""
-type Version {
-  """
-  The type of the API version
-  """
-  kind: VersionKind!
-  """
-  Version string that can be used in API-Version header
-  """
-  value: String!
-  """
-  The display name of the API version
-  """
-  display_name: String!
-}
-
-"""
-All possible API version types
-"""
-enum VersionKind {
-  maintenance
-  current
-  release_candidate
-  dev
-  deprecated
-  old__maintenance
-  old_previous_maintenance
-  previous_maintenance
 }
 
 """
