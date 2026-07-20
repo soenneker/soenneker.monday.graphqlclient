@@ -13,6 +13,8 @@ public enum UserRequestKind
 
     RequestToMakeAppPublic,
 
-    RequestToUpgradeBoardConnection
+    RequestToUpgradeBoardConnection,
+
+    RequestToUpgradeBeforeAppsUnpublish
 
 }

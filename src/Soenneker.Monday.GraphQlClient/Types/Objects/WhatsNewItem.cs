@@ -100,4 +100,10 @@ public sealed partial class WhatsNewItem
     [JsonPropertyName("likes")]
     public int? Likes { get; init; }
 
+    /// <summary>
+    /// Whether this entry should appear in the initial loading carousel
+    /// </summary>
+    [JsonPropertyName("show_in_loading_carousel")]
+    public bool ShowInLoadingCarousel { get; init; }
+
 }
