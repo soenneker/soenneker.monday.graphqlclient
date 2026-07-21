@@ -5,18 +5,12 @@ using System.Text.Json.Serialization;
 namespace Soenneker.Monday.GraphQlClient;
 
 /// <summary>
-/// Theme selection input for app creation. Provide either `id` (preset) or `definition` (extracted).
+/// Theme selection input for app creation. Provide a full `definition` (extracted theme).
 /// </summary>
 public sealed partial class ThemeInput
 {
     /// <summary>
-    /// Predefined theme ID (e.g., "gen_z", "ios_26", "monday_com").
-    /// </summary>
-    [JsonPropertyName("id")]
-    public string? Id { get; init; }
-
-    /// <summary>
-    /// Full ThemeDefinition for an extracted theme (used when id is omitted).
+    /// Full ThemeDefinition for an extracted theme.
     /// </summary>
     [JsonPropertyName("definition")]
     public ThemeDefinitionInput? Definition { get; init; }

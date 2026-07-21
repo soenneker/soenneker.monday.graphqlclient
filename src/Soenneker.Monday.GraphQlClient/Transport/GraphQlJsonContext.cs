@@ -3010,8 +3010,6 @@ namespace Soenneker.Monday.GraphQlClient;
 [JsonSerializable(typeof(GraphQlResponse<VibeSortDir>))]
 [JsonSerializable(typeof(VibeSubscription))]
 [JsonSerializable(typeof(GraphQlResponse<VibeSubscription>))]
-[JsonSerializable(typeof(VibeTheme))]
-[JsonSerializable(typeof(GraphQlResponse<VibeTheme>))]
 [JsonSerializable(typeof(VibeVariant))]
 [JsonSerializable(typeof(GraphQlResponse<VibeVariant>))]
 [JsonSerializable(typeof(VideoBlockInput))]

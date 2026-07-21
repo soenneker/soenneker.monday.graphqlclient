@@ -71,12 +71,6 @@ public sealed partial class VibeQueries
     public List<UserRequest>? UserRequests { get; init; }
 
     /// <summary>
-    /// List of available predefined themes with full styling tokens
-    /// </summary>
-    [JsonPropertyName("themes")]
-    public List<VibeTheme>? Themes { get; init; }
-
-    /// <summary>
     /// Check if a vibe app is published by appFeatureReferenceId
     /// </summary>
     [JsonPropertyName("is_app_published")]

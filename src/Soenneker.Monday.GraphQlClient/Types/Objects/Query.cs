@@ -540,6 +540,36 @@ public sealed partial class Query
     public Validations? Validations { get; init; }
 
     /// <summary>
+    /// Export the dependency graph for a specific board
+    /// </summary>
+    [JsonPropertyName("export_graph")]
+    public BoardGraphExport? ExportGraph { get; init; }
+
+    /// <summary>
+    /// Fetch dependency column configuration for a board
+    /// </summary>
+    [JsonPropertyName("dependency_column_config")]
+    public DependencyColumnConfigResult? DependencyColumnConfig { get; init; }
+
+    /// <summary>
+    /// Export events for a board within a date range. Requires a valid X-Tool-Execution-Secret header.
+    /// </summary>
+    [JsonPropertyName("export_events")]
+    public EventsExport? ExportEvents { get; init; }
+
+    /// <summary>
+    /// Get all dependency predecessors for a specific item, including dependency type and lag per edge
+    /// </summary>
+    [JsonPropertyName("item_dependency")]
+    public ItemDependency? ItemDependency { get; init; }
+
+    /// <summary>
+    /// Get all dependency predecessors for every item on a board, paginated. Each item includes its predecessor edges with dependency type and lag.
+    /// </summary>
+    [JsonPropertyName("board_dependencies")]
+    public BoardDependencies? BoardDependencies { get; init; }
+
+    /// <summary>
     /// Retrieves the JSON schema definition for a specific create view type. 
     ///   Use this query before calling create_view mutation to understand the structure and validation rules for the settings parameter. 
     ///   The schema defines what properties are available when creating views of a specific type.
@@ -588,36 +618,6 @@ public sealed partial class Query
     /// </summary>
     [JsonPropertyName("export_markdown_from_doc")]
     public ExportMarkdownResult? ExportMarkdownFromDoc { get; init; }
-
-    /// <summary>
-    /// Export the dependency graph for a specific board
-    /// </summary>
-    [JsonPropertyName("export_graph")]
-    public BoardGraphExport? ExportGraph { get; init; }
-
-    /// <summary>
-    /// Fetch dependency column configuration for a board
-    /// </summary>
-    [JsonPropertyName("dependency_column_config")]
-    public DependencyColumnConfigResult? DependencyColumnConfig { get; init; }
-
-    /// <summary>
-    /// Export events for a board within a date range. Requires a valid X-Tool-Execution-Secret header.
-    /// </summary>
-    [JsonPropertyName("export_events")]
-    public EventsExport? ExportEvents { get; init; }
-
-    /// <summary>
-    /// Get all dependency predecessors for a specific item, including dependency type and lag per edge
-    /// </summary>
-    [JsonPropertyName("item_dependency")]
-    public ItemDependency? ItemDependency { get; init; }
-
-    /// <summary>
-    /// Get all dependency predecessors for every item on a board, paginated. Each item includes its predecessor edges with dependency type and lag.
-    /// </summary>
-    [JsonPropertyName("board_dependencies")]
-    public BoardDependencies? BoardDependencies { get; init; }
 
     /// <summary>
     /// Search knowledge base snippets.
