@@ -1566,10 +1566,6 @@ type Query {
   """
   sprints(ids: [ID!]!): [Sprint!]
   """
-  Performs aggregation operations on board data
-  """
-  aggregate(query: AggregateQueryInput!): AggregateQueryResult
-  """
   Get all personal list items by list ID
   """
   favorites: [GraphqlHierarchyObjectItem!]
@@ -1692,6 +1688,10 @@ type Query {
   Get board IDs that are linked to a specific connection.
   """
   connection_board_ids(connection_id: ID!): [ID!]!
+  """
+  Performs aggregation operations on board data
+  """
+  aggregate(query: AggregateQueryInput!): AggregateQueryResult
   """
   Get all roles for the account
   """
@@ -4669,433 +4669,6 @@ type SprintTimeline {
   user-editable complete date of the monday dev sprint timeline, may be different than the sprint complete date
   """
   to: Date
-}
-
-type AggregateBasicAggregationResult {
-  result: Float
-}
-
-enum AggregateFromElementType {
-  TABLE
-}
-
-input AggregateFromTableInput {
-  """
-  Always TABLE or DATA_VIEW
-  """
-  type: AggregateFromElementType!
-  id: ID!
-}
-
-input AggregateGroupByElementInput {
-  column_id: String!
-  limit: Int
-}
-
-type AggregateGroupByResult {
-  """
-  The value of the group by result. Can be an integer, float, string, or boolean.
-  """
-  value: JSON
-}
-
-input AggregateQueryInput {
-  """
-  Select elements to return. Each element must have either a function or column property. If selecting a column or transformative function, the element must appear in group by.
-  """
-  select: [AggregateSelectElementInput!]!
-  """
-  Source to select from (table or data view)
-  """
-  from: AggregateFromTableInput!
-  """
-  Group by elements
-  """
-  group_by: [AggregateGroupByElementInput!]
-  """
-  ItemsQuery filter and sort. If not provided, all items will be returned.
-  """
-  query: ItemsQuery
-  """
-  Max number of results to return
-  """
-  limit: Int
-}
-
-type AggregateQueryResult {
-  results: [AggregateResultSet!]
-}
-
-union AggregateResult = AggregateBasicAggregationResult | AggregateGroupByResult
-
-type AggregateResultEntry {
-  alias: String
-  value: AggregateResult
-}
-
-type AggregateResultSet {
-  entries: [AggregateResultEntry!]
-}
-
-input AggregateSelectColumnInput {
-  column_id: String!
-}
-
-input AggregateSelectElementInput {
-  """
-  Type of the selected element
-  """
-  type: AggregateSelectElementType!
-  """
-  Column to select. Required if type is COLUMN. If selecting a column, the element must have a matching group by element with the same column_id or alias, if present.
-  """
-  column: AggregateSelectColumnInput
-  """
-  Function to select. Required if type is FUNCTION. If selecting a transformative function, the element must have a matching group by element with the same alias. If selecting an aggregative function, the select element must not have a matching group by element.
-  """
-  function: AggregateSelectFunctionInput
-  """
-  Alias for the selected element
-  """
-  as: String!
-}
-
-enum AggregateSelectElementType {
-  COLUMN
-  FUNCTION
-}
-
-input AggregateSelectFunctionInput {
-  """
-  Function to select. Required if type is FUNCTION
-  """
-  function: AggregateSelectFunctionName!
-  params: [AggregateSelectElementInput!]
-}
-
-"""
-Function to select. Required if type is FUNCTION
-"""
-enum AggregateSelectFunctionName {
-  NONE
-  COUNT_ITEMS
-  COUNT_SUBITEMS
-  COUNT
-  COUNT_DISTINCT
-  COUNT_KEYS
-  SUM
-  AVERAGE
-  MEDIAN
-  MIN
-  MAX
-  MIN_MAX
-  BETWEEN
-  DURATION_RUNNING
-  UPPER
-  LOWER
-  TRIM
-  LENGTH
-  FIRST
-  LEFT
-  FLATTEN
-  CASE
-  EQUALS
-  DATE_TRUNC_DAY
-  DATE_TRUNC_WEEK
-  DATE_TRUNC_MONTH
-  DATE_TRUNC_QUARTER
-  DATE_TRUNC_YEAR
-  DATE
-  START_DATE
-  END_DATE
-  HOUR
-  PERSON
-  ID
-  LABEL
-  COLOR
-  ORDER
-  RAW
-  IS_DONE
-  PHONE_COUNTRY_SHORT_NAME
-}
-
-"""
-A single item returned by the items_page query
-"""
-type ItemResult {
-  """
-  The unique identifier of the item
-  """
-  id: ID
-  """
-  The name of the item
-  """
-  name: String
-  """
-  The state of the item (active, deleted, etc.)
-  """
-  state: String
-  """
-  The ID of the group this item belongs to
-  """
-  group_id: ID
-  """
-  ISO 8601 timestamp of when the item was created
-  """
-  created_at: String
-  """
-  ISO 8601 timestamp of when the item was last updated
-  """
-  updated_at: String
-  """
-  Structured column values
-  """
-  column_values(ids: [ID!], types: [ItemsPageColumnTypeFilter!], capabilities: [ItemsPageColumnCapability!]): [ItemsPageColumnValue!]
-  """
-  Subitems of this item
-  """
-  subitems: [ItemResult!]
-}
-
-"""
-A single status-count entry in a battery (status rollup) value.
-"""
-type ItemsPageBatteryValueItem {
-  """
-  The status label index/key.
-  """
-  key: ID
-  """
-  Number of items with this status.
-  """
-  count: Int
-}
-
-"""
-The calculated (rollup) capability configuration of a column.
-"""
-type ItemsPageCalculatedCapability {
-  """
-  The aggregation function applied to child values.
-  """
-  function: ItemsPageCalculatedFunction
-  """
-  The resolved value type of the calculation, when applicable.
-  """
-  calculated_type: String
-}
-
-"""
-Aggregation function used by a calculated (rollup) column on a multi-level board.
-"""
-enum ItemsPageCalculatedFunction {
-  COUNT_KEYS
-  MAX
-  MIN
-  MIN_MAX
-  NONE
-  SUM
-}
-
-"""
-Capabilities of a column (e.g. calculated/rollup metadata on multi-level boards).
-"""
-type ItemsPageColumnCapabilities {
-  """
-  Calculated/rollup capability, present only on rollup columns.
-  """
-  calculated: ItemsPageCalculatedCapability
-}
-
-"""
-Column capability flags accepted by the column_values capabilities filter.
-"""
-enum ItemsPageColumnCapability {
-  CALCULATED
-  VISIBILITY
-}
-
-"""
-Column type values accepted by the column_values types filter.
-"""
-enum ItemsPageColumnTypeFilter {
-  auto_number
-  board_relation
-  button
-  checkbox
-  color_picker
-  country
-  creation_log
-  date
-  dependency
-  direct_doc
-  doc
-  dropdown
-  email
-  file
-  formula
-  hour
-  item_id
-  last_updated
-  link
-  location
-  long_text
-  mirror
-  numbers
-  people
-  phone
-  progress
-  rating
-  status
-  subtasks
-  tags
-  text
-  time_tracking
-  timeline
-  unsupported
-  vote
-  week
-  world_clock
-}
-
-"""
-A column value for an item returned by items_page
-"""
-interface ItemsPageColumnValue {
-  """
-  Column ID
-  """
-  id: ID
-  """
-  Column type
-  """
-  type: String
-  """
-  Stringified text representation
-  """
-  text: String
-  """
-  JSON string value matching old API format
-  """
-  value: String
-  """
-  Multi-level boards: whether this item is a leaf (has no subitems).
-  """
-  is_leaf: Boolean!
-  """
-  Column capabilities (calculated/rollup metadata on multi-level boards).
-  """
-  capabilities: ItemsPageColumnCapabilities
-}
-
-"""
-A dropdown option selected in a dropdown column.
-"""
-type ItemsPageDropdownValueOption {
-  """
-  The dropdown item's unique identifier.
-  """
-  id: ID
-  """
-  The dropdown item's label.
-  """
-  label: String
-}
-
-"""
-Input arguments for the items_page query
-"""
-input ItemsPageInput {
-  """
-  The board to query
-  """
-  board_id: ID!
-  """
-  Optional filter and sort configuration
-  """
-  query: ItemsQuery
-  """
-  Page size (default 25, max 500)
-  """
-  limit: Int
-  """
-  Optional group ID to scope the query to a specific group
-  """
-  group_id: String
-  """
-  For multi-level boards: controls how filters apply across the item hierarchy. Use "allItems" to evaluate filters against parents and subitems and return matches at every level. Accepted values: allItems, parentItems.
-  """
-  hierarchy_scope_config: String
-}
-
-"""
-A linked item referenced by a relation column.
-"""
-type ItemsPageLinkedItem {
-  """
-  The linked item ID.
-  """
-  id: ID
-  """
-  The linked item name.
-  """
-  name: String
-}
-
-"""
-A mirrored item containing the mirrored column value.
-"""
-type ItemsPageMirroredItem {
-  """
-  The mirrored column value from the linked item.
-  """
-  mirrored_value: ItemsPageColumnValue
-}
-
-"""
-A person or team entity assigned to a people column.
-"""
-type ItemsPagePeopleEntity {
-  """
-  Id of the entity: a person or a team.
-  """
-  id: ID
-  """
-  Type of entity.
-  """
-  kind: String
-}
-
-"""
-Paginated result set returned by the items_page query
-"""
-type ItemsPageResult {
-  """
-  Opaque pagination token, null if no more pages
-  """
-  cursor: String
-  """
-  The items in this page of results
-  """
-  items: [ItemResult!]
-  """
-  Linked items (relations, dependencies, subitems from other boards)
-  """
-  linked_items: [ItemResult!]
-}
-
-"""
-A data source to describe
-"""
-input SqlDescribeSourceInput {
-  """
-  Source type: board, materialized_view, data_view
-  """
-  type: String!
-  """
-  Source identifier
-  """
-  id: String!
 }
 
 """
@@ -11880,6 +11453,433 @@ input WorkflowsPaginationInput {
   Cursor of the last item from the previous page; pass `page_info.end_cursor` from the previous response
   """
   last_id: ID
+}
+
+type AggregateBasicAggregationResult {
+  result: Float
+}
+
+enum AggregateFromElementType {
+  TABLE
+}
+
+input AggregateFromTableInput {
+  """
+  Always TABLE or DATA_VIEW
+  """
+  type: AggregateFromElementType!
+  id: ID!
+}
+
+input AggregateGroupByElementInput {
+  column_id: String!
+  limit: Int
+}
+
+type AggregateGroupByResult {
+  """
+  The value of the group by result. Can be an integer, float, string, or boolean.
+  """
+  value: JSON
+}
+
+input AggregateQueryInput {
+  """
+  Select elements to return. Each element must have either a function or column property. If selecting a column or transformative function, the element must appear in group by.
+  """
+  select: [AggregateSelectElementInput!]!
+  """
+  Source to select from (table or data view)
+  """
+  from: AggregateFromTableInput!
+  """
+  Group by elements
+  """
+  group_by: [AggregateGroupByElementInput!]
+  """
+  ItemsQuery filter and sort. If not provided, all items will be returned.
+  """
+  query: ItemsQuery
+  """
+  Max number of results to return
+  """
+  limit: Int
+}
+
+type AggregateQueryResult {
+  results: [AggregateResultSet!]
+}
+
+union AggregateResult = AggregateBasicAggregationResult | AggregateGroupByResult
+
+type AggregateResultEntry {
+  alias: String
+  value: AggregateResult
+}
+
+type AggregateResultSet {
+  entries: [AggregateResultEntry!]
+}
+
+input AggregateSelectColumnInput {
+  column_id: String!
+}
+
+input AggregateSelectElementInput {
+  """
+  Type of the selected element
+  """
+  type: AggregateSelectElementType!
+  """
+  Column to select. Required if type is COLUMN. If selecting a column, the element must have a matching group by element with the same column_id or alias, if present.
+  """
+  column: AggregateSelectColumnInput
+  """
+  Function to select. Required if type is FUNCTION. If selecting a transformative function, the element must have a matching group by element with the same alias. If selecting an aggregative function, the select element must not have a matching group by element.
+  """
+  function: AggregateSelectFunctionInput
+  """
+  Alias for the selected element
+  """
+  as: String!
+}
+
+enum AggregateSelectElementType {
+  COLUMN
+  FUNCTION
+}
+
+input AggregateSelectFunctionInput {
+  """
+  Function to select. Required if type is FUNCTION
+  """
+  function: AggregateSelectFunctionName!
+  params: [AggregateSelectElementInput!]
+}
+
+"""
+Function to select. Required if type is FUNCTION
+"""
+enum AggregateSelectFunctionName {
+  NONE
+  COUNT_ITEMS
+  COUNT_SUBITEMS
+  COUNT
+  COUNT_DISTINCT
+  COUNT_KEYS
+  SUM
+  AVERAGE
+  MEDIAN
+  MIN
+  MAX
+  MIN_MAX
+  BETWEEN
+  DURATION_RUNNING
+  UPPER
+  LOWER
+  TRIM
+  LENGTH
+  FIRST
+  LEFT
+  FLATTEN
+  CASE
+  EQUALS
+  DATE_TRUNC_DAY
+  DATE_TRUNC_WEEK
+  DATE_TRUNC_MONTH
+  DATE_TRUNC_QUARTER
+  DATE_TRUNC_YEAR
+  DATE
+  START_DATE
+  END_DATE
+  HOUR
+  PERSON
+  ID
+  LABEL
+  COLOR
+  ORDER
+  RAW
+  IS_DONE
+  PHONE_COUNTRY_SHORT_NAME
+}
+
+"""
+A single item returned by the items_page query
+"""
+type ItemResult {
+  """
+  The unique identifier of the item
+  """
+  id: ID
+  """
+  The name of the item
+  """
+  name: String
+  """
+  The state of the item (active, deleted, etc.)
+  """
+  state: String
+  """
+  The ID of the group this item belongs to
+  """
+  group_id: ID
+  """
+  ISO 8601 timestamp of when the item was created
+  """
+  created_at: String
+  """
+  ISO 8601 timestamp of when the item was last updated
+  """
+  updated_at: String
+  """
+  Structured column values
+  """
+  column_values(ids: [ID!], types: [ItemsPageColumnTypeFilter!], capabilities: [ItemsPageColumnCapability!]): [ItemsPageColumnValue!]
+  """
+  Subitems of this item
+  """
+  subitems: [ItemResult!]
+}
+
+"""
+A single status-count entry in a battery (status rollup) value.
+"""
+type ItemsPageBatteryValueItem {
+  """
+  The status label index/key.
+  """
+  key: ID
+  """
+  Number of items with this status.
+  """
+  count: Int
+}
+
+"""
+The calculated (rollup) capability configuration of a column.
+"""
+type ItemsPageCalculatedCapability {
+  """
+  The aggregation function applied to child values.
+  """
+  function: ItemsPageCalculatedFunction
+  """
+  The resolved value type of the calculation, when applicable.
+  """
+  calculated_type: String
+}
+
+"""
+Aggregation function used by a calculated (rollup) column on a multi-level board.
+"""
+enum ItemsPageCalculatedFunction {
+  COUNT_KEYS
+  MAX
+  MIN
+  MIN_MAX
+  NONE
+  SUM
+}
+
+"""
+Capabilities of a column (e.g. calculated/rollup metadata on multi-level boards).
+"""
+type ItemsPageColumnCapabilities {
+  """
+  Calculated/rollup capability, present only on rollup columns.
+  """
+  calculated: ItemsPageCalculatedCapability
+}
+
+"""
+Column capability flags accepted by the column_values capabilities filter.
+"""
+enum ItemsPageColumnCapability {
+  CALCULATED
+  VISIBILITY
+}
+
+"""
+Column type values accepted by the column_values types filter.
+"""
+enum ItemsPageColumnTypeFilter {
+  auto_number
+  board_relation
+  button
+  checkbox
+  color_picker
+  country
+  creation_log
+  date
+  dependency
+  direct_doc
+  doc
+  dropdown
+  email
+  file
+  formula
+  hour
+  item_id
+  last_updated
+  link
+  location
+  long_text
+  mirror
+  numbers
+  people
+  phone
+  progress
+  rating
+  status
+  subtasks
+  tags
+  text
+  time_tracking
+  timeline
+  unsupported
+  vote
+  week
+  world_clock
+}
+
+"""
+A column value for an item returned by items_page
+"""
+interface ItemsPageColumnValue {
+  """
+  Column ID
+  """
+  id: ID
+  """
+  Column type
+  """
+  type: String
+  """
+  Stringified text representation
+  """
+  text: String
+  """
+  JSON string value matching old API format
+  """
+  value: String
+  """
+  Multi-level boards: whether this item is a leaf (has no subitems).
+  """
+  is_leaf: Boolean!
+  """
+  Column capabilities (calculated/rollup metadata on multi-level boards).
+  """
+  capabilities: ItemsPageColumnCapabilities
+}
+
+"""
+A dropdown option selected in a dropdown column.
+"""
+type ItemsPageDropdownValueOption {
+  """
+  The dropdown item's unique identifier.
+  """
+  id: ID
+  """
+  The dropdown item's label.
+  """
+  label: String
+}
+
+"""
+Input arguments for the items_page query
+"""
+input ItemsPageInput {
+  """
+  The board to query. Provide either board_id or data_view_id, not both.
+  """
+  board_id: ID
+  """
+  Optional filter and sort configuration
+  """
+  query: ItemsQuery
+  """
+  Page size (default 25, max 500)
+  """
+  limit: Int
+  """
+  Optional group ID to scope the query to a specific group
+  """
+  group_id: String
+  """
+  For multi-level boards: controls how filters apply across the item hierarchy. Use "allItems" to evaluate filters against parents and subitems and return matches at every level. Accepted values: allItems, parentItems.
+  """
+  hierarchy_scope_config: String
+}
+
+"""
+A linked item referenced by a relation column.
+"""
+type ItemsPageLinkedItem {
+  """
+  The linked item ID.
+  """
+  id: ID
+  """
+  The linked item name.
+  """
+  name: String
+}
+
+"""
+A mirrored item containing the mirrored column value.
+"""
+type ItemsPageMirroredItem {
+  """
+  The mirrored column value from the linked item.
+  """
+  mirrored_value: ItemsPageColumnValue
+}
+
+"""
+A person or team entity assigned to a people column.
+"""
+type ItemsPagePeopleEntity {
+  """
+  Id of the entity: a person or a team.
+  """
+  id: ID
+  """
+  Type of entity.
+  """
+  kind: String
+}
+
+"""
+Paginated result set returned by the items_page query
+"""
+type ItemsPageResult {
+  """
+  Opaque pagination token, null if no more pages
+  """
+  cursor: String
+  """
+  The items in this page of results
+  """
+  items: [ItemResult!]
+  """
+  Linked items (relations, dependencies, subitems from other boards)
+  """
+  linked_items: [ItemResult!]
+}
+
+"""
+A data source to describe
+"""
+input SqlDescribeSourceInput {
+  """
+  Source type: board, materialized_view, data_view
+  """
+  type: String!
+  """
+  Source identifier
+  """
+  id: String!
 }
 
 """
@@ -23461,6 +23461,418 @@ enum AiColumnTone {
   same
 }
 
+"""
+Base field type implementation
+"""
+type BaseFieldType implements FieldType {
+  """
+  Unique identifier for the field type
+  """
+  id: Int
+  """
+  Unique key of the field type
+  """
+  uniqueKey: String
+  """
+  Name of the field type
+  """
+  name: String
+  """
+  Description of the field type
+  """
+  description: String
+  """
+  Current state of the field type
+  """
+  state: FieldTypeState
+  """
+  Unique key identifier for the field type
+  """
+  key: String
+  """
+  Default key for fields of this type
+  """
+  defaultFieldKey: String
+  """
+  Dependency configuration specifying mandatory and optional field dependencies required to enable this field and compute its dynamic values. When fetching the permitted values for custom input fields via the remote_options query, you must provide these dependencies in the query input.
+  """
+  dependencyConfig: DependencyConfig
+  """
+  List of field type implementations
+  """
+  implement: [FieldTypeImplementation!]
+  """
+  Indicates whether this field type fetches its options from a remote source
+  """
+  has_remote_options: Boolean
+}
+
+"""
+Configuration for a custom input field
+"""
+type CustomInputFieldConfig implements InputFieldConfig {
+  """
+  Unique identifier for the field
+  """
+  id: Int
+  """
+  Key identifier for the field
+  """
+  fieldKey: String
+  """
+  Display title for the field
+  """
+  fieldTitle: String
+  """
+  Whether the field can be null
+  """
+  isNullable: Boolean
+  """
+  Whether the field is an array type
+  """
+  isArray: Boolean
+  """
+  Whether the field is optional
+  """
+  isOptional: Boolean
+  """
+  Additional information about the field
+  """
+  information: FieldInformation
+  """
+  Detailed description of the field
+  """
+  description: FieldInformation
+  """
+  Type of the field relation
+  """
+  type: FieldTypeRelationType
+  """
+  Reference ID to the field type
+  """
+  fieldTypeReferenceId: Int
+  """
+  Unique key of the field type
+  """
+  fieldTypeUniqueKey: String
+  """
+  Constraints applied to the field
+  """
+  constraints: InputFieldConstraints
+  """
+  Data for the referenced field type. Fetch this field when you need the `fieldTypeReferenceId` to call the `remote_options` query and retrieve the available options for the input field.
+  """
+  fieldTypeData: FieldType
+}
+
+"""
+Configuration for a custom output field
+"""
+type CustomOutputFieldConfig implements OutputFieldConfig {
+  """
+  Unique identifier for the field
+  """
+  id: Int
+  """
+  Key identifier for the field
+  """
+  fieldKey: String
+  """
+  Display title for the field
+  """
+  fieldTitle: String
+  """
+  Whether the field can be null
+  """
+  isNullable: Boolean
+  """
+  Whether the field is an array type
+  """
+  isArray: Boolean
+  """
+  Whether the field is optional
+  """
+  isOptional: Boolean
+  """
+  Additional information about the field
+  """
+  information: FieldInformation
+  """
+  Detailed description of the field
+  """
+  description: FieldInformation
+  """
+  Type of the field relation
+  """
+  type: FieldTypeRelationType
+  """
+  Reference ID to the field type
+  """
+  fieldTypeReferenceId: Int
+  """
+  Unique key of the field type
+  """
+  fieldTypeUniqueKey: String
+  """
+  Constraints applied to the field
+  """
+  constraints: OutputFieldConstraints
+  """
+  Data for the referenced field type
+  """
+  fieldTypeData: FieldType
+}
+
+"""
+Configuration for an interface input field
+"""
+type InterfaceInputFieldConfig implements InputFieldConfig {
+  """
+  Unique identifier for the field
+  """
+  id: Int
+  """
+  Key identifier for the field
+  """
+  fieldKey: String
+  """
+  Display title for the field
+  """
+  fieldTitle: String
+  """
+  Whether the field can be null
+  """
+  isNullable: Boolean
+  """
+  Whether the field is an array type
+  """
+  isArray: Boolean
+  """
+  Whether the field is optional
+  """
+  isOptional: Boolean
+  """
+  Additional information about the field
+  """
+  information: FieldInformation
+  """
+  Detailed description of the field
+  """
+  description: FieldInformation
+  """
+  Type of the field relation
+  """
+  type: FieldTypeRelationType
+  """
+  Name of the subfield in the interface
+  """
+  subfieldName: String
+  """
+  Reference id of the field-type interface this input requires. Null when the source block does not declare one.
+  """
+  interface_id: ID
+  """
+  Constraints applied to the field
+  """
+  constraints: InputFieldConstraints
+}
+
+"""
+Primitive field type implementation
+"""
+type PrimitiveFieldType implements FieldType {
+  """
+  Unique identifier for the field type
+  """
+  id: Int
+  """
+  Unique key of the field type
+  """
+  uniqueKey: String
+  """
+  Name of the field type
+  """
+  name: String
+  """
+  Description of the field type
+  """
+  description: String
+  """
+  Current state of the field type
+  """
+  state: FieldTypeState
+  """
+  Unique key identifier for the field type
+  """
+  key: String
+  """
+  Default key for fields of this type
+  """
+  defaultFieldKey: String
+  """
+  Dependency configuration specifying mandatory and optional field dependencies required to enable this field and compute its dynamic values. When fetching the permitted values for custom input fields via the remote_options query, you must provide these dependencies in the query input.
+  """
+  dependencyConfig: DependencyConfig
+  """
+  List of field type implementations
+  """
+  implement: [FieldTypeImplementation!]
+  """
+  Indicates whether this field type fetches its options from a remote source
+  """
+  has_remote_options: Boolean
+  """
+  The primitive type of the field
+  """
+  primitiveType: PrimitiveTypes
+  """
+  Configuration metadata for the field type
+  """
+  configurartionMetadata: JSON
+}
+
+"""
+Configuration for a primitive input field
+"""
+type PrimitiveInputFieldConfig implements InputFieldConfig {
+  """
+  Unique identifier for the field
+  """
+  id: Int
+  """
+  Key identifier for the field
+  """
+  fieldKey: String
+  """
+  Display title for the field
+  """
+  fieldTitle: String
+  """
+  Whether the field can be null
+  """
+  isNullable: Boolean
+  """
+  Whether the field is an array type
+  """
+  isArray: Boolean
+  """
+  Whether the field is optional
+  """
+  isOptional: Boolean
+  """
+  Additional information about the field
+  """
+  information: FieldInformation
+  """
+  Detailed description of the field
+  """
+  description: FieldInformation
+  """
+  Type of the field relation
+  """
+  type: FieldTypeRelationType
+  """
+  Type of the primitive field
+  """
+  primitiveType: PrimitiveTypes
+}
+
+"""
+Configuration for a primitive output field
+"""
+type PrimitiveOutputFieldConfig implements OutputFieldConfig {
+  """
+  Unique identifier for the field
+  """
+  id: Int
+  """
+  Key identifier for the field
+  """
+  fieldKey: String
+  """
+  Display title for the field
+  """
+  fieldTitle: String
+  """
+  Whether the field can be null
+  """
+  isNullable: Boolean
+  """
+  Whether the field is an array type
+  """
+  isArray: Boolean
+  """
+  Whether the field is optional
+  """
+  isOptional: Boolean
+  """
+  Additional information about the field
+  """
+  information: FieldInformation
+  """
+  Detailed description of the field
+  """
+  description: FieldInformation
+  """
+  Type of the field relation
+  """
+  type: FieldTypeRelationType
+  """
+  Type of the primitive field
+  """
+  primitiveType: PrimitiveTypes
+}
+
+"""
+Object field type implementation
+"""
+type SubfieldsFieldType implements FieldType {
+  """
+  Unique identifier for the field type
+  """
+  id: Int
+  """
+  Unique key of the field type
+  """
+  uniqueKey: String
+  """
+  Name of the field type
+  """
+  name: String
+  """
+  Description of the field type
+  """
+  description: String
+  """
+  Current state of the field type
+  """
+  state: FieldTypeState
+  """
+  Unique key identifier for the field type
+  """
+  key: String
+  """
+  Default key for fields of this type
+  """
+  defaultFieldKey: String
+  """
+  Dependency configuration specifying mandatory and optional field dependencies required to enable this field and compute its dynamic values. When fetching the permitted values for custom input fields via the remote_options query, you must provide these dependencies in the query input.
+  """
+  dependencyConfig: DependencyConfig
+  """
+  List of field type implementations
+  """
+  implement: [FieldTypeImplementation!]
+  """
+  Indicates whether this field type fetches its options from a remote source
+  """
+  has_remote_options: Boolean
+  """
+  Indicates if the object field type has remote subfields
+  """
+  hasRemoteSubfields: Boolean
+}
+
 type FormulaValue implements ColumnValue {
   """
   The column's unique identifier.
@@ -24724,418 +25136,6 @@ type ItemsPageWorldClockValue implements ItemsPageColumnValue {
   Timezone string (e.g. "America/New_York")
   """
   timezone: String
-}
-
-"""
-Base field type implementation
-"""
-type BaseFieldType implements FieldType {
-  """
-  Unique identifier for the field type
-  """
-  id: Int
-  """
-  Unique key of the field type
-  """
-  uniqueKey: String
-  """
-  Name of the field type
-  """
-  name: String
-  """
-  Description of the field type
-  """
-  description: String
-  """
-  Current state of the field type
-  """
-  state: FieldTypeState
-  """
-  Unique key identifier for the field type
-  """
-  key: String
-  """
-  Default key for fields of this type
-  """
-  defaultFieldKey: String
-  """
-  Dependency configuration specifying mandatory and optional field dependencies required to enable this field and compute its dynamic values. When fetching the permitted values for custom input fields via the remote_options query, you must provide these dependencies in the query input.
-  """
-  dependencyConfig: DependencyConfig
-  """
-  List of field type implementations
-  """
-  implement: [FieldTypeImplementation!]
-  """
-  Indicates whether this field type fetches its options from a remote source
-  """
-  has_remote_options: Boolean
-}
-
-"""
-Configuration for a custom input field
-"""
-type CustomInputFieldConfig implements InputFieldConfig {
-  """
-  Unique identifier for the field
-  """
-  id: Int
-  """
-  Key identifier for the field
-  """
-  fieldKey: String
-  """
-  Display title for the field
-  """
-  fieldTitle: String
-  """
-  Whether the field can be null
-  """
-  isNullable: Boolean
-  """
-  Whether the field is an array type
-  """
-  isArray: Boolean
-  """
-  Whether the field is optional
-  """
-  isOptional: Boolean
-  """
-  Additional information about the field
-  """
-  information: FieldInformation
-  """
-  Detailed description of the field
-  """
-  description: FieldInformation
-  """
-  Type of the field relation
-  """
-  type: FieldTypeRelationType
-  """
-  Reference ID to the field type
-  """
-  fieldTypeReferenceId: Int
-  """
-  Unique key of the field type
-  """
-  fieldTypeUniqueKey: String
-  """
-  Constraints applied to the field
-  """
-  constraints: InputFieldConstraints
-  """
-  Data for the referenced field type. Fetch this field when you need the `fieldTypeReferenceId` to call the `remote_options` query and retrieve the available options for the input field.
-  """
-  fieldTypeData: FieldType
-}
-
-"""
-Configuration for a custom output field
-"""
-type CustomOutputFieldConfig implements OutputFieldConfig {
-  """
-  Unique identifier for the field
-  """
-  id: Int
-  """
-  Key identifier for the field
-  """
-  fieldKey: String
-  """
-  Display title for the field
-  """
-  fieldTitle: String
-  """
-  Whether the field can be null
-  """
-  isNullable: Boolean
-  """
-  Whether the field is an array type
-  """
-  isArray: Boolean
-  """
-  Whether the field is optional
-  """
-  isOptional: Boolean
-  """
-  Additional information about the field
-  """
-  information: FieldInformation
-  """
-  Detailed description of the field
-  """
-  description: FieldInformation
-  """
-  Type of the field relation
-  """
-  type: FieldTypeRelationType
-  """
-  Reference ID to the field type
-  """
-  fieldTypeReferenceId: Int
-  """
-  Unique key of the field type
-  """
-  fieldTypeUniqueKey: String
-  """
-  Constraints applied to the field
-  """
-  constraints: OutputFieldConstraints
-  """
-  Data for the referenced field type
-  """
-  fieldTypeData: FieldType
-}
-
-"""
-Configuration for an interface input field
-"""
-type InterfaceInputFieldConfig implements InputFieldConfig {
-  """
-  Unique identifier for the field
-  """
-  id: Int
-  """
-  Key identifier for the field
-  """
-  fieldKey: String
-  """
-  Display title for the field
-  """
-  fieldTitle: String
-  """
-  Whether the field can be null
-  """
-  isNullable: Boolean
-  """
-  Whether the field is an array type
-  """
-  isArray: Boolean
-  """
-  Whether the field is optional
-  """
-  isOptional: Boolean
-  """
-  Additional information about the field
-  """
-  information: FieldInformation
-  """
-  Detailed description of the field
-  """
-  description: FieldInformation
-  """
-  Type of the field relation
-  """
-  type: FieldTypeRelationType
-  """
-  Name of the subfield in the interface
-  """
-  subfieldName: String
-  """
-  Reference id of the field-type interface this input requires. Null when the source block does not declare one.
-  """
-  interface_id: ID
-  """
-  Constraints applied to the field
-  """
-  constraints: InputFieldConstraints
-}
-
-"""
-Primitive field type implementation
-"""
-type PrimitiveFieldType implements FieldType {
-  """
-  Unique identifier for the field type
-  """
-  id: Int
-  """
-  Unique key of the field type
-  """
-  uniqueKey: String
-  """
-  Name of the field type
-  """
-  name: String
-  """
-  Description of the field type
-  """
-  description: String
-  """
-  Current state of the field type
-  """
-  state: FieldTypeState
-  """
-  Unique key identifier for the field type
-  """
-  key: String
-  """
-  Default key for fields of this type
-  """
-  defaultFieldKey: String
-  """
-  Dependency configuration specifying mandatory and optional field dependencies required to enable this field and compute its dynamic values. When fetching the permitted values for custom input fields via the remote_options query, you must provide these dependencies in the query input.
-  """
-  dependencyConfig: DependencyConfig
-  """
-  List of field type implementations
-  """
-  implement: [FieldTypeImplementation!]
-  """
-  Indicates whether this field type fetches its options from a remote source
-  """
-  has_remote_options: Boolean
-  """
-  The primitive type of the field
-  """
-  primitiveType: PrimitiveTypes
-  """
-  Configuration metadata for the field type
-  """
-  configurartionMetadata: JSON
-}
-
-"""
-Configuration for a primitive input field
-"""
-type PrimitiveInputFieldConfig implements InputFieldConfig {
-  """
-  Unique identifier for the field
-  """
-  id: Int
-  """
-  Key identifier for the field
-  """
-  fieldKey: String
-  """
-  Display title for the field
-  """
-  fieldTitle: String
-  """
-  Whether the field can be null
-  """
-  isNullable: Boolean
-  """
-  Whether the field is an array type
-  """
-  isArray: Boolean
-  """
-  Whether the field is optional
-  """
-  isOptional: Boolean
-  """
-  Additional information about the field
-  """
-  information: FieldInformation
-  """
-  Detailed description of the field
-  """
-  description: FieldInformation
-  """
-  Type of the field relation
-  """
-  type: FieldTypeRelationType
-  """
-  Type of the primitive field
-  """
-  primitiveType: PrimitiveTypes
-}
-
-"""
-Configuration for a primitive output field
-"""
-type PrimitiveOutputFieldConfig implements OutputFieldConfig {
-  """
-  Unique identifier for the field
-  """
-  id: Int
-  """
-  Key identifier for the field
-  """
-  fieldKey: String
-  """
-  Display title for the field
-  """
-  fieldTitle: String
-  """
-  Whether the field can be null
-  """
-  isNullable: Boolean
-  """
-  Whether the field is an array type
-  """
-  isArray: Boolean
-  """
-  Whether the field is optional
-  """
-  isOptional: Boolean
-  """
-  Additional information about the field
-  """
-  information: FieldInformation
-  """
-  Detailed description of the field
-  """
-  description: FieldInformation
-  """
-  Type of the field relation
-  """
-  type: FieldTypeRelationType
-  """
-  Type of the primitive field
-  """
-  primitiveType: PrimitiveTypes
-}
-
-"""
-Object field type implementation
-"""
-type SubfieldsFieldType implements FieldType {
-  """
-  Unique identifier for the field type
-  """
-  id: Int
-  """
-  Unique key of the field type
-  """
-  uniqueKey: String
-  """
-  Name of the field type
-  """
-  name: String
-  """
-  Description of the field type
-  """
-  description: String
-  """
-  Current state of the field type
-  """
-  state: FieldTypeState
-  """
-  Unique key identifier for the field type
-  """
-  key: String
-  """
-  Default key for fields of this type
-  """
-  defaultFieldKey: String
-  """
-  Dependency configuration specifying mandatory and optional field dependencies required to enable this field and compute its dynamic values. When fetching the permitted values for custom input fields via the remote_options query, you must provide these dependencies in the query input.
-  """
-  dependencyConfig: DependencyConfig
-  """
-  List of field type implementations
-  """
-  implement: [FieldTypeImplementation!]
-  """
-  Indicates whether this field type fetches its options from a remote source
-  """
-  has_remote_options: Boolean
-  """
-  Indicates if the object field type has remote subfields
-  """
-  hasRemoteSubfields: Boolean
 }
 
 """

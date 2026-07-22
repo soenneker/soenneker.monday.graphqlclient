@@ -42,12 +42,6 @@ public sealed partial class Query
     public List<Sprint>? Sprints { get; init; }
 
     /// <summary>
-    /// Performs aggregation operations on board data
-    /// </summary>
-    [JsonPropertyName("aggregate")]
-    public AggregateQueryResult? Aggregate { get; init; }
-
-    /// <summary>
     /// Get all personal list items by list ID
     /// </summary>
     [JsonPropertyName("favorites")]
@@ -233,6 +227,12 @@ public sealed partial class Query
     /// </summary>
     [JsonPropertyName("connection_board_ids")]
     public List<string> ConnectionBoardIds { get; init; } = [];
+
+    /// <summary>
+    /// Performs aggregation operations on board data
+    /// </summary>
+    [JsonPropertyName("aggregate")]
+    public AggregateQueryResult? Aggregate { get; init; }
 
     /// <summary>
     /// Get all roles for the account

@@ -10,10 +10,10 @@ namespace Soenneker.Monday.GraphQlClient;
 public sealed partial class ItemsPageInput
 {
     /// <summary>
-    /// The board to query
+    /// The board to query. Provide either board_id or data_view_id, not both.
     /// </summary>
     [JsonPropertyName("board_id")]
-    public string BoardId { get; init; } = null!;
+    public string? BoardId { get; init; }
 
     /// <summary>
     /// Optional filter and sort configuration
