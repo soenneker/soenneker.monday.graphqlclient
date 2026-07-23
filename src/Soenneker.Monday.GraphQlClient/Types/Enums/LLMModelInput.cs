@@ -21,7 +21,11 @@ public enum LLMModelInput
 
     GEMINI35FLASH,
 
+    GEMINI36FLASH,
+
     GEMINI31FLASHLITE,
+
+    GEMINI35FLASHLITE,
 
     GPT5NANO,
 

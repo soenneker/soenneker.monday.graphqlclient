@@ -29,7 +29,7 @@ public sealed partial class FileUploadUrl
     public DateOnly? ExpiresAt { get; init; }
 
     /// <summary>
-    /// Assets-core upload session — present when vibe-assets-upload flag is ON and file_size was provided. Pass upload_id and part ETags to vibe.asset_complete_upload after uploading to each part URL.
+    /// Assets-core upload session — present when file_size was provided. Pass upload_id and part ETags to vibe.asset_complete_upload after uploading to each part URL.
     /// </summary>
     [JsonPropertyName("asset_upload_result")]
     public AssetUploadResult? AssetUploadResult { get; init; }
