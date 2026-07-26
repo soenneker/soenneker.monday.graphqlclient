@@ -35,6 +35,12 @@ public sealed partial class ItemResult
     public string? GroupId { get; init; }
 
     /// <summary>
+    /// The ID of the board this item belongs to. Populated only for data-view queries.
+    /// </summary>
+    [JsonPropertyName("board_id")]
+    public string? BoardId { get; init; }
+
+    /// <summary>
     /// ISO 8601 timestamp of when the item was created
     /// </summary>
     [JsonPropertyName("created_at")]

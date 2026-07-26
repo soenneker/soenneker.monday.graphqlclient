@@ -229,12 +229,6 @@ public sealed partial class Query
     public List<string> ConnectionBoardIds { get; init; } = [];
 
     /// <summary>
-    /// Performs aggregation operations on board data
-    /// </summary>
-    [JsonPropertyName("aggregate")]
-    public AggregateQueryResult? Aggregate { get; init; }
-
-    /// <summary>
     /// Get all roles for the account
     /// </summary>
     [JsonPropertyName("account_roles")]
@@ -251,6 +245,12 @@ public sealed partial class Query
     /// </summary>
     [JsonPropertyName("service_users")]
     public List<ServiceUser>? ServiceUsers { get; init; }
+
+    /// <summary>
+    /// Performs aggregation operations on board data
+    /// </summary>
+    [JsonPropertyName("aggregate")]
+    public AggregateQueryResult? Aggregate { get; init; }
 
     /// <summary>
     /// Search API. Each field searches a single entity type with tailored filters.

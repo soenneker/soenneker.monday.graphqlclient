@@ -161,4 +161,10 @@ public sealed partial class VibeApp
     [JsonPropertyName("audits")]
     public List<AppAudit> Audits { get; init; } = [];
 
+    /// <summary>
+    /// The memory the AI applies when building this app (app, current user, and account scopes). Null when the memory feature is off or tenancy is unavailable.
+    /// </summary>
+    [JsonPropertyName("memory")]
+    public VibeMemory? Memory { get; init; }
+
 }
