@@ -341,90 +341,6 @@ public sealed partial class Mutation
     public ResponseForm? SetFormPassword { get; init; }
 
     /// <summary>
-    /// Execute an integration block with the provided field values
-    /// </summary>
-    [JsonPropertyName("execute_integration_block")]
-    public IntegrationExecutionResult? ExecuteIntegrationBlock { get; init; }
-
-    /// <summary>
-    /// Creates a new team.
-    /// </summary>
-    [JsonPropertyName("create_team")]
-    public Team? CreateTeam { get; init; }
-
-    /// <summary>
-    /// Activates the specified users.
-    /// </summary>
-    [JsonPropertyName("activate_users")]
-    public ActivateUsersResult? ActivateUsers { get; init; }
-
-    /// <summary>
-    /// Deactivates the specified users.
-    /// </summary>
-    [JsonPropertyName("deactivate_users")]
-    public DeactivateUsersResult? DeactivateUsers { get; init; }
-
-    /// <summary>
-    /// Deletes the specified team.
-    /// </summary>
-    [JsonPropertyName("delete_team")]
-    public Team? DeleteTeam { get; init; }
-
-    /// <summary>
-    /// Updates the role of the specified users.
-    /// </summary>
-    [JsonPropertyName("update_users_role")]
-    public UpdateUsersRoleResult? UpdateUsersRole { get; init; }
-
-    /// <summary>
-    /// Assigns the specified users as owners of the specified team.
-    /// </summary>
-    [JsonPropertyName("assign_team_owners")]
-    public AssignTeamOwnersResult? AssignTeamOwners { get; init; }
-
-    /// <summary>
-    /// Removes the specified users as owners of the specified team.
-    /// </summary>
-    [JsonPropertyName("remove_team_owners")]
-    public RemoveTeamOwnersResult? RemoveTeamOwners { get; init; }
-
-    /// <summary>
-    /// Updates the email domain for the specified users.
-    /// </summary>
-    [JsonPropertyName("update_email_domain")]
-    public UpdateEmailDomainResult? UpdateEmailDomain { get; init; }
-
-    /// <summary>
-    /// Updates attributes for users.
-    /// </summary>
-    [JsonPropertyName("update_multiple_users")]
-    public UpdateUserAttributesResult? UpdateMultipleUsers { get; init; }
-
-    /// <summary>
-    /// Invite users to the account.
-    /// </summary>
-    [JsonPropertyName("invite_users")]
-    public InviteUsersResult? InviteUsers { get; init; }
-
-    /// <summary>
-    /// Revokes all API tokens for a service user.
-    /// </summary>
-    [JsonPropertyName("revoke_service_user_tokens")]
-    public bool? RevokeServiceUserTokens { get; init; }
-
-    /// <summary>
-    /// Revokes all existing tokens and generates a new API token for a service user.
-    /// </summary>
-    [JsonPropertyName("regenerate_service_user_token")]
-    public string? RegenerateServiceUserToken { get; init; }
-
-    /// <summary>
-    /// Creates a new service user.
-    /// </summary>
-    [JsonPropertyName("create_service_user")]
-    public CreateServiceUserResult? CreateServiceUser { get; init; }
-
-    /// <summary>
     /// Creates a new app with the specified configuration.
     /// </summary>
     [JsonPropertyName("create_app")]
@@ -483,6 +399,12 @@ public sealed partial class Mutation
     /// </summary>
     [JsonPropertyName("update_mute_board_settings")]
     public List<BoardMuteSettings>? UpdateMuteBoardSettings { get; init; }
+
+    /// <summary>
+    /// Execute an integration block with the provided field values
+    /// </summary>
+    [JsonPropertyName("execute_integration_block")]
+    public IntegrationExecutionResult? ExecuteIntegrationBlock { get; init; }
 
     /// <summary>
     /// Add a file to a column value.
@@ -949,6 +871,84 @@ public sealed partial class Mutation
     /// </summary>
     [JsonPropertyName("undo_action")]
     public UndoResult? UndoAction { get; init; }
+
+    /// <summary>
+    /// Creates a new team.
+    /// </summary>
+    [JsonPropertyName("create_team")]
+    public Team? CreateTeam { get; init; }
+
+    /// <summary>
+    /// Activates the specified users.
+    /// </summary>
+    [JsonPropertyName("activate_users")]
+    public ActivateUsersResult? ActivateUsers { get; init; }
+
+    /// <summary>
+    /// Deactivates the specified users.
+    /// </summary>
+    [JsonPropertyName("deactivate_users")]
+    public DeactivateUsersResult? DeactivateUsers { get; init; }
+
+    /// <summary>
+    /// Deletes the specified team.
+    /// </summary>
+    [JsonPropertyName("delete_team")]
+    public Team? DeleteTeam { get; init; }
+
+    /// <summary>
+    /// Updates the role of the specified users.
+    /// </summary>
+    [JsonPropertyName("update_users_role")]
+    public UpdateUsersRoleResult? UpdateUsersRole { get; init; }
+
+    /// <summary>
+    /// Assigns the specified users as owners of the specified team.
+    /// </summary>
+    [JsonPropertyName("assign_team_owners")]
+    public AssignTeamOwnersResult? AssignTeamOwners { get; init; }
+
+    /// <summary>
+    /// Removes the specified users as owners of the specified team.
+    /// </summary>
+    [JsonPropertyName("remove_team_owners")]
+    public RemoveTeamOwnersResult? RemoveTeamOwners { get; init; }
+
+    /// <summary>
+    /// Updates the email domain for the specified users.
+    /// </summary>
+    [JsonPropertyName("update_email_domain")]
+    public UpdateEmailDomainResult? UpdateEmailDomain { get; init; }
+
+    /// <summary>
+    /// Updates attributes for users.
+    /// </summary>
+    [JsonPropertyName("update_multiple_users")]
+    public UpdateUserAttributesResult? UpdateMultipleUsers { get; init; }
+
+    /// <summary>
+    /// Invite users to the account.
+    /// </summary>
+    [JsonPropertyName("invite_users")]
+    public InviteUsersResult? InviteUsers { get; init; }
+
+    /// <summary>
+    /// Revokes all API tokens for a service user.
+    /// </summary>
+    [JsonPropertyName("revoke_service_user_tokens")]
+    public bool? RevokeServiceUserTokens { get; init; }
+
+    /// <summary>
+    /// Revokes all existing tokens and generates a new API token for a service user.
+    /// </summary>
+    [JsonPropertyName("regenerate_service_user_token")]
+    public string? RegenerateServiceUserToken { get; init; }
+
+    /// <summary>
+    /// Creates a new service user.
+    /// </summary>
+    [JsonPropertyName("create_service_user")]
+    public CreateServiceUserResult? CreateServiceUser { get; init; }
 
     /// <summary>
     /// Connect an existing project to a portfolio. When a callback_url is provided the mutation returns immediately with a process_id, and the result is POSTed to that URL once the operation completes. The callback payload is: { is_success: boolean, process_id: string, portfolio_item_id?: string }.

@@ -18,66 +18,6 @@ public sealed partial class User
     public string Id { get; init; } = null!;
 
     /// <summary>
-    /// The user's title.
-    /// </summary>
-    [JsonPropertyName("title")]
-    public string Title { get; init; } = null!;
-
-    /// <summary>
-    /// The user's phone number.
-    /// </summary>
-    [JsonPropertyName("phone")]
-    public string? Phone { get; init; }
-
-    /// <summary>
-    /// The user's location.
-    /// </summary>
-    [JsonPropertyName("location")]
-    public string? Location { get; init; }
-
-    /// <summary>
-    /// The user's birthday.
-    /// </summary>
-    [JsonPropertyName("birthday")]
-    public string? Birthday { get; init; }
-
-    /// <summary>
-    /// The user's mobile phone number.
-    /// </summary>
-    [JsonPropertyName("mobile_phone")]
-    public string? MobilePhone { get; init; }
-
-    /// <summary>
-    /// The user's country code.
-    /// </summary>
-    [JsonPropertyName("country_code")]
-    public string? CountryCode { get; init; }
-
-    /// <summary>
-    /// The current user's language
-    /// </summary>
-    [JsonPropertyName("current_language")]
-    public string? CurrentLanguage { get; init; }
-
-    /// <summary>
-    /// The user's timezone identifier.
-    /// </summary>
-    [JsonPropertyName("time_zone_identifier")]
-    public string? TimeZoneIdentifier { get; init; }
-
-    /// <summary>
-    /// The user's utc hours difference.
-    /// </summary>
-    [JsonPropertyName("utc_hours_diff")]
-    public double? UtcHoursDiff { get; init; }
-
-    /// <summary>
-    /// The user's profile url.
-    /// </summary>
-    [JsonPropertyName("url")]
-    public string Url { get; init; } = null!;
-
-    /// <summary>
     /// The user's account.
     /// </summary>
     [JsonPropertyName("account")]
@@ -292,6 +232,66 @@ public sealed partial class User
     /// </summary>
     [JsonPropertyName("created_at")]
     public string CreatedAt { get; init; } = null!;
+
+    /// <summary>
+    /// The user's title.
+    /// </summary>
+    [JsonPropertyName("title")]
+    public string Title { get; init; } = null!;
+
+    /// <summary>
+    /// The user's phone number.
+    /// </summary>
+    [JsonPropertyName("phone")]
+    public string? Phone { get; init; }
+
+    /// <summary>
+    /// The user's location.
+    /// </summary>
+    [JsonPropertyName("location")]
+    public string? Location { get; init; }
+
+    /// <summary>
+    /// The user's birthday.
+    /// </summary>
+    [JsonPropertyName("birthday")]
+    public string? Birthday { get; init; }
+
+    /// <summary>
+    /// The user's mobile phone number.
+    /// </summary>
+    [JsonPropertyName("mobile_phone")]
+    public string? MobilePhone { get; init; }
+
+    /// <summary>
+    /// The user's country code.
+    /// </summary>
+    [JsonPropertyName("country_code")]
+    public string? CountryCode { get; init; }
+
+    /// <summary>
+    /// The current user's language
+    /// </summary>
+    [JsonPropertyName("current_language")]
+    public string? CurrentLanguage { get; init; }
+
+    /// <summary>
+    /// The user's timezone identifier.
+    /// </summary>
+    [JsonPropertyName("time_zone_identifier")]
+    public string? TimeZoneIdentifier { get; init; }
+
+    /// <summary>
+    /// The user's utc hours difference.
+    /// </summary>
+    [JsonPropertyName("utc_hours_diff")]
+    public double? UtcHoursDiff { get; init; }
+
+    /// <summary>
+    /// The user's profile url.
+    /// </summary>
+    [JsonPropertyName("url")]
+    public string Url { get; init; } = null!;
 
     /// <summary>
     /// Activity log entries for the user

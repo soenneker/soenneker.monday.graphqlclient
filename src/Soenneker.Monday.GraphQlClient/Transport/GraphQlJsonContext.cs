@@ -2598,6 +2598,8 @@ namespace Soenneker.Monday.GraphQlClient;
 [JsonSerializable(typeof(GraphQlResponse<Topic>))]
 [JsonSerializable(typeof(TranscriptEntry))]
 [JsonSerializable(typeof(GraphQlResponse<TranscriptEntry>))]
+[JsonSerializable(typeof(TransferAgentsOwnershipResult))]
+[JsonSerializable(typeof(GraphQlResponse<TransferAgentsOwnershipResult>))]
 [JsonSerializable(typeof(TransformationType))]
 [JsonSerializable(typeof(GraphQlResponse<TransformationType>))]
 [JsonSerializable(typeof(TransitionToExternalEligibility))]

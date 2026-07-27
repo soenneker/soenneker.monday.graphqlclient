@@ -181,6 +181,12 @@ public sealed partial class Query
     public AccountTriggersByEntityId? AccountTriggersStatisticsByEntityId { get; init; }
 
     /// <summary>
+    /// Performs aggregation operations on board data
+    /// </summary>
+    [JsonPropertyName("aggregate")]
+    public AggregateQueryResult? Aggregate { get; init; }
+
+    /// <summary>
     /// Get board candidates based on workspace and usage type
     /// </summary>
     [JsonPropertyName("board_candidates")]
@@ -227,30 +233,6 @@ public sealed partial class Query
     /// </summary>
     [JsonPropertyName("connection_board_ids")]
     public List<string> ConnectionBoardIds { get; init; } = [];
-
-    /// <summary>
-    /// Get all roles for the account
-    /// </summary>
-    [JsonPropertyName("account_roles")]
-    public List<AccountRole>? AccountRoles { get; init; }
-
-    /// <summary>
-    /// Retrieves API tokens for the given service users.
-    /// </summary>
-    [JsonPropertyName("service_user_tokens")]
-    public List<ServiceUserToken>? ServiceUserTokens { get; init; }
-
-    /// <summary>
-    /// Retrieves all service users in the account with their token last activity.
-    /// </summary>
-    [JsonPropertyName("service_users")]
-    public List<ServiceUser>? ServiceUsers { get; init; }
-
-    /// <summary>
-    /// Performs aggregation operations on board data
-    /// </summary>
-    [JsonPropertyName("aggregate")]
-    public AggregateQueryResult? Aggregate { get; init; }
 
     /// <summary>
     /// Search API. Each field searches a single entity type with tailored filters.
@@ -520,6 +502,24 @@ public sealed partial class Query
     /// </summary>
     [JsonPropertyName("users")]
     public List<User>? Users { get; init; }
+
+    /// <summary>
+    /// Get all roles for the account
+    /// </summary>
+    [JsonPropertyName("account_roles")]
+    public List<AccountRole>? AccountRoles { get; init; }
+
+    /// <summary>
+    /// Retrieves API tokens for the given service users.
+    /// </summary>
+    [JsonPropertyName("service_user_tokens")]
+    public List<ServiceUserToken>? ServiceUserTokens { get; init; }
+
+    /// <summary>
+    /// Retrieves all service users in the account with their token last activity.
+    /// </summary>
+    [JsonPropertyName("service_users")]
+    public List<ServiceUser>? ServiceUsers { get; init; }
 
     /// <summary>
     /// Get the status of an async job by its external ID

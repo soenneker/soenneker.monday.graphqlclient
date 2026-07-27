@@ -11,6 +11,8 @@ public enum VibeAppSearchSortField
 
     CREATEDAT,
 
-    NAME
+    NAME,
+
+    VIEWCOUNT
 
 }

@@ -53,6 +53,12 @@ public sealed partial class ItemResult
     public string? UpdatedAt { get; init; }
 
     /// <summary>
+    /// The user ID of the item creator
+    /// </summary>
+    [JsonPropertyName("creator_id")]
+    public string? CreatorId { get; init; }
+
+    /// <summary>
     /// Structured column values
     /// </summary>
     [JsonPropertyName("column_values")]
@@ -63,5 +69,11 @@ public sealed partial class ItemResult
     /// </summary>
     [JsonPropertyName("subitems")]
     public List<ItemResult>? Subitems { get; init; }
+
+    /// <summary>
+    /// The parent item when this item is a subitem within the result set. Null for top-level items.
+    /// </summary>
+    [JsonPropertyName("parent_item")]
+    public ItemResult? ParentItem { get; init; }
 
 }
