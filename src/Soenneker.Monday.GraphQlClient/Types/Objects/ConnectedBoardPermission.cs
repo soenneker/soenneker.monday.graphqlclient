@@ -21,4 +21,10 @@ public sealed partial class ConnectedBoardPermission
     [JsonPropertyName("can_edit")]
     public bool? CanEdit { get; init; }
 
+    /// <summary>
+    /// Whether the user has read access to this board (read-based for viewers; mirrors can_edit for everyone else)
+    /// </summary>
+    [JsonPropertyName("can_view")]
+    public bool? CanView { get; init; }
+
 }

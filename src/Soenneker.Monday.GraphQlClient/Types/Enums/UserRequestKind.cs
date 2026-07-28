@@ -15,6 +15,8 @@ public enum UserRequestKind
 
     RequestToUpgradeBoardConnection,
 
+    RequestToUpgradeVibePackage,
+
     RequestToUpgradeBeforeAppsUnpublish
 
 }

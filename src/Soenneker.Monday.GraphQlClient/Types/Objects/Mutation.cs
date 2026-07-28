@@ -401,12 +401,6 @@ public sealed partial class Mutation
     public List<BoardMuteSettings>? UpdateMuteBoardSettings { get; init; }
 
     /// <summary>
-    /// Execute an integration block with the provided field values
-    /// </summary>
-    [JsonPropertyName("execute_integration_block")]
-    public IntegrationExecutionResult? ExecuteIntegrationBlock { get; init; }
-
-    /// <summary>
     /// Add a file to a column value.
     /// </summary>
     [JsonPropertyName("add_file_to_column")]
@@ -1147,5 +1141,11 @@ public sealed partial class Mutation
     /// </summary>
     [JsonPropertyName("set_item_description_content")]
     public DocBlocksFromMarkdownResult? SetItemDescriptionContent { get; init; }
+
+    /// <summary>
+    /// Execute an integration block with the provided field values
+    /// </summary>
+    [JsonPropertyName("execute_integration_block")]
+    public IntegrationExecutionResult? ExecuteIntegrationBlock { get; init; }
 
 }

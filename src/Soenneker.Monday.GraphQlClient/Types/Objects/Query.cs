@@ -181,12 +181,6 @@ public sealed partial class Query
     public AccountTriggersByEntityId? AccountTriggersStatisticsByEntityId { get; init; }
 
     /// <summary>
-    /// Performs aggregation operations on board data
-    /// </summary>
-    [JsonPropertyName("aggregate")]
-    public AggregateQueryResult? Aggregate { get; init; }
-
-    /// <summary>
     /// Get board candidates based on workspace and usage type
     /// </summary>
     [JsonPropertyName("board_candidates")]
@@ -290,6 +284,12 @@ public sealed partial class Query
     /// </summary>
     [JsonPropertyName("version")]
     public Version Version { get; init; } = null!;
+
+    /// <summary>
+    /// Performs aggregation operations on board data
+    /// </summary>
+    [JsonPropertyName("aggregate")]
+    public AggregateQueryResult? Aggregate { get; init; }
 
     /// <summary>
     /// Get the connected account's information.
