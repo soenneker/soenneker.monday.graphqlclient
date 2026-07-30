@@ -144,6 +144,12 @@ public sealed partial class User
     public List<Team>? Teams { get; init; }
 
     /// <summary>
+    /// Activity log entries for the user
+    /// </summary>
+    [JsonPropertyName("activity_logs")]
+    public UserActivityLogsPage? ActivityLogs { get; init; }
+
+    /// <summary>
     /// The department the user is a member of (if any)
     /// </summary>
     [JsonPropertyName("department")]
@@ -292,11 +298,5 @@ public sealed partial class User
     /// </summary>
     [JsonPropertyName("url")]
     public string Url { get; init; } = null!;
-
-    /// <summary>
-    /// Activity log entries for the user
-    /// </summary>
-    [JsonPropertyName("activity_logs")]
-    public UserActivityLogsPage? ActivityLogs { get; init; }
 
 }
