@@ -46,4 +46,10 @@ public sealed partial class QueuedMessage
     [JsonPropertyName("files")]
     public List<QueuedMessageFile> Files { get; init; } = [];
 
+    /// <summary>
+    /// Integration blocks picked in the UI, provisioned when the message is dispatched
+    /// </summary>
+    [JsonPropertyName("integration_blocks")]
+    public List<ChatMessageIntegrationBlock> IntegrationBlocks { get; init; } = [];
+
 }

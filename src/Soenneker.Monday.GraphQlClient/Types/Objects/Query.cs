@@ -476,6 +476,18 @@ public sealed partial class Query
     [JsonPropertyName("departments")]
     public List<Department>? Departments { get; init; }
 
+    /// <summary>
+    /// Get all user configs for the account.
+    /// </summary>
+    [JsonPropertyName("user_configs")]
+    public List<UserConfig>? UserConfigs { get; init; }
+
+    /// <summary>
+    /// Get users.
+    /// </summary>
+    [JsonPropertyName("users")]
+    public List<User>? Users { get; init; }
+
     [JsonPropertyName("updates")]
     public List<Update>? Updates { get; init; }
 
@@ -490,18 +502,6 @@ public sealed partial class Query
     /// </summary>
     [JsonPropertyName("fetch_job_status")]
     public JobStatus FetchJobStatus { get; init; } = null!;
-
-    /// <summary>
-    /// Get all user configs for the account.
-    /// </summary>
-    [JsonPropertyName("user_configs")]
-    public List<UserConfig>? UserConfigs { get; init; }
-
-    /// <summary>
-    /// Get users.
-    /// </summary>
-    [JsonPropertyName("users")]
-    public List<User>? Users { get; init; }
 
     /// <summary>
     /// Get all roles for the account

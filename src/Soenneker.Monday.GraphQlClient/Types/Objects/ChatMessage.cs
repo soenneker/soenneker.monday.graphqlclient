@@ -114,6 +114,12 @@ public sealed partial class ChatMessage
     public List<ChatMessageComponentReference> ComponentReferences { get; init; } = [];
 
     /// <summary>
+    /// Integration blocks the user picked in the UI and attached to this message
+    /// </summary>
+    [JsonPropertyName("integration_blocks")]
+    public List<ChatMessageIntegrationBlock> IntegrationBlocks { get; init; } = [];
+
+    /// <summary>
     /// The date and time the object was created
     /// </summary>
     [JsonPropertyName("created_at")]

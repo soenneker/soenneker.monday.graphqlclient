@@ -867,12 +867,6 @@ public sealed partial class Mutation
     public UndoResult? UndoAction { get; init; }
 
     /// <summary>
-    /// Execute an integration block with the provided field values
-    /// </summary>
-    [JsonPropertyName("execute_integration_block")]
-    public IntegrationExecutionResult? ExecuteIntegrationBlock { get; init; }
-
-    /// <summary>
     /// Creates a new team.
     /// </summary>
     [JsonPropertyName("create_team")]
@@ -1075,6 +1069,12 @@ public sealed partial class Mutation
 
     [JsonPropertyName("delete_custom_activity")]
     public CustomActivity? DeleteCustomActivity { get; init; }
+
+    /// <summary>
+    /// Execute an integration block with the provided field values
+    /// </summary>
+    [JsonPropertyName("execute_integration_block")]
+    public IntegrationExecutionResult? ExecuteIntegrationBlock { get; init; }
 
     /// <summary>
     /// Adds markdown content to an existing document by converting it into document blocks. Use this to append content to the end of a document or insert content after a specific block. The markdown will be parsed and converted into the appropriate document block types (text, headers, lists, etc.). Returns the IDs of the newly created blocks on success.

@@ -60,7 +60,7 @@ public sealed partial class VibeApp
     public string? Tagline { get; init; }
 
     /// <summary>
-    /// View count over the last 7 days. Only populated when search_apps results are sorted by VIEW_COUNT; null otherwise.
+    /// Number of distinct viewers over the last 30 days. Only populated when search_apps results are sorted by VIEW_COUNT; null otherwise.
     /// </summary>
     [JsonPropertyName("view_count")]
     public int? ViewCount { get; init; }
