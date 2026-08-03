@@ -95,4 +95,16 @@ public sealed partial class Artifact
     [JsonPropertyName("runs")]
     public List<ArtifactRun>? Runs { get; init; }
 
+    /// <summary>
+    /// Generation status across the create/update/finalize lifecycle
+    /// </summary>
+    [JsonPropertyName("generation_status")]
+    public ArtifactGenerationStatus? GenerationStatus { get; init; }
+
+    /// <summary>
+    /// Server-side timestamp of the last generation activity (create/update/finalize)
+    /// </summary>
+    [JsonPropertyName("latest_update_at")]
+    public DateOnly? LatestUpdateAt { get; init; }
+
 }

@@ -120,6 +120,46 @@ type User {
   """
   activity_logs(from: String, to: String, board_ids: [ID!], limit: Int, event_types: [String!], cursor: String): UserActivityLogsPage
   """
+  The user's title.
+  """
+  title: String!
+  """
+  The user's phone number.
+  """
+  phone: String
+  """
+  The user's location.
+  """
+  location: String
+  """
+  The user's birthday.
+  """
+  birthday: String
+  """
+  The user's mobile phone number.
+  """
+  mobile_phone: String
+  """
+  The user's country code.
+  """
+  country_code: String
+  """
+  The current user's language
+  """
+  current_language: String
+  """
+  The user's timezone identifier.
+  """
+  time_zone_identifier: String
+  """
+  The user's utc hours difference.
+  """
+  utc_hours_diff: Float
+  """
+  The user's profile url.
+  """
+  url: String!
+  """
   The user's account.
   """
   account: Account!
@@ -263,46 +303,6 @@ type User {
   The user's creation date.
   """
   created_at: ISO8601DateTime!
-  """
-  The user's title.
-  """
-  title: String!
-  """
-  The user's phone number.
-  """
-  phone: String
-  """
-  The user's location.
-  """
-  location: String
-  """
-  The user's birthday.
-  """
-  birthday: String
-  """
-  The user's mobile phone number.
-  """
-  mobile_phone: String
-  """
-  The user's country code.
-  """
-  country_code: String
-  """
-  The current user's language
-  """
-  current_language: String
-  """
-  The user's timezone identifier.
-  """
-  time_zone_identifier: String
-  """
-  The user's utc hours difference.
-  """
-  utc_hours_diff: Float
-  """
-  The user's profile url.
-  """
-  url: String!
 }
 
 """
@@ -1322,6 +1322,58 @@ type Mutation {
   """
   uninstall_app(app_identifier: ID!): AppDeletionResponse
   """
+  Creates a new team.
+  """
+  create_team(input: CreateTeamAttributesInput!, options: CreateTeamOptionsInput): Team
+  """
+  Activates the specified users.
+  """
+  activate_users(user_ids: [ID!]!): ActivateUsersResult
+  """
+  Deactivates the specified users.
+  """
+  deactivate_users(user_ids: [ID!]!): DeactivateUsersResult
+  """
+  Deletes the specified team.
+  """
+  delete_team(team_id: ID!): Team
+  """
+  Updates the role of the specified users.
+  """
+  update_users_role(user_ids: [ID!]!, new_role: BaseRoleName, role_id: ID): UpdateUsersRoleResult
+  """
+  Assigns the specified users as owners of the specified team.
+  """
+  assign_team_owners(team_id: ID!, user_ids: [ID!]!): AssignTeamOwnersResult
+  """
+  Removes the specified users as owners of the specified team.
+  """
+  remove_team_owners(team_id: ID!, user_ids: [ID!]!): RemoveTeamOwnersResult
+  """
+  Updates the email domain for the specified users.
+  """
+  update_email_domain(input: UpdateEmailDomainAttributesInput!): UpdateEmailDomainResult
+  """
+  Updates attributes for users.
+  """
+  update_multiple_users(user_updates: [UserUpdateInput!]!, bypass_confirmation_for_claimed_domains: Boolean, use_async_mode: Boolean): UpdateUserAttributesResult
+  """
+  Invite users to the account.
+  """
+  invite_users(emails: [String!]!, user_role: UserRole, product: Product): InviteUsersResult
+  """
+  Revokes all API tokens for a service user.
+  """
+  revoke_service_user_tokens(service_user_id: ID!): Boolean
+  """
+  Revokes all existing tokens and generates a new API token for a service user.
+  """
+  regenerate_service_user_token(service_user_id: ID!): String
+  """
+  Creates a new service user.
+  """
+  create_service_user(name: String!, title: String): CreateServiceUserResult
+  """
   Updates a notification setting's enabled status.
   """
   update_notification_setting(scope_type: ScopeType!, scope_id: Int, setting_kind: String!, channel: ChannelType!, enabled: Boolean!): [NotificationSetting!]
@@ -1633,58 +1685,6 @@ type Mutation {
   Undo a previously completed action, or cancel one still in flight
   """
   undo_action(job_id: ID!): UndoResult
-  """
-  Creates a new team.
-  """
-  create_team(input: CreateTeamAttributesInput!, options: CreateTeamOptionsInput): Team
-  """
-  Activates the specified users.
-  """
-  activate_users(user_ids: [ID!]!): ActivateUsersResult
-  """
-  Deactivates the specified users.
-  """
-  deactivate_users(user_ids: [ID!]!): DeactivateUsersResult
-  """
-  Deletes the specified team.
-  """
-  delete_team(team_id: ID!): Team
-  """
-  Updates the role of the specified users.
-  """
-  update_users_role(user_ids: [ID!]!, new_role: BaseRoleName, role_id: ID): UpdateUsersRoleResult
-  """
-  Assigns the specified users as owners of the specified team.
-  """
-  assign_team_owners(team_id: ID!, user_ids: [ID!]!): AssignTeamOwnersResult
-  """
-  Removes the specified users as owners of the specified team.
-  """
-  remove_team_owners(team_id: ID!, user_ids: [ID!]!): RemoveTeamOwnersResult
-  """
-  Updates the email domain for the specified users.
-  """
-  update_email_domain(input: UpdateEmailDomainAttributesInput!): UpdateEmailDomainResult
-  """
-  Updates attributes for users.
-  """
-  update_multiple_users(user_updates: [UserUpdateInput!]!, bypass_confirmation_for_claimed_domains: Boolean, use_async_mode: Boolean): UpdateUserAttributesResult
-  """
-  Invite users to the account.
-  """
-  invite_users(emails: [String!]!, user_role: UserRole, product: Product): InviteUsersResult
-  """
-  Revokes all API tokens for a service user.
-  """
-  revoke_service_user_tokens(service_user_id: ID!): Boolean
-  """
-  Revokes all existing tokens and generates a new API token for a service user.
-  """
-  regenerate_service_user_token(service_user_id: ID!): String
-  """
-  Creates a new service user.
-  """
-  create_service_user(name: String!, title: String): CreateServiceUserResult
   """
   Connect an existing project to a portfolio. When a callback_url is provided the mutation returns immediately with a process_id, and the result is POSTed to that URL once the operation completes. The callback payload is: { is_success: boolean, process_id: string, portfolio_item_id?: string }.
   """
@@ -2020,6 +2020,18 @@ type Query {
   Get lifecycle subscriptions for all entity types in a specific app version. If version_id is not provided, resolves the active version (user testing version, live, or latest).
   """
   get_app_lifecycle_subscriptions(app_id: ID!, version_id: ID): [LifecycleSubscriptionKind!]
+  """
+  Get all roles for the account
+  """
+  account_roles: [AccountRole!]
+  """
+  Retrieves API tokens for the given service users.
+  """
+  service_user_tokens(service_user_ids: [ID!]!): [ServiceUserToken!]
+  """
+  Retrieves all service users in the account with their token last activity.
+  """
+  service_users: [ServiceUser!]
   notifications(cursor: ID, limit: Int = 25, filter_read: Boolean, since: ISO8601DateTime): [NotificationV2!]
   """
   Retrieves the current user's notification settings across all available channels.
@@ -2203,18 +2215,6 @@ type Query {
   Get the status of a backfill or ingest job
   """
   fetch_job_status(job_id: ID!): JobStatus!
-  """
-  Get all roles for the account
-  """
-  account_roles: [AccountRole!]
-  """
-  Retrieves API tokens for the given service users.
-  """
-  service_user_tokens(service_user_ids: [ID!]!): [ServiceUserToken!]
-  """
-  Retrieves all service users in the account with their token last activity.
-  """
-  service_users: [ServiceUser!]
   """
   Get the status of an async job by its external ID
   """
@@ -6176,6 +6176,14 @@ type Artifact {
   Runs associated with this artifact
   """
   runs: [ArtifactRun!]
+  """
+  Generation status across the create/update/finalize lifecycle
+  """
+  generation_status: ArtifactGenerationStatus
+  """
+  Server-side timestamp of the last generation activity (create/update/finalize)
+  """
+  latest_update_at: Date
 }
 
 """
@@ -13581,6 +13589,699 @@ input UpdateLifecycleSubscriptionsInput {
   lifecycle_events: [LifecycleEventInput!]!
 }
 
+"""
+A role in the account
+"""
+type AccountRole {
+  """
+  The ID of the role
+  """
+  id: ID
+  """
+  The name of the role
+  """
+  name: String
+  """
+  The type of the role
+  """
+  roleType: String
+}
+
+"""
+Error that occurred during activation.
+"""
+type ActivateUsersError {
+  """
+  The error message.
+  """
+  message: String
+  """
+  The error code.
+  """
+  code: ActivateUsersErrorCode
+  """
+  The id of the user that caused the error.
+  """
+  user_id: ID
+}
+
+"""
+Error codes for activating users.
+"""
+enum ActivateUsersErrorCode {
+  EXCEEDS_BATCH_LIMIT
+  INVALID_INPUT
+  USER_NOT_FOUND
+  CANNOT_UPDATE_SELF
+  FAILED
+}
+
+"""
+Result of activating users.
+"""
+type ActivateUsersResult {
+  """
+  The users that were activated.
+  """
+  activated_users: [User!]
+  """
+  Errors that occurred during activation.
+  """
+  errors: [ActivateUsersError!]
+}
+
+"""
+The level of access a user or team has for an agent.
+"""
+enum AgentMembershipRole {
+  OWNER
+  MEMBER
+}
+
+"""
+A subscriber of an agent — a user or team with an assigned role.
+"""
+type AgentSubscriber {
+  """
+  The role assigned to the subscribed entity.
+  """
+  role: AgentMembershipRole
+  """
+  Whether the subscribed entity is a user or a team.
+  """
+  type: AgentSubscriberKind
+  """
+  The subscribed user or team.
+  """
+  entity: AgentSubscriberEntity!
+}
+
+"""
+The user or team subscribed to an agent.
+"""
+union AgentSubscriberEntity = User | Team
+
+"""
+The type of entity subscribed to an agent.
+"""
+enum AgentSubscriberKind {
+  USER
+  TEAM
+}
+
+"""
+Maps an API app to an API-app-backed user within an account.
+"""
+type ApiAppUserMapping {
+  """
+  The mapped user.
+  """
+  user: User!
+}
+
+"""
+The kind of API-app-backed user to create.
+"""
+enum ApiAppUserMappingKind {
+  AGENT_MEMBER
+  VIBE_USER
+}
+
+"""
+Error that occurred while changing team owners.
+"""
+type AssignTeamOwnersError {
+  """
+  The error message.
+  """
+  message: String
+  """
+  The error code.
+  """
+  code: AssignTeamOwnersErrorCode
+  """
+  The id of the user that caused the error.
+  """
+  user_id: ID
+}
+
+"""
+Error codes that can occur while changing team owners.
+"""
+enum AssignTeamOwnersErrorCode {
+  VIEWERS_OR_GUESTS
+  USER_NOT_MEMBER_OF_TEAM
+  EXCEEDS_BATCH_LIMIT
+  INVALID_INPUT
+  USER_NOT_FOUND
+  CANNOT_UPDATE_SELF
+  FAILED
+}
+
+"""
+Result of changing the team's ownership.
+"""
+type AssignTeamOwnersResult {
+  """
+  The team for which the owners were changed.
+  """
+  team: Team
+  """
+  Errors that occurred while changing team owners.
+  """
+  errors: [AssignTeamOwnersError!]
+}
+
+"""
+The role of the user.
+"""
+enum BaseRoleName {
+  GUEST
+  VIEW_ONLY
+  MEMBER
+  ADMIN
+}
+
+"""
+The result of creating a service user.
+"""
+type CreateServiceUserResult {
+  """
+  The created service user.
+  """
+  user: User
+}
+
+"""
+Attributes of the team to be created.
+"""
+input CreateTeamAttributesInput {
+  """
+  The team's name.
+  """
+  name: String!
+  """
+  Whether the team can contain guest users.
+  """
+  is_guest_team: Boolean
+  """
+  The parent team identifier.
+  """
+  parent_team_id: ID
+  """
+  The team members. Must not be empty, unless allow_empty_team is set.
+  """
+  subscriber_ids: [ID!]
+}
+
+"""
+Options for creating a team.
+"""
+input CreateTeamOptionsInput {
+  """
+  Whether to allow a team without any subscribers.
+  """
+  allow_empty_team: Boolean
+}
+
+"""
+Error that occurred during deactivation.
+"""
+type DeactivateUsersError {
+  """
+  The error message.
+  """
+  message: String
+  """
+  The error code.
+  """
+  code: DeactivateUsersErrorCode
+  """
+  The id of the user that caused the error.
+  """
+  user_id: ID
+}
+
+"""
+Error codes for deactivating users.
+"""
+enum DeactivateUsersErrorCode {
+  EXCEEDS_BATCH_LIMIT
+  INVALID_INPUT
+  USER_NOT_FOUND
+  CANNOT_UPDATE_SELF
+  FAILED
+}
+
+"""
+Result of deactivating users.
+"""
+type DeactivateUsersResult {
+  """
+  The users that were deactivated.
+  """
+  deactivated_users: [User!]
+  """
+  Errors that occurred during deactivation.
+  """
+  errors: [DeactivateUsersError!]
+}
+
+"""
+Error that occurred while inviting users
+"""
+type InviteUsersError {
+  """
+  The error message.
+  """
+  message: String
+  """
+  The error code.
+  """
+  code: InviteUsersErrorCode
+  """
+  The email address for the user that caused the error.
+  """
+  email: ID
+}
+
+"""
+Error codes that can occur while changing email domain.
+"""
+enum InviteUsersErrorCode {
+  ERROR
+}
+
+"""
+Result of inviting users to the account.
+"""
+type InviteUsersResult {
+  """
+  The users that were successfully invited.
+  """
+  invited_users: [User!]
+  """
+  Errors that occurred while inviting users
+  """
+  errors: [InviteUsersError!]
+}
+
+"""
+The product to invite the users to.
+"""
+enum Product {
+  work_management
+  crm
+  dev
+  service
+  whiteboard
+  knowledge
+  forms
+  workflows
+}
+
+"""
+Error that occurred while removing team owners.
+"""
+type RemoveTeamOwnersError {
+  """
+  The error message.
+  """
+  message: String
+  """
+  The error code.
+  """
+  code: RemoveTeamOwnersErrorCode
+  """
+  The id of the user that caused the error.
+  """
+  user_id: ID
+}
+
+"""
+Error codes that can occur while removing team owners.
+"""
+enum RemoveTeamOwnersErrorCode {
+  VIEWERS_OR_GUESTS
+  USER_NOT_MEMBER_OF_TEAM
+  EXCEEDS_BATCH_LIMIT
+  INVALID_INPUT
+  USER_NOT_FOUND
+  CANNOT_UPDATE_SELF
+  FAILED
+}
+
+"""
+Result of removing the team's ownership.
+"""
+type RemoveTeamOwnersResult {
+  """
+  The team for which the owners were removed.
+  """
+  team: Team
+  """
+  Errors that occurred while removing team owners.
+  """
+  errors: [RemoveTeamOwnersError!]
+}
+
+"""
+A service user in the account.
+"""
+type ServiceUser {
+  """
+  The ID of the service user.
+  """
+  id: ID
+  """
+  The display name of the service user.
+  """
+  name: String
+  """
+  The title/description of the service user.
+  """
+  title: String
+  """
+  Whether the service user is active.
+  """
+  enabled: Boolean
+  """
+  The ID of the user who created this service user.
+  """
+  invited_by_id: ID
+  """
+  When the service user was created.
+  """
+  created_at: String
+  """
+  The last time the service user token was used for an API request.
+  """
+  last_token_activity: String
+  """
+  Whether the service user currently has an active API token.
+  """
+  has_token: Boolean
+}
+
+"""
+A service user token result.
+"""
+type ServiceUserToken {
+  """
+  The ID of the service user.
+  """
+  service_user_id: ID
+  """
+  The API token.
+  """
+  token: String
+}
+
+"""
+Result of the subscribe_teams_to_agent mutation.
+"""
+type SubscribeTeamsToAgentResult {
+  """
+  Whether all teams were successfully subscribed to the agent.
+  """
+  is_successful: Boolean
+}
+
+"""
+Result of the subscribe_users_to_agent mutation.
+"""
+type SubscribeUsersToAgentResult {
+  """
+  Whether all users were successfully subscribed to the agent.
+  """
+  is_successful: Boolean
+}
+
+"""
+A team of users.
+"""
+type Team {
+  """
+  The team's unique identifier.
+  """
+  id: ID!
+  """
+  Whether the team is a guest team
+  """
+  is_guest: Boolean
+  """
+  The team's name.
+  """
+  name: String!
+  """
+  The team's creation date as an ISO 8601 string.
+  """
+  created_at: String
+  """
+  The users who are the owners of the team.
+  """
+  owners(ids: [ID!]): [User!]!
+  """
+  The team's picture url.
+  """
+  picture_url: String
+  """
+  The users in the team.
+  """
+  users(emails: [String], ids: [ID!], kind: UserKind, limit: Int, name: String, newest_first: Boolean, non_active: Boolean, page: Int): [User]
+}
+
+"""
+Result of the transfer_agent_ownership mutation.
+"""
+type TransferAgentOwnershipResult {
+  """
+  Whether the ownership transfer completed successfully.
+  """
+  is_successful: Boolean
+  """
+  The failure reason, or null when the transfer succeeded.
+  """
+  reason: String
+}
+
+"""
+Result of the unsubscribe_teams_from_agent mutation.
+"""
+type UnsubscribeTeamsFromAgentResult {
+  """
+  Whether all teams were successfully unsubscribed from the agent.
+  """
+  is_successful: Boolean
+}
+
+"""
+Result of the unsubscribe_users_from_agent mutation.
+"""
+type UnsubscribeUsersFromAgentResult {
+  """
+  Whether all users were successfully unsubscribed from the agent.
+  """
+  is_successful: Boolean
+}
+
+"""
+Attributes of the email domain to be updated.
+"""
+input UpdateEmailDomainAttributesInput {
+  """
+  The user identifiers (max 200)
+  """
+  user_ids: [ID!]!
+  """
+  The new email domain.
+  """
+  new_domain: String!
+}
+
+"""
+Error that occurred while changing email domain.
+"""
+type UpdateEmailDomainError {
+  """
+  The error message.
+  """
+  message: String
+  """
+  The error code.
+  """
+  code: UpdateEmailDomainErrorCode
+  """
+  The id of the user that caused the error.
+  """
+  user_id: ID
+}
+
+"""
+Error codes that can occur while changing email domain.
+"""
+enum UpdateEmailDomainErrorCode {
+  UPDATE_EMAIL_DOMAIN_ERROR
+  EXCEEDS_BATCH_LIMIT
+  INVALID_INPUT
+  USER_NOT_FOUND
+  CANNOT_UPDATE_SELF
+  FAILED
+}
+
+"""
+Result of updating the email domain for the specified users.
+"""
+type UpdateEmailDomainResult {
+  """
+  The users for which the email domain was updated.
+  """
+  updated_users: [User!]
+  """
+  Errors that occurred during the update.
+  """
+  errors: [UpdateEmailDomainError!]
+}
+
+"""
+Error that occurred while updating users attributes.
+"""
+type UpdateUserAttributesError {
+  """
+  The error message.
+  """
+  message: String
+  """
+  The error code.
+  """
+  code: UpdateUserAttributesErrorCode
+  """
+  The id of the user that caused the error.
+  """
+  user_id: ID
+}
+
+"""
+Error codes that can occur while updating user attributes.
+"""
+enum UpdateUserAttributesErrorCode {
+  INVALID_FIELD
+}
+
+"""
+The result of updating users attributes.
+"""
+type UpdateUserAttributesResult {
+  """
+  The users that were updated.
+  """
+  updated_users: [User!]
+  """
+  Errors that occurred during the update.
+  """
+  errors: [UpdateUserAttributesError!]
+}
+
+"""
+Error that occurred during updating users role.
+"""
+type UpdateUsersRoleError {
+  """
+  The error message.
+  """
+  message: String
+  """
+  The error code.
+  """
+  code: UpdateUsersRoleErrorCode
+  """
+  The id of the user that caused the error.
+  """
+  user_id: ID
+}
+
+"""
+Error codes for updating users roles.
+"""
+enum UpdateUsersRoleErrorCode {
+  EXCEEDS_BATCH_LIMIT
+  INVALID_INPUT
+  USER_NOT_FOUND
+  CANNOT_UPDATE_SELF
+  FAILED
+}
+
+"""
+Result of updating users role.
+"""
+type UpdateUsersRoleResult {
+  """
+  The users that were updated.
+  """
+  updated_users: [User!]
+  """
+  Errors that occurred during updating users role.
+  """
+  errors: [UpdateUsersRoleError!]
+}
+
+"""
+The attributes to update for a user.
+"""
+input UserAttributesInput {
+  """
+  The birthday of the user.
+  """
+  birthday: String
+  """
+  The email of the user.
+  """
+  email: String
+  """
+  The join date of the user.
+  """
+  join_date: String
+  """
+  The name of the user.
+  """
+  name: String
+  """
+  The location of the user.
+  """
+  location: String
+  """
+  The mobile phone of the user.
+  """
+  mobile_phone: String
+  """
+  The phone of the user.
+  """
+  phone: String
+  """
+  The title of the user.
+  """
+  title: String
+  """
+  The department of the user.
+  """
+  department: String
+}
+
+"""
+The role of the user.
+"""
+enum UserRole {
+  GUEST
+  VIEW_ONLY
+  MEMBER
+  ADMIN
+}
+
+input UserUpdateInput {
+  user_id: ID!
+  user_attribute_updates: UserAttributesInput!
+}
+
 type BoardMuteSettings {
   """
   Board ID
@@ -14089,6 +14790,15 @@ input SqlDescribeSourceInput {
   Source identifier
   """
   id: String!
+}
+
+"""
+Generation status of an artifact across its create/update/finalize lifecycle
+"""
+enum ArtifactGenerationStatus {
+  IDLE
+  IN_PROGRESS
+  FINALIZED
 }
 
 """
@@ -15788,40 +16498,6 @@ type Tag {
   The tag's name.
   """
   name: String!
-}
-
-"""
-A team of users.
-"""
-type Team {
-  """
-  The team's unique identifier.
-  """
-  id: ID!
-  """
-  The team's name.
-  """
-  name: String!
-  """
-  The users who are the owners of the team.
-  """
-  owners(ids: [ID!]): [User!]!
-  """
-  The team's picture url.
-  """
-  picture_url: String
-  """
-  The users in the team.
-  """
-  users(emails: [String], ids: [ID!], kind: UserKind, limit: Int, name: String, newest_first: Boolean, non_active: Boolean, page: Int): [User]
-  """
-  Whether the team is a guest team
-  """
-  is_guest: Boolean
-  """
-  The team's creation date as an ISO 8601 string.
-  """
-  created_at: String
 }
 
 """
@@ -17526,665 +18202,6 @@ Outcome of loading a single widget within loadDashboardData.
 enum WidgetStatus {
   OK
   ERROR
-}
-
-"""
-A role in the account
-"""
-type AccountRole {
-  """
-  The ID of the role
-  """
-  id: ID
-  """
-  The name of the role
-  """
-  name: String
-  """
-  The type of the role
-  """
-  roleType: String
-}
-
-"""
-Error that occurred during activation.
-"""
-type ActivateUsersError {
-  """
-  The error message.
-  """
-  message: String
-  """
-  The error code.
-  """
-  code: ActivateUsersErrorCode
-  """
-  The id of the user that caused the error.
-  """
-  user_id: ID
-}
-
-"""
-Error codes for activating users.
-"""
-enum ActivateUsersErrorCode {
-  EXCEEDS_BATCH_LIMIT
-  INVALID_INPUT
-  USER_NOT_FOUND
-  CANNOT_UPDATE_SELF
-  FAILED
-}
-
-"""
-Result of activating users.
-"""
-type ActivateUsersResult {
-  """
-  The users that were activated.
-  """
-  activated_users: [User!]
-  """
-  Errors that occurred during activation.
-  """
-  errors: [ActivateUsersError!]
-}
-
-"""
-The level of access a user or team has for an agent.
-"""
-enum AgentMembershipRole {
-  OWNER
-  MEMBER
-}
-
-"""
-A subscriber of an agent — a user or team with an assigned role.
-"""
-type AgentSubscriber {
-  """
-  The role assigned to the subscribed entity.
-  """
-  role: AgentMembershipRole
-  """
-  Whether the subscribed entity is a user or a team.
-  """
-  type: AgentSubscriberKind
-  """
-  The subscribed user or team.
-  """
-  entity: AgentSubscriberEntity!
-}
-
-"""
-The user or team subscribed to an agent.
-"""
-union AgentSubscriberEntity = User | Team
-
-"""
-The type of entity subscribed to an agent.
-"""
-enum AgentSubscriberKind {
-  USER
-  TEAM
-}
-
-"""
-Maps an API app to an API-app-backed user within an account.
-"""
-type ApiAppUserMapping {
-  """
-  The mapped user.
-  """
-  user: User!
-}
-
-"""
-The kind of API-app-backed user to create.
-"""
-enum ApiAppUserMappingKind {
-  AGENT_MEMBER
-  VIBE_USER
-}
-
-"""
-Error that occurred while changing team owners.
-"""
-type AssignTeamOwnersError {
-  """
-  The error message.
-  """
-  message: String
-  """
-  The error code.
-  """
-  code: AssignTeamOwnersErrorCode
-  """
-  The id of the user that caused the error.
-  """
-  user_id: ID
-}
-
-"""
-Error codes that can occur while changing team owners.
-"""
-enum AssignTeamOwnersErrorCode {
-  VIEWERS_OR_GUESTS
-  USER_NOT_MEMBER_OF_TEAM
-  EXCEEDS_BATCH_LIMIT
-  INVALID_INPUT
-  USER_NOT_FOUND
-  CANNOT_UPDATE_SELF
-  FAILED
-}
-
-"""
-Result of changing the team's ownership.
-"""
-type AssignTeamOwnersResult {
-  """
-  The team for which the owners were changed.
-  """
-  team: Team
-  """
-  Errors that occurred while changing team owners.
-  """
-  errors: [AssignTeamOwnersError!]
-}
-
-"""
-The role of the user.
-"""
-enum BaseRoleName {
-  GUEST
-  VIEW_ONLY
-  MEMBER
-  ADMIN
-}
-
-"""
-The result of creating a service user.
-"""
-type CreateServiceUserResult {
-  """
-  The created service user.
-  """
-  user: User
-}
-
-"""
-Attributes of the team to be created.
-"""
-input CreateTeamAttributesInput {
-  """
-  The team's name.
-  """
-  name: String!
-  """
-  Whether the team can contain guest users.
-  """
-  is_guest_team: Boolean
-  """
-  The parent team identifier.
-  """
-  parent_team_id: ID
-  """
-  The team members. Must not be empty, unless allow_empty_team is set.
-  """
-  subscriber_ids: [ID!]
-}
-
-"""
-Options for creating a team.
-"""
-input CreateTeamOptionsInput {
-  """
-  Whether to allow a team without any subscribers.
-  """
-  allow_empty_team: Boolean
-}
-
-"""
-Error that occurred during deactivation.
-"""
-type DeactivateUsersError {
-  """
-  The error message.
-  """
-  message: String
-  """
-  The error code.
-  """
-  code: DeactivateUsersErrorCode
-  """
-  The id of the user that caused the error.
-  """
-  user_id: ID
-}
-
-"""
-Error codes for deactivating users.
-"""
-enum DeactivateUsersErrorCode {
-  EXCEEDS_BATCH_LIMIT
-  INVALID_INPUT
-  USER_NOT_FOUND
-  CANNOT_UPDATE_SELF
-  FAILED
-}
-
-"""
-Result of deactivating users.
-"""
-type DeactivateUsersResult {
-  """
-  The users that were deactivated.
-  """
-  deactivated_users: [User!]
-  """
-  Errors that occurred during deactivation.
-  """
-  errors: [DeactivateUsersError!]
-}
-
-"""
-Error that occurred while inviting users
-"""
-type InviteUsersError {
-  """
-  The error message.
-  """
-  message: String
-  """
-  The error code.
-  """
-  code: InviteUsersErrorCode
-  """
-  The email address for the user that caused the error.
-  """
-  email: ID
-}
-
-"""
-Error codes that can occur while changing email domain.
-"""
-enum InviteUsersErrorCode {
-  ERROR
-}
-
-"""
-Result of inviting users to the account.
-"""
-type InviteUsersResult {
-  """
-  The users that were successfully invited.
-  """
-  invited_users: [User!]
-  """
-  Errors that occurred while inviting users
-  """
-  errors: [InviteUsersError!]
-}
-
-"""
-The product to invite the users to.
-"""
-enum Product {
-  work_management
-  crm
-  dev
-  service
-  whiteboard
-  knowledge
-  forms
-  workflows
-}
-
-"""
-Error that occurred while removing team owners.
-"""
-type RemoveTeamOwnersError {
-  """
-  The error message.
-  """
-  message: String
-  """
-  The error code.
-  """
-  code: RemoveTeamOwnersErrorCode
-  """
-  The id of the user that caused the error.
-  """
-  user_id: ID
-}
-
-"""
-Error codes that can occur while removing team owners.
-"""
-enum RemoveTeamOwnersErrorCode {
-  VIEWERS_OR_GUESTS
-  USER_NOT_MEMBER_OF_TEAM
-  EXCEEDS_BATCH_LIMIT
-  INVALID_INPUT
-  USER_NOT_FOUND
-  CANNOT_UPDATE_SELF
-  FAILED
-}
-
-"""
-Result of removing the team's ownership.
-"""
-type RemoveTeamOwnersResult {
-  """
-  The team for which the owners were removed.
-  """
-  team: Team
-  """
-  Errors that occurred while removing team owners.
-  """
-  errors: [RemoveTeamOwnersError!]
-}
-
-"""
-A service user in the account.
-"""
-type ServiceUser {
-  """
-  The ID of the service user.
-  """
-  id: ID
-  """
-  The display name of the service user.
-  """
-  name: String
-  """
-  The title/description of the service user.
-  """
-  title: String
-  """
-  Whether the service user is active.
-  """
-  enabled: Boolean
-  """
-  The ID of the user who created this service user.
-  """
-  invited_by_id: ID
-  """
-  When the service user was created.
-  """
-  created_at: String
-  """
-  The last time the service user token was used for an API request.
-  """
-  last_token_activity: String
-  """
-  Whether the service user currently has an active API token.
-  """
-  has_token: Boolean
-}
-
-"""
-A service user token result.
-"""
-type ServiceUserToken {
-  """
-  The ID of the service user.
-  """
-  service_user_id: ID
-  """
-  The API token.
-  """
-  token: String
-}
-
-"""
-Result of the subscribe_teams_to_agent mutation.
-"""
-type SubscribeTeamsToAgentResult {
-  """
-  Whether all teams were successfully subscribed to the agent.
-  """
-  is_successful: Boolean
-}
-
-"""
-Result of the subscribe_users_to_agent mutation.
-"""
-type SubscribeUsersToAgentResult {
-  """
-  Whether all users were successfully subscribed to the agent.
-  """
-  is_successful: Boolean
-}
-
-"""
-Result of the transfer_agents_ownership mutation.
-"""
-type TransferAgentsOwnershipResult {
-  """
-  Whether the ownership transfer completed successfully.
-  """
-  is_successful: Boolean
-  """
-  The failure reason, or null when the transfer succeeded.
-  """
-  reason: String
-}
-
-"""
-Result of the unsubscribe_teams_from_agent mutation.
-"""
-type UnsubscribeTeamsFromAgentResult {
-  """
-  Whether all teams were successfully unsubscribed from the agent.
-  """
-  is_successful: Boolean
-}
-
-"""
-Result of the unsubscribe_users_from_agent mutation.
-"""
-type UnsubscribeUsersFromAgentResult {
-  """
-  Whether all users were successfully unsubscribed from the agent.
-  """
-  is_successful: Boolean
-}
-
-"""
-Attributes of the email domain to be updated.
-"""
-input UpdateEmailDomainAttributesInput {
-  """
-  The user identifiers (max 200)
-  """
-  user_ids: [ID!]!
-  """
-  The new email domain.
-  """
-  new_domain: String!
-}
-
-"""
-Error that occurred while changing email domain.
-"""
-type UpdateEmailDomainError {
-  """
-  The error message.
-  """
-  message: String
-  """
-  The error code.
-  """
-  code: UpdateEmailDomainErrorCode
-  """
-  The id of the user that caused the error.
-  """
-  user_id: ID
-}
-
-"""
-Error codes that can occur while changing email domain.
-"""
-enum UpdateEmailDomainErrorCode {
-  UPDATE_EMAIL_DOMAIN_ERROR
-  EXCEEDS_BATCH_LIMIT
-  INVALID_INPUT
-  USER_NOT_FOUND
-  CANNOT_UPDATE_SELF
-  FAILED
-}
-
-"""
-Result of updating the email domain for the specified users.
-"""
-type UpdateEmailDomainResult {
-  """
-  The users for which the email domain was updated.
-  """
-  updated_users: [User!]
-  """
-  Errors that occurred during the update.
-  """
-  errors: [UpdateEmailDomainError!]
-}
-
-"""
-Error that occurred while updating users attributes.
-"""
-type UpdateUserAttributesError {
-  """
-  The error message.
-  """
-  message: String
-  """
-  The error code.
-  """
-  code: UpdateUserAttributesErrorCode
-  """
-  The id of the user that caused the error.
-  """
-  user_id: ID
-}
-
-"""
-Error codes that can occur while updating user attributes.
-"""
-enum UpdateUserAttributesErrorCode {
-  INVALID_FIELD
-}
-
-"""
-The result of updating users attributes.
-"""
-type UpdateUserAttributesResult {
-  """
-  The users that were updated.
-  """
-  updated_users: [User!]
-  """
-  Errors that occurred during the update.
-  """
-  errors: [UpdateUserAttributesError!]
-}
-
-"""
-Error that occurred during updating users role.
-"""
-type UpdateUsersRoleError {
-  """
-  The error message.
-  """
-  message: String
-  """
-  The error code.
-  """
-  code: UpdateUsersRoleErrorCode
-  """
-  The id of the user that caused the error.
-  """
-  user_id: ID
-}
-
-"""
-Error codes for updating users roles.
-"""
-enum UpdateUsersRoleErrorCode {
-  EXCEEDS_BATCH_LIMIT
-  INVALID_INPUT
-  USER_NOT_FOUND
-  CANNOT_UPDATE_SELF
-  FAILED
-}
-
-"""
-Result of updating users role.
-"""
-type UpdateUsersRoleResult {
-  """
-  The users that were updated.
-  """
-  updated_users: [User!]
-  """
-  Errors that occurred during updating users role.
-  """
-  errors: [UpdateUsersRoleError!]
-}
-
-"""
-The attributes to update for a user.
-"""
-input UserAttributesInput {
-  """
-  The birthday of the user.
-  """
-  birthday: String
-  """
-  The email of the user.
-  """
-  email: String
-  """
-  The join date of the user.
-  """
-  join_date: String
-  """
-  The name of the user.
-  """
-  name: String
-  """
-  The location of the user.
-  """
-  location: String
-  """
-  The mobile phone of the user.
-  """
-  mobile_phone: String
-  """
-  The phone of the user.
-  """
-  phone: String
-  """
-  The title of the user.
-  """
-  title: String
-  """
-  The department of the user.
-  """
-  department: String
-}
-
-"""
-The role of the user.
-"""
-enum UserRole {
-  GUEST
-  VIEW_ONLY
-  MEMBER
-  ADMIN
-}
-
-input UserUpdateInput {
-  user_id: ID!
-  user_attribute_updates: UserAttributesInput!
 }
 
 type ConnectProjectResult {

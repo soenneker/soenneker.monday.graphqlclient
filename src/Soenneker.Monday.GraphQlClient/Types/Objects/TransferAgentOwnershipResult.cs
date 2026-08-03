@@ -5,9 +5,9 @@ using System.Text.Json.Serialization;
 namespace Soenneker.Monday.GraphQlClient;
 
 /// <summary>
-/// Result of the transfer_agents_ownership mutation.
+/// Result of the transfer_agent_ownership mutation.
 /// </summary>
-public sealed partial class TransferAgentsOwnershipResult
+public sealed partial class TransferAgentOwnershipResult
 {
     /// <summary>
     /// Whether the ownership transfer completed successfully.
