@@ -11,6 +11,8 @@ public enum MessageTypeInput
 
     ASK,
 
-    ERROR
+    ERROR,
+
+    PLAN
 
 }

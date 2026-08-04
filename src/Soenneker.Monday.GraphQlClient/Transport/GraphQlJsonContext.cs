@@ -2916,6 +2916,8 @@ namespace Soenneker.Monday.GraphQlClient;
 [JsonSerializable(typeof(GraphQlResponse<VibeCollection>))]
 [JsonSerializable(typeof(VibeCollectionField))]
 [JsonSerializable(typeof(GraphQlResponse<VibeCollectionField>))]
+[JsonSerializable(typeof(VibeConnectedIntegration))]
+[JsonSerializable(typeof(GraphQlResponse<VibeConnectedIntegration>))]
 [JsonSerializable(typeof(VibeDocument))]
 [JsonSerializable(typeof(GraphQlResponse<VibeDocument>))]
 [JsonSerializable(typeof(VibeDocumentConnection))]
