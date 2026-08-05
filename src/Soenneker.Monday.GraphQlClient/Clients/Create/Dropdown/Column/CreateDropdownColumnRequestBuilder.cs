@@ -22,7 +22,7 @@ public sealed partial class CreateDropdownColumnRequestBuilder
     /// </summary>
     public ValueTask<GraphQlResponse<CreateDropdownColumnData>> Execute(CreateDropdownColumnVariables request, CancellationToken cancellationToken = default)
     {
-        const string gqlQuery = @"mutation CreateDropdownColumn($board_id: ID!, $id: String, $title: String!, $description: String, $after_column_id: ID, $defaults: CreateDropdownColumnSettingsInput) { create_dropdown_column(board_id: $board_id, id: $id, title: $title, description: $description, after_column_id: $after_column_id, defaults: $defaults) { id title description type width archived settings settings_str revision capabilities { calculated { function calculated_type } visibility } } }";
+        const string gqlQuery = @"mutation CreateDropdownColumn($board_id: ID!, $id: String, $title: String!, $description: String, $after_column_id: ID, $defaults: CreateDropdownColumnSettingsInput) { create_dropdown_column(board_id: $board_id, id: $id, title: $title, description: $description, after_column_id: $after_column_id, defaults: $defaults) { archived description id settings_str title type width settings revision capabilities { calculated { function calculated_type } visibility } } }";
         return _graphQlClient.Execute<CreateDropdownColumnData>(gqlQuery, request, cancellationToken);
     }
 

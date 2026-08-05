@@ -15,4 +15,10 @@ public sealed partial class UpdateCustomAgentPayload
     [JsonPropertyName("success")]
     public bool? Success { get; init; }
 
+    /// <summary>
+    /// Custom-agent only — new secret used to sign callback requests, returned when a callback_url is set/updated. Never logged.
+    /// </summary>
+    [JsonPropertyName("signing_secret")]
+    public string? SigningSecret { get; init; }
+
 }

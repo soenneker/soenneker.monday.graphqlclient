@@ -9,28 +9,28 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public sealed class CreateColumnVariables
 {
+    [JsonPropertyName("after_column_id")]
+    public string? AfterColumnId { get; init; }
+
     [JsonPropertyName("board_id")]
     public string BoardId { get; init; } = null!;
+
+    [JsonPropertyName("capabilities")]
+    public ColumnCapabilitiesInput? Capabilities { get; init; }
+
+    [JsonPropertyName("column_type")]
+    public ColumnType ColumnType { get; init; }
+
+    [JsonPropertyName("defaults")]
+    public string? Defaults { get; init; }
+
+    [JsonPropertyName("description")]
+    public string? Description { get; init; }
 
     [JsonPropertyName("id")]
     public string? Id { get; init; }
 
     [JsonPropertyName("title")]
     public string Title { get; init; } = null!;
-
-    [JsonPropertyName("description")]
-    public string? Description { get; init; }
-
-    [JsonPropertyName("after_column_id")]
-    public string? AfterColumnId { get; init; }
-
-    [JsonPropertyName("capabilities")]
-    public ColumnCapabilitiesInput? Capabilities { get; init; }
-
-    [JsonPropertyName("defaults")]
-    public string? Defaults { get; init; }
-
-    [JsonPropertyName("column_type")]
-    public ColumnType ColumnType { get; init; }
 
 }

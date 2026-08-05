@@ -12,12 +12,6 @@ namespace Soenneker.Monday.GraphQlClient;
 public sealed partial class Update
 {
     /// <summary>
-    /// The update's unique identifier.
-    /// </summary>
-    [JsonPropertyName("id")]
-    public string Id { get; init; } = null!;
-
-    /// <summary>
     /// The update's assets/files.
     /// </summary>
     [JsonPropertyName("assets")]
@@ -46,6 +40,12 @@ public sealed partial class Update
     /// </summary>
     [JsonPropertyName("creator_id")]
     public string? CreatorId { get; init; }
+
+    /// <summary>
+    /// The update's unique identifier.
+    /// </summary>
+    [JsonPropertyName("id")]
+    public string Id { get; init; } = null!;
 
     /// <summary>
     /// The update's item ID.

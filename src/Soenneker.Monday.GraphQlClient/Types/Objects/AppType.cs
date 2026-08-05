@@ -8,6 +8,12 @@ namespace Soenneker.Monday.GraphQlClient;
 
 public sealed partial class AppType
 {
+    /// <summary>
+    /// The API app ID
+    /// </summary>
+    [JsonPropertyName("api_app_id")]
+    public string? ApiAppId { get; init; }
+
     [JsonPropertyName("id")]
     public string Id { get; init; } = null!;
 
@@ -22,12 +28,6 @@ public sealed partial class AppType
     /// </summary>
     [JsonPropertyName("name")]
     public string? Name { get; init; }
-
-    /// <summary>
-    /// The API app ID
-    /// </summary>
-    [JsonPropertyName("api_app_id")]
-    public string? ApiAppId { get; init; }
 
     /// <summary>
     /// The client ID used to identify the app for OAuth and API access
