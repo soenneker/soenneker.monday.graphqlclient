@@ -40,4 +40,16 @@ public sealed partial class PublicTemplateLinkPreviewResult
     [JsonPropertyName("source_ai_app_id")]
     public string? SourceAiAppId { get; init; }
 
+    /// <summary>
+    /// True when the template was published without board data. The install form must ask the user to pick replacement boards, and install_from_public_template_link requires board_ids.
+    /// </summary>
+    [JsonPropertyName("code_only")]
+    public bool? CodeOnly { get; init; }
+
+    /// <summary>
+    /// Number of boards the source app was connected to, for display on the install form.
+    /// </summary>
+    [JsonPropertyName("boards_count")]
+    public int? BoardsCount { get; init; }
+
 }

@@ -15,4 +15,10 @@ public sealed partial class CurrentPublicTemplateLinkResult
     [JsonPropertyName("share_token")]
     public string? ShareToken { get; init; }
 
+    /// <summary>
+    /// True when this link was published without board data. The editor should offer a code_only: true option on the next generate call rather than re-using this link for a non-code-only publish.
+    /// </summary>
+    [JsonPropertyName("code_only")]
+    public bool? CodeOnly { get; init; }
+
 }

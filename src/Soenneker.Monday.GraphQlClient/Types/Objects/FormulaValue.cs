@@ -7,16 +7,22 @@ namespace Soenneker.Monday.GraphQlClient;
 public sealed partial class FormulaValue : ColumnValue
 {
     /// <summary>
-    /// The column that this value belongs to.
-    /// </summary>
-    [JsonPropertyName("column")]
-    public Column Column { get; init; } = null!;
-
-    /// <summary>
     /// The column's unique identifier.
     /// </summary>
     [JsonPropertyName("id")]
     public string Id { get; init; } = null!;
+
+    /// <summary>
+    /// A string representing all the formula values, separated by commas
+    /// </summary>
+    [JsonPropertyName("display_value")]
+    public string DisplayValue { get; init; } = null!;
+
+    /// <summary>
+    /// The column that this value belongs to.
+    /// </summary>
+    [JsonPropertyName("column")]
+    public Column Column { get; init; } = null!;
 
     /// <summary>
     /// Whether this item is a leaf (has no subitems).
@@ -41,11 +47,5 @@ public sealed partial class FormulaValue : ColumnValue
     /// </summary>
     [JsonPropertyName("value")]
     public string? Value { get; init; }
-
-    /// <summary>
-    /// A string representing all the formula values, separated by commas
-    /// </summary>
-    [JsonPropertyName("display_value")]
-    public string DisplayValue { get; init; } = null!;
 
 }

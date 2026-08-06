@@ -7,34 +7,22 @@ namespace Soenneker.Monday.GraphQlClient;
 public sealed partial class Column
 {
     /// <summary>
-    /// Is the column archived or not.
-    /// </summary>
-    [JsonPropertyName("archived")]
-    public bool Archived { get; init; }
-
-    /// <summary>
-    /// The column's description.
-    /// </summary>
-    [JsonPropertyName("description")]
-    public string? Description { get; init; }
-
-    /// <summary>
     /// The unique identifier of the column.
     /// </summary>
     [JsonPropertyName("id")]
     public string Id { get; init; } = null!;
 
     /// <summary>
-    /// The column's settings in a string form.
-    /// </summary>
-    [JsonPropertyName("settings_str")]
-    public string SettingsStr { get; init; } = null!;
-
-    /// <summary>
     /// The column's title.
     /// </summary>
     [JsonPropertyName("title")]
     public string Title { get; init; } = null!;
+
+    /// <summary>
+    /// The column's description.
+    /// </summary>
+    [JsonPropertyName("description")]
+    public string? Description { get; init; }
 
     /// <summary>
     /// The column's type.
@@ -49,10 +37,22 @@ public sealed partial class Column
     public int? Width { get; init; }
 
     /// <summary>
+    /// Is the column archived or not.
+    /// </summary>
+    [JsonPropertyName("archived")]
+    public bool Archived { get; init; }
+
+    /// <summary>
     /// The column's settings in a JSON form.
     /// </summary>
     [JsonPropertyName("settings")]
     public string? Settings { get; init; }
+
+    /// <summary>
+    /// The column's settings in a string form.
+    /// </summary>
+    [JsonPropertyName("settings_str")]
+    public string SettingsStr { get; init; } = null!;
 
     /// <summary>
     /// The revision of the column (fetch to get latest revision). Used for optimistic concurrency control.

@@ -24,132 +24,6 @@ public sealed partial class User
     public UserActivityLogsPage? ActivityLogs { get; init; }
 
     /// <summary>
-    /// The user's account.
-    /// </summary>
-    [JsonPropertyName("account")]
-    public Account Account { get; init; } = null!;
-
-    /// <summary>
-    /// The products the user is assigned to.
-    /// </summary>
-    [JsonPropertyName("account_products")]
-    public List<AccountProduct>? AccountProducts { get; init; }
-
-    /// <summary>
-    /// The custom field metas of the user profile.
-    /// </summary>
-    [JsonPropertyName("custom_field_metas")]
-    public List<CustomFieldMetas>? CustomFieldMetas { get; init; }
-
-    /// <summary>
-    /// The custom field values of the user profile.
-    /// </summary>
-    [JsonPropertyName("custom_field_values")]
-    public List<CustomFieldValue>? CustomFieldValues { get; init; }
-
-    /// <summary>
-    /// Is the user enabled or not.
-    /// </summary>
-    [JsonPropertyName("enabled")]
-    public bool Enabled { get; init; }
-
-    /// <summary>
-    /// The token of the user for email to board.
-    /// </summary>
-    [JsonPropertyName("encrypt_api_token")]
-    public string? EncryptApiToken { get; init; }
-
-    /// <summary>
-    /// Is the user an account admin.
-    /// </summary>
-    [JsonPropertyName("is_admin")]
-    public bool? IsAdmin { get; init; }
-
-    /// <summary>
-    /// Is the user a guest or not.
-    /// </summary>
-    [JsonPropertyName("is_guest")]
-    public bool? IsGuest { get; init; }
-
-    /// <summary>
-    /// Is the user a pending user
-    /// </summary>
-    [JsonPropertyName("is_pending")]
-    public bool? IsPending { get; init; }
-
-    /// <summary>
-    /// Is user verified his email.
-    /// </summary>
-    [JsonPropertyName("is_verified")]
-    public bool? IsVerified { get; init; }
-
-    /// <summary>
-    /// Is the user a view only user or not.
-    /// </summary>
-    [JsonPropertyName("is_view_only")]
-    public bool? IsViewOnly { get; init; }
-
-    /// <summary>
-    /// The date the user joined the account.
-    /// </summary>
-    [JsonPropertyName("join_date")]
-    public DateOnly? JoinDate { get; init; }
-
-    /// <summary>
-    /// Last date &amp; time when user was active
-    /// </summary>
-    [JsonPropertyName("last_activity")]
-    public DateOnly? LastActivity { get; init; }
-
-    /// <summary>
-    /// The user's out of office status.
-    /// </summary>
-    [JsonPropertyName("out_of_office")]
-    public OutOfOffice? OutOfOffice { get; init; }
-
-    /// <summary>
-    /// The user's photo in the original size.
-    /// </summary>
-    [JsonPropertyName("photo_original")]
-    public string? PhotoOriginal { get; init; }
-
-    /// <summary>
-    /// The user's photo in small size (150x150).
-    /// </summary>
-    [JsonPropertyName("photo_small")]
-    public string? PhotoSmall { get; init; }
-
-    /// <summary>
-    /// The user's photo in thumbnail size (100x100).
-    /// </summary>
-    [JsonPropertyName("photo_thumb")]
-    public string? PhotoThumb { get; init; }
-
-    /// <summary>
-    /// The user's photo in small thumbnail size (50x50).
-    /// </summary>
-    [JsonPropertyName("photo_thumb_small")]
-    public string? PhotoThumbSmall { get; init; }
-
-    /// <summary>
-    /// The user's photo in tiny size (30x30).
-    /// </summary>
-    [JsonPropertyName("photo_tiny")]
-    public string? PhotoTiny { get; init; }
-
-    /// <summary>
-    /// The product to which the user signed up to first.
-    /// </summary>
-    [JsonPropertyName("sign_up_product_kind")]
-    public string? SignUpProductKind { get; init; }
-
-    /// <summary>
-    /// The teams the user is a member in.
-    /// </summary>
-    [JsonPropertyName("teams")]
-    public List<Team>? Teams { get; init; }
-
-    /// <summary>
     /// The user's title.
     /// </summary>
     [JsonPropertyName("title")]
@@ -298,5 +172,131 @@ public sealed partial class User
     /// </summary>
     [JsonPropertyName("created_at")]
     public string CreatedAt { get; init; } = null!;
+
+    /// <summary>
+    /// The user's account.
+    /// </summary>
+    [JsonPropertyName("account")]
+    public Account Account { get; init; } = null!;
+
+    /// <summary>
+    /// The products the user is assigned to.
+    /// </summary>
+    [JsonPropertyName("account_products")]
+    public List<AccountProduct>? AccountProducts { get; init; }
+
+    /// <summary>
+    /// The custom field metas of the user profile.
+    /// </summary>
+    [JsonPropertyName("custom_field_metas")]
+    public List<CustomFieldMetas>? CustomFieldMetas { get; init; }
+
+    /// <summary>
+    /// The custom field values of the user profile.
+    /// </summary>
+    [JsonPropertyName("custom_field_values")]
+    public List<CustomFieldValue>? CustomFieldValues { get; init; }
+
+    /// <summary>
+    /// Is the user enabled or not.
+    /// </summary>
+    [JsonPropertyName("enabled")]
+    public bool Enabled { get; init; }
+
+    /// <summary>
+    /// The token of the user for email to board.
+    /// </summary>
+    [JsonPropertyName("encrypt_api_token")]
+    public string? EncryptApiToken { get; init; }
+
+    /// <summary>
+    /// Is the user an account admin.
+    /// </summary>
+    [JsonPropertyName("is_admin")]
+    public bool? IsAdmin { get; init; }
+
+    /// <summary>
+    /// Is the user a guest or not.
+    /// </summary>
+    [JsonPropertyName("is_guest")]
+    public bool? IsGuest { get; init; }
+
+    /// <summary>
+    /// Is the user a pending user
+    /// </summary>
+    [JsonPropertyName("is_pending")]
+    public bool? IsPending { get; init; }
+
+    /// <summary>
+    /// Is user verified his email.
+    /// </summary>
+    [JsonPropertyName("is_verified")]
+    public bool? IsVerified { get; init; }
+
+    /// <summary>
+    /// Is the user a view only user or not.
+    /// </summary>
+    [JsonPropertyName("is_view_only")]
+    public bool? IsViewOnly { get; init; }
+
+    /// <summary>
+    /// The date the user joined the account.
+    /// </summary>
+    [JsonPropertyName("join_date")]
+    public DateOnly? JoinDate { get; init; }
+
+    /// <summary>
+    /// Last date &amp; time when user was active
+    /// </summary>
+    [JsonPropertyName("last_activity")]
+    public DateOnly? LastActivity { get; init; }
+
+    /// <summary>
+    /// The user's out of office status.
+    /// </summary>
+    [JsonPropertyName("out_of_office")]
+    public OutOfOffice? OutOfOffice { get; init; }
+
+    /// <summary>
+    /// The user's photo in the original size.
+    /// </summary>
+    [JsonPropertyName("photo_original")]
+    public string? PhotoOriginal { get; init; }
+
+    /// <summary>
+    /// The user's photo in small size (150x150).
+    /// </summary>
+    [JsonPropertyName("photo_small")]
+    public string? PhotoSmall { get; init; }
+
+    /// <summary>
+    /// The user's photo in thumbnail size (100x100).
+    /// </summary>
+    [JsonPropertyName("photo_thumb")]
+    public string? PhotoThumb { get; init; }
+
+    /// <summary>
+    /// The user's photo in small thumbnail size (50x50).
+    /// </summary>
+    [JsonPropertyName("photo_thumb_small")]
+    public string? PhotoThumbSmall { get; init; }
+
+    /// <summary>
+    /// The user's photo in tiny size (30x30).
+    /// </summary>
+    [JsonPropertyName("photo_tiny")]
+    public string? PhotoTiny { get; init; }
+
+    /// <summary>
+    /// The product to which the user signed up to first.
+    /// </summary>
+    [JsonPropertyName("sign_up_product_kind")]
+    public string? SignUpProductKind { get; init; }
+
+    /// <summary>
+    /// The teams the user is a member in.
+    /// </summary>
+    [JsonPropertyName("teams")]
+    public List<Team>? Teams { get; init; }
 
 }

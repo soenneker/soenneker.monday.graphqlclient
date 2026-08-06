@@ -22,7 +22,7 @@ public sealed partial class DeleteWorkspaceRequestBuilder
     /// </summary>
     public ValueTask<GraphQlResponse<DeleteWorkspaceData>> Execute(DeleteWorkspaceVariables request, CancellationToken cancellationToken = default)
     {
-        const string gqlQuery = @"mutation DeleteWorkspace($workspace_id: ID!) { delete_workspace(workspace_id: $workspace_id) { account_product { default_workspace_id id kind tier } created_at description id is_default_workspace kind name settings { icon { color image } } state } }";
+        const string gqlQuery = @"mutation DeleteWorkspace($workspace_id: ID!) { delete_workspace(workspace_id: $workspace_id) { id account_product { default_workspace_id id kind tier } created_at description is_default_workspace kind name settings { icon { color image } } state } }";
         return _graphQlClient.Execute<DeleteWorkspaceData>(gqlQuery, request, cancellationToken);
     }
 
