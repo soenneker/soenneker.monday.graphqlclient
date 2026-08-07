@@ -5134,469 +5134,6 @@ type Document {
 }
 
 """
-The result of the connect_migration_job mutation.
-"""
-type ConnectMigrationJobResult {
-  """
-  Whether the connection was successfully created or already exists.
-  """
-  success: Boolean
-  """
-  The unique identifier of the migration job connection.
-  """
-  migrationJobConnectionId: ID
-}
-
-type CreateEntitySnapshotResult {
-  """
-  The unique identifier of the snapshot.
-  """
-  snapshotId: ID!
-  """
-  The date and time the snapshot was created.
-  """
-  createdAt: String!
-  """
-  The entity that was snapshot.
-  """
-  entity: String!
-  """
-  The unique identifier of the migration job.
-  """
-  migrationJobId: String!
-}
-
-type CreateMigrationJobResult {
-  """
-  The unique identifier of the migration job.
-  """
-  id: ID!
-}
-
-"""
-The result of deleting entity ID mappings.
-"""
-type DeleteEntityIdMappingsResult {
-  """
-  Whether the delete operation was successful.
-  """
-  success: Boolean
-  """
-  The number of mappings that were deleted.
-  """
-  count: Int
-}
-
-"""
-Input type for entity ID mapping.
-"""
-input EntityIdMappingInput {
-  """
-  The old ID of the entity.
-  """
-  oldId: String!
-  """
-  The new ID of the entity.
-  """
-  newId: String!
-}
-
-type GetEntitiesForMigrationResult {
-  """
-  The entities for migration.
-  """
-  entityId: String
-}
-
-"""
-The result of querying entity restores.
-"""
-type GetRestoresQueryResults {
-  """
-  The unique identifier of the restore.
-  """
-  id: ID!
-  """
-  The date and time the restore was created.
-  """
-  createdAt: String!
-  """
-  The entity id of the restore.
-  """
-  entityId: String!
-  """
-  The unique identifier of the migration job.
-  """
-  migrationJobId: String!
-  """
-  The status of the restore.
-  """
-  status: RestoreStatus!
-  """
-  Progress counters for the restore operation.
-  """
-  progress: MigrationProgress
-}
-
-type GetSnapshotsQueryResults {
-  """
-  The unique identifier of the snapshot.
-  """
-  id: ID!
-  """
-  The date and time the snapshot was created.
-  """
-  createdAt: String!
-  """
-  The entity id of the snapshot.
-  """
-  entityId: String!
-  """
-  The unique identifier of the migration job.
-  """
-  migrationJobId: String!
-  """
-  The status of the snapshot.
-  """
-  status: SnapshotStatus!
-  """
-  Progress counters for the snapshot operation.
-  """
-  progress: MigrationProgress
-}
-
-type MigratedEntityIdMappingsResult {
-  """
-  The entity type of migrated entities.
-  """
-  entityType: String
-  """
-  The old ID of the migrated entity.
-  """
-  oldId: String
-  """
-  The new ID of the migrated entity.
-  """
-  newId: String
-}
-
-"""
-Progress counters for a snapshot or restore operation.
-"""
-type MigrationProgress {
-  """
-  Live progress counters. Present only while the operation is in progress.
-  """
-  ongoing: OngoingProgress
-  """
-  Final progress result. Present only after the operation completes.
-  """
-  result: ProgressResult
-}
-
-"""
-Live progress counters for an in-progress migration operation.
-"""
-type OngoingProgress {
-  """
-  The total number of entities to process.
-  """
-  total: Int!
-  """
-  The number of entities currently being processed.
-  """
-  processing: Int!
-  """
-  The number of entities successfully processed.
-  """
-  success: Int!
-  """
-  The number of entities that failed processing.
-  """
-  failed: Int!
-  """
-  Number of components excluded from migration.
-  """
-  excluded: Int!
-  """
-  List of nodes currently being processed.
-  """
-  currently_processing: [ProcessingNode!]!
-}
-
-"""
-A node currently being processed in a migration operation.
-"""
-type ProcessingNode {
-  """
-  The component type, e.g. BoardPosts, BoardPermissions.
-  """
-  type: String!
-  """
-  The unique identifier of the entity being processed.
-  """
-  id: ID!
-  """
-  ISO timestamp when processing began.
-  """
-  started_at: String
-}
-
-"""
-Final progress result for a completed migration operation.
-"""
-type ProgressResult {
-  """
-  The total number of entities processed.
-  """
-  total: Int!
-  """
-  The number of entities successfully processed.
-  """
-  success: Int!
-  """
-  The number of entities that failed processing.
-  """
-  failed: Int!
-  """
-  Number of components excluded from migration.
-  """
-  excluded: Int!
-  """
-  The full manifest JSON with per-component summary baked in.
-  """
-  raw_manifest: JSON!
-}
-
-"""
-The result of the restore entity mutation.
-"""
-type RestoreEntityResult {
-  """
-  Confirms the restore request was accepted.
-  """
-  accepted: Boolean
-}
-
-"""
-A point-in-time record of a restore status change.
-"""
-type RestoreHistoryEntry {
-  """
-  The restore ID at the time this history entry was recorded.
-  """
-  restore_id: ID!
-  """
-  The entity id (package id) of the restore.
-  """
-  entity_id: ID!
-  """
-  The status of the restore at the time this history entry was recorded.
-  """
-  status: RestoreStatus!
-  """
-  The date and time this history entry was recorded.
-  """
-  recorded_at: String!
-}
-
-"""
-The possible statuses of a restore operation.
-"""
-enum RestoreStatus {
-  pending
-  processing
-  success
-  failed
-  rollback
-}
-
-"""
-Result of a restore rollback operation.
-"""
-type RollbackRestoreMutationResult {
-  """
-  The unique identifier of the restore.
-  """
-  restore_id: ID!
-  """
-  The new status of the restore (rollback).
-  """
-  status: RestoreStatus!
-}
-
-"""
-Result of a snapshot rollback operation.
-"""
-type RollbackSnapshotMutationResult {
-  """
-  The unique identifier of the snapshot.
-  """
-  snapshot_id: ID!
-  """
-  The new status of the snapshot (rollback).
-  """
-  status: SnapshotStatus!
-}
-
-"""
-A point-in-time record of a snapshot status change.
-"""
-type SnapshotHistoryEntry {
-  """
-  The snapshot ID at the time this history entry was recorded.
-  """
-  snapshot_id: ID!
-  """
-  The entity id (package id) of the snapshot.
-  """
-  entity_id: ID!
-  """
-  The status of the snapshot at the time this history entry was recorded.
-  """
-  status: SnapshotStatus!
-  """
-  The date and time this history entry was recorded.
-  """
-  recorded_at: String!
-}
-
-"""
-The possible statuses of a snapshot operation.
-"""
-enum SnapshotStatus {
-  pending
-  processing
-  success
-  failed
-  rollback
-}
-
-"""
-A board that can be snapshotted, with metadata and relations.
-"""
-type SnapshottableBoard {
-  """
-  The board ID.
-  """
-  id: ID
-  """
-  The board name.
-  """
-  name: String
-  """
-  The board owner user ID.
-  """
-  owner: ID
-  """
-  The workspace ID this board belongs to.
-  """
-  workspace_id: ID
-  """
-  Whether this board is a document.
-  """
-  is_doc: Boolean
-  """
-  Whether this board is a managed template instance.
-  """
-  is_managed_template_instance: Boolean
-  """
-  Related boards by relation type. Limited to 1 level of depth.
-  """
-  board_relations(relation_type: String!): [SnapshottableBoard!]
-}
-
-"""
-A paginated connection of snapshottable boards.
-"""
-type SnapshottableBoardConnection {
-  """
-  The list of boards in this page.
-  """
-  items: [SnapshottableBoard!]
-  """
-  The cursor for the next page.
-  """
-  cursor: String
-  """
-  Whether there are more pages.
-  """
-  has_next_page: Boolean
-}
-
-"""
-An overview that can be snapshotted, with connected boards.
-"""
-type SnapshottableOverview {
-  """
-  The overview ID.
-  """
-  id: ID
-  """
-  Boards connected to this overview.
-  """
-  connected_boards: [SnapshottableBoard!]
-}
-
-"""
-A paginated connection of snapshottable overviews.
-"""
-type SnapshottableOverviewConnection {
-  """
-  The list of overviews in this page.
-  """
-  items: [SnapshottableOverview!]
-  """
-  The cursor for the next page.
-  """
-  cursor: String
-  """
-  Whether there are more pages.
-  """
-  has_next_page: Boolean
-}
-
-"""
-A workspace that can be snapshotted, with paginated boards and overviews.
-"""
-type SnapshottableWorkspace {
-  """
-  The workspace ID.
-  """
-  id: ID
-  """
-  The workspace name.
-  """
-  name: String
-  """
-  The workspace owner user ID.
-  """
-  owner: ID
-  """
-  Paginated boards in this workspace.
-  """
-  boards(cursor: String): SnapshottableBoardConnection
-  """
-  Paginated overviews in this workspace.
-  """
-  overviews(cursor: String): SnapshottableOverviewConnection
-}
-
-"""
-The result of upserting entity ID mappings.
-"""
-type UpsertEntityIdMappingsResult {
-  """
-  Whether the upsert operation was successful.
-  """
-  success: Boolean
-  """
-  The number of mappings that were upserted.
-  """
-  count: Int
-}
-
-"""
 A page of live workflow automations with cursor-based pagination metadata
 """
 type LiveWorkflowAutomationsPage {
@@ -19178,6 +18715,469 @@ Type of mutation operation
 enum ViewMutationKind {
   CREATE
   UPDATE
+}
+
+"""
+The result of the connect_migration_job mutation.
+"""
+type ConnectMigrationJobResult {
+  """
+  Whether the connection was successfully created or already exists.
+  """
+  success: Boolean
+  """
+  The unique identifier of the migration job connection.
+  """
+  migrationJobConnectionId: ID
+}
+
+type CreateEntitySnapshotResult {
+  """
+  The unique identifier of the snapshot.
+  """
+  snapshotId: ID!
+  """
+  The date and time the snapshot was created.
+  """
+  createdAt: String!
+  """
+  The entity that was snapshot.
+  """
+  entity: String!
+  """
+  The unique identifier of the migration job.
+  """
+  migrationJobId: String!
+}
+
+type CreateMigrationJobResult {
+  """
+  The unique identifier of the migration job.
+  """
+  id: ID!
+}
+
+"""
+The result of deleting entity ID mappings.
+"""
+type DeleteEntityIdMappingsResult {
+  """
+  Whether the delete operation was successful.
+  """
+  success: Boolean
+  """
+  The number of mappings that were deleted.
+  """
+  count: Int
+}
+
+"""
+Input type for entity ID mapping.
+"""
+input EntityIdMappingInput {
+  """
+  The old ID of the entity.
+  """
+  oldId: String!
+  """
+  The new ID of the entity.
+  """
+  newId: String!
+}
+
+type GetEntitiesForMigrationResult {
+  """
+  The entities for migration.
+  """
+  entityId: String
+}
+
+"""
+The result of querying entity restores.
+"""
+type GetRestoresQueryResults {
+  """
+  The unique identifier of the restore.
+  """
+  id: ID!
+  """
+  The date and time the restore was created.
+  """
+  createdAt: String!
+  """
+  The entity id of the restore.
+  """
+  entityId: String!
+  """
+  The unique identifier of the migration job.
+  """
+  migrationJobId: String!
+  """
+  The status of the restore.
+  """
+  status: RestoreStatus!
+  """
+  Progress counters for the restore operation.
+  """
+  progress: MigrationProgress
+}
+
+type GetSnapshotsQueryResults {
+  """
+  The unique identifier of the snapshot.
+  """
+  id: ID!
+  """
+  The date and time the snapshot was created.
+  """
+  createdAt: String!
+  """
+  The entity id of the snapshot.
+  """
+  entityId: String!
+  """
+  The unique identifier of the migration job.
+  """
+  migrationJobId: String!
+  """
+  The status of the snapshot.
+  """
+  status: SnapshotStatus!
+  """
+  Progress counters for the snapshot operation.
+  """
+  progress: MigrationProgress
+}
+
+type MigratedEntityIdMappingsResult {
+  """
+  The entity type of migrated entities.
+  """
+  entityType: String
+  """
+  The old ID of the migrated entity.
+  """
+  oldId: String
+  """
+  The new ID of the migrated entity.
+  """
+  newId: String
+}
+
+"""
+Progress counters for a snapshot or restore operation.
+"""
+type MigrationProgress {
+  """
+  Live progress counters. Present only while the operation is in progress.
+  """
+  ongoing: OngoingProgress
+  """
+  Final progress result. Present only after the operation completes.
+  """
+  result: ProgressResult
+}
+
+"""
+Live progress counters for an in-progress migration operation.
+"""
+type OngoingProgress {
+  """
+  The total number of entities to process.
+  """
+  total: Int!
+  """
+  The number of entities currently being processed.
+  """
+  processing: Int!
+  """
+  The number of entities successfully processed.
+  """
+  success: Int!
+  """
+  The number of entities that failed processing.
+  """
+  failed: Int!
+  """
+  Number of components excluded from migration.
+  """
+  excluded: Int!
+  """
+  List of nodes currently being processed.
+  """
+  currently_processing: [ProcessingNode!]!
+}
+
+"""
+A node currently being processed in a migration operation.
+"""
+type ProcessingNode {
+  """
+  The component type, e.g. BoardPosts, BoardPermissions.
+  """
+  type: String!
+  """
+  The unique identifier of the entity being processed.
+  """
+  id: ID!
+  """
+  ISO timestamp when processing began.
+  """
+  started_at: String
+}
+
+"""
+Final progress result for a completed migration operation.
+"""
+type ProgressResult {
+  """
+  The total number of entities processed.
+  """
+  total: Int!
+  """
+  The number of entities successfully processed.
+  """
+  success: Int!
+  """
+  The number of entities that failed processing.
+  """
+  failed: Int!
+  """
+  Number of components excluded from migration.
+  """
+  excluded: Int!
+  """
+  The full manifest JSON with per-component summary baked in.
+  """
+  raw_manifest: JSON!
+}
+
+"""
+The result of the restore entity mutation.
+"""
+type RestoreEntityResult {
+  """
+  Confirms the restore request was accepted.
+  """
+  accepted: Boolean
+}
+
+"""
+A point-in-time record of a restore status change.
+"""
+type RestoreHistoryEntry {
+  """
+  The restore ID at the time this history entry was recorded.
+  """
+  restore_id: ID!
+  """
+  The entity id (package id) of the restore.
+  """
+  entity_id: ID!
+  """
+  The status of the restore at the time this history entry was recorded.
+  """
+  status: RestoreStatus!
+  """
+  The date and time this history entry was recorded.
+  """
+  recorded_at: String!
+}
+
+"""
+The possible statuses of a restore operation.
+"""
+enum RestoreStatus {
+  pending
+  processing
+  success
+  failed
+  rollback
+}
+
+"""
+Result of a restore rollback operation.
+"""
+type RollbackRestoreMutationResult {
+  """
+  The unique identifier of the restore.
+  """
+  restore_id: ID!
+  """
+  The new status of the restore (rollback).
+  """
+  status: RestoreStatus!
+}
+
+"""
+Result of a snapshot rollback operation.
+"""
+type RollbackSnapshotMutationResult {
+  """
+  The unique identifier of the snapshot.
+  """
+  snapshot_id: ID!
+  """
+  The new status of the snapshot (rollback).
+  """
+  status: SnapshotStatus!
+}
+
+"""
+A point-in-time record of a snapshot status change.
+"""
+type SnapshotHistoryEntry {
+  """
+  The snapshot ID at the time this history entry was recorded.
+  """
+  snapshot_id: ID!
+  """
+  The entity id (package id) of the snapshot.
+  """
+  entity_id: ID!
+  """
+  The status of the snapshot at the time this history entry was recorded.
+  """
+  status: SnapshotStatus!
+  """
+  The date and time this history entry was recorded.
+  """
+  recorded_at: String!
+}
+
+"""
+The possible statuses of a snapshot operation.
+"""
+enum SnapshotStatus {
+  pending
+  processing
+  success
+  failed
+  rollback
+}
+
+"""
+A board that can be snapshotted, with metadata and relations.
+"""
+type SnapshottableBoard {
+  """
+  The board ID.
+  """
+  id: ID
+  """
+  The board name.
+  """
+  name: String
+  """
+  The board owner user ID.
+  """
+  owner: ID
+  """
+  The workspace ID this board belongs to.
+  """
+  workspace_id: ID
+  """
+  Whether this board is a document.
+  """
+  is_doc: Boolean
+  """
+  Whether this board is a managed template instance.
+  """
+  is_managed_template_instance: Boolean
+  """
+  Related boards by relation type. Limited to 1 level of depth.
+  """
+  board_relations(relation_type: String!): [SnapshottableBoard!]
+}
+
+"""
+A paginated connection of snapshottable boards.
+"""
+type SnapshottableBoardConnection {
+  """
+  The list of boards in this page.
+  """
+  items: [SnapshottableBoard!]
+  """
+  The cursor for the next page.
+  """
+  cursor: String
+  """
+  Whether there are more pages.
+  """
+  has_next_page: Boolean
+}
+
+"""
+An overview that can be snapshotted, with connected boards.
+"""
+type SnapshottableOverview {
+  """
+  The overview ID.
+  """
+  id: ID
+  """
+  Boards connected to this overview.
+  """
+  connected_boards: [SnapshottableBoard!]
+}
+
+"""
+A paginated connection of snapshottable overviews.
+"""
+type SnapshottableOverviewConnection {
+  """
+  The list of overviews in this page.
+  """
+  items: [SnapshottableOverview!]
+  """
+  The cursor for the next page.
+  """
+  cursor: String
+  """
+  Whether there are more pages.
+  """
+  has_next_page: Boolean
+}
+
+"""
+A workspace that can be snapshotted, with paginated boards and overviews.
+"""
+type SnapshottableWorkspace {
+  """
+  The workspace ID.
+  """
+  id: ID
+  """
+  The workspace name.
+  """
+  name: String
+  """
+  The workspace owner user ID.
+  """
+  owner: ID
+  """
+  Paginated boards in this workspace.
+  """
+  boards(cursor: String): SnapshottableBoardConnection
+  """
+  Paginated overviews in this workspace.
+  """
+  overviews(cursor: String): SnapshottableOverviewConnection
+}
+
+"""
+The result of upserting entity ID mappings.
+"""
+type UpsertEntityIdMappingsResult {
+  """
+  Whether the upsert operation was successful.
+  """
+  success: Boolean
+  """
+  The number of mappings that were upserted.
+  """
+  count: Int
 }
 
 """
