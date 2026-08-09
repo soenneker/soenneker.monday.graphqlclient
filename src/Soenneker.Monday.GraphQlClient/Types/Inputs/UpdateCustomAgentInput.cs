@@ -10,10 +10,10 @@ namespace Soenneker.Monday.GraphQlClient;
 public sealed partial class UpdateCustomAgentInput
 {
     /// <summary>
-    /// The ID of the custom agent to update
+    /// The ID of the custom agent to update. Optional when the agent updates itself (inferred from the calling agent identity).
     /// </summary>
     [JsonPropertyName("agent_id")]
-    public int AgentId { get; init; }
+    public string? AgentId { get; init; }
 
     /// <summary>
     /// New display name for the agent

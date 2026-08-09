@@ -246,24 +246,6 @@ public sealed partial class Query
     [JsonPropertyName("service_users")]
     public List<ServiceUser>? ServiceUsers { get; init; }
 
-    /// <summary>
-    /// Get managed column data.
-    /// </summary>
-    [JsonPropertyName("managed_column")]
-    public List<ManagedColumn>? ManagedColumn { get; init; }
-
-    /// <summary>
-    /// Retrieves the JSON schema definition for a specific column type. Use this query before calling update_column mutation to understand the structure and validation rules for the defaults parameter. The schema defines what properties are available when updating columns of a specific type.
-    /// </summary>
-    [JsonPropertyName("get_column_type_schema")]
-    public string? GetColumnTypeSchema { get; init; }
-
-    /// <summary>
-    /// Retrieve active account object schemas by their IDs or names. Only returns account-level object schemas (not global). Object schemas define the structure and columns of boards. If no parameters are provided, all account object schemas are returned. Pass exclude_created_by_monday: true to omit the schemas seeded by monday.com and return only schemas created by users in this account. Results are paginated using page and limit parameters.
-    /// </summary>
-    [JsonPropertyName("get_object_schemas")]
-    public List<ObjectSchema>? GetObjectSchemas { get; init; }
-
     [JsonPropertyName("notifications")]
     public List<NotificationV2>? Notifications { get; init; }
 
@@ -438,6 +420,24 @@ public sealed partial class Query
     /// </summary>
     [JsonPropertyName("get_view_schema_by_type")]
     public string? GetViewSchemaByType { get; init; }
+
+    /// <summary>
+    /// Get managed column data.
+    /// </summary>
+    [JsonPropertyName("managed_column")]
+    public List<ManagedColumn>? ManagedColumn { get; init; }
+
+    /// <summary>
+    /// Retrieves the JSON schema definition for a specific column type. Use this query before calling update_column mutation to understand the structure and validation rules for the defaults parameter. The schema defines what properties are available when updating columns of a specific type.
+    /// </summary>
+    [JsonPropertyName("get_column_type_schema")]
+    public string? GetColumnTypeSchema { get; init; }
+
+    /// <summary>
+    /// Retrieve active account object schemas by their IDs or names. Only returns account-level object schemas (not global). Object schemas define the structure and columns of boards. If no parameters are provided, all account object schemas are returned. Pass exclude_created_by_monday: true to omit the schemas seeded by monday.com and return only schemas created by users in this account. Results are paginated using page and limit parameters.
+    /// </summary>
+    [JsonPropertyName("get_object_schemas")]
+    public List<ObjectSchema>? GetObjectSchemas { get; init; }
 
     /// <summary>
     /// Get the connected account's information.

@@ -934,102 +934,6 @@ type Mutation {
   """
   create_service_user(name: String!, title: String): CreateServiceUserResult
   """
-  Create managed column of type dropdown mutation.
-  """
-  create_dropdown_managed_column(title: String!, description: String, settings: CreateDropdownColumnSettingsInput): DropdownManagedColumn
-  """
-  Create managed column of type status mutation.
-  """
-  create_status_managed_column(title: String!, description: String, settings: CreateStatusColumnSettingsInput): StatusManagedColumn
-  """
-  Update managed column of type dropdown mutation.
-  """
-  update_dropdown_managed_column(id: String!, title: String, description: String, settings: UpdateDropdownColumnSettingsInput, revision: Int!): DropdownManagedColumn
-  """
-  Update managed column of type status mutation.
-  """
-  update_status_managed_column(id: String!, title: String, description: String, settings: UpdateStatusColumnSettingsInput, revision: Int!): StatusManagedColumn
-  """
-  Activate managed column mutation.
-  """
-  activate_managed_column(id: String!): ManagedColumn
-  """
-  Deactivate managed column mutation.
-  """
-  deactivate_managed_column(id: String!): ManagedColumn
-  """
-  Delete managed column mutation.
-  """
-  delete_managed_column(id: String!): ManagedColumn
-  """
-  Updates a status column's properties including title, description, and status label settings. Status columns allow users to track item progress through customizable labels (e.g., "Working on it", "Done", "Stuck"). This mutation is specifically for status/color columns and provides type-safe updates.
-  """
-  update_status_column(board_id: ID!, id: String!, title: String, description: String, width: Int, revision: String!, capabilities: StatusColumnCapabilitiesInput, settings: UpdateStatusColumnSettingsInput): Column
-  """
-  Updates a dropdown column's properties including title, description, and dropdown label settings. Dropdown columns allow users to select from a predefined list of options. This mutation is specifically for dropdown columns and provides type-safe updates.
-  """
-  update_dropdown_column(board_id: ID!, id: String!, title: String, description: String, width: Int, revision: String!, settings: UpdateDropdownColumnSettingsInput): Column
-  """
-  Generic mutation for updating any column type with validation. Supports updating column properties like title, description, and type-specific defaults/settings. The mutation validates input against the column type's schema before applying changes. Use get_column_type_schema query to understand available properties for each column type.
-  """
-  update_column(board_id: ID!, id: String!, title: String, description: String, width: Int, revision: String!, capabilities: ColumnCapabilitiesInput, settings: JSON, column_type: ColumnType!): Column
-  """
-  Creates a new status column with strongly typed settings. Status columns allow users to track item progress through customizable labels (e.g., "Working on it", "Done", "Stuck"). This mutation is specifically for status/color columns and provides type-safe creation with label configuration.
-  """
-  create_status_column(board_id: ID!, id: String, title: String!, description: String, after_column_id: ID, capabilities: StatusColumnCapabilitiesInput, defaults: CreateStatusColumnSettingsInput): Column
-  """
-  Creates a new dropdown column with strongly typed settings. Dropdown columns allow users to select from a predefined list of options. This mutation is specifically for dropdown columns and provides type-safe creation with dropdown options configuration.
-  """
-  create_dropdown_column(board_id: ID!, id: String, title: String!, description: String, after_column_id: ID, defaults: CreateDropdownColumnSettingsInput): Column
-  """
-  Generic mutation for creating any column type with validation. Supports creating column with properties like title, description, and type-specific defaults/settings. The mutation validates input against the column type's schema before applying changes. Use get_column_type_schema query to understand available properties for each column type.
-  """
-  create_column(board_id: ID!, id: String, title: String!, description: String, after_column_id: ID, capabilities: ColumnCapabilitiesInput, defaults: JSON, column_type: ColumnType!): Column
-  """
-  Creates a new status column in a board that is linked to a managed column. The column data and settings are controlled by the managed column. Only title and description can be overridden locally.
-  """
-  attach_status_managed_column(board_id: ID!, managed_column_id: ID!, title: String, description: String, after_column_id: ID): Column
-  """
-  Creates a new dropdown column in a board that is linked to a managed column. The column data and settings are controlled by the managed column. Title, description, and dropdown-specific settings (limit_select, label_limit_count) can be overridden locally.
-  """
-  attach_dropdown_managed_column(board_id: ID!, managed_column_id: ID!, title: String, description: String, after_column_id: ID, settings: DropdownSettingsOverridesInput): Column
-  """
-  Create a new account object schema.
-  """
-  create_object_schema(name: String!, parent_id: ID, description: String): ObjectSchema
-  """
-  Update an account object schema.
-  """
-  update_object_schema(id: ID!, revision: Int!, parent_id: ID, description: String): ObjectSchema
-  """
-  Delete an account object schema. Can only delete if there are no boards attached to the object schema. Object schemas define the structure and columns of boards.
-  """
-  delete_object_schema(id: ID, name: String): ObjectSchema
-  """
-  Connect a board to an object schema.
-  """
-  connect_board_to_object_schema(board_id: ID!, object_schema_id: ID, object_schema_name: String): BoardConnection
-  """
-  Create columns on an account object schema.
-  """
-  create_object_schema_columns(object_schema_id: ID, object_schema_name: String, columns: [CreateObjectSchemaColumnInput!]!): ObjectSchema
-  """
-  Deactivate or reactivate a column on an account object schema.
-  """
-  set_object_schema_column_active_state(object_schema_id: ID, object_schema_name: String, column_id: ID!, action: ColumnActiveStateAction!): ObjectSchema
-  """
-  Detach boards from their object schemas.
-  """
-  detach_boards_from_object_schema(board_ids: [ID!]!): [BulkDetachBoardResult!]
-  """
-  Update columns on an account object schema.
-  """
-  update_object_schema_columns(object_schema_id: ID, object_schema_name: String, columns: [UpdateObjectSchemaColumnInput!]!): ObjectSchema
-  """
-  Execute multiple object schema column actions in a single request. Actions are executed sequentially in the order provided. If any action fails, execution stops and an error is returned.
-  """
-  bulk_object_schema_column_actions(object_schema_id: ID, object_schema_name: String, actions: [ObjectSchemaActionInput!]!): [ObjectSchemaActionResult!]
-  """
   Updates a notification setting's enabled status.
   """
   update_notification_setting(scope_type: ScopeType!, scope_id: Int, setting_kind: String!, channel: ChannelType!, enabled: Boolean!): [NotificationSetting!]
@@ -1172,6 +1076,102 @@ type Mutation {
   Delete an existing board subset/view
   """
   delete_view(view_id: ID!, board_id: ID!): BoardView
+  """
+  Create managed column of type dropdown mutation.
+  """
+  create_dropdown_managed_column(title: String!, description: String, settings: CreateDropdownColumnSettingsInput): DropdownManagedColumn
+  """
+  Create managed column of type status mutation.
+  """
+  create_status_managed_column(title: String!, description: String, settings: CreateStatusColumnSettingsInput): StatusManagedColumn
+  """
+  Update managed column of type dropdown mutation.
+  """
+  update_dropdown_managed_column(id: String!, title: String, description: String, settings: UpdateDropdownColumnSettingsInput, revision: Int!): DropdownManagedColumn
+  """
+  Update managed column of type status mutation.
+  """
+  update_status_managed_column(id: String!, title: String, description: String, settings: UpdateStatusColumnSettingsInput, revision: Int!): StatusManagedColumn
+  """
+  Activate managed column mutation.
+  """
+  activate_managed_column(id: String!): ManagedColumn
+  """
+  Deactivate managed column mutation.
+  """
+  deactivate_managed_column(id: String!): ManagedColumn
+  """
+  Delete managed column mutation.
+  """
+  delete_managed_column(id: String!): ManagedColumn
+  """
+  Updates a status column's properties including title, description, and status label settings. Status columns allow users to track item progress through customizable labels (e.g., "Working on it", "Done", "Stuck"). This mutation is specifically for status/color columns and provides type-safe updates.
+  """
+  update_status_column(board_id: ID!, id: String!, title: String, description: String, width: Int, revision: String!, capabilities: StatusColumnCapabilitiesInput, settings: UpdateStatusColumnSettingsInput): Column
+  """
+  Updates a dropdown column's properties including title, description, and dropdown label settings. Dropdown columns allow users to select from a predefined list of options. This mutation is specifically for dropdown columns and provides type-safe updates.
+  """
+  update_dropdown_column(board_id: ID!, id: String!, title: String, description: String, width: Int, revision: String!, settings: UpdateDropdownColumnSettingsInput): Column
+  """
+  Generic mutation for updating any column type with validation. Supports updating column properties like title, description, and type-specific defaults/settings. The mutation validates input against the column type's schema before applying changes. Use get_column_type_schema query to understand available properties for each column type.
+  """
+  update_column(board_id: ID!, id: String!, title: String, description: String, width: Int, revision: String!, capabilities: ColumnCapabilitiesInput, settings: JSON, column_type: ColumnType!): Column
+  """
+  Creates a new status column with strongly typed settings. Status columns allow users to track item progress through customizable labels (e.g., "Working on it", "Done", "Stuck"). This mutation is specifically for status/color columns and provides type-safe creation with label configuration.
+  """
+  create_status_column(board_id: ID!, id: String, title: String!, description: String, after_column_id: ID, capabilities: StatusColumnCapabilitiesInput, defaults: CreateStatusColumnSettingsInput): Column
+  """
+  Creates a new dropdown column with strongly typed settings. Dropdown columns allow users to select from a predefined list of options. This mutation is specifically for dropdown columns and provides type-safe creation with dropdown options configuration.
+  """
+  create_dropdown_column(board_id: ID!, id: String, title: String!, description: String, after_column_id: ID, defaults: CreateDropdownColumnSettingsInput): Column
+  """
+  Generic mutation for creating any column type with validation. Supports creating column with properties like title, description, and type-specific defaults/settings. The mutation validates input against the column type's schema before applying changes. Use get_column_type_schema query to understand available properties for each column type.
+  """
+  create_column(board_id: ID!, id: String, title: String!, description: String, after_column_id: ID, capabilities: ColumnCapabilitiesInput, defaults: JSON, column_type: ColumnType!): Column
+  """
+  Creates a new status column in a board that is linked to a managed column. The column data and settings are controlled by the managed column. Only title and description can be overridden locally.
+  """
+  attach_status_managed_column(board_id: ID!, managed_column_id: ID!, title: String, description: String, after_column_id: ID): Column
+  """
+  Creates a new dropdown column in a board that is linked to a managed column. The column data and settings are controlled by the managed column. Title, description, and dropdown-specific settings (limit_select, label_limit_count) can be overridden locally.
+  """
+  attach_dropdown_managed_column(board_id: ID!, managed_column_id: ID!, title: String, description: String, after_column_id: ID, settings: DropdownSettingsOverridesInput): Column
+  """
+  Create a new account object schema.
+  """
+  create_object_schema(name: String!, parent_id: ID, description: String): ObjectSchema
+  """
+  Update an account object schema.
+  """
+  update_object_schema(id: ID!, revision: Int!, parent_id: ID, description: String): ObjectSchema
+  """
+  Delete an account object schema. Can only delete if there are no boards attached to the object schema. Object schemas define the structure and columns of boards.
+  """
+  delete_object_schema(id: ID, name: String): ObjectSchema
+  """
+  Connect a board to an object schema.
+  """
+  connect_board_to_object_schema(board_id: ID!, object_schema_id: ID, object_schema_name: String): BoardConnection
+  """
+  Create columns on an account object schema.
+  """
+  create_object_schema_columns(object_schema_id: ID, object_schema_name: String, columns: [CreateObjectSchemaColumnInput!]!): ObjectSchema
+  """
+  Deactivate or reactivate a column on an account object schema.
+  """
+  set_object_schema_column_active_state(object_schema_id: ID, object_schema_name: String, column_id: ID!, action: ColumnActiveStateAction!): ObjectSchema
+  """
+  Detach boards from their object schemas.
+  """
+  detach_boards_from_object_schema(board_ids: [ID!]!): [BulkDetachBoardResult!]
+  """
+  Update columns on an account object schema.
+  """
+  update_object_schema_columns(object_schema_id: ID, object_schema_name: String, columns: [UpdateObjectSchemaColumnInput!]!): ObjectSchema
+  """
+  Execute multiple object schema column actions in a single request. Actions are executed sequentially in the order provided. If any action fails, execution stops and an error is returned.
+  """
+  bulk_object_schema_column_actions(object_schema_id: ID, object_schema_name: String, actions: [ObjectSchemaActionInput!]!): [ObjectSchemaActionResult!]
   """
   Add a file to a column value.
   """
@@ -1698,18 +1698,6 @@ type Query {
   Retrieves all service users in the account with their token last activity.
   """
   service_users: [ServiceUser!]
-  """
-  Get managed column data.
-  """
-  managed_column(id: [String!], state: [ManagedColumnState!]): [ManagedColumn!]
-  """
-  Retrieves the JSON schema definition for a specific column type. Use this query before calling update_column mutation to understand the structure and validation rules for the defaults parameter. The schema defines what properties are available when updating columns of a specific type.
-  """
-  get_column_type_schema(type: ColumnType!): JSON
-  """
-  Retrieve active account object schemas by their IDs or names. Only returns account-level object schemas (not global). Object schemas define the structure and columns of boards. If no parameters are provided, all account object schemas are returned. Pass exclude_created_by_monday: true to omit the schemas seeded by monday.com and return only schemas created by users in this account. Results are paginated using page and limit parameters.
-  """
-  get_object_schemas(ids: [ID!], names: [String!], limit: Int, page: Int, exclude_created_by_monday: Boolean): [ObjectSchema!]
   notifications(cursor: ID, limit: Int = 25, filter_read: Boolean, since: ISO8601DateTime): [NotificationV2!]
   """
   Retrieves the current user's notification settings across all available channels.
@@ -1843,6 +1831,18 @@ type Query {
     The schema defines what properties are available when creating views of a specific type.
   """
   get_view_schema_by_type(type: ViewKind!, mutationType: ViewMutationKind!): JSON
+  """
+  Get managed column data.
+  """
+  managed_column(id: [String!], state: [ManagedColumnState!]): [ManagedColumn!]
+  """
+  Retrieves the JSON schema definition for a specific column type. Use this query before calling update_column mutation to understand the structure and validation rules for the defaults parameter. The schema defines what properties are available when updating columns of a specific type.
+  """
+  get_column_type_schema(type: ColumnType!): JSON
+  """
+  Retrieve active account object schemas by their IDs or names. Only returns account-level object schemas (not global). Object schemas define the structure and columns of boards. If no parameters are provided, all account object schemas are returned. Pass exclude_created_by_monday: true to omit the schemas seeded by monday.com and return only schemas created by users in this account. Results are paginated using page and limit parameters.
+  """
+  get_object_schemas(ids: [ID!], names: [String!], limit: Int, page: Int, exclude_created_by_monday: Boolean): [ObjectSchema!]
   """
   Get the connected account's information.
   """
@@ -3528,10 +3528,6 @@ type Board {
   """
   manual_metadata: BoardManualMetadata
   """
-  The board's visible columns.
-  """
-  columns(ids: [String], types: [ColumnType!], capabilities: [ColumnCapability]): [Column]
-  """
   The board's updates with cursor-based pagination.
   """
   updates_page(limit: Int = 25, cursor: String): UpdatesPage
@@ -3543,6 +3539,10 @@ type Board {
   The board's views.
   """
   views(ids: [ID!], type: String): [BoardView]
+  """
+  The board's visible columns.
+  """
+  columns(ids: [String], types: [ColumnType!], capabilities: [ColumnCapability]): [Column]
   """
   The user's permission level for this board (view / edit).
   """
@@ -4217,6 +4217,188 @@ Output format for people column values in CSV exports.
 """
 enum PeopleColumnFormat {
   NAME
+}
+
+"""
+Provider-specific data for Claude managed agents
+"""
+type ClaudeProviderData {
+  """
+  Available environments on this provider
+  """
+  environments: [ProviderResource!]
+  """
+  Available vaults for secret management on this provider
+  """
+  vaults: [ProviderResource!]
+}
+
+"""
+Connect input for a custom external agent reachable via callback URL
+"""
+input ConnectCustomAgentInput {
+  """
+  The display name for the connected agent
+  """
+  name: String!
+  """
+  The HTTPS callback URL the platform invokes for agent events
+  """
+  callback_url: String!
+  """
+  Optional custom avatar URL for the agent (HTTPS). When omitted, a default avatar is used.
+  """
+  avatar_url: String
+}
+
+"""
+Input for connecting an external agent via BYOA (Bring Your Own Agent)
+"""
+input ConnectExternalAgentInput {
+  """
+  The type of external provider (e.g. CLAUDE_MANAGED_AGENT, CUSTOM_AGENT)
+  """
+  external_provider_type: ExternalProvider!
+  """
+  The unique identifier of the agent on the external provider
+  """
+  external_agent_id: ID!
+  """
+  The credential ID used to authenticate with the external provider
+  """
+  credential_id: ID!
+  """
+  The display name for the connected agent
+  """
+  name: String!
+  """
+  Optional environment identifier on the external provider
+  """
+  environment_id: ID
+  """
+  Optional vault identifier for secret management on the external provider
+  """
+  vault_id: ID
+  """
+  Optional callback URL for agent event notifications
+  """
+  callback_url: String
+}
+
+"""
+Payload returned after initiating an external agent connection (async operation)
+"""
+type ConnectExternalAgentPayload {
+  """
+  The connection status (e.g. "connecting"). Final result is delivered via Pusher.
+  """
+  status: String
+}
+
+"""
+Result of a synchronous external-agent connect. agent_id is always present; signing_secret, api_token, and instructions are populated only for custom agents.
+"""
+type ConnectExternalAgentResult {
+  """
+  The internal monday-agents agent ID
+  """
+  agent_id: ID
+  """
+  Custom-agent only — secret used to sign callback requests. Never logged.
+  """
+  signing_secret: String
+  """
+  Custom-agent only — API token for the agent to call back into monday. Never logged.
+  """
+  api_token: String
+  """
+  Custom-agent only — setup instructions for the integrator. Never logged.
+  """
+  instructions: String
+}
+
+"""
+Wrapper input for the synchronous connect mutation. Currently supports custom agents only.
+"""
+input ConnectExternalAgentSyncInput {
+  """
+  Connect a custom agent.
+  """
+  custom: ConnectCustomAgentInput
+}
+
+"""
+Payload returned after disconnecting an external agent
+"""
+type DisconnectExternalAgentPayload {
+  """
+  Whether the disconnection was successful
+  """
+  success: Boolean
+}
+
+"""
+The type of external agent provider
+"""
+enum ExternalProvider {
+  CLAUDE_MANAGED_AGENT
+  CUSTOM_AGENT
+  OPENAI
+}
+
+"""
+Provider-specific data, use inline fragments to access fields per provider type
+"""
+union ExternalProviderData = ClaudeProviderData
+
+"""
+A resource (agent, environment, or vault) available on an external provider
+"""
+type ProviderResource {
+  """
+  The unique identifier of the resource on the provider
+  """
+  id: ID
+  """
+  The display name of the resource
+  """
+  name: String
+}
+
+"""
+Input for updating mutable fields of an existing custom agent
+"""
+input UpdateCustomAgentInput {
+  """
+  The ID of the custom agent to update. Optional when the agent updates itself (inferred from the calling agent identity).
+  """
+  agent_id: ID
+  """
+  New display name for the agent
+  """
+  name: String
+  """
+  New HTTPS callback URL for agent event notifications. Only valid for CUSTOM_AGENT type.
+  """
+  callback_url: String
+  """
+  New custom avatar URL (HTTPS) for the agent.
+  """
+  avatar_url: String
+}
+
+"""
+Payload returned after updating a custom agent
+"""
+type UpdateCustomAgentPayload {
+  """
+  Whether the update was successful
+  """
+  success: Boolean
+  """
+  Custom-agent only — new secret used to sign callback requests, returned when a callback_url is set/updated. Never logged.
+  """
+  signing_secret: String
 }
 
 """
@@ -12231,1254 +12413,6 @@ input UserUpdateInput {
   user_attribute_updates: UserAttributesInput!
 }
 
-"""
-Represents a board and its connection to an object schema.
-"""
-type BoardConnection {
-  """
-  The unique identifier of the board.
-  """
-  id: ID
-  """
-  The object schema ID that this board is connected to.
-  """
-  object_schema_id: ID
-}
-
-"""
-Result of a single board detach operation within a bulk detach request.
-"""
-type BulkDetachBoardResult {
-  """
-  The board ID that was detached.
-  """
-  board_id: ID
-  """
-  Whether the detach operation succeeded.
-  """
-  success: Boolean
-  """
-  Error message if the detach failed.
-  """
-  error: String
-}
-
-"""
-Calculated capability settings for a column
-"""
-type CalculatedCapability {
-  """
-  Function to calculate the parent values
-  """
-  function: CalculatedFunction!
-  """
-  Type of the calculated value
-  """
-  calculated_type: ColumnType
-}
-
-"""
-Input for configuring calculated capability settings on a column
-"""
-input CalculatedCapabilityInput {
-  """
-  Function to calculate the values. If not provided, will use the default function for the column type.
-  """
-  function: CalculatedFunction!
-}
-
-"""
-Available functions for calculating values in column capabilities
-"""
-enum CalculatedFunction {
-  MIN
-  MAX
-  SUM
-  MIN_MAX
-  NONE
-  COUNT_KEYS
-}
-
-"""
-Fields that can be overridden in a column policy
-"""
-enum CanOverrideField {
-  settings
-  title
-  description
-}
-
-"""
-A board-type data view source that is a child of a schema source.
-"""
-type ChildBoardDataViewSource {
-  """
-  The source identifier.
-  """
-  source_id: DataViewSourceId
-  """
-  The parent schema source identifier.
-  """
-  parent_source_id: DataViewSourceId
-}
-
-type Column {
-  """
-  The unique identifier of the column.
-  """
-  id: ID!
-  """
-  The column's title.
-  """
-  title: String!
-  """
-  The column's description.
-  """
-  description: String
-  """
-  The column's type.
-  """
-  type: ColumnType!
-  """
-  The column's width.
-  """
-  width: Int
-  """
-  Is the column archived or not.
-  """
-  archived: Boolean!
-  """
-  The column's settings in a JSON form.
-  """
-  settings: JSON
-  """
-  The column's settings in a string form.
-  """
-  settings_str: String! @deprecated(reason: "From version 2025-10, use settings instead. Will be removed in a future version.")
-  """
-  The revision of the column (fetch to get latest revision). Used for optimistic concurrency control.
-  """
-  revision: String!
-  """
-  Capabilities available for this column
-  """
-  capabilities: ColumnCapabilities!
-}
-
-"""
-Action to perform on an object schema column to change its active state. A column can be reactivated if it was previously deactivated.
-"""
-enum ColumnActiveStateAction {
-  DEACTIVATE
-  REACTIVATE
-}
-
-"""
-Capabilities available for a column
-"""
-type ColumnCapabilities {
-  """
-  Calculated capability settings
-  """
-  calculated: CalculatedCapability
-  """
-  Visibility capability settings
-  """
-  visibility: String
-}
-
-"""
-Input for configuring column capabilities during creation
-"""
-input ColumnCapabilitiesInput {
-  """
-  Calculated capability settings. If provided, enables calculated functionality for the column.
-  """
-  calculated: CalculatedCapabilityInput
-}
-
-"""
-Capabilities supported by the API
-"""
-enum ColumnCapability {
-  CALCULATED
-  VISIBILITY
-}
-
-"""
-Policy rules that control what actions can be performed on a column
-"""
-input ColumnPolicyInput {
-  """
-  User-facing messages explaining why certain actions are disabled
-  """
-  messages: PolicyMessagesInput
-  """
-  List of fields that can be overridden
-  """
-  can_override: [CanOverrideField!]!
-  """
-  Whether the column cannot be deleted
-  """
-  cannot_delete: Boolean!
-}
-
-union ColumnSettings = StatusColumnSettings | DropdownColumnSettings
-
-"""
-Types of columns supported by the API
-"""
-enum ColumnType {
-  auto_number
-  board_relation
-  button
-  checkbox
-  color_picker
-  country
-  creation_log
-  date
-  dependency
-  doc
-  dropdown
-  email
-  file
-  formula
-  group
-  hour
-  integration
-  item_assignees
-  item_id
-  last_updated
-  link
-  location
-  long_text
-  mirror
-  numbers
-  people
-  phone
-  progress
-  rating
-  status
-  tags
-  team
-  text
-  timeline
-  time_tracking
-  vote
-  week
-  world_clock
-  unsupported
-  name
-  person
-  direct_doc
-  subtasks
-}
-
-input CreateDropdownColumnSettingsInput {
-  labels: [CreateDropdownLabelInput!]!
-  """
-  Whether to limit the number of labels that can be selected
-  """
-  limit_select: Boolean
-  """
-  Maximum number of labels that can be selected when limit_select is enabled
-  """
-  label_limit_count: Int
-}
-
-input CreateDropdownLabelInput {
-  label: String!
-}
-
-"""
-Input for creating a new column on an object schema
-"""
-input CreateObjectSchemaColumnInput {
-  """
-  The column type (e.g., "status", "dropdown", "text", "date")
-  """
-  type: ColumnType!
-  """
-  The column title
-  """
-  title: String!
-  """
-  Optional column description
-  """
-  description: String
-  """
-  Type-specific configuration object containing column defaults and settings. Use get_column_type_schema query to see available properties and validation rules. Examples: status column labels, dropdown options, number formatting rules, date display preferences.
-  """
-  defaults: JSON
-  """
-  Whether this column should be opted-out by default on boards. If false or not provided, the column will be automatically included on all boards using this object schema (opt-in by default).
-  """
-  opt_out_by_default: Boolean
-  """
-  Policy rules controlling what can be done with the column
-  """
-  policy: ColumnPolicyInput!
-}
-
-"""
-Input for the create_object_schema_columns action.
-"""
-input CreateObjectSchemaColumnsActionInput {
-  """
-  Array of columns to create.
-  """
-  columns: [CreateObjectSchemaColumnInput!]!
-}
-
-input CreateStatusColumnSettingsInput {
-  labels: [CreateStatusLabelInput!]!
-}
-
-input CreateStatusLabelInput {
-  label: String!
-  color: StatusColumnColors!
-  index: Int!
-  description: String
-  is_done: Boolean
-}
-
-"""
-A data view that aggregates data from multiple sources into a unified structure.
-"""
-type DataView {
-  """
-  The unique identifier of the data view.
-  """
-  id: ID
-  """
-  The name of the data view.
-  """
-  name: String
-  """
-  The description of the data view.
-  """
-  description: String
-  """
-  The target schema of the data view.
-  """
-  target: DataViewTarget
-  """
-  The authorization object associated with the data view.
-  """
-  authorization_object: DataViewAuthorizationObject
-  """
-  The paginated sources of the data view.
-  """
-  sources: DataViewPaginatedSources
-  """
-  The account identifier.
-  """
-  account_id: ID
-  """
-  The user identifier of the creator.
-  """
-  created_by: Int
-  """
-  The date and time of creation.
-  """
-  created_at: Date
-  """
-  The date and time of the last update.
-  """
-  updated_at: Date
-  """
-  The revision number of the data view.
-  """
-  revision: Int
-  """
-  Whether the data view is archived.
-  """
-  archived: Boolean
-}
-
-"""
-The kind of object that authorizes access to a data view.
-"""
-enum DataViewAuthorizationKind {
-  BOARD
-}
-
-"""
-The authorization object associated with a data view.
-"""
-type DataViewAuthorizationObject {
-  """
-  The identifier of the authorization object.
-  """
-  id: ID
-  """
-  The type of the authorization object.
-  """
-  type: String
-}
-
-"""
-The authorization object that gates access to the data view.
-"""
-input DataViewAuthorizationObjectInput {
-  """
-  The identifier of the authorization object.
-  """
-  id: ID!
-  """
-  The type of the authorization object.
-  """
-  type: DataViewAuthorizationKind!
-}
-
-"""
-The result of calculating a data view target schema and per-source column mappings.
-"""
-type DataViewAutomapping {
-  """
-  The calculated (or provided) target schema.
-  """
-  target: DataViewTarget
-  """
-  The calculated sources with their mappings and errors.
-  """
-  sources: DataViewAutomappingSources
-}
-
-"""
-The calculated sources of a data view automapping, each with its computed mappings and errors.
-"""
-type DataViewAutomappingSources {
-  """
-  The calculated sources.
-  """
-  items: [DataViewSource!]
-}
-
-"""
-A column definition within a data view target.
-"""
-type DataViewColumn {
-  """
-  The unique identifier of the column.
-  """
-  id: ID
-  """
-  The display title of the column.
-  """
-  title: String
-  """
-  The column type.
-  """
-  type: String
-  """
-  For mirror/lookup columns, the type of the column being displayed.
-  """
-  sub_type: String
-  """
-  The column settings.
-  """
-  settings: JSON
-  """
-  The column labels.
-  """
-  labels: JSON
-  """
-  The column label positions.
-  """
-  labels_positions_v2: JSON
-  """
-  Whether the column is archived.
-  """
-  archived: Boolean
-  """
-  The column description.
-  """
-  description: String
-  """
-  The column model identifier.
-  """
-  column_model_id: ID
-  """
-  The column model strategy.
-  """
-  column_model_strategy: String
-  """
-  The global column identifier.
-  """
-  global_column_id: ID
-  """
-  The numeric column unit settings.
-  """
-  unit: JSON
-}
-
-"""
-A column definition within a data view target.
-"""
-input DataViewColumnInput {
-  """
-  The unique identifier of the column.
-  """
-  id: ID!
-  """
-  The display title of the column.
-  """
-  title: String
-  """
-  The column type.
-  """
-  type: String
-  """
-  For mirror/lookup columns, the type of the column being displayed.
-  """
-  sub_type: ColumnType
-  """
-  The column settings.
-  """
-  settings: JSON
-  """
-  The column labels.
-  """
-  labels: JSON
-  """
-  The column label positions.
-  """
-  labels_positions_v2: JSON
-  """
-  Whether the column is archived.
-  """
-  archived: Boolean
-  """
-  The column description.
-  """
-  description: String
-  """
-  The column model identifier.
-  """
-  column_model_id: ID
-  """
-  The column model strategy.
-  """
-  column_model_strategy: String
-  """
-  The global column identifier.
-  """
-  global_column_id: ID
-  """
-  The numeric column unit settings.
-  """
-  unit: JSON
-}
-
-"""
-A column-level error indicating an issue with a specific column in the source.
-"""
-type DataViewColumnLevelError {
-  """
-  The error type discriminator.
-  """
-  type: String
-  """
-  The error code.
-  """
-  error: String
-  """
-  The identifier of the column with the error.
-  """
-  column_id: ID
-}
-
-"""
-A mapping between a source column and a target column.
-"""
-type DataViewColumnMapping {
-  """
-  The source column identifier.
-  """
-  source_column_id: ID
-  """
-  The target column identifier.
-  """
-  target_column_id: ID
-}
-
-"""
-A mapping between a source column and a target column.
-"""
-input DataViewColumnMappingInput {
-  """
-  The source column identifier.
-  """
-  source_column_id: ID!
-  """
-  The target column identifier.
-  """
-  target_column_id: ID!
-}
-
-"""
-A paginated list of data view sources.
-"""
-type DataViewPaginatedSources {
-  """
-  The data view sources for the current page.
-  """
-  items: [DataViewSource!]
-  """
-  The pagination metadata.
-  """
-  pagination: DataViewPaginationMetadata
-}
-
-"""
-Pagination metadata for data view sources.
-"""
-type DataViewPaginationMetadata {
-  """
-  The current page number.
-  """
-  page: Int
-  """
-  The number of items per page.
-  """
-  page_size: Int
-  """
-  The total number of items.
-  """
-  total_count: Int
-  """
-  The total number of pages.
-  """
-  total_pages: Int
-}
-
-"""
-A union of possible data view source types.
-"""
-union DataViewSource = StandaloneBoardDataViewSource | ChildBoardDataViewSource | EntityDataViewSource
-
-"""
-A column of a data view source, used to render source column options.
-"""
-type DataViewSourceColumn {
-  """
-  The column identifier.
-  """
-  id: ID
-  """
-  The column title.
-  """
-  title: String
-  """
-  The column type.
-  """
-  type: String
-}
-
-"""
-A union of possible source errors.
-"""
-union DataViewSourceError = DataViewColumnLevelError
-
-"""
-The identifier of a data view source, consisting of an id and type that uniquely identify the source
-"""
-type DataViewSourceId {
-  """
-  The object identifier.
-  """
-  object_id: ID
-  """
-  The object type.
-  """
-  object_type: String
-}
-
-"""
-The identifier of a data view source, consisting of an id and type that uniquely identify the source.
-"""
-input DataViewSourceIdInput {
-  """
-  The object identifier.
-  """
-  object_id: ID!
-  """
-  The object type.
-  """
-  object_type: DataViewSourceKind!
-}
-
-"""
-A source to include in a data view.
-"""
-input DataViewSourceInput {
-  """
-  The source identifier.
-  """
-  source_id: DataViewSourceIdInput!
-  """
-  The column mappings for this source. If omitted, mappings are auto-calculated by the server.
-  """
-  mappings: [DataViewColumnMappingInput!]
-}
-
-"""
-The kind of object backing a data view source.
-"""
-enum DataViewSourceKind {
-  BOARD
-  DATA_ENTITY
-}
-
-"""
-The target schema of a data view, defining the unified column structure.
-"""
-type DataViewTarget {
-  """
-  The columns in the target schema.
-  """
-  columns: [DataViewColumn!]
-  """
-  The column configurations for the target.
-  """
-  column_configurations: JSON
-}
-
-"""
-The target schema of a data view, defining the unified column structure.
-"""
-input DataViewTargetInput {
-  """
-  The columns in the target schema.
-  """
-  columns: [DataViewColumnInput!]!
-  """
-  The column configurations for the target, keyed by column id.
-  """
-  column_configurations: JSON
-}
-
-"""
-Input for the delete_object_schema_columns action.
-"""
-input DeleteObjectSchemaColumnsActionInput {
-  """
-  The IDs of the columns to delete.
-  """
-  column_ids: [ID!]!
-}
-
-"""
-Reasons why specific actions are disabled on a column
-"""
-input DisabledReasonInput {
-  """
-  Reason why the column cannot be deleted
-  """
-  delete: String
-  """
-  Reason why the column title cannot be edited
-  """
-  edit_title: String
-  """
-  Reason why the column labels cannot be edited
-  """
-  edit_labels: String
-  """
-  Reason why the column settings cannot be edited
-  """
-  edit_settings: String
-  """
-  Reason why the column description cannot be edited
-  """
-  edit_description: String
-  """
-  Reason why the column label positions cannot be edited
-  """
-  edit_labels_positions_v2: String
-}
-
-type DropdownColumnSettings {
-  type: ManagedColumnTypes
-  labels: [DropdownLabel!]
-}
-
-type DropdownLabel {
-  id: Int
-  label: String
-  is_deactivated: Boolean
-}
-
-type DropdownManagedColumn {
-  id: String
-  title: String
-  description: String
-  settings_json: JSON
-  created_by: ID
-  updated_by: ID
-  revision: Int
-  state: ManagedColumnState
-  """
-  The date and time of creation.
-  """
-  created_at: Date
-  """
-  The date and time of the last update.
-  """
-  updated_at: Date
-  settings: DropdownColumnSettings
-}
-
-"""
-Overridable settings for dropdown columns attached to a managed column.
-"""
-input DropdownSettingsOverridesInput {
-  """
-  Whether to limit the number of selectable labels.
-  """
-  limit_select: Boolean
-  """
-  Maximum number of labels that can be selected when limit_select is enabled.
-  """
-  label_limit_count: Int
-}
-
-"""
-A schema-type data view source.
-"""
-type EntityDataViewSource {
-  """
-  The source identifier.
-  """
-  source_id: DataViewSourceId
-  """
-  The column mappings for this source.
-  """
-  mappings: [DataViewColumnMapping!]
-  """
-  The errors associated with this source.
-  """
-  errors: [DataViewSourceError!]
-  """
-  The live columns of this source. Populated by the automapping query.
-  """
-  columns: [DataViewSourceColumn!]
-  """
-  Number of child board sources under this schema.
-  """
-  children_count: Int
-}
-
-type ManagedColumn {
-  id: String
-  title: String
-  description: String
-  settings_json: JSON
-  created_by: ID
-  updated_by: ID
-  revision: Int
-  state: ManagedColumnState
-  """
-  The date and time of creation.
-  """
-  created_at: Date
-  """
-  The date and time of the last update.
-  """
-  updated_at: Date
-  settings: ColumnSettings
-}
-
-enum ManagedColumnState {
-  active
-  deleted
-  inactive
-}
-
-enum ManagedColumnTypes {
-  status
-  dropdown
-}
-
-"""
-Represents an account-level object schema that can be customized per account.
-"""
-type ObjectSchema {
-  """
-  The unique identifier of the object schema.
-  """
-  id: ID!
-  """
-  The account ID this object schema belongs to.
-  """
-  account_id: ID!
-  """
-  The user ID who created this object schema.
-  """
-  created_by: ID!
-  """
-  The revision number for optimistic locking.
-  """
-  revision: Int!
-  """
-  The date and time of creation.
-  """
-  created_at: Date
-  """
-  The date and time of the last update.
-  """
-  updated_at: Date
-  """
-  The columns defined in this object schema.
-  """
-  columns: [ObjectSchemaColumn!]!
-  """
-  The ID of the parent object schema (typically a global object schema).
-  """
-  parent_id: ID
-  """
-  The name of this object schema.
-  """
-  name: String
-  """
-  The description for this object schema.
-  """
-  description: String
-  """
-  The number of boards connected to this object schema.
-  """
-  connected_boards_count: Int!
-}
-
-"""
-The type of column action to perform in a bulk object schema mutation.
-"""
-enum ObjectSchemaAction {
-  CREATE_OBJECT_SCHEMA_COLUMNS
-  UPDATE_OBJECT_SCHEMA_COLUMNS
-  DELETE_OBJECT_SCHEMA_COLUMNS
-}
-
-"""
-A single action in a bulk object schema mutation. Provide the action type and the corresponding input field.
-"""
-input ObjectSchemaActionInput {
-  """
-  The type of action to perform.
-  """
-  action: ObjectSchemaAction!
-  """
-  Input for create_object_schema_columns action. Required when action is create_object_schema_columns.
-  """
-  create_object_schema_columns: CreateObjectSchemaColumnsActionInput
-  """
-  Input for update_object_schema_columns action. Required when action is update_object_schema_columns.
-  """
-  update_object_schema_columns: UpdateObjectSchemaColumnsActionInput
-  """
-  Input for delete_object_schema_columns action. Required when action is delete_object_schema_columns.
-  """
-  delete_object_schema_columns: DeleteObjectSchemaColumnsActionInput
-}
-
-"""
-Result of a single action within a bulk object schema mutation.
-"""
-type ObjectSchemaActionResult {
-  """
-  The type of action that was performed.
-  """
-  action: ObjectSchemaAction
-  """
-  The resulting object schema after the action.
-  """
-  object_schema: ObjectSchema
-}
-
-"""
-A column definition within an object schema.
-"""
-type ObjectSchemaColumn {
-  """
-  The unique identifier of the column.
-  """
-  id: ID
-  """
-  The column's title.
-  """
-  title: String!
-  """
-  The column's type.
-  """
-  type: ColumnType
-  """
-  The column's description.
-  """
-  description: String
-  """
-  The column's settings in a JSON form.
-  """
-  settings: JSON
-  """
-  Policy rules for this column.
-  """
-  policy: ObjectSchemaColumnPolicy
-  """
-  Tags indicating column status (deprecated, inherited, etc.).
-  """
-  tags: ObjectSchemaColumnTags
-}
-
-"""
-Policy rules governing how an object schema column can be modified.
-"""
-type ObjectSchemaColumnPolicy {
-  """
-  List of column properties that can be overridden by board-level columns.
-  """
-  can_override: [String!]!
-  """
-  Whether this column is protected from deletion.
-  """
-  cannot_delete: Boolean!
-  """
-  Whether this column is read-only.
-  """
-  read_only: Boolean!
-  """
-  Policy-related messages, such as disabled reasons.
-  """
-  messages: JSON
-}
-
-"""
-Tags applied to an object schema column indicating its status or behavior.
-"""
-type ObjectSchemaColumnTags {
-  """
-  Deprecation info with a start timestamp, if the column is deprecated.
-  """
-  deprecated: JSON
-  """
-  Opt-in by default info with an optional end timestamp.
-  """
-  opt_in_by_default: JSON
-  """
-  Whether this column is inherited from a parent object schema.
-  """
-  inherited: Boolean
-}
-
-"""
-Policy messages that explain why certain actions are disabled on a column
-"""
-input PolicyMessagesInput {
-  """
-  Structured reasons for disabled actions
-  """
-  disabled_reason: DisabledReasonInput
-}
-
-"""
-A standalone board-type data view source.
-"""
-type StandaloneBoardDataViewSource {
-  """
-  The source identifier.
-  """
-  source_id: DataViewSourceId
-  """
-  The column mappings for this source.
-  """
-  mappings: [DataViewColumnMapping!]
-  """
-  The errors associated with this source.
-  """
-  errors: [DataViewSourceError!]
-  """
-  The live columns of this source. Populated by the automapping query.
-  """
-  columns: [DataViewSourceColumn!]
-}
-
-"""
-Input for configuring calculated capability settings on a status column
-"""
-input StatusCalculatedCapabilityInput {
-  """
-  Function to calculate the values. For status columns, only COUNT_KEYS function is supported.
-  """
-  function: StatusCalculatedFunction!
-}
-
-"""
-Available functions for calculating values in status column capabilities
-"""
-enum StatusCalculatedFunction {
-  COUNT_KEYS
-}
-
-"""
-Input for configuring status column capabilities during creation
-"""
-input StatusColumnCapabilitiesInput {
-  """
-  Calculated capability settings. If provided, enables calculated functionality for the status column.
-  """
-  calculated: StatusCalculatedCapabilityInput
-}
-
-enum StatusColumnColors {
-  working_orange
-  done_green
-  stuck_red
-  dark_blue
-  purple
-  explosive
-  grass_green
-  bright_blue
-  saladish
-  egg_yolk
-  blackish
-  dark_red
-  sofia_pink
-  lipstick
-  dark_purple
-  bright_green
-  chili_blue
-  american_gray
-  brown
-  dark_orange
-  sunset
-  bubble
-  peach
-  berry
-  winter
-  river
-  navy
-  aquamarine
-  indigo
-  dark_indigo
-  pecan
-  lavender
-  royal
-  steel
-  orchid
-  lilac
-  tan
-  sky
-  coffee
-  teal
-}
-
-type StatusColumnSettings {
-  type: ManagedColumnTypes
-  labels: [StatusLabel!]
-}
-
-type StatusLabel {
-  id: Int
-  label: String
-  color: StatusColumnColors
-  index: Int
-  description: String
-  is_deactivated: Boolean
-  is_done: Boolean
-}
-
-type StatusManagedColumn {
-  id: String
-  title: String
-  description: String
-  settings_json: JSON
-  created_by: ID
-  updated_by: ID
-  revision: Int
-  state: ManagedColumnState
-  """
-  The date and time of creation.
-  """
-  created_at: Date
-  """
-  The date and time of the last update.
-  """
-  updated_at: Date
-  settings: StatusColumnSettings
-}
-
-input UpdateDropdownColumnSettingsInput {
-  labels: [UpdateDropdownLabelInput!]!
-  """
-  Whether to limit the number of labels that can be selected
-  """
-  limit_select: Boolean
-  """
-  Maximum number of labels that can be selected when limit_select is enabled
-  """
-  label_limit_count: Int
-}
-
-input UpdateDropdownLabelInput {
-  label: String!
-  id: Int
-  is_deactivated: Boolean
-}
-
-"""
-Input for updating an existing column on an object schema
-"""
-input UpdateObjectSchemaColumnInput {
-  """
-  The ID of the column to update
-  """
-  column_id: ID!
-  """
-  The column title
-  """
-  title: String
-  """
-  Optional column description
-  """
-  description: String
-  """
-  Type-specific configuration object containing column defaults and settings. Use get_column_type_schema query to see available properties and validation rules. Examples: status column labels, dropdown options, number formatting rules, date display preferences.
-  """
-  defaults: JSON
-  """
-  Whether this column should be opted-out by default on boards. If false, the column will be automatically included on all boards using this object schema (opt-in by default).
-  """
-  opt_out_by_default: Boolean
-  """
-  Policy rules controlling what can be done with the column
-  """
-  policy: ColumnPolicyInput
-}
-
-"""
-Input for the update_object_schema_columns action.
-"""
-input UpdateObjectSchemaColumnsActionInput {
-  """
-  Array of column updates.
-  """
-  columns: [UpdateObjectSchemaColumnInput!]!
-}
-
-input UpdateStatusColumnSettingsInput {
-  labels: [UpdateStatusLabelInput!]!
-}
-
-input UpdateStatusLabelInput {
-  label: String!
-  color: StatusColumnColors!
-  index: Int!
-  description: String
-  is_done: Boolean
-  id: Int
-  is_deactivated: Boolean
-}
-
 type BoardMuteSettings {
   """
   Board ID
@@ -17699,188 +16633,6 @@ type CreatePortfolioResult {
 }
 
 """
-Provider-specific data for Claude managed agents
-"""
-type ClaudeProviderData {
-  """
-  Available environments on this provider
-  """
-  environments: [ProviderResource!]
-  """
-  Available vaults for secret management on this provider
-  """
-  vaults: [ProviderResource!]
-}
-
-"""
-Connect input for a custom external agent reachable via callback URL
-"""
-input ConnectCustomAgentInput {
-  """
-  The display name for the connected agent
-  """
-  name: String!
-  """
-  The HTTPS callback URL the platform invokes for agent events
-  """
-  callback_url: String!
-  """
-  Optional custom avatar URL for the agent (HTTPS). When omitted, a default avatar is used.
-  """
-  avatar_url: String
-}
-
-"""
-Input for connecting an external agent via BYOA (Bring Your Own Agent)
-"""
-input ConnectExternalAgentInput {
-  """
-  The type of external provider (e.g. CLAUDE_MANAGED_AGENT, CUSTOM_AGENT)
-  """
-  external_provider_type: ExternalProvider!
-  """
-  The unique identifier of the agent on the external provider
-  """
-  external_agent_id: ID!
-  """
-  The credential ID used to authenticate with the external provider
-  """
-  credential_id: ID!
-  """
-  The display name for the connected agent
-  """
-  name: String!
-  """
-  Optional environment identifier on the external provider
-  """
-  environment_id: ID
-  """
-  Optional vault identifier for secret management on the external provider
-  """
-  vault_id: ID
-  """
-  Optional callback URL for agent event notifications
-  """
-  callback_url: String
-}
-
-"""
-Payload returned after initiating an external agent connection (async operation)
-"""
-type ConnectExternalAgentPayload {
-  """
-  The connection status (e.g. "connecting"). Final result is delivered via Pusher.
-  """
-  status: String
-}
-
-"""
-Result of a synchronous external-agent connect. agent_id is always present; signing_secret, api_token, and instructions are populated only for custom agents.
-"""
-type ConnectExternalAgentResult {
-  """
-  The internal monday-agents agent ID
-  """
-  agent_id: ID
-  """
-  Custom-agent only — secret used to sign callback requests. Never logged.
-  """
-  signing_secret: String
-  """
-  Custom-agent only — API token for the agent to call back into monday. Never logged.
-  """
-  api_token: String
-  """
-  Custom-agent only — setup instructions for the integrator. Never logged.
-  """
-  instructions: String
-}
-
-"""
-Wrapper input for the synchronous connect mutation. Currently supports custom agents only.
-"""
-input ConnectExternalAgentSyncInput {
-  """
-  Connect a custom agent.
-  """
-  custom: ConnectCustomAgentInput
-}
-
-"""
-Payload returned after disconnecting an external agent
-"""
-type DisconnectExternalAgentPayload {
-  """
-  Whether the disconnection was successful
-  """
-  success: Boolean
-}
-
-"""
-The type of external agent provider
-"""
-enum ExternalProvider {
-  CLAUDE_MANAGED_AGENT
-  CUSTOM_AGENT
-  OPENAI
-}
-
-"""
-Provider-specific data, use inline fragments to access fields per provider type
-"""
-union ExternalProviderData = ClaudeProviderData
-
-"""
-A resource (agent, environment, or vault) available on an external provider
-"""
-type ProviderResource {
-  """
-  The unique identifier of the resource on the provider
-  """
-  id: ID
-  """
-  The display name of the resource
-  """
-  name: String
-}
-
-"""
-Input for updating mutable fields of an existing custom agent
-"""
-input UpdateCustomAgentInput {
-  """
-  The ID of the custom agent to update
-  """
-  agent_id: Int!
-  """
-  New display name for the agent
-  """
-  name: String
-  """
-  New HTTPS callback URL for agent event notifications. Only valid for CUSTOM_AGENT type.
-  """
-  callback_url: String
-  """
-  New custom avatar URL (HTTPS) for the agent.
-  """
-  avatar_url: String
-}
-
-"""
-Payload returned after updating a custom agent
-"""
-type UpdateCustomAgentPayload {
-  """
-  Whether the update was successful
-  """
-  success: Boolean
-  """
-  Custom-agent only — new secret used to sign callback requests, returned when a callback_url is set/updated. Never logged.
-  """
-  signing_secret: String
-}
-
-"""
 Structured result data for a completed or partially-completed operation
 """
 type AsyncJobResult {
@@ -19178,6 +17930,1254 @@ type UpsertEntityIdMappingsResult {
   The number of mappings that were upserted.
   """
   count: Int
+}
+
+"""
+Represents a board and its connection to an object schema.
+"""
+type BoardConnection {
+  """
+  The unique identifier of the board.
+  """
+  id: ID
+  """
+  The object schema ID that this board is connected to.
+  """
+  object_schema_id: ID
+}
+
+"""
+Result of a single board detach operation within a bulk detach request.
+"""
+type BulkDetachBoardResult {
+  """
+  The board ID that was detached.
+  """
+  board_id: ID
+  """
+  Whether the detach operation succeeded.
+  """
+  success: Boolean
+  """
+  Error message if the detach failed.
+  """
+  error: String
+}
+
+"""
+Calculated capability settings for a column
+"""
+type CalculatedCapability {
+  """
+  Function to calculate the parent values
+  """
+  function: CalculatedFunction!
+  """
+  Type of the calculated value
+  """
+  calculated_type: ColumnType
+}
+
+"""
+Input for configuring calculated capability settings on a column
+"""
+input CalculatedCapabilityInput {
+  """
+  Function to calculate the values. If not provided, will use the default function for the column type.
+  """
+  function: CalculatedFunction!
+}
+
+"""
+Available functions for calculating values in column capabilities
+"""
+enum CalculatedFunction {
+  MIN
+  MAX
+  SUM
+  MIN_MAX
+  NONE
+  COUNT_KEYS
+}
+
+"""
+Fields that can be overridden in a column policy
+"""
+enum CanOverrideField {
+  settings
+  title
+  description
+}
+
+"""
+A board-type data view source that is a child of a schema source.
+"""
+type ChildBoardDataViewSource {
+  """
+  The source identifier.
+  """
+  source_id: DataViewSourceId
+  """
+  The parent schema source identifier.
+  """
+  parent_source_id: DataViewSourceId
+}
+
+type Column {
+  """
+  The unique identifier of the column.
+  """
+  id: ID!
+  """
+  The column's title.
+  """
+  title: String!
+  """
+  The column's description.
+  """
+  description: String
+  """
+  The column's type.
+  """
+  type: ColumnType!
+  """
+  The column's width.
+  """
+  width: Int
+  """
+  Is the column archived or not.
+  """
+  archived: Boolean!
+  """
+  The column's settings in a JSON form.
+  """
+  settings: JSON
+  """
+  The column's settings in a string form.
+  """
+  settings_str: String! @deprecated(reason: "From version 2025-10, use settings instead. Will be removed in a future version.")
+  """
+  The revision of the column (fetch to get latest revision). Used for optimistic concurrency control.
+  """
+  revision: String!
+  """
+  Capabilities available for this column
+  """
+  capabilities: ColumnCapabilities!
+}
+
+"""
+Action to perform on an object schema column to change its active state. A column can be reactivated if it was previously deactivated.
+"""
+enum ColumnActiveStateAction {
+  DEACTIVATE
+  REACTIVATE
+}
+
+"""
+Capabilities available for a column
+"""
+type ColumnCapabilities {
+  """
+  Calculated capability settings
+  """
+  calculated: CalculatedCapability
+  """
+  Visibility capability settings
+  """
+  visibility: String
+}
+
+"""
+Input for configuring column capabilities during creation
+"""
+input ColumnCapabilitiesInput {
+  """
+  Calculated capability settings. If provided, enables calculated functionality for the column.
+  """
+  calculated: CalculatedCapabilityInput
+}
+
+"""
+Capabilities supported by the API
+"""
+enum ColumnCapability {
+  CALCULATED
+  VISIBILITY
+}
+
+"""
+Policy rules that control what actions can be performed on a column
+"""
+input ColumnPolicyInput {
+  """
+  User-facing messages explaining why certain actions are disabled
+  """
+  messages: PolicyMessagesInput
+  """
+  List of fields that can be overridden
+  """
+  can_override: [CanOverrideField!]!
+  """
+  Whether the column cannot be deleted
+  """
+  cannot_delete: Boolean!
+}
+
+union ColumnSettings = StatusColumnSettings | DropdownColumnSettings
+
+"""
+Types of columns supported by the API
+"""
+enum ColumnType {
+  auto_number
+  board_relation
+  button
+  checkbox
+  color_picker
+  country
+  creation_log
+  date
+  dependency
+  doc
+  dropdown
+  email
+  file
+  formula
+  group
+  hour
+  integration
+  item_assignees
+  item_id
+  last_updated
+  link
+  location
+  long_text
+  mirror
+  numbers
+  people
+  phone
+  progress
+  rating
+  status
+  tags
+  team
+  text
+  timeline
+  time_tracking
+  vote
+  week
+  world_clock
+  unsupported
+  name
+  person
+  direct_doc
+  subtasks
+}
+
+input CreateDropdownColumnSettingsInput {
+  labels: [CreateDropdownLabelInput!]!
+  """
+  Whether to limit the number of labels that can be selected
+  """
+  limit_select: Boolean
+  """
+  Maximum number of labels that can be selected when limit_select is enabled
+  """
+  label_limit_count: Int
+}
+
+input CreateDropdownLabelInput {
+  label: String!
+}
+
+"""
+Input for creating a new column on an object schema
+"""
+input CreateObjectSchemaColumnInput {
+  """
+  The column type (e.g., "status", "dropdown", "text", "date")
+  """
+  type: ColumnType!
+  """
+  The column title
+  """
+  title: String!
+  """
+  Optional column description
+  """
+  description: String
+  """
+  Type-specific configuration object containing column defaults and settings. Use get_column_type_schema query to see available properties and validation rules. Examples: status column labels, dropdown options, number formatting rules, date display preferences.
+  """
+  defaults: JSON
+  """
+  Whether this column should be opted-out by default on boards. If false or not provided, the column will be automatically included on all boards using this object schema (opt-in by default).
+  """
+  opt_out_by_default: Boolean
+  """
+  Policy rules controlling what can be done with the column
+  """
+  policy: ColumnPolicyInput!
+}
+
+"""
+Input for the create_object_schema_columns action.
+"""
+input CreateObjectSchemaColumnsActionInput {
+  """
+  Array of columns to create.
+  """
+  columns: [CreateObjectSchemaColumnInput!]!
+}
+
+input CreateStatusColumnSettingsInput {
+  labels: [CreateStatusLabelInput!]!
+}
+
+input CreateStatusLabelInput {
+  label: String!
+  color: StatusColumnColors!
+  index: Int!
+  description: String
+  is_done: Boolean
+}
+
+"""
+A data view that aggregates data from multiple sources into a unified structure.
+"""
+type DataView {
+  """
+  The unique identifier of the data view.
+  """
+  id: ID
+  """
+  The name of the data view.
+  """
+  name: String
+  """
+  The description of the data view.
+  """
+  description: String
+  """
+  The target schema of the data view.
+  """
+  target: DataViewTarget
+  """
+  The authorization object associated with the data view.
+  """
+  authorization_object: DataViewAuthorizationObject
+  """
+  The paginated sources of the data view.
+  """
+  sources: DataViewPaginatedSources
+  """
+  The account identifier.
+  """
+  account_id: ID
+  """
+  The user identifier of the creator.
+  """
+  created_by: Int
+  """
+  The date and time of creation.
+  """
+  created_at: Date
+  """
+  The date and time of the last update.
+  """
+  updated_at: Date
+  """
+  The revision number of the data view.
+  """
+  revision: Int
+  """
+  Whether the data view is archived.
+  """
+  archived: Boolean
+}
+
+"""
+The kind of object that authorizes access to a data view.
+"""
+enum DataViewAuthorizationKind {
+  BOARD
+}
+
+"""
+The authorization object associated with a data view.
+"""
+type DataViewAuthorizationObject {
+  """
+  The identifier of the authorization object.
+  """
+  id: ID
+  """
+  The type of the authorization object.
+  """
+  type: String
+}
+
+"""
+The authorization object that gates access to the data view.
+"""
+input DataViewAuthorizationObjectInput {
+  """
+  The identifier of the authorization object.
+  """
+  id: ID!
+  """
+  The type of the authorization object.
+  """
+  type: DataViewAuthorizationKind!
+}
+
+"""
+The result of calculating a data view target schema and per-source column mappings.
+"""
+type DataViewAutomapping {
+  """
+  The calculated (or provided) target schema.
+  """
+  target: DataViewTarget
+  """
+  The calculated sources with their mappings and errors.
+  """
+  sources: DataViewAutomappingSources
+}
+
+"""
+The calculated sources of a data view automapping, each with its computed mappings and errors.
+"""
+type DataViewAutomappingSources {
+  """
+  The calculated sources.
+  """
+  items: [DataViewSource!]
+}
+
+"""
+A column definition within a data view target.
+"""
+type DataViewColumn {
+  """
+  The unique identifier of the column.
+  """
+  id: ID
+  """
+  The display title of the column.
+  """
+  title: String
+  """
+  The column type.
+  """
+  type: String
+  """
+  For mirror/lookup columns, the type of the column being displayed.
+  """
+  sub_type: String
+  """
+  The column settings.
+  """
+  settings: JSON
+  """
+  The column labels.
+  """
+  labels: JSON
+  """
+  The column label positions.
+  """
+  labels_positions_v2: JSON
+  """
+  Whether the column is archived.
+  """
+  archived: Boolean
+  """
+  The column description.
+  """
+  description: String
+  """
+  The column model identifier.
+  """
+  column_model_id: ID
+  """
+  The column model strategy.
+  """
+  column_model_strategy: String
+  """
+  The global column identifier.
+  """
+  global_column_id: ID
+  """
+  The numeric column unit settings.
+  """
+  unit: JSON
+}
+
+"""
+A column definition within a data view target.
+"""
+input DataViewColumnInput {
+  """
+  The unique identifier of the column.
+  """
+  id: ID!
+  """
+  The display title of the column.
+  """
+  title: String
+  """
+  The column type.
+  """
+  type: String
+  """
+  For mirror/lookup columns, the type of the column being displayed.
+  """
+  sub_type: ColumnType
+  """
+  The column settings.
+  """
+  settings: JSON
+  """
+  The column labels.
+  """
+  labels: JSON
+  """
+  The column label positions.
+  """
+  labels_positions_v2: JSON
+  """
+  Whether the column is archived.
+  """
+  archived: Boolean
+  """
+  The column description.
+  """
+  description: String
+  """
+  The column model identifier.
+  """
+  column_model_id: ID
+  """
+  The column model strategy.
+  """
+  column_model_strategy: String
+  """
+  The global column identifier.
+  """
+  global_column_id: ID
+  """
+  The numeric column unit settings.
+  """
+  unit: JSON
+}
+
+"""
+A column-level error indicating an issue with a specific column in the source.
+"""
+type DataViewColumnLevelError {
+  """
+  The error type discriminator.
+  """
+  type: String
+  """
+  The error code.
+  """
+  error: String
+  """
+  The identifier of the column with the error.
+  """
+  column_id: ID
+}
+
+"""
+A mapping between a source column and a target column.
+"""
+type DataViewColumnMapping {
+  """
+  The source column identifier.
+  """
+  source_column_id: ID
+  """
+  The target column identifier.
+  """
+  target_column_id: ID
+}
+
+"""
+A mapping between a source column and a target column.
+"""
+input DataViewColumnMappingInput {
+  """
+  The source column identifier.
+  """
+  source_column_id: ID!
+  """
+  The target column identifier.
+  """
+  target_column_id: ID!
+}
+
+"""
+A paginated list of data view sources.
+"""
+type DataViewPaginatedSources {
+  """
+  The data view sources for the current page.
+  """
+  items: [DataViewSource!]
+  """
+  The pagination metadata.
+  """
+  pagination: DataViewPaginationMetadata
+}
+
+"""
+Pagination metadata for data view sources.
+"""
+type DataViewPaginationMetadata {
+  """
+  The current page number.
+  """
+  page: Int
+  """
+  The number of items per page.
+  """
+  page_size: Int
+  """
+  The total number of items.
+  """
+  total_count: Int
+  """
+  The total number of pages.
+  """
+  total_pages: Int
+}
+
+"""
+A union of possible data view source types.
+"""
+union DataViewSource = StandaloneBoardDataViewSource | ChildBoardDataViewSource | EntityDataViewSource
+
+"""
+A column of a data view source, used to render source column options.
+"""
+type DataViewSourceColumn {
+  """
+  The column identifier.
+  """
+  id: ID
+  """
+  The column title.
+  """
+  title: String
+  """
+  The column type.
+  """
+  type: String
+}
+
+"""
+A union of possible source errors.
+"""
+union DataViewSourceError = DataViewColumnLevelError
+
+"""
+The identifier of a data view source, consisting of an id and type that uniquely identify the source
+"""
+type DataViewSourceId {
+  """
+  The object identifier.
+  """
+  object_id: ID
+  """
+  The object type.
+  """
+  object_type: String
+}
+
+"""
+The identifier of a data view source, consisting of an id and type that uniquely identify the source.
+"""
+input DataViewSourceIdInput {
+  """
+  The object identifier.
+  """
+  object_id: ID!
+  """
+  The object type.
+  """
+  object_type: DataViewSourceKind!
+}
+
+"""
+A source to include in a data view.
+"""
+input DataViewSourceInput {
+  """
+  The source identifier.
+  """
+  source_id: DataViewSourceIdInput!
+  """
+  The column mappings for this source. If omitted, mappings are auto-calculated by the server.
+  """
+  mappings: [DataViewColumnMappingInput!]
+}
+
+"""
+The kind of object backing a data view source.
+"""
+enum DataViewSourceKind {
+  BOARD
+  DATA_ENTITY
+}
+
+"""
+The target schema of a data view, defining the unified column structure.
+"""
+type DataViewTarget {
+  """
+  The columns in the target schema.
+  """
+  columns: [DataViewColumn!]
+  """
+  The column configurations for the target.
+  """
+  column_configurations: JSON
+}
+
+"""
+The target schema of a data view, defining the unified column structure.
+"""
+input DataViewTargetInput {
+  """
+  The columns in the target schema.
+  """
+  columns: [DataViewColumnInput!]!
+  """
+  The column configurations for the target, keyed by column id.
+  """
+  column_configurations: JSON
+}
+
+"""
+Input for the delete_object_schema_columns action.
+"""
+input DeleteObjectSchemaColumnsActionInput {
+  """
+  The IDs of the columns to delete.
+  """
+  column_ids: [ID!]!
+}
+
+"""
+Reasons why specific actions are disabled on a column
+"""
+input DisabledReasonInput {
+  """
+  Reason why the column cannot be deleted
+  """
+  delete: String
+  """
+  Reason why the column title cannot be edited
+  """
+  edit_title: String
+  """
+  Reason why the column labels cannot be edited
+  """
+  edit_labels: String
+  """
+  Reason why the column settings cannot be edited
+  """
+  edit_settings: String
+  """
+  Reason why the column description cannot be edited
+  """
+  edit_description: String
+  """
+  Reason why the column label positions cannot be edited
+  """
+  edit_labels_positions_v2: String
+}
+
+type DropdownColumnSettings {
+  type: ManagedColumnTypes
+  labels: [DropdownLabel!]
+}
+
+type DropdownLabel {
+  id: Int
+  label: String
+  is_deactivated: Boolean
+}
+
+type DropdownManagedColumn {
+  id: String
+  title: String
+  description: String
+  settings_json: JSON
+  created_by: ID
+  updated_by: ID
+  revision: Int
+  state: ManagedColumnState
+  """
+  The date and time of creation.
+  """
+  created_at: Date
+  """
+  The date and time of the last update.
+  """
+  updated_at: Date
+  settings: DropdownColumnSettings
+}
+
+"""
+Overridable settings for dropdown columns attached to a managed column.
+"""
+input DropdownSettingsOverridesInput {
+  """
+  Whether to limit the number of selectable labels.
+  """
+  limit_select: Boolean
+  """
+  Maximum number of labels that can be selected when limit_select is enabled.
+  """
+  label_limit_count: Int
+}
+
+"""
+A schema-type data view source.
+"""
+type EntityDataViewSource {
+  """
+  The source identifier.
+  """
+  source_id: DataViewSourceId
+  """
+  The column mappings for this source.
+  """
+  mappings: [DataViewColumnMapping!]
+  """
+  The errors associated with this source.
+  """
+  errors: [DataViewSourceError!]
+  """
+  The live columns of this source. Populated by the automapping query.
+  """
+  columns: [DataViewSourceColumn!]
+  """
+  Number of child board sources under this schema.
+  """
+  children_count: Int
+}
+
+type ManagedColumn {
+  id: String
+  title: String
+  description: String
+  settings_json: JSON
+  created_by: ID
+  updated_by: ID
+  revision: Int
+  state: ManagedColumnState
+  """
+  The date and time of creation.
+  """
+  created_at: Date
+  """
+  The date and time of the last update.
+  """
+  updated_at: Date
+  settings: ColumnSettings
+}
+
+enum ManagedColumnState {
+  active
+  deleted
+  inactive
+}
+
+enum ManagedColumnTypes {
+  status
+  dropdown
+}
+
+"""
+Represents an account-level object schema that can be customized per account.
+"""
+type ObjectSchema {
+  """
+  The unique identifier of the object schema.
+  """
+  id: ID!
+  """
+  The account ID this object schema belongs to.
+  """
+  account_id: ID!
+  """
+  The user ID who created this object schema.
+  """
+  created_by: ID!
+  """
+  The revision number for optimistic locking.
+  """
+  revision: Int!
+  """
+  The date and time of creation.
+  """
+  created_at: Date
+  """
+  The date and time of the last update.
+  """
+  updated_at: Date
+  """
+  The columns defined in this object schema.
+  """
+  columns: [ObjectSchemaColumn!]!
+  """
+  The ID of the parent object schema (typically a global object schema).
+  """
+  parent_id: ID
+  """
+  The name of this object schema.
+  """
+  name: String
+  """
+  The description for this object schema.
+  """
+  description: String
+  """
+  The number of boards connected to this object schema.
+  """
+  connected_boards_count: Int!
+}
+
+"""
+The type of column action to perform in a bulk object schema mutation.
+"""
+enum ObjectSchemaAction {
+  CREATE_OBJECT_SCHEMA_COLUMNS
+  UPDATE_OBJECT_SCHEMA_COLUMNS
+  DELETE_OBJECT_SCHEMA_COLUMNS
+}
+
+"""
+A single action in a bulk object schema mutation. Provide the action type and the corresponding input field.
+"""
+input ObjectSchemaActionInput {
+  """
+  The type of action to perform.
+  """
+  action: ObjectSchemaAction!
+  """
+  Input for create_object_schema_columns action. Required when action is create_object_schema_columns.
+  """
+  create_object_schema_columns: CreateObjectSchemaColumnsActionInput
+  """
+  Input for update_object_schema_columns action. Required when action is update_object_schema_columns.
+  """
+  update_object_schema_columns: UpdateObjectSchemaColumnsActionInput
+  """
+  Input for delete_object_schema_columns action. Required when action is delete_object_schema_columns.
+  """
+  delete_object_schema_columns: DeleteObjectSchemaColumnsActionInput
+}
+
+"""
+Result of a single action within a bulk object schema mutation.
+"""
+type ObjectSchemaActionResult {
+  """
+  The type of action that was performed.
+  """
+  action: ObjectSchemaAction
+  """
+  The resulting object schema after the action.
+  """
+  object_schema: ObjectSchema
+}
+
+"""
+A column definition within an object schema.
+"""
+type ObjectSchemaColumn {
+  """
+  The unique identifier of the column.
+  """
+  id: ID
+  """
+  The column's title.
+  """
+  title: String!
+  """
+  The column's type.
+  """
+  type: ColumnType
+  """
+  The column's description.
+  """
+  description: String
+  """
+  The column's settings in a JSON form.
+  """
+  settings: JSON
+  """
+  Policy rules for this column.
+  """
+  policy: ObjectSchemaColumnPolicy
+  """
+  Tags indicating column status (deprecated, inherited, etc.).
+  """
+  tags: ObjectSchemaColumnTags
+}
+
+"""
+Policy rules governing how an object schema column can be modified.
+"""
+type ObjectSchemaColumnPolicy {
+  """
+  List of column properties that can be overridden by board-level columns.
+  """
+  can_override: [String!]!
+  """
+  Whether this column is protected from deletion.
+  """
+  cannot_delete: Boolean!
+  """
+  Whether this column is read-only.
+  """
+  read_only: Boolean!
+  """
+  Policy-related messages, such as disabled reasons.
+  """
+  messages: JSON
+}
+
+"""
+Tags applied to an object schema column indicating its status or behavior.
+"""
+type ObjectSchemaColumnTags {
+  """
+  Deprecation info with a start timestamp, if the column is deprecated.
+  """
+  deprecated: JSON
+  """
+  Opt-in by default info with an optional end timestamp.
+  """
+  opt_in_by_default: JSON
+  """
+  Whether this column is inherited from a parent object schema.
+  """
+  inherited: Boolean
+}
+
+"""
+Policy messages that explain why certain actions are disabled on a column
+"""
+input PolicyMessagesInput {
+  """
+  Structured reasons for disabled actions
+  """
+  disabled_reason: DisabledReasonInput
+}
+
+"""
+A standalone board-type data view source.
+"""
+type StandaloneBoardDataViewSource {
+  """
+  The source identifier.
+  """
+  source_id: DataViewSourceId
+  """
+  The column mappings for this source.
+  """
+  mappings: [DataViewColumnMapping!]
+  """
+  The errors associated with this source.
+  """
+  errors: [DataViewSourceError!]
+  """
+  The live columns of this source. Populated by the automapping query.
+  """
+  columns: [DataViewSourceColumn!]
+}
+
+"""
+Input for configuring calculated capability settings on a status column
+"""
+input StatusCalculatedCapabilityInput {
+  """
+  Function to calculate the values. For status columns, only COUNT_KEYS function is supported.
+  """
+  function: StatusCalculatedFunction!
+}
+
+"""
+Available functions for calculating values in status column capabilities
+"""
+enum StatusCalculatedFunction {
+  COUNT_KEYS
+}
+
+"""
+Input for configuring status column capabilities during creation
+"""
+input StatusColumnCapabilitiesInput {
+  """
+  Calculated capability settings. If provided, enables calculated functionality for the status column.
+  """
+  calculated: StatusCalculatedCapabilityInput
+}
+
+enum StatusColumnColors {
+  working_orange
+  done_green
+  stuck_red
+  dark_blue
+  purple
+  explosive
+  grass_green
+  bright_blue
+  saladish
+  egg_yolk
+  blackish
+  dark_red
+  sofia_pink
+  lipstick
+  dark_purple
+  bright_green
+  chili_blue
+  american_gray
+  brown
+  dark_orange
+  sunset
+  bubble
+  peach
+  berry
+  winter
+  river
+  navy
+  aquamarine
+  indigo
+  dark_indigo
+  pecan
+  lavender
+  royal
+  steel
+  orchid
+  lilac
+  tan
+  sky
+  coffee
+  teal
+}
+
+type StatusColumnSettings {
+  type: ManagedColumnTypes
+  labels: [StatusLabel!]
+}
+
+type StatusLabel {
+  id: Int
+  label: String
+  color: StatusColumnColors
+  index: Int
+  description: String
+  is_deactivated: Boolean
+  is_done: Boolean
+}
+
+type StatusManagedColumn {
+  id: String
+  title: String
+  description: String
+  settings_json: JSON
+  created_by: ID
+  updated_by: ID
+  revision: Int
+  state: ManagedColumnState
+  """
+  The date and time of creation.
+  """
+  created_at: Date
+  """
+  The date and time of the last update.
+  """
+  updated_at: Date
+  settings: StatusColumnSettings
+}
+
+input UpdateDropdownColumnSettingsInput {
+  labels: [UpdateDropdownLabelInput!]!
+  """
+  Whether to limit the number of labels that can be selected
+  """
+  limit_select: Boolean
+  """
+  Maximum number of labels that can be selected when limit_select is enabled
+  """
+  label_limit_count: Int
+}
+
+input UpdateDropdownLabelInput {
+  label: String!
+  id: Int
+  is_deactivated: Boolean
+}
+
+"""
+Input for updating an existing column on an object schema
+"""
+input UpdateObjectSchemaColumnInput {
+  """
+  The ID of the column to update
+  """
+  column_id: ID!
+  """
+  The column title
+  """
+  title: String
+  """
+  Optional column description
+  """
+  description: String
+  """
+  Type-specific configuration object containing column defaults and settings. Use get_column_type_schema query to see available properties and validation rules. Examples: status column labels, dropdown options, number formatting rules, date display preferences.
+  """
+  defaults: JSON
+  """
+  Whether this column should be opted-out by default on boards. If false, the column will be automatically included on all boards using this object schema (opt-in by default).
+  """
+  opt_out_by_default: Boolean
+  """
+  Policy rules controlling what can be done with the column
+  """
+  policy: ColumnPolicyInput
+}
+
+"""
+Input for the update_object_schema_columns action.
+"""
+input UpdateObjectSchemaColumnsActionInput {
+  """
+  Array of column updates.
+  """
+  columns: [UpdateObjectSchemaColumnInput!]!
+}
+
+input UpdateStatusColumnSettingsInput {
+  labels: [UpdateStatusLabelInput!]!
+}
+
+input UpdateStatusLabelInput {
+  label: String!
+  color: StatusColumnColors!
+  index: Int!
+  description: String
+  is_done: Boolean
+  id: Int
+  is_deactivated: Boolean
 }
 
 """

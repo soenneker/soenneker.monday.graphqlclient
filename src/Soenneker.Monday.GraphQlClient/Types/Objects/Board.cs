@@ -29,12 +29,6 @@ public sealed partial class Board
     public BoardManualMetadata? ManualMetadata { get; init; }
 
     /// <summary>
-    /// The board's visible columns.
-    /// </summary>
-    [JsonPropertyName("columns")]
-    public List<Column>? Columns { get; init; }
-
-    /// <summary>
     /// The board's updates with cursor-based pagination.
     /// </summary>
     [JsonPropertyName("updates_page")]
@@ -51,6 +45,12 @@ public sealed partial class Board
     /// </summary>
     [JsonPropertyName("views")]
     public List<BoardView>? Views { get; init; }
+
+    /// <summary>
+    /// The board's visible columns.
+    /// </summary>
+    [JsonPropertyName("columns")]
+    public List<Column>? Columns { get; init; }
 
     /// <summary>
     /// The user's permission level for this board (view / edit).
