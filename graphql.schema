@@ -14000,6 +14000,198 @@ type UploadJobInit {
 }
 
 """
+Account context information.
+"""
+type AccountContext {
+  """
+  Unique account identifier.
+  """
+  id: ID
+  """
+  Account name.
+  """
+  name: String
+  """
+  Account industry. Examples: "Technology", "Healthcare", "Finance".
+  """
+  industry: String
+  """
+  Industry sector.
+  """
+  sector: String
+  """
+  Industry sub-sector.
+  """
+  sub_sector: String
+  """
+  Primary use cases for the account.
+  """
+  golden_use_cases: [String!]
+  """
+  Platform usage categories. Examples: "project_management", "crm", "marketing".
+  """
+  platform_usages: [String!]
+  """
+  Active monday.com products. Values: "core", "crm", "software", "marketing", "project_management", "service".
+  """
+  active_product_kinds: [String!]
+}
+
+"""
+A board where the user has item assignments.
+"""
+type AssignedBoard {
+  """
+  Board ID
+  """
+  board_id: ID
+  """
+  Number of items assigned to the user on this board
+  """
+  assignment_count: Int
+  """
+  Board details resolved via federation from the boards subgraph.
+  """
+  board: Board
+}
+
+"""
+Intelligence data.
+"""
+type Intelligence {
+  """
+  Top visited boards ranked by relevance (frequency + recency).
+  """
+  relevant_boards(limit: Int): [RelevantBoard!]
+  """
+  Top loaded docs ranked by relevance (frequency + recency).
+  """
+  relevant_docs(limit: Int): [RelevantDoc!]
+  """
+  Top related users ranked by relevance (multi-signal frequency + recency).
+  """
+  relevant_people(limit: Int): [RelevantPerson!]
+  """
+  User and account context information.
+  """
+  context: UserContextResponse
+  """
+  Boards where the user has item assignments.
+  """
+  assigned_boards(user_id: ID, size: Int): [AssignedBoard!]
+}
+
+"""
+A board ranked by relevance based on visit frequency and recency.
+"""
+type RelevantBoard {
+  """
+  Board ID
+  """
+  id: ID
+  """
+  Board details resolved via federation from the boards subgraph.
+  """
+  board: Board
+}
+
+"""
+A doc ranked by relevance based on load frequency and recency.
+"""
+type RelevantDoc {
+  """
+  Document ID
+  """
+  id: ID
+  """
+  Document object ID — the identifier that appears in the doc's URL.
+  """
+  object_id: ID
+  """
+  Document details resolved via federation from the docs subgraph.
+  """
+  document: Document
+}
+
+"""
+A user ranked by relevance based on interaction frequency and recency.
+"""
+type RelevantPerson {
+  """
+  User ID
+  """
+  id: ID
+  """
+  User details resolved via federation from the users subgraph.
+  """
+  user: User
+}
+
+"""
+User context information.
+"""
+type UserContext {
+  """
+  Unique user identifier.
+  """
+  id: ID
+  """
+  User display name.
+  """
+  name: String
+  """
+  User job title.
+  """
+  title: String
+  """
+  User email address.
+  """
+  email: String
+  """
+  User type. Values: null (regular), "guest", "view_only", "portal_user".
+  """
+  kind: String
+  """
+  User job role. Examples: "project_manager", "marketing_manager", "ceo".
+  """
+  job_role: String
+  """
+  User job department. Examples: "engineering", "marketing", "sales", "hr".
+  """
+  job_department: String
+  """
+  Organizational department within the workspace.
+  """
+  department: String
+  """
+  User time zone. Examples: "America/New_York", "Europe/London".
+  """
+  time_zone: String
+  """
+  User locale for date and number formatting. Examples: "en-US", "de-DE".
+  """
+  locale: String
+  """
+  Number of days since the user became active.
+  """
+  tenure_days: Int
+}
+
+"""
+Combined user and account context.
+"""
+type UserContextResponse {
+  """
+  User context.
+  """
+  user: UserContext
+  """
+  Account context.
+  """
+  account: AccountContext
+}
+
+"""
 Aggregated result of synchronously loading all widget data for a dashboard.
 """
 type DashboardDataResult {
@@ -21082,6 +21274,96 @@ input WorkspacesQueryInput {
   account_product_kind: WorkspacesQueryAccountProductKind
 }
 
+"""
+A chat message.
+"""
+type Message {
+  """
+  Unique message identifier (UUID).
+  """
+  id: ID
+  """
+  ID of the channel this message belongs to.
+  """
+  channel_id: ID
+  """
+  User or agent ID of the sender.
+  """
+  sender_user_id: ID
+  """
+  Whether the sender is a human user or an AI agent.
+  """
+  sender_type: MessageSenderType
+  """
+  Structured message content (text blocks, mentions, attachments). Uses JSON scalar — a typed MessageContent input type will be added in a future version.
+  """
+  content: JSON
+  """
+  ISO 8601 timestamp when the message was sent.
+  """
+  created_at: ISO8601DateTime
+  """
+  Whether the message body has been edited after it was originally sent.
+  """
+  is_edited: Boolean
+  """
+  Categorizes the message — STANDARD messages or AGENT_ERROR system notifications.
+  """
+  message_type: MessageType
+}
+
+"""
+Identifies who sent a message.
+"""
+enum MessageSenderType {
+  USER
+  AGENT
+}
+
+"""
+Categorizes the purpose of a message.
+"""
+enum MessageType {
+  STANDARD
+  AGENT_ERROR
+}
+
+"""
+A cursor-paginated page of messages, ordered newest-first.
+"""
+type MessagesPage {
+  """
+  Messages in this page, ordered newest-first.
+  """
+  messages: [Message!]
+  """
+  Pass as the cursor argument in a subsequent request to fetch the next (older) page. Null when there are no more messages.
+  """
+  cursor: String
+}
+
+"""
+Parameters for sending a message to a channel.
+"""
+input SendMessageInput {
+  """
+  ID of the channel to send the message to.
+  """
+  channel_id: ID!
+  """
+  Client-generated UUID for this message. Re-sending the same message_id is idempotent — the original message is returned without creating a duplicate. If omitted, a UUID is generated server-side (retries will not be idempotent).
+  """
+  message_id: ID
+  """
+  Structured message content (text blocks, mentions, attachments). Must conform to the MessageContent schema from @mondaydotcomorg/chat-contracts.
+  """
+  content: JSON!
+  """
+  ID of the message being replied to. When provided, this message is added to that message's thread instead of the channel timeline.
+  """
+  reply_to_message_id: ID
+}
+
 type AppType {
   """
   The API app ID
@@ -22430,176 +22712,6 @@ enum SearchField {
   LAST_UPDATED_BY
   BOARD_OWNER_ID
   BOARD_WITH_PULSE_VIEW_PERMISSIONS
-}
-
-"""
-Account context information.
-"""
-type AccountContext {
-  """
-  Unique account identifier.
-  """
-  id: ID
-  """
-  Account name.
-  """
-  name: String
-  """
-  Account industry. Examples: "Technology", "Healthcare", "Finance".
-  """
-  industry: String
-  """
-  Industry sector.
-  """
-  sector: String
-  """
-  Industry sub-sector.
-  """
-  sub_sector: String
-  """
-  Primary use cases for the account.
-  """
-  golden_use_cases: [String!]
-  """
-  Platform usage categories. Examples: "project_management", "crm", "marketing".
-  """
-  platform_usages: [String!]
-  """
-  Active monday.com products. Values: "core", "crm", "software", "marketing", "project_management", "service".
-  """
-  active_product_kinds: [String!]
-}
-
-"""
-A board where the user has item assignments.
-"""
-type AssignedBoard {
-  """
-  Board ID
-  """
-  board_id: ID
-  """
-  Number of items assigned to the user on this board
-  """
-  assignment_count: Int
-  """
-  Board details resolved via federation from the boards subgraph.
-  """
-  board: Board
-}
-
-"""
-Intelligence data.
-"""
-type Intelligence {
-  """
-  Top visited boards ranked by relevance (frequency + recency).
-  """
-  relevant_boards(limit: Int): [RelevantBoard!]
-  """
-  Top related users ranked by relevance (multi-signal frequency + recency).
-  """
-  relevant_people(limit: Int): [RelevantPerson!]
-  """
-  User and account context information.
-  """
-  context: UserContextResponse
-  """
-  Boards where the user has item assignments.
-  """
-  assigned_boards(user_id: ID, size: Int): [AssignedBoard!]
-}
-
-"""
-A board ranked by relevance based on visit frequency and recency.
-"""
-type RelevantBoard {
-  """
-  Board ID
-  """
-  id: ID
-  """
-  Board details resolved via federation from the boards subgraph.
-  """
-  board: Board
-}
-
-"""
-A user ranked by relevance based on interaction frequency and recency.
-"""
-type RelevantPerson {
-  """
-  User ID
-  """
-  id: ID
-  """
-  User details resolved via federation from the users subgraph.
-  """
-  user: User
-}
-
-"""
-User context information.
-"""
-type UserContext {
-  """
-  Unique user identifier.
-  """
-  id: ID
-  """
-  User display name.
-  """
-  name: String
-  """
-  User job title.
-  """
-  title: String
-  """
-  User email address.
-  """
-  email: String
-  """
-  User type. Values: null (regular), "guest", "view_only", "portal_user".
-  """
-  kind: String
-  """
-  User job role. Examples: "project_manager", "marketing_manager", "ceo".
-  """
-  job_role: String
-  """
-  User job department. Examples: "engineering", "marketing", "sales", "hr".
-  """
-  job_department: String
-  """
-  Organizational department within the workspace.
-  """
-  department: String
-  """
-  User time zone. Examples: "America/New_York", "Europe/London".
-  """
-  time_zone: String
-  """
-  User locale for date and number formatting. Examples: "en-US", "de-DE".
-  """
-  locale: String
-  """
-  Number of days since the user became active.
-  """
-  tenure_days: Int
-}
-
-"""
-Combined user and account context.
-"""
-type UserContextResponse {
-  """
-  User context.
-  """
-  user: UserContext
-  """
-  Account context.
-  """
-  account: AccountContext
 }
 
 """

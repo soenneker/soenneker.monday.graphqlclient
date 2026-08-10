@@ -17,6 +17,12 @@ public sealed partial class Intelligence
     public List<RelevantBoard>? RelevantBoards { get; init; }
 
     /// <summary>
+    /// Top loaded docs ranked by relevance (frequency + recency).
+    /// </summary>
+    [JsonPropertyName("relevant_docs")]
+    public List<RelevantDoc>? RelevantDocs { get; init; }
+
+    /// <summary>
     /// Top related users ranked by relevance (multi-signal frequency + recency).
     /// </summary>
     [JsonPropertyName("relevant_people")]
