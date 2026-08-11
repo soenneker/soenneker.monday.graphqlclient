@@ -52,4 +52,10 @@ public sealed partial class PublicTemplateLinkPreviewResult
     [JsonPropertyName("boards_count")]
     public int? BoardsCount { get; init; }
 
+    /// <summary>
+    /// Names of the boards the template was exported with, for display on the install form. Null for links generated before board names were recorded.
+    /// </summary>
+    [JsonPropertyName("board_names")]
+    public List<string>? BoardNames { get; init; }
+
 }

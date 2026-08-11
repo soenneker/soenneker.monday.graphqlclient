@@ -25,6 +25,6 @@ public sealed partial class AgentSubscriber
     /// The subscribed user or team.
     /// </summary>
     [JsonPropertyName("entity")]
-    public AgentSubscriberEntity Entity { get; init; } = null!;
+    public AgentSubscriberEntity? Entity { get; init; }
 
 }

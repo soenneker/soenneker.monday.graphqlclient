@@ -28,9 +28,9 @@ public sealed partial class SendMessageInput
     public string Content { get; init; } = null!;
 
     /// <summary>
-    /// ID of the message being replied to. When provided, this message is added to that message's thread instead of the channel timeline.
+    /// ID of the thread session to post into. When provided, this message is added to that thread instead of the channel timeline.
     /// </summary>
-    [JsonPropertyName("reply_to_message_id")]
-    public string? ReplyToMessageId { get; init; }
+    [JsonPropertyName("thread_session_id")]
+    public string? ThreadSessionId { get; init; }
 
 }
