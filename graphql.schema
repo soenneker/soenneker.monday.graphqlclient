@@ -3512,6 +3512,180 @@ type SprintTimeline {
 }
 
 """
+A chat message.
+"""
+type Message {
+  """
+  Unique message identifier (UUID).
+  """
+  id: ID
+  """
+  ID of the channel this message belongs to.
+  """
+  channel_id: ID
+  """
+  User or agent ID of the sender.
+  """
+  sender_user_id: ID
+  """
+  Whether the sender is a human user or an AI agent.
+  """
+  sender_type: MessageSenderType
+  """
+  Structured message content (text blocks, mentions, attachments). Uses JSON scalar — a typed MessageContent input type will be added in a future version.
+  """
+  content: JSON
+  """
+  ISO 8601 timestamp when the message was sent.
+  """
+  created_at: ISO8601DateTime
+  """
+  Whether the message body has been edited after it was originally sent.
+  """
+  is_edited: Boolean
+  """
+  Categorizes the message — STANDARD messages or AGENT_ERROR system notifications.
+  """
+  message_type: MessageType
+  """
+  Aggregated reactions on this message, one entry per distinct emoji.
+  """
+  reactions: [ReactionSummary!]
+  """
+  Thread preview for this message when it is a root with at least one reply. Null for replies and for roots with no replies yet.
+  """
+  thread_session_metadata: ThreadSessionMetadata
+}
+
+"""
+Identifies who sent a message.
+"""
+enum MessageSenderType {
+  USER
+  AGENT
+}
+
+"""
+Categorizes the purpose of a message.
+"""
+enum MessageType {
+  STANDARD
+  AGENT_ERROR
+}
+
+"""
+A cursor-paginated page of messages, ordered newest-first.
+"""
+type MessagesPage {
+  """
+  Messages in this page, ordered newest-first.
+  """
+  messages: [Message!]
+  """
+  Pass as the cursor argument in a subsequent request to fetch the next (older) page. Null when there are no more messages.
+  """
+  cursor: String
+}
+
+"""
+Aggregated reaction summary for a single emoji on a message.
+"""
+type ReactionSummary {
+  """
+  The emoji character.
+  """
+  emoji: String
+  """
+  Number of users who reacted with this emoji.
+  """
+  count: Int
+  """
+  IDs of users who reacted with this emoji.
+  """
+  user_ids: [ID!]
+}
+
+"""
+Parameters for sending a message to a channel.
+"""
+input SendMessageInput {
+  """
+  ID of the channel to send the message to.
+  """
+  channel_id: ID!
+  """
+  Client-generated UUID for this message. Re-sending the same message_id is idempotent — the original message is returned without creating a duplicate. If omitted, a UUID is generated server-side (retries will not be idempotent).
+  """
+  message_id: ID
+  """
+  Structured message content (text blocks, mentions, attachments). Must conform to the MessageContent schema from @mondaydotcomorg/chat-contracts.
+  """
+  content: JSON!
+  """
+  ID of the thread session to post into. When provided, this message is added to that thread instead of the channel timeline.
+  """
+  thread_session_id: ID
+}
+
+"""
+Thread metadata for a root message — present only when the message has at least one reply.
+"""
+type ThreadSessionMetadata {
+  """
+  ID of the thread container.
+  """
+  thread_session_id: ID
+  """
+  ID of the root message this thread hangs off.
+  """
+  root_message_id: ID
+  """
+  Number of non-deleted replies in the thread (≥1 when present).
+  """
+  reply_count: Int
+  """
+  ISO 8601 timestamp of the most recent reply.
+  """
+  last_reply_at: ISO8601DateTime
+  """
+  IDs of the first up-to-5 distinct repliers, ordered by their earliest reply.
+  """
+  participant_user_ids: [ID!]
+}
+
+"""
+Parameters for toggling a reaction on a message.
+"""
+input ToggleReactionInput {
+  """
+  ID of the channel containing the message.
+  """
+  channel_id: ID!
+  """
+  UUID of the message to react to.
+  """
+  message_id: ID!
+  """
+  Emoji character to toggle on the message (e.g. "👍"). Adding it again removes it.
+  """
+  emoji: String!
+}
+
+"""
+Result of toggling a reaction on a message.
+"""
+type ToggleReactionResult {
+  """
+  True if the reaction was added; false if it was removed.
+  """
+  added: Boolean
+  """
+  Updated aggregate for this emoji after the toggle.
+  """
+  summary: ReactionSummary
+}
+
+"""
 A monday.com board.
 """
 type Board {
@@ -12276,96 +12450,6 @@ type BoardAutomationDeleteResult {
   Whether the deletion was successful
   """
   is_success: Boolean
-}
-
-"""
-A chat message.
-"""
-type Message {
-  """
-  Unique message identifier (UUID).
-  """
-  id: ID
-  """
-  ID of the channel this message belongs to.
-  """
-  channel_id: ID
-  """
-  User or agent ID of the sender.
-  """
-  sender_user_id: ID
-  """
-  Whether the sender is a human user or an AI agent.
-  """
-  sender_type: MessageSenderType
-  """
-  Structured message content (text blocks, mentions, attachments). Uses JSON scalar — a typed MessageContent input type will be added in a future version.
-  """
-  content: JSON
-  """
-  ISO 8601 timestamp when the message was sent.
-  """
-  created_at: ISO8601DateTime
-  """
-  Whether the message body has been edited after it was originally sent.
-  """
-  is_edited: Boolean
-  """
-  Categorizes the message — STANDARD messages or AGENT_ERROR system notifications.
-  """
-  message_type: MessageType
-}
-
-"""
-Identifies who sent a message.
-"""
-enum MessageSenderType {
-  USER
-  AGENT
-}
-
-"""
-Categorizes the purpose of a message.
-"""
-enum MessageType {
-  STANDARD
-  AGENT_ERROR
-}
-
-"""
-A cursor-paginated page of messages, ordered newest-first.
-"""
-type MessagesPage {
-  """
-  Messages in this page, ordered newest-first.
-  """
-  messages: [Message!]
-  """
-  Pass as the cursor argument in a subsequent request to fetch the next (older) page. Null when there are no more messages.
-  """
-  cursor: String
-}
-
-"""
-Parameters for sending a message to a channel.
-"""
-input SendMessageInput {
-  """
-  ID of the channel to send the message to.
-  """
-  channel_id: ID!
-  """
-  Client-generated UUID for this message. Re-sending the same message_id is idempotent — the original message is returned without creating a duplicate. If omitted, a UUID is generated server-side (retries will not be idempotent).
-  """
-  message_id: ID
-  """
-  Structured message content (text blocks, mentions, attachments). Must conform to the MessageContent schema from @mondaydotcomorg/chat-contracts.
-  """
-  content: JSON!
-  """
-  ID of the thread session to post into. When provided, this message is added to that thread instead of the channel timeline.
-  """
-  thread_session_id: ID
 }
 
 """
