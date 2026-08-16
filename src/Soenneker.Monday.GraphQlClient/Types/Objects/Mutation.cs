@@ -314,12 +314,6 @@ public sealed partial class Mutation
     public UndoResult? UndoAction { get; init; }
 
     /// <summary>
-    /// Execute an integration block with the provided field values
-    /// </summary>
-    [JsonPropertyName("execute_integration_block")]
-    public IntegrationExecutionResult? ExecuteIntegrationBlock { get; init; }
-
-    /// <summary>
     /// Creates a new team.
     /// </summary>
     [JsonPropertyName("create_team")]
@@ -1099,6 +1093,12 @@ public sealed partial class Mutation
     /// </summary>
     [JsonPropertyName("set_item_description_content")]
     public DocBlocksFromMarkdownResult? SetItemDescriptionContent { get; init; }
+
+    /// <summary>
+    /// Execute an integration block with the provided field values
+    /// </summary>
+    [JsonPropertyName("execute_integration_block")]
+    public IntegrationExecutionResult? ExecuteIntegrationBlock { get; init; }
 
     /// <summary>
     /// Creates a new app with the specified configuration.

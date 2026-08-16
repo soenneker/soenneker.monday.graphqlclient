@@ -17,6 +17,8 @@ public enum LLMModelInput
 
     CLAUDEOPUS46,
 
+    CLAUDEOPUS5,
+
     GEMINI31PRO,
 
     GEMINI35FLASH,
@@ -26,6 +28,8 @@ public enum LLMModelInput
     GEMINI31FLASHLITE,
 
     GEMINI35FLASHLITE,
+
+    GEMINI37FLASH,
 
     GPT5NANO,
 

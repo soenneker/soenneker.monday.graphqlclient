@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 namespace Soenneker.Monday.GraphQlClient;
 
 /// <summary>
-/// Connect input for a custom external agent reachable via callback URL
+/// Connect input for a custom external agent. callback_url is optional — omit to create a detached agent (identity only, not executable via webhook).
 /// </summary>
 public sealed partial class ConnectCustomAgentInput
 {
@@ -16,10 +16,10 @@ public sealed partial class ConnectCustomAgentInput
     public string Name { get; init; } = null!;
 
     /// <summary>
-    /// The HTTPS callback URL the platform invokes for agent events
+    /// The HTTPS callback URL the platform invokes for agent events. Omit to create a detached agent.
     /// </summary>
     [JsonPropertyName("callback_url")]
-    public string CallbackUrl { get; init; } = null!;
+    public string? CallbackUrl { get; init; }
 
     /// <summary>
     /// Optional custom avatar URL for the agent (HTTPS). When omitted, a default avatar is used.
