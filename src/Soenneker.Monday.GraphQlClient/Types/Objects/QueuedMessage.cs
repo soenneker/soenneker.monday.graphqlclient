@@ -52,4 +52,10 @@ public sealed partial class QueuedMessage
     [JsonPropertyName("integration_blocks")]
     public List<ChatMessageIntegrationBlock> IntegrationBlocks { get; init; } = [];
 
+    /// <summary>
+    /// The ID of the user who queued this message
+    /// </summary>
+    [JsonPropertyName("user_id")]
+    public string? UserId { get; init; }
+
 }
