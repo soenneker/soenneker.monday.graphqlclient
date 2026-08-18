@@ -12,16 +12,16 @@ namespace Soenneker.Monday.GraphQlClient;
 public sealed partial class Query
 {
     /// <summary>
-    /// Fetch resources information from the resource directory
-    /// </summary>
-    [JsonPropertyName("get_directory_resources")]
-    public DirectoryResourcesResponse? GetDirectoryResources { get; init; }
-
-    /// <summary>
     /// Get a collection of monday dev sprints
     /// </summary>
     [JsonPropertyName("sprints")]
     public List<Sprint>? Sprints { get; init; }
+
+    /// <summary>
+    /// Fetch resources information from the resource directory
+    /// </summary>
+    [JsonPropertyName("get_directory_resources")]
+    public DirectoryResourcesResponse? GetDirectoryResources { get; init; }
 
     /// <summary>
     /// Get all personal list items by list ID
@@ -191,6 +191,24 @@ public sealed partial class Query
     /// </summary>
     [JsonPropertyName("account_triggers_statistics_by_entity_id")]
     public AccountTriggersByEntityId? AccountTriggersStatisticsByEntityId { get; init; }
+
+    /// <summary>
+    /// Get an app by ID or slug.
+    /// </summary>
+    [JsonPropertyName("app")]
+    public AppType? App { get; init; }
+
+    /// <summary>
+    /// Query the monday.com apps documentation using AI. Returns an AI-generated answer based on the documentation.
+    /// </summary>
+    [JsonPropertyName("ask_developer_docs")]
+    public AppDocumentationAiResponse? AskDeveloperDocs { get; init; }
+
+    /// <summary>
+    /// Get lifecycle subscriptions for all entity types in a specific app version. If version_id is not provided, resolves the active version (user testing version, live, or latest).
+    /// </summary>
+    [JsonPropertyName("get_app_lifecycle_subscriptions")]
+    public List<LifecycleSubscriptionKind>? GetAppLifecycleSubscriptions { get; init; }
 
     /// <summary>
     /// Get board candidates based on workspace and usage type
@@ -566,12 +584,6 @@ public sealed partial class Query
     public List<Workspace>? Workspaces { get; init; }
 
     /// <summary>
-    /// Platform API data.
-    /// </summary>
-    [JsonPropertyName("platform_api")]
-    public PlatformApi? PlatformApi { get; init; }
-
-    /// <summary>
     /// Retrieves blocks for the published version of a specific article if the requesting user has permission to access it. Returns paginated blocks in their position order. Will return an error if the user lacks the required permissions.
     /// </summary>
     [JsonPropertyName("article_blocks")]
@@ -602,22 +614,10 @@ public sealed partial class Query
     public ExportMarkdownResult? ExportMarkdownFromDoc { get; init; }
 
     /// <summary>
-    /// Get an app by ID or slug.
+    /// Platform API data.
     /// </summary>
-    [JsonPropertyName("app")]
-    public AppType? App { get; init; }
-
-    /// <summary>
-    /// Query the monday.com apps documentation using AI. Returns an AI-generated answer based on the documentation.
-    /// </summary>
-    [JsonPropertyName("ask_developer_docs")]
-    public AppDocumentationAiResponse? AskDeveloperDocs { get; init; }
-
-    /// <summary>
-    /// Get lifecycle subscriptions for all entity types in a specific app version. If version_id is not provided, resolves the active version (user testing version, live, or latest).
-    /// </summary>
-    [JsonPropertyName("get_app_lifecycle_subscriptions")]
-    public List<LifecycleSubscriptionKind>? GetAppLifecycleSubscriptions { get; init; }
+    [JsonPropertyName("platform_api")]
+    public PlatformApi? PlatformApi { get; init; }
 
     /// <summary>
     /// Search knowledge base snippets.

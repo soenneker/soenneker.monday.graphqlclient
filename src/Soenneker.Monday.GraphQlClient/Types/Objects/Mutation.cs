@@ -11,16 +11,16 @@ namespace Soenneker.Monday.GraphQlClient;
 public sealed partial class Mutation
 {
     /// <summary>
-    /// Update attributes (Job Role, Skills, or Location) for multiple resources in the directory
-    /// </summary>
-    [JsonPropertyName("update_directory_resources_attributes")]
-    public UpdateDirectoryResourceAttributesResponse? UpdateDirectoryResourcesAttributes { get; init; }
-
-    /// <summary>
     /// Execute an integration block with the provided field values
     /// </summary>
     [JsonPropertyName("execute_integration_block")]
     public IntegrationExecutionResult? ExecuteIntegrationBlock { get; init; }
+
+    /// <summary>
+    /// Update attributes (Job Role, Skills, or Location) for multiple resources in the directory
+    /// </summary>
+    [JsonPropertyName("update_directory_resources_attributes")]
+    public UpdateDirectoryResourceAttributesResponse? UpdateDirectoryResourcesAttributes { get; init; }
 
     /// <summary>
     /// Add workspace object to favorites
@@ -111,6 +111,54 @@ public sealed partial class Mutation
     /// </summary>
     [JsonPropertyName("enroll_items_to_sequence")]
     public EnrollToSequenceResult? EnrollItemsToSequence { get; init; }
+
+    /// <summary>
+    /// Creates a new app with the specified configuration.
+    /// </summary>
+    [JsonPropertyName("create_app")]
+    public CreateAppResponse? CreateApp { get; init; }
+
+    /// <summary>
+    /// Updates an existing app. If the app latest version is live, a new draft version is automatically created and updated.
+    /// </summary>
+    [JsonPropertyName("update_app")]
+    public AppType? UpdateApp { get; init; }
+
+    /// <summary>
+    /// Update an app feature.
+    /// </summary>
+    [JsonPropertyName("update_app_feature")]
+    public AppFeatureType? UpdateAppFeature { get; init; }
+
+    /// <summary>
+    /// Create a new app feature.
+    /// </summary>
+    [JsonPropertyName("create_app_feature")]
+    public AppFeatureType? CreateAppFeature { get; init; }
+
+    /// <summary>
+    /// Update (or create) lifecycle subscriptions for an entity. This will soft delete all existing subscriptions for this entity_identifier and create new ones.
+    /// </summary>
+    [JsonPropertyName("update_app_lifecycle_subscription")]
+    public List<LifecycleSubscriptionKind>? UpdateAppLifecycleSubscription { get; init; }
+
+    /// <summary>
+    /// Delete all lifecycle subscriptions for an entity. Returns true if deleted successfully or if no subscriptions exist.
+    /// </summary>
+    [JsonPropertyName("delete_app_lifecycle_subscription")]
+    public bool? DeleteAppLifecycleSubscription { get; init; }
+
+    /// <summary>
+    /// Installs an app on the current account. Requires account admin permission.
+    /// </summary>
+    [JsonPropertyName("install_app")]
+    public InstallAppResponse? InstallApp { get; init; }
+
+    /// <summary>
+    /// Uninstalls an app from the current account. Requires account admin permission.
+    /// </summary>
+    [JsonPropertyName("uninstall_app")]
+    public AppDeletionResponse? UninstallApp { get; init; }
 
     /// <summary>
     /// Convert an existing monday.com board into a project with enhanced project management capabilities. This mutation transforms a regular board by applying project-specific features and configurations through column mappings that define how existing board columns should be interpreted in the project context. The conversion process is asynchronous and returns a process_id for tracking completion. Optionally accepts a callback URL for notification when the conversion completes. Use this when you have an existing board with data that needs to be upgraded to a full project with advanced project management features like Resource Planner integration.
@@ -1099,53 +1147,5 @@ public sealed partial class Mutation
     /// </summary>
     [JsonPropertyName("set_item_description_content")]
     public DocBlocksFromMarkdownResult? SetItemDescriptionContent { get; init; }
-
-    /// <summary>
-    /// Creates a new app with the specified configuration.
-    /// </summary>
-    [JsonPropertyName("create_app")]
-    public CreateAppResponse? CreateApp { get; init; }
-
-    /// <summary>
-    /// Updates an existing app. If the app latest version is live, a new draft version is automatically created and updated.
-    /// </summary>
-    [JsonPropertyName("update_app")]
-    public AppType? UpdateApp { get; init; }
-
-    /// <summary>
-    /// Update an app feature.
-    /// </summary>
-    [JsonPropertyName("update_app_feature")]
-    public AppFeatureType? UpdateAppFeature { get; init; }
-
-    /// <summary>
-    /// Create a new app feature.
-    /// </summary>
-    [JsonPropertyName("create_app_feature")]
-    public AppFeatureType? CreateAppFeature { get; init; }
-
-    /// <summary>
-    /// Update (or create) lifecycle subscriptions for an entity. This will soft delete all existing subscriptions for this entity_identifier and create new ones.
-    /// </summary>
-    [JsonPropertyName("update_app_lifecycle_subscription")]
-    public List<LifecycleSubscriptionKind>? UpdateAppLifecycleSubscription { get; init; }
-
-    /// <summary>
-    /// Delete all lifecycle subscriptions for an entity. Returns true if deleted successfully or if no subscriptions exist.
-    /// </summary>
-    [JsonPropertyName("delete_app_lifecycle_subscription")]
-    public bool? DeleteAppLifecycleSubscription { get; init; }
-
-    /// <summary>
-    /// Installs an app on the current account. Requires account admin permission.
-    /// </summary>
-    [JsonPropertyName("install_app")]
-    public InstallAppResponse? InstallApp { get; init; }
-
-    /// <summary>
-    /// Uninstalls an app from the current account. Requires account admin permission.
-    /// </summary>
-    [JsonPropertyName("uninstall_app")]
-    public AppDeletionResponse? UninstallApp { get; init; }
 
 }
