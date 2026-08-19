@@ -250,18 +250,6 @@ public sealed partial class Mutation
     [JsonPropertyName("set_form_password")]
     public ResponseForm? SetFormPassword { get; init; }
 
-    [JsonPropertyName("create_timeline_item")]
-    public TimelineItem? CreateTimelineItem { get; init; }
-
-    [JsonPropertyName("delete_timeline_item")]
-    public TimelineItem? DeleteTimelineItem { get; init; }
-
-    [JsonPropertyName("create_custom_activity")]
-    public CustomActivity? CreateCustomActivity { get; init; }
-
-    [JsonPropertyName("delete_custom_activity")]
-    public CustomActivity? DeleteCustomActivity { get; init; }
-
     /// <summary>
     /// Updates a notification setting's enabled status.
     /// </summary>
@@ -273,6 +261,18 @@ public sealed partial class Mutation
     /// </summary>
     [JsonPropertyName("update_mute_board_settings")]
     public List<BoardMuteSettings>? UpdateMuteBoardSettings { get; init; }
+
+    [JsonPropertyName("create_timeline_item")]
+    public TimelineItem? CreateTimelineItem { get; init; }
+
+    [JsonPropertyName("delete_timeline_item")]
+    public TimelineItem? DeleteTimelineItem { get; init; }
+
+    [JsonPropertyName("create_custom_activity")]
+    public CustomActivity? CreateCustomActivity { get; init; }
+
+    [JsonPropertyName("delete_custom_activity")]
+    public CustomActivity? DeleteCustomActivity { get; init; }
 
     /// <summary>
     /// Assigns members to a department.

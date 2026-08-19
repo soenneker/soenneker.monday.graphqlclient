@@ -228,18 +228,6 @@ public sealed partial class Query
     [JsonPropertyName("notetaker")]
     public NotetakerQueries? Notetaker { get; init; }
 
-    [JsonPropertyName("custom_activity")]
-    public List<CustomActivity>? CustomActivity { get; init; }
-
-    [JsonPropertyName("timeline_item")]
-    public TimelineItem? TimelineItem { get; init; }
-
-    /// <summary>
-    /// Fetches timeline items for a given item
-    /// </summary>
-    [JsonPropertyName("timeline")]
-    public TimelineResponse? Timeline { get; init; }
-
     /// <summary>
     /// Search API. Each field searches a single entity type with tailored filters.
     /// </summary>
@@ -266,6 +254,18 @@ public sealed partial class Query
     /// </summary>
     [JsonPropertyName("aggregate")]
     public AggregateQueryResult? Aggregate { get; init; }
+
+    [JsonPropertyName("custom_activity")]
+    public List<CustomActivity>? CustomActivity { get; init; }
+
+    [JsonPropertyName("timeline_item")]
+    public TimelineItem? TimelineItem { get; init; }
+
+    /// <summary>
+    /// Fetches timeline items for a given item
+    /// </summary>
+    [JsonPropertyName("timeline")]
+    public TimelineResponse? Timeline { get; init; }
 
     /// <summary>
     /// Retrieve audit logs for your Monday account. You can

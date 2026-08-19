@@ -4,58 +4,6 @@ Directs the executor to defer this fragment when the if argument is true or unde
 directive @defer(label: String, if: Boolean! = true) on FRAGMENT_SPREAD | INLINE_FRAGMENT
 
 """
-Result of enhancing a board with AI columns.
-"""
-type BoardEnhancementResult {
-  """
-  The ID of the board that was enhanced.
-  """
-  board_id: ID
-  """
-  The result of the AI column enhancement.
-  """
-  result: ConvertColumnsToAiResult
-}
-
-"""
-Result of enhancing columns with AI.
-"""
-type ConvertColumnsToAiResult {
-  """
-  Whether the conversion succeeded.
-  """
-  succeeded: Boolean
-  """
-  List of column IDs that were converted to AI columns.
-  """
-  converted_column_ids: [ID!]
-  """
-  List of column IDs that were added as new AI columns.
-  """
-  added_column_ids: [ID!]
-}
-
-"""
-A date.
-"""
-scalar Date
-
-"""
-A multipart file
-"""
-scalar File
-
-"""
-An ISO 8601-encoded datetime (e.g., 2024-04-09T13:45:30Z)
-"""
-scalar ISO8601DateTime
-
-"""
-A JSON formatted string.
-"""
-scalar JSON
-
-"""
 Response from AI action request
 """
 type AiActionResponse {
@@ -713,6 +661,11 @@ input DataSourceInput {
 }
 
 """
+A date.
+"""
+scalar Date
+
+"""
 Result of a deployment operation
 """
 type DeploymentResult {
@@ -820,6 +773,11 @@ input HostTargetInput {
   """
   id: String
 }
+
+"""
+An ISO 8601-encoded datetime (e.g., 2024-04-09T13:45:30Z)
+"""
+scalar ISO8601DateTime
 
 """
 A curated design/style inspiration for app creation
@@ -936,6 +894,11 @@ type IntegrationVariable {
   """
   updated_at: Date
 }
+
+"""
+A JSON formatted string.
+"""
+scalar JSON
 
 """
 Available LLM models for code generation
@@ -1151,10 +1114,6 @@ type Mutation {
   Set a password on a form to restrict access. This will enable password protection for the form.
   """
   set_form_password(formToken: String!, input: SetFormPasswordInput!): ResponseForm
-  create_timeline_item(item_id: ID!, user_id: Int, title: String!, timestamp: ISO8601DateTime!, summary: String, content: String, location: String, phone: String, url: String, time_range: TimelineItemTimeRange, custom_activity_id: String!): TimelineItem
-  delete_timeline_item(id: String!): TimelineItem
-  create_custom_activity(name: String!, icon_id: CustomActivityIcon!, color: CustomActivityColor!): CustomActivity
-  delete_custom_activity(id: String!): CustomActivity
   """
   Updates a notification setting's enabled status.
   """
@@ -1163,6 +1122,10 @@ type Mutation {
   Update mute notification settings for a board. Allows muting all notifications for all users, only for the current user, or setting mentions/assigns-only. Returns the updated mute state for the board. Requires appropriate permissions for muting all users.
   """
   update_mute_board_settings(board_id: String!, mute_state: BoardMuteState!, enabled: [CustomizableBoardSettings!]): [BoardMuteSettings!]
+  create_timeline_item(item_id: ID!, user_id: Int, title: String!, timestamp: ISO8601DateTime!, summary: String, content: String, location: String, phone: String, url: String, time_range: TimelineItemTimeRange, custom_activity_id: String!): TimelineItem
+  delete_timeline_item(id: String!): TimelineItem
+  create_custom_activity(name: String!, icon_id: CustomActivityIcon!, color: CustomActivityColor!): CustomActivity
+  delete_custom_activity(id: String!): CustomActivity
   """
   Assigns members to a department.
   """
@@ -3441,6 +3404,11 @@ enum EffortKind {
 }
 
 """
+A multipart file
+"""
+scalar File
+
+"""
 Resource attribute allowed for grouping in the utilization report.
 """
 enum GroupByResourceAttribute {
@@ -3788,322 +3756,6 @@ type UtilizationReportUngrouped {
 }
 
 """
-Dimension to group event counts by
-"""
-enum ActivityGroupBy {
-  BOARD
-  USER
-}
-
-"""
-Represents a single activity log entry
-"""
-type ActivityLog {
-  """
-  The unique identifier of the activity log entry
-  """
-  id: ID
-  """
-  The account this activity log entry belongs to
-  """
-  account_id: ID
-  """
-  The user who performed the action
-  """
-  user_id: ID
-  """
-  The type of event that occurred
-  """
-  event: String
-  """
-  The entity type that was affected
-  """
-  entity: String
-  """
-  Additional data associated with the event as a JSON string
-  """
-  data: String
-  """
-  The timestamp when the activity log entry was created
-  """
-  created_at: String
-}
-
-"""
-Entry point for internal activity log queries
-"""
-type ActivityLogInternalQueries {
-  """
-  Internal activity log entries for boards or users — skips authorization, entity whitelisting, and always includes boardless events
-  """
-  logs(board_ids: [ID!], user_ids: [ID!], from: String, to: String, event_types: [String!], correlation_ids: [ID!], entities: [String!], search: String, item_ids: [ID!], triggering_flow_types: [String!], limit: Int, cursor: String): ActivityLogsPage
-  """
-  Event counts grouped by board or user in a single aggregation request (no per-entity fan-out). board_ids is always required. Provide user_ids to count specific users; omit them (with group_by USER) to discover the top-N users active on the given boards.
-  """
-  event_counts(group_by: ActivityGroupBy!, limit: Int, board_ids: [ID!], user_ids: [ID!], from: String, to: String, event_types: [String!], correlation_ids: [ID!], entities: [String!], search: String): EventCountsResult
-}
-
-"""
-Entry point for all activity log queries
-"""
-type ActivityLogQueries {
-  """
-  Activity log entries for boards or users
-  """
-  logs(board_ids: [ID!], user_ids: [ID!], item_ids: [ID!], from: String, to: String, limit: Int, event_types: [String!], cursor: String): ActivityLogsPage
-}
-
-"""
-A page of activity log entries with a cursor for fetching the next page
-"""
-type ActivityLogsPage {
-  """
-  The activity log entries for this page
-  """
-  logs: [ActivityLog!]
-  """
-  Cursor to pass to fetch the next page, null if this is the last page
-  """
-  cursor: String
-}
-
-"""
-Event counts grouped by the requested dimension
-"""
-type EventCountsResult {
-  """
-  Explicit mode (IDs supplied): one bucket per requested ID, count 0 for IDs with no events. Discovery mode (group_by USER without user_ids): top-N users active on the given boards.
-  """
-  buckets: [GroupCountBucket!]
-}
-
-"""
-A grouped entity and its event count
-"""
-type GroupCountBucket {
-  """
-  The grouped entity ID (board ID or user ID, depending on group_by)
-  """
-  key: ID
-  """
-  Number of events for this entity within the filtered range
-  """
-  count: Int
-}
-
-"""
-A monday.com user.
-"""
-type User {
-  """
-  The user's unique identifier.
-  """
-  id: ID!
-  """
-  Activity log entries for the user
-  """
-  activity_logs(from: String, to: String, board_ids: [ID!], limit: Int, event_types: [String!], cursor: String): UserActivityLogsPage
-  """
-  The department the user is a member of (if any)
-  """
-  department: Department
-  """
-  The unique identifier of the account the user belongs to.
-  """
-  account_id: ID!
-  """
-  The activation status of the user.
-  """
-  status: UserStatus!
-  """
-  The method by which the user was added to the account.
-  """
-  invitation_method: InvitationMethod!
-  """
-  The user registration sequence number.
-  """
-  serial_number: Int
-  """
-  Whether the user has been soft-deleted.
-  """
-  is_deleted: Boolean!
-  """
-  URLs for the user's profile photo in various sizes.
-  """
-  photo_url: PhotoUrl
-  """
-  The date and time when the user became active.
-  """
-  became_active_at: ISO8601DateTime
-  """
-  The BigBrain visitor ID associated with the user.
-  """
-  bb_visitor_id: ID!
-  """
-  Whether the user has confirmed their email address.
-  """
-  is_email_confirmed: Boolean!
-  """
-  The user's config based on their kind.
-  """
-  user_config: UserConfig!
-  """
-  The user's email address.
-  """
-  email: String!
-  """
-  The user's full name.
-  """
-  name: String!
-  """
-  The kind of the user.
-  """
-  kind: String!
-  """
-  The user's creation date.
-  """
-  created_at: ISO8601DateTime!
-  """
-  The user's title.
-  """
-  title: String!
-  """
-  The user's phone number.
-  """
-  phone: String
-  """
-  The user's location.
-  """
-  location: String
-  """
-  The user's birthday.
-  """
-  birthday: String
-  """
-  The user's mobile phone number.
-  """
-  mobile_phone: String
-  """
-  The user's country code.
-  """
-  country_code: String
-  """
-  The current user's language
-  """
-  current_language: String
-  """
-  The user's timezone identifier.
-  """
-  time_zone_identifier: String
-  """
-  The user's utc hours difference.
-  """
-  utc_hours_diff: Float
-  """
-  The user's profile url.
-  """
-  url: String!
-  """
-  The user's account.
-  """
-  account: Account!
-  """
-  The products the user is assigned to.
-  """
-  account_products: [AccountProduct!]
-  """
-  The custom field metas of the user profile.
-  """
-  custom_field_metas: [CustomFieldMetas]
-  """
-  The custom field values of the user profile.
-  """
-  custom_field_values: [CustomFieldValue]
-  """
-  Is the user enabled or not.
-  """
-  enabled: Boolean! @deprecated(reason: "This field is deprecated. Please use status instead.")
-  """
-  The token of the user for email to board.
-  """
-  encrypt_api_token: String @deprecated(reason: "This field is deprecated and will be removed in later versions.")
-  """
-  Is the user an account admin.
-  """
-  is_admin: Boolean @deprecated(reason: "This field is deprecated. Please use kind instead.")
-  """
-  Is the user a guest or not.
-  """
-  is_guest: Boolean @deprecated(reason: "This field is deprecated. Please use kind instead.")
-  """
-  Is the user a pending user
-  """
-  is_pending: Boolean @deprecated(reason: "This field is deprecated. Please use status instead.")
-  """
-  Is user verified his email.
-  """
-  is_verified: Boolean @deprecated(reason: "This field is deprecated. Please use is_email_confirmed instead.")
-  """
-  Is the user a view only user or not.
-  """
-  is_view_only: Boolean @deprecated(reason: "This field is deprecated. Please use kind instead.")
-  """
-  The date the user joined the account.
-  """
-  join_date: Date @deprecated(reason: "This field is deprecated. Please use became_active_at instead.")
-  """
-  Last date & time when user was active
-  """
-  last_activity: Date
-  """
-  The user's out of office status.
-  """
-  out_of_office: OutOfOffice
-  """
-  The user's photo in the original size.
-  """
-  photo_original: String @deprecated(reason: "This field is deprecated. Please use photo_url.original instead.")
-  """
-  The user's photo in small size (150x150).
-  """
-  photo_small: String @deprecated(reason: "This field is deprecated. Please use photo_url.small instead.")
-  """
-  The user's photo in thumbnail size (100x100).
-  """
-  photo_thumb: String @deprecated(reason: "This field is deprecated. Please use photo_url.thumb instead.")
-  """
-  The user's photo in small thumbnail size (50x50).
-  """
-  photo_thumb_small: String @deprecated(reason: "This field is deprecated. Please use photo_url.thumb_small instead.")
-  """
-  The user's photo in tiny size (30x30).
-  """
-  photo_tiny: String @deprecated(reason: "This field is deprecated. Please use photo_url.tiny instead.")
-  """
-  The product to which the user signed up to first.
-  """
-  sign_up_product_kind: String @deprecated(reason: "This field is deprecated and will be removed in later versions.")
-  """
-  The teams the user is a member in.
-  """
-  teams(ids: [ID!]): [Team]
-}
-
-"""
-A page of activity log entries with a cursor for fetching the next page
-"""
-type UserActivityLogsPage {
-  """
-  The activity log entries for this page
-  """
-  logs: [ActivityLog!]
-  """
-  Cursor to pass to fetch the next page, null if this is the last page
-  """
-  cursor: String
-}
-
-"""
 An item (table row).
 """
 type Item {
@@ -4340,12 +3992,6 @@ type Query {
   Namespace for all notetaker-related queries.
   """
   notetaker: NotetakerQueries
-  custom_activity(ids: [String!], name: String, icon_id: CustomActivityIcon, color: CustomActivityColor): [CustomActivity!]
-  timeline_item(id: ID!): TimelineItem
-  """
-  Fetches timeline items for a given item
-  """
-  timeline(id: ID!, skipConnectedItems: Boolean): TimelineResponse
   """
   Search API. Each field searches a single entity type with tailored filters.
   """
@@ -4363,6 +4009,12 @@ type Query {
   Performs aggregation operations on board data
   """
   aggregate(query: AggregateQueryInput!): AggregateQueryResult
+  custom_activity(ids: [String!], name: String, icon_id: CustomActivityIcon, color: CustomActivityColor): [CustomActivity!]
+  timeline_item(id: ID!): TimelineItem
+  """
+  Fetches timeline items for a given item
+  """
+  timeline(id: ID!, skipConnectedItems: Boolean): TimelineResponse
   """
   Retrieve audit logs for your Monday account. You can
     filter logs by event types, user ID, IP address and start and end date.
@@ -7407,6 +7059,204 @@ input UpdateObjectInput {
 }
 
 """
+A monday.com user.
+"""
+type User {
+  """
+  The user's unique identifier.
+  """
+  id: ID!
+  """
+  The department the user is a member of (if any)
+  """
+  department: Department
+  """
+  The unique identifier of the account the user belongs to.
+  """
+  account_id: ID!
+  """
+  The activation status of the user.
+  """
+  status: UserStatus!
+  """
+  The method by which the user was added to the account.
+  """
+  invitation_method: InvitationMethod!
+  """
+  The user registration sequence number.
+  """
+  serial_number: Int
+  """
+  Whether the user has been soft-deleted.
+  """
+  is_deleted: Boolean!
+  """
+  URLs for the user's profile photo in various sizes.
+  """
+  photo_url: PhotoUrl
+  """
+  The date and time when the user became active.
+  """
+  became_active_at: ISO8601DateTime
+  """
+  The BigBrain visitor ID associated with the user.
+  """
+  bb_visitor_id: ID!
+  """
+  Whether the user has confirmed their email address.
+  """
+  is_email_confirmed: Boolean!
+  """
+  The user's config based on their kind.
+  """
+  user_config: UserConfig!
+  """
+  The user's email address.
+  """
+  email: String!
+  """
+  The user's full name.
+  """
+  name: String!
+  """
+  The kind of the user.
+  """
+  kind: String!
+  """
+  The user's creation date.
+  """
+  created_at: ISO8601DateTime!
+  """
+  The user's title.
+  """
+  title: String!
+  """
+  The user's phone number.
+  """
+  phone: String
+  """
+  The user's location.
+  """
+  location: String
+  """
+  The user's birthday.
+  """
+  birthday: String
+  """
+  The user's mobile phone number.
+  """
+  mobile_phone: String
+  """
+  The user's country code.
+  """
+  country_code: String
+  """
+  The current user's language
+  """
+  current_language: String
+  """
+  The user's timezone identifier.
+  """
+  time_zone_identifier: String
+  """
+  The user's utc hours difference.
+  """
+  utc_hours_diff: Float
+  """
+  The user's profile url.
+  """
+  url: String!
+  """
+  The user's account.
+  """
+  account: Account!
+  """
+  The products the user is assigned to.
+  """
+  account_products: [AccountProduct!]
+  """
+  The custom field metas of the user profile.
+  """
+  custom_field_metas: [CustomFieldMetas]
+  """
+  The custom field values of the user profile.
+  """
+  custom_field_values: [CustomFieldValue]
+  """
+  Is the user enabled or not.
+  """
+  enabled: Boolean! @deprecated(reason: "This field is deprecated. Please use status instead.")
+  """
+  The token of the user for email to board.
+  """
+  encrypt_api_token: String @deprecated(reason: "This field is deprecated and will be removed in later versions.")
+  """
+  Is the user an account admin.
+  """
+  is_admin: Boolean @deprecated(reason: "This field is deprecated. Please use kind instead.")
+  """
+  Is the user a guest or not.
+  """
+  is_guest: Boolean @deprecated(reason: "This field is deprecated. Please use kind instead.")
+  """
+  Is the user a pending user
+  """
+  is_pending: Boolean @deprecated(reason: "This field is deprecated. Please use status instead.")
+  """
+  Is user verified his email.
+  """
+  is_verified: Boolean @deprecated(reason: "This field is deprecated. Please use is_email_confirmed instead.")
+  """
+  Is the user a view only user or not.
+  """
+  is_view_only: Boolean @deprecated(reason: "This field is deprecated. Please use kind instead.")
+  """
+  The date the user joined the account.
+  """
+  join_date: Date @deprecated(reason: "This field is deprecated. Please use became_active_at instead.")
+  """
+  Last date & time when user was active
+  """
+  last_activity: Date
+  """
+  The user's out of office status.
+  """
+  out_of_office: OutOfOffice
+  """
+  The user's photo in the original size.
+  """
+  photo_original: String @deprecated(reason: "This field is deprecated. Please use photo_url.original instead.")
+  """
+  The user's photo in small size (150x150).
+  """
+  photo_small: String @deprecated(reason: "This field is deprecated. Please use photo_url.small instead.")
+  """
+  The user's photo in thumbnail size (100x100).
+  """
+  photo_thumb: String @deprecated(reason: "This field is deprecated. Please use photo_url.thumb instead.")
+  """
+  The user's photo in small thumbnail size (50x50).
+  """
+  photo_thumb_small: String @deprecated(reason: "This field is deprecated. Please use photo_url.thumb_small instead.")
+  """
+  The user's photo in tiny size (30x30).
+  """
+  photo_tiny: String @deprecated(reason: "This field is deprecated. Please use photo_url.tiny instead.")
+  """
+  The product to which the user signed up to first.
+  """
+  sign_up_product_kind: String @deprecated(reason: "This field is deprecated and will be removed in later versions.")
+  """
+  The teams the user is a member in.
+  """
+  teams(ids: [ID!]): [Team]
+  """
+  Activity log entries for the user
+  """
+  activity_logs(from: String, to: String, board_ids: [ID!], limit: Int, event_types: [String!], cursor: String): UserActivityLogsPage
+}
+
+"""
 Provider-specific data for Claude managed agents
 """
 type ClaudeProviderData {
@@ -7855,6 +7705,38 @@ The status of the subscription. Possible values: active, inactive.
 enum SubscriptionStatus {
   active
   inactive
+}
+
+"""
+Result of enhancing a board with AI columns.
+"""
+type BoardEnhancementResult {
+  """
+  The ID of the board that was enhanced.
+  """
+  board_id: ID
+  """
+  The result of the AI column enhancement.
+  """
+  result: ConvertColumnsToAiResult
+}
+
+"""
+Result of enhancing columns with AI.
+"""
+type ConvertColumnsToAiResult {
+  """
+  Whether the conversion succeeded.
+  """
+  succeeded: Boolean
+  """
+  List of column IDs that were converted to AI columns.
+  """
+  converted_column_ids: [ID!]
+  """
+  List of column IDs that were added as new AI columns.
+  """
+  added_column_ids: [ID!]
 }
 
 """
@@ -13400,238 +13282,6 @@ type TranscriptEntry {
   language: String!
 }
 
-type CustomActivity {
-  id: ID
-  type: String
-  name: String
-  icon_id: CustomActivityIcon
-  color: CustomActivityColor
-}
-
-enum CustomActivityColor {
-  VIVID_CERULEAN
-  GO_GREEN
-  PHILIPPINE_GREEN
-  YANKEES_BLUE
-  CELTIC_BLUE
-  MEDIUM_TURQUOISE
-  CORNFLOWER_BLUE
-  MAYA_BLUE
-  SLATE_BLUE
-  GRAY
-  YELLOW_GREEN
-  DINGY_DUNGEON
-  PARADISE_PINK
-  BRINK_PINK
-  YELLOW_ORANGE
-  LIGHT_DEEP_PINK
-  LIGHT_HOT_PINK
-  PHILIPPINE_YELLOW
-}
-
-enum CustomActivityIcon {
-  ASCENDING
-  CAMERA
-  CONFERENCE
-  FLAG
-  GIFT
-  HEADPHONES
-  HOMEKEYS
-  LOCATION
-  PAPERPLANE
-  PLANE
-  NOTEBOOK
-  PLIERS
-  TRIPOD
-  TWOFLAGS
-  UTENCILS
-}
-
-"""
-Email metadata for email-type timeline items.
-"""
-type EmailTimelineItemMetadata {
-  """
-  The email sender address.
-  """
-  from: String
-  """
-  List of recipient email addresses.
-  """
-  to: [String!]
-  """
-  List of CC email addresses.
-  """
-  cc: [String!]
-  """
-  List of BCC email addresses.
-  """
-  bcc: [String!]
-}
-
-"""
-Serialized note timeline item.
-"""
-type Note {
-  """
-  The timeline item id of the note.
-  """
-  id: ID
-  """
-  The timeline item type.
-  """
-  type: String
-  """
-  The item the note is associated with.
-  """
-  item: Item
-  """
-  The board the note is associated with.
-  """
-  board: Board
-  """
-  The user who created the note timeline item.
-  """
-  user: User
-  """
-  The note due date.
-  """
-  due_date: Date
-  """
-  The timeline item creation timestamp.
-  """
-  created_at: Date
-  """
-  The timeline item last update timestamp.
-  """
-  updated_at: Date
-  """
-  Whether this note is a sample timeline item.
-  """
-  is_sample: Boolean
-  """
-  The origin item id when relevant.
-  """
-  origin_item_id: ID
-  """
-  The note resource payload.
-  """
-  data: NoteData
-}
-
-"""
-Serialized note resource payload.
-"""
-type NoteData {
-  """
-  The note id.
-  """
-  id: ID
-  """
-  The note content.
-  """
-  content: String
-  """
-  A shortened preview of the note content.
-  """
-  content_preview: String
-  """
-  The user who created the note.
-  """
-  user: User
-  """
-  The account id where the note exists.
-  """
-  account_id: ID!
-  """
-  The note creation timestamp.
-  """
-  created_at: Date
-  """
-  The note last update timestamp.
-  """
-  updated_at: Date
-  """
-  The note name.
-  """
-  name: String
-  """
-  Whether the note is public.
-  """
-  public: Boolean
-}
-
-type TimelineItem {
-  id: ID
-  type: String
-  """
-  The item that the timeline item is on.
-  """
-  item: Item
-  """
-  The board that the timeline item is on.
-  """
-  board: Board
-  """
-  The user who created the timeline item.
-  """
-  user: User
-  """
-  The title of the timeline item.
-  """
-  title: String
-  """
-  The external ID of the custom activity of the timeline item.
-  """
-  custom_activity_id: String
-  """
-  The content of the timeline item.
-  """
-  content: String
-  """
-  The creation date of the timeline item.
-  """
-  created_at: Date!
-  """
-  Type-specific metadata for the timeline item. Populated based on the timeline item type.
-  """
-  metadata: TimelineItemMetadata
-}
-
-"""
-Type-specific metadata union for timeline items.
-"""
-union TimelineItemMetadata = EmailTimelineItemMetadata
-
-input TimelineItemTimeRange {
-  """
-  Start time
-  """
-  start_timestamp: ISO8601DateTime!
-  """
-  End time
-  """
-  end_timestamp: ISO8601DateTime!
-}
-
-type TimelineItemsPage {
-  """
-  The timeline items in the current page
-  """
-  timeline_items: [TimelineItem!]!
-  """
-  Cursor for fetching the next page
-  """
-  cursor: String
-}
-
-type TimelineResponse {
-  """
-  Paginated set of timeline items and a cursor to get the next page
-  """
-  timeline_items_page(cursor: String = null, limit: Int = 25): TimelineItemsPage!
-}
-
 """
 Preview information for a board in the Magic solution.
 """
@@ -14912,6 +14562,43 @@ type SearchWorkspaceResults {
   results: [SearchWorkspaceResult!]!
 }
 
+type TimelineItem {
+  id: ID
+  type: String
+  """
+  The item that the timeline item is on.
+  """
+  item: Item
+  """
+  The board that the timeline item is on.
+  """
+  board: Board
+  """
+  The user who created the timeline item.
+  """
+  user: User
+  """
+  The title of the timeline item.
+  """
+  title: String
+  """
+  The external ID of the custom activity of the timeline item.
+  """
+  custom_activity_id: String
+  """
+  The content of the timeline item.
+  """
+  content: String
+  """
+  The creation date of the timeline item.
+  """
+  created_at: Date!
+  """
+  Type-specific metadata for the timeline item. Populated based on the timeline item type.
+  """
+  metadata: TimelineItemMetadata
+}
+
 """
 Kind of timeline item.
 """
@@ -15264,6 +14951,469 @@ type RunPromptResult {
   content: String
 }
 
+"""
+The result of the connect_migration_job mutation.
+"""
+type ConnectMigrationJobResult {
+  """
+  Whether the connection was successfully created or already exists.
+  """
+  success: Boolean
+  """
+  The unique identifier of the migration job connection.
+  """
+  migrationJobConnectionId: ID
+}
+
+type CreateEntitySnapshotResult {
+  """
+  The unique identifier of the snapshot.
+  """
+  snapshotId: ID!
+  """
+  The date and time the snapshot was created.
+  """
+  createdAt: String!
+  """
+  The entity that was snapshot.
+  """
+  entity: String!
+  """
+  The unique identifier of the migration job.
+  """
+  migrationJobId: String!
+}
+
+type CreateMigrationJobResult {
+  """
+  The unique identifier of the migration job.
+  """
+  id: ID!
+}
+
+"""
+The result of deleting entity ID mappings.
+"""
+type DeleteEntityIdMappingsResult {
+  """
+  Whether the delete operation was successful.
+  """
+  success: Boolean
+  """
+  The number of mappings that were deleted.
+  """
+  count: Int
+}
+
+"""
+Input type for entity ID mapping.
+"""
+input EntityIdMappingInput {
+  """
+  The old ID of the entity.
+  """
+  oldId: String!
+  """
+  The new ID of the entity.
+  """
+  newId: String!
+}
+
+type GetEntitiesForMigrationResult {
+  """
+  The entities for migration.
+  """
+  entityId: String
+}
+
+"""
+The result of querying entity restores.
+"""
+type GetRestoresQueryResults {
+  """
+  The unique identifier of the restore.
+  """
+  id: ID!
+  """
+  The date and time the restore was created.
+  """
+  createdAt: String!
+  """
+  The entity id of the restore.
+  """
+  entityId: String!
+  """
+  The unique identifier of the migration job.
+  """
+  migrationJobId: String!
+  """
+  The status of the restore.
+  """
+  status: RestoreStatus!
+  """
+  Progress counters for the restore operation.
+  """
+  progress: MigrationProgress
+}
+
+type GetSnapshotsQueryResults {
+  """
+  The unique identifier of the snapshot.
+  """
+  id: ID!
+  """
+  The date and time the snapshot was created.
+  """
+  createdAt: String!
+  """
+  The entity id of the snapshot.
+  """
+  entityId: String!
+  """
+  The unique identifier of the migration job.
+  """
+  migrationJobId: String!
+  """
+  The status of the snapshot.
+  """
+  status: SnapshotStatus!
+  """
+  Progress counters for the snapshot operation.
+  """
+  progress: MigrationProgress
+}
+
+type MigratedEntityIdMappingsResult {
+  """
+  The entity type of migrated entities.
+  """
+  entityType: String
+  """
+  The old ID of the migrated entity.
+  """
+  oldId: String
+  """
+  The new ID of the migrated entity.
+  """
+  newId: String
+}
+
+"""
+Progress counters for a snapshot or restore operation.
+"""
+type MigrationProgress {
+  """
+  Live progress counters. Present only while the operation is in progress.
+  """
+  ongoing: OngoingProgress
+  """
+  Final progress result. Present only after the operation completes.
+  """
+  result: ProgressResult
+}
+
+"""
+Live progress counters for an in-progress migration operation.
+"""
+type OngoingProgress {
+  """
+  The total number of entities to process.
+  """
+  total: Int!
+  """
+  The number of entities currently being processed.
+  """
+  processing: Int!
+  """
+  The number of entities successfully processed.
+  """
+  success: Int!
+  """
+  The number of entities that failed processing.
+  """
+  failed: Int!
+  """
+  Number of components excluded from migration.
+  """
+  excluded: Int!
+  """
+  List of nodes currently being processed.
+  """
+  currently_processing: [ProcessingNode!]!
+}
+
+"""
+A node currently being processed in a migration operation.
+"""
+type ProcessingNode {
+  """
+  The component type, e.g. BoardPosts, BoardPermissions.
+  """
+  type: String!
+  """
+  The unique identifier of the entity being processed.
+  """
+  id: ID!
+  """
+  ISO timestamp when processing began.
+  """
+  started_at: String
+}
+
+"""
+Final progress result for a completed migration operation.
+"""
+type ProgressResult {
+  """
+  The total number of entities processed.
+  """
+  total: Int!
+  """
+  The number of entities successfully processed.
+  """
+  success: Int!
+  """
+  The number of entities that failed processing.
+  """
+  failed: Int!
+  """
+  Number of components excluded from migration.
+  """
+  excluded: Int!
+  """
+  The full manifest JSON with per-component summary baked in.
+  """
+  raw_manifest: JSON!
+}
+
+"""
+The result of the restore entity mutation.
+"""
+type RestoreEntityResult {
+  """
+  Confirms the restore request was accepted.
+  """
+  accepted: Boolean
+}
+
+"""
+A point-in-time record of a restore status change.
+"""
+type RestoreHistoryEntry {
+  """
+  The restore ID at the time this history entry was recorded.
+  """
+  restore_id: ID!
+  """
+  The entity id (package id) of the restore.
+  """
+  entity_id: ID!
+  """
+  The status of the restore at the time this history entry was recorded.
+  """
+  status: RestoreStatus!
+  """
+  The date and time this history entry was recorded.
+  """
+  recorded_at: String!
+}
+
+"""
+The possible statuses of a restore operation.
+"""
+enum RestoreStatus {
+  pending
+  processing
+  success
+  failed
+  rollback
+}
+
+"""
+Result of a restore rollback operation.
+"""
+type RollbackRestoreMutationResult {
+  """
+  The unique identifier of the restore.
+  """
+  restore_id: ID!
+  """
+  The new status of the restore (rollback).
+  """
+  status: RestoreStatus!
+}
+
+"""
+Result of a snapshot rollback operation.
+"""
+type RollbackSnapshotMutationResult {
+  """
+  The unique identifier of the snapshot.
+  """
+  snapshot_id: ID!
+  """
+  The new status of the snapshot (rollback).
+  """
+  status: SnapshotStatus!
+}
+
+"""
+A point-in-time record of a snapshot status change.
+"""
+type SnapshotHistoryEntry {
+  """
+  The snapshot ID at the time this history entry was recorded.
+  """
+  snapshot_id: ID!
+  """
+  The entity id (package id) of the snapshot.
+  """
+  entity_id: ID!
+  """
+  The status of the snapshot at the time this history entry was recorded.
+  """
+  status: SnapshotStatus!
+  """
+  The date and time this history entry was recorded.
+  """
+  recorded_at: String!
+}
+
+"""
+The possible statuses of a snapshot operation.
+"""
+enum SnapshotStatus {
+  pending
+  processing
+  success
+  failed
+  rollback
+}
+
+"""
+A board that can be snapshotted, with metadata and relations.
+"""
+type SnapshottableBoard {
+  """
+  The board ID.
+  """
+  id: ID
+  """
+  The board name.
+  """
+  name: String
+  """
+  The board owner user ID.
+  """
+  owner: ID
+  """
+  The workspace ID this board belongs to.
+  """
+  workspace_id: ID
+  """
+  Whether this board is a document.
+  """
+  is_doc: Boolean
+  """
+  Whether this board is a managed template instance.
+  """
+  is_managed_template_instance: Boolean
+  """
+  Related boards by relation type. Limited to 1 level of depth.
+  """
+  board_relations(relation_type: String!): [SnapshottableBoard!]
+}
+
+"""
+A paginated connection of snapshottable boards.
+"""
+type SnapshottableBoardConnection {
+  """
+  The list of boards in this page.
+  """
+  items: [SnapshottableBoard!]
+  """
+  The cursor for the next page.
+  """
+  cursor: String
+  """
+  Whether there are more pages.
+  """
+  has_next_page: Boolean
+}
+
+"""
+An overview that can be snapshotted, with connected boards.
+"""
+type SnapshottableOverview {
+  """
+  The overview ID.
+  """
+  id: ID
+  """
+  Boards connected to this overview.
+  """
+  connected_boards: [SnapshottableBoard!]
+}
+
+"""
+A paginated connection of snapshottable overviews.
+"""
+type SnapshottableOverviewConnection {
+  """
+  The list of overviews in this page.
+  """
+  items: [SnapshottableOverview!]
+  """
+  The cursor for the next page.
+  """
+  cursor: String
+  """
+  Whether there are more pages.
+  """
+  has_next_page: Boolean
+}
+
+"""
+A workspace that can be snapshotted, with paginated boards and overviews.
+"""
+type SnapshottableWorkspace {
+  """
+  The workspace ID.
+  """
+  id: ID
+  """
+  The workspace name.
+  """
+  name: String
+  """
+  The workspace owner user ID.
+  """
+  owner: ID
+  """
+  Paginated boards in this workspace.
+  """
+  boards(cursor: String): SnapshottableBoardConnection
+  """
+  Paginated overviews in this workspace.
+  """
+  overviews(cursor: String): SnapshottableOverviewConnection
+}
+
+"""
+The result of upserting entity ID mappings.
+"""
+type UpsertEntityIdMappingsResult {
+  """
+  Whether the upsert operation was successful.
+  """
+  success: Boolean
+  """
+  The number of mappings that were upserted.
+  """
+  count: Int
+}
+
 type AggregateBasicAggregationResult {
   result: Float
 }
@@ -15440,6 +15590,201 @@ The results of the search for benchmark.
 """
 type SearchBenchmarkResults {
   data: String
+}
+
+type CustomActivity {
+  id: ID
+  type: String
+  name: String
+  icon_id: CustomActivityIcon
+  color: CustomActivityColor
+}
+
+enum CustomActivityColor {
+  VIVID_CERULEAN
+  GO_GREEN
+  PHILIPPINE_GREEN
+  YANKEES_BLUE
+  CELTIC_BLUE
+  MEDIUM_TURQUOISE
+  CORNFLOWER_BLUE
+  MAYA_BLUE
+  SLATE_BLUE
+  GRAY
+  YELLOW_GREEN
+  DINGY_DUNGEON
+  PARADISE_PINK
+  BRINK_PINK
+  YELLOW_ORANGE
+  LIGHT_DEEP_PINK
+  LIGHT_HOT_PINK
+  PHILIPPINE_YELLOW
+}
+
+enum CustomActivityIcon {
+  ASCENDING
+  CAMERA
+  CONFERENCE
+  FLAG
+  GIFT
+  HEADPHONES
+  HOMEKEYS
+  LOCATION
+  PAPERPLANE
+  PLANE
+  NOTEBOOK
+  PLIERS
+  TRIPOD
+  TWOFLAGS
+  UTENCILS
+}
+
+"""
+Email metadata for email-type timeline items.
+"""
+type EmailTimelineItemMetadata {
+  """
+  The email sender address.
+  """
+  from: String
+  """
+  List of recipient email addresses.
+  """
+  to: [String!]
+  """
+  List of CC email addresses.
+  """
+  cc: [String!]
+  """
+  List of BCC email addresses.
+  """
+  bcc: [String!]
+}
+
+"""
+Serialized note timeline item.
+"""
+type Note {
+  """
+  The timeline item id of the note.
+  """
+  id: ID
+  """
+  The timeline item type.
+  """
+  type: String
+  """
+  The item the note is associated with.
+  """
+  item: Item
+  """
+  The board the note is associated with.
+  """
+  board: Board
+  """
+  The user who created the note timeline item.
+  """
+  user: User
+  """
+  The note due date.
+  """
+  due_date: Date
+  """
+  The timeline item creation timestamp.
+  """
+  created_at: Date
+  """
+  The timeline item last update timestamp.
+  """
+  updated_at: Date
+  """
+  Whether this note is a sample timeline item.
+  """
+  is_sample: Boolean
+  """
+  The origin item id when relevant.
+  """
+  origin_item_id: ID
+  """
+  The note resource payload.
+  """
+  data: NoteData
+}
+
+"""
+Serialized note resource payload.
+"""
+type NoteData {
+  """
+  The note id.
+  """
+  id: ID
+  """
+  The note content.
+  """
+  content: String
+  """
+  A shortened preview of the note content.
+  """
+  content_preview: String
+  """
+  The user who created the note.
+  """
+  user: User
+  """
+  The account id where the note exists.
+  """
+  account_id: ID!
+  """
+  The note creation timestamp.
+  """
+  created_at: Date
+  """
+  The note last update timestamp.
+  """
+  updated_at: Date
+  """
+  The note name.
+  """
+  name: String
+  """
+  Whether the note is public.
+  """
+  public: Boolean
+}
+
+"""
+Type-specific metadata union for timeline items.
+"""
+union TimelineItemMetadata = EmailTimelineItemMetadata
+
+input TimelineItemTimeRange {
+  """
+  Start time
+  """
+  start_timestamp: ISO8601DateTime!
+  """
+  End time
+  """
+  end_timestamp: ISO8601DateTime!
+}
+
+type TimelineItemsPage {
+  """
+  The timeline items in the current page
+  """
+  timeline_items: [TimelineItem!]!
+  """
+  Cursor for fetching the next page
+  """
+  cursor: String
+}
+
+type TimelineResponse {
+  """
+  Paginated set of timeline items and a cursor to get the next page
+  """
+  timeline_items_page(cursor: String = null, limit: Int = 25): TimelineItemsPage!
 }
 
 """
@@ -19701,469 +20046,6 @@ enum ViewMutationKind {
 }
 
 """
-The result of the connect_migration_job mutation.
-"""
-type ConnectMigrationJobResult {
-  """
-  Whether the connection was successfully created or already exists.
-  """
-  success: Boolean
-  """
-  The unique identifier of the migration job connection.
-  """
-  migrationJobConnectionId: ID
-}
-
-type CreateEntitySnapshotResult {
-  """
-  The unique identifier of the snapshot.
-  """
-  snapshotId: ID!
-  """
-  The date and time the snapshot was created.
-  """
-  createdAt: String!
-  """
-  The entity that was snapshot.
-  """
-  entity: String!
-  """
-  The unique identifier of the migration job.
-  """
-  migrationJobId: String!
-}
-
-type CreateMigrationJobResult {
-  """
-  The unique identifier of the migration job.
-  """
-  id: ID!
-}
-
-"""
-The result of deleting entity ID mappings.
-"""
-type DeleteEntityIdMappingsResult {
-  """
-  Whether the delete operation was successful.
-  """
-  success: Boolean
-  """
-  The number of mappings that were deleted.
-  """
-  count: Int
-}
-
-"""
-Input type for entity ID mapping.
-"""
-input EntityIdMappingInput {
-  """
-  The old ID of the entity.
-  """
-  oldId: String!
-  """
-  The new ID of the entity.
-  """
-  newId: String!
-}
-
-type GetEntitiesForMigrationResult {
-  """
-  The entities for migration.
-  """
-  entityId: String
-}
-
-"""
-The result of querying entity restores.
-"""
-type GetRestoresQueryResults {
-  """
-  The unique identifier of the restore.
-  """
-  id: ID!
-  """
-  The date and time the restore was created.
-  """
-  createdAt: String!
-  """
-  The entity id of the restore.
-  """
-  entityId: String!
-  """
-  The unique identifier of the migration job.
-  """
-  migrationJobId: String!
-  """
-  The status of the restore.
-  """
-  status: RestoreStatus!
-  """
-  Progress counters for the restore operation.
-  """
-  progress: MigrationProgress
-}
-
-type GetSnapshotsQueryResults {
-  """
-  The unique identifier of the snapshot.
-  """
-  id: ID!
-  """
-  The date and time the snapshot was created.
-  """
-  createdAt: String!
-  """
-  The entity id of the snapshot.
-  """
-  entityId: String!
-  """
-  The unique identifier of the migration job.
-  """
-  migrationJobId: String!
-  """
-  The status of the snapshot.
-  """
-  status: SnapshotStatus!
-  """
-  Progress counters for the snapshot operation.
-  """
-  progress: MigrationProgress
-}
-
-type MigratedEntityIdMappingsResult {
-  """
-  The entity type of migrated entities.
-  """
-  entityType: String
-  """
-  The old ID of the migrated entity.
-  """
-  oldId: String
-  """
-  The new ID of the migrated entity.
-  """
-  newId: String
-}
-
-"""
-Progress counters for a snapshot or restore operation.
-"""
-type MigrationProgress {
-  """
-  Live progress counters. Present only while the operation is in progress.
-  """
-  ongoing: OngoingProgress
-  """
-  Final progress result. Present only after the operation completes.
-  """
-  result: ProgressResult
-}
-
-"""
-Live progress counters for an in-progress migration operation.
-"""
-type OngoingProgress {
-  """
-  The total number of entities to process.
-  """
-  total: Int!
-  """
-  The number of entities currently being processed.
-  """
-  processing: Int!
-  """
-  The number of entities successfully processed.
-  """
-  success: Int!
-  """
-  The number of entities that failed processing.
-  """
-  failed: Int!
-  """
-  Number of components excluded from migration.
-  """
-  excluded: Int!
-  """
-  List of nodes currently being processed.
-  """
-  currently_processing: [ProcessingNode!]!
-}
-
-"""
-A node currently being processed in a migration operation.
-"""
-type ProcessingNode {
-  """
-  The component type, e.g. BoardPosts, BoardPermissions.
-  """
-  type: String!
-  """
-  The unique identifier of the entity being processed.
-  """
-  id: ID!
-  """
-  ISO timestamp when processing began.
-  """
-  started_at: String
-}
-
-"""
-Final progress result for a completed migration operation.
-"""
-type ProgressResult {
-  """
-  The total number of entities processed.
-  """
-  total: Int!
-  """
-  The number of entities successfully processed.
-  """
-  success: Int!
-  """
-  The number of entities that failed processing.
-  """
-  failed: Int!
-  """
-  Number of components excluded from migration.
-  """
-  excluded: Int!
-  """
-  The full manifest JSON with per-component summary baked in.
-  """
-  raw_manifest: JSON!
-}
-
-"""
-The result of the restore entity mutation.
-"""
-type RestoreEntityResult {
-  """
-  Confirms the restore request was accepted.
-  """
-  accepted: Boolean
-}
-
-"""
-A point-in-time record of a restore status change.
-"""
-type RestoreHistoryEntry {
-  """
-  The restore ID at the time this history entry was recorded.
-  """
-  restore_id: ID!
-  """
-  The entity id (package id) of the restore.
-  """
-  entity_id: ID!
-  """
-  The status of the restore at the time this history entry was recorded.
-  """
-  status: RestoreStatus!
-  """
-  The date and time this history entry was recorded.
-  """
-  recorded_at: String!
-}
-
-"""
-The possible statuses of a restore operation.
-"""
-enum RestoreStatus {
-  pending
-  processing
-  success
-  failed
-  rollback
-}
-
-"""
-Result of a restore rollback operation.
-"""
-type RollbackRestoreMutationResult {
-  """
-  The unique identifier of the restore.
-  """
-  restore_id: ID!
-  """
-  The new status of the restore (rollback).
-  """
-  status: RestoreStatus!
-}
-
-"""
-Result of a snapshot rollback operation.
-"""
-type RollbackSnapshotMutationResult {
-  """
-  The unique identifier of the snapshot.
-  """
-  snapshot_id: ID!
-  """
-  The new status of the snapshot (rollback).
-  """
-  status: SnapshotStatus!
-}
-
-"""
-A point-in-time record of a snapshot status change.
-"""
-type SnapshotHistoryEntry {
-  """
-  The snapshot ID at the time this history entry was recorded.
-  """
-  snapshot_id: ID!
-  """
-  The entity id (package id) of the snapshot.
-  """
-  entity_id: ID!
-  """
-  The status of the snapshot at the time this history entry was recorded.
-  """
-  status: SnapshotStatus!
-  """
-  The date and time this history entry was recorded.
-  """
-  recorded_at: String!
-}
-
-"""
-The possible statuses of a snapshot operation.
-"""
-enum SnapshotStatus {
-  pending
-  processing
-  success
-  failed
-  rollback
-}
-
-"""
-A board that can be snapshotted, with metadata and relations.
-"""
-type SnapshottableBoard {
-  """
-  The board ID.
-  """
-  id: ID
-  """
-  The board name.
-  """
-  name: String
-  """
-  The board owner user ID.
-  """
-  owner: ID
-  """
-  The workspace ID this board belongs to.
-  """
-  workspace_id: ID
-  """
-  Whether this board is a document.
-  """
-  is_doc: Boolean
-  """
-  Whether this board is a managed template instance.
-  """
-  is_managed_template_instance: Boolean
-  """
-  Related boards by relation type. Limited to 1 level of depth.
-  """
-  board_relations(relation_type: String!): [SnapshottableBoard!]
-}
-
-"""
-A paginated connection of snapshottable boards.
-"""
-type SnapshottableBoardConnection {
-  """
-  The list of boards in this page.
-  """
-  items: [SnapshottableBoard!]
-  """
-  The cursor for the next page.
-  """
-  cursor: String
-  """
-  Whether there are more pages.
-  """
-  has_next_page: Boolean
-}
-
-"""
-An overview that can be snapshotted, with connected boards.
-"""
-type SnapshottableOverview {
-  """
-  The overview ID.
-  """
-  id: ID
-  """
-  Boards connected to this overview.
-  """
-  connected_boards: [SnapshottableBoard!]
-}
-
-"""
-A paginated connection of snapshottable overviews.
-"""
-type SnapshottableOverviewConnection {
-  """
-  The list of overviews in this page.
-  """
-  items: [SnapshottableOverview!]
-  """
-  The cursor for the next page.
-  """
-  cursor: String
-  """
-  Whether there are more pages.
-  """
-  has_next_page: Boolean
-}
-
-"""
-A workspace that can be snapshotted, with paginated boards and overviews.
-"""
-type SnapshottableWorkspace {
-  """
-  The workspace ID.
-  """
-  id: ID
-  """
-  The workspace name.
-  """
-  name: String
-  """
-  The workspace owner user ID.
-  """
-  owner: ID
-  """
-  Paginated boards in this workspace.
-  """
-  boards(cursor: String): SnapshottableBoardConnection
-  """
-  Paginated overviews in this workspace.
-  """
-  overviews(cursor: String): SnapshottableOverviewConnection
-}
-
-"""
-The result of upserting entity ID mappings.
-"""
-type UpsertEntityIdMappingsResult {
-  """
-  Whether the upsert operation was successful.
-  """
-  success: Boolean
-  """
-  The number of mappings that were upserted.
-  """
-  count: Int
-}
-
-"""
 Your monday.com account
 """
 type Account {
@@ -23011,6 +22893,124 @@ input VideoBlockInput {
   The width of the video
   """
   width: Int
+}
+
+"""
+Dimension to group event counts by
+"""
+enum ActivityGroupBy {
+  BOARD
+  USER
+}
+
+"""
+Represents a single activity log entry
+"""
+type ActivityLog {
+  """
+  The unique identifier of the activity log entry
+  """
+  id: ID
+  """
+  The account this activity log entry belongs to
+  """
+  account_id: ID
+  """
+  The user who performed the action
+  """
+  user_id: ID
+  """
+  The type of event that occurred
+  """
+  event: String
+  """
+  The entity type that was affected
+  """
+  entity: String
+  """
+  Additional data associated with the event as a JSON string
+  """
+  data: String
+  """
+  The timestamp when the activity log entry was created
+  """
+  created_at: String
+}
+
+"""
+Entry point for internal activity log queries
+"""
+type ActivityLogInternalQueries {
+  """
+  Internal activity log entries for boards or users — skips authorization, entity whitelisting, and always includes boardless events
+  """
+  logs(board_ids: [ID!], user_ids: [ID!], from: String, to: String, event_types: [String!], correlation_ids: [ID!], entities: [String!], search: String, item_ids: [ID!], triggering_flow_types: [String!], limit: Int, cursor: String): ActivityLogsPage
+  """
+  Event counts grouped by board or user in a single aggregation request (no per-entity fan-out). board_ids is always required. Provide user_ids to count specific users; omit them (with group_by USER) to discover the top-N users active on the given boards.
+  """
+  event_counts(group_by: ActivityGroupBy!, limit: Int, board_ids: [ID!], user_ids: [ID!], from: String, to: String, event_types: [String!], correlation_ids: [ID!], entities: [String!], search: String): EventCountsResult
+}
+
+"""
+Entry point for all activity log queries
+"""
+type ActivityLogQueries {
+  """
+  Activity log entries for boards or users
+  """
+  logs(board_ids: [ID!], user_ids: [ID!], item_ids: [ID!], from: String, to: String, limit: Int, event_types: [String!], cursor: String): ActivityLogsPage
+}
+
+"""
+A page of activity log entries with a cursor for fetching the next page
+"""
+type ActivityLogsPage {
+  """
+  The activity log entries for this page
+  """
+  logs: [ActivityLog!]
+  """
+  Cursor to pass to fetch the next page, null if this is the last page
+  """
+  cursor: String
+}
+
+"""
+Event counts grouped by the requested dimension
+"""
+type EventCountsResult {
+  """
+  Explicit mode (IDs supplied): one bucket per requested ID, count 0 for IDs with no events. Discovery mode (group_by USER without user_ids): top-N users active on the given boards.
+  """
+  buckets: [GroupCountBucket!]
+}
+
+"""
+A grouped entity and its event count
+"""
+type GroupCountBucket {
+  """
+  The grouped entity ID (board ID or user ID, depending on group_by)
+  """
+  key: ID
+  """
+  Number of events for this entity within the filtered range
+  """
+  count: Int
+}
+
+"""
+A page of activity log entries with a cursor for fetching the next page
+"""
+type UserActivityLogsPage {
+  """
+  The activity log entries for this page
+  """
+  logs: [ActivityLog!]
+  """
+  Cursor to pass to fetch the next page, null if this is the last page
+  """
+  cursor: String
 }
 
 """
