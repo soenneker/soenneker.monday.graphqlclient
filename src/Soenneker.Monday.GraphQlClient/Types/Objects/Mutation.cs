@@ -262,111 +262,6 @@ public sealed partial class Mutation
     [JsonPropertyName("update_mute_board_settings")]
     public List<BoardMuteSettings>? UpdateMuteBoardSettings { get; init; }
 
-    [JsonPropertyName("create_timeline_item")]
-    public TimelineItem? CreateTimelineItem { get; init; }
-
-    [JsonPropertyName("delete_timeline_item")]
-    public TimelineItem? DeleteTimelineItem { get; init; }
-
-    [JsonPropertyName("create_custom_activity")]
-    public CustomActivity? CreateCustomActivity { get; init; }
-
-    [JsonPropertyName("delete_custom_activity")]
-    public CustomActivity? DeleteCustomActivity { get; init; }
-
-    /// <summary>
-    /// Assigns members to a department.
-    /// </summary>
-    [JsonPropertyName("assign_department_members")]
-    public AssignDepartmentMembersResult? AssignDepartmentMembers { get; init; }
-
-    /// <summary>
-    /// Clear users department
-    /// </summary>
-    [JsonPropertyName("clear_users_department")]
-    public ClearUsersDepartmentResult? ClearUsersDepartment { get; init; }
-
-    /// <summary>
-    /// Assigns an owner to a department.
-    /// </summary>
-    [JsonPropertyName("assign_department_owner")]
-    public AssignDepartmentOwnerResult? AssignDepartmentOwner { get; init; }
-
-    /// <summary>
-    /// Unassigns owners from a department.
-    /// </summary>
-    [JsonPropertyName("unassign_department_owners")]
-    public UnassignDepartmentOwnerResult? UnassignDepartmentOwners { get; init; }
-
-    /// <summary>
-    /// Creates a new department.
-    /// </summary>
-    [JsonPropertyName("create_department")]
-    public Department? CreateDepartment { get; init; }
-
-    /// <summary>
-    /// Updates a department.
-    /// </summary>
-    [JsonPropertyName("update_department")]
-    public Department? UpdateDepartment { get; init; }
-
-    /// <summary>
-    /// Deletes a department.
-    /// </summary>
-    [JsonPropertyName("delete_department")]
-    public Department? DeleteDepartment { get; init; }
-
-    [JsonPropertyName("like_update")]
-    public Update? LikeUpdate { get; init; }
-
-    [JsonPropertyName("unlike_update")]
-    public Update UnlikeUpdate { get; init; } = null!;
-
-    [JsonPropertyName("delete_update")]
-    public Update? DeleteUpdate { get; init; }
-
-    [JsonPropertyName("edit_update")]
-    public Update EditUpdate { get; init; } = null!;
-
-    [JsonPropertyName("pin_to_top")]
-    public Update PinToTop { get; init; } = null!;
-
-    [JsonPropertyName("unpin_from_top")]
-    public Update UnpinFromTop { get; init; } = null!;
-
-    [JsonPropertyName("create_update")]
-    public Update? CreateUpdate { get; init; }
-
-    /// <summary>
-    /// Asynchronously delete items on a board
-    /// </summary>
-    [JsonPropertyName("bulk_delete_items")]
-    public BulkDeleteInit? BulkDeleteItems { get; init; }
-
-    /// <summary>
-    /// Asynchronously archive items on a board
-    /// </summary>
-    [JsonPropertyName("bulk_archive_items")]
-    public BulkDeleteInit? BulkArchiveItems { get; init; }
-
-    /// <summary>
-    /// Initialize a backfill job for a board and group. Designed for data migrations with no side effects and a 20k row limit. Returns job ID and upload URL to begin the process.
-    /// </summary>
-    [JsonPropertyName("backfill_items")]
-    public UploadJobInit? BackfillItems { get; init; }
-
-    /// <summary>
-    /// Initialize an ingest job for a board and group. Designed for ongoing integrations with full side effects and a 10k row limit. Returns job ID and upload URL to begin the process.
-    /// </summary>
-    [JsonPropertyName("ingest_items")]
-    public UploadJobInit? IngestItems { get; init; }
-
-    /// <summary>
-    /// Undo a previously completed action, or cancel one still in flight
-    /// </summary>
-    [JsonPropertyName("undo_action")]
-    public UndoResult? UndoAction { get; init; }
-
     /// <summary>
     /// Create managed column of type dropdown mutation.
     /// </summary>
@@ -511,6 +406,123 @@ public sealed partial class Mutation
     [JsonPropertyName("bulk_object_schema_column_actions")]
     public List<ObjectSchemaActionResult>? BulkObjectSchemaColumnActions { get; init; }
 
+    [JsonPropertyName("create_timeline_item")]
+    public TimelineItem? CreateTimelineItem { get; init; }
+
+    [JsonPropertyName("delete_timeline_item")]
+    public TimelineItem? DeleteTimelineItem { get; init; }
+
+    [JsonPropertyName("create_custom_activity")]
+    public CustomActivity? CreateCustomActivity { get; init; }
+
+    [JsonPropertyName("delete_custom_activity")]
+    public CustomActivity? DeleteCustomActivity { get; init; }
+
+    /// <summary>
+    /// Assigns members to a department.
+    /// </summary>
+    [JsonPropertyName("assign_department_members")]
+    public AssignDepartmentMembersResult? AssignDepartmentMembers { get; init; }
+
+    /// <summary>
+    /// Clear users department
+    /// </summary>
+    [JsonPropertyName("clear_users_department")]
+    public ClearUsersDepartmentResult? ClearUsersDepartment { get; init; }
+
+    /// <summary>
+    /// Assigns an owner to a department.
+    /// </summary>
+    [JsonPropertyName("assign_department_owner")]
+    public AssignDepartmentOwnerResult? AssignDepartmentOwner { get; init; }
+
+    /// <summary>
+    /// Unassigns owners from a department.
+    /// </summary>
+    [JsonPropertyName("unassign_department_owners")]
+    public UnassignDepartmentOwnerResult? UnassignDepartmentOwners { get; init; }
+
+    /// <summary>
+    /// Creates a new department.
+    /// </summary>
+    [JsonPropertyName("create_department")]
+    public Department? CreateDepartment { get; init; }
+
+    /// <summary>
+    /// Updates a department.
+    /// </summary>
+    [JsonPropertyName("update_department")]
+    public Department? UpdateDepartment { get; init; }
+
+    /// <summary>
+    /// Deletes a department.
+    /// </summary>
+    [JsonPropertyName("delete_department")]
+    public Department? DeleteDepartment { get; init; }
+
+    [JsonPropertyName("like_update")]
+    public Update? LikeUpdate { get; init; }
+
+    [JsonPropertyName("unlike_update")]
+    public Update UnlikeUpdate { get; init; } = null!;
+
+    [JsonPropertyName("delete_update")]
+    public Update? DeleteUpdate { get; init; }
+
+    [JsonPropertyName("edit_update")]
+    public Update EditUpdate { get; init; } = null!;
+
+    [JsonPropertyName("pin_to_top")]
+    public Update PinToTop { get; init; } = null!;
+
+    [JsonPropertyName("unpin_from_top")]
+    public Update UnpinFromTop { get; init; } = null!;
+
+    [JsonPropertyName("create_update")]
+    public Update? CreateUpdate { get; init; }
+
+    /// <summary>
+    /// Connect an existing project to a portfolio. When a callback_url is provided the mutation returns immediately with a process_id, and the result is POSTed to that URL once the operation completes. The callback payload is: { is_success: boolean, process_id: string, portfolio_item_id?: string }.
+    /// </summary>
+    [JsonPropertyName("connect_project_to_portfolio")]
+    public ConnectProjectResult? ConnectProjectToPortfolio { get; init; }
+
+    /// <summary>
+    /// Create a new portfolio. When a callback_url is provided the mutation returns immediately with a process_id, and the portfolio_id is POSTed to that URL once the portfolio is actually created. The callback payload is: { is_success: boolean, process_id: string, portfolio_id?: number }.
+    /// </summary>
+    [JsonPropertyName("create_portfolio")]
+    public CreatePortfolioResult? CreatePortfolio { get; init; }
+
+    /// <summary>
+    /// Asynchronously delete items on a board
+    /// </summary>
+    [JsonPropertyName("bulk_delete_items")]
+    public BulkDeleteInit? BulkDeleteItems { get; init; }
+
+    /// <summary>
+    /// Asynchronously archive items on a board
+    /// </summary>
+    [JsonPropertyName("bulk_archive_items")]
+    public BulkDeleteInit? BulkArchiveItems { get; init; }
+
+    /// <summary>
+    /// Initialize a backfill job for a board and group. Designed for data migrations with no side effects and a 20k row limit. Returns job ID and upload URL to begin the process.
+    /// </summary>
+    [JsonPropertyName("backfill_items")]
+    public UploadJobInit? BackfillItems { get; init; }
+
+    /// <summary>
+    /// Initialize an ingest job for a board and group. Designed for ongoing integrations with full side effects and a 10k row limit. Returns job ID and upload URL to begin the process.
+    /// </summary>
+    [JsonPropertyName("ingest_items")]
+    public UploadJobInit? IngestItems { get; init; }
+
+    /// <summary>
+    /// Undo a previously completed action, or cancel one still in flight
+    /// </summary>
+    [JsonPropertyName("undo_action")]
+    public UndoResult? UndoAction { get; init; }
+
     /// <summary>
     /// Creates a new team.
     /// </summary>
@@ -588,18 +600,6 @@ public sealed partial class Mutation
     /// </summary>
     [JsonPropertyName("create_service_user")]
     public CreateServiceUserResult? CreateServiceUser { get; init; }
-
-    /// <summary>
-    /// Connect an existing project to a portfolio. When a callback_url is provided the mutation returns immediately with a process_id, and the result is POSTed to that URL once the operation completes. The callback payload is: { is_success: boolean, process_id: string, portfolio_item_id?: string }.
-    /// </summary>
-    [JsonPropertyName("connect_project_to_portfolio")]
-    public ConnectProjectResult? ConnectProjectToPortfolio { get; init; }
-
-    /// <summary>
-    /// Create a new portfolio. When a callback_url is provided the mutation returns immediately with a process_id, and the portfolio_id is POSTed to that URL once the portfolio is actually created. The callback payload is: { is_success: boolean, process_id: string, portfolio_id?: number }.
-    /// </summary>
-    [JsonPropertyName("create_portfolio")]
-    public CreatePortfolioResult? CreatePortfolio { get; init; }
 
     /// <summary>
     /// Create a new widget.

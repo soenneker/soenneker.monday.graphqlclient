@@ -1122,65 +1122,6 @@ type Mutation {
   Update mute notification settings for a board. Allows muting all notifications for all users, only for the current user, or setting mentions/assigns-only. Returns the updated mute state for the board. Requires appropriate permissions for muting all users.
   """
   update_mute_board_settings(board_id: String!, mute_state: BoardMuteState!, enabled: [CustomizableBoardSettings!]): [BoardMuteSettings!]
-  create_timeline_item(item_id: ID!, user_id: Int, title: String!, timestamp: ISO8601DateTime!, summary: String, content: String, location: String, phone: String, url: String, time_range: TimelineItemTimeRange, custom_activity_id: String!): TimelineItem
-  delete_timeline_item(id: String!): TimelineItem
-  create_custom_activity(name: String!, icon_id: CustomActivityIcon!, color: CustomActivityColor!): CustomActivity
-  delete_custom_activity(id: String!): CustomActivity
-  """
-  Assigns members to a department.
-  """
-  assign_department_members(department_id: ID!, user_ids: [ID!]!): AssignDepartmentMembersResult
-  """
-  Clear users department
-  """
-  clear_users_department(user_ids: [ID!]!): ClearUsersDepartmentResult
-  """
-  Assigns an owner to a department.
-  """
-  assign_department_owner(department_id: ID!, user_id: ID!): AssignDepartmentOwnerResult
-  """
-  Unassigns owners from a department.
-  """
-  unassign_department_owners(department_id: ID!, user_ids: [ID!]!): UnassignDepartmentOwnerResult
-  """
-  Creates a new department.
-  """
-  create_department(data: CreateDepartmentDataInput!): Department
-  """
-  Updates a department.
-  """
-  update_department(department_id: ID!, data: UpdateDepartmentOptionsInput): Department
-  """
-  Deletes a department.
-  """
-  delete_department(department_id: ID!): Department
-  like_update(update_id: ID!, reaction_type: String): Update
-  unlike_update(update_id: ID!): Update!
-  delete_update(id: ID!): Update
-  edit_update(id: ID!, body: String!): Update!
-  pin_to_top(id: ID!, item_id: ID): Update!
-  unpin_from_top(id: ID!, item_id: ID): Update!
-  create_update(body: String!, original_creation_date: String, mentions_list: [UpdateMention], item_id: ID, parent_id: ID, use_app_info: Boolean): Update
-  """
-  Asynchronously delete items on a board
-  """
-  bulk_delete_items(board_id: ID!, item_ids: [ID!]!): BulkDeleteInit
-  """
-  Asynchronously archive items on a board
-  """
-  bulk_archive_items(board_id: ID!, item_ids: [ID!]!): BulkDeleteInit
-  """
-  Initialize a backfill job for a board and group. Designed for data migrations with no side effects and a 20k row limit. Returns job ID and upload URL to begin the process.
-  """
-  backfill_items(board_id: ID!, group_id: ID!): UploadJobInit
-  """
-  Initialize an ingest job for a board and group. Designed for ongoing integrations with full side effects and a 10k row limit. Returns job ID and upload URL to begin the process.
-  """
-  ingest_items(board_id: ID!, group_id: ID!, on_match: OnMatchInput): UploadJobInit
-  """
-  Undo a previously completed action, or cancel one still in flight
-  """
-  undo_action(job_id: ID!): UndoResult
   """
   Create managed column of type dropdown mutation.
   """
@@ -1277,6 +1218,73 @@ type Mutation {
   Execute multiple object schema column actions in a single request. Actions are executed sequentially in the order provided. If any action fails, execution stops and an error is returned.
   """
   bulk_object_schema_column_actions(object_schema_id: ID, object_schema_name: String, actions: [ObjectSchemaActionInput!]!): [ObjectSchemaActionResult!]
+  create_timeline_item(item_id: ID!, user_id: Int, title: String!, timestamp: ISO8601DateTime!, summary: String, content: String, location: String, phone: String, url: String, time_range: TimelineItemTimeRange, custom_activity_id: String!): TimelineItem
+  delete_timeline_item(id: String!): TimelineItem
+  create_custom_activity(name: String!, icon_id: CustomActivityIcon!, color: CustomActivityColor!): CustomActivity
+  delete_custom_activity(id: String!): CustomActivity
+  """
+  Assigns members to a department.
+  """
+  assign_department_members(department_id: ID!, user_ids: [ID!]!): AssignDepartmentMembersResult
+  """
+  Clear users department
+  """
+  clear_users_department(user_ids: [ID!]!): ClearUsersDepartmentResult
+  """
+  Assigns an owner to a department.
+  """
+  assign_department_owner(department_id: ID!, user_id: ID!): AssignDepartmentOwnerResult
+  """
+  Unassigns owners from a department.
+  """
+  unassign_department_owners(department_id: ID!, user_ids: [ID!]!): UnassignDepartmentOwnerResult
+  """
+  Creates a new department.
+  """
+  create_department(data: CreateDepartmentDataInput!): Department
+  """
+  Updates a department.
+  """
+  update_department(department_id: ID!, data: UpdateDepartmentOptionsInput): Department
+  """
+  Deletes a department.
+  """
+  delete_department(department_id: ID!): Department
+  like_update(update_id: ID!, reaction_type: String): Update
+  unlike_update(update_id: ID!): Update!
+  delete_update(id: ID!): Update
+  edit_update(id: ID!, body: String!): Update!
+  pin_to_top(id: ID!, item_id: ID): Update!
+  unpin_from_top(id: ID!, item_id: ID): Update!
+  create_update(body: String!, original_creation_date: String, mentions_list: [UpdateMention], item_id: ID, parent_id: ID, use_app_info: Boolean): Update
+  """
+  Connect an existing project to a portfolio. When a callback_url is provided the mutation returns immediately with a process_id, and the result is POSTed to that URL once the operation completes. The callback payload is: { is_success: boolean, process_id: string, portfolio_item_id?: string }.
+  """
+  connect_project_to_portfolio(projectBoardId: ID!, portfolioBoardId: ID!, callback_url: String): ConnectProjectResult
+  """
+  Create a new portfolio. When a callback_url is provided the mutation returns immediately with a process_id, and the portfolio_id is POSTed to that URL once the portfolio is actually created. The callback payload is: { is_success: boolean, process_id: string, portfolio_id?: number }.
+  """
+  create_portfolio(boardName: String!, boardPrivacy: String!, destinationWorkspaceId: Int, callback_url: String): CreatePortfolioResult
+  """
+  Asynchronously delete items on a board
+  """
+  bulk_delete_items(board_id: ID!, item_ids: [ID!]!): BulkDeleteInit
+  """
+  Asynchronously archive items on a board
+  """
+  bulk_archive_items(board_id: ID!, item_ids: [ID!]!): BulkDeleteInit
+  """
+  Initialize a backfill job for a board and group. Designed for data migrations with no side effects and a 20k row limit. Returns job ID and upload URL to begin the process.
+  """
+  backfill_items(board_id: ID!, group_id: ID!): UploadJobInit
+  """
+  Initialize an ingest job for a board and group. Designed for ongoing integrations with full side effects and a 10k row limit. Returns job ID and upload URL to begin the process.
+  """
+  ingest_items(board_id: ID!, group_id: ID!, on_match: OnMatchInput): UploadJobInit
+  """
+  Undo a previously completed action, or cancel one still in flight
+  """
+  undo_action(job_id: ID!): UndoResult
   """
   Creates a new team.
   """
@@ -1329,14 +1337,6 @@ type Mutation {
   Creates a new service user.
   """
   create_service_user(name: String!, title: String): CreateServiceUserResult
-  """
-  Connect an existing project to a portfolio. When a callback_url is provided the mutation returns immediately with a process_id, and the result is POSTed to that URL once the operation completes. The callback payload is: { is_success: boolean, process_id: string, portfolio_item_id?: string }.
-  """
-  connect_project_to_portfolio(projectBoardId: ID!, portfolioBoardId: ID!, callback_url: String): ConnectProjectResult
-  """
-  Create a new portfolio. When a callback_url is provided the mutation returns immediately with a process_id, and the portfolio_id is POSTed to that URL once the portfolio is actually created. The callback payload is: { is_success: boolean, process_id: string, portfolio_id?: number }.
-  """
-  create_portfolio(boardName: String!, boardPrivacy: String!, destinationWorkspaceId: Int, callback_url: String): CreatePortfolioResult
   """
   Create a new widget.
   """
@@ -3755,100 +3755,321 @@ type UtilizationReportUngrouped {
   total_resource_count: Int
 }
 
-"""
-An item (table row).
-"""
-type Item {
+type AggregateBasicAggregationResult {
+  result: Float
+}
+
+enum AggregateFromElementType {
+  TABLE
+}
+
+input AggregateFromTableInput {
   """
-  The item's unique identifier.
+  Always TABLE or DATA_VIEW
   """
+  type: AggregateFromElementType!
   id: ID!
+}
+
+input AggregateGroupByElementInput {
+  column_id: String!
+  limit: Int
+}
+
+type AggregateGroupByResult {
   """
-  The item's updates with cursor-based pagination.
+  The value of the group by result. Can be an integer, float, string, or boolean.
   """
-  updates_page(limit: Int = 25, cursor: String): UpdatesPage
+  value: JSON
+}
+
+input AggregateQueryInput {
   """
-  The item's updates.
+  Select elements to return. Each element must have either a function or column property. If selecting a column or transformative function, the element must appear in group by.
   """
-  updates(limit: Int = 25, page: Int = 1, ids: [ID!]): [Update!]
+  select: [AggregateSelectElementInput!]!
   """
-  The item's assets/files.
+  Source to select from (table or data view)
   """
-  assets(assets_source: AssetsSource, column_ids: [String]): [Asset]
+  from: AggregateFromTableInput!
   """
-  The board that contains this item.
+  Group by elements
   """
-  board: Board
+  group_by: [AggregateGroupByElementInput!]
   """
-  The item's column values.
+  ItemsQuery filter and sort. If not provided, all items will be returned.
   """
-  column_values(capabilities: [ColumnCapability!], ids: [String!], types: [ColumnType!]): [ColumnValue!]!
+  query: ItemsQuery
   """
-  The item's create date.
+  Max number of results to return
+  """
+  limit: Int
+}
+
+type AggregateQueryResult {
+  results: [AggregateResultSet!]
+}
+
+union AggregateResult = AggregateBasicAggregationResult | AggregateGroupByResult
+
+type AggregateResultEntry {
+  alias: String
+  value: AggregateResult
+}
+
+type AggregateResultSet {
+  entries: [AggregateResultEntry!]
+}
+
+input AggregateSelectColumnInput {
+  column_id: String!
+}
+
+input AggregateSelectElementInput {
+  """
+  Type of the selected element
+  """
+  type: AggregateSelectElementType!
+  """
+  Column to select. Required if type is COLUMN. If selecting a column, the element must have a matching group by element with the same column_id or alias, if present.
+  """
+  column: AggregateSelectColumnInput
+  """
+  Function to select. Required if type is FUNCTION. If selecting a transformative function, the element must have a matching group by element with the same alias. If selecting an aggregative function, the select element must not have a matching group by element.
+  """
+  function: AggregateSelectFunctionInput
+  """
+  Alias for the selected element
+  """
+  as: String!
+}
+
+enum AggregateSelectElementType {
+  COLUMN
+  FUNCTION
+}
+
+input AggregateSelectFunctionInput {
+  """
+  Function to select. Required if type is FUNCTION
+  """
+  function: AggregateSelectFunctionName!
+  params: [AggregateSelectElementInput!]
+}
+
+"""
+Function to select. Required if type is FUNCTION
+"""
+enum AggregateSelectFunctionName {
+  NONE
+  COUNT_ITEMS
+  COUNT_SUBITEMS
+  COUNT
+  COUNT_DISTINCT
+  COUNT_KEYS
+  SUM
+  AVERAGE
+  MEDIAN
+  MIN
+  MAX
+  MIN_MAX
+  BETWEEN
+  DURATION_RUNNING
+  UPPER
+  LOWER
+  TRIM
+  LENGTH
+  FIRST
+  LEFT
+  FLATTEN
+  CASE
+  EQUALS
+  DATE_TRUNC_DAY
+  DATE_TRUNC_WEEK
+  DATE_TRUNC_MONTH
+  DATE_TRUNC_QUARTER
+  DATE_TRUNC_YEAR
+  DATE
+  START_DATE
+  END_DATE
+  HOUR
+  PERSON
+  ID
+  LABEL
+  COLOR
+  ORDER
+  RAW
+  IS_DONE
+  PHONE_COUNTRY_SHORT_NAME
+}
+
+"""
+A string or number value for comparison
+"""
+scalar CompareValue
+
+"""
+A data view that aggregates data from multiple sources into a unified structure.
+"""
+type DataView {
+  """
+  The unique identifier of the data view.
+  """
+  id: ID
+  """
+  The name of the data view.
+  """
+  name: String
+  """
+  The description of the data view.
+  """
+  description: String
+  """
+  The target schema of the data view.
+  """
+  target: DataViewTarget
+  """
+  The authorization object associated with the data view.
+  """
+  authorization_object: DataViewAuthorizationObject
+  """
+  The paginated sources of the data view.
+  """
+  sources: DataViewPaginatedSources
+  """
+  The account identifier.
+  """
+  account_id: ID
+  """
+  The user identifier of the creator.
+  """
+  created_by: Int
+  """
+  The date and time of creation.
   """
   created_at: Date
   """
-  The item's creator.
-  """
-  creator: User
-  """
-  The unique identifier of the item creator.
-  """
-  creator_id: String!
-  """
-  The item's description
-  """
-  description: ItemDescription
-  """
-  The item's email.
-  """
-  email: String!
-  """
-  The group that contains this item.
-  """
-  group: Group
-  """
-  The item's linked items
-  """
-  linked_items(link_to_item_column_id: String!, linked_board_id: ID!): [Item!]!
-  """
-  The item's name.
-  """
-  name: String!
-  """
-  The parent item of a subitem.
-  """
-  parent_item: Item
-  """
-  The item's relative path
-  """
-  relative_link: String
-  """
-  The item's state (all / active / archived / deleted).
-  """
-  state: State
-  """
-  The item's subitems.
-  """
-  subitems: [Item]
-  """
-  The pulses's subscribers.
-  """
-  subscribers: [User]!
-  """
-  The item's last update date.
+  The date and time of the last update.
   """
   updated_at: Date
   """
-  The item's link
+  The revision number of the data view.
   """
-  url: String!
+  revision: Int
+  """
+  Whether the data view is archived.
+  """
+  archived: Boolean
+}
+
+"""
+The direction to order the items by
+"""
+enum ItemsOrderByDirection {
+  asc
+  desc
+}
+
+input ItemsQuery {
+  """
+  A list of rules
+  """
+  rules: [ItemsQueryRule!]
+  """
+  A list of rule groups
+  """
+  groups: [ItemsQueryGroup!]
+  """
+  The operator to use for the query rules or rule groups. Default: AND
+  """
+  operator: ItemsQueryOperator = and
+  """
+  A list of item IDs to fetch. Use this to fetch a specific set of items by their IDs. Limited to 100 IDs in ItemsQuery
+  """
+  ids: [ID!]
+  """
+  Sort the results by specified columns
+  """
+  order_by: [ItemsQueryOrderBy!]
+}
+
+"""
+A group of rules or rule groups
+"""
+input ItemsQueryGroup {
+  """
+  A list of rules
+  """
+  rules: [ItemsQueryRule!]
+  """
+  A list of rule groups
+  """
+  groups: [ItemsQueryGroup!]
+  """
+  The operator to use for the query rules or rule groups. Default: AND
+  """
+  operator: ItemsQueryOperator = and
+}
+
+"""
+The condition between the query rules
+"""
+enum ItemsQueryOperator {
+  or
+  and
+}
+
+"""
+Sort the results by specified columns
+"""
+input ItemsQueryOrderBy {
+  column_id: String!
+  """
+  Sort direction (defaults to ASC)
+  """
+  direction: ItemsOrderByDirection = asc
+}
+
+"""
+A rule to filter items by a specific column
+"""
+input ItemsQueryRule {
+  column_id: ID!
+  compare_value: CompareValue!
+  compare_attribute: String
+  operator: ItemsQueryRuleOperator = any_of
+}
+
+"""
+The operator to use for the value comparison
+"""
+enum ItemsQueryRuleOperator {
+  any_of
+  not_any_of
+  is_empty
+  is_not_empty
+  within_the_last
+  within_the_next
+  greater_than
+  greater_than_or_equals
+  lower_than
+  lower_than_or_equal
+  between
+  starts_with
+  ends_with
+  contains_text
+  contains_terms
+  not_contains_text
 }
 
 """
 Root query type for the Dependencies service
 """
 type Query {
+  """
+  Performs aggregation operations on board data
+  """
+  aggregate(query: AggregateQueryInput!): AggregateQueryResult
   """
   Get a collection of monday dev sprints
   """
@@ -4006,9 +4227,17 @@ type Query {
   """
   mute_board_settings(board_ids: [ID!]!): [BoardMuteSettings!]
   """
-  Performs aggregation operations on board data
+  Get managed column data.
   """
-  aggregate(query: AggregateQueryInput!): AggregateQueryResult
+  managed_column(id: [String!], state: [ManagedColumnState!]): [ManagedColumn!]
+  """
+  Retrieves the JSON schema definition for a specific column type. Use this query before calling update_column mutation to understand the structure and validation rules for the defaults parameter. The schema defines what properties are available when updating columns of a specific type.
+  """
+  get_column_type_schema(type: ColumnType!): JSON
+  """
+  Retrieve active account object schemas by their IDs or names. Only returns account-level object schemas (not global). Object schemas define the structure and columns of boards. If no parameters are provided, all account object schemas are returned. Pass exclude_created_by_monday: true to omit the schemas seeded by monday.com and return only schemas created by users in this account. Results are paginated using page and limit parameters.
+  """
+  get_object_schemas(ids: [ID!], names: [String!], limit: Int, page: Int, exclude_created_by_monday: Boolean): [ObjectSchema!]
   custom_activity(ids: [String!], name: String, icon_id: CustomActivityIcon, color: CustomActivityColor): [CustomActivity!]
   timeline_item(id: ID!): TimelineItem
   """
@@ -4097,18 +4326,6 @@ type Query {
   Get the status of a backfill or ingest job
   """
   fetch_job_status(job_id: ID!): JobStatus!
-  """
-  Get managed column data.
-  """
-  managed_column(id: [String!], state: [ManagedColumnState!]): [ManagedColumn!]
-  """
-  Retrieves the JSON schema definition for a specific column type. Use this query before calling update_column mutation to understand the structure and validation rules for the defaults parameter. The schema defines what properties are available when updating columns of a specific type.
-  """
-  get_column_type_schema(type: ColumnType!): JSON
-  """
-  Retrieve active account object schemas by their IDs or names. Only returns account-level object schemas (not global). Object schemas define the structure and columns of boards. If no parameters are provided, all account object schemas are returned. Pass exclude_created_by_monday: true to omit the schemas seeded by monday.com and return only schemas created by users in this account. Results are paginated using page and limit parameters.
-  """
-  get_object_schemas(ids: [ID!], names: [String!], limit: Int, page: Int, exclude_created_by_monday: Boolean): [ObjectSchema!]
   """
   Get all roles for the account
   """
@@ -4271,6 +4488,110 @@ type Query {
   Search knowledge base snippets.
   """
   knowledge_base_search(query: String!, limit: Int = 5): KnowledgeBaseAnswer
+}
+
+"""
+A data source to describe
+"""
+input SqlDescribeSourceInput {
+  """
+  Source type: board, materialized_view, data_view
+  """
+  type: String!
+  """
+  Source identifier
+  """
+  id: String!
+}
+
+"""
+An item (table row).
+"""
+type Item {
+  """
+  The item's unique identifier.
+  """
+  id: ID!
+  """
+  The item's updates with cursor-based pagination.
+  """
+  updates_page(limit: Int = 25, cursor: String): UpdatesPage
+  """
+  The item's updates.
+  """
+  updates(limit: Int = 25, page: Int = 1, ids: [ID!]): [Update!]
+  """
+  The item's assets/files.
+  """
+  assets(assets_source: AssetsSource, column_ids: [String]): [Asset]
+  """
+  The board that contains this item.
+  """
+  board: Board
+  """
+  The item's column values.
+  """
+  column_values(capabilities: [ColumnCapability!], ids: [String!], types: [ColumnType!]): [ColumnValue!]!
+  """
+  The item's create date.
+  """
+  created_at: Date
+  """
+  The item's creator.
+  """
+  creator: User
+  """
+  The unique identifier of the item creator.
+  """
+  creator_id: String!
+  """
+  The item's description
+  """
+  description: ItemDescription
+  """
+  The item's email.
+  """
+  email: String!
+  """
+  The group that contains this item.
+  """
+  group: Group
+  """
+  The item's linked items
+  """
+  linked_items(link_to_item_column_id: String!, linked_board_id: ID!): [Item!]!
+  """
+  The item's name.
+  """
+  name: String!
+  """
+  The parent item of a subitem.
+  """
+  parent_item: Item
+  """
+  The item's relative path
+  """
+  relative_link: String
+  """
+  The item's state (all / active / archived / deleted).
+  """
+  state: State
+  """
+  The item's subitems.
+  """
+  subitems: [Item]
+  """
+  The pulses's subscribers.
+  """
+  subscribers: [User]!
+  """
+  The item's last update date.
+  """
+  updated_at: Date
+  """
+  The item's link
+  """
+  url: String!
 }
 
 """
@@ -4613,6 +4934,10 @@ type Board {
   """
   manual_metadata: BoardManualMetadata
   """
+  The board's visible columns.
+  """
+  columns(ids: [String], types: [ColumnType!], capabilities: [ColumnCapability]): [Column]
+  """
   The board's updates with cursor-based pagination.
   """
   updates_page(limit: Int = 25, cursor: String): UpdatesPage
@@ -4620,10 +4945,6 @@ type Board {
   The board's updates.
   """
   updates(limit: Int = 25, page: Int = 1, ids: [ID!], board_updates_only: Boolean, from_date: ISO8601DateTime, to_date: ISO8601DateTime): [Update!]
-  """
-  The board's visible columns.
-  """
-  columns(ids: [String], types: [ColumnType!], capabilities: [ColumnCapability]): [Column]
   """
   The board's views.
   """
@@ -5697,11 +6018,6 @@ type Attribute {
 }
 
 """
-A string or number value for comparison
-"""
-scalar CompareValue
-
-"""
 Input for creating a PTO entry for a user
 """
 input CreatePtoEntryInput {
@@ -5930,106 +6246,6 @@ type GetAttributesResponse {
   List of available attributes containing id, name, and is_active
   """
   attributes: [Attribute!]!
-}
-
-"""
-The direction to order the items by
-"""
-enum ItemsOrderByDirection {
-  asc
-  desc
-}
-
-input ItemsQuery {
-  """
-  A list of rules
-  """
-  rules: [ItemsQueryRule!]
-  """
-  A list of rule groups
-  """
-  groups: [ItemsQueryGroup!]
-  """
-  The operator to use for the query rules or rule groups. Default: AND
-  """
-  operator: ItemsQueryOperator = and
-  """
-  A list of item IDs to fetch. Use this to fetch a specific set of items by their IDs. Limited to 100 IDs in ItemsQuery
-  """
-  ids: [ID!]
-  """
-  Sort the results by specified columns
-  """
-  order_by: [ItemsQueryOrderBy!]
-}
-
-"""
-A group of rules or rule groups
-"""
-input ItemsQueryGroup {
-  """
-  A list of rules
-  """
-  rules: [ItemsQueryRule!]
-  """
-  A list of rule groups
-  """
-  groups: [ItemsQueryGroup!]
-  """
-  The operator to use for the query rules or rule groups. Default: AND
-  """
-  operator: ItemsQueryOperator = and
-}
-
-"""
-The condition between the query rules
-"""
-enum ItemsQueryOperator {
-  or
-  and
-}
-
-"""
-Sort the results by specified columns
-"""
-input ItemsQueryOrderBy {
-  column_id: String!
-  """
-  Sort direction (defaults to ASC)
-  """
-  direction: ItemsOrderByDirection = asc
-}
-
-"""
-A rule to filter items by a specific column
-"""
-input ItemsQueryRule {
-  column_id: ID!
-  compare_value: CompareValue!
-  compare_attribute: String
-  operator: ItemsQueryRuleOperator = any_of
-}
-
-"""
-The operator to use for the value comparison
-"""
-enum ItemsQueryRuleOperator {
-  any_of
-  not_any_of
-  is_empty
-  is_not_empty
-  within_the_last
-  within_the_next
-  greater_than
-  greater_than_or_equals
-  lower_than
-  lower_than_or_equal
-  between
-  starts_with
-  ends_with
-  contains_text
-  contains_terms
-  not_contains_text
 }
 
 """
@@ -14749,6 +14965,50 @@ type Workspace {
   users_subscribers(limit: Int = 25, page: Int = 1): [User]
 }
 
+"""
+Aggregated result of synchronously loading all widget data for a dashboard.
+"""
+type DashboardDataResult {
+  """
+  Identifier of the dashboard whose widgets were loaded.
+  """
+  dashboard_id: ID
+  """
+  Per-widget results for the dashboard, one entry per supported widget.
+  """
+  widgets: [WidgetResult!]
+}
+
+"""
+Result of loading a single widget within a dashboard data load.
+"""
+type WidgetResult {
+  """
+  Identifier of the widget this result belongs to.
+  """
+  widget_id: ID
+  """
+  Whether the widget data loaded successfully or failed.
+  """
+  status: WidgetStatus
+  """
+  Loaded widget data payload; null when status is ERROR or no data is available.
+  """
+  data: JSON
+  """
+  Error message describing why the widget failed to load; null on success.
+  """
+  error: String
+}
+
+"""
+Outcome of loading a single widget within loadDashboardData.
+"""
+enum WidgetStatus {
+  OK
+  ERROR
+}
+
 type BoardMuteSettings {
   """
   Board ID
@@ -15414,168 +15674,6 @@ type UpsertEntityIdMappingsResult {
   count: Int
 }
 
-type AggregateBasicAggregationResult {
-  result: Float
-}
-
-enum AggregateFromElementType {
-  TABLE
-}
-
-input AggregateFromTableInput {
-  """
-  Always TABLE or DATA_VIEW
-  """
-  type: AggregateFromElementType!
-  id: ID!
-}
-
-input AggregateGroupByElementInput {
-  column_id: String!
-  limit: Int
-}
-
-type AggregateGroupByResult {
-  """
-  The value of the group by result. Can be an integer, float, string, or boolean.
-  """
-  value: JSON
-}
-
-input AggregateQueryInput {
-  """
-  Select elements to return. Each element must have either a function or column property. If selecting a column or transformative function, the element must appear in group by.
-  """
-  select: [AggregateSelectElementInput!]!
-  """
-  Source to select from (table or data view)
-  """
-  from: AggregateFromTableInput!
-  """
-  Group by elements
-  """
-  group_by: [AggregateGroupByElementInput!]
-  """
-  ItemsQuery filter and sort. If not provided, all items will be returned.
-  """
-  query: ItemsQuery
-  """
-  Max number of results to return
-  """
-  limit: Int
-}
-
-type AggregateQueryResult {
-  results: [AggregateResultSet!]
-}
-
-union AggregateResult = AggregateBasicAggregationResult | AggregateGroupByResult
-
-type AggregateResultEntry {
-  alias: String
-  value: AggregateResult
-}
-
-type AggregateResultSet {
-  entries: [AggregateResultEntry!]
-}
-
-input AggregateSelectColumnInput {
-  column_id: String!
-}
-
-input AggregateSelectElementInput {
-  """
-  Type of the selected element
-  """
-  type: AggregateSelectElementType!
-  """
-  Column to select. Required if type is COLUMN. If selecting a column, the element must have a matching group by element with the same column_id or alias, if present.
-  """
-  column: AggregateSelectColumnInput
-  """
-  Function to select. Required if type is FUNCTION. If selecting a transformative function, the element must have a matching group by element with the same alias. If selecting an aggregative function, the select element must not have a matching group by element.
-  """
-  function: AggregateSelectFunctionInput
-  """
-  Alias for the selected element
-  """
-  as: String!
-}
-
-enum AggregateSelectElementType {
-  COLUMN
-  FUNCTION
-}
-
-input AggregateSelectFunctionInput {
-  """
-  Function to select. Required if type is FUNCTION
-  """
-  function: AggregateSelectFunctionName!
-  params: [AggregateSelectElementInput!]
-}
-
-"""
-Function to select. Required if type is FUNCTION
-"""
-enum AggregateSelectFunctionName {
-  NONE
-  COUNT_ITEMS
-  COUNT_SUBITEMS
-  COUNT
-  COUNT_DISTINCT
-  COUNT_KEYS
-  SUM
-  AVERAGE
-  MEDIAN
-  MIN
-  MAX
-  MIN_MAX
-  BETWEEN
-  DURATION_RUNNING
-  UPPER
-  LOWER
-  TRIM
-  LENGTH
-  FIRST
-  LEFT
-  FLATTEN
-  CASE
-  EQUALS
-  DATE_TRUNC_DAY
-  DATE_TRUNC_WEEK
-  DATE_TRUNC_MONTH
-  DATE_TRUNC_QUARTER
-  DATE_TRUNC_YEAR
-  DATE
-  START_DATE
-  END_DATE
-  HOUR
-  PERSON
-  ID
-  LABEL
-  COLOR
-  ORDER
-  RAW
-  IS_DONE
-  PHONE_COUNTRY_SHORT_NAME
-}
-
-"""
-A data source to describe
-"""
-input SqlDescribeSourceInput {
-  """
-  Source type: board, materialized_view, data_view
-  """
-  type: String!
-  """
-  Source identifier
-  """
-  id: String!
-}
-
 """
 Generation status of an artifact across its create/update/finalize lifecycle
 """
@@ -15583,1606 +15681,6 @@ enum ArtifactGenerationStatus {
   IDLE
   IN_PROGRESS
   FINALIZED
-}
-
-"""
-The results of the search for benchmark.
-"""
-type SearchBenchmarkResults {
-  data: String
-}
-
-type CustomActivity {
-  id: ID
-  type: String
-  name: String
-  icon_id: CustomActivityIcon
-  color: CustomActivityColor
-}
-
-enum CustomActivityColor {
-  VIVID_CERULEAN
-  GO_GREEN
-  PHILIPPINE_GREEN
-  YANKEES_BLUE
-  CELTIC_BLUE
-  MEDIUM_TURQUOISE
-  CORNFLOWER_BLUE
-  MAYA_BLUE
-  SLATE_BLUE
-  GRAY
-  YELLOW_GREEN
-  DINGY_DUNGEON
-  PARADISE_PINK
-  BRINK_PINK
-  YELLOW_ORANGE
-  LIGHT_DEEP_PINK
-  LIGHT_HOT_PINK
-  PHILIPPINE_YELLOW
-}
-
-enum CustomActivityIcon {
-  ASCENDING
-  CAMERA
-  CONFERENCE
-  FLAG
-  GIFT
-  HEADPHONES
-  HOMEKEYS
-  LOCATION
-  PAPERPLANE
-  PLANE
-  NOTEBOOK
-  PLIERS
-  TRIPOD
-  TWOFLAGS
-  UTENCILS
-}
-
-"""
-Email metadata for email-type timeline items.
-"""
-type EmailTimelineItemMetadata {
-  """
-  The email sender address.
-  """
-  from: String
-  """
-  List of recipient email addresses.
-  """
-  to: [String!]
-  """
-  List of CC email addresses.
-  """
-  cc: [String!]
-  """
-  List of BCC email addresses.
-  """
-  bcc: [String!]
-}
-
-"""
-Serialized note timeline item.
-"""
-type Note {
-  """
-  The timeline item id of the note.
-  """
-  id: ID
-  """
-  The timeline item type.
-  """
-  type: String
-  """
-  The item the note is associated with.
-  """
-  item: Item
-  """
-  The board the note is associated with.
-  """
-  board: Board
-  """
-  The user who created the note timeline item.
-  """
-  user: User
-  """
-  The note due date.
-  """
-  due_date: Date
-  """
-  The timeline item creation timestamp.
-  """
-  created_at: Date
-  """
-  The timeline item last update timestamp.
-  """
-  updated_at: Date
-  """
-  Whether this note is a sample timeline item.
-  """
-  is_sample: Boolean
-  """
-  The origin item id when relevant.
-  """
-  origin_item_id: ID
-  """
-  The note resource payload.
-  """
-  data: NoteData
-}
-
-"""
-Serialized note resource payload.
-"""
-type NoteData {
-  """
-  The note id.
-  """
-  id: ID
-  """
-  The note content.
-  """
-  content: String
-  """
-  A shortened preview of the note content.
-  """
-  content_preview: String
-  """
-  The user who created the note.
-  """
-  user: User
-  """
-  The account id where the note exists.
-  """
-  account_id: ID!
-  """
-  The note creation timestamp.
-  """
-  created_at: Date
-  """
-  The note last update timestamp.
-  """
-  updated_at: Date
-  """
-  The note name.
-  """
-  name: String
-  """
-  Whether the note is public.
-  """
-  public: Boolean
-}
-
-"""
-Type-specific metadata union for timeline items.
-"""
-union TimelineItemMetadata = EmailTimelineItemMetadata
-
-input TimelineItemTimeRange {
-  """
-  Start time
-  """
-  start_timestamp: ISO8601DateTime!
-  """
-  End time
-  """
-  end_timestamp: ISO8601DateTime!
-}
-
-type TimelineItemsPage {
-  """
-  The timeline items in the current page
-  """
-  timeline_items: [TimelineItem!]!
-  """
-  Cursor for fetching the next page
-  """
-  cursor: String
-}
-
-type TimelineResponse {
-  """
-  Paginated set of timeline items and a cursor to get the next page
-  """
-  timeline_items_page(cursor: String = null, limit: Int = 25): TimelineItemsPage!
-}
-
-"""
-Input for updating an existing widgets surface via LLM regeneration.
-"""
-input UpdateWidgetsSurfaceInput {
-  """
-  Natural-language instruction describing the desired changes to the widgets surface.
-  """
-  prompt: String!
-  """
-  Metadata associated with the update request.
-  """
-  metadata: JSON
-  """
-  JSON Schema (JSONSchema7 format) used as the data structure source for widget generation. If omitted, the previously persisted data_structure is used.
-  """
-  data_structure: JSON
-  """
-  Optional sample data for the data source, used to guide generation.
-  """
-  data_sample: JSON
-}
-
-"""
-A generated AI widgets surface containing A2UI component definitions.
-"""
-type WidgetsSurface {
-  """
-  The unique identifier of the widgets surface.
-  """
-  id: ID
-  """
-  The current version number, incremented on each update.
-  """
-  version: Int
-  """
-  The jazz-widgets catalog version used for generation.
-  """
-  catalog_version: String
-  """
-  The generated A2UI JSON string defining the widget layout.
-  """
-  structure: String
-  """
-  The JSON Schema used as the data structure for widgets surface generation.
-  """
-  data_structure: JSON
-}
-
-"""
-A page of automations with cursor for pagination
-"""
-type AutomationsPage {
-  """
-  Opaque cursor for fetching the next page. Null if no more results.
-  """
-  cursor: String
-  """
-  The automations in this page
-  """
-  items: [BoardAutomation!]
-  """
-  Read-only automations on this board that were set up in an older way. These ARE automations on the user's board — always list and describe them together with `items`, never omit them. They cannot be activated, deactivated, edited, or deleted. Resolved only for board-scoped queries (null otherwise); best-effort, so it may carry an error marker instead of data.
-  """
-  legacy_automations: JSON
-}
-
-"""
-A board automation
-"""
-type BoardAutomation {
-  """
-  Automation ID
-  """
-  id: ID
-  """
-  Creator user ID
-  """
-  user_id: ID
-  """
-  Whether the automation is active
-  """
-  active: Boolean
-  """
-  Automation title
-  """
-  title: String
-  """
-  Automation description
-  """
-  description: String
-  """
-  Creation timestamp
-  """
-  created_at: String
-  """
-  Last update timestamp
-  """
-  updated_at: String
-  """
-  Host data (board ID and type)
-  """
-  workflow_host_data: JSON
-  """
-  Workflow block definitions
-  """
-  workflow_blocks: JSON
-  """
-  Workflow variable definitions
-  """
-  workflow_variables: JSON
-  """
-  Automation importance level
-  """
-  importance: Int
-  """
-  Notice message for the automation
-  """
-  notice_message: String
-  """
-  Template reference ID if created from template
-  """
-  template_reference_id: ID
-}
-
-"""
-Input for creating a board automation. Provide template_reference_id to create from a template, or workflow_blocks and workflow_variables for a direct creation.
-"""
-input BoardAutomationCreateInput {
-  """
-  Board ID to host the automation
-  """
-  board_id: String!
-  """
-  Automation title
-  """
-  title: String!
-  """
-  Automation description
-  """
-  description: String
-  """
-  Template reference ID (for template-based creation)
-  """
-  template_reference_id: ID
-  """
-  Automation block definitions (for direct creation)
-  """
-  workflow_blocks: JSON
-  """
-  Automation variable definitions (for direct creation)
-  """
-  workflow_variables: JSON
-  """
-  Template variable values (for template-based creation)
-  """
-  workflow_variables_values: JSON
-}
-
-"""
-Result of creating a board automation
-"""
-type BoardAutomationCreateResult {
-  """
-  The ID of the created automation
-  """
-  workflow_id: ID
-}
-
-"""
-Result of deleting a board automation
-"""
-type BoardAutomationDeleteResult {
-  """
-  Whether the deletion was successful
-  """
-  is_success: Boolean
-}
-
-"""
-Response from saving a workspace as a template
-"""
-type SaveWorkspaceAsTemplateResponse {
-  """
-  The template ID of the created template
-  """
-  template_id: Int
-}
-
-"""
-A solution
-"""
-type Solution {
-  """
-  Unique identifier for the solution
-  """
-  id: String
-  """
-  Name of the solution
-  """
-  title: String
-  """
-  Description of the solution
-  """
-  description: String
-  """
-  Creation date of the solution
-  """
-  createdAt: String
-  """
-  Last update date of the solution
-  """
-  updatedAt: String
-  """
-  Thumbnail URL of the solution
-  """
-  thumbnailUrl: String
-  """
-  appFeatureReferenceId of the solution
-  """
-  appFeatureReferenceId: String
-}
-
-"""
-The type of template that can be created
-"""
-enum TemplateType {
-  standard_template
-  managed_template
-}
-
-type AuditEventCatalogueEntry {
-  name: String
-  description: String
-  metadata_details: JSON
-}
-
-type AuditLogEntry {
-  timestamp: String
-  account_id: String
-  user: User
-  event: String
-  slug: String
-  ip_address: String
-  user_agent: String
-  client_name: String
-  client_version: String
-  os_name: String
-  os_version: String
-  device_name: String
-  device_type: String
-  activity_metadata: JSON
-}
-
-"""
-A paginated collection of audit log entries. This object contains two properties:
-logs, the requested page of AuditLogEntry objects matching your query, and pagination, which 
-contains metadata about the current and next page (if present).
-"""
-type AuditLogPage {
-  """
-  List of audit log entries for the current page. See the audit log entry object
-    for more details on this object.
-  """
-  logs: [AuditLogEntry!]
-  """
-  Pagination metadata. See the pagination object for more details.
-  """
-  pagination: Pagination
-}
-
-"""
-Pagination metadata: indicates the current page and page size, whether there
-are more pages, and the next page number if one exists. Note that the page size reflects
-the number of items requested, not the number of items returned.
-"""
-type Pagination {
-  """
-  Current page number (1-based)
-  """
-  page: Int
-  """
-  Number of items per page
-  """
-  page_size: Int
-  """
-  Indicates if there are more pages available
-  """
-  has_more_pages: Boolean
-  """
-  Number of the next page
-  """
-  next_page_number: Int
-}
-
-"""
-Result of assigning members to a department.
-"""
-type AssignDepartmentMembersResult {
-  """
-  The users that were successfully assigned to the department.
-  """
-  successful_users: [User!]
-  """
-  The users that were not assigned to the department.
-  """
-  failed_users: [User!]
-}
-
-"""
-Result of assigning an owner to a department.
-"""
-type AssignDepartmentOwnerResult {
-  """
-  The user ID of the owner that was assigned to the department.
-  """
-  owner: User
-}
-
-"""
-Result of clearing users department.
-"""
-type ClearUsersDepartmentResult {
-  """
-  The users that their department was cleared.
-  """
-  cleared_users: [User!]
-}
-
-"""
-Data for creating a department.
-"""
-input CreateDepartmentDataInput {
-  """
-  The name of the department.
-  """
-  name: String!
-  """
-  The number of reserved seats for the department.
-  """
-  reserved_seats: Int
-}
-
-"""
-A department in the account.
-"""
-type Department {
-  """
-  The department's ID.
-  """
-  id: ID!
-  """
-  The department's name.
-  """
-  name: String!
-  """
-  The number of seats reserved for the department.
-  """
-  reserved_seats: Int!
-  """
-  The number of seats assigned to the department.
-  """
-  assigned_seats: Int!
-  """
-  The members of the department
-  """
-  members: [User!]
-  """
-  The owners of the department
-  """
-  owners: [User!]
-}
-
-"""
-Result of unassigning owners from a department.
-"""
-type UnassignDepartmentOwnerResult {
-  """
-  The user IDs of the owners that were unassigned from the department.
-  """
-  unassigned_users: [User!]
-}
-
-"""
-Options for updating a department.
-"""
-input UpdateDepartmentOptionsInput {
-  """
-  The new name of the department.
-  """
-  name: String
-  """
-  The new number of reserved seats for the department.
-  """
-  reserved_seats: Int
-}
-
-"""
-Result of creating an API user.
-"""
-type CreateApiUserResult {
-  """
-  The user ID of the created API user.
-  """
-  id: ID
-}
-
-"""
-Result of creating multiple users.
-"""
-type CreateMultipleUsersResult {
-  """
-  Successfully created users.
-  """
-  created_users: [User!]
-  """
-  Users that could not be created.
-  """
-  uncreated_users: [UncreatedUser!]
-}
-
-"""
-Input for creating a single user.
-"""
-input CreateUserInput {
-  """
-  The kind of user to create.
-  """
-  kind: UserKindValue!
-  """
-  The name for the user.
-  """
-  name: String!
-  """
-  The email for the user.
-  """
-  email: String!
-  """
-  The title for the user.
-  """
-  title: String
-  """
-  The user creation flow to use.
-  """
-  user_creation_flow: UserCreationFlow!
-  """
-  The invitation method for the user.
-  """
-  invitation_method: CreateUserInvitationMethod!
-  """
-  The activation status for the user.
-  """
-  status: UserStatus = ACTIVE
-  """
-  Whether the email is confirmed.
-  """
-  confirmed_email: Boolean = true
-  """
-  Photo URL for the user (HTTPS only).
-  """
-  photo_url: String
-}
-
-"""
-The invitation method allowed when creating a user via create_multiple_users.
-"""
-enum CreateUserInvitationMethod {
-  API_USER_CREATION
-  AGENT_USER_CREATION
-  SYSTEM_CREATION
-}
-
-"""
-A user whose profile picture could not be updated, with the requested URL and failure reason.
-"""
-type FailedUserProfilePicture {
-  """
-  The ID of the user that failed to update.
-  """
-  id: ID!
-  """
-  The profile picture URL that was requested.
-  """
-  photo_url: String
-  """
-  The reason the profile picture could not be updated.
-  """
-  reason: String
-}
-
-"""
-The method by which a user was added to the account.
-"""
-enum InvitationMethod {
-  USER
-  SCIM
-  SSO
-  AUTH_DOMAIN
-  FIRST_USER
-  CONSOLIDATION
-  INTERNAL_CREATION
-  UNKNOWN
-  SERVICE_PORTAL_AUTH_DOMAIN
-  SERVICE_PORTAL_USER_INVITATION
-  API_USER_CREATION
-  AGENT_USER_CREATION
-  SYSTEM_CREATION
-}
-
-"""
-URLs for the user's profile photo in various sizes.
-"""
-type PhotoUrl {
-  """
-  The user's photo in original size.
-  """
-  original: String
-  """
-  The user's photo in small size (150x150).
-  """
-  small: String
-  """
-  The user's photo in thumbnail size (100x100).
-  """
-  thumb: String
-  """
-  The user's photo in small thumbnail size (50x50).
-  """
-  thumb_small: String
-  """
-  The user's photo in tiny size (30x30).
-  """
-  tiny: String
-}
-
-"""
-A user that could not be created, returning the original input and failure reason.
-"""
-type UncreatedUser {
-  """
-  The kind of user to create.
-  """
-  kind: String
-  """
-  The name for the user.
-  """
-  name: String
-  """
-  The email for the user.
-  """
-  email: String
-  """
-  The title for the user.
-  """
-  title: String
-  """
-  The activation status for the user.
-  """
-  status: UserStatus
-  """
-  Whether the email is confirmed.
-  """
-  confirmed_email: Boolean
-  """
-  Photo URL for the user (HTTPS only).
-  """
-  photo_url: String
-  """
-  The reason the user could not be created.
-  """
-  reason: String
-}
-
-"""
-A user that could not be updated, returning the original input and failure reason.
-"""
-type UnupdatedUser {
-  """
-  The user ID that failed to update.
-  """
-  id: ID!
-  """
-  The name that was requested.
-  """
-  name: String
-  """
-  The title that was requested.
-  """
-  title: String
-  """
-  The photo URL that was requested.
-  """
-  photo_url: String
-  """
-  The status that was requested.
-  """
-  status: UpdatableUserStatus
-  """
-  The reason the user could not be updated.
-  """
-  reason: String
-}
-
-"""
-Activation status values that can be set via mutations.
-"""
-enum UpdatableUserStatus {
-  ACTIVE
-  INACTIVE
-}
-
-"""
-Input for updating a single user.
-"""
-input UpdateUserInput {
-  """
-  The user ID to update.
-  """
-  id: ID!
-  """
-  New name for the user.
-  """
-  name: String
-  """
-  New title for the user.
-  """
-  title: String
-  """
-  New photo URL for the user (HTTPS only).
-  """
-  photo_url: String
-  """
-  New activation status (ACTIVE or INACTIVE).
-  """
-  status: UpdatableUserStatus
-}
-
-"""
-A user ID paired with the profile picture URL to set for that user.
-"""
-input UpdateUserProfilePictureInput {
-  """
-  The ID of the user whose profile picture will be updated.
-  """
-  id: ID!
-  """
-  The new profile picture URL. Must be an absolute HTTPS URL.
-  """
-  photo_url: String!
-}
-
-"""
-Result of updating the profile picture of multiple users.
-"""
-type UpdateUsersProfilePictureResult {
-  """
-  Users whose profile picture was successfully updated.
-  """
-  updated_users: [User!]
-  """
-  Users whose profile picture could not be updated.
-  """
-  failed_to_update: [FailedUserProfilePicture!]
-}
-
-"""
-Result of updating multiple users.
-"""
-type UpdateUsersResult {
-  """
-  Successfully updated users.
-  """
-  updated_users: [User!]
-  """
-  Users that could not be updated.
-  """
-  unupdated_users: [UnupdatedUser!]
-}
-
-"""
-User config of a user kind within the account.
-"""
-type UserConfig {
-  """
-  The user kind for the user config.
-  """
-  kind: String!
-  """
-  The role ID associated with this user config.
-  """
-  role_id: ID!
-  """
-  The visibility for this user config.
-  """
-  visibility: [String!]!
-  """
-  The behavior IDs that are true for this user kind.
-  """
-  behaviors: [String!]!
-  """
-  The group this user config belongs to.
-  """
-  group: String!
-}
-
-"""
-The user creation flow/context type.
-"""
-enum UserCreationFlow {
-  API_USER_CREATION
-  AGENT_USER_CREATION
-  SYSTEM_CREATION
-}
-
-"""
-@deprecated Use UserKindFilter with the user_kind arg instead. The kind to search users by.
-"""
-enum UserKind {
-  all
-  non_guests
-  guests
-  non_pending
-}
-
-"""
-Filter for user kinds, including kind groups.
-"""
-enum UserKindFilter {
-  ADMIN
-  MEMBER
-  GUEST
-  VIEW_ONLY
-  AGENT_MEMBER
-  PERSONAL_AGENT_MEMBER
-  AGENT_SIGNUP_USER
-  WORK_MANAGEMENT_AGENT_MEMBER
-  EXTERNAL_AGENT_MEMBER
-  EXTERNAL_AGENT_DETACHED_MEMBER
-  WORKSPACE_PRIMARY_AGENT_MEMBER
-  SERVICE_USER
-  VIBE_USER
-  PORTAL
-  PORTFOLIO_API_USER
-  NEXUS_API_USER
-  RESOURCE_DIRECTORY_API_USER
-  OMNICHANNEL_API_USER
-  GOALS_API_USER
-  PROJECTS_API_USER
-  SPRINT_MANAGEMENT_API_USER
-  CRM_COMMERCE_API_USER
-  CAMPAIGNS_API_USER
-  DATA_RETENTION_API_USER
-  MONDAY_SERVICE_API_USER
-  AI_PLATFORM_AGENT_API_USER
-  DEPENDENCIES_API_USER
-  HISTORICAL_TRACKING_BACKFILL_API_USER
-  ENTITY_KNOWLEDGE_API_USER
-  ORG_HUB_API_USER
-  BASIC
-}
-
-"""
-Filter users by kind. Supports individual kinds and groups (e.g. BASIC = admin, member, guest, view_only). The not_in values are removed from the expanded in set.
-"""
-input UserKindFilterInput {
-  """
-  Include users matching these kinds or kind groups.
-  """
-  in: [UserKindFilter!]
-  """
-  Exclude users matching these kinds or kind groups.
-  """
-  not_in: [UserKindFilter!]
-}
-
-"""
-A specific user kind value.
-"""
-enum UserKindValue {
-  ADMIN
-  MEMBER
-  GUEST
-  VIEW_ONLY
-  AGENT_MEMBER
-  PERSONAL_AGENT_MEMBER
-  AGENT_SIGNUP_USER
-  WORK_MANAGEMENT_AGENT_MEMBER
-  EXTERNAL_AGENT_MEMBER
-  EXTERNAL_AGENT_DETACHED_MEMBER
-  WORKSPACE_PRIMARY_AGENT_MEMBER
-  SERVICE_USER
-  VIBE_USER
-  PORTAL
-  PORTFOLIO_API_USER
-  NEXUS_API_USER
-  RESOURCE_DIRECTORY_API_USER
-  OMNICHANNEL_API_USER
-  GOALS_API_USER
-  PROJECTS_API_USER
-  SPRINT_MANAGEMENT_API_USER
-  CRM_COMMERCE_API_USER
-  CAMPAIGNS_API_USER
-  DATA_RETENTION_API_USER
-  MONDAY_SERVICE_API_USER
-  AI_PLATFORM_AGENT_API_USER
-  DEPENDENCIES_API_USER
-  HISTORICAL_TRACKING_BACKFILL_API_USER
-  ENTITY_KNOWLEDGE_API_USER
-  ORG_HUB_API_USER
-}
-
-"""
-The activation status of a user.
-"""
-enum UserStatus {
-  ACTIVE
-  INACTIVE
-  PENDING
-}
-
-"""
-The direction to sort users.
-"""
-enum UsersSortDirection {
-  ASC
-  DESC
-}
-
-"""
-The field to sort users by.
-"""
-enum UsersSortField {
-  CREATED_AT
-}
-
-"""
-Input for sorting users.
-"""
-input UsersSortInput {
-  """
-  The field to sort by.
-  """
-  field: UsersSortField!
-  """
-  The sort direction.
-  """
-  direction: UsersSortDirection!
-}
-
-"""
-The type of entity that a reaction is attributed to.
-"""
-enum AttributionEntity {
-  AGENT
-}
-
-type Like {
-  id: ID!
-  creator_id: String
-  creator: User
-  reaction_type: String
-  """
-  The reference identifier of the entity that created this reaction on behalf of the user, who this reaction should be attributed to (e.g. agent_{agentId}).
-  """
-  attribution_entity_ref: String
-  """
-  The type of entity that created this reaction.
-  """
-  attribution_entity_type: AttributionEntity
-  created_at: Date
-  updated_at: Date
-}
-
-"""
-The type of the mention.
-"""
-enum MentionType {
-  User
-  Team
-  Project
-  Board
-  Agent
-}
-
-"""
-A reply for an update.
-"""
-type Reply {
-  """
-  The reply's unique identifier.
-  """
-  id: ID!
-  """
-  The reply's html formatted body.
-  """
-  body: String!
-  kind: String!
-  """
-  The unique identifier of the reply creator.
-  """
-  creator_id: String
-  edited_at: Date!
-  """
-  The reply's creator.
-  """
-  creator: User
-  likes: [Like!]!
-  pinned_to_top: [UpdatePin!]!
-  viewers(limit: Int = 100, page: Int = 1): [Watcher!]!
-  """
-  The reply's creation date.
-  """
-  created_at: Date
-  """
-  The reply's last edit date.
-  """
-  updated_at: Date
-  """
-  The reply's assets/files.
-  """
-  assets: [Asset]
-  """
-  The reply's text body.
-  """
-  text_body: String
-}
-
-input UpdateMention {
-  """
-  The object id.
-  """
-  id: ID!
-  """
-  The type of the mention.
-  """
-  type: MentionType!
-}
-
-"""
-The pin to top data of the update.
-"""
-type UpdatePin {
-  item_id: ID!
-}
-
-"""
-Paginated updates response with cursor.
-"""
-type UpdatesPage {
-  """
-  The list of updates.
-  """
-  updates: [Update!]!
-  """
-  Opaque cursor for the next page. Null when no more data.
-  """
-  cursor: String
-}
-
-"""
-The viewer of the update.
-"""
-type Watcher {
-  user_id: ID!
-  medium: String!
-  user: User
-}
-
-"""
-Initialization response for bulk delete containing job ID for polling
-"""
-type BulkDeleteInit {
-  """
-  Job ID for polling progress via job_status query
-  """
-  job_id: ID
-}
-
-"""
-Reason for failure when status is Rejected or Failed
-"""
-enum BulkImportFailureReason {
-  INVALID_UPLOAD
-  AUTHORIZATION_FAILED
-  PERMISSION_DENIED
-  BOARD_CAPACITY_EXCEEDED
-  ACCOUNT_CAPACITY_EXCEEDED
-  FILE_TOO_LARGE
-  INTERNAL_ERROR
-}
-
-"""
-Initialization response for bulk import containing import ID and upload URL
-"""
-type BulkImportInit {
-  """
-  The unique identifier of the bulk import operation
-  """
-  import_id: ID
-  """
-  The URL where the file should be uploaded for processing
-  """
-  upload_url: String
-}
-
-"""
-Item counts for a bulk import process
-"""
-type BulkImportItemCounts {
-  """
-  Total number of items submitted for import
-  """
-  submitted: Int
-  """
-  Number of items that failed validation
-  """
-  invalid: Int
-  """
-  Number of items that were skipped
-  """
-  skipped: Int
-  """
-  Number of items that have been created
-  """
-  created: Int
-  """
-  Number of items that have been updated
-  """
-  updated: Int
-  """
-  Number of valid items that failed during import execution
-  """
-  failed: Int
-}
-
-"""
-Current state of the import process
-"""
-enum BulkImportState {
-  UPLOAD_PENDING
-  REJECTED
-  PROCESSING
-  COMPLETED
-  FAILED
-}
-
-"""
-Status information for a bulk import process
-"""
-type BulkImportStatus {
-  """
-  Current state of the import process
-  """
-  status: BulkImportState
-  """
-  Item counts breakdown for the import process
-  """
-  counts: BulkImportItemCounts
-  """
-  Progress percentage (0-100) of the import process. Note: 100 does not imply success — on FAILED or REJECTED the percentage is also locked to 100 to indicate "no more work will happen". Clients must check `status` and `failure_reason` to determine the outcome.
-  """
-  progress_percentage: Int
-  """
-  Reason for failure when status is Rejected or Failed
-  """
-  failure_reason: BulkImportFailureReason
-  """
-  User-friendly error message explaining why the import failed or was rejected
-  """
-  failure_message: String
-  """
-  Indicates if the upload is completely done
-  """
-  fully_imported: Boolean
-  """
-  Indicates if a report file has been generated
-  """
-  report_created: Boolean
-  """
-  URL to download the import report, valid for 10 minutes
-  """
-  report_url: String
-}
-
-"""
-Item counts for an items job process
-"""
-type ItemsJobItemCounts {
-  """
-  Total number of items submitted for processing
-  """
-  submitted: Int
-  """
-  Number of items that failed validation
-  """
-  invalid: Int
-  """
-  Number of items that were skipped
-  """
-  skipped: Int
-  """
-  Number of items that have been created
-  """
-  created: Int
-  """
-  Number of items that have been updated
-  """
-  updated: Int
-  """
-  Number of valid items that failed during execution
-  """
-  failed: Int
-}
-
-"""
-Status information for an items job process
-"""
-type ItemsJobStatus {
-  """
-  Current state of the job process
-  """
-  status: BulkImportState
-  """
-  Item counts breakdown for the job process
-  """
-  counts: ItemsJobItemCounts
-  """
-  Progress percentage (0-100) of the job process
-  """
-  progress_percentage: Int
-  """
-  Reason for failure when status is Rejected or Failed
-  """
-  failure_reason: BulkImportFailureReason
-  """
-  User-friendly error message explaining why the job failed or was rejected
-  """
-  failure_message: String
-  """
-  Indicates if the job is completely done
-  """
-  fully_imported: Boolean
-  """
-  Indicates if a report file has been generated
-  """
-  report_created: Boolean
-  """
-  URL to download the job report, valid for 10 minutes
-  """
-  report_url: String
-}
-
-"""
-Status of a job operation. Currently supports items job status for backfill and ingest operations.
-"""
-union JobStatus = ItemsJobStatus
-
-"""
-Strategy for handling matching items during import
-"""
-enum OnMatchBehaviour {
-  UPSERT
-  SKIP
-}
-
-"""
-Configuration for how to handle matching items during import
-"""
-input OnMatchInput {
-  """
-  The column ID to use for matching (e.g., email, phone number). When importing items, this column value will be used to identify matches.
-  """
-  match_column_id: String!
-  """
-  Strategy for handling matching items
-  """
-  behaviour: OnMatchBehaviour!
-}
-
-"""
-Result of an undo operation
-"""
-type UndoResult {
-  """
-  Whether the undo was successfully initiated
-  """
-  success: Boolean
-  """
-  Human-readable status message
-  """
-  message: String
-}
-
-"""
-Initialization response containing job ID and upload URL
-"""
-type UploadJobInit {
-  """
-  The unique identifier of the job
-  """
-  job_id: ID
-  """
-  The URL where the file should be uploaded for processing
-  """
-  upload_url: String
-}
-
-"""
-Account context information.
-"""
-type AccountContext {
-  """
-  Unique account identifier.
-  """
-  id: ID
-  """
-  Account name.
-  """
-  name: String
-  """
-  Account industry. Examples: "Technology", "Healthcare", "Finance".
-  """
-  industry: String
-  """
-  Industry sector.
-  """
-  sector: String
-  """
-  Industry sub-sector.
-  """
-  sub_sector: String
-  """
-  Primary use cases for the account.
-  """
-  golden_use_cases: [String!]
-  """
-  Platform usage categories. Examples: "project_management", "crm", "marketing".
-  """
-  platform_usages: [String!]
-  """
-  Active monday.com products. Values: "core", "crm", "software", "marketing", "project_management", "service".
-  """
-  active_product_kinds: [String!]
-}
-
-"""
-A board where the user has item assignments.
-"""
-type AssignedBoard {
-  """
-  Board ID
-  """
-  board_id: ID
-  """
-  Number of items assigned to the user on this board
-  """
-  assignment_count: Int
-  """
-  Board details resolved via federation from the boards subgraph.
-  """
-  board: Board
-}
-
-"""
-Intelligence data.
-"""
-type Intelligence {
-  """
-  Top visited boards ranked by relevance (frequency + recency).
-  """
-  relevant_boards(limit: Int): [RelevantBoard!]
-  """
-  Top loaded docs ranked by relevance (frequency + recency).
-  """
-  relevant_docs(limit: Int): [RelevantDoc!]
-  """
-  Top related users ranked by relevance (multi-signal frequency + recency).
-  """
-  relevant_people(limit: Int): [RelevantPerson!]
-  """
-  User and account context information.
-  """
-  context: UserContextResponse
-  """
-  Boards where the user has item assignments.
-  """
-  assigned_boards(user_id: ID, size: Int): [AssignedBoard!]
-}
-
-"""
-A board ranked by relevance based on visit frequency and recency.
-"""
-type RelevantBoard {
-  """
-  Board ID
-  """
-  id: ID
-  """
-  Board details resolved via federation from the boards subgraph.
-  """
-  board: Board
-}
-
-"""
-A doc ranked by relevance based on load frequency and recency.
-"""
-type RelevantDoc {
-  """
-  Document ID
-  """
-  id: ID
-  """
-  Document object ID — the identifier that appears in the doc's URL.
-  """
-  object_id: ID
-  """
-  Document details resolved via federation from the docs subgraph.
-  """
-  document: Document
-}
-
-"""
-A user ranked by relevance based on interaction frequency and recency.
-"""
-type RelevantPerson {
-  """
-  User ID
-  """
-  id: ID
-  """
-  User details resolved via federation from the users subgraph.
-  """
-  user: User
-}
-
-"""
-User context information.
-"""
-type UserContext {
-  """
-  Unique user identifier.
-  """
-  id: ID
-  """
-  User display name.
-  """
-  name: String
-  """
-  User job title.
-  """
-  title: String
-  """
-  User email address.
-  """
-  email: String
-  """
-  User type. Values: null (regular), "guest", "view_only", "portal_user".
-  """
-  kind: String
-  """
-  User job role. Examples: "project_manager", "marketing_manager", "ceo".
-  """
-  job_role: String
-  """
-  User job department. Examples: "engineering", "marketing", "sales", "hr".
-  """
-  job_department: String
-  """
-  Organizational department within the workspace.
-  """
-  department: String
-  """
-  User time zone. Examples: "America/New_York", "Europe/London".
-  """
-  time_zone: String
-  """
-  User locale for date and number formatting. Examples: "en-US", "de-DE".
-  """
-  locale: String
-  """
-  Number of days since the user became active.
-  """
-  tenure_days: Int
-}
-
-"""
-Combined user and account context.
-"""
-type UserContextResponse {
-  """
-  User context.
-  """
-  user: UserContext
-  """
-  Account context.
-  """
-  account: AccountContext
 }
 
 """
@@ -17497,64 +15995,11 @@ input CreateStatusLabelInput {
 }
 
 """
-A data view that aggregates data from multiple sources into a unified structure.
-"""
-type DataView {
-  """
-  The unique identifier of the data view.
-  """
-  id: ID
-  """
-  The name of the data view.
-  """
-  name: String
-  """
-  The description of the data view.
-  """
-  description: String
-  """
-  The target schema of the data view.
-  """
-  target: DataViewTarget
-  """
-  The authorization object associated with the data view.
-  """
-  authorization_object: DataViewAuthorizationObject
-  """
-  The paginated sources of the data view.
-  """
-  sources: DataViewPaginatedSources
-  """
-  The account identifier.
-  """
-  account_id: ID
-  """
-  The user identifier of the creator.
-  """
-  created_by: Int
-  """
-  The date and time of creation.
-  """
-  created_at: Date
-  """
-  The date and time of the last update.
-  """
-  updated_at: Date
-  """
-  The revision number of the data view.
-  """
-  revision: Int
-  """
-  Whether the data view is archived.
-  """
-  archived: Boolean
-}
-
-"""
 The kind of object that authorizes access to a data view.
 """
 enum DataViewAuthorizationKind {
   BOARD
+  OVERVIEW
 }
 
 """
@@ -18434,6 +16879,1592 @@ input UpdateStatusLabelInput {
 }
 
 """
+The results of the search for benchmark.
+"""
+type SearchBenchmarkResults {
+  data: String
+}
+
+type CustomActivity {
+  id: ID
+  type: String
+  name: String
+  icon_id: CustomActivityIcon
+  color: CustomActivityColor
+}
+
+enum CustomActivityColor {
+  VIVID_CERULEAN
+  GO_GREEN
+  PHILIPPINE_GREEN
+  YANKEES_BLUE
+  CELTIC_BLUE
+  MEDIUM_TURQUOISE
+  CORNFLOWER_BLUE
+  MAYA_BLUE
+  SLATE_BLUE
+  GRAY
+  YELLOW_GREEN
+  DINGY_DUNGEON
+  PARADISE_PINK
+  BRINK_PINK
+  YELLOW_ORANGE
+  LIGHT_DEEP_PINK
+  LIGHT_HOT_PINK
+  PHILIPPINE_YELLOW
+}
+
+enum CustomActivityIcon {
+  ASCENDING
+  CAMERA
+  CONFERENCE
+  FLAG
+  GIFT
+  HEADPHONES
+  HOMEKEYS
+  LOCATION
+  PAPERPLANE
+  PLANE
+  NOTEBOOK
+  PLIERS
+  TRIPOD
+  TWOFLAGS
+  UTENCILS
+}
+
+"""
+Email metadata for email-type timeline items.
+"""
+type EmailTimelineItemMetadata {
+  """
+  The email sender address.
+  """
+  from: String
+  """
+  List of recipient email addresses.
+  """
+  to: [String!]
+  """
+  List of CC email addresses.
+  """
+  cc: [String!]
+  """
+  List of BCC email addresses.
+  """
+  bcc: [String!]
+}
+
+"""
+Serialized note timeline item.
+"""
+type Note {
+  """
+  The timeline item id of the note.
+  """
+  id: ID
+  """
+  The timeline item type.
+  """
+  type: String
+  """
+  The item the note is associated with.
+  """
+  item: Item
+  """
+  The board the note is associated with.
+  """
+  board: Board
+  """
+  The user who created the note timeline item.
+  """
+  user: User
+  """
+  The note due date.
+  """
+  due_date: Date
+  """
+  The timeline item creation timestamp.
+  """
+  created_at: Date
+  """
+  The timeline item last update timestamp.
+  """
+  updated_at: Date
+  """
+  Whether this note is a sample timeline item.
+  """
+  is_sample: Boolean
+  """
+  The origin item id when relevant.
+  """
+  origin_item_id: ID
+  """
+  The note resource payload.
+  """
+  data: NoteData
+}
+
+"""
+Serialized note resource payload.
+"""
+type NoteData {
+  """
+  The note id.
+  """
+  id: ID
+  """
+  The note content.
+  """
+  content: String
+  """
+  A shortened preview of the note content.
+  """
+  content_preview: String
+  """
+  The user who created the note.
+  """
+  user: User
+  """
+  The account id where the note exists.
+  """
+  account_id: ID!
+  """
+  The note creation timestamp.
+  """
+  created_at: Date
+  """
+  The note last update timestamp.
+  """
+  updated_at: Date
+  """
+  The note name.
+  """
+  name: String
+  """
+  Whether the note is public.
+  """
+  public: Boolean
+}
+
+"""
+Type-specific metadata union for timeline items.
+"""
+union TimelineItemMetadata = EmailTimelineItemMetadata
+
+input TimelineItemTimeRange {
+  """
+  Start time
+  """
+  start_timestamp: ISO8601DateTime!
+  """
+  End time
+  """
+  end_timestamp: ISO8601DateTime!
+}
+
+type TimelineItemsPage {
+  """
+  The timeline items in the current page
+  """
+  timeline_items: [TimelineItem!]!
+  """
+  Cursor for fetching the next page
+  """
+  cursor: String
+}
+
+type TimelineResponse {
+  """
+  Paginated set of timeline items and a cursor to get the next page
+  """
+  timeline_items_page(cursor: String = null, limit: Int = 25): TimelineItemsPage!
+}
+
+"""
+Input for updating an existing widgets surface via LLM regeneration.
+"""
+input UpdateWidgetsSurfaceInput {
+  """
+  Natural-language instruction describing the desired changes to the widgets surface.
+  """
+  prompt: String!
+  """
+  Metadata associated with the update request.
+  """
+  metadata: JSON
+  """
+  JSON Schema (JSONSchema7 format) used as the data structure source for widget generation. If omitted, the previously persisted data_structure is used.
+  """
+  data_structure: JSON
+  """
+  Optional sample data for the data source, used to guide generation.
+  """
+  data_sample: JSON
+}
+
+"""
+A generated AI widgets surface containing A2UI component definitions.
+"""
+type WidgetsSurface {
+  """
+  The unique identifier of the widgets surface.
+  """
+  id: ID
+  """
+  The current version number, incremented on each update.
+  """
+  version: Int
+  """
+  The jazz-widgets catalog version used for generation.
+  """
+  catalog_version: String
+  """
+  The generated A2UI JSON string defining the widget layout.
+  """
+  structure: String
+  """
+  The JSON Schema used as the data structure for widgets surface generation.
+  """
+  data_structure: JSON
+}
+
+"""
+A page of automations with cursor for pagination
+"""
+type AutomationsPage {
+  """
+  Opaque cursor for fetching the next page. Null if no more results.
+  """
+  cursor: String
+  """
+  The automations in this page
+  """
+  items: [BoardAutomation!]
+  """
+  Read-only automations on this board that were set up in an older way. These ARE automations on the user's board — always list and describe them together with `items`, never omit them. They cannot be activated, deactivated, edited, or deleted. Resolved only for board-scoped queries (null otherwise); best-effort, so it may carry an error marker instead of data.
+  """
+  legacy_automations: JSON
+}
+
+"""
+A board automation
+"""
+type BoardAutomation {
+  """
+  Automation ID
+  """
+  id: ID
+  """
+  Creator user ID
+  """
+  user_id: ID
+  """
+  Whether the automation is active
+  """
+  active: Boolean
+  """
+  Automation title
+  """
+  title: String
+  """
+  Automation description
+  """
+  description: String
+  """
+  Creation timestamp
+  """
+  created_at: String
+  """
+  Last update timestamp
+  """
+  updated_at: String
+  """
+  Host data (board ID and type)
+  """
+  workflow_host_data: JSON
+  """
+  Workflow block definitions
+  """
+  workflow_blocks: JSON
+  """
+  Workflow variable definitions
+  """
+  workflow_variables: JSON
+  """
+  Automation importance level
+  """
+  importance: Int
+  """
+  Notice message for the automation
+  """
+  notice_message: String
+  """
+  Template reference ID if created from template
+  """
+  template_reference_id: ID
+}
+
+"""
+Input for creating a board automation. Provide template_reference_id to create from a template, or workflow_blocks and workflow_variables for a direct creation.
+"""
+input BoardAutomationCreateInput {
+  """
+  Board ID to host the automation
+  """
+  board_id: String!
+  """
+  Automation title
+  """
+  title: String!
+  """
+  Automation description
+  """
+  description: String
+  """
+  Template reference ID (for template-based creation)
+  """
+  template_reference_id: ID
+  """
+  Automation block definitions (for direct creation)
+  """
+  workflow_blocks: JSON
+  """
+  Automation variable definitions (for direct creation)
+  """
+  workflow_variables: JSON
+  """
+  Template variable values (for template-based creation)
+  """
+  workflow_variables_values: JSON
+}
+
+"""
+Result of creating a board automation
+"""
+type BoardAutomationCreateResult {
+  """
+  The ID of the created automation
+  """
+  workflow_id: ID
+}
+
+"""
+Result of deleting a board automation
+"""
+type BoardAutomationDeleteResult {
+  """
+  Whether the deletion was successful
+  """
+  is_success: Boolean
+}
+
+type AuditEventCatalogueEntry {
+  name: String
+  description: String
+  metadata_details: JSON
+}
+
+type AuditLogEntry {
+  timestamp: String
+  account_id: String
+  user: User
+  event: String
+  slug: String
+  ip_address: String
+  user_agent: String
+  client_name: String
+  client_version: String
+  os_name: String
+  os_version: String
+  device_name: String
+  device_type: String
+  activity_metadata: JSON
+}
+
+"""
+A paginated collection of audit log entries. This object contains two properties:
+logs, the requested page of AuditLogEntry objects matching your query, and pagination, which 
+contains metadata about the current and next page (if present).
+"""
+type AuditLogPage {
+  """
+  List of audit log entries for the current page. See the audit log entry object
+    for more details on this object.
+  """
+  logs: [AuditLogEntry!]
+  """
+  Pagination metadata. See the pagination object for more details.
+  """
+  pagination: Pagination
+}
+
+"""
+Pagination metadata: indicates the current page and page size, whether there
+are more pages, and the next page number if one exists. Note that the page size reflects
+the number of items requested, not the number of items returned.
+"""
+type Pagination {
+  """
+  Current page number (1-based)
+  """
+  page: Int
+  """
+  Number of items per page
+  """
+  page_size: Int
+  """
+  Indicates if there are more pages available
+  """
+  has_more_pages: Boolean
+  """
+  Number of the next page
+  """
+  next_page_number: Int
+}
+
+"""
+Result of assigning members to a department.
+"""
+type AssignDepartmentMembersResult {
+  """
+  The users that were successfully assigned to the department.
+  """
+  successful_users: [User!]
+  """
+  The users that were not assigned to the department.
+  """
+  failed_users: [User!]
+}
+
+"""
+Result of assigning an owner to a department.
+"""
+type AssignDepartmentOwnerResult {
+  """
+  The user ID of the owner that was assigned to the department.
+  """
+  owner: User
+}
+
+"""
+Result of clearing users department.
+"""
+type ClearUsersDepartmentResult {
+  """
+  The users that their department was cleared.
+  """
+  cleared_users: [User!]
+}
+
+"""
+Data for creating a department.
+"""
+input CreateDepartmentDataInput {
+  """
+  The name of the department.
+  """
+  name: String!
+  """
+  The number of reserved seats for the department.
+  """
+  reserved_seats: Int
+}
+
+"""
+A department in the account.
+"""
+type Department {
+  """
+  The department's ID.
+  """
+  id: ID!
+  """
+  The department's name.
+  """
+  name: String!
+  """
+  The number of seats reserved for the department.
+  """
+  reserved_seats: Int!
+  """
+  The number of seats assigned to the department.
+  """
+  assigned_seats: Int!
+  """
+  The members of the department
+  """
+  members: [User!]
+  """
+  The owners of the department
+  """
+  owners: [User!]
+}
+
+"""
+Result of unassigning owners from a department.
+"""
+type UnassignDepartmentOwnerResult {
+  """
+  The user IDs of the owners that were unassigned from the department.
+  """
+  unassigned_users: [User!]
+}
+
+"""
+Options for updating a department.
+"""
+input UpdateDepartmentOptionsInput {
+  """
+  The new name of the department.
+  """
+  name: String
+  """
+  The new number of reserved seats for the department.
+  """
+  reserved_seats: Int
+}
+
+"""
+Result of creating an API user.
+"""
+type CreateApiUserResult {
+  """
+  The user ID of the created API user.
+  """
+  id: ID
+}
+
+"""
+Result of creating multiple users.
+"""
+type CreateMultipleUsersResult {
+  """
+  Successfully created users.
+  """
+  created_users: [User!]
+  """
+  Users that could not be created.
+  """
+  uncreated_users: [UncreatedUser!]
+}
+
+"""
+Input for creating a single user.
+"""
+input CreateUserInput {
+  """
+  The kind of user to create.
+  """
+  kind: UserKindValue!
+  """
+  The name for the user.
+  """
+  name: String!
+  """
+  The email for the user.
+  """
+  email: String!
+  """
+  The title for the user.
+  """
+  title: String
+  """
+  The user creation flow to use.
+  """
+  user_creation_flow: UserCreationFlow!
+  """
+  The invitation method for the user.
+  """
+  invitation_method: CreateUserInvitationMethod!
+  """
+  The activation status for the user.
+  """
+  status: UserStatus = ACTIVE
+  """
+  Whether the email is confirmed.
+  """
+  confirmed_email: Boolean = true
+  """
+  Photo URL for the user (HTTPS only).
+  """
+  photo_url: String
+}
+
+"""
+The invitation method allowed when creating a user via create_multiple_users.
+"""
+enum CreateUserInvitationMethod {
+  API_USER_CREATION
+  AGENT_USER_CREATION
+  SYSTEM_CREATION
+}
+
+"""
+A user whose profile picture could not be updated, with the requested URL and failure reason.
+"""
+type FailedUserProfilePicture {
+  """
+  The ID of the user that failed to update.
+  """
+  id: ID!
+  """
+  The profile picture URL that was requested.
+  """
+  photo_url: String
+  """
+  The reason the profile picture could not be updated.
+  """
+  reason: String
+}
+
+"""
+The method by which a user was added to the account.
+"""
+enum InvitationMethod {
+  USER
+  SCIM
+  SSO
+  AUTH_DOMAIN
+  FIRST_USER
+  CONSOLIDATION
+  INTERNAL_CREATION
+  UNKNOWN
+  SERVICE_PORTAL_AUTH_DOMAIN
+  SERVICE_PORTAL_USER_INVITATION
+  API_USER_CREATION
+  AGENT_USER_CREATION
+  SYSTEM_CREATION
+}
+
+"""
+URLs for the user's profile photo in various sizes.
+"""
+type PhotoUrl {
+  """
+  The user's photo in original size.
+  """
+  original: String
+  """
+  The user's photo in small size (150x150).
+  """
+  small: String
+  """
+  The user's photo in thumbnail size (100x100).
+  """
+  thumb: String
+  """
+  The user's photo in small thumbnail size (50x50).
+  """
+  thumb_small: String
+  """
+  The user's photo in tiny size (30x30).
+  """
+  tiny: String
+}
+
+"""
+A user that could not be created, returning the original input and failure reason.
+"""
+type UncreatedUser {
+  """
+  The kind of user to create.
+  """
+  kind: String
+  """
+  The name for the user.
+  """
+  name: String
+  """
+  The email for the user.
+  """
+  email: String
+  """
+  The title for the user.
+  """
+  title: String
+  """
+  The activation status for the user.
+  """
+  status: UserStatus
+  """
+  Whether the email is confirmed.
+  """
+  confirmed_email: Boolean
+  """
+  Photo URL for the user (HTTPS only).
+  """
+  photo_url: String
+  """
+  The reason the user could not be created.
+  """
+  reason: String
+}
+
+"""
+A user that could not be updated, returning the original input and failure reason.
+"""
+type UnupdatedUser {
+  """
+  The user ID that failed to update.
+  """
+  id: ID!
+  """
+  The name that was requested.
+  """
+  name: String
+  """
+  The title that was requested.
+  """
+  title: String
+  """
+  The photo URL that was requested.
+  """
+  photo_url: String
+  """
+  The status that was requested.
+  """
+  status: UpdatableUserStatus
+  """
+  The reason the user could not be updated.
+  """
+  reason: String
+}
+
+"""
+Activation status values that can be set via mutations.
+"""
+enum UpdatableUserStatus {
+  ACTIVE
+  INACTIVE
+}
+
+"""
+Input for updating a single user.
+"""
+input UpdateUserInput {
+  """
+  The user ID to update.
+  """
+  id: ID!
+  """
+  New name for the user.
+  """
+  name: String
+  """
+  New title for the user.
+  """
+  title: String
+  """
+  New photo URL for the user (HTTPS only).
+  """
+  photo_url: String
+  """
+  New activation status (ACTIVE or INACTIVE).
+  """
+  status: UpdatableUserStatus
+}
+
+"""
+A user ID paired with the profile picture URL to set for that user.
+"""
+input UpdateUserProfilePictureInput {
+  """
+  The ID of the user whose profile picture will be updated.
+  """
+  id: ID!
+  """
+  The new profile picture URL. Must be an absolute HTTPS URL.
+  """
+  photo_url: String!
+}
+
+"""
+Result of updating the profile picture of multiple users.
+"""
+type UpdateUsersProfilePictureResult {
+  """
+  Users whose profile picture was successfully updated.
+  """
+  updated_users: [User!]
+  """
+  Users whose profile picture could not be updated.
+  """
+  failed_to_update: [FailedUserProfilePicture!]
+}
+
+"""
+Result of updating multiple users.
+"""
+type UpdateUsersResult {
+  """
+  Successfully updated users.
+  """
+  updated_users: [User!]
+  """
+  Users that could not be updated.
+  """
+  unupdated_users: [UnupdatedUser!]
+}
+
+"""
+User config of a user kind within the account.
+"""
+type UserConfig {
+  """
+  The user kind for the user config.
+  """
+  kind: String!
+  """
+  The role ID associated with this user config.
+  """
+  role_id: ID!
+  """
+  The visibility for this user config.
+  """
+  visibility: [String!]!
+  """
+  The behavior IDs that are true for this user kind.
+  """
+  behaviors: [String!]!
+  """
+  The group this user config belongs to.
+  """
+  group: String!
+}
+
+"""
+The user creation flow/context type.
+"""
+enum UserCreationFlow {
+  API_USER_CREATION
+  AGENT_USER_CREATION
+  SYSTEM_CREATION
+}
+
+"""
+@deprecated Use UserKindFilter with the user_kind arg instead. The kind to search users by.
+"""
+enum UserKind {
+  all
+  non_guests
+  guests
+  non_pending
+}
+
+"""
+Filter for user kinds, including kind groups.
+"""
+enum UserKindFilter {
+  ADMIN
+  MEMBER
+  GUEST
+  VIEW_ONLY
+  AGENT_MEMBER
+  PERSONAL_AGENT_MEMBER
+  AGENT_SIGNUP_USER
+  WORK_MANAGEMENT_AGENT_MEMBER
+  EXTERNAL_AGENT_MEMBER
+  EXTERNAL_AGENT_DETACHED_MEMBER
+  WORKSPACE_PRIMARY_AGENT_MEMBER
+  SERVICE_USER
+  VIBE_USER
+  PORTAL
+  PORTFOLIO_API_USER
+  NEXUS_API_USER
+  RESOURCE_DIRECTORY_API_USER
+  OMNICHANNEL_API_USER
+  GOALS_API_USER
+  PROJECTS_API_USER
+  SPRINT_MANAGEMENT_API_USER
+  CRM_COMMERCE_API_USER
+  CAMPAIGNS_API_USER
+  DATA_RETENTION_API_USER
+  MONDAY_SERVICE_API_USER
+  AI_PLATFORM_AGENT_API_USER
+  DEPENDENCIES_API_USER
+  HISTORICAL_TRACKING_BACKFILL_API_USER
+  ENTITY_KNOWLEDGE_API_USER
+  ORG_HUB_API_USER
+  BASIC
+}
+
+"""
+Filter users by kind. Supports individual kinds and groups (e.g. BASIC = admin, member, guest, view_only). The not_in values are removed from the expanded in set.
+"""
+input UserKindFilterInput {
+  """
+  Include users matching these kinds or kind groups.
+  """
+  in: [UserKindFilter!]
+  """
+  Exclude users matching these kinds or kind groups.
+  """
+  not_in: [UserKindFilter!]
+}
+
+"""
+A specific user kind value.
+"""
+enum UserKindValue {
+  ADMIN
+  MEMBER
+  GUEST
+  VIEW_ONLY
+  AGENT_MEMBER
+  PERSONAL_AGENT_MEMBER
+  AGENT_SIGNUP_USER
+  WORK_MANAGEMENT_AGENT_MEMBER
+  EXTERNAL_AGENT_MEMBER
+  EXTERNAL_AGENT_DETACHED_MEMBER
+  WORKSPACE_PRIMARY_AGENT_MEMBER
+  SERVICE_USER
+  VIBE_USER
+  PORTAL
+  PORTFOLIO_API_USER
+  NEXUS_API_USER
+  RESOURCE_DIRECTORY_API_USER
+  OMNICHANNEL_API_USER
+  GOALS_API_USER
+  PROJECTS_API_USER
+  SPRINT_MANAGEMENT_API_USER
+  CRM_COMMERCE_API_USER
+  CAMPAIGNS_API_USER
+  DATA_RETENTION_API_USER
+  MONDAY_SERVICE_API_USER
+  AI_PLATFORM_AGENT_API_USER
+  DEPENDENCIES_API_USER
+  HISTORICAL_TRACKING_BACKFILL_API_USER
+  ENTITY_KNOWLEDGE_API_USER
+  ORG_HUB_API_USER
+}
+
+"""
+The activation status of a user.
+"""
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  PENDING
+}
+
+"""
+The direction to sort users.
+"""
+enum UsersSortDirection {
+  ASC
+  DESC
+}
+
+"""
+The field to sort users by.
+"""
+enum UsersSortField {
+  CREATED_AT
+}
+
+"""
+Input for sorting users.
+"""
+input UsersSortInput {
+  """
+  The field to sort by.
+  """
+  field: UsersSortField!
+  """
+  The sort direction.
+  """
+  direction: UsersSortDirection!
+}
+
+"""
+The type of entity that a reaction is attributed to.
+"""
+enum AttributionEntity {
+  AGENT
+}
+
+type Like {
+  id: ID!
+  creator_id: String
+  creator: User
+  reaction_type: String
+  """
+  The reference identifier of the entity that created this reaction on behalf of the user, who this reaction should be attributed to (e.g. agent_{agentId}).
+  """
+  attribution_entity_ref: String
+  """
+  The type of entity that created this reaction.
+  """
+  attribution_entity_type: AttributionEntity
+  created_at: Date
+  updated_at: Date
+}
+
+"""
+The type of the mention.
+"""
+enum MentionType {
+  User
+  Team
+  Project
+  Board
+  Agent
+}
+
+"""
+A reply for an update.
+"""
+type Reply {
+  """
+  The reply's unique identifier.
+  """
+  id: ID!
+  """
+  The reply's html formatted body.
+  """
+  body: String!
+  kind: String!
+  """
+  The unique identifier of the reply creator.
+  """
+  creator_id: String
+  edited_at: Date!
+  """
+  The reply's creator.
+  """
+  creator: User
+  likes: [Like!]!
+  pinned_to_top: [UpdatePin!]!
+  viewers(limit: Int = 100, page: Int = 1): [Watcher!]!
+  """
+  The reply's creation date.
+  """
+  created_at: Date
+  """
+  The reply's last edit date.
+  """
+  updated_at: Date
+  """
+  The reply's assets/files.
+  """
+  assets: [Asset]
+  """
+  The reply's text body.
+  """
+  text_body: String
+}
+
+input UpdateMention {
+  """
+  The object id.
+  """
+  id: ID!
+  """
+  The type of the mention.
+  """
+  type: MentionType!
+}
+
+"""
+The pin to top data of the update.
+"""
+type UpdatePin {
+  item_id: ID!
+}
+
+"""
+Paginated updates response with cursor.
+"""
+type UpdatesPage {
+  """
+  The list of updates.
+  """
+  updates: [Update!]!
+  """
+  Opaque cursor for the next page. Null when no more data.
+  """
+  cursor: String
+}
+
+"""
+The viewer of the update.
+"""
+type Watcher {
+  user_id: ID!
+  medium: String!
+  user: User
+}
+
+type ConnectProjectResult {
+  """
+  Indicates if the operation was successful.
+  """
+  success: Boolean
+  """
+  A message describing the result of the operation.
+  """
+  message: String
+  """
+  The ID of the created portfolio item, if successful.
+  """
+  portfolio_item_id: String
+  """
+  Unique process ID for tracking this request. Included in the callback payload when the operation completes.
+  """
+  process_id: ID
+}
+
+type CreatePortfolioResult {
+  """
+  The ID of the solution that was created
+  """
+  solution_live_version_id: String
+  """
+  Indicates if the operation was successful.
+  """
+  success: Boolean
+  """
+  A message describing the result of the operation.
+  """
+  message: String
+  """
+  Unique process ID for tracking this request. Included in the callback payload when the operation completes.
+  """
+  process_id: ID
+}
+
+"""
+Account context information.
+"""
+type AccountContext {
+  """
+  Unique account identifier.
+  """
+  id: ID
+  """
+  Account name.
+  """
+  name: String
+  """
+  Account industry. Examples: "Technology", "Healthcare", "Finance".
+  """
+  industry: String
+  """
+  Industry sector.
+  """
+  sector: String
+  """
+  Industry sub-sector.
+  """
+  sub_sector: String
+  """
+  Primary use cases for the account.
+  """
+  golden_use_cases: [String!]
+  """
+  Platform usage categories. Examples: "project_management", "crm", "marketing".
+  """
+  platform_usages: [String!]
+  """
+  Active monday.com products. Values: "core", "crm", "software", "marketing", "project_management", "service".
+  """
+  active_product_kinds: [String!]
+}
+
+"""
+A board where the user has item assignments.
+"""
+type AssignedBoard {
+  """
+  Board ID
+  """
+  board_id: ID
+  """
+  Number of items assigned to the user on this board
+  """
+  assignment_count: Int
+  """
+  Board details resolved via federation from the boards subgraph.
+  """
+  board: Board
+}
+
+"""
+Intelligence data.
+"""
+type Intelligence {
+  """
+  Top visited boards ranked by relevance (frequency + recency).
+  """
+  relevant_boards(limit: Int): [RelevantBoard!]
+  """
+  Top loaded docs ranked by relevance (frequency + recency).
+  """
+  relevant_docs(limit: Int): [RelevantDoc!]
+  """
+  Top related users ranked by relevance (multi-signal frequency + recency).
+  """
+  relevant_people(limit: Int): [RelevantPerson!]
+  """
+  User and account context information.
+  """
+  context: UserContextResponse
+  """
+  Boards where the user has item assignments.
+  """
+  assigned_boards(user_id: ID, size: Int): [AssignedBoard!]
+}
+
+"""
+A board ranked by relevance based on visit frequency and recency.
+"""
+type RelevantBoard {
+  """
+  Board ID
+  """
+  id: ID
+  """
+  Board details resolved via federation from the boards subgraph.
+  """
+  board: Board
+}
+
+"""
+A doc ranked by relevance based on load frequency and recency.
+"""
+type RelevantDoc {
+  """
+  Document ID
+  """
+  id: ID
+  """
+  Document object ID — the identifier that appears in the doc's URL.
+  """
+  object_id: ID
+  """
+  Document details resolved via federation from the docs subgraph.
+  """
+  document: Document
+}
+
+"""
+A user ranked by relevance based on interaction frequency and recency.
+"""
+type RelevantPerson {
+  """
+  User ID
+  """
+  id: ID
+  """
+  User details resolved via federation from the users subgraph.
+  """
+  user: User
+}
+
+"""
+User context information.
+"""
+type UserContext {
+  """
+  Unique user identifier.
+  """
+  id: ID
+  """
+  User display name.
+  """
+  name: String
+  """
+  User job title.
+  """
+  title: String
+  """
+  User email address.
+  """
+  email: String
+  """
+  User type. Values: null (regular), "guest", "view_only", "portal_user".
+  """
+  kind: String
+  """
+  User job role. Examples: "project_manager", "marketing_manager", "ceo".
+  """
+  job_role: String
+  """
+  User job department. Examples: "engineering", "marketing", "sales", "hr".
+  """
+  job_department: String
+  """
+  Organizational department within the workspace.
+  """
+  department: String
+  """
+  User time zone. Examples: "America/New_York", "Europe/London".
+  """
+  time_zone: String
+  """
+  User locale for date and number formatting. Examples: "en-US", "de-DE".
+  """
+  locale: String
+  """
+  Number of days since the user became active.
+  """
+  tenure_days: Int
+}
+
+"""
+Combined user and account context.
+"""
+type UserContextResponse {
+  """
+  User context.
+  """
+  user: UserContext
+  """
+  Account context.
+  """
+  account: AccountContext
+}
+
+"""
+Initialization response for bulk delete containing job ID for polling
+"""
+type BulkDeleteInit {
+  """
+  Job ID for polling progress via job_status query
+  """
+  job_id: ID
+}
+
+"""
+Reason for failure when status is Rejected or Failed
+"""
+enum BulkImportFailureReason {
+  INVALID_UPLOAD
+  AUTHORIZATION_FAILED
+  PERMISSION_DENIED
+  BOARD_CAPACITY_EXCEEDED
+  ACCOUNT_CAPACITY_EXCEEDED
+  FILE_TOO_LARGE
+  INTERNAL_ERROR
+}
+
+"""
+Initialization response for bulk import containing import ID and upload URL
+"""
+type BulkImportInit {
+  """
+  The unique identifier of the bulk import operation
+  """
+  import_id: ID
+  """
+  The URL where the file should be uploaded for processing
+  """
+  upload_url: String
+}
+
+"""
+Item counts for a bulk import process
+"""
+type BulkImportItemCounts {
+  """
+  Total number of items submitted for import
+  """
+  submitted: Int
+  """
+  Number of items that failed validation
+  """
+  invalid: Int
+  """
+  Number of items that were skipped
+  """
+  skipped: Int
+  """
+  Number of items that have been created
+  """
+  created: Int
+  """
+  Number of items that have been updated
+  """
+  updated: Int
+  """
+  Number of valid items that failed during import execution
+  """
+  failed: Int
+}
+
+"""
+Current state of the import process
+"""
+enum BulkImportState {
+  UPLOAD_PENDING
+  REJECTED
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+"""
+Status information for a bulk import process
+"""
+type BulkImportStatus {
+  """
+  Current state of the import process
+  """
+  status: BulkImportState
+  """
+  Item counts breakdown for the import process
+  """
+  counts: BulkImportItemCounts
+  """
+  Progress percentage (0-100) of the import process. Note: 100 does not imply success — on FAILED or REJECTED the percentage is also locked to 100 to indicate "no more work will happen". Clients must check `status` and `failure_reason` to determine the outcome.
+  """
+  progress_percentage: Int
+  """
+  Reason for failure when status is Rejected or Failed
+  """
+  failure_reason: BulkImportFailureReason
+  """
+  User-friendly error message explaining why the import failed or was rejected
+  """
+  failure_message: String
+  """
+  Indicates if the upload is completely done
+  """
+  fully_imported: Boolean
+  """
+  Indicates if a report file has been generated
+  """
+  report_created: Boolean
+  """
+  URL to download the import report, valid for 10 minutes
+  """
+  report_url: String
+}
+
+"""
+Item counts for an items job process
+"""
+type ItemsJobItemCounts {
+  """
+  Total number of items submitted for processing
+  """
+  submitted: Int
+  """
+  Number of items that failed validation
+  """
+  invalid: Int
+  """
+  Number of items that were skipped
+  """
+  skipped: Int
+  """
+  Number of items that have been created
+  """
+  created: Int
+  """
+  Number of items that have been updated
+  """
+  updated: Int
+  """
+  Number of valid items that failed during execution
+  """
+  failed: Int
+}
+
+"""
+Status information for an items job process
+"""
+type ItemsJobStatus {
+  """
+  Current state of the job process
+  """
+  status: BulkImportState
+  """
+  Item counts breakdown for the job process
+  """
+  counts: ItemsJobItemCounts
+  """
+  Progress percentage (0-100) of the job process
+  """
+  progress_percentage: Int
+  """
+  Reason for failure when status is Rejected or Failed
+  """
+  failure_reason: BulkImportFailureReason
+  """
+  User-friendly error message explaining why the job failed or was rejected
+  """
+  failure_message: String
+  """
+  Indicates if the job is completely done
+  """
+  fully_imported: Boolean
+  """
+  Indicates if a report file has been generated
+  """
+  report_created: Boolean
+  """
+  URL to download the job report, valid for 10 minutes
+  """
+  report_url: String
+}
+
+"""
+Status of a job operation. Currently supports items job status for backfill and ingest operations.
+"""
+union JobStatus = ItemsJobStatus
+
+"""
+Strategy for handling matching items during import
+"""
+enum OnMatchBehaviour {
+  UPSERT
+  SKIP
+}
+
+"""
+Configuration for how to handle matching items during import
+"""
+input OnMatchInput {
+  """
+  The column ID to use for matching (e.g., email, phone number). When importing items, this column value will be used to identify matches.
+  """
+  match_column_id: String!
+  """
+  Strategy for handling matching items
+  """
+  behaviour: OnMatchBehaviour!
+}
+
+"""
+Result of an undo operation
+"""
+type UndoResult {
+  """
+  Whether the undo was successfully initiated
+  """
+  success: Boolean
+  """
+  Human-readable status message
+  """
+  message: String
+}
+
+"""
+Initialization response containing job ID and upload URL
+"""
+type UploadJobInit {
+  """
+  The unique identifier of the job
+  """
+  job_id: ID
+  """
+  The URL where the file should be uploaded for processing
+  """
+  upload_url: String
+}
+
+"""
 A role in the account
 """
 type AccountRole {
@@ -19127,88 +19158,6 @@ input UserUpdateInput {
 }
 
 """
-Aggregated result of synchronously loading all widget data for a dashboard.
-"""
-type DashboardDataResult {
-  """
-  Identifier of the dashboard whose widgets were loaded.
-  """
-  dashboard_id: ID
-  """
-  Per-widget results for the dashboard, one entry per supported widget.
-  """
-  widgets: [WidgetResult!]
-}
-
-"""
-Result of loading a single widget within a dashboard data load.
-"""
-type WidgetResult {
-  """
-  Identifier of the widget this result belongs to.
-  """
-  widget_id: ID
-  """
-  Whether the widget data loaded successfully or failed.
-  """
-  status: WidgetStatus
-  """
-  Loaded widget data payload; null when status is ERROR or no data is available.
-  """
-  data: JSON
-  """
-  Error message describing why the widget failed to load; null on success.
-  """
-  error: String
-}
-
-"""
-Outcome of loading a single widget within loadDashboardData.
-"""
-enum WidgetStatus {
-  OK
-  ERROR
-}
-
-type ConnectProjectResult {
-  """
-  Indicates if the operation was successful.
-  """
-  success: Boolean
-  """
-  A message describing the result of the operation.
-  """
-  message: String
-  """
-  The ID of the created portfolio item, if successful.
-  """
-  portfolio_item_id: String
-  """
-  Unique process ID for tracking this request. Included in the callback payload when the operation completes.
-  """
-  process_id: ID
-}
-
-type CreatePortfolioResult {
-  """
-  The ID of the solution that was created
-  """
-  solution_live_version_id: String
-  """
-  Indicates if the operation was successful.
-  """
-  success: Boolean
-  """
-  A message describing the result of the operation.
-  """
-  message: String
-  """
-  Unique process ID for tracking this request. Included in the callback payload when the operation completes.
-  """
-  process_id: ID
-}
-
-"""
 Structured result data for a completed or partially-completed operation
 """
 type AsyncJobResult {
@@ -19510,6 +19459,58 @@ type Validations {
 
 enum ValidationsEntityType {
   board
+}
+
+"""
+Response from saving a workspace as a template
+"""
+type SaveWorkspaceAsTemplateResponse {
+  """
+  The template ID of the created template
+  """
+  template_id: Int
+}
+
+"""
+A solution
+"""
+type Solution {
+  """
+  Unique identifier for the solution
+  """
+  id: String
+  """
+  Name of the solution
+  """
+  title: String
+  """
+  Description of the solution
+  """
+  description: String
+  """
+  Creation date of the solution
+  """
+  createdAt: String
+  """
+  Last update date of the solution
+  """
+  updatedAt: String
+  """
+  Thumbnail URL of the solution
+  """
+  thumbnailUrl: String
+  """
+  appFeatureReferenceId of the solution
+  """
+  appFeatureReferenceId: String
+}
+
+"""
+The type of template that can be created
+"""
+enum TemplateType {
+  standard_template
+  managed_template
 }
 
 """
@@ -23770,6 +23771,37 @@ enum AiColumnTone {
   same
 }
 
+type FormulaValue implements ColumnValue {
+  """
+  The column's unique identifier.
+  """
+  id: ID!
+  """
+  A string representing all the formula values, separated by commas
+  """
+  display_value: String!
+  """
+  The column that this value belongs to.
+  """
+  column: Column!
+  """
+  Whether this item is a leaf (has no subitems).
+  """
+  is_leaf: Boolean!
+  """
+  Text representation of the column value. Note: Not all columns support textual value
+  """
+  text: String
+  """
+  The column's type.
+  """
+  type: ColumnType!
+  """
+  The column's raw value in JSON format.
+  """
+  value: JSON
+}
+
 """
 Base field type implementation
 """
@@ -24180,37 +24212,6 @@ type SubfieldsFieldType implements FieldType {
   Indicates if the object field type has remote subfields
   """
   hasRemoteSubfields: Boolean
-}
-
-type FormulaValue implements ColumnValue {
-  """
-  The column's unique identifier.
-  """
-  id: ID!
-  """
-  A string representing all the formula values, separated by commas
-  """
-  display_value: String!
-  """
-  The column that this value belongs to.
-  """
-  column: Column!
-  """
-  Whether this item is a leaf (has no subitems).
-  """
-  is_leaf: Boolean!
-  """
-  Text representation of the column value. Note: Not all columns support textual value
-  """
-  text: String
-  """
-  The column's type.
-  """
-  type: ColumnType!
-  """
-  The column's raw value in JSON format.
-  """
-  value: JSON
 }
 
 """

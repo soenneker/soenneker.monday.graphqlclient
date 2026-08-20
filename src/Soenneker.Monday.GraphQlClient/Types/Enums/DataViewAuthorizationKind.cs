@@ -7,6 +7,8 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum DataViewAuthorizationKind
 {
-    BOARD
+    BOARD,
+
+    OVERVIEW
 
 }
