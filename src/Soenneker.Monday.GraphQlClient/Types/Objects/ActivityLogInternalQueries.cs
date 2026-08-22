@@ -16,7 +16,7 @@ public sealed partial class ActivityLogInternalQueries
     public ActivityLogsPage? Logs { get; init; }
 
     /// <summary>
-    /// Event counts grouped by board or user in a single aggregation request (no per-entity fan-out). board_ids is always required. Provide user_ids to count specific users; omit them (with group_by USER) to discover the top-N users active on the given boards.
+    /// Event counts grouped by board or user in a single aggregation request (no per-entity fan-out). group_by BOARD always requires board_ids; group_by USER needs a scope — board_ids, user_ids, or document_ids. Provide user_ids to count specific users; omit them (with group_by USER) to discover the top-N users active on the given scope.
     /// </summary>
     [JsonPropertyName("event_counts")]
     public EventCountsResult? EventCounts { get; init; }

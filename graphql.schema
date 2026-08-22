@@ -21949,6 +21949,124 @@ input WorkspacesQueryInput {
 }
 
 """
+Dimension to group event counts by
+"""
+enum ActivityGroupBy {
+  BOARD
+  USER
+}
+
+"""
+Represents a single activity log entry
+"""
+type ActivityLog {
+  """
+  The unique identifier of the activity log entry
+  """
+  id: ID
+  """
+  The account this activity log entry belongs to
+  """
+  account_id: ID
+  """
+  The user who performed the action
+  """
+  user_id: ID
+  """
+  The type of event that occurred
+  """
+  event: String
+  """
+  The entity type that was affected
+  """
+  entity: String
+  """
+  Additional data associated with the event as a JSON string
+  """
+  data: String
+  """
+  The timestamp when the activity log entry was created
+  """
+  created_at: String
+}
+
+"""
+Entry point for internal activity log queries
+"""
+type ActivityLogInternalQueries {
+  """
+  Internal activity log entries for boards or users — skips authorization, entity whitelisting, and always includes boardless events
+  """
+  logs(board_ids: [ID!], user_ids: [ID!], from: String, to: String, event_types: [String!], correlation_ids: [ID!], document_ids: [ID!], entities: [String!], search: String, item_ids: [ID!], triggering_flow_types: [String!], limit: Int, cursor: String): ActivityLogsPage
+  """
+  Event counts grouped by board or user in a single aggregation request (no per-entity fan-out). group_by BOARD always requires board_ids; group_by USER needs a scope — board_ids, user_ids, or document_ids. Provide user_ids to count specific users; omit them (with group_by USER) to discover the top-N users active on the given scope.
+  """
+  event_counts(group_by: ActivityGroupBy!, limit: Int, board_ids: [ID!], user_ids: [ID!], from: String, to: String, event_types: [String!], correlation_ids: [ID!], document_ids: [ID!], entities: [String!], search: String): EventCountsResult
+}
+
+"""
+Entry point for all activity log queries
+"""
+type ActivityLogQueries {
+  """
+  Activity log entries for boards or users
+  """
+  logs(board_ids: [ID!], user_ids: [ID!], item_ids: [ID!], from: String, to: String, limit: Int, event_types: [String!], cursor: String): ActivityLogsPage
+}
+
+"""
+A page of activity log entries with a cursor for fetching the next page
+"""
+type ActivityLogsPage {
+  """
+  The activity log entries for this page
+  """
+  logs: [ActivityLog!]
+  """
+  Cursor to pass to fetch the next page, null if this is the last page
+  """
+  cursor: String
+}
+
+"""
+Event counts grouped by the requested dimension
+"""
+type EventCountsResult {
+  """
+  Explicit mode (IDs supplied): one bucket per requested ID, count 0 for IDs with no events. Discovery mode (group_by USER without user_ids): top-N users active on the given boards.
+  """
+  buckets: [GroupCountBucket!]
+}
+
+"""
+A grouped entity and its event count
+"""
+type GroupCountBucket {
+  """
+  The grouped entity ID (board ID or user ID, depending on group_by)
+  """
+  key: ID
+  """
+  Number of events for this entity within the filtered range
+  """
+  count: Int
+}
+
+"""
+A page of activity log entries with a cursor for fetching the next page
+"""
+type UserActivityLogsPage {
+  """
+  The activity log entries for this page
+  """
+  logs: [ActivityLog!]
+  """
+  Cursor to pass to fetch the next page, null if this is the last page
+  """
+  cursor: String
+}
+
+"""
 The Article is the main object type of monday.com Knowledge product. A collaborative article that can contain rich text, media, and structured content. Articles have both draft and published versions, and are organized within workspaces and folders, with configurable privacy settings and access controls. They support features like version history, real-time collaboration, and can be shared with specific users or teams. Articles are commonly used for documentation, knowledge sharing, and team collaboration.
 """
 type Article {
@@ -22894,124 +23012,6 @@ input VideoBlockInput {
   The width of the video
   """
   width: Int
-}
-
-"""
-Dimension to group event counts by
-"""
-enum ActivityGroupBy {
-  BOARD
-  USER
-}
-
-"""
-Represents a single activity log entry
-"""
-type ActivityLog {
-  """
-  The unique identifier of the activity log entry
-  """
-  id: ID
-  """
-  The account this activity log entry belongs to
-  """
-  account_id: ID
-  """
-  The user who performed the action
-  """
-  user_id: ID
-  """
-  The type of event that occurred
-  """
-  event: String
-  """
-  The entity type that was affected
-  """
-  entity: String
-  """
-  Additional data associated with the event as a JSON string
-  """
-  data: String
-  """
-  The timestamp when the activity log entry was created
-  """
-  created_at: String
-}
-
-"""
-Entry point for internal activity log queries
-"""
-type ActivityLogInternalQueries {
-  """
-  Internal activity log entries for boards or users — skips authorization, entity whitelisting, and always includes boardless events
-  """
-  logs(board_ids: [ID!], user_ids: [ID!], from: String, to: String, event_types: [String!], correlation_ids: [ID!], entities: [String!], search: String, item_ids: [ID!], triggering_flow_types: [String!], limit: Int, cursor: String): ActivityLogsPage
-  """
-  Event counts grouped by board or user in a single aggregation request (no per-entity fan-out). board_ids is always required. Provide user_ids to count specific users; omit them (with group_by USER) to discover the top-N users active on the given boards.
-  """
-  event_counts(group_by: ActivityGroupBy!, limit: Int, board_ids: [ID!], user_ids: [ID!], from: String, to: String, event_types: [String!], correlation_ids: [ID!], entities: [String!], search: String): EventCountsResult
-}
-
-"""
-Entry point for all activity log queries
-"""
-type ActivityLogQueries {
-  """
-  Activity log entries for boards or users
-  """
-  logs(board_ids: [ID!], user_ids: [ID!], item_ids: [ID!], from: String, to: String, limit: Int, event_types: [String!], cursor: String): ActivityLogsPage
-}
-
-"""
-A page of activity log entries with a cursor for fetching the next page
-"""
-type ActivityLogsPage {
-  """
-  The activity log entries for this page
-  """
-  logs: [ActivityLog!]
-  """
-  Cursor to pass to fetch the next page, null if this is the last page
-  """
-  cursor: String
-}
-
-"""
-Event counts grouped by the requested dimension
-"""
-type EventCountsResult {
-  """
-  Explicit mode (IDs supplied): one bucket per requested ID, count 0 for IDs with no events. Discovery mode (group_by USER without user_ids): top-N users active on the given boards.
-  """
-  buckets: [GroupCountBucket!]
-}
-
-"""
-A grouped entity and its event count
-"""
-type GroupCountBucket {
-  """
-  The grouped entity ID (board ID or user ID, depending on group_by)
-  """
-  key: ID
-  """
-  Number of events for this entity within the filtered range
-  """
-  count: Int
-}
-
-"""
-A page of activity log entries with a cursor for fetching the next page
-"""
-type UserActivityLogsPage {
-  """
-  The activity log entries for this page
-  """
-  logs: [ActivityLog!]
-  """
-  Cursor to pass to fetch the next page, null if this is the last page
-  """
-  cursor: String
 }
 
 """
