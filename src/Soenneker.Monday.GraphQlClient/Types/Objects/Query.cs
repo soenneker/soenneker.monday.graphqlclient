@@ -67,36 +67,6 @@ public sealed partial class Query
     public string? Empty { get; init; }
 
     /// <summary>
-    /// Returns connections for the authenticated user. Supports filtering, pagination, ordering, and partial-scope options.
-    /// </summary>
-    [JsonPropertyName("connections")]
-    public List<Connection>? Connections { get; init; }
-
-    /// <summary>
-    /// Returns connections that belong to the authenticated user.
-    /// </summary>
-    [JsonPropertyName("user_connections")]
-    public List<Connection>? UserConnections { get; init; }
-
-    /// <summary>
-    /// Returns all connections for the account. Requires admin privileges.
-    /// </summary>
-    [JsonPropertyName("account_connections")]
-    public List<Connection>? AccountConnections { get; init; }
-
-    /// <summary>
-    /// Fetch a single connection by its unique ID.
-    /// </summary>
-    [JsonPropertyName("connection")]
-    public Connection? Connection { get; init; }
-
-    /// <summary>
-    /// Get board IDs that are linked to a specific connection.
-    /// </summary>
-    [JsonPropertyName("connection_board_ids")]
-    public List<string> ConnectionBoardIds { get; init; } = [];
-
-    /// <summary>
     /// Get sequences that the current user is allowed to enroll items to, that are connected to the provided board. Returns sequences owned by the user or sequences where the user has access to the sender connection.
     /// </summary>
     [JsonPropertyName("allowed_sequences_to_enroll")]
@@ -376,6 +346,36 @@ public sealed partial class Query
     /// </summary>
     [JsonPropertyName("replies")]
     public List<Reply>? Replies { get; init; }
+
+    /// <summary>
+    /// Returns connections for the authenticated user. Supports filtering, pagination, ordering, and partial-scope options.
+    /// </summary>
+    [JsonPropertyName("connections")]
+    public List<Connection>? Connections { get; init; }
+
+    /// <summary>
+    /// Returns connections that belong to the authenticated user.
+    /// </summary>
+    [JsonPropertyName("user_connections")]
+    public List<Connection>? UserConnections { get; init; }
+
+    /// <summary>
+    /// Returns all connections for the account. Requires admin privileges.
+    /// </summary>
+    [JsonPropertyName("account_connections")]
+    public List<Connection>? AccountConnections { get; init; }
+
+    /// <summary>
+    /// Fetch a single connection by its unique ID.
+    /// </summary>
+    [JsonPropertyName("connection")]
+    public Connection? Connection { get; init; }
+
+    /// <summary>
+    /// Get board IDs that are linked to a specific connection.
+    /// </summary>
+    [JsonPropertyName("connection_board_ids")]
+    public List<string> ConnectionBoardIds { get; init; } = [];
 
     /// <summary>
     /// Get the status of a backfill or ingest job

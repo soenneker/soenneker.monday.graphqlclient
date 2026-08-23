@@ -4102,26 +4102,6 @@ type Query {
   """
   empty: String
   """
-  Returns connections for the authenticated user. Supports filtering, pagination, ordering, and partial-scope options.
-  """
-  connections(withAutomations: Boolean, connectionState: String, withStateValidation: Boolean, page: Int, pageSize: Int, order: String, withPartialScopes: Boolean, pagination: PaginationInput): [Connection!]
-  """
-  Returns connections that belong to the authenticated user.
-  """
-  user_connections(withAutomations: Boolean, withStateValidation: Boolean, page: Int, pageSize: Int, order: String, pagination: PaginationInput): [Connection!]
-  """
-  Returns all connections for the account. Requires admin privileges.
-  """
-  account_connections(withAutomations: Boolean, withStateValidation: Boolean, page: Int, pageSize: Int, order: String, pagination: PaginationInput): [Connection!]
-  """
-  Fetch a single connection by its unique ID.
-  """
-  connection(id: Int!): Connection
-  """
-  Get board IDs that are linked to a specific connection.
-  """
-  connection_board_ids(connection_id: ID!): [ID!]!
-  """
   Get sequences that the current user is allowed to enroll items to, that are connected to the provided board. Returns sequences owned by the user or sequences where the user has access to the sender connection.
   """
   allowed_sequences_to_enroll(board_id: ID!): [Sequence!]
@@ -4322,6 +4302,26 @@ type Query {
   Get a collection of replies filtered by board IDs and date range.
   """
   replies(limit: Int = 25, page: Int = 1, board_ids: [ID!]!, created_at_from: String, created_at_to: String): [Reply!]
+  """
+  Returns connections for the authenticated user. Supports filtering, pagination, ordering, and partial-scope options.
+  """
+  connections(withAutomations: Boolean, connectionState: String, withStateValidation: Boolean, page: Int, pageSize: Int, order: String, withPartialScopes: Boolean, pagination: PaginationInput): [Connection!]
+  """
+  Returns connections that belong to the authenticated user.
+  """
+  user_connections(withAutomations: Boolean, withStateValidation: Boolean, page: Int, pageSize: Int, order: String, pagination: PaginationInput): [Connection!]
+  """
+  Returns all connections for the account. Requires admin privileges.
+  """
+  account_connections(withAutomations: Boolean, withStateValidation: Boolean, page: Int, pageSize: Int, order: String, pagination: PaginationInput): [Connection!]
+  """
+  Fetch a single connection by its unique ID.
+  """
+  connection(id: Int!): Connection
+  """
+  Get board IDs that are linked to a specific connection.
+  """
+  connection_board_ids(connection_id: ID!): [ID!]!
   """
   Get the status of a backfill or ingest job
   """
@@ -8317,1286 +8317,6 @@ type WorkflowStep {
   Display title of the step
   """
   title: String
-}
-
-"""
-Result of activating a workflow
-"""
-type ActivateWorkflowResult {
-  """
-  Whether the workflow was successfully activated
-  """
-  is_success: Boolean!
-}
-
-"""
-A block in the framework
-"""
-type Block {
-  """
-  Unique identifier for the block
-  """
-  id: Int
-  """
-  Unique key of the block
-  """
-  uniqueKey: String
-  """
-  Name of the block
-  """
-  name: String
-  """
-  Description of the block
-  """
-  description: String
-  """
-  Type of the block
-  """
-  kind: String
-  """
-  Whether the block is deprecated
-  """
-  is_deprecated: Boolean
-  """
-  Configuration for input fields. To fetch the available options of a specific input field, first query the block requesting the `fieldTypeData` for that field and then call the `remote_options` query using the resulting `fieldTypeReferenceId`.
-  """
-  inputFieldsConfig: [InputFieldConfig!]
-  """
-  Configuration for output fields
-  """
-  outputFieldsConfig: [OutputFieldConfig!]
-  """
-  Context-specific data for the block, organized by context name
-  """
-  context_data: BlockContextData
-}
-
-"""
-Context-specific data for a block, organized by context name
-"""
-type BlockContextData {
-  """
-  Context data for the workflow builder
-  """
-  workflow_builder: WorkflowBuilderContextData
-  """
-  Context data for the lite builder
-  """
-  lite_builder: LiteBuilderContextData
-  """
-  Context data for Monday agents
-  """
-  monday_agents: MondayAgentsContextData
-}
-
-"""
-Result of a blocks query
-"""
-type BlocksResult {
-  """
-  List of blocks
-  """
-  blocks: [Block!]
-}
-
-"""
-Result of changing workflow owner
-"""
-type ChangeWorkflowOwnerResult {
-  """
-  Whether the workflow owner was successfully changed
-  """
-  is_success: Boolean!
-}
-
-"""
-Represents an integration connection between a monday.com account and an external service.
-"""
-type Connection {
-  """
-  Unique identifier of the connection.
-  """
-  id: Int
-  """
-  Identifier of the monday.com account that owns the connection.
-  """
-  accountId: Int
-  """
-  Identifier of the user who created the connection.
-  """
-  userId: Int
-  """
-  External service provider of the connection (e.g., gmail, slack).
-  """
-  provider: String
-  """
-  Human-readable display name for the connection.
-  """
-  name: String
-  """
-  Authentication method used by the connection (e.g., oauth, token_based).
-  """
-  method: String
-  """
-  Identifier of the linked account at the provider side.
-  """
-  providerAccountIdentifier: String
-  """
-  Current state of the connection (e.g., active, inactive).
-  """
-  state: String
-  """
-  ISO timestamp when the connection was created.
-  """
-  createdAt: String
-  """
-  ISO timestamp when the connection was last updated.
-  """
-  updatedAt: String
-}
-
-"""
-Input for creating a workflow from a template
-"""
-input CreateWorkflowFromTemplateInput {
-  """
-  Title of the workflow
-  """
-  title: String!
-  """
-  Detailed description of the workflow
-  """
-  description: String
-  """
-  The reference ID of the workflow template to create the workflow from
-  """
-  template_reference_id: ID!
-  """
-  A map of workflow variable keys to their configuration values. Each value can contain: value, title, icon, and dependencies
-  """
-  workflow_variables_values: JSON
-  """
-  Variables used within this workflow. To get the accurate JSON schema call the GraphQL query 'get_workflow_variable_schemas' These variables will be appended to the template workflow variables.
-  """
-  workflow_variables: [JSON!]
-  """
-  ID of the creator app
-  """
-  creator_app_id: ID!
-  """
-  Reference ID of the creator app feature
-  """
-  creator_app_feature_reference_id: ID
-  """
-  Hierarchy level the workflow is hosted in If omitted, defaults to account-level with the current account ID.
-  """
-  workflow_host_data: WorkflowHostDataInput
-}
-
-type CreateWorkflowResult {
-  """
-  Workflow numeric ID (supports both integer and bigint)
-  """
-  id: String
-}
-
-"""
-The access level for CRUD operations on a workflow
-"""
-enum CrudAccessLevel {
-  USER
-  ACCOUNT
-}
-
-"""
-Result of deactivating a workflow
-"""
-type DeactivateWorkflowResult {
-  """
-  Whether the workflow was successfully deactivated
-  """
-  is_success: Boolean!
-}
-
-type DeleteWorkflowResult {
-  """
-  Whether the workflow was successfully deleted
-  """
-  is_success: Boolean!
-}
-
-"""
-Defines mandatory and optional dependencies that must be populated to allow resolving the field dynamic values
-"""
-type DependencyConfig {
-  """
-  Required dependencies evaluated in order
-  """
-  orderedMandatoryFields: [DependencyField!]
-  """
-  Non-required dependencies that refine the dynamic values request but do not block enablement
-  """
-  optionalFields: [DependencyField!]
-}
-
-"""
-Maps a source field-type to the key name expected in the dynamic-values payload for this dependency
-"""
-type DependencyField {
-  """
-  Reference ID of the field-type that supplies the dependency value
-  """
-  sourceFieldTypeReferenceId: Int
-  """
-  Unique key of the source field type
-  """
-  sourceFieldTypeUniqueKey: String
-  """
-  JSON key that the backend expects for this dependency value
-  """
-  targetFieldKey: String
-}
-
-"""
-Result of detaching managed workflows from a template for a given host instance
-"""
-type DetachWorkflowsFromTemplateResult {
-  """
-  Number of workflows successfully detached from template
-  """
-  workflows_detached_count: Int!
-  """
-  Number of workflows that failed to detach
-  """
-  workflows_failed_count: Int!
-}
-
-"""
-Information about a field
-"""
-type FieldInformation {
-  """
-  The text content of the field information
-  """
-  text: String
-  """
-  A link to more information
-  """
-  link: JSON
-}
-
-"""
-A field type in the framework
-"""
-interface FieldType {
-  """
-  Unique identifier for the field type
-  """
-  id: Int
-  """
-  Unique key of the field type
-  """
-  uniqueKey: String
-  """
-  Name of the field type
-  """
-  name: String
-  """
-  Description of the field type
-  """
-  description: String
-  """
-  Current state of the field type
-  """
-  state: FieldTypeState
-  """
-  Unique key identifier for the field type
-  """
-  key: String
-  """
-  Default key for fields of this type
-  """
-  defaultFieldKey: String
-  """
-  Dependency configuration specifying mandatory and optional field dependencies required to enable this field and compute its dynamic values. When fetching the permitted values for custom input fields via the remote_options query, you must provide these dependencies in the query input.
-  """
-  dependencyConfig: DependencyConfig
-  """
-  List of field type implementations
-  """
-  implement: [FieldTypeImplementation!]
-  """
-  Indicates whether this field type fetches its options from a remote source
-  """
-  has_remote_options: Boolean
-}
-
-"""
-An interface (app feature) that a field type implements
-"""
-type FieldTypeImplementation {
-  """
-  Reference id of the app feature interface this field type implements
-  """
-  app_feature_reference_id: ID
-}
-
-"""
-The type of relation between a field and its type
-"""
-enum FieldTypeRelationType {
-  PRIMITIVE
-  INTERFACE
-  CUSTOM
-}
-
-"""
-The state of a field type
-"""
-enum FieldTypeState {
-  ACTIVE
-  DELETED
-}
-
-"""
-Input parameters for getting blocks
-"""
-input GetBlocksInput {
-  """
-  Optional array of app feature unique keys to filter blocks
-  """
-  app_feature_unique_keys: [String!]
-  """
-  Optional array of contexts to filter blocks
-  """
-  contexts: [String!]
-}
-
-enum HostType {
-  APP_FEATURE_OBJECT
-  BOARD
-  ACCOUNT_LEVEL
-}
-
-"""
-Interface for input field configuration
-"""
-interface InputFieldConfig {
-  """
-  Unique identifier for the field
-  """
-  id: Int
-  """
-  Key identifier for the field
-  """
-  fieldKey: String
-  """
-  Display title for the field
-  """
-  fieldTitle: String
-  """
-  Whether the field can be null
-  """
-  isNullable: Boolean
-  """
-  Whether the field is an array type
-  """
-  isArray: Boolean
-  """
-  Whether the field is optional
-  """
-  isOptional: Boolean
-  """
-  Additional information about the field
-  """
-  information: FieldInformation
-  """
-  Detailed description of the field
-  """
-  description: FieldInformation
-  """
-  Type of the field relation
-  """
-  type: FieldTypeRelationType
-}
-
-"""
-Input field constraints
-"""
-type InputFieldConstraints {
-  """
-  Dependencies for remote options that affect this field
-  """
-  remoteOptionsDependencies: JSON
-  """
-  Dependencies that affect this field's behavior or validation
-  """
-  dependencies: JSON
-  """
-  Dependencies between this field and its subfields
-  """
-  subFieldsDependencies: JSON
-  """
-  Credential dependencies required for this field
-  """
-  credentials: JSON
-}
-
-"""
-Context data for the lite builder, including sentence configuration and field source mappings
-"""
-type LiteBuilderContextData {
-  """
-  Sentence template parts (array of strings and sentence part objects)
-  """
-  sentence: JSON
-  """
-  Mapping of inbound field keys to their source configuration
-  """
-  source_config: JSON
-  """
-  Category for the block in the lite builder menu
-  """
-  menu_category: String
-  """
-  Configuration for sentence part views (container type, content, header)
-  """
-  sentence_part_configurations: JSON
-  """
-  Overrides for inbound field display properties (title, placeholder, header)
-  """
-  inbound_field_overrides: JSON
-}
-
-"""
-A page of live workflows with pagination metadata
-"""
-type LiveWorkflowsPage {
-  """
-  List of live workflows in this page
-  """
-  data: [Workflow!]!
-  """
-  Cursor-based pagination metadata for fetching subsequent pages
-  """
-  page_info: LiveWorkflowsPageInfo!
-}
-
-"""
-Cursor-based pagination metadata for live workflows
-"""
-type LiveWorkflowsPageInfo {
-  """
-  Whether there are more results beyond the current page
-  """
-  has_next_page: Boolean!
-  """
-  Cursor of the last item in the current page; pass as `lastId` to fetch the next page
-  """
-  end_cursor: ID
-}
-
-"""
-Context data for Monday agents
-"""
-type MondayAgentsContextData {
-  """
-  Display name of the block in the agents context
-  """
-  block_name: String
-  """
-  Keys of fields that should be hidden in the agents context
-  """
-  hidden_field_keys: [String!]
-}
-
-"""
-Data required to request the next page of remote options
-"""
-type NextPageRequestData {
-  """
-  The page identifier to request
-  """
-  page: JSON
-  """
-  Optional cursor for cursor-based pagination
-  """
-  cursor: JSON
-}
-
-"""
-A single option in a remote options list
-"""
-type Option {
-  """
-  The value of the option
-  """
-  value: JSON
-  """
-  The display title of the option
-  """
-  title: String
-  """
-  Optional icon to display alongside the option (e.g. { vibe, tooltip })
-  """
-  icon: JSON
-}
-
-"""
-Interface for output field configuration
-"""
-interface OutputFieldConfig {
-  """
-  Unique identifier for the field
-  """
-  id: Int
-  """
-  Key identifier for the field
-  """
-  fieldKey: String
-  """
-  Display title for the field
-  """
-  fieldTitle: String
-  """
-  Whether the field can be null
-  """
-  isNullable: Boolean
-  """
-  Whether the field is an array type
-  """
-  isArray: Boolean
-  """
-  Whether the field is optional
-  """
-  isOptional: Boolean
-  """
-  Additional information about the field
-  """
-  information: FieldInformation
-  """
-  Detailed description of the field
-  """
-  description: FieldInformation
-  """
-  Type of the field relation
-  """
-  type: FieldTypeRelationType
-}
-
-"""
-Output field constraints
-"""
-type OutputFieldConstraints {
-  """
-  Dependencies that affect this field's output behavior
-  """
-  dependencies: JSON
-  """
-  Dependencies between this field and its subfields in the output
-  """
-  subFieldsDependencies: JSON
-  """
-  Credential dependencies required for this field's output
-  """
-  credentials: JSON
-}
-
-"""
-Pagination parameters for queries
-"""
-input PaginationInput {
-  """
-  Maximum number of results to return
-  """
-  limit: Int
-  """
-  Last ID for cursor-based pagination
-  """
-  lastId: Int
-}
-
-"""
-The primitive types supported by the system
-"""
-enum PrimitiveTypes {
-  STRING
-  NUMBER
-  FLOAT
-  BOOLEAN
-  DATE
-  HOUR
-}
-
-"""
-Input type for requesting remote options for a field type, including dependencies, credentials, pagination, and search query.
-"""
-input RemoteOptionsInput {
-  """
-  The unique key of the field type
-  """
-  field_type_unique_key: String!
-  """
-  Map all the dependencies fieldKeys to their values. Example: { "my-field-key": { value: 123 }, "my-other-field-key": { value: 456 } } .The schema is: Record<string, { value: unknown }>
-  """
-  dependencies_values: JSON
-  """
-  Map a credentialsKey to the credentials data. Example: { "my-credentials-key": { userCredentialsId: 123, accessToken: "abc" } }
-  """
-  credentials_values: JSON
-  """
-  Pagination data matching the schema of the field's remote options pagination data
-  """
-  page_request_data: JSON
-  """
-  Search query
-  """
-  query: String
-  """
-  Request specific values to fetch their title
-  """
-  values_to_fetch: JSON
-}
-
-"""
-Response containing a list of remote options and pagination information
-"""
-type RemoteOptionsResponse {
-  """
-  List of available options
-  """
-  options: [Option!]
-  """
-  Whether the options list supports pagination
-  """
-  isPaginated: Boolean
-  """
-  Whether this is the last page of options
-  """
-  isLastPage: Boolean
-  """
-  Data required to fetch the next page of options
-  """
-  nextPageRequestData: NextPageRequestData
-  """
-  Optional disclaimer text to display with the options
-  """
-  disclaimer: String
-}
-
-"""
-Which workflow revision to use for a run-once execution
-"""
-enum RunOnceSource {
-  LIVE
-  DRAFT
-}
-
-"""
-Result of a run-once workflow execution
-"""
-type RunWorkflowOnceResult {
-  """
-  Unique identifier for this execution. Can be used for tracking and correlating execution events.
-  """
-  trigger_uuid: String!
-  """
-  Internal subscription ID associated with this execution.
-  """
-  subscription_id: ID!
-  """
-  Internal automation ID created for this execution.
-  """
-  automation_id: ID!
-}
-
-"""
-Result of saving a workflow as a template
-"""
-type SaveWorkflowAsTemplateResult {
-  """
-  AppFeature reference ID of the created template
-  """
-  template_reference_id: ID!
-}
-
-"""
-Result of stopping a run-once workflow execution
-"""
-type StopWorkflowRunOnceResult {
-  """
-  Whether a running execution was successfully stopped. Returns false if no execution was active.
-  """
-  stopped: Boolean!
-  """
-  Explanation when 'stopped' is false. For example, 'no_active_test_run' means no execution was in progress.
-  """
-  reason: String
-}
-
-"""
-The type of transformation to apply to the workflow variable's value
-"""
-enum TransformationType {
-  DIRECT
-  DYNAMIC_TEXT
-  DYNAMIC_NUMBER
-  ARRAY
-  DATE
-  HOUR
-}
-
-"""
-Input for updating a workflow created from a template
-"""
-input UpdateWorkflowFromTemplateInput {
-  """
-  Workflow numeric ID (supports both integer and bigint)
-  """
-  id: ID!
-  """
-  A map of workflow variable keys to their configuration values. Each value can contain: value, title, icon, and dependencies
-  """
-  workflow_variables_values: JSON
-  """
-  Variables used within this workflow. To get the accurate JSON schema call the GraphQL query 'get_workflow_variable_schemas'
-  """
-  workflow_variables: [JSON!]
-  """
-  Title of the workflow
-  """
-  title: String
-  """
-  Detailed description of the workflow
-  """
-  description: String
-  """
-  Importance level of the workflow
-  """
-  importance: Int
-}
-
-input UpdateWorkflowInput {
-  """
-  ID of the workflow to update
-  """
-  id: ID!
-  """
-  New set of workflow blocks to replace existing ones
-  """
-  workflowBlocks: [WorkflowBlockInput!]!
-  """
-  Variables used within this workflow. To get the accurate JSON schema call the GraphQL query 'get_workflow_variable_schemas'
-  """
-  workflowVariables: [JSON!]!
-  """
-  Optional array of iterator (loop) configurations. Currently supports forEach iterators only. Each iterator loops over a collection, executing specified workflow blocks once per item. REQUIRED SETUP per iterator: (1) Add an isLoopEnded workflow variable to workflowVariables with sourceKind "auto_calculated_runtime_data" and sourceMetadata { dataType: "iteratorMetadata", metadata: { iteratorId: <matching_id>, fieldKey: "isLoopEnded" } }. (2) Add a boolean true constant variable with sourceKind "constant", sourceMetadata: {}, config: { value: true }. (3) Configure the entry node with Routes-type nextWorkflowBlocksConfig using conditions that compare isLoopEnded to the true constant to route between continue (internal node) and exit (post_iterator_node_id). Nested iterators are not supported yet. Iterator IDs must be unique across the workflow.
-  """
-  iterators: [WorkflowIteratorInput!]
-}
-
-input UpdateWorkflowMetadataInput {
-  """
-  ID of the workflow to update
-  """
-  id: ID!
-  """
-  New title for the workflow
-  """
-  title: String
-  """
-  New description for the workflow
-  """
-  description: String
-  """
-  Importance level of the workflow
-  """
-  importance: Int
-}
-
-type UpdateWorkflowResult {
-  """
-  Workflow numeric ID (supports both integer and bigint)
-  """
-  id: String
-}
-
-type Workflow {
-  """
-  Workflow numeric ID (supports both integer and bigint)
-  """
-  id: ID!
-  """
-  User ID who owns the workflow
-  """
-  user_id: Int!
-  """
-  Whether the workflow is currently active
-  """
-  is_active: Boolean!
-  """
-  Automation ID associated with the workflow
-  """
-  automation_id: ID!
-  """
-  Last updated timestamp of the workflow
-  """
-  updated_at: Date!
-  """
-  Created timestamp of the workflow
-  """
-  created_at: Date!
-  """
-  Importance level of the workflow
-  """
-  importance: Int
-  """
-  Title of the workflow
-  """
-  title: String!
-  """
-  Detailed description of the workflow
-  """
-  description: String!
-  """
-  Define the workflow's steps and the configuration of each step
-  """
-  workflow_blocks: [WorkflowBlock!]!
-  """
-  Variables used within this workflow. To get the accurate JSON schema call the GraphQL query 'get_workflow_variable_schemas'
-  """
-  workflow_variables: JSON!
-  """
-  Hierarchy level the workflow is hosted in
-  """
-  workflow_host_data: WorkflowHostData!
-  """
-  Notice/Error message for the workflow
-  """
-  notice_message: String
-  """
-  Reference ID of the template this workflow was created from, if any
-  """
-  template_reference_id: ID
-  """
-  Optional array of iterator (loop) configurations. Currently supports forEach iterators only. Each iterator loops over a collection, executing specified workflow blocks once per item. REQUIRED SETUP per iterator: (1) Add an isLoopEnded workflow variable to workflowVariables with sourceKind "auto_calculated_runtime_data" and sourceMetadata { dataType: "iteratorMetadata", metadata: { iteratorId: <matching_id>, fieldKey: "isLoopEnded" } }. (2) Add a boolean true constant variable with sourceKind "constant", sourceMetadata: {}, config: { value: true }. (3) Configure the entry node with Routes-type nextWorkflowBlocksConfig using conditions that compare isLoopEnded to the true constant to route between continue (internal node) and exit (post_iterator_node_id). Nested iterators are not supported yet. Iterator IDs must be unique across the workflow.
-  """
-  iterators: [WorkflowIterator!]
-}
-
-type WorkflowBlock {
-  """
-  Unique node identifier within the workflow
-  """
-  workflowNodeId: Int!
-  """
-  Reference ID of the block
-  """
-  blockReferenceId: Int!
-  """
-  Title of the workflow block
-  """
-  title: String!
-  """
-  Defines the input fields of the workflow block. This corresponds to the input fields defined by the block used in the Workflow Block. You must call the remote_options query to retrieve the allowed values for any custom input field before configuring it.
-  """
-  inputFields: [WorkflowBlockInputField!]!
-  """
-  Defines the credential fields for the workflow block. Each field references a workflow variable containing the credential value.
-  """
-  credentialFields: [WorkflowBlockCredentialField!]
-  """
-  Configuration for the next workflow blocks. To get the accurate JSON schema call the graphQL query 'get_workflow_block_next_mapping_schemas'. Note: Only the following mapping types are currently supported: routesMapping, waitTriggerMapping.
-  """
-  nextWorkflowBlocksConfig: JSON
-  kind: WorkflowBlockKind!
-}
-
-"""
-Credential field configuration for workflow blocks
-"""
-type WorkflowBlockCredentialField {
-  """
-  The credential field key
-  """
-  fieldKey: String!
-  """
-  Key of the workflow variable containing the credential value. Always a positive number
-  """
-  workflowVariableKey: Int!
-}
-
-"""
-Input for credential field configuration in workflow blocks
-"""
-input WorkflowBlockCredentialFieldInput {
-  """
-  The credential field key
-  """
-  fieldKey: String!
-  """
-  Key of the workflow variable containing the credential value. Always a positive number
-  """
-  workflowVariableKey: Int!
-}
-
-input WorkflowBlockFieldInput {
-  """
-  The block's field key
-  """
-  fieldKey: String!
-  """
-  Key of the workflow variable defining the configuration for the field key. Always a positive number
-  """
-  workflowVariableKey: Int!
-}
-
-input WorkflowBlockInput {
-  """
-  Unique node identifier within the workflow
-  """
-  workflowNodeId: Int!
-  """
-  Reference ID of the block
-  """
-  blockReferenceId: Int!
-  """
-  Title of the workflow block
-  """
-  title: String!
-  """
-  Defines the input fields of the workflow block. This corresponds to the input fields defined by the block used in the Workflow Block. You must call the remote_options query to retrieve the allowed values for any custom input field before configuring it.
-  """
-  inputFields: [WorkflowBlockFieldInput!]!
-  """
-  Defines the credential fields for the workflow block. Each field references a workflow variable containing the credential value.
-  """
-  credentialFields: [WorkflowBlockCredentialFieldInput!]
-  """
-  Configuration for the next workflow blocks. To get the accurate JSON schema call the graphQL query 'get_workflow_block_next_mapping_schemas'. Note: Only the following mapping types are currently supported: routesMapping, waitTriggerMapping.
-  """
-  nextWorkflowBlocksConfig: JSON
-  kind: WorkflowBlockKind
-}
-
-type WorkflowBlockInputField {
-  """
-  The block's field key
-  """
-  fieldKey: String!
-  """
-  Key of the workflow variable defining the configuration for the field key. Always a positive number
-  """
-  workflowVariableKey: Int!
-}
-
-"""
-The kind of workflow block. This is the type of the block that is used in the UI
-"""
-enum WorkflowBlockKind {
-  WAIT
-}
-
-"""
-The json schema definition for a given workflow block next mapping kind
-"""
-type WorkflowBlockNextMappingSchema {
-  """
-  The kind of workflow block next mapping
-  """
-  kind: String
-  """
-  JSON schema for this workflow block next mapping kind
-  """
-  schema: JSON
-}
-
-"""
-Context data for the workflow builder
-"""
-type WorkflowBuilderContextData {
-  """
-  Keys of input fields that should be hidden in the workflow builder
-  """
-  hidden_input_fields_keys: [String!]
-}
-
-"""
-Customization settings for the workflow
-"""
-input WorkflowCustomizationInput {
-  """
-  The access level for CRUD operations on an account-level workflow. Only applicable for ACCOUNT_LEVEL host type. Defaults to USER (only the creator can modify).
-  """
-  crud_access_level: CrudAccessLevel
-}
-
-"""
-Hierarchy level the workflow is hosted in
-"""
-type WorkflowHostData {
-  """
-  Type of host for this workflow
-  """
-  type: HostType!
-  """
-  Instance ID of the host
-  """
-  id: String
-}
-
-"""
-Host data for the workflow. Both id and type must be provided together. If omitted, defaults to account-level with the current account ID.
-"""
-input WorkflowHostDataInput {
-  """
-  Instance ID of the host
-  """
-  id: String
-  """
-  Type of host for this workflow
-  """
-  type: HostType
-}
-
-input WorkflowInput {
-  """
-  Title of the workflow
-  """
-  title: String!
-  """
-  Detailed description of the workflow
-  """
-  description: String!
-  """
-  Define the workflow's steps and the configuration of each step
-  """
-  workflowBlocks: [WorkflowBlockInput!]!
-  """
-  Variables used within this workflow. To get the accurate JSON schema call the GraphQL query 'get_workflow_variable_schemas'
-  """
-  workflowVariables: [JSON!]!
-  """
-  Hierarchy level the workflow is hosted in If omitted, defaults to account-level with the current account ID.
-  """
-  workflowHostData: WorkflowHostDataInput
-  """
-  Reference ID of the creator app feature
-  """
-  creatorAppFeatureReferenceId: Int
-  """
-  ID of the creator app
-  """
-  creatorAppId: Int
-  """
-  Customization settings for the workflow
-  """
-  customization: WorkflowCustomizationInput
-  """
-  Optional array of iterator (loop) configurations. Currently supports forEach iterators only. Each iterator loops over a collection, executing specified workflow blocks once per item. REQUIRED SETUP per iterator: (1) Add an isLoopEnded workflow variable to workflowVariables with sourceKind "auto_calculated_runtime_data" and sourceMetadata { dataType: "iteratorMetadata", metadata: { iteratorId: <matching_id>, fieldKey: "isLoopEnded" } }. (2) Add a boolean true constant variable with sourceKind "constant", sourceMetadata: {}, config: { value: true }. (3) Configure the entry node with Routes-type nextWorkflowBlocksConfig using conditions that compare isLoopEnded to the true constant to route between continue (internal node) and exit (post_iterator_node_id). Nested iterators are not supported yet. Iterator IDs must be unique across the workflow.
-  """
-  iterators: [WorkflowIteratorInput!]
-}
-
-"""
-Iterator configuration for looping over collections within a workflow
-"""
-type WorkflowIterator {
-  """
-  Unique positive integer identifier for the iterator. Must be unique across all iterators in the workflow. This ID is referenced by the isLoopEnded workflow variable in its sourceMetadata.metadata.iteratorId field.
-  """
-  iterator_id: ID!
-  """
-  List of all workflow block node IDs that belong to this loop. Must include entry_node_id. Must NOT include post_iterator_node_id. Every node ID must correspond to a workflowNodeId in the workflow blocks. Nested iterators are not supported: an iterator entry node must not appear in another iterator's node_ids. Terminal nodes within the iterator (those with null nextWorkflowBlocksConfig) are automatically routed back to the entry node.
-  """
-  node_ids: [ID!]!
-  """
-  The workflow node ID that serves as the loop entry point. Must be included in node_ids. This node's nextWorkflowBlocksConfig MUST use type "Routes" with conditions referencing the isLoopEnded workflow variable: one route to post_iterator_node_id (when isLoopEnded IS equal to true, to exit the loop) and one route to an internal iterator node (when isLoopEnded IS NOT equal to true, to continue the loop). When post_iterator_node_id is not null, an exit route targeting it is required.
-  """
-  entry_node_id: ID!
-  """
-  Node ID that executes after the iterator completes all iterations. Set to null if no action should follow the loop (workflow ends after the loop). Must NOT be included in node_ids. When not null, the entry node's Routes config must include an exit route targeting this node.
-  """
-  post_iterator_node_id: ID
-  """
-  Workflow variable key referencing the collection to iterate over (forEach). The referenced variable must resolve to an array at runtime. The iterator executes the loop body once per item in the collection.
-  """
-  collection_workflow_variable_key: ID!
-  """
-  Optional workflow variable key containing the maximum number of iterations. When provided, the actual iteration count is min(collection length, max iterations value). When omitted, the iterator processes the entire collection.
-  """
-  max_iterations_workflow_variable_key: Int
-}
-
-"""
-Configuration for a forEach iterator that loops over a collection. REQUIRED WORKFLOW VARIABLES: For each iterator, the workflowVariables array must include: (1) An isLoopEnded variable with sourceKind "auto_calculated_runtime_data" and sourceMetadata { dataType: "iteratorMetadata", metadata: { iteratorId: <matching_iterator_id>, fieldKey: "isLoopEnded" } }. (2) A boolean true constant variable with sourceKind "constant", sourceMetadata: {}, and config: { value: true }. ENTRY NODE SETUP: The entry node must use a Routes-type nextWorkflowBlocksConfig with conditions comparing the isLoopEnded variable key to the true constant variable key: one route with operator "Is" pointing to post_iterator_node_id (exit loop), and one route with operator "IsNot" pointing to an internal iterator node (continue loop). Terminal nodes inside the iterator (with null nextWorkflowBlocksConfig) are automatically routed back to the entry node.
-"""
-input WorkflowIteratorInput {
-  """
-  Unique positive integer identifier for the iterator. Must be unique across all iterators in the workflow. This ID is referenced by the isLoopEnded workflow variable in its sourceMetadata.metadata.iteratorId field.
-  """
-  iterator_id: Int!
-  """
-  List of all workflow block node IDs that belong to this loop. Must include entry_node_id. Must NOT include post_iterator_node_id. Every node ID must correspond to a workflowNodeId in the workflow blocks. Nested iterators are not supported: an iterator entry node must not appear in another iterator's node_ids. Terminal nodes within the iterator (those with null nextWorkflowBlocksConfig) are automatically routed back to the entry node.
-  """
-  node_ids: [Int!]!
-  """
-  The workflow node ID that serves as the loop entry point. Must be included in node_ids. This node's nextWorkflowBlocksConfig MUST use type "Routes" with conditions referencing the isLoopEnded workflow variable: one route to post_iterator_node_id (when isLoopEnded IS equal to true, to exit the loop) and one route to an internal iterator node (when isLoopEnded IS NOT equal to true, to continue the loop). When post_iterator_node_id is not null, an exit route targeting it is required.
-  """
-  entry_node_id: Int!
-  """
-  Node ID that executes after the iterator completes all iterations. Set to null if no action should follow the loop (workflow ends after the loop). Must NOT be included in node_ids. When not null, the entry node's Routes config must include an exit route targeting this node.
-  """
-  post_iterator_node_id: ID
-  """
-  Workflow variable key referencing the collection to iterate over (forEach). The referenced variable must resolve to an array at runtime. The iterator executes the loop body once per item in the collection.
-  """
-  collection_workflow_variable_key: Int!
-  """
-  Optional workflow variable key containing the maximum number of iterations. When provided, the actual iteration count is min(collection length, max iterations value). When omitted, the iterator processes the entire collection.
-  """
-  max_iterations_workflow_variable_key: Int
-}
-
-"""
-Result of querying trigger entities for a run-once workflow execution
-"""
-type WorkflowRunOnceTriggerEntities {
-  """
-  Whether this workflow requires a trigger entity to execute. When false (e.g., for scheduled/cron triggers), you can call 'run_workflow_once' without providing a trigger_payload.
-  """
-  requires_entity: Boolean!
-  """
-  List of available trigger entities. Each entity represents a real object in the workspace (e.g., a board item) that the workflow can be executed against. Pass the selected entity's 'value' field to 'run_workflow_once' as 'trigger_payload'.
-  """
-  entities: [WorkflowRunOnceTriggerEntity!]!
-}
-
-"""
-A trigger entity representing a real object in the workspace (e.g., a board item) that a workflow can be executed against
-"""
-type WorkflowRunOnceTriggerEntity {
-  """
-  Human-readable name of the trigger entity (e.g., the item name).
-  """
-  label: String!
-  """
-  Opaque payload representing this trigger entity. Pass this value as-is to the 'run_workflow_once' mutation's 'trigger_payload' argument. Do not modify this value.
-  """
-  value: JSON!
-}
-
-"""
-The context where a workflow template can be accessed
-"""
-enum WorkflowTemplateContext {
-  LITE_BUILDER
-}
-
-"""
-Input data for creating a workflow template
-"""
-input WorkflowTemplateInput {
-  """
-  Name of the template
-  """
-  name: String!
-  """
-  Description of the template
-  """
-  description: String!
-  """
-  URL of the image for the template
-  """
-  image_url: String
-  """
-  Define the workflow's steps and the configuration of each step
-  """
-  workflow_blocks: [WorkflowTemplateWorkflowBlockInput!]!
-  """
-  Variables used within this workflow. To get the accurate JSON schema call the GraphQL query 'get_workflow_variable_schemas'
-  """
-  workflow_variables: [JSON!]!
-  """
-  Contexts that the template should be accessible from
-  """
-  contexts: [WorkflowTemplateContext!]
-}
-
-"""
-Defines the input fields of the workflow block. This corresponds to the input fields defined by the block used in the Workflow Block. You must call the remote_options query to retrieve the allowed values for any custom input field before configuring it.
-"""
-input WorkflowTemplateWorkflowBlockFieldInput {
-  """
-  Key of the workflow variable defining the configuration for the field key. Always a positive number
-  """
-  workflow_variable_key: Int!
-  """
-  The block's field key
-  """
-  field_key: String!
-}
-
-"""
-Define the workflow's steps and the configuration of each step
-"""
-input WorkflowTemplateWorkflowBlockInput {
-  """
-  Unique node identifier within the workflow
-  """
-  workflow_node_id: Int!
-  """
-  Reference ID of the block
-  """
-  block_reference_id: Int!
-  """
-  Title of the workflow block
-  """
-  title: String!
-  """
-  Defines the input fields of the workflow block. This corresponds to the input fields defined by the block used in the Workflow Block. You must call the remote_options query to retrieve the allowed values for any custom input field before configuring it.
-  """
-  input_fields: [WorkflowTemplateWorkflowBlockFieldInput!]!
-  """
-  Configuration for the next workflow blocks. To get the accurate JSON schema call the graphQL query 'get_workflow_block_next_mapping_schemas'. Note: Only the following mapping types are currently supported: routesMapping, waitTriggerMapping.
-  """
-  next_workflow_blocks_config: JSON
-}
-
-"""
-The kind and JSON schema definition for a given workflow variable kind
-"""
-type WorkflowVariableSchema {
-  """
-  The kind of workflow variable
-  """
-  kind: WorkflowVariableSourceKind
-  """
-  JSON schema of the workflow variable
-  """
-  schema: JSON
-}
-
-enum WorkflowVariableSourceKind {
-  user_config
-  node_results
-  reference
-  host_metadata
-  external_context_provider
-}
-
-"""
-Cursor-based pagination parameters for live workflows queries
-"""
-input WorkflowsPaginationInput {
-  """
-  Maximum number of results to return
-  """
-  limit: Int
-  """
-  Cursor of the last item from the previous page; pass `page_info.end_cursor` from the previous response
-  """
-  last_id: ID
 }
 
 """
@@ -18031,6 +16751,1286 @@ type CreatePortfolioResult {
   Unique process ID for tracking this request. Included in the callback payload when the operation completes.
   """
   process_id: ID
+}
+
+"""
+Result of activating a workflow
+"""
+type ActivateWorkflowResult {
+  """
+  Whether the workflow was successfully activated
+  """
+  is_success: Boolean!
+}
+
+"""
+A block in the framework
+"""
+type Block {
+  """
+  Unique identifier for the block
+  """
+  id: Int
+  """
+  Unique key of the block
+  """
+  uniqueKey: String
+  """
+  Name of the block
+  """
+  name: String
+  """
+  Description of the block
+  """
+  description: String
+  """
+  Type of the block
+  """
+  kind: String
+  """
+  Whether the block is deprecated
+  """
+  is_deprecated: Boolean
+  """
+  Configuration for input fields. To fetch the available options of a specific input field, first query the block requesting the `fieldTypeData` for that field and then call the `remote_options` query using the resulting `fieldTypeReferenceId`.
+  """
+  inputFieldsConfig: [InputFieldConfig!]
+  """
+  Configuration for output fields
+  """
+  outputFieldsConfig: [OutputFieldConfig!]
+  """
+  Context-specific data for the block, organized by context name
+  """
+  context_data: BlockContextData
+}
+
+"""
+Context-specific data for a block, organized by context name
+"""
+type BlockContextData {
+  """
+  Context data for the workflow builder
+  """
+  workflow_builder: WorkflowBuilderContextData
+  """
+  Context data for the lite builder
+  """
+  lite_builder: LiteBuilderContextData
+  """
+  Context data for Monday agents
+  """
+  monday_agents: MondayAgentsContextData
+}
+
+"""
+Result of a blocks query
+"""
+type BlocksResult {
+  """
+  List of blocks
+  """
+  blocks: [Block!]
+}
+
+"""
+Result of changing workflow owner
+"""
+type ChangeWorkflowOwnerResult {
+  """
+  Whether the workflow owner was successfully changed
+  """
+  is_success: Boolean!
+}
+
+"""
+Represents an integration connection between a monday.com account and an external service.
+"""
+type Connection {
+  """
+  Unique identifier of the connection.
+  """
+  id: Int
+  """
+  Identifier of the monday.com account that owns the connection.
+  """
+  accountId: Int
+  """
+  Identifier of the user who created the connection.
+  """
+  userId: Int
+  """
+  External service provider of the connection (e.g., gmail, slack).
+  """
+  provider: String
+  """
+  Human-readable display name for the connection.
+  """
+  name: String
+  """
+  Authentication method used by the connection (e.g., oauth, token_based).
+  """
+  method: String
+  """
+  Identifier of the linked account at the provider side.
+  """
+  providerAccountIdentifier: String
+  """
+  Current state of the connection (e.g., active, inactive).
+  """
+  state: String
+  """
+  ISO timestamp when the connection was created.
+  """
+  createdAt: String
+  """
+  ISO timestamp when the connection was last updated.
+  """
+  updatedAt: String
+}
+
+"""
+Input for creating a workflow from a template
+"""
+input CreateWorkflowFromTemplateInput {
+  """
+  Title of the workflow
+  """
+  title: String!
+  """
+  Detailed description of the workflow
+  """
+  description: String
+  """
+  The reference ID of the workflow template to create the workflow from
+  """
+  template_reference_id: ID!
+  """
+  A map of workflow variable keys to their configuration values. Each value can contain: value, title, icon, and dependencies
+  """
+  workflow_variables_values: JSON
+  """
+  Variables used within this workflow. To get the accurate JSON schema call the GraphQL query 'get_workflow_variable_schemas' These variables will be appended to the template workflow variables.
+  """
+  workflow_variables: [JSON!]
+  """
+  ID of the creator app
+  """
+  creator_app_id: ID!
+  """
+  Reference ID of the creator app feature
+  """
+  creator_app_feature_reference_id: ID
+  """
+  Hierarchy level the workflow is hosted in If omitted, defaults to account-level with the current account ID.
+  """
+  workflow_host_data: WorkflowHostDataInput
+}
+
+type CreateWorkflowResult {
+  """
+  Workflow numeric ID (supports both integer and bigint)
+  """
+  id: String
+}
+
+"""
+The access level for CRUD operations on a workflow
+"""
+enum CrudAccessLevel {
+  USER
+  ACCOUNT
+}
+
+"""
+Result of deactivating a workflow
+"""
+type DeactivateWorkflowResult {
+  """
+  Whether the workflow was successfully deactivated
+  """
+  is_success: Boolean!
+}
+
+type DeleteWorkflowResult {
+  """
+  Whether the workflow was successfully deleted
+  """
+  is_success: Boolean!
+}
+
+"""
+Defines mandatory and optional dependencies that must be populated to allow resolving the field dynamic values
+"""
+type DependencyConfig {
+  """
+  Required dependencies evaluated in order
+  """
+  orderedMandatoryFields: [DependencyField!]
+  """
+  Non-required dependencies that refine the dynamic values request but do not block enablement
+  """
+  optionalFields: [DependencyField!]
+}
+
+"""
+Maps a source field-type to the key name expected in the dynamic-values payload for this dependency
+"""
+type DependencyField {
+  """
+  Reference ID of the field-type that supplies the dependency value
+  """
+  sourceFieldTypeReferenceId: Int
+  """
+  Unique key of the source field type
+  """
+  sourceFieldTypeUniqueKey: String
+  """
+  JSON key that the backend expects for this dependency value
+  """
+  targetFieldKey: String
+}
+
+"""
+Result of detaching managed workflows from a template for a given host instance
+"""
+type DetachWorkflowsFromTemplateResult {
+  """
+  Number of workflows successfully detached from template
+  """
+  workflows_detached_count: Int!
+  """
+  Number of workflows that failed to detach
+  """
+  workflows_failed_count: Int!
+}
+
+"""
+Information about a field
+"""
+type FieldInformation {
+  """
+  The text content of the field information
+  """
+  text: String
+  """
+  A link to more information
+  """
+  link: JSON
+}
+
+"""
+A field type in the framework
+"""
+interface FieldType {
+  """
+  Unique identifier for the field type
+  """
+  id: Int
+  """
+  Unique key of the field type
+  """
+  uniqueKey: String
+  """
+  Name of the field type
+  """
+  name: String
+  """
+  Description of the field type
+  """
+  description: String
+  """
+  Current state of the field type
+  """
+  state: FieldTypeState
+  """
+  Unique key identifier for the field type
+  """
+  key: String
+  """
+  Default key for fields of this type
+  """
+  defaultFieldKey: String
+  """
+  Dependency configuration specifying mandatory and optional field dependencies required to enable this field and compute its dynamic values. When fetching the permitted values for custom input fields via the remote_options query, you must provide these dependencies in the query input.
+  """
+  dependencyConfig: DependencyConfig
+  """
+  List of field type implementations
+  """
+  implement: [FieldTypeImplementation!]
+  """
+  Indicates whether this field type fetches its options from a remote source
+  """
+  has_remote_options: Boolean
+}
+
+"""
+An interface (app feature) that a field type implements
+"""
+type FieldTypeImplementation {
+  """
+  Reference id of the app feature interface this field type implements
+  """
+  app_feature_reference_id: ID
+}
+
+"""
+The type of relation between a field and its type
+"""
+enum FieldTypeRelationType {
+  PRIMITIVE
+  INTERFACE
+  CUSTOM
+}
+
+"""
+The state of a field type
+"""
+enum FieldTypeState {
+  ACTIVE
+  DELETED
+}
+
+"""
+Input parameters for getting blocks
+"""
+input GetBlocksInput {
+  """
+  Optional array of app feature unique keys to filter blocks
+  """
+  app_feature_unique_keys: [String!]
+  """
+  Optional array of contexts to filter blocks
+  """
+  contexts: [String!]
+}
+
+enum HostType {
+  APP_FEATURE_OBJECT
+  BOARD
+  ACCOUNT_LEVEL
+}
+
+"""
+Interface for input field configuration
+"""
+interface InputFieldConfig {
+  """
+  Unique identifier for the field
+  """
+  id: Int
+  """
+  Key identifier for the field
+  """
+  fieldKey: String
+  """
+  Display title for the field
+  """
+  fieldTitle: String
+  """
+  Whether the field can be null
+  """
+  isNullable: Boolean
+  """
+  Whether the field is an array type
+  """
+  isArray: Boolean
+  """
+  Whether the field is optional
+  """
+  isOptional: Boolean
+  """
+  Additional information about the field
+  """
+  information: FieldInformation
+  """
+  Detailed description of the field
+  """
+  description: FieldInformation
+  """
+  Type of the field relation
+  """
+  type: FieldTypeRelationType
+}
+
+"""
+Input field constraints
+"""
+type InputFieldConstraints {
+  """
+  Dependencies for remote options that affect this field
+  """
+  remoteOptionsDependencies: JSON
+  """
+  Dependencies that affect this field's behavior or validation
+  """
+  dependencies: JSON
+  """
+  Dependencies between this field and its subfields
+  """
+  subFieldsDependencies: JSON
+  """
+  Credential dependencies required for this field
+  """
+  credentials: JSON
+}
+
+"""
+Context data for the lite builder, including sentence configuration and field source mappings
+"""
+type LiteBuilderContextData {
+  """
+  Sentence template parts (array of strings and sentence part objects)
+  """
+  sentence: JSON
+  """
+  Mapping of inbound field keys to their source configuration
+  """
+  source_config: JSON
+  """
+  Category for the block in the lite builder menu
+  """
+  menu_category: String
+  """
+  Configuration for sentence part views (container type, content, header)
+  """
+  sentence_part_configurations: JSON
+  """
+  Overrides for inbound field display properties (title, placeholder, header)
+  """
+  inbound_field_overrides: JSON
+}
+
+"""
+A page of live workflows with pagination metadata
+"""
+type LiveWorkflowsPage {
+  """
+  List of live workflows in this page
+  """
+  data: [Workflow!]!
+  """
+  Cursor-based pagination metadata for fetching subsequent pages
+  """
+  page_info: LiveWorkflowsPageInfo!
+}
+
+"""
+Cursor-based pagination metadata for live workflows
+"""
+type LiveWorkflowsPageInfo {
+  """
+  Whether there are more results beyond the current page
+  """
+  has_next_page: Boolean!
+  """
+  Cursor of the last item in the current page; pass as `lastId` to fetch the next page
+  """
+  end_cursor: ID
+}
+
+"""
+Context data for Monday agents
+"""
+type MondayAgentsContextData {
+  """
+  Display name of the block in the agents context
+  """
+  block_name: String
+  """
+  Keys of fields that should be hidden in the agents context
+  """
+  hidden_field_keys: [String!]
+}
+
+"""
+Data required to request the next page of remote options
+"""
+type NextPageRequestData {
+  """
+  The page identifier to request
+  """
+  page: JSON
+  """
+  Optional cursor for cursor-based pagination
+  """
+  cursor: JSON
+}
+
+"""
+A single option in a remote options list
+"""
+type Option {
+  """
+  The value of the option
+  """
+  value: JSON
+  """
+  The display title of the option
+  """
+  title: String
+  """
+  Optional icon to display alongside the option (e.g. { vibe, tooltip })
+  """
+  icon: JSON
+}
+
+"""
+Interface for output field configuration
+"""
+interface OutputFieldConfig {
+  """
+  Unique identifier for the field
+  """
+  id: Int
+  """
+  Key identifier for the field
+  """
+  fieldKey: String
+  """
+  Display title for the field
+  """
+  fieldTitle: String
+  """
+  Whether the field can be null
+  """
+  isNullable: Boolean
+  """
+  Whether the field is an array type
+  """
+  isArray: Boolean
+  """
+  Whether the field is optional
+  """
+  isOptional: Boolean
+  """
+  Additional information about the field
+  """
+  information: FieldInformation
+  """
+  Detailed description of the field
+  """
+  description: FieldInformation
+  """
+  Type of the field relation
+  """
+  type: FieldTypeRelationType
+}
+
+"""
+Output field constraints
+"""
+type OutputFieldConstraints {
+  """
+  Dependencies that affect this field's output behavior
+  """
+  dependencies: JSON
+  """
+  Dependencies between this field and its subfields in the output
+  """
+  subFieldsDependencies: JSON
+  """
+  Credential dependencies required for this field's output
+  """
+  credentials: JSON
+}
+
+"""
+Pagination parameters for queries
+"""
+input PaginationInput {
+  """
+  Maximum number of results to return
+  """
+  limit: Int
+  """
+  Last ID for cursor-based pagination
+  """
+  lastId: Int
+}
+
+"""
+The primitive types supported by the system
+"""
+enum PrimitiveTypes {
+  STRING
+  NUMBER
+  FLOAT
+  BOOLEAN
+  DATE
+  HOUR
+}
+
+"""
+Input type for requesting remote options for a field type, including dependencies, credentials, pagination, and search query.
+"""
+input RemoteOptionsInput {
+  """
+  The unique key of the field type
+  """
+  field_type_unique_key: String!
+  """
+  Map all the dependencies fieldKeys to their values. Example: { "my-field-key": { value: 123 }, "my-other-field-key": { value: 456 } } .The schema is: Record<string, { value: unknown }>
+  """
+  dependencies_values: JSON
+  """
+  Map a credentialsKey to the credentials data. Example: { "my-credentials-key": { userCredentialsId: 123, accessToken: "abc" } }
+  """
+  credentials_values: JSON
+  """
+  Pagination data matching the schema of the field's remote options pagination data
+  """
+  page_request_data: JSON
+  """
+  Search query
+  """
+  query: String
+  """
+  Request specific values to fetch their title
+  """
+  values_to_fetch: JSON
+}
+
+"""
+Response containing a list of remote options and pagination information
+"""
+type RemoteOptionsResponse {
+  """
+  List of available options
+  """
+  options: [Option!]
+  """
+  Whether the options list supports pagination
+  """
+  isPaginated: Boolean
+  """
+  Whether this is the last page of options
+  """
+  isLastPage: Boolean
+  """
+  Data required to fetch the next page of options
+  """
+  nextPageRequestData: NextPageRequestData
+  """
+  Optional disclaimer text to display with the options
+  """
+  disclaimer: String
+}
+
+"""
+Which workflow revision to use for a run-once execution
+"""
+enum RunOnceSource {
+  LIVE
+  DRAFT
+}
+
+"""
+Result of a run-once workflow execution
+"""
+type RunWorkflowOnceResult {
+  """
+  Unique identifier for this execution. Can be used for tracking and correlating execution events.
+  """
+  trigger_uuid: String!
+  """
+  Internal subscription ID associated with this execution.
+  """
+  subscription_id: ID!
+  """
+  Internal automation ID created for this execution.
+  """
+  automation_id: ID!
+}
+
+"""
+Result of saving a workflow as a template
+"""
+type SaveWorkflowAsTemplateResult {
+  """
+  AppFeature reference ID of the created template
+  """
+  template_reference_id: ID!
+}
+
+"""
+Result of stopping a run-once workflow execution
+"""
+type StopWorkflowRunOnceResult {
+  """
+  Whether a running execution was successfully stopped. Returns false if no execution was active.
+  """
+  stopped: Boolean!
+  """
+  Explanation when 'stopped' is false. For example, 'no_active_run_once' means no execution was in progress.
+  """
+  reason: String
+}
+
+"""
+The type of transformation to apply to the workflow variable's value
+"""
+enum TransformationType {
+  DIRECT
+  DYNAMIC_TEXT
+  DYNAMIC_NUMBER
+  ARRAY
+  DATE
+  HOUR
+}
+
+"""
+Input for updating a workflow created from a template
+"""
+input UpdateWorkflowFromTemplateInput {
+  """
+  Workflow numeric ID (supports both integer and bigint)
+  """
+  id: ID!
+  """
+  A map of workflow variable keys to their configuration values. Each value can contain: value, title, icon, and dependencies
+  """
+  workflow_variables_values: JSON
+  """
+  Variables used within this workflow. To get the accurate JSON schema call the GraphQL query 'get_workflow_variable_schemas'
+  """
+  workflow_variables: [JSON!]
+  """
+  Title of the workflow
+  """
+  title: String
+  """
+  Detailed description of the workflow
+  """
+  description: String
+  """
+  Importance level of the workflow
+  """
+  importance: Int
+}
+
+input UpdateWorkflowInput {
+  """
+  ID of the workflow to update
+  """
+  id: ID!
+  """
+  New set of workflow blocks to replace existing ones
+  """
+  workflowBlocks: [WorkflowBlockInput!]!
+  """
+  Variables used within this workflow. To get the accurate JSON schema call the GraphQL query 'get_workflow_variable_schemas'
+  """
+  workflowVariables: [JSON!]!
+  """
+  Optional array of iterator (loop) configurations. Currently supports forEach iterators only. Each iterator loops over a collection, executing specified workflow blocks once per item. REQUIRED SETUP per iterator: (1) Add an isLoopEnded workflow variable to workflowVariables with sourceKind "auto_calculated_runtime_data" and sourceMetadata { dataType: "iteratorMetadata", metadata: { iteratorId: <matching_id>, fieldKey: "isLoopEnded" } }. (2) Add a boolean true constant variable with sourceKind "constant", sourceMetadata: {}, config: { value: true }. (3) Configure the entry node with Routes-type nextWorkflowBlocksConfig using conditions that compare isLoopEnded to the true constant to route between continue (internal node) and exit (post_iterator_node_id). Nested iterators are not supported yet. Iterator IDs must be unique across the workflow.
+  """
+  iterators: [WorkflowIteratorInput!]
+}
+
+input UpdateWorkflowMetadataInput {
+  """
+  ID of the workflow to update
+  """
+  id: ID!
+  """
+  New title for the workflow
+  """
+  title: String
+  """
+  New description for the workflow
+  """
+  description: String
+  """
+  Importance level of the workflow
+  """
+  importance: Int
+}
+
+type UpdateWorkflowResult {
+  """
+  Workflow numeric ID (supports both integer and bigint)
+  """
+  id: String
+}
+
+type Workflow {
+  """
+  Workflow numeric ID (supports both integer and bigint)
+  """
+  id: ID!
+  """
+  User ID who owns the workflow
+  """
+  user_id: Int!
+  """
+  Whether the workflow is currently active
+  """
+  is_active: Boolean!
+  """
+  Automation ID associated with the workflow
+  """
+  automation_id: ID!
+  """
+  Last updated timestamp of the workflow
+  """
+  updated_at: Date!
+  """
+  Created timestamp of the workflow
+  """
+  created_at: Date!
+  """
+  Importance level of the workflow
+  """
+  importance: Int
+  """
+  Title of the workflow
+  """
+  title: String!
+  """
+  Detailed description of the workflow
+  """
+  description: String!
+  """
+  Define the workflow's steps and the configuration of each step
+  """
+  workflow_blocks: [WorkflowBlock!]!
+  """
+  Variables used within this workflow. To get the accurate JSON schema call the GraphQL query 'get_workflow_variable_schemas'
+  """
+  workflow_variables: JSON!
+  """
+  Hierarchy level the workflow is hosted in
+  """
+  workflow_host_data: WorkflowHostData!
+  """
+  Notice/Error message for the workflow
+  """
+  notice_message: String
+  """
+  Reference ID of the template this workflow was created from, if any
+  """
+  template_reference_id: ID
+  """
+  Optional array of iterator (loop) configurations. Currently supports forEach iterators only. Each iterator loops over a collection, executing specified workflow blocks once per item. REQUIRED SETUP per iterator: (1) Add an isLoopEnded workflow variable to workflowVariables with sourceKind "auto_calculated_runtime_data" and sourceMetadata { dataType: "iteratorMetadata", metadata: { iteratorId: <matching_id>, fieldKey: "isLoopEnded" } }. (2) Add a boolean true constant variable with sourceKind "constant", sourceMetadata: {}, config: { value: true }. (3) Configure the entry node with Routes-type nextWorkflowBlocksConfig using conditions that compare isLoopEnded to the true constant to route between continue (internal node) and exit (post_iterator_node_id). Nested iterators are not supported yet. Iterator IDs must be unique across the workflow.
+  """
+  iterators: [WorkflowIterator!]
+}
+
+type WorkflowBlock {
+  """
+  Unique node identifier within the workflow
+  """
+  workflowNodeId: Int!
+  """
+  Reference ID of the block
+  """
+  blockReferenceId: Int!
+  """
+  Title of the workflow block
+  """
+  title: String!
+  """
+  Defines the input fields of the workflow block. This corresponds to the input fields defined by the block used in the Workflow Block. You must call the remote_options query to retrieve the allowed values for any custom input field before configuring it.
+  """
+  inputFields: [WorkflowBlockInputField!]!
+  """
+  Defines the credential fields for the workflow block. Each field references a workflow variable containing the credential value.
+  """
+  credentialFields: [WorkflowBlockCredentialField!]
+  """
+  Configuration for the next workflow blocks. To get the accurate JSON schema call the graphQL query 'get_workflow_block_next_mapping_schemas'. Note: Only the following mapping types are currently supported: routesMapping, waitTriggerMapping.
+  """
+  nextWorkflowBlocksConfig: JSON
+  kind: WorkflowBlockKind!
+}
+
+"""
+Credential field configuration for workflow blocks
+"""
+type WorkflowBlockCredentialField {
+  """
+  The credential field key
+  """
+  fieldKey: String!
+  """
+  Key of the workflow variable containing the credential value. Always a positive number
+  """
+  workflowVariableKey: Int!
+}
+
+"""
+Input for credential field configuration in workflow blocks
+"""
+input WorkflowBlockCredentialFieldInput {
+  """
+  The credential field key
+  """
+  fieldKey: String!
+  """
+  Key of the workflow variable containing the credential value. Always a positive number
+  """
+  workflowVariableKey: Int!
+}
+
+input WorkflowBlockFieldInput {
+  """
+  The block's field key
+  """
+  fieldKey: String!
+  """
+  Key of the workflow variable defining the configuration for the field key. Always a positive number
+  """
+  workflowVariableKey: Int!
+}
+
+input WorkflowBlockInput {
+  """
+  Unique node identifier within the workflow
+  """
+  workflowNodeId: Int!
+  """
+  Reference ID of the block
+  """
+  blockReferenceId: Int!
+  """
+  Title of the workflow block
+  """
+  title: String!
+  """
+  Defines the input fields of the workflow block. This corresponds to the input fields defined by the block used in the Workflow Block. You must call the remote_options query to retrieve the allowed values for any custom input field before configuring it.
+  """
+  inputFields: [WorkflowBlockFieldInput!]!
+  """
+  Defines the credential fields for the workflow block. Each field references a workflow variable containing the credential value.
+  """
+  credentialFields: [WorkflowBlockCredentialFieldInput!]
+  """
+  Configuration for the next workflow blocks. To get the accurate JSON schema call the graphQL query 'get_workflow_block_next_mapping_schemas'. Note: Only the following mapping types are currently supported: routesMapping, waitTriggerMapping.
+  """
+  nextWorkflowBlocksConfig: JSON
+  kind: WorkflowBlockKind
+}
+
+type WorkflowBlockInputField {
+  """
+  The block's field key
+  """
+  fieldKey: String!
+  """
+  Key of the workflow variable defining the configuration for the field key. Always a positive number
+  """
+  workflowVariableKey: Int!
+}
+
+"""
+The kind of workflow block. This is the type of the block that is used in the UI
+"""
+enum WorkflowBlockKind {
+  WAIT
+}
+
+"""
+The json schema definition for a given workflow block next mapping kind
+"""
+type WorkflowBlockNextMappingSchema {
+  """
+  The kind of workflow block next mapping
+  """
+  kind: String
+  """
+  JSON schema for this workflow block next mapping kind
+  """
+  schema: JSON
+}
+
+"""
+Context data for the workflow builder
+"""
+type WorkflowBuilderContextData {
+  """
+  Keys of input fields that should be hidden in the workflow builder
+  """
+  hidden_input_fields_keys: [String!]
+}
+
+"""
+Customization settings for the workflow
+"""
+input WorkflowCustomizationInput {
+  """
+  The access level for CRUD operations on an account-level workflow. Only applicable for ACCOUNT_LEVEL host type. Defaults to USER (only the creator can modify).
+  """
+  crud_access_level: CrudAccessLevel
+}
+
+"""
+Hierarchy level the workflow is hosted in
+"""
+type WorkflowHostData {
+  """
+  Type of host for this workflow
+  """
+  type: HostType!
+  """
+  Instance ID of the host
+  """
+  id: String
+}
+
+"""
+Host data for the workflow. Both id and type must be provided together. If omitted, defaults to account-level with the current account ID.
+"""
+input WorkflowHostDataInput {
+  """
+  Instance ID of the host
+  """
+  id: String
+  """
+  Type of host for this workflow
+  """
+  type: HostType
+}
+
+input WorkflowInput {
+  """
+  Title of the workflow
+  """
+  title: String!
+  """
+  Detailed description of the workflow
+  """
+  description: String!
+  """
+  Define the workflow's steps and the configuration of each step
+  """
+  workflowBlocks: [WorkflowBlockInput!]!
+  """
+  Variables used within this workflow. To get the accurate JSON schema call the GraphQL query 'get_workflow_variable_schemas'
+  """
+  workflowVariables: [JSON!]!
+  """
+  Hierarchy level the workflow is hosted in If omitted, defaults to account-level with the current account ID.
+  """
+  workflowHostData: WorkflowHostDataInput
+  """
+  Reference ID of the creator app feature
+  """
+  creatorAppFeatureReferenceId: Int
+  """
+  ID of the creator app
+  """
+  creatorAppId: Int
+  """
+  Customization settings for the workflow
+  """
+  customization: WorkflowCustomizationInput
+  """
+  Optional array of iterator (loop) configurations. Currently supports forEach iterators only. Each iterator loops over a collection, executing specified workflow blocks once per item. REQUIRED SETUP per iterator: (1) Add an isLoopEnded workflow variable to workflowVariables with sourceKind "auto_calculated_runtime_data" and sourceMetadata { dataType: "iteratorMetadata", metadata: { iteratorId: <matching_id>, fieldKey: "isLoopEnded" } }. (2) Add a boolean true constant variable with sourceKind "constant", sourceMetadata: {}, config: { value: true }. (3) Configure the entry node with Routes-type nextWorkflowBlocksConfig using conditions that compare isLoopEnded to the true constant to route between continue (internal node) and exit (post_iterator_node_id). Nested iterators are not supported yet. Iterator IDs must be unique across the workflow.
+  """
+  iterators: [WorkflowIteratorInput!]
+}
+
+"""
+Iterator configuration for looping over collections within a workflow
+"""
+type WorkflowIterator {
+  """
+  Unique positive integer identifier for the iterator. Must be unique across all iterators in the workflow. This ID is referenced by the isLoopEnded workflow variable in its sourceMetadata.metadata.iteratorId field.
+  """
+  iterator_id: ID!
+  """
+  List of all workflow block node IDs that belong to this loop. Must include entry_node_id. Must NOT include post_iterator_node_id. Every node ID must correspond to a workflowNodeId in the workflow blocks. Nested iterators are not supported: an iterator entry node must not appear in another iterator's node_ids. Terminal nodes within the iterator (those with null nextWorkflowBlocksConfig) are automatically routed back to the entry node.
+  """
+  node_ids: [ID!]!
+  """
+  The workflow node ID that serves as the loop entry point. Must be included in node_ids. This node's nextWorkflowBlocksConfig MUST use type "Routes" with conditions referencing the isLoopEnded workflow variable: one route to post_iterator_node_id (when isLoopEnded IS equal to true, to exit the loop) and one route to an internal iterator node (when isLoopEnded IS NOT equal to true, to continue the loop). When post_iterator_node_id is not null, an exit route targeting it is required.
+  """
+  entry_node_id: ID!
+  """
+  Node ID that executes after the iterator completes all iterations. Set to null if no action should follow the loop (workflow ends after the loop). Must NOT be included in node_ids. When not null, the entry node's Routes config must include an exit route targeting this node.
+  """
+  post_iterator_node_id: ID
+  """
+  Workflow variable key referencing the collection to iterate over (forEach). The referenced variable must resolve to an array at runtime. The iterator executes the loop body once per item in the collection.
+  """
+  collection_workflow_variable_key: ID!
+  """
+  Optional workflow variable key containing the maximum number of iterations. When provided, the actual iteration count is min(collection length, max iterations value). When omitted, the iterator processes the entire collection.
+  """
+  max_iterations_workflow_variable_key: Int
+}
+
+"""
+Configuration for a forEach iterator that loops over a collection. REQUIRED WORKFLOW VARIABLES: For each iterator, the workflowVariables array must include: (1) An isLoopEnded variable with sourceKind "auto_calculated_runtime_data" and sourceMetadata { dataType: "iteratorMetadata", metadata: { iteratorId: <matching_iterator_id>, fieldKey: "isLoopEnded" } }. (2) A boolean true constant variable with sourceKind "constant", sourceMetadata: {}, and config: { value: true }. ENTRY NODE SETUP: The entry node must use a Routes-type nextWorkflowBlocksConfig with conditions comparing the isLoopEnded variable key to the true constant variable key: one route with operator "Is" pointing to post_iterator_node_id (exit loop), and one route with operator "IsNot" pointing to an internal iterator node (continue loop). Terminal nodes inside the iterator (with null nextWorkflowBlocksConfig) are automatically routed back to the entry node.
+"""
+input WorkflowIteratorInput {
+  """
+  Unique positive integer identifier for the iterator. Must be unique across all iterators in the workflow. This ID is referenced by the isLoopEnded workflow variable in its sourceMetadata.metadata.iteratorId field.
+  """
+  iterator_id: Int!
+  """
+  List of all workflow block node IDs that belong to this loop. Must include entry_node_id. Must NOT include post_iterator_node_id. Every node ID must correspond to a workflowNodeId in the workflow blocks. Nested iterators are not supported: an iterator entry node must not appear in another iterator's node_ids. Terminal nodes within the iterator (those with null nextWorkflowBlocksConfig) are automatically routed back to the entry node.
+  """
+  node_ids: [Int!]!
+  """
+  The workflow node ID that serves as the loop entry point. Must be included in node_ids. This node's nextWorkflowBlocksConfig MUST use type "Routes" with conditions referencing the isLoopEnded workflow variable: one route to post_iterator_node_id (when isLoopEnded IS equal to true, to exit the loop) and one route to an internal iterator node (when isLoopEnded IS NOT equal to true, to continue the loop). When post_iterator_node_id is not null, an exit route targeting it is required.
+  """
+  entry_node_id: Int!
+  """
+  Node ID that executes after the iterator completes all iterations. Set to null if no action should follow the loop (workflow ends after the loop). Must NOT be included in node_ids. When not null, the entry node's Routes config must include an exit route targeting this node.
+  """
+  post_iterator_node_id: ID
+  """
+  Workflow variable key referencing the collection to iterate over (forEach). The referenced variable must resolve to an array at runtime. The iterator executes the loop body once per item in the collection.
+  """
+  collection_workflow_variable_key: Int!
+  """
+  Optional workflow variable key containing the maximum number of iterations. When provided, the actual iteration count is min(collection length, max iterations value). When omitted, the iterator processes the entire collection.
+  """
+  max_iterations_workflow_variable_key: Int
+}
+
+"""
+Result of querying trigger entities for a run-once workflow execution
+"""
+type WorkflowRunOnceTriggerEntities {
+  """
+  Whether this workflow requires a trigger entity to execute. When false (e.g., for scheduled/cron triggers), you can call 'run_workflow_once' without providing a trigger_payload.
+  """
+  requires_entity: Boolean!
+  """
+  List of available trigger entities. Each entity represents a real object in the workspace (e.g., a board item) that the workflow can be executed against. Pass the selected entity's 'value' field to 'run_workflow_once' as 'trigger_payload'.
+  """
+  entities: [WorkflowRunOnceTriggerEntity!]!
+}
+
+"""
+A trigger entity representing a real object in the workspace (e.g., a board item) that a workflow can be executed against
+"""
+type WorkflowRunOnceTriggerEntity {
+  """
+  Human-readable name of the trigger entity (e.g., the item name).
+  """
+  label: String!
+  """
+  Opaque payload representing this trigger entity. Pass this value as-is to the 'run_workflow_once' mutation's 'trigger_payload' argument. Do not modify this value.
+  """
+  value: JSON!
+}
+
+"""
+The context where a workflow template can be accessed
+"""
+enum WorkflowTemplateContext {
+  LITE_BUILDER
+}
+
+"""
+Input data for creating a workflow template
+"""
+input WorkflowTemplateInput {
+  """
+  Name of the template
+  """
+  name: String!
+  """
+  Description of the template
+  """
+  description: String!
+  """
+  URL of the image for the template
+  """
+  image_url: String
+  """
+  Define the workflow's steps and the configuration of each step
+  """
+  workflow_blocks: [WorkflowTemplateWorkflowBlockInput!]!
+  """
+  Variables used within this workflow. To get the accurate JSON schema call the GraphQL query 'get_workflow_variable_schemas'
+  """
+  workflow_variables: [JSON!]!
+  """
+  Contexts that the template should be accessible from
+  """
+  contexts: [WorkflowTemplateContext!]
+}
+
+"""
+Defines the input fields of the workflow block. This corresponds to the input fields defined by the block used in the Workflow Block. You must call the remote_options query to retrieve the allowed values for any custom input field before configuring it.
+"""
+input WorkflowTemplateWorkflowBlockFieldInput {
+  """
+  Key of the workflow variable defining the configuration for the field key. Always a positive number
+  """
+  workflow_variable_key: Int!
+  """
+  The block's field key
+  """
+  field_key: String!
+}
+
+"""
+Define the workflow's steps and the configuration of each step
+"""
+input WorkflowTemplateWorkflowBlockInput {
+  """
+  Unique node identifier within the workflow
+  """
+  workflow_node_id: Int!
+  """
+  Reference ID of the block
+  """
+  block_reference_id: Int!
+  """
+  Title of the workflow block
+  """
+  title: String!
+  """
+  Defines the input fields of the workflow block. This corresponds to the input fields defined by the block used in the Workflow Block. You must call the remote_options query to retrieve the allowed values for any custom input field before configuring it.
+  """
+  input_fields: [WorkflowTemplateWorkflowBlockFieldInput!]!
+  """
+  Configuration for the next workflow blocks. To get the accurate JSON schema call the graphQL query 'get_workflow_block_next_mapping_schemas'. Note: Only the following mapping types are currently supported: routesMapping, waitTriggerMapping.
+  """
+  next_workflow_blocks_config: JSON
+}
+
+"""
+The kind and JSON schema definition for a given workflow variable kind
+"""
+type WorkflowVariableSchema {
+  """
+  The kind of workflow variable
+  """
+  kind: WorkflowVariableSourceKind
+  """
+  JSON schema of the workflow variable
+  """
+  schema: JSON
+}
+
+enum WorkflowVariableSourceKind {
+  user_config
+  node_results
+  reference
+  host_metadata
+  external_context_provider
+}
+
+"""
+Cursor-based pagination parameters for live workflows queries
+"""
+input WorkflowsPaginationInput {
+  """
+  Maximum number of results to return
+  """
+  limit: Int
+  """
+  Cursor of the last item from the previous page; pass `page_info.end_cursor` from the previous response
+  """
+  last_id: ID
 }
 
 """

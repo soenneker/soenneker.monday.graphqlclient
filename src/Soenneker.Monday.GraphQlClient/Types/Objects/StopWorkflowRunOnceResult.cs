@@ -16,7 +16,7 @@ public sealed partial class StopWorkflowRunOnceResult
     public bool Stopped { get; init; }
 
     /// <summary>
-    /// Explanation when 'stopped' is false. For example, 'no_active_test_run' means no execution was in progress.
+    /// Explanation when 'stopped' is false. For example, 'no_active_run_once' means no execution was in progress.
     /// </summary>
     [JsonPropertyName("reason")]
     public string? Reason { get; init; }
