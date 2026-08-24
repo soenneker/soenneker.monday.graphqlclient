@@ -23,24 +23,6 @@ public sealed partial class Mutation
     public UpdateDirectoryResourceAttributesResponse? UpdateDirectoryResourcesAttributes { get; init; }
 
     /// <summary>
-    /// Add workspace object to favorites
-    /// </summary>
-    [JsonPropertyName("create_favorite")]
-    public CreateFavoriteResultType? CreateFavorite { get; init; }
-
-    /// <summary>
-    /// Remove an object from favorites
-    /// </summary>
-    [JsonPropertyName("delete_favorite")]
-    public DeleteFavoriteInputResultType? DeleteFavorite { get; init; }
-
-    /// <summary>
-    /// Update the position of an object in favorites
-    /// </summary>
-    [JsonPropertyName("update_favorite_position")]
-    public UpdateFavoriteResultType? UpdateFavoritePosition { get; init; }
-
-    /// <summary>
     /// Creates a new object in the Monday.com Objects Platform. The type of object created is determined by the object_type_unique_key parameter. This mutation can create boards, docs, dashboards, workflows, or specialized objects like CRM, capacity manager, etc. Under the hood, this creates a board with the corresponding app_feature_id.
     /// </summary>
     [JsonPropertyName("create_object")]
@@ -173,6 +155,24 @@ public sealed partial class Mutation
     public CreateProjectResult? CreateProject { get; init; }
 
     /// <summary>
+    /// Add workspace object to favorites
+    /// </summary>
+    [JsonPropertyName("create_favorite")]
+    public CreateFavoriteResultType? CreateFavorite { get; init; }
+
+    /// <summary>
+    /// Remove an object from favorites
+    /// </summary>
+    [JsonPropertyName("delete_favorite")]
+    public DeleteFavoriteInputResultType? DeleteFavorite { get; init; }
+
+    /// <summary>
+    /// Update the position of an object in favorites
+    /// </summary>
+    [JsonPropertyName("update_favorite_position")]
+    public UpdateFavoriteResultType? UpdateFavoritePosition { get; init; }
+
+    /// <summary>
     /// Update form properties including title, description, or question order.
     /// </summary>
     [JsonPropertyName("update_form")]
@@ -261,6 +261,36 @@ public sealed partial class Mutation
     /// </summary>
     [JsonPropertyName("update_mute_board_settings")]
     public List<BoardMuteSettings>? UpdateMuteBoardSettings { get; init; }
+
+    /// <summary>
+    /// Create a new table view
+    /// </summary>
+    [JsonPropertyName("create_view_table")]
+    public BoardView? CreateViewTable { get; init; }
+
+    /// <summary>
+    /// Create a view
+    /// </summary>
+    [JsonPropertyName("create_view")]
+    public BoardView? CreateView { get; init; }
+
+    /// <summary>
+    /// Update an existing board table view
+    /// </summary>
+    [JsonPropertyName("update_view_table")]
+    public BoardView? UpdateViewTable { get; init; }
+
+    /// <summary>
+    /// Update an existing view
+    /// </summary>
+    [JsonPropertyName("update_view")]
+    public BoardView? UpdateView { get; init; }
+
+    /// <summary>
+    /// Delete an existing board subset/view
+    /// </summary>
+    [JsonPropertyName("delete_view")]
+    public BoardView? DeleteView { get; init; }
 
     /// <summary>
     /// Create managed column of type dropdown mutation.
@@ -672,36 +702,6 @@ public sealed partial class Mutation
     /// </summary>
     [JsonPropertyName("batch_update_dependency_column")]
     public string BatchUpdateDependencyColumn { get; init; } = null!;
-
-    /// <summary>
-    /// Create a new table view
-    /// </summary>
-    [JsonPropertyName("create_view_table")]
-    public BoardView? CreateViewTable { get; init; }
-
-    /// <summary>
-    /// Create a view
-    /// </summary>
-    [JsonPropertyName("create_view")]
-    public BoardView? CreateView { get; init; }
-
-    /// <summary>
-    /// Update an existing board table view
-    /// </summary>
-    [JsonPropertyName("update_view_table")]
-    public BoardView? UpdateViewTable { get; init; }
-
-    /// <summary>
-    /// Update an existing view
-    /// </summary>
-    [JsonPropertyName("update_view")]
-    public BoardView? UpdateView { get; init; }
-
-    /// <summary>
-    /// Delete an existing board subset/view
-    /// </summary>
-    [JsonPropertyName("delete_view")]
-    public BoardView? DeleteView { get; init; }
 
     /// <summary>
     /// Add a file to a column value.

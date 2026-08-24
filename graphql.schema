@@ -965,18 +965,6 @@ type Mutation {
   """
   update_directory_resources_attributes(attribute: DirectoryResourceAttribute!, values: [String!]!, resource_ids: [ID!]!): UpdateDirectoryResourceAttributesResponse
   """
-  Add workspace object to favorites
-  """
-  create_favorite(input: CreateFavoriteInput!): CreateFavoriteResultType
-  """
-  Remove an object from favorites
-  """
-  delete_favorite(input: DeleteFavoriteInput!): DeleteFavoriteInputResultType
-  """
-  Update the position of an object in favorites
-  """
-  update_favorite_position(input: UpdateObjectHierarchyPositionInput!): UpdateFavoriteResultType
-  """
   Creates a new object in the Monday.com Objects Platform. The type of object created is determined by the object_type_unique_key parameter. This mutation can create boards, docs, dashboards, workflows, or specialized objects like CRM, capacity manager, etc. Under the hood, this creates a board with the corresponding app_feature_id.
   """
   create_object(name: String!, privacy_kind: PrivacyKind!, workspace_id: ID, description: String, folder_id: ID, owner_ids: [ID!], owner_team_ids: [ID!], subscriber_ids: [ID!], subscriber_teams_ids: [ID!], object_type_unique_key: String!, payload: JSON, relations: [ObjectRelationInput!]): Object
@@ -1063,6 +1051,18 @@ type Mutation {
   """
   create_project(input: CreateProjectInput!): CreateProjectResult
   """
+  Add workspace object to favorites
+  """
+  create_favorite(input: CreateFavoriteInput!): CreateFavoriteResultType
+  """
+  Remove an object from favorites
+  """
+  delete_favorite(input: DeleteFavoriteInput!): DeleteFavoriteInputResultType
+  """
+  Update the position of an object in favorites
+  """
+  update_favorite_position(input: UpdateObjectHierarchyPositionInput!): UpdateFavoriteResultType
+  """
   Update form properties including title, description, or question order.
   """
   update_form(formToken: String!, input: UpdateFormInput!): ResponseForm
@@ -1122,6 +1122,26 @@ type Mutation {
   Update mute notification settings for a board. Allows muting all notifications for all users, only for the current user, or setting mentions/assigns-only. Returns the updated mute state for the board. Requires appropriate permissions for muting all users.
   """
   update_mute_board_settings(board_id: String!, mute_state: BoardMuteState!, enabled: [CustomizableBoardSettings!]): [BoardMuteSettings!]
+  """
+  Create a new table view
+  """
+  create_view_table(board_id: ID!, name: String, filter_user_id: ID, filter_team_id: ID, filter: ItemsQueryGroup, sort: [ItemsQueryOrderBy!], tags: [String!], settings: TableViewSettingsInput): BoardView
+  """
+  Create a view
+  """
+  create_view(board_id: ID!, type: ViewKind!, name: String, filter_user_id: ID, filter_team_id: ID, filter: ItemsQueryGroup, sort: [ItemsQueryOrderBy!], tags: [String!], settings: JSON): BoardView
+  """
+  Update an existing board table view
+  """
+  update_view_table(view_id: ID!, board_id: ID!, name: String, filter_user_id: ID, filter_team_id: ID, filter: ItemsQueryGroup, sort: [ItemsQueryOrderBy!], tags: [String!], settings: TableViewSettingsInput): BoardView
+  """
+  Update an existing view
+  """
+  update_view(name: String, filter_user_id: ID, filter_team_id: ID, filter: ItemsQueryGroup, sort: [ItemsQueryOrderBy!], tags: [String!], view_id: ID!, board_id: ID!, type: ViewKind!, settings: JSON): BoardView
+  """
+  Delete an existing board subset/view
+  """
+  delete_view(view_id: ID!, board_id: ID!): BoardView
   """
   Create managed column of type dropdown mutation.
   """
@@ -1385,26 +1405,6 @@ type Mutation {
   Batch update the dependency column values in a board. Limited to 50 items per batch.
   """
   batch_update_dependency_column(boardId: String!, columnId: String!, values: [DependencyPulseValueInput!]!): JSON!
-  """
-  Create a new table view
-  """
-  create_view_table(board_id: ID!, name: String, filter_user_id: ID, filter_team_id: ID, filter: ItemsQueryGroup, sort: [ItemsQueryOrderBy!], tags: [String!], settings: TableViewSettingsInput): BoardView
-  """
-  Create a view
-  """
-  create_view(board_id: ID!, type: ViewKind!, name: String, filter_user_id: ID, filter_team_id: ID, filter: ItemsQueryGroup, sort: [ItemsQueryOrderBy!], tags: [String!], settings: JSON): BoardView
-  """
-  Update an existing board table view
-  """
-  update_view_table(view_id: ID!, board_id: ID!, name: String, filter_user_id: ID, filter_team_id: ID, filter: ItemsQueryGroup, sort: [ItemsQueryOrderBy!], tags: [String!], settings: TableViewSettingsInput): BoardView
-  """
-  Update an existing view
-  """
-  update_view(name: String, filter_user_id: ID, filter_team_id: ID, filter: ItemsQueryGroup, sort: [ItemsQueryOrderBy!], tags: [String!], view_id: ID!, board_id: ID!, type: ViewKind!, settings: JSON): BoardView
-  """
-  Delete an existing board subset/view
-  """
-  delete_view(view_id: ID!, board_id: ID!): BoardView
   """
   Add a file to a column value.
   """
@@ -4079,10 +4079,6 @@ type Query {
   """
   get_directory_resources(query_params: ItemsQuery, cursor: String, limit: Int = 25): DirectoryResourcesResponse
   """
-  Get all personal list items by list ID
-  """
-  favorites: [GraphqlHierarchyObjectItem!]
-  """
   Retrieves a list of available object types that can be created or queried. Each object type is uniquely identified by an 'object_type_unique_key'. This key is required for mutations like 'create_object' and for filtering in the 'objects' query. Use this query to discover what types of objects are available in the system (e.g., 'workflows', 'projects') and get their corresponding unique keys. The structure of unique key is 'app_slug::app_feature_slug'.
   """
   object_types_unique_keys: [ObjectTypeUniqueKey!]
@@ -4186,6 +4182,10 @@ type Query {
   """
   board_candidates(workspaceId: String!, usageType: BoardUsage!): [Board!]
   """
+  Get all personal list items by list ID
+  """
+  favorites: [GraphqlHierarchyObjectItem!]
+  """
   Fetch a form by its token. The returned form includes all the details of the form such as its settings, questions, title, etc. Use this endpoint when you need to retrieve complete form data for display or processing. Requires that the requesting user has read access to the associated board.
   """
   form(formToken: String!): ResponseForm
@@ -4207,6 +4207,12 @@ type Query {
   """
   mute_board_settings(board_ids: [ID!]!): [BoardMuteSettings!]
   """
+  Retrieves the JSON schema definition for a specific create view type. 
+    Use this query before calling create_view mutation to understand the structure and validation rules for the settings parameter. 
+    The schema defines what properties are available when creating views of a specific type.
+  """
+  get_view_schema_by_type(type: ViewKind!, mutationType: ViewMutationKind!): JSON
+  """
   Get managed column data.
   """
   managed_column(id: [String!], state: [ManagedColumnState!]): [ManagedColumn!]
@@ -4224,6 +4230,10 @@ type Query {
   Fetches timeline items for a given item
   """
   timeline(id: ID!, skipConnectedItems: Boolean): TimelineResponse
+  """
+  Search knowledge base snippets.
+  """
+  knowledge_base_search(query: String!, limit: Int = 5): KnowledgeBaseAnswer
   """
   Retrieve audit logs for your Monday account. You can
     filter logs by event types, user ID, IP address and start and end date.
@@ -4371,12 +4381,6 @@ type Query {
   """
   board_dependencies(board_id: ID!, limit: Int = 25, page: Int = 1, include_items_without_predecessors: Boolean = true): BoardDependencies
   """
-  Retrieves the JSON schema definition for a specific create view type. 
-    Use this query before calling create_view mutation to understand the structure and validation rules for the settings parameter. 
-    The schema defines what properties are available when creating views of a specific type.
-  """
-  get_view_schema_by_type(type: ViewKind!, mutationType: ViewMutationKind!): JSON
-  """
   Get the connected account's information.
   """
   account: Account
@@ -4484,10 +4488,6 @@ type Query {
   Platform API data.
   """
   platform_api: PlatformApi
-  """
-  Search knowledge base snippets.
-  """
-  knowledge_base_search(query: String!, limit: Int = 5): KnowledgeBaseAnswer
 }
 
 """
@@ -4918,6 +4918,230 @@ type ToggleReactionResult {
 }
 
 """
+Boolean compound query with must/should/must_not clauses
+"""
+input BoolInput {
+  """
+  Minimum number of SHOULD clauses that must match
+  """
+  min_should_match: Int
+  """
+  Child clauses
+  """
+  clauses: [ClauseInput!]!
+}
+
+"""
+A single search clause. Exactly one leaf or compound field must be set. occur and boost are optional modifiers used when this clause is a child of a bool or dis_max.
+"""
+input ClauseInput {
+  """
+  How this clause affects the parent score
+  """
+  occur: Occur
+  """
+  Score multiplier for this clause
+  """
+  boost: Float
+  """
+  Exact-term match on a field
+  """
+  term: FieldTextInput
+  """
+  Exact phrase match on a field
+  """
+  phrase: FieldTextInput
+  """
+  Phrase-prefix (autocomplete) match
+  """
+  phrase_prefix: FieldTextInput
+  """
+  Term-prefix match on a field
+  """
+  term_prefix: FieldTextInput
+  """
+  Wildcard pattern match (* and ?)
+  """
+  wildcard: FieldTextInput
+  """
+  Regular-expression match on a field
+  """
+  regex: FieldTextInput
+  """
+  Matches if the field equals ANY of the given values
+  """
+  terms_any: FieldTextListInput
+  """
+  Matches if the field equals ALL of the given values
+  """
+  terms_all: FieldTextListInput
+  """
+  Range match over a numeric or date field
+  """
+  range: RangeInput
+  """
+  Typo-tolerant fuzzy term match (Levenshtein)
+  """
+  fuzzy: FuzzyInput
+  """
+  Matches documents where the field has any indexed value
+  """
+  exists: FieldInput
+  """
+  When true, matches every document (equivalent to a match-all query)
+  """
+  all: Boolean
+  """
+  Boolean compound of sub-clauses (must / should / must_not)
+  """
+  bool: BoolInput
+  """
+  Disjunction-max compound — scores by the best-matching sub-clause
+  """
+  dis_max: DisMaxInput
+}
+
+"""
+Disjunction-max query — scores by the best-matching child clause
+"""
+input DisMaxInput {
+  """
+  Boost factor for non-best-matching clauses (0–1)
+  """
+  tie_breaker: Float
+  """
+  Child clauses
+  """
+  clauses: [ClauseInput!]!
+}
+
+"""
+Checks that a field has at least one indexed value (exists query)
+"""
+input FieldInput {
+  """
+  The indexed field that must have a value
+  """
+  field: SearchField!
+}
+
+"""
+A field+value pair for term/phrase/regex style leaf queries
+"""
+input FieldTextInput {
+  """
+  The indexed field to match against
+  """
+  field: SearchField!
+  """
+  The value to match
+  """
+  value: String!
+}
+
+"""
+A field+values pair for terms_any / terms_all leaf queries
+"""
+input FieldTextListInput {
+  """
+  The indexed field to match against
+  """
+  field: SearchField!
+  """
+  The list of values to match
+  """
+  values: [String!]!
+}
+
+"""
+Fuzzy term query with edit-distance tolerance
+"""
+input FuzzyInput {
+  """
+  The indexed field to match against
+  """
+  field: SearchField!
+  """
+  The value to fuzzily match
+  """
+  value: String!
+  """
+  Maximum edit distance (Levenshtein)
+  """
+  distance: Int!
+  """
+  Length of the common prefix that is not fuzzified
+  """
+  prefix_len: Int
+  """
+  Count transpositions as a single edit
+  """
+  transpositions: Boolean
+}
+
+"""
+Boolean occurrence modifier for a clause inside a bool query
+"""
+enum Occur {
+  MUST
+  SHOULD
+  MUST_NOT
+}
+
+"""
+Range query over a numeric or date field
+"""
+input RangeInput {
+  """
+  The numeric or date field to range over
+  """
+  field: SearchField!
+  """
+  Lower bound (inclusive when include_min is true)
+  """
+  min: String
+  """
+  Upper bound (inclusive when include_max is true)
+  """
+  max: String
+  """
+  Whether the lower bound is inclusive (default false)
+  """
+  include_min: Boolean
+  """
+  Whether the upper bound is inclusive (default false)
+  """
+  include_max: Boolean
+}
+
+"""
+Indexed fields available for structured search queries
+"""
+enum SearchField {
+  ITEM_NAME
+  BOARD_ID
+  UPDATED_AT
+  ITEM_FREE_TEXT
+  ITEM_STATUSES
+  BOARD_NAME
+  ITEMS_NUMERICS
+  ITEMS_DATES
+  WORKSPACE_ID
+  BOARD_KIND
+  PERSONS
+  CREATED_BY
+  LAST_UPDATED_BY
+  BOARD_OWNER_ID
+  BOARD_WITH_PULSE_VIEW_PERMISSIONS
+  GROUP_ID
+  GROUP_NAME
+  ITEM_LABELS
+  ITEM_REFERENCED_EMAILS
+  ITEM_TAGS
+  ITEM_ID
+}
+
+"""
 A monday.com board.
 """
 type Board {
@@ -4934,6 +5158,10 @@ type Board {
   """
   manual_metadata: BoardManualMetadata
   """
+  The board's views.
+  """
+  views(ids: [ID!], type: String): [BoardView]
+  """
   The board's visible columns.
   """
   columns(ids: [String], types: [ColumnType!], capabilities: [ColumnCapability]): [Column]
@@ -4945,10 +5173,6 @@ type Board {
   The board's updates.
   """
   updates(limit: Int = 25, page: Int = 1, ids: [ID!], board_updates_only: Boolean, from_date: ISO8601DateTime, to_date: ISO8601DateTime): [Update!]
-  """
-  The board's views.
-  """
-  views(ids: [ID!], type: String): [BoardView]
   """
   The user's permission level for this board (view / edit).
   """
@@ -6860,209 +7084,6 @@ type WorkSchedules {
   Work schedules
   """
   work_schedules: [WorkSchedule!]!
-}
-
-"""
-Input type for adding an object to a hierarchy list
-"""
-input CreateFavoriteInput {
-  """
-  The object to add to the list
-  """
-  object: HierarchyObjectIDInputType!
-  """
-  The name of the object
-  """
-  name: String
-  """
-  The position where to add the object
-  """
-  newPosition: ObjectDynamicPositionInput
-}
-
-"""
-Represents the response when adding an object to a list
-"""
-type CreateFavoriteResultType {
-  """
-  The favorite item that was created
-  """
-  favorite: GraphqlHierarchyObjectItem
-  """
-  If the object that was created is a folder, this is extra data about the folder
-  """
-  folder: GraphqlFolder
-}
-
-"""
-Input type for removing an object from favorites
-"""
-input DeleteFavoriteInput {
-  """
-  The object to remove from favorites
-  """
-  object: HierarchyObjectIDInputType!
-}
-
-"""
-Result type for removing an object from favorites
-"""
-type DeleteFavoriteInputResultType {
-  """
-  Whether the object was successfully removed
-  """
-  success: Boolean
-}
-
-"""
-Represents a folder in the hierarchy
-"""
-type GraphqlFolder {
-  """
-  The unique identifier of the folder
-  """
-  id: ID
-  """
-  The account identifier this folder belongs to
-  """
-  accountId: ID
-  """
-  The name of the folder
-  """
-  name: String
-  """
-  The timestamp when this folder was created
-  """
-  createdAt: Date
-  """
-  The timestamp when this folder was last updated
-  """
-  updatedAt: Date
-  """
-  The user who created this folder
-  """
-  createdBy: ID
-  """
-  The app feature slug associated with this folder
-  """
-  app_feature_slug: String
-}
-
-"""
-Represents an item in favorites
-"""
-type GraphqlHierarchyObjectItem {
-  """
-  The unique identifier of the hierarchy item
-  """
-  id: ID
-  """
-  The account identifier this item belongs to
-  """
-  accountId: ID
-  """
-  The object identifier and type
-  """
-  object: HierarchyObjectID
-  """
-  The folder identifier if the item is contained within a folder
-  """
-  folderId: ID
-  """
-  The position of the item within its list or folder
-  """
-  position: Float
-  """
-  The timestamp when this item was created
-  """
-  createdAt: Date
-  """
-  The timestamp when this item was last updated
-  """
-  updatedAt: Date
-}
-
-"""
-Represents a monday object.
-"""
-enum GraphqlMondayObject {
-  Board
-  Folder
-  Dashboard
-  Workspace
-}
-
-"""
-Represents a monday object identifier with its type
-"""
-type HierarchyObjectID {
-  """
-  The unique identifier of the object
-  """
-  id: ID
-  """
-  The type of the object
-  """
-  type: GraphqlMondayObject
-}
-
-"""
-Input type for identifying a favorites object by its ID and type
-"""
-input HierarchyObjectIDInputType {
-  """
-  The ID of the object
-  """
-  id: ID!
-  """
-  The type of the object
-  """
-  type: GraphqlMondayObject!
-}
-
-"""
-Types of lists in hierarchyMS
-"""
-enum ListType {
-  PersonalList
-  Workspace
-  CustomizedList
-}
-
-input ObjectDynamicPositionInput {
-  """
-  The previous object in the list
-  """
-  prevObject: HierarchyObjectIDInputType
-  """
-  The next object in the list
-  """
-  nextObject: HierarchyObjectIDInputType
-}
-
-"""
-Represents the response when adding an object to a list
-"""
-type UpdateFavoriteResultType {
-  """
-  The favorite item that its position was updated
-  """
-  favorite: GraphqlHierarchyObjectItem
-}
-
-input UpdateObjectHierarchyPositionInput {
-  """
-  The favorite's object to update
-  """
-  object: HierarchyObjectIDInputType!
-  """
-  The new folder ID to move the object to, if necessary
-  """
-  newFolder: ID
-  """
-  The new position for the object
-  """
-  newPosition: ObjectDynamicPositionInput
 }
 
 """
@@ -10258,6 +10279,209 @@ type CreateProjectResult {
   Unique process ID for tracking this creation request. This will be included in the callback when creation completes.
   """
   process_id: ID
+}
+
+"""
+Input type for adding an object to a hierarchy list
+"""
+input CreateFavoriteInput {
+  """
+  The object to add to the list
+  """
+  object: HierarchyObjectIDInputType!
+  """
+  The name of the object
+  """
+  name: String
+  """
+  The position where to add the object
+  """
+  newPosition: ObjectDynamicPositionInput
+}
+
+"""
+Represents the response when adding an object to a list
+"""
+type CreateFavoriteResultType {
+  """
+  The favorite item that was created
+  """
+  favorite: GraphqlHierarchyObjectItem
+  """
+  If the object that was created is a folder, this is extra data about the folder
+  """
+  folder: GraphqlFolder
+}
+
+"""
+Input type for removing an object from favorites
+"""
+input DeleteFavoriteInput {
+  """
+  The object to remove from favorites
+  """
+  object: HierarchyObjectIDInputType!
+}
+
+"""
+Result type for removing an object from favorites
+"""
+type DeleteFavoriteInputResultType {
+  """
+  Whether the object was successfully removed
+  """
+  success: Boolean
+}
+
+"""
+Represents a folder in the hierarchy
+"""
+type GraphqlFolder {
+  """
+  The unique identifier of the folder
+  """
+  id: ID
+  """
+  The account identifier this folder belongs to
+  """
+  accountId: ID
+  """
+  The name of the folder
+  """
+  name: String
+  """
+  The timestamp when this folder was created
+  """
+  createdAt: Date
+  """
+  The timestamp when this folder was last updated
+  """
+  updatedAt: Date
+  """
+  The user who created this folder
+  """
+  createdBy: ID
+  """
+  The app feature slug associated with this folder
+  """
+  app_feature_slug: String
+}
+
+"""
+Represents an item in favorites
+"""
+type GraphqlHierarchyObjectItem {
+  """
+  The unique identifier of the hierarchy item
+  """
+  id: ID
+  """
+  The account identifier this item belongs to
+  """
+  accountId: ID
+  """
+  The object identifier and type
+  """
+  object: HierarchyObjectID
+  """
+  The folder identifier if the item is contained within a folder
+  """
+  folderId: ID
+  """
+  The position of the item within its list or folder
+  """
+  position: Float
+  """
+  The timestamp when this item was created
+  """
+  createdAt: Date
+  """
+  The timestamp when this item was last updated
+  """
+  updatedAt: Date
+}
+
+"""
+Represents a monday object.
+"""
+enum GraphqlMondayObject {
+  Board
+  Folder
+  Dashboard
+  Workspace
+}
+
+"""
+Represents a monday object identifier with its type
+"""
+type HierarchyObjectID {
+  """
+  The unique identifier of the object
+  """
+  id: ID
+  """
+  The type of the object
+  """
+  type: GraphqlMondayObject
+}
+
+"""
+Input type for identifying a favorites object by its ID and type
+"""
+input HierarchyObjectIDInputType {
+  """
+  The ID of the object
+  """
+  id: ID!
+  """
+  The type of the object
+  """
+  type: GraphqlMondayObject!
+}
+
+"""
+Types of lists in hierarchyMS
+"""
+enum ListType {
+  PersonalList
+  Workspace
+  CustomizedList
+}
+
+input ObjectDynamicPositionInput {
+  """
+  The previous object in the list
+  """
+  prevObject: HierarchyObjectIDInputType
+  """
+  The next object in the list
+  """
+  nextObject: HierarchyObjectIDInputType
+}
+
+"""
+Represents the response when adding an object to a list
+"""
+type UpdateFavoriteResultType {
+  """
+  The favorite item that its position was updated
+  """
+  favorite: GraphqlHierarchyObjectItem
+}
+
+input UpdateObjectHierarchyPositionInput {
+  """
+  The favorite's object to update
+  """
+  object: HierarchyObjectIDInputType!
+  """
+  The new folder ID to move the object to, if necessary
+  """
+  newFolder: ID
+  """
+  The new position for the object
+  """
+  newPosition: ObjectDynamicPositionInput
 }
 
 enum Action {
@@ -13932,6 +14156,292 @@ type RunPromptResult {
 }
 
 """
+The privacy kind for a board
+"""
+enum BoardKindInput {
+  PUBLIC
+  PRIVATE
+  SHARE
+}
+
+"""
+A board's view.
+"""
+type BoardView {
+  """
+  The view's unique identifier.
+  """
+  id: ID!
+  """
+  The view's name.
+  """
+  name: String!
+  """
+  The view's type.
+  """
+  type: String
+  """
+  The view's settings in a string form.
+  """
+  settings_str: String!
+  """
+  Specific board view data (supported only for forms)
+  """
+  view_specific_data_str: String!
+  """
+  The view's template id if it was duplicated from other view
+  """
+  source_view_id: ID
+  """
+  The view's settings, the structure varies by view type
+  """
+  settings: JSON
+  """
+  The view's sort
+  """
+  sort: JSON
+  """
+  The view's filter user id
+  """
+  filter_user_id: Int
+  """
+  The view's filter team id
+  """
+  filter_team_id: Int
+  """
+  The view's tags
+  """
+  tags: [String!]
+  """
+  The view's filter
+  """
+  filter: JSON
+  """
+  The user's permission level for this view (view / edit).
+  """
+  access_level: BoardViewAccessLevel!
+}
+
+"""
+The board view access level of the user
+"""
+enum BoardViewAccessLevel {
+  view
+  edit
+}
+
+type ChangeBoardKindResult {
+  id: ID!
+  board_kind: String!
+}
+
+input ColumnPropertyInput {
+  """
+  The ID of the column
+  """
+  column_id: String!
+  """
+  Whether the column is visible
+  """
+  visible: Boolean!
+}
+
+input ColumnsConfigInput {
+  """
+  Configuration for main board columns
+  """
+  column_properties: [ColumnPropertyInput!]
+  """
+  Configuration for subitems columns
+  """
+  subitems_column_properties: [ColumnPropertyInput!]
+  """
+  Number of floating columns to display
+  """
+  floating_columns_count: Int
+  """
+  Order of columns
+  """
+  column_order: [String!]
+}
+
+"""
+A single conditional formatting condition that defines when and how to highlight rows or cells
+"""
+input ConditionalFormattingConditionInput {
+  """
+  Unique identifier for the condition (client-generated GUID)
+  """
+  id: String
+  """
+  The formatting to apply when this condition matches
+  """
+  formatting: ConditionalFormattingFormattingInput
+  """
+  Rules that trigger this condition
+  """
+  rules: [ConditionalFormattingRuleBucketInput!]
+  """
+  What to highlight when the condition matches
+  """
+  target: ConditionalFormattingTargetInput
+}
+
+input ConditionalFormattingFormattingInput {
+  """
+  Color name to apply as highlight (e.g. orange, dark_red, done-green)
+  """
+  highlight_color: String
+}
+
+input ConditionalFormattingRuleBucketInput {
+  """
+  Logical operator (e.g. AND, OR)
+  """
+  operator: String
+  """
+  The rule definition
+  """
+  rule: ConditionalFormattingRuleInput
+}
+
+input ConditionalFormattingRuleContextInput {
+  """
+  ID of the column to evaluate
+  """
+  column_id: String
+  """
+  Column attribute to compare against
+  """
+  compare_attribute: String
+  """
+  Board ID the column belongs to
+  """
+  board_id: ID
+}
+
+input ConditionalFormattingRuleInput {
+  """
+  The column context for this rule
+  """
+  context: ConditionalFormattingRuleContextInput
+  """
+  Value to compare against
+  """
+  compare_value: JSON
+}
+
+input ConditionalFormattingTargetInput {
+  """
+  Column IDs to highlight (empty = entire row)
+  """
+  column_ids: [String!]
+  """
+  Whether to highlight the entire row
+  """
+  entire_row: Boolean
+}
+
+"""
+Configuration settings for group by column
+"""
+input GroupByColumnConfigInput {
+  """
+  Sort settings for the column
+  """
+  sortSettings: GroupBySortSettingsInput
+}
+
+"""
+Condition for grouping items by column
+"""
+input GroupByConditionInput {
+  """
+  ID of the column to group by
+  """
+  columnId: String!
+  """
+  Configuration for the group by column
+  """
+  config: GroupByColumnConfigInput
+}
+
+"""
+Settings for grouping board items
+"""
+input GroupBySettingsInput {
+  """
+  List of conditions for grouping items
+  """
+  conditions: [GroupByConditionInput!]!
+  """
+  Whether to hide groups with no items
+  """
+  hideEmptyGroups: Boolean
+}
+
+"""
+Sort settings for group by configuration
+"""
+input GroupBySortSettingsInput {
+  """
+  Sort direction for the group
+  """
+  direction: SortDirection!
+  """
+  Type of sorting to apply
+  """
+  type: String
+}
+
+"""
+Direction for sorting items
+"""
+enum SortDirection {
+  ASC
+  DESC
+}
+
+"""
+Settings configuration for table view display options
+"""
+input TableViewSettingsInput {
+  """
+  Column visibility configuration for the board view
+  """
+  columns: ColumnsConfigInput
+  """
+  The group by to apply to the board view
+  """
+  group_by: GroupBySettingsInput
+}
+
+"""
+Specifies the entity scope for the created view
+"""
+enum ViewContext {
+  BOARD
+}
+
+"""
+Available view types for board displays
+"""
+enum ViewKind {
+  DASHBOARD
+  TABLE
+  FORM
+  APP
+}
+
+"""
+Type of mutation operation
+"""
+enum ViewMutationKind {
+  CREATE
+  UPDATE
+}
+
+"""
 The result of the connect_migration_job mutation.
 """
 type ConnectMigrationJobResult {
@@ -15798,6 +16308,58 @@ type TimelineResponse {
   Paginated set of timeline items and a cursor to get the next page
   """
   timeline_items_page(cursor: String = null, limit: Int = 25): TimelineItemsPage!
+}
+
+"""
+Knowledge base answer generated from snippets using LLM.
+"""
+type KnowledgeBaseAnswer {
+  """
+  List of knowledge base snippets used to generate the answer.
+  """
+  raw_snippets: [SnippetSearchResult!]
+  """
+  LLM-generated answer based on the knowledge base snippets.
+  """
+  answer: String
+}
+
+"""
+A knowledge base for monday.com which returns a list of snippet search results containing document content and metadata.
+"""
+type SnippetSearchResult {
+  """
+  The unique identifier of the snippet.
+  """
+  id: ID!
+  """
+  The title of the article.
+  """
+  title: String
+  """
+  The content of the snippet.
+  """
+  text: String
+  """
+  The parent document ID.
+  """
+  parent_id: ID
+  """
+  When the snippet was created.
+  """
+  created_at: String
+  """
+  When the snippet was last updated.
+  """
+  updated_at: String
+  """
+  The vector distance score. Lower is better. value between 0 and 1.
+  """
+  distance: Float
+  """
+  The URL of the source article.
+  """
+  url: String
 }
 
 """
@@ -19852,201 +20414,6 @@ input UpdateDependencyColumnInput {
 }
 
 """
-A board's view.
-"""
-type BoardView {
-  """
-  The view's unique identifier.
-  """
-  id: ID!
-  """
-  The view's name.
-  """
-  name: String!
-  """
-  The view's type.
-  """
-  type: String
-  """
-  The view's settings in a string form.
-  """
-  settings_str: String!
-  """
-  Specific board view data (supported only for forms)
-  """
-  view_specific_data_str: String!
-  """
-  The view's template id if it was duplicated from other view
-  """
-  source_view_id: ID
-  """
-  The view's settings, the structure varies by view type
-  """
-  settings: JSON
-  """
-  The view's sort
-  """
-  sort: JSON
-  """
-  The view's filter user id
-  """
-  filter_user_id: Int
-  """
-  The view's filter team id
-  """
-  filter_team_id: Int
-  """
-  The view's tags
-  """
-  tags: [String!]
-  """
-  The view's filter
-  """
-  filter: JSON
-  """
-  The user's permission level for this view (view / edit).
-  """
-  access_level: BoardViewAccessLevel!
-}
-
-"""
-The board view access level of the user
-"""
-enum BoardViewAccessLevel {
-  view
-  edit
-}
-
-input ColumnPropertyInput {
-  """
-  The ID of the column
-  """
-  column_id: String!
-  """
-  Whether the column is visible
-  """
-  visible: Boolean!
-}
-
-input ColumnsConfigInput {
-  """
-  Configuration for main board columns
-  """
-  column_properties: [ColumnPropertyInput!]
-  """
-  Configuration for subitems columns
-  """
-  subitems_column_properties: [ColumnPropertyInput!]
-  """
-  Number of floating columns to display
-  """
-  floating_columns_count: Int
-  """
-  Order of columns
-  """
-  column_order: [String!]
-}
-
-"""
-Configuration settings for group by column
-"""
-input GroupByColumnConfigInput {
-  """
-  Sort settings for the column
-  """
-  sortSettings: GroupBySortSettingsInput
-}
-
-"""
-Condition for grouping items by column
-"""
-input GroupByConditionInput {
-  """
-  ID of the column to group by
-  """
-  columnId: String!
-  """
-  Configuration for the group by column
-  """
-  config: GroupByColumnConfigInput
-}
-
-"""
-Settings for grouping board items
-"""
-input GroupBySettingsInput {
-  """
-  List of conditions for grouping items
-  """
-  conditions: [GroupByConditionInput!]!
-  """
-  Whether to hide groups with no items
-  """
-  hideEmptyGroups: Boolean
-}
-
-"""
-Sort settings for group by configuration
-"""
-input GroupBySortSettingsInput {
-  """
-  Sort direction for the group
-  """
-  direction: SortDirection!
-  """
-  Type of sorting to apply
-  """
-  type: String
-}
-
-"""
-Direction for sorting items
-"""
-enum SortDirection {
-  ASC
-  DESC
-}
-
-"""
-Settings configuration for table view display options
-"""
-input TableViewSettingsInput {
-  """
-  Column visibility configuration for the board view
-  """
-  columns: ColumnsConfigInput
-  """
-  The group by to apply to the board view
-  """
-  group_by: GroupBySettingsInput
-}
-
-"""
-Specifies the entity scope for the created view
-"""
-enum ViewContext {
-  BOARD
-}
-
-"""
-Available view types for board displays
-"""
-enum ViewKind {
-  DASHBOARD
-  TABLE
-  FORM
-  APP
-}
-
-"""
-Type of mutation operation
-"""
-enum ViewMutationKind {
-  CREATE
-  UPDATE
-}
-
-"""
 Your monday.com account
 """
 type Account {
@@ -23129,224 +23496,6 @@ type PlatformApiDailyAnalyticsByUser {
 }
 
 """
-Boolean compound query with must/should/must_not clauses
-"""
-input BoolInput {
-  """
-  Minimum number of SHOULD clauses that must match
-  """
-  min_should_match: Int
-  """
-  Child clauses
-  """
-  clauses: [ClauseInput!]!
-}
-
-"""
-A single search clause. Exactly one leaf or compound field must be set. occur and boost are optional modifiers used when this clause is a child of a bool or dis_max.
-"""
-input ClauseInput {
-  """
-  How this clause affects the parent score
-  """
-  occur: Occur
-  """
-  Score multiplier for this clause
-  """
-  boost: Float
-  """
-  Exact-term match on a field
-  """
-  term: FieldTextInput
-  """
-  Exact phrase match on a field
-  """
-  phrase: FieldTextInput
-  """
-  Phrase-prefix (autocomplete) match
-  """
-  phrase_prefix: FieldTextInput
-  """
-  Term-prefix match on a field
-  """
-  term_prefix: FieldTextInput
-  """
-  Wildcard pattern match (* and ?)
-  """
-  wildcard: FieldTextInput
-  """
-  Regular-expression match on a field
-  """
-  regex: FieldTextInput
-  """
-  Matches if the field equals ANY of the given values
-  """
-  terms_any: FieldTextListInput
-  """
-  Matches if the field equals ALL of the given values
-  """
-  terms_all: FieldTextListInput
-  """
-  Range match over a numeric or date field
-  """
-  range: RangeInput
-  """
-  Typo-tolerant fuzzy term match (Levenshtein)
-  """
-  fuzzy: FuzzyInput
-  """
-  Matches documents where the field has any indexed value
-  """
-  exists: FieldInput
-  """
-  When true, matches every document (equivalent to a match-all query)
-  """
-  all: Boolean
-  """
-  Boolean compound of sub-clauses (must / should / must_not)
-  """
-  bool: BoolInput
-  """
-  Disjunction-max compound — scores by the best-matching sub-clause
-  """
-  dis_max: DisMaxInput
-}
-
-"""
-Disjunction-max query — scores by the best-matching child clause
-"""
-input DisMaxInput {
-  """
-  Boost factor for non-best-matching clauses (0–1)
-  """
-  tie_breaker: Float
-  """
-  Child clauses
-  """
-  clauses: [ClauseInput!]!
-}
-
-"""
-Checks that a field has at least one indexed value (exists query)
-"""
-input FieldInput {
-  """
-  The indexed field that must have a value
-  """
-  field: SearchField!
-}
-
-"""
-A field+value pair for term/phrase/regex style leaf queries
-"""
-input FieldTextInput {
-  """
-  The indexed field to match against
-  """
-  field: SearchField!
-  """
-  The value to match
-  """
-  value: String!
-}
-
-"""
-A field+values pair for terms_any / terms_all leaf queries
-"""
-input FieldTextListInput {
-  """
-  The indexed field to match against
-  """
-  field: SearchField!
-  """
-  The list of values to match
-  """
-  values: [String!]!
-}
-
-"""
-Fuzzy term query with edit-distance tolerance
-"""
-input FuzzyInput {
-  """
-  The indexed field to match against
-  """
-  field: SearchField!
-  """
-  The value to fuzzily match
-  """
-  value: String!
-  """
-  Maximum edit distance (Levenshtein)
-  """
-  distance: Int!
-  """
-  Length of the common prefix that is not fuzzified
-  """
-  prefix_len: Int
-  """
-  Count transpositions as a single edit
-  """
-  transpositions: Boolean
-}
-
-"""
-Boolean occurrence modifier for a clause inside a bool query
-"""
-enum Occur {
-  MUST
-  SHOULD
-  MUST_NOT
-}
-
-"""
-Range query over a numeric or date field
-"""
-input RangeInput {
-  """
-  The numeric or date field to range over
-  """
-  field: SearchField!
-  """
-  Lower bound (inclusive when include_min is true)
-  """
-  min: String
-  """
-  Upper bound (inclusive when include_max is true)
-  """
-  max: String
-  """
-  Whether the lower bound is inclusive (default false)
-  """
-  include_min: Boolean
-  """
-  Whether the upper bound is inclusive (default false)
-  """
-  include_max: Boolean
-}
-
-"""
-Indexed fields available for structured search queries
-"""
-enum SearchField {
-  ITEM_NAME
-  BOARD_ID
-  UPDATED_AT
-  ITEM_FREE_TEXT
-  ITEM_STATUSES
-  BOARD_NAME
-  ITEMS_NUMERICS
-  ITEMS_DATES
-  WORKSPACE_ID
-  BOARD_KIND
-  PERSONS
-  CREATED_BY
-  LAST_UPDATED_BY
-  BOARD_OWNER_ID
-  BOARD_WITH_PULSE_VIEW_PERMISSIONS
-}
-
-"""
 Input for board relation column default settings.
 """
 input BoardRelationColumnDefaultsInput {
@@ -23571,58 +23720,6 @@ type TargetSchemaGroup {
   Target columns for this schema.
   """
   target_columns: [ConnectedTargetColumn!]
-}
-
-"""
-Knowledge base answer generated from snippets using LLM.
-"""
-type KnowledgeBaseAnswer {
-  """
-  List of knowledge base snippets used to generate the answer.
-  """
-  raw_snippets: [SnippetSearchResult!]
-  """
-  LLM-generated answer based on the knowledge base snippets.
-  """
-  answer: String
-}
-
-"""
-A knowledge base for monday.com which returns a list of snippet search results containing document content and metadata.
-"""
-type SnippetSearchResult {
-  """
-  The unique identifier of the snippet.
-  """
-  id: ID!
-  """
-  The title of the article.
-  """
-  title: String
-  """
-  The content of the snippet.
-  """
-  text: String
-  """
-  The parent document ID.
-  """
-  parent_id: ID
-  """
-  When the snippet was created.
-  """
-  created_at: String
-  """
-  When the snippet was last updated.
-  """
-  updated_at: String
-  """
-  The vector distance score. Lower is better. value between 0 and 1.
-  """
-  distance: Float
-  """
-  The URL of the source article.
-  """
-  url: String
 }
 
 """

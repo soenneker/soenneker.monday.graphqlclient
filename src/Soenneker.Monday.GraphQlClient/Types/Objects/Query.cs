@@ -30,12 +30,6 @@ public sealed partial class Query
     public DirectoryResourcesResponse? GetDirectoryResources { get; init; }
 
     /// <summary>
-    /// Get all personal list items by list ID
-    /// </summary>
-    [JsonPropertyName("favorites")]
-    public List<GraphqlHierarchyObjectItem>? Favorites { get; init; }
-
-    /// <summary>
     /// Retrieves a list of available object types that can be created or queried. Each object type is uniquely identified by an 'object_type_unique_key'. This key is required for mutations like 'create_object' and for filtering in the 'objects' query. Use this query to discover what types of objects are available in the system (e.g., 'workflows', 'projects') and get their corresponding unique keys. The structure of unique key is 'app_slug::app_feature_slug'.
     /// </summary>
     [JsonPropertyName("object_types_unique_keys")]
@@ -193,6 +187,12 @@ public sealed partial class Query
     public List<Board>? BoardCandidates { get; init; }
 
     /// <summary>
+    /// Get all personal list items by list ID
+    /// </summary>
+    [JsonPropertyName("favorites")]
+    public List<GraphqlHierarchyObjectItem>? Favorites { get; init; }
+
+    /// <summary>
     /// Fetch a form by its token. The returned form includes all the details of the form such as its settings, questions, title, etc. Use this endpoint when you need to retrieve complete form data for display or processing. Requires that the requesting user has read access to the associated board.
     /// </summary>
     [JsonPropertyName("form")]
@@ -226,6 +226,14 @@ public sealed partial class Query
     public List<BoardMuteSettings>? MuteBoardSettings { get; init; }
 
     /// <summary>
+    /// Retrieves the JSON schema definition for a specific create view type. 
+    ///   Use this query before calling create_view mutation to understand the structure and validation rules for the settings parameter. 
+    ///   The schema defines what properties are available when creating views of a specific type.
+    /// </summary>
+    [JsonPropertyName("get_view_schema_by_type")]
+    public string? GetViewSchemaByType { get; init; }
+
+    /// <summary>
     /// Get managed column data.
     /// </summary>
     [JsonPropertyName("managed_column")]
@@ -254,6 +262,12 @@ public sealed partial class Query
     /// </summary>
     [JsonPropertyName("timeline")]
     public TimelineResponse? Timeline { get; init; }
+
+    /// <summary>
+    /// Search knowledge base snippets.
+    /// </summary>
+    [JsonPropertyName("knowledge_base_search")]
+    public KnowledgeBaseAnswer? KnowledgeBaseSearch { get; init; }
 
     /// <summary>
     /// Retrieve audit logs for your Monday account. You can
@@ -450,14 +464,6 @@ public sealed partial class Query
     public BoardDependencies? BoardDependencies { get; init; }
 
     /// <summary>
-    /// Retrieves the JSON schema definition for a specific create view type. 
-    ///   Use this query before calling create_view mutation to understand the structure and validation rules for the settings parameter. 
-    ///   The schema defines what properties are available when creating views of a specific type.
-    /// </summary>
-    [JsonPropertyName("get_view_schema_by_type")]
-    public string? GetViewSchemaByType { get; init; }
-
-    /// <summary>
     /// Get the connected account's information.
     /// </summary>
     [JsonPropertyName("account")]
@@ -618,11 +624,5 @@ public sealed partial class Query
     /// </summary>
     [JsonPropertyName("platform_api")]
     public PlatformApi? PlatformApi { get; init; }
-
-    /// <summary>
-    /// Search knowledge base snippets.
-    /// </summary>
-    [JsonPropertyName("knowledge_base_search")]
-    public KnowledgeBaseAnswer? KnowledgeBaseSearch { get; init; }
 
 }
