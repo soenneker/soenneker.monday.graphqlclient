@@ -12,12 +12,6 @@ namespace Soenneker.Monday.GraphQlClient;
 public sealed partial class Workspace
 {
     /// <summary>
-    /// The workspace's unique identifier.
-    /// </summary>
-    [JsonPropertyName("id")]
-    public string? Id { get; init; }
-
-    /// <summary>
     /// The account product that contains workspace.
     /// </summary>
     [JsonPropertyName("account_product")]
@@ -34,6 +28,12 @@ public sealed partial class Workspace
     /// </summary>
     [JsonPropertyName("description")]
     public string? Description { get; init; }
+
+    /// <summary>
+    /// The workspace's unique identifier.
+    /// </summary>
+    [JsonPropertyName("id")]
+    public string? Id { get; init; }
 
     /// <summary>
     /// Returns true if it is the default workspace of the product or account

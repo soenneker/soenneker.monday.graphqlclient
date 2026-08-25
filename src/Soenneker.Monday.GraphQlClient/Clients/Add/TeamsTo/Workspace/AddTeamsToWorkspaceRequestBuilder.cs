@@ -23,7 +23,7 @@ public sealed partial class AddTeamsToWorkspaceRequestBuilder
     /// </summary>
     public ValueTask<GraphQlResponse<AddTeamsToWorkspaceData>> Execute(AddTeamsToWorkspaceVariables request, CancellationToken cancellationToken = default)
     {
-        const string gqlQuery = @"mutation AddTeamsToWorkspace($kind: WorkspaceSubscriberKind, $team_ids: [ID!]!, $workspace_id: ID!) { add_teams_to_workspace(kind: $kind, team_ids: $team_ids, workspace_id: $workspace_id) { id is_guest name created_at picture_url } }";
+        const string gqlQuery = @"mutation AddTeamsToWorkspace($kind: WorkspaceSubscriberKind, $team_ids: [ID!]!, $workspace_id: ID!) { add_teams_to_workspace(kind: $kind, team_ids: $team_ids, workspace_id: $workspace_id) { id name picture_url is_guest created_at } }";
         return _graphQlClient.Execute<AddTeamsToWorkspaceData>(gqlQuery, request, cancellationToken);
     }
 

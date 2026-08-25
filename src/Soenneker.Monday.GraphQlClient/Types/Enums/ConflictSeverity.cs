@@ -3,12 +3,12 @@
 namespace Soenneker.Monday.GraphQlClient;
 
 /// <summary>
-/// The board view access level of the user
+/// Severity of a schedule conflict.
 /// </summary>
-public enum BoardViewAccessLevel
+public enum ConflictSeverity
 {
-    Edit,
+    PARTIAL,
 
-    View
+    FULL
 
 }

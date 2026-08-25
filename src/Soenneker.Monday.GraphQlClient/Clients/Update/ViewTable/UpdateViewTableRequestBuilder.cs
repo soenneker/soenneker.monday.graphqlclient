@@ -22,7 +22,7 @@ public sealed partial class UpdateViewTableRequestBuilder
     /// </summary>
     public ValueTask<GraphQlResponse<UpdateViewTableData>> Execute(UpdateViewTableVariables request, CancellationToken cancellationToken = default)
     {
-        const string gqlQuery = @"mutation UpdateViewTable($view_id: ID!, $board_id: ID!, $name: String, $filter_user_id: ID, $filter_team_id: ID, $filter: ItemsQueryGroup, $sort: [ItemsQueryOrderBy!], $tags: [String!], $settings: TableViewSettingsInput) { update_view_table(view_id: $view_id, board_id: $board_id, name: $name, filter_user_id: $filter_user_id, filter_team_id: $filter_team_id, filter: $filter, sort: $sort, tags: $tags, settings: $settings) { id name type settings_str view_specific_data_str source_view_id settings sort filter_user_id filter_team_id tags filter access_level } }";
+        const string gqlQuery = @"mutation UpdateViewTable($view_id: ID!, $board_id: ID!, $name: String, $filter_user_id: ID, $filter_team_id: ID, $filter: ItemsQueryGroup, $sort: [ItemsQueryOrderBy!], $tags: [String!], $settings: TableViewSettingsInput) { update_view_table(view_id: $view_id, board_id: $board_id, name: $name, filter_user_id: $filter_user_id, filter_team_id: $filter_team_id, filter: $filter, sort: $sort, tags: $tags, settings: $settings) { access_level id name settings_str source_view_id type view_specific_data_str settings sort filter_user_id filter_team_id tags filter } }";
         return _graphQlClient.Execute<UpdateViewTableData>(gqlQuery, request, cancellationToken);
     }
 

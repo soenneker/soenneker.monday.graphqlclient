@@ -18,18 +18,6 @@ public sealed partial class Item
     public string Id { get; init; } = null!;
 
     /// <summary>
-    /// The item's updates with cursor-based pagination.
-    /// </summary>
-    [JsonPropertyName("updates_page")]
-    public UpdatesPage? UpdatesPage { get; init; }
-
-    /// <summary>
-    /// The item's updates.
-    /// </summary>
-    [JsonPropertyName("updates")]
-    public List<Update>? Updates { get; init; }
-
-    /// <summary>
     /// The item's assets/files.
     /// </summary>
     [JsonPropertyName("assets")]
@@ -136,5 +124,17 @@ public sealed partial class Item
     /// </summary>
     [JsonPropertyName("url")]
     public string Url { get; init; } = null!;
+
+    /// <summary>
+    /// The item's updates with cursor-based pagination.
+    /// </summary>
+    [JsonPropertyName("updates_page")]
+    public UpdatesPage? UpdatesPage { get; init; }
+
+    /// <summary>
+    /// The item's updates.
+    /// </summary>
+    [JsonPropertyName("updates")]
+    public List<Update>? Updates { get; init; }
 
 }

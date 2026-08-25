@@ -96,6 +96,12 @@ public sealed partial class ChatMessage
     public string? TemporalNamespace { get; init; }
 
     /// <summary>
+    /// Turn identity id for the turn that produced this message. Null for messages predating V3.
+    /// </summary>
+    [JsonPropertyName("turn_id")]
+    public string? TurnId { get; init; }
+
+    /// <summary>
     /// User feedback for this chat message
     /// </summary>
     [JsonPropertyName("feedbacks")]

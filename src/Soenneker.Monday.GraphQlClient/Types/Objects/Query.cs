@@ -24,12 +24,6 @@ public sealed partial class Query
     public List<Sprint>? Sprints { get; init; }
 
     /// <summary>
-    /// Fetch resources information from the resource directory
-    /// </summary>
-    [JsonPropertyName("get_directory_resources")]
-    public DirectoryResourcesResponse? GetDirectoryResources { get; init; }
-
-    /// <summary>
     /// Retrieves a list of available object types that can be created or queried. Each object type is uniquely identified by an 'object_type_unique_key'. This key is required for mutations like 'create_object' and for filtering in the 'objects' query. Use this query to discover what types of objects are available in the system (e.g., 'workflows', 'projects') and get their corresponding unique keys. The structure of unique key is 'app_slug::app_feature_slug'.
     /// </summary>
     [JsonPropertyName("object_types_unique_keys")]
@@ -52,6 +46,132 @@ public sealed partial class Query
 
     [JsonPropertyName("app_subscriptions")]
     public AppSubscriptions AppSubscriptions { get; init; } = null!;
+
+    /// <summary>
+    /// Get the connected account's information.
+    /// </summary>
+    [JsonPropertyName("account")]
+    public Account? Account { get; init; }
+
+    /// <summary>
+    /// Get a collection of installs of an app.
+    /// </summary>
+    [JsonPropertyName("app_installs")]
+    public List<AppInstall>? AppInstalls { get; init; }
+
+    /// <summary>
+    /// Get the current app subscription. Note: This query does not work in the playground
+    /// </summary>
+    [JsonPropertyName("app_subscription")]
+    public List<AppSubscription>? AppSubscription { get; init; }
+
+    /// <summary>
+    /// Get operations counter current value
+    /// </summary>
+    [JsonPropertyName("app_subscription_operations")]
+    public AppSubscriptionOperationsCounter? AppSubscriptionOperations { get; init; }
+
+    /// <summary>
+    /// Get apps monetization information for an account
+    /// </summary>
+    [JsonPropertyName("apps_monetization_info")]
+    public AppsMonetizationInfo? AppsMonetizationInfo { get; init; }
+
+    /// <summary>
+    /// Get apps monetization status for an account
+    /// </summary>
+    [JsonPropertyName("apps_monetization_status")]
+    public AppMonetizationStatus? AppsMonetizationStatus { get; init; }
+
+    /// <summary>
+    /// Get a collection of assets by ids.
+    /// </summary>
+    [JsonPropertyName("assets")]
+    public List<Asset>? Assets { get; init; }
+
+    /// <summary>
+    /// Get a collection of boards.
+    /// </summary>
+    [JsonPropertyName("boards")]
+    public List<Board>? Boards { get; init; }
+
+    /// <summary>
+    /// Get the complexity data of your queries.
+    /// </summary>
+    [JsonPropertyName("complexity")]
+    public Complexity? Complexity { get; init; }
+
+    /// <summary>
+    /// Get a collection of docs.
+    /// </summary>
+    [JsonPropertyName("docs")]
+    public List<Document>? Docs { get; init; }
+
+    /// <summary>
+    /// Get a collection of folders. Note: This query won't return folders from closed workspaces to which you are not subscribed
+    /// </summary>
+    [JsonPropertyName("folders")]
+    public List<Folder>? Folders { get; init; }
+
+    /// <summary>
+    /// Get a collection of items.
+    /// </summary>
+    [JsonPropertyName("items")]
+    public List<Item>? Items { get; init; }
+
+    /// <summary>
+    /// Search items by multiple columns and values.
+    /// </summary>
+    [JsonPropertyName("items_page_by_column_values")]
+    public ItemsResponse ItemsPageByColumnValues { get; init; } = null!;
+
+    /// <summary>
+    /// Get the connected user's information.
+    /// </summary>
+    [JsonPropertyName("me")]
+    public User? Me { get; init; }
+
+    /// <summary>
+    /// Get next pages of board's items (rows) by cursor.
+    /// </summary>
+    [JsonPropertyName("next_items_page")]
+    public ItemsResponse NextItemsPage { get; init; } = null!;
+
+    /// <summary>
+    /// Get a collection of tags.
+    /// </summary>
+    [JsonPropertyName("tags")]
+    public List<Tag>? Tags { get; init; }
+
+    /// <summary>
+    /// Get a collection of teams.
+    /// </summary>
+    [JsonPropertyName("teams")]
+    public List<Team>? Teams { get; init; }
+
+    /// <summary>
+    /// Get the API version in use
+    /// </summary>
+    [JsonPropertyName("version")]
+    public Version Version { get; init; } = null!;
+
+    /// <summary>
+    /// Get a list containing the versions of the API
+    /// </summary>
+    [JsonPropertyName("versions")]
+    public List<Version>? Versions { get; init; }
+
+    /// <summary>
+    /// Get a collection of webhooks for the board
+    /// </summary>
+    [JsonPropertyName("webhooks")]
+    public List<Webhook>? Webhooks { get; init; }
+
+    /// <summary>
+    /// Get a collection of workspaces.
+    /// </summary>
+    [JsonPropertyName("workspaces")]
+    public List<Workspace>? Workspaces { get; init; }
 
     /// <summary>
     /// Placeholder query field for automations-test microservice.
@@ -270,6 +390,36 @@ public sealed partial class Query
     public KnowledgeBaseAnswer? KnowledgeBaseSearch { get; init; }
 
     /// <summary>
+    /// Export the dependency graph for a specific board
+    /// </summary>
+    [JsonPropertyName("export_graph")]
+    public BoardGraphExport? ExportGraph { get; init; }
+
+    /// <summary>
+    /// Fetch dependency column configuration for a board
+    /// </summary>
+    [JsonPropertyName("dependency_column_config")]
+    public DependencyColumnConfigResult? DependencyColumnConfig { get; init; }
+
+    /// <summary>
+    /// Export events for a board within a date range. Requires a valid X-Tool-Execution-Secret header.
+    /// </summary>
+    [JsonPropertyName("export_events")]
+    public EventsExport? ExportEvents { get; init; }
+
+    /// <summary>
+    /// Get all dependency predecessors for a specific item, including dependency type and lag per edge
+    /// </summary>
+    [JsonPropertyName("item_dependency")]
+    public ItemDependency? ItemDependency { get; init; }
+
+    /// <summary>
+    /// Get all dependency predecessors for every item on a board, paginated. Each item includes its predecessor edges with dependency type and lag.
+    /// </summary>
+    [JsonPropertyName("board_dependencies")]
+    public BoardDependencies? BoardDependencies { get; init; }
+
+    /// <summary>
     /// Retrieve audit logs for your Monday account. You can
     ///   filter logs by event types, user ID, IP address and start and end date.
     ///   
@@ -416,6 +566,12 @@ public sealed partial class Query
     public List<ServiceUser>? ServiceUsers { get; init; }
 
     /// <summary>
+    /// Fetch resources information from the resource directory
+    /// </summary>
+    [JsonPropertyName("get_directory_resources")]
+    public DirectoryResourcesResponse? GetDirectoryResources { get; init; }
+
+    /// <summary>
     /// Get the status of an async job by its external ID
     /// </summary>
     [JsonPropertyName("job_status")]
@@ -432,162 +588,6 @@ public sealed partial class Query
     /// </summary>
     [JsonPropertyName("validations")]
     public Validations? Validations { get; init; }
-
-    /// <summary>
-    /// Export the dependency graph for a specific board
-    /// </summary>
-    [JsonPropertyName("export_graph")]
-    public BoardGraphExport? ExportGraph { get; init; }
-
-    /// <summary>
-    /// Fetch dependency column configuration for a board
-    /// </summary>
-    [JsonPropertyName("dependency_column_config")]
-    public DependencyColumnConfigResult? DependencyColumnConfig { get; init; }
-
-    /// <summary>
-    /// Export events for a board within a date range. Requires a valid X-Tool-Execution-Secret header.
-    /// </summary>
-    [JsonPropertyName("export_events")]
-    public EventsExport? ExportEvents { get; init; }
-
-    /// <summary>
-    /// Get all dependency predecessors for a specific item, including dependency type and lag per edge
-    /// </summary>
-    [JsonPropertyName("item_dependency")]
-    public ItemDependency? ItemDependency { get; init; }
-
-    /// <summary>
-    /// Get all dependency predecessors for every item on a board, paginated. Each item includes its predecessor edges with dependency type and lag.
-    /// </summary>
-    [JsonPropertyName("board_dependencies")]
-    public BoardDependencies? BoardDependencies { get; init; }
-
-    /// <summary>
-    /// Get the connected account's information.
-    /// </summary>
-    [JsonPropertyName("account")]
-    public Account? Account { get; init; }
-
-    /// <summary>
-    /// Get a collection of installs of an app.
-    /// </summary>
-    [JsonPropertyName("app_installs")]
-    public List<AppInstall>? AppInstalls { get; init; }
-
-    /// <summary>
-    /// Get the current app subscription. Note: This query does not work in the playground
-    /// </summary>
-    [JsonPropertyName("app_subscription")]
-    public List<AppSubscription>? AppSubscription { get; init; }
-
-    /// <summary>
-    /// Get operations counter current value
-    /// </summary>
-    [JsonPropertyName("app_subscription_operations")]
-    public AppSubscriptionOperationsCounter? AppSubscriptionOperations { get; init; }
-
-    /// <summary>
-    /// Get apps monetization information for an account
-    /// </summary>
-    [JsonPropertyName("apps_monetization_info")]
-    public AppsMonetizationInfo? AppsMonetizationInfo { get; init; }
-
-    /// <summary>
-    /// Get apps monetization status for an account
-    /// </summary>
-    [JsonPropertyName("apps_monetization_status")]
-    public AppMonetizationStatus? AppsMonetizationStatus { get; init; }
-
-    /// <summary>
-    /// Get a collection of assets by ids.
-    /// </summary>
-    [JsonPropertyName("assets")]
-    public List<Asset>? Assets { get; init; }
-
-    /// <summary>
-    /// Get a collection of boards.
-    /// </summary>
-    [JsonPropertyName("boards")]
-    public List<Board>? Boards { get; init; }
-
-    /// <summary>
-    /// Get the complexity data of your queries.
-    /// </summary>
-    [JsonPropertyName("complexity")]
-    public Complexity? Complexity { get; init; }
-
-    /// <summary>
-    /// Get a collection of docs.
-    /// </summary>
-    [JsonPropertyName("docs")]
-    public List<Document>? Docs { get; init; }
-
-    /// <summary>
-    /// Get a collection of folders. Note: This query won't return folders from closed workspaces to which you are not subscribed
-    /// </summary>
-    [JsonPropertyName("folders")]
-    public List<Folder>? Folders { get; init; }
-
-    /// <summary>
-    /// Get a collection of items.
-    /// </summary>
-    [JsonPropertyName("items")]
-    public List<Item>? Items { get; init; }
-
-    /// <summary>
-    /// Search items by multiple columns and values.
-    /// </summary>
-    [JsonPropertyName("items_page_by_column_values")]
-    public ItemsResponse ItemsPageByColumnValues { get; init; } = null!;
-
-    /// <summary>
-    /// Get the connected user's information.
-    /// </summary>
-    [JsonPropertyName("me")]
-    public User? Me { get; init; }
-
-    /// <summary>
-    /// Get next pages of board's items (rows) by cursor.
-    /// </summary>
-    [JsonPropertyName("next_items_page")]
-    public ItemsResponse NextItemsPage { get; init; } = null!;
-
-    /// <summary>
-    /// Get a collection of tags.
-    /// </summary>
-    [JsonPropertyName("tags")]
-    public List<Tag>? Tags { get; init; }
-
-    /// <summary>
-    /// Get a collection of teams.
-    /// </summary>
-    [JsonPropertyName("teams")]
-    public List<Team>? Teams { get; init; }
-
-    /// <summary>
-    /// Get the API version in use
-    /// </summary>
-    [JsonPropertyName("version")]
-    public Version Version { get; init; } = null!;
-
-    /// <summary>
-    /// Get a list containing the versions of the API
-    /// </summary>
-    [JsonPropertyName("versions")]
-    public List<Version>? Versions { get; init; }
-
-    /// <summary>
-    /// Get a collection of webhooks for the board
-    /// </summary>
-    [JsonPropertyName("webhooks")]
-    public List<Webhook>? Webhooks { get; init; }
-
-    /// <summary>
-    /// Get a collection of workspaces.
-    /// </summary>
-    [JsonPropertyName("workspaces")]
-    public List<Workspace>? Workspaces { get; init; }
 
     /// <summary>
     /// Retrieves blocks for the published version of a specific article if the requesting user has permission to access it. Returns paginated blocks in their position order. Will return an error if the user lacks the required permissions.
