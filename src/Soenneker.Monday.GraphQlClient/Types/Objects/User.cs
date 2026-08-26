@@ -12,12 +12,6 @@ namespace Soenneker.Monday.GraphQlClient;
 public sealed partial class User
 {
     /// <summary>
-    /// The user's unique identifier.
-    /// </summary>
-    [JsonPropertyName("id")]
-    public string Id { get; init; } = null!;
-
-    /// <summary>
     /// The user's account.
     /// </summary>
     [JsonPropertyName("account")]
@@ -52,6 +46,12 @@ public sealed partial class User
     /// </summary>
     [JsonPropertyName("encrypt_api_token")]
     public string? EncryptApiToken { get; init; }
+
+    /// <summary>
+    /// The user's unique identifier.
+    /// </summary>
+    [JsonPropertyName("id")]
+    public string Id { get; init; } = null!;
 
     /// <summary>
     /// Is the user an account admin.

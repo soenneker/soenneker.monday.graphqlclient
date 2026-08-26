@@ -12,42 +12,6 @@ namespace Soenneker.Monday.GraphQlClient;
 public sealed partial class Query
 {
     /// <summary>
-    /// Performs aggregation operations on board data
-    /// </summary>
-    [JsonPropertyName("aggregate")]
-    public AggregateQueryResult? Aggregate { get; init; }
-
-    /// <summary>
-    /// Get a collection of monday dev sprints
-    /// </summary>
-    [JsonPropertyName("sprints")]
-    public List<Sprint>? Sprints { get; init; }
-
-    /// <summary>
-    /// Retrieves a list of available object types that can be created or queried. Each object type is uniquely identified by an 'object_type_unique_key'. This key is required for mutations like 'create_object' and for filtering in the 'objects' query. Use this query to discover what types of objects are available in the system (e.g., 'workflows', 'projects') and get their corresponding unique keys. The structure of unique key is 'app_slug::app_feature_slug'.
-    /// </summary>
-    [JsonPropertyName("object_types_unique_keys")]
-    public List<ObjectTypeUniqueKey>? ObjectTypesUniqueKeys { get; init; }
-
-    /// <summary>
-    /// Retrieves a list of objects from the Monday.com Objects Platform based on specified filters. This query can return any type of object (board, doc, dashboard, workflow, etc.) depending on the filter criteria. Use object_type_unique_keys to filter for specific object types.
-    /// </summary>
-    [JsonPropertyName("objects")]
-    public List<Object>? Objects { get; init; }
-
-    /// <summary>
-    /// Fetch relations for a specific object
-    /// </summary>
-    [JsonPropertyName("object_relations")]
-    public List<ObjectRelation>? ObjectRelations { get; init; }
-
-    [JsonPropertyName("marketplace_app_discounts")]
-    public List<MarketplaceAppDiscount> MarketplaceAppDiscounts { get; init; } = [];
-
-    [JsonPropertyName("app_subscriptions")]
-    public AppSubscriptions AppSubscriptions { get; init; } = null!;
-
-    /// <summary>
     /// Get the connected account's information.
     /// </summary>
     [JsonPropertyName("account")]
@@ -174,6 +138,42 @@ public sealed partial class Query
     public List<Workspace>? Workspaces { get; init; }
 
     /// <summary>
+    /// Performs aggregation operations on board data
+    /// </summary>
+    [JsonPropertyName("aggregate")]
+    public AggregateQueryResult? Aggregate { get; init; }
+
+    /// <summary>
+    /// Retrieves a list of available object types that can be created or queried. Each object type is uniquely identified by an 'object_type_unique_key'. This key is required for mutations like 'create_object' and for filtering in the 'objects' query. Use this query to discover what types of objects are available in the system (e.g., 'workflows', 'projects') and get their corresponding unique keys. The structure of unique key is 'app_slug::app_feature_slug'.
+    /// </summary>
+    [JsonPropertyName("object_types_unique_keys")]
+    public List<ObjectTypeUniqueKey>? ObjectTypesUniqueKeys { get; init; }
+
+    /// <summary>
+    /// Retrieves a list of objects from the Monday.com Objects Platform based on specified filters. This query can return any type of object (board, doc, dashboard, workflow, etc.) depending on the filter criteria. Use object_type_unique_keys to filter for specific object types.
+    /// </summary>
+    [JsonPropertyName("objects")]
+    public List<Object>? Objects { get; init; }
+
+    /// <summary>
+    /// Fetch relations for a specific object
+    /// </summary>
+    [JsonPropertyName("object_relations")]
+    public List<ObjectRelation>? ObjectRelations { get; init; }
+
+    [JsonPropertyName("marketplace_app_discounts")]
+    public List<MarketplaceAppDiscount> MarketplaceAppDiscounts { get; init; } = [];
+
+    [JsonPropertyName("app_subscriptions")]
+    public AppSubscriptions AppSubscriptions { get; init; } = null!;
+
+    /// <summary>
+    /// Get validations configuration for a board
+    /// </summary>
+    [JsonPropertyName("validations")]
+    public Validations? Validations { get; init; }
+
+    /// <summary>
     /// Placeholder query field for automations-test microservice.
     ///   This can be replaced with actual queries as the service evolves.
     /// </summary>
@@ -283,6 +283,12 @@ public sealed partial class Query
     public AccountTriggersByEntityId? AccountTriggersStatisticsByEntityId { get; init; }
 
     /// <summary>
+    /// Get a collection of monday dev sprints
+    /// </summary>
+    [JsonPropertyName("sprints")]
+    public List<Sprint>? Sprints { get; init; }
+
+    /// <summary>
     /// Get an app by ID or slug.
     /// </summary>
     [JsonPropertyName("app")]
@@ -344,14 +350,6 @@ public sealed partial class Query
     /// </summary>
     [JsonPropertyName("mute_board_settings")]
     public List<BoardMuteSettings>? MuteBoardSettings { get; init; }
-
-    /// <summary>
-    /// Retrieves the JSON schema definition for a specific create view type. 
-    ///   Use this query before calling create_view mutation to understand the structure and validation rules for the settings parameter. 
-    ///   The schema defines what properties are available when creating views of a specific type.
-    /// </summary>
-    [JsonPropertyName("get_view_schema_by_type")]
-    public string? GetViewSchemaByType { get; init; }
 
     /// <summary>
     /// Get managed column data.
@@ -418,6 +416,14 @@ public sealed partial class Query
     /// </summary>
     [JsonPropertyName("board_dependencies")]
     public BoardDependencies? BoardDependencies { get; init; }
+
+    /// <summary>
+    /// Retrieves the JSON schema definition for a specific create view type. 
+    ///   Use this query before calling create_view mutation to understand the structure and validation rules for the settings parameter. 
+    ///   The schema defines what properties are available when creating views of a specific type.
+    /// </summary>
+    [JsonPropertyName("get_view_schema_by_type")]
+    public string? GetViewSchemaByType { get; init; }
 
     /// <summary>
     /// Retrieve audit logs for your Monday account. You can
@@ -582,12 +588,6 @@ public sealed partial class Query
     /// </summary>
     [JsonPropertyName("all_widgets_schema")]
     public List<WidgetSchemaInfo>? AllWidgetsSchema { get; init; }
-
-    /// <summary>
-    /// Get validations configuration for a board
-    /// </summary>
-    [JsonPropertyName("validations")]
-    public Validations? Validations { get; init; }
 
     /// <summary>
     /// Retrieves blocks for the published version of a specific article if the requesting user has permission to access it. Returns paginated blocks in their position order. Will return an error if the user lacks the required permissions.

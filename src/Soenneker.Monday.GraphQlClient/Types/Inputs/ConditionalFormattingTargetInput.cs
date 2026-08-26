@@ -8,7 +8,7 @@ namespace Soenneker.Monday.GraphQlClient;
 public sealed partial class ConditionalFormattingTargetInput
 {
     /// <summary>
-    /// Column IDs to highlight (empty = entire row)
+    /// Column IDs to highlight
     /// </summary>
     [JsonPropertyName("column_ids")]
     public List<string>? ColumnIds { get; init; }

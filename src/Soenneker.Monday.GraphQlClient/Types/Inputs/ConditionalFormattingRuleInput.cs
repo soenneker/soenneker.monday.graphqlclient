@@ -7,13 +7,19 @@ namespace Soenneker.Monday.GraphQlClient;
 public sealed partial class ConditionalFormattingRuleInput
 {
     /// <summary>
+    /// Rule type (e.g. BOARD_COLUMN)
+    /// </summary>
+    [JsonPropertyName("type")]
+    public string? Type { get; init; }
+
+    /// <summary>
     /// The column context for this rule
     /// </summary>
     [JsonPropertyName("context")]
     public ConditionalFormattingRuleContextInput? Context { get; init; }
 
     /// <summary>
-    /// Value to compare against
+    /// Array of internal label IDs to match against (e.g. [2] for Stuck)
     /// </summary>
     [JsonPropertyName("compare_value")]
     public string? CompareValue { get; init; }

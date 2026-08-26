@@ -7,7 +7,13 @@ namespace Soenneker.Monday.GraphQlClient;
 public sealed partial class ConditionalFormattingRuleBucketInput
 {
     /// <summary>
-    /// Logical operator (e.g. AND, OR)
+    /// Bucket type (e.g. RULE)
+    /// </summary>
+    [JsonPropertyName("type")]
+    public string? Type { get; init; }
+
+    /// <summary>
+    /// Logical operator (e.g. ANY_OF, ALL_OF)
     /// </summary>
     [JsonPropertyName("operator")]
     public string? @Operator { get; init; }

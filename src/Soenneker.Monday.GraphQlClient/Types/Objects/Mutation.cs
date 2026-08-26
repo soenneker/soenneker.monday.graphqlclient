@@ -11,78 +11,6 @@ namespace Soenneker.Monday.GraphQlClient;
 public sealed partial class Mutation
 {
     /// <summary>
-    /// Execute an integration block with the provided field values
-    /// </summary>
-    [JsonPropertyName("execute_integration_block")]
-    public IntegrationExecutionResult? ExecuteIntegrationBlock { get; init; }
-
-    /// <summary>
-    /// Creates a new object in the Monday.com Objects Platform. The type of object created is determined by the object_type_unique_key parameter. This mutation can create boards, docs, dashboards, workflows, or specialized objects like CRM, capacity manager, etc. Under the hood, this creates a board with the corresponding app_feature_id.
-    /// </summary>
-    [JsonPropertyName("create_object")]
-    public Object? CreateObject { get; init; }
-
-    /// <summary>
-    /// Permanently deletes an object from the Monday.com Objects Platform. Unlike archiving, deletion is only reversible for 30 days and removes all associated data. This operation works for any object type including boards, docs, dashboards, workflows, and specialized objects (CRM, capacity manager, etc.). WARNING: This operation cannot be undone after 30 days.
-    /// </summary>
-    [JsonPropertyName("delete_object")]
-    public Object? DeleteObject { get; init; }
-
-    /// <summary>
-    /// Archives an object in the Monday.com Objects Platform, changing its state to "archived" while preserving all data. Archived objects remain in the system but are hidden from regular views. This operation works for any object type including boards, docs, dashboards, workflows, and specialized objects (CRM, capacity manager, etc.). Under the hood, this archives the board that represents this object.
-    /// </summary>
-    [JsonPropertyName("archive_object")]
-    public Object? ArchiveObject { get; init; }
-
-    /// <summary>
-    /// Adds users to an existing object as either subscribers or owners. Subscribers receive notifications about object changes, while owners have full control permissions. Works with any object type including boards, docs, dashboards, workflows, and specialized objects (CRM, capacity manager, etc.). Equivalent to the add_users_to_board mutation in the boards API.
-    /// </summary>
-    [JsonPropertyName("add_subscribers_to_object")]
-    public Object? AddSubscribersToObject { get; init; }
-
-    /// <summary>
-    /// Updates an object.
-    /// </summary>
-    [JsonPropertyName("update_object")]
-    public Object? UpdateObject { get; init; }
-
-    /// <summary>
-    /// Publishes object out of draft state. Returns {success: true} on success, {success: false} on failure.
-    /// </summary>
-    [JsonPropertyName("publish_object")]
-    public ObjectOperationResponse? PublishObject { get; init; }
-
-    /// <summary>
-    /// Unpublishes object from public state back to draft state. Returns {success: true} on success, {success: false} on failure.
-    /// </summary>
-    [JsonPropertyName("unpublish_object")]
-    public ObjectOperationResponse? UnpublishObject { get; init; }
-
-    /// <summary>
-    /// Create relations for an object
-    /// </summary>
-    [JsonPropertyName("create_object_relations")]
-    public List<ObjectRelation>? CreateObjectRelations { get; init; }
-
-    /// <summary>
-    /// Delete a specific object relation or all relations for an object. Returns the number of relations deleted.
-    /// </summary>
-    [JsonPropertyName("delete_object_relation")]
-    public int? DeleteObjectRelation { get; init; }
-
-    /// <summary>
-    /// Create a marketplace app discount
-    /// </summary>
-    [JsonPropertyName("create_marketplace_app_discount")]
-    public CreateMarketplaceAppDiscountResult CreateMarketplaceAppDiscount { get; init; } = null!;
-
-    [JsonPropertyName("delete_marketplace_app_discount")]
-    public DeleteMarketplaceAppDiscountResult DeleteMarketplaceAppDiscount { get; init; } = null!;
-
-    [JsonPropertyName("grant_marketplace_app_discount")]
-    public GrantMarketplaceAppDiscountResult GrantMarketplaceAppDiscount { get; init; } = null!;
-
-    /// <summary>
     /// Add a file to a column value.
     /// </summary>
     [JsonPropertyName("add_file_to_column")]
@@ -462,6 +390,108 @@ public sealed partial class Mutation
     public Template? UseTemplate { get; init; }
 
     /// <summary>
+    /// Execute an integration block with the provided field values
+    /// </summary>
+    [JsonPropertyName("execute_integration_block")]
+    public IntegrationExecutionResult? ExecuteIntegrationBlock { get; init; }
+
+    /// <summary>
+    /// Creates a new object in the Monday.com Objects Platform. The type of object created is determined by the object_type_unique_key parameter. This mutation can create boards, docs, dashboards, workflows, or specialized objects like CRM, capacity manager, etc. Under the hood, this creates a board with the corresponding app_feature_id.
+    /// </summary>
+    [JsonPropertyName("create_object")]
+    public Object? CreateObject { get; init; }
+
+    /// <summary>
+    /// Permanently deletes an object from the Monday.com Objects Platform. Unlike archiving, deletion is only reversible for 30 days and removes all associated data. This operation works for any object type including boards, docs, dashboards, workflows, and specialized objects (CRM, capacity manager, etc.). WARNING: This operation cannot be undone after 30 days.
+    /// </summary>
+    [JsonPropertyName("delete_object")]
+    public Object? DeleteObject { get; init; }
+
+    /// <summary>
+    /// Archives an object in the Monday.com Objects Platform, changing its state to "archived" while preserving all data. Archived objects remain in the system but are hidden from regular views. This operation works for any object type including boards, docs, dashboards, workflows, and specialized objects (CRM, capacity manager, etc.). Under the hood, this archives the board that represents this object.
+    /// </summary>
+    [JsonPropertyName("archive_object")]
+    public Object? ArchiveObject { get; init; }
+
+    /// <summary>
+    /// Adds users to an existing object as either subscribers or owners. Subscribers receive notifications about object changes, while owners have full control permissions. Works with any object type including boards, docs, dashboards, workflows, and specialized objects (CRM, capacity manager, etc.). Equivalent to the add_users_to_board mutation in the boards API.
+    /// </summary>
+    [JsonPropertyName("add_subscribers_to_object")]
+    public Object? AddSubscribersToObject { get; init; }
+
+    /// <summary>
+    /// Updates an object.
+    /// </summary>
+    [JsonPropertyName("update_object")]
+    public Object? UpdateObject { get; init; }
+
+    /// <summary>
+    /// Publishes object out of draft state. Returns {success: true} on success, {success: false} on failure.
+    /// </summary>
+    [JsonPropertyName("publish_object")]
+    public ObjectOperationResponse? PublishObject { get; init; }
+
+    /// <summary>
+    /// Unpublishes object from public state back to draft state. Returns {success: true} on success, {success: false} on failure.
+    /// </summary>
+    [JsonPropertyName("unpublish_object")]
+    public ObjectOperationResponse? UnpublishObject { get; init; }
+
+    /// <summary>
+    /// Create relations for an object
+    /// </summary>
+    [JsonPropertyName("create_object_relations")]
+    public List<ObjectRelation>? CreateObjectRelations { get; init; }
+
+    /// <summary>
+    /// Delete a specific object relation or all relations for an object. Returns the number of relations deleted.
+    /// </summary>
+    [JsonPropertyName("delete_object_relation")]
+    public int? DeleteObjectRelation { get; init; }
+
+    /// <summary>
+    /// Create a marketplace app discount
+    /// </summary>
+    [JsonPropertyName("create_marketplace_app_discount")]
+    public CreateMarketplaceAppDiscountResult CreateMarketplaceAppDiscount { get; init; } = null!;
+
+    [JsonPropertyName("delete_marketplace_app_discount")]
+    public DeleteMarketplaceAppDiscountResult DeleteMarketplaceAppDiscount { get; init; } = null!;
+
+    [JsonPropertyName("grant_marketplace_app_discount")]
+    public GrantMarketplaceAppDiscountResult GrantMarketplaceAppDiscount { get; init; } = null!;
+
+    /// <summary>
+    /// Add a required column to a board
+    /// </summary>
+    [JsonPropertyName("add_required_column")]
+    public RequiredColumns? AddRequiredColumn { get; init; }
+
+    /// <summary>
+    /// Remove a required column from a board
+    /// </summary>
+    [JsonPropertyName("remove_required_column")]
+    public RequiredColumns? RemoveRequiredColumn { get; init; }
+
+    /// <summary>
+    /// Create a validation rule
+    /// </summary>
+    [JsonPropertyName("create_validation_rule")]
+    public ValidationRule? CreateValidationRule { get; init; }
+
+    /// <summary>
+    /// Update a validation rule
+    /// </summary>
+    [JsonPropertyName("update_validation_rule")]
+    public ValidationRule? UpdateValidationRule { get; init; }
+
+    /// <summary>
+    /// Delete a validation rule
+    /// </summary>
+    [JsonPropertyName("delete_validation_rule")]
+    public ValidationRule? DeleteValidationRule { get; init; }
+
+    /// <summary>
     /// Enroll multiple items to a single sequence. Maximum 50 items per request.
     /// </summary>
     [JsonPropertyName("enroll_items_to_sequence")]
@@ -636,36 +666,6 @@ public sealed partial class Mutation
     public List<BoardMuteSettings>? UpdateMuteBoardSettings { get; init; }
 
     /// <summary>
-    /// Create a new table view
-    /// </summary>
-    [JsonPropertyName("create_view_table")]
-    public BoardView? CreateViewTable { get; init; }
-
-    /// <summary>
-    /// Create a view
-    /// </summary>
-    [JsonPropertyName("create_view")]
-    public BoardView? CreateView { get; init; }
-
-    /// <summary>
-    /// Update an existing board table view
-    /// </summary>
-    [JsonPropertyName("update_view_table")]
-    public BoardView? UpdateViewTable { get; init; }
-
-    /// <summary>
-    /// Update an existing view
-    /// </summary>
-    [JsonPropertyName("update_view")]
-    public BoardView? UpdateView { get; init; }
-
-    /// <summary>
-    /// Delete an existing board subset/view
-    /// </summary>
-    [JsonPropertyName("delete_view")]
-    public BoardView? DeleteView { get; init; }
-
-    /// <summary>
     /// Create managed column of type dropdown mutation.
     /// </summary>
     [JsonPropertyName("create_dropdown_managed_column")]
@@ -826,6 +826,36 @@ public sealed partial class Mutation
     /// </summary>
     [JsonPropertyName("batch_update_dependency_column")]
     public string BatchUpdateDependencyColumn { get; init; } = null!;
+
+    /// <summary>
+    /// Create a new table view
+    /// </summary>
+    [JsonPropertyName("create_view_table")]
+    public BoardView? CreateViewTable { get; init; }
+
+    /// <summary>
+    /// Create a view
+    /// </summary>
+    [JsonPropertyName("create_view")]
+    public BoardView? CreateView { get; init; }
+
+    /// <summary>
+    /// Update an existing board table view
+    /// </summary>
+    [JsonPropertyName("update_view_table")]
+    public BoardView? UpdateViewTable { get; init; }
+
+    /// <summary>
+    /// Update an existing view
+    /// </summary>
+    [JsonPropertyName("update_view")]
+    public BoardView? UpdateView { get; init; }
+
+    /// <summary>
+    /// Delete an existing board subset/view
+    /// </summary>
+    [JsonPropertyName("delete_view")]
+    public BoardView? DeleteView { get; init; }
 
     /// <summary>
     /// Assigns members to a department.
@@ -1045,36 +1075,6 @@ public sealed partial class Mutation
     /// </summary>
     [JsonPropertyName("delete_dashboard")]
     public bool? DeleteDashboard { get; init; }
-
-    /// <summary>
-    /// Add a required column to a board
-    /// </summary>
-    [JsonPropertyName("add_required_column")]
-    public RequiredColumns? AddRequiredColumn { get; init; }
-
-    /// <summary>
-    /// Remove a required column from a board
-    /// </summary>
-    [JsonPropertyName("remove_required_column")]
-    public RequiredColumns? RemoveRequiredColumn { get; init; }
-
-    /// <summary>
-    /// Create a validation rule
-    /// </summary>
-    [JsonPropertyName("create_validation_rule")]
-    public ValidationRule? CreateValidationRule { get; init; }
-
-    /// <summary>
-    /// Update a validation rule
-    /// </summary>
-    [JsonPropertyName("update_validation_rule")]
-    public ValidationRule? UpdateValidationRule { get; init; }
-
-    /// <summary>
-    /// Delete a validation rule
-    /// </summary>
-    [JsonPropertyName("delete_validation_rule")]
-    public ValidationRule? DeleteValidationRule { get; init; }
 
     /// <summary>
     /// Adds markdown content to an existing document by converting it into document blocks. Use this to append content to the end of a document or insert content after a specific block. The markdown will be parsed and converted into the appropriate document block types (text, headers, lists, etc.). Returns the IDs of the newly created blocks on success.

@@ -13,6 +13,12 @@ public sealed partial class ConditionalFormattingRuleContextInput
     public string? ColumnId { get; init; }
 
     /// <summary>
+    /// Type of the column (e.g. color, text, date)
+    /// </summary>
+    [JsonPropertyName("column_type")]
+    public string? ColumnType { get; init; }
+
+    /// <summary>
     /// Column attribute to compare against
     /// </summary>
     [JsonPropertyName("compare_attribute")]

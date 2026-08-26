@@ -11,24 +11,6 @@ namespace Soenneker.Monday.GraphQlClient;
 public sealed partial class Board
 {
     /// <summary>
-    /// The unique identifier of the board.
-    /// </summary>
-    [JsonPropertyName("id")]
-    public string Id { get; init; } = null!;
-
-    /// <summary>
-    /// Inferred metadata associated with this board
-    /// </summary>
-    [JsonPropertyName("inferred_metadata")]
-    public BoardInferredMetadata? InferredMetadata { get; init; }
-
-    /// <summary>
-    /// Manually set metadata associated with this board
-    /// </summary>
-    [JsonPropertyName("manual_metadata")]
-    public BoardManualMetadata? ManualMetadata { get; init; }
-
-    /// <summary>
     /// The user's permission level for this board (view / edit).
     /// </summary>
     [JsonPropertyName("access_level")]
@@ -105,6 +87,12 @@ public sealed partial class Board
     /// </summary>
     [JsonPropertyName("hierarchy_type")]
     public BoardHierarchy? HierarchyType { get; init; }
+
+    /// <summary>
+    /// The unique identifier of the board.
+    /// </summary>
+    [JsonPropertyName("id")]
+    public string Id { get; init; } = null!;
 
     /// <summary>
     /// The Board's item nickname, one of a predefined set of values, or a custom user value
@@ -231,6 +219,18 @@ public sealed partial class Board
     /// </summary>
     [JsonPropertyName("workspace_id")]
     public string? WorkspaceId { get; init; }
+
+    /// <summary>
+    /// Inferred metadata associated with this board
+    /// </summary>
+    [JsonPropertyName("inferred_metadata")]
+    public BoardInferredMetadata? InferredMetadata { get; init; }
+
+    /// <summary>
+    /// Manually set metadata associated with this board
+    /// </summary>
+    [JsonPropertyName("manual_metadata")]
+    public BoardManualMetadata? ManualMetadata { get; init; }
 
     /// <summary>
     /// The board's visible columns.
