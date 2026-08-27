@@ -330,12 +330,6 @@ public sealed partial class Query
     [JsonPropertyName("notetaker")]
     public NotetakerQueries? Notetaker { get; init; }
 
-    /// <summary>
-    /// Search API. Each field searches a single entity type with tailored filters.
-    /// </summary>
-    [JsonPropertyName("search")]
-    public SearchNamespace Search { get; init; } = null!;
-
     [JsonPropertyName("notifications")]
     public List<NotificationV2>? Notifications { get; init; }
 
@@ -350,6 +344,12 @@ public sealed partial class Query
     /// </summary>
     [JsonPropertyName("mute_board_settings")]
     public List<BoardMuteSettings>? MuteBoardSettings { get; init; }
+
+    /// <summary>
+    /// Search API. Each field searches a single entity type with tailored filters.
+    /// </summary>
+    [JsonPropertyName("search")]
+    public SearchNamespace Search { get; init; } = null!;
 
     /// <summary>
     /// Get managed column data.

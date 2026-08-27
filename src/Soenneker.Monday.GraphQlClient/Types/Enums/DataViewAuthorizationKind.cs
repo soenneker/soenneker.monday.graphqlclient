@@ -9,6 +9,8 @@ public enum DataViewAuthorizationKind
 {
     BOARD,
 
-    OVERVIEW
+    OVERVIEW,
+
+    VIBEAPP
 
 }
