@@ -11,6 +11,36 @@ namespace Soenneker.Monday.GraphQlClient;
 public sealed partial class Mutation
 {
     /// <summary>
+    /// Asynchronously delete items on a board
+    /// </summary>
+    [JsonPropertyName("bulk_delete_items")]
+    public BulkDeleteInit? BulkDeleteItems { get; init; }
+
+    /// <summary>
+    /// Asynchronously archive items on a board
+    /// </summary>
+    [JsonPropertyName("bulk_archive_items")]
+    public BulkDeleteInit? BulkArchiveItems { get; init; }
+
+    /// <summary>
+    /// Initialize a backfill job for a board and group. Designed for data migrations with no side effects and a 20k row limit. Returns job ID and upload URL to begin the process.
+    /// </summary>
+    [JsonPropertyName("backfill_items")]
+    public UploadJobInit? BackfillItems { get; init; }
+
+    /// <summary>
+    /// Initialize an ingest job for a board and group. Designed for ongoing integrations with full side effects and a 10k row limit. Returns job ID and upload URL to begin the process.
+    /// </summary>
+    [JsonPropertyName("ingest_items")]
+    public UploadJobInit? IngestItems { get; init; }
+
+    /// <summary>
+    /// Undo a previously completed action, or cancel one still in flight
+    /// </summary>
+    [JsonPropertyName("undo_action")]
+    public UndoResult? UndoAction { get; init; }
+
+    /// <summary>
     /// Add a file to a column value.
     /// </summary>
     [JsonPropertyName("add_file_to_column")]
@@ -931,36 +961,6 @@ public sealed partial class Mutation
     /// </summary>
     [JsonPropertyName("create_portfolio")]
     public CreatePortfolioResult? CreatePortfolio { get; init; }
-
-    /// <summary>
-    /// Asynchronously delete items on a board
-    /// </summary>
-    [JsonPropertyName("bulk_delete_items")]
-    public BulkDeleteInit? BulkDeleteItems { get; init; }
-
-    /// <summary>
-    /// Asynchronously archive items on a board
-    /// </summary>
-    [JsonPropertyName("bulk_archive_items")]
-    public BulkDeleteInit? BulkArchiveItems { get; init; }
-
-    /// <summary>
-    /// Initialize a backfill job for a board and group. Designed for data migrations with no side effects and a 20k row limit. Returns job ID and upload URL to begin the process.
-    /// </summary>
-    [JsonPropertyName("backfill_items")]
-    public UploadJobInit? BackfillItems { get; init; }
-
-    /// <summary>
-    /// Initialize an ingest job for a board and group. Designed for ongoing integrations with full side effects and a 10k row limit. Returns job ID and upload URL to begin the process.
-    /// </summary>
-    [JsonPropertyName("ingest_items")]
-    public UploadJobInit? IngestItems { get; init; }
-
-    /// <summary>
-    /// Undo a previously completed action, or cancel one still in flight
-    /// </summary>
-    [JsonPropertyName("undo_action")]
-    public UndoResult? UndoAction { get; init; }
 
     /// <summary>
     /// Creates a new team.

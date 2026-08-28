@@ -12,6 +12,12 @@ namespace Soenneker.Monday.GraphQlClient;
 public sealed partial class Query
 {
     /// <summary>
+    /// Get the status of a backfill or ingest job
+    /// </summary>
+    [JsonPropertyName("fetch_job_status")]
+    public JobStatus FetchJobStatus { get; init; } = null!;
+
+    /// <summary>
     /// Get the connected account's information.
     /// </summary>
     [JsonPropertyName("account")]
@@ -546,12 +552,6 @@ public sealed partial class Query
     /// </summary>
     [JsonPropertyName("connection_board_ids")]
     public List<string> ConnectionBoardIds { get; init; } = [];
-
-    /// <summary>
-    /// Get the status of a backfill or ingest job
-    /// </summary>
-    [JsonPropertyName("fetch_job_status")]
-    public JobStatus FetchJobStatus { get; init; } = null!;
 
     /// <summary>
     /// Get all roles for the account
