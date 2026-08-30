@@ -187,6 +187,42 @@ public sealed partial class Query
     public string? Empty { get; init; }
 
     /// <summary>
+    /// List trigger events with optional filters
+    /// </summary>
+    [JsonPropertyName("trigger_events")]
+    public TriggerEventsPage? TriggerEvents { get; init; }
+
+    /// <summary>
+    /// Fetch a single trigger event by UUID
+    /// </summary>
+    [JsonPropertyName("trigger_event")]
+    public TriggerEvent? TriggerEvent { get; init; }
+
+    /// <summary>
+    /// List block events for a given trigger UUID
+    /// </summary>
+    [JsonPropertyName("block_events")]
+    public BlockEventsPage? BlockEvents { get; init; }
+
+    /// <summary>
+    /// List tool events for a given trigger UUID
+    /// </summary>
+    [JsonPropertyName("tool_events")]
+    public ToolEventsPage? ToolEvents { get; init; }
+
+    /// <summary>
+    /// Get aggregated automation runs statistics in the account
+    /// </summary>
+    [JsonPropertyName("account_trigger_statistics")]
+    public AccountTriggerStatistics? AccountTriggerStatistics { get; init; }
+
+    /// <summary>
+    /// Get aggregated automation runs statistics grouped by entity Ids
+    /// </summary>
+    [JsonPropertyName("account_triggers_statistics_by_entity_id")]
+    public AccountTriggersByEntityId? AccountTriggersStatisticsByEntityId { get; init; }
+
+    /// <summary>
     /// Get sequences that the current user is allowed to enroll items to, that are connected to the provided board. Returns sequences owned by the user or sequences where the user has access to the sender connection.
     /// </summary>
     [JsonPropertyName("allowed_sequences_to_enroll")]
@@ -251,42 +287,6 @@ public sealed partial class Query
     /// </summary>
     [JsonPropertyName("usage")]
     public CampaignsUsage? Usage { get; init; }
-
-    /// <summary>
-    /// List trigger events with optional filters
-    /// </summary>
-    [JsonPropertyName("trigger_events")]
-    public TriggerEventsPage? TriggerEvents { get; init; }
-
-    /// <summary>
-    /// Fetch a single trigger event by UUID
-    /// </summary>
-    [JsonPropertyName("trigger_event")]
-    public TriggerEvent? TriggerEvent { get; init; }
-
-    /// <summary>
-    /// List block events for a given trigger UUID
-    /// </summary>
-    [JsonPropertyName("block_events")]
-    public BlockEventsPage? BlockEvents { get; init; }
-
-    /// <summary>
-    /// List tool events for a given trigger UUID
-    /// </summary>
-    [JsonPropertyName("tool_events")]
-    public ToolEventsPage? ToolEvents { get; init; }
-
-    /// <summary>
-    /// Get aggregated automation runs statistics in the account
-    /// </summary>
-    [JsonPropertyName("account_trigger_statistics")]
-    public AccountTriggerStatistics? AccountTriggerStatistics { get; init; }
-
-    /// <summary>
-    /// Get aggregated automation runs statistics grouped by entity Ids
-    /// </summary>
-    [JsonPropertyName("account_triggers_statistics_by_entity_id")]
-    public AccountTriggersByEntityId? AccountTriggersStatisticsByEntityId { get; init; }
 
     /// <summary>
     /// Get a collection of monday dev sprints
@@ -375,6 +375,14 @@ public sealed partial class Query
     [JsonPropertyName("get_object_schemas")]
     public List<ObjectSchema>? GetObjectSchemas { get; init; }
 
+    /// <summary>
+    /// Retrieves the JSON schema definition for a specific create view type. 
+    ///   Use this query before calling create_view mutation to understand the structure and validation rules for the settings parameter. 
+    ///   The schema defines what properties are available when creating views of a specific type.
+    /// </summary>
+    [JsonPropertyName("get_view_schema_by_type")]
+    public string? GetViewSchemaByType { get; init; }
+
     [JsonPropertyName("custom_activity")]
     public List<CustomActivity>? CustomActivity { get; init; }
 
@@ -422,14 +430,6 @@ public sealed partial class Query
     /// </summary>
     [JsonPropertyName("board_dependencies")]
     public BoardDependencies? BoardDependencies { get; init; }
-
-    /// <summary>
-    /// Retrieves the JSON schema definition for a specific create view type. 
-    ///   Use this query before calling create_view mutation to understand the structure and validation rules for the settings parameter. 
-    ///   The schema defines what properties are available when creating views of a specific type.
-    /// </summary>
-    [JsonPropertyName("get_view_schema_by_type")]
-    public string? GetViewSchemaByType { get; init; }
 
     /// <summary>
     /// Retrieve audit logs for your Monday account. You can

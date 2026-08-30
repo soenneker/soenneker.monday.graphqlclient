@@ -420,12 +420,6 @@ public sealed partial class Mutation
     public Template? UseTemplate { get; init; }
 
     /// <summary>
-    /// Execute an integration block with the provided field values
-    /// </summary>
-    [JsonPropertyName("execute_integration_block")]
-    public IntegrationExecutionResult? ExecuteIntegrationBlock { get; init; }
-
-    /// <summary>
     /// Creates a new object in the Monday.com Objects Platform. The type of object created is determined by the object_type_unique_key parameter. This mutation can create boards, docs, dashboards, workflows, or specialized objects like CRM, capacity manager, etc. Under the hood, this creates a board with the corresponding app_feature_id.
     /// </summary>
     [JsonPropertyName("create_object")]
@@ -833,30 +827,6 @@ public sealed partial class Mutation
     [JsonPropertyName("bulk_object_schema_column_actions")]
     public List<ObjectSchemaActionResult>? BulkObjectSchemaColumnActions { get; init; }
 
-    [JsonPropertyName("create_timeline_item")]
-    public TimelineItem? CreateTimelineItem { get; init; }
-
-    [JsonPropertyName("delete_timeline_item")]
-    public TimelineItem? DeleteTimelineItem { get; init; }
-
-    [JsonPropertyName("create_custom_activity")]
-    public CustomActivity? CreateCustomActivity { get; init; }
-
-    [JsonPropertyName("delete_custom_activity")]
-    public CustomActivity? DeleteCustomActivity { get; init; }
-
-    /// <summary>
-    /// Update the dependency column for a specific pulse
-    /// </summary>
-    [JsonPropertyName("update_dependency_column")]
-    public string UpdateDependencyColumn { get; init; } = null!;
-
-    /// <summary>
-    /// Batch update the dependency column values in a board. Limited to 50 items per batch.
-    /// </summary>
-    [JsonPropertyName("batch_update_dependency_column")]
-    public string BatchUpdateDependencyColumn { get; init; } = null!;
-
     /// <summary>
     /// Create a new table view
     /// </summary>
@@ -886,6 +856,30 @@ public sealed partial class Mutation
     /// </summary>
     [JsonPropertyName("delete_view")]
     public BoardView? DeleteView { get; init; }
+
+    [JsonPropertyName("create_timeline_item")]
+    public TimelineItem? CreateTimelineItem { get; init; }
+
+    [JsonPropertyName("delete_timeline_item")]
+    public TimelineItem? DeleteTimelineItem { get; init; }
+
+    [JsonPropertyName("create_custom_activity")]
+    public CustomActivity? CreateCustomActivity { get; init; }
+
+    [JsonPropertyName("delete_custom_activity")]
+    public CustomActivity? DeleteCustomActivity { get; init; }
+
+    /// <summary>
+    /// Update the dependency column for a specific pulse
+    /// </summary>
+    [JsonPropertyName("update_dependency_column")]
+    public string UpdateDependencyColumn { get; init; } = null!;
+
+    /// <summary>
+    /// Batch update the dependency column values in a board. Limited to 50 items per batch.
+    /// </summary>
+    [JsonPropertyName("batch_update_dependency_column")]
+    public string BatchUpdateDependencyColumn { get; init; } = null!;
 
     /// <summary>
     /// Assigns members to a department.
@@ -949,6 +943,12 @@ public sealed partial class Mutation
 
     [JsonPropertyName("create_update")]
     public Update? CreateUpdate { get; init; }
+
+    /// <summary>
+    /// Execute an integration block with the provided field values
+    /// </summary>
+    [JsonPropertyName("execute_integration_block")]
+    public IntegrationExecutionResult? ExecuteIntegrationBlock { get; init; }
 
     /// <summary>
     /// Connect an existing project to a portfolio. When a callback_url is provided the mutation returns immediately with a process_id, and the result is POSTed to that URL once the operation completes. The callback payload is: { is_success: boolean, process_id: string, portfolio_item_id?: string }.
