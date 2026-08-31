@@ -9,7 +9,7 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <Description>A .NET client generated from the Monday GraphQL schema, updated daily</Description>
+        <Description>Typed queries, mutations, variables, and response models for Monday's GraphQL API.</Description>
         <Version Condition="'$(BUILD_VERSION)' == ''">4.0.0</Version>
         <Version Condition="'$(BUILD_VERSION)' != ''">$(BUILD_VERSION)</Version>
         <AssemblyName>Soenneker.Monday.GraphQlClient</AssemblyName>
