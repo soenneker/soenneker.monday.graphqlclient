@@ -7,6 +7,7 @@ namespace Soenneker.Monday.GraphQlClient;
 /// <summary>
 /// Configuration for an interface input field
 /// </summary>
+/// <inheritdoc cref="InputFieldConfig" />
 public sealed partial class InterfaceInputFieldConfig : InputFieldConfig
 {
     /// <summary>

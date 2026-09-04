@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace Soenneker.Monday.GraphQlClient;
 
+/// <inheritdoc cref="IGraphQlClient" />
 public sealed class GraphQlHttpClient : IGraphQlClient
 {
     private readonly HttpClient _httpClient;
