@@ -22,7 +22,7 @@ public sealed partial class DeleteViewRequestBuilder
     /// </summary>
     public ValueTask<GraphQlResponse<DeleteViewData>> Execute(DeleteViewVariables request, CancellationToken cancellationToken = default)
     {
-        const string gqlQuery = @"mutation DeleteView($view_id: ID!, $board_id: ID!) { delete_view(view_id: $view_id, board_id: $board_id) { access_level id name settings_str source_view_id type view_specific_data_str settings sort filter_user_id filter_team_id tags filter } }";
+        const string gqlQuery = @"mutation DeleteView($view_id: ID!, $board_id: ID!) { delete_view(view_id: $view_id, board_id: $board_id) { id name type settings_str view_specific_data_str source_view_id settings sort filter_user_id filter_team_id tags filter access_level } }";
         return _graphQlClient.Execute<DeleteViewData>(gqlQuery, request, cancellationToken);
     }
 

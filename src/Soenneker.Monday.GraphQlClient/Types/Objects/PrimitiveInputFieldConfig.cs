@@ -7,7 +7,6 @@ namespace Soenneker.Monday.GraphQlClient;
 /// <summary>
 /// Configuration for a primitive input field
 /// </summary>
-/// <inheritdoc cref="InputFieldConfig" />
 public sealed partial class PrimitiveInputFieldConfig : InputFieldConfig
 {
     /// <summary>

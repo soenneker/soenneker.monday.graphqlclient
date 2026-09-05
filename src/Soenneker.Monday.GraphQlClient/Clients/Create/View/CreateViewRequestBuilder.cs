@@ -22,7 +22,7 @@ public sealed partial class CreateViewRequestBuilder
     /// </summary>
     public ValueTask<GraphQlResponse<CreateViewData>> Execute(CreateViewVariables request, CancellationToken cancellationToken = default)
     {
-        const string gqlQuery = @"mutation CreateView($board_id: ID!, $type: ViewKind!, $name: String, $filter_user_id: ID, $filter_team_id: ID, $filter: ItemsQueryGroup, $sort: [ItemsQueryOrderBy!], $tags: [String!], $settings: JSON) { create_view(board_id: $board_id, type: $type, name: $name, filter_user_id: $filter_user_id, filter_team_id: $filter_team_id, filter: $filter, sort: $sort, tags: $tags, settings: $settings) { access_level id name settings_str source_view_id type view_specific_data_str settings sort filter_user_id filter_team_id tags filter } }";
+        const string gqlQuery = @"mutation CreateView($board_id: ID!, $type: ViewKind!, $name: String, $filter_user_id: ID, $filter_team_id: ID, $filter: ItemsQueryGroup, $sort: [ItemsQueryOrderBy!], $tags: [String!], $settings: JSON) { create_view(board_id: $board_id, type: $type, name: $name, filter_user_id: $filter_user_id, filter_team_id: $filter_team_id, filter: $filter, sort: $sort, tags: $tags, settings: $settings) { id name type settings_str view_specific_data_str source_view_id settings sort filter_user_id filter_team_id tags filter access_level } }";
         return _graphQlClient.Execute<CreateViewData>(gqlQuery, request, cancellationToken);
     }
 

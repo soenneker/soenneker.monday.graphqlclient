@@ -12,11 +12,11 @@ public sealed partial class ItemsQueryRule
     [JsonPropertyName("column_id")]
     public string ColumnId { get; init; } = null!;
 
-    [JsonPropertyName("compare_attribute")]
-    public string? CompareAttribute { get; init; }
-
     [JsonPropertyName("compare_value")]
     public string CompareValue { get; init; } = null!;
+
+    [JsonPropertyName("compare_attribute")]
+    public string? CompareAttribute { get; init; }
 
     [JsonPropertyName("operator")]
     public ItemsQueryRuleOperator? @Operator { get; init; }

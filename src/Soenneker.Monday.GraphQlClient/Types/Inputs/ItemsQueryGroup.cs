@@ -11,6 +11,12 @@ namespace Soenneker.Monday.GraphQlClient;
 public sealed partial class ItemsQueryGroup
 {
     /// <summary>
+    /// A list of rules
+    /// </summary>
+    [JsonPropertyName("rules")]
+    public List<ItemsQueryRule>? Rules { get; init; }
+
+    /// <summary>
     /// A list of rule groups
     /// </summary>
     [JsonPropertyName("groups")]
@@ -21,11 +27,5 @@ public sealed partial class ItemsQueryGroup
     /// </summary>
     [JsonPropertyName("operator")]
     public ItemsQueryOperator? @Operator { get; init; }
-
-    /// <summary>
-    /// A list of rules
-    /// </summary>
-    [JsonPropertyName("rules")]
-    public List<ItemsQueryRule>? Rules { get; init; }
 
 }

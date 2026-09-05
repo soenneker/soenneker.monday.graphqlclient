@@ -22,7 +22,7 @@ public sealed partial class UpdateStatusColumnRequestBuilder
     /// </summary>
     public ValueTask<GraphQlResponse<UpdateStatusColumnData>> Execute(UpdateStatusColumnVariables request, CancellationToken cancellationToken = default)
     {
-        const string gqlQuery = @"mutation UpdateStatusColumn($board_id: ID!, $id: String!, $title: String, $description: String, $width: Int, $revision: String!, $capabilities: StatusColumnCapabilitiesInput, $settings: UpdateStatusColumnSettingsInput) { update_status_column(board_id: $board_id, id: $id, title: $title, description: $description, width: $width, revision: $revision, capabilities: $capabilities, settings: $settings) { archived description id settings_str title type width settings revision capabilities { calculated { function calculated_type } visibility } } }";
+        const string gqlQuery = @"mutation UpdateStatusColumn($board_id: ID!, $id: String!, $title: String, $description: String, $width: Int, $revision: String!, $capabilities: StatusColumnCapabilitiesInput, $settings: UpdateStatusColumnSettingsInput) { update_status_column(board_id: $board_id, id: $id, title: $title, description: $description, width: $width, revision: $revision, capabilities: $capabilities, settings: $settings) { id title description type width archived settings settings_str revision capabilities { calculated { function calculated_type } visibility } } }";
         return _graphQlClient.Execute<UpdateStatusColumnData>(gqlQuery, request, cancellationToken);
     }
 

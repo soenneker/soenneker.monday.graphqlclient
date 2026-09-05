@@ -11,12 +11,6 @@ namespace Soenneker.Monday.GraphQlClient;
 public sealed partial class BoardView
 {
     /// <summary>
-    /// The user's permission level for this view (view / edit).
-    /// </summary>
-    [JsonPropertyName("access_level")]
-    public BoardViewAccessLevel AccessLevel { get; init; }
-
-    /// <summary>
     /// The view's unique identifier.
     /// </summary>
     [JsonPropertyName("id")]
@@ -29,28 +23,28 @@ public sealed partial class BoardView
     public string Name { get; init; } = null!;
 
     /// <summary>
-    /// The view's settings in a string form.
-    /// </summary>
-    [JsonPropertyName("settings_str")]
-    public string SettingsStr { get; init; } = null!;
-
-    /// <summary>
-    /// The view's template id if it was duplicated from other view
-    /// </summary>
-    [JsonPropertyName("source_view_id")]
-    public string? SourceViewId { get; init; }
-
-    /// <summary>
     /// The view's type.
     /// </summary>
     [JsonPropertyName("type")]
     public string? Type { get; init; }
 
     /// <summary>
+    /// The view's settings in a string form.
+    /// </summary>
+    [JsonPropertyName("settings_str")]
+    public string SettingsStr { get; init; } = null!;
+
+    /// <summary>
     /// Specific board view data (supported only for forms)
     /// </summary>
     [JsonPropertyName("view_specific_data_str")]
     public string ViewSpecificDataStr { get; init; } = null!;
+
+    /// <summary>
+    /// The view's template id if it was duplicated from other view
+    /// </summary>
+    [JsonPropertyName("source_view_id")]
+    public string? SourceViewId { get; init; }
 
     /// <summary>
     /// The view's settings, the structure varies by view type
@@ -87,5 +81,11 @@ public sealed partial class BoardView
     /// </summary>
     [JsonPropertyName("filter")]
     public string? Filter { get; init; }
+
+    /// <summary>
+    /// The user's permission level for this view (view / edit).
+    /// </summary>
+    [JsonPropertyName("access_level")]
+    public BoardViewAccessLevel AccessLevel { get; init; }
 
 }
