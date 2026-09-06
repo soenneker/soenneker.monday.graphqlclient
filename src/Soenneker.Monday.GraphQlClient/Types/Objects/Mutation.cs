@@ -188,6 +188,12 @@ public sealed partial class Mutation
     public Department? DeleteDepartment { get; init; }
 
     /// <summary>
+    /// Execute an integration block with the provided field values
+    /// </summary>
+    [JsonPropertyName("execute_integration_block")]
+    public IntegrationExecutionResult? ExecuteIntegrationBlock { get; init; }
+
+    /// <summary>
     /// Creates a new object in the Monday.com Objects Platform. The type of object created is determined by the object_type_unique_key parameter. This mutation can create boards, docs, dashboards, workflows, or specialized objects like CRM, capacity manager, etc. Under the hood, this creates a board with the corresponding app_feature_id.
     /// </summary>
     [JsonPropertyName("create_object")]
@@ -252,6 +258,78 @@ public sealed partial class Mutation
 
     [JsonPropertyName("grant_marketplace_app_discount")]
     public GrantMarketplaceAppDiscountResult GrantMarketplaceAppDiscount { get; init; } = null!;
+
+    /// <summary>
+    /// Adds markdown content to an existing document by converting it into document blocks. Use this to append content to the end of a document or insert content after a specific block. The markdown will be parsed and converted into the appropriate document block types (text, headers, lists, etc.). Returns the IDs of the newly created blocks on success.
+    /// </summary>
+    [JsonPropertyName("add_content_to_doc_from_markdown")]
+    public DocBlocksFromMarkdownResult? AddContentToDocFromMarkdown { get; init; }
+
+    /// <summary>
+    /// Creates a new article in the specified workspace. Optionally accepts a name and folder ID. Returns the created article metadata.
+    /// </summary>
+    [JsonPropertyName("create_article")]
+    public ArticleMetadata? CreateArticle { get; init; }
+
+    /// <summary>
+    /// Creates multiple document blocks in a single operation for efficient content creation. Use this when adding substantial content like importing documents, creating structured content (articles, reports, guides), or building complex document sections. Supports all block types including text paragraphs, headers, bullet/numbered lists, images, tables, code blocks, and more. Much faster than creating blocks individually. Perfect for content migration, template creation, or generating documents from external data. Maximum 25 blocks per request.
+    /// </summary>
+    [JsonPropertyName("create_doc_blocks")]
+    public List<DocumentBlockV2>? CreateDocBlocks { get; init; }
+
+    /// <summary>
+    /// Deletes an article with the specified object ID
+    /// </summary>
+    [JsonPropertyName("delete_article")]
+    public ArticleMetadata? DeleteArticle { get; init; }
+
+    /// <summary>
+    /// Permanently deletes a document and all its content from the system. This action cannot be undone. The document will be removed from all user views and workspaces. Use with caution - ensure the document is no longer needed before deletion. Returns success status and the deleted document ID.
+    /// </summary>
+    [JsonPropertyName("delete_doc")]
+    public string? DeleteDoc { get; init; }
+
+    /// <summary>
+    /// Deletes multiple document blocks in a single operation. Maximum 100 blocks per request.
+    /// </summary>
+    [JsonPropertyName("delete_doc_blocks")]
+    public List<DeletedDocBlock>? DeleteDocBlocks { get; init; }
+
+    /// <summary>
+    /// Creates an exact copy of an existing document, including all content, structure, and formatting. Use this to create templates, backup documents before major changes, or create variations of existing documents. The duplicated document will have a new unique ID and can be modified independently. Returns the new document's ID on success.
+    /// </summary>
+    [JsonPropertyName("duplicate_doc")]
+    public string? DuplicateDoc { get; init; }
+
+    /// <summary>
+    /// Imports HTML content as a new document by converting it into document blocks. The HTML will be parsed and converted into the appropriate document block types (text, headers, lists, etc.). Returns the ID of the newly created document on success.
+    /// </summary>
+    [JsonPropertyName("import_doc_from_html")]
+    public ImportDocFromHtmlResult? ImportDocFromHtml { get; init; }
+
+    /// <summary>
+    /// Publishes an article with the specified object ID. Allows setting privacy level, target folder, and managing subscribers (users and teams). Returns the updated article metadata.
+    /// </summary>
+    [JsonPropertyName("publish_article")]
+    public ArticleMetadata? PublishArticle { get; init; }
+
+    /// <summary>
+    /// Updates the content of a specific article block. The block must belong to a draft article that the user has permission to edit. Cannot update blocks of published articles.
+    /// </summary>
+    [JsonPropertyName("update_article_block")]
+    public ArticleBlock? UpdateArticleBlock { get; init; }
+
+    /// <summary>
+    /// Update a document's name/title. Changes are applied immediately and visible to all users with access to the document.
+    /// </summary>
+    [JsonPropertyName("update_doc_name")]
+    public string? UpdateDocName { get; init; }
+
+    /// <summary>
+    /// Sets an item description document's content with new markdown data. This mutation converts the provided markdown into document blocks and replaces the existing content of the item's description. Returns the IDs of the newly created blocks on success. Note: Markdown does not support text colors or background highlights. Any existing colored or highlighted text will be lost after replacement.
+    /// </summary>
+    [JsonPropertyName("set_item_description_content")]
+    public DocBlocksFromMarkdownResult? SetItemDescriptionContent { get; init; }
 
     /// <summary>
     /// Add a required column to a board
@@ -330,18 +408,6 @@ public sealed partial class Mutation
     /// </summary>
     [JsonPropertyName("uninstall_app")]
     public AppDeletionResponse? UninstallApp { get; init; }
-
-    /// <summary>
-    /// Convert an existing monday.com board into a project with enhanced project management capabilities. This mutation transforms a regular board by applying project-specific features and configurations through column mappings that define how existing board columns should be interpreted in the project context. The conversion process is asynchronous and returns a process_id for tracking completion. Optionally accepts a callback URL for notification when the conversion completes. Use this when you have an existing board with data that needs to be upgraded to a full project with advanced project management features like Resource Planner integration.
-    /// </summary>
-    [JsonPropertyName("convert_board_to_project")]
-    public ConvertBoardToProjectResult? ConvertBoardToProject { get; init; }
-
-    /// <summary>
-    /// Create a new project in monday.com from scratch. This mutation initiates asynchronous project creation with comprehensive customization options including: privacy settings (private/public - share is currently not supported), optional companions like Resource Planner for enhanced project management capabilities, workspace assignment for organizational structure, folder placement for better organization, and template selection for predefined project structures. Since project creation is asynchronous, you can optionally provide a callback_url where the project ID will be sent via POST request once creation completes. The callback will receive: { is_success: boolean, process_id: string, project_id?: number }. Returns a process_id for tracking the creation request.
-    /// </summary>
-    [JsonPropertyName("create_project")]
-    public CreateProjectResult? CreateProject { get; init; }
 
     /// <summary>
     /// Add workspace object to favorites
@@ -1023,6 +1089,18 @@ public sealed partial class Mutation
     public Template? UseTemplate { get; init; }
 
     /// <summary>
+    /// Convert an existing monday.com board into a project with enhanced project management capabilities. This mutation transforms a regular board by applying project-specific features and configurations through column mappings that define how existing board columns should be interpreted in the project context. The conversion process is asynchronous and returns a process_id for tracking completion. Optionally accepts a callback URL for notification when the conversion completes. Use this when you have an existing board with data that needs to be upgraded to a full project with advanced project management features like Resource Planner integration.
+    /// </summary>
+    [JsonPropertyName("convert_board_to_project")]
+    public ConvertBoardToProjectResult? ConvertBoardToProject { get; init; }
+
+    /// <summary>
+    /// Create a new project in monday.com from scratch. This mutation initiates asynchronous project creation with comprehensive customization options including: privacy settings (private/public - share is currently not supported), optional companions like Resource Planner for enhanced project management capabilities, workspace assignment for organizational structure, folder placement for better organization, and template selection for predefined project structures. Since project creation is asynchronous, you can optionally provide a callback_url where the project ID will be sent via POST request once creation completes. The callback will receive: { is_success: boolean, process_id: string, project_id?: number }. Returns a process_id for tracking the creation request.
+    /// </summary>
+    [JsonPropertyName("create_project")]
+    public CreateProjectResult? CreateProject { get; init; }
+
+    /// <summary>
     /// Update attributes (Job Role, Skills, or Location) for multiple resources in the directory
     /// </summary>
     [JsonPropertyName("update_directory_resources_attributes")]
@@ -1069,83 +1147,5 @@ public sealed partial class Mutation
     /// </summary>
     [JsonPropertyName("update_mute_board_settings")]
     public List<BoardMuteSettings>? UpdateMuteBoardSettings { get; init; }
-
-    /// <summary>
-    /// Execute an integration block with the provided field values
-    /// </summary>
-    [JsonPropertyName("execute_integration_block")]
-    public IntegrationExecutionResult? ExecuteIntegrationBlock { get; init; }
-
-    /// <summary>
-    /// Adds markdown content to an existing document by converting it into document blocks. Use this to append content to the end of a document or insert content after a specific block. The markdown will be parsed and converted into the appropriate document block types (text, headers, lists, etc.). Returns the IDs of the newly created blocks on success.
-    /// </summary>
-    [JsonPropertyName("add_content_to_doc_from_markdown")]
-    public DocBlocksFromMarkdownResult? AddContentToDocFromMarkdown { get; init; }
-
-    /// <summary>
-    /// Creates a new article in the specified workspace. Optionally accepts a name and folder ID. Returns the created article metadata.
-    /// </summary>
-    [JsonPropertyName("create_article")]
-    public ArticleMetadata? CreateArticle { get; init; }
-
-    /// <summary>
-    /// Creates multiple document blocks in a single operation for efficient content creation. Use this when adding substantial content like importing documents, creating structured content (articles, reports, guides), or building complex document sections. Supports all block types including text paragraphs, headers, bullet/numbered lists, images, tables, code blocks, and more. Much faster than creating blocks individually. Perfect for content migration, template creation, or generating documents from external data. Maximum 25 blocks per request.
-    /// </summary>
-    [JsonPropertyName("create_doc_blocks")]
-    public List<DocumentBlockV2>? CreateDocBlocks { get; init; }
-
-    /// <summary>
-    /// Deletes an article with the specified object ID
-    /// </summary>
-    [JsonPropertyName("delete_article")]
-    public ArticleMetadata? DeleteArticle { get; init; }
-
-    /// <summary>
-    /// Permanently deletes a document and all its content from the system. This action cannot be undone. The document will be removed from all user views and workspaces. Use with caution - ensure the document is no longer needed before deletion. Returns success status and the deleted document ID.
-    /// </summary>
-    [JsonPropertyName("delete_doc")]
-    public string? DeleteDoc { get; init; }
-
-    /// <summary>
-    /// Deletes multiple document blocks in a single operation. Maximum 100 blocks per request.
-    /// </summary>
-    [JsonPropertyName("delete_doc_blocks")]
-    public List<DeletedDocBlock>? DeleteDocBlocks { get; init; }
-
-    /// <summary>
-    /// Creates an exact copy of an existing document, including all content, structure, and formatting. Use this to create templates, backup documents before major changes, or create variations of existing documents. The duplicated document will have a new unique ID and can be modified independently. Returns the new document's ID on success.
-    /// </summary>
-    [JsonPropertyName("duplicate_doc")]
-    public string? DuplicateDoc { get; init; }
-
-    /// <summary>
-    /// Imports HTML content as a new document by converting it into document blocks. The HTML will be parsed and converted into the appropriate document block types (text, headers, lists, etc.). Returns the ID of the newly created document on success.
-    /// </summary>
-    [JsonPropertyName("import_doc_from_html")]
-    public ImportDocFromHtmlResult? ImportDocFromHtml { get; init; }
-
-    /// <summary>
-    /// Publishes an article with the specified object ID. Allows setting privacy level, target folder, and managing subscribers (users and teams). Returns the updated article metadata.
-    /// </summary>
-    [JsonPropertyName("publish_article")]
-    public ArticleMetadata? PublishArticle { get; init; }
-
-    /// <summary>
-    /// Updates the content of a specific article block. The block must belong to a draft article that the user has permission to edit. Cannot update blocks of published articles.
-    /// </summary>
-    [JsonPropertyName("update_article_block")]
-    public ArticleBlock? UpdateArticleBlock { get; init; }
-
-    /// <summary>
-    /// Update a document's name/title. Changes are applied immediately and visible to all users with access to the document.
-    /// </summary>
-    [JsonPropertyName("update_doc_name")]
-    public string? UpdateDocName { get; init; }
-
-    /// <summary>
-    /// Sets an item description document's content with new markdown data. This mutation converts the provided markdown into document blocks and replaces the existing content of the item's description. Returns the IDs of the newly created blocks on success. Note: Markdown does not support text colors or background highlights. Any existing colored or highlighted text will be lost after replacement.
-    /// </summary>
-    [JsonPropertyName("set_item_description_content")]
-    public DocBlocksFromMarkdownResult? SetItemDescriptionContent { get; init; }
 
 }

@@ -159,6 +159,36 @@ public sealed partial class Query
     public AppSubscriptions AppSubscriptions { get; init; } = null!;
 
     /// <summary>
+    /// Retrieves blocks for the published version of a specific article if the requesting user has permission to access it. Returns paginated blocks in their position order. Will return an error if the user lacks the required permissions.
+    /// </summary>
+    [JsonPropertyName("article_blocks")]
+    public List<ArticleBlock> ArticleBlocks { get; init; } = [];
+
+    /// <summary>
+    /// Retrieves a list of published articles with their metadata and content blocks that the requesting user has permission to access. Articles without proper permissions will be filtered out. By default, returns the first 25 blocks per article. To retrieve more blocks, use the article_blocks query.
+    /// </summary>
+    [JsonPropertyName("articles")]
+    public List<Article> Articles { get; init; } = [];
+
+    /// <summary>
+    /// Retrieves the content diff between two versions of a document. Pass two restoring point dates (from doc_version_history) to see what blocks were added, deleted, or changed. Only blocks with changes are returned.
+    /// </summary>
+    [JsonPropertyName("doc_version_diff")]
+    public DocVersionDiff? DocVersionDiff { get; init; }
+
+    /// <summary>
+    /// Retrieves the version history of a document. Returns a list of restoring points (snapshots) with timestamps and the users who made changes. Snapshots are grouped in 5-minute intervals. Use the since and until arguments to filter the time range.
+    /// </summary>
+    [JsonPropertyName("doc_version_history")]
+    public DocVersionHistory? DocVersionHistory { get; init; }
+
+    /// <summary>
+    /// Converts document content into standard markdown format for external use, backup, or processing. Exports the entire document by default, or specific blocks if block IDs are provided. Use this to extract content for integration with other systems, create backups, generate reports, or process document content with external tools. The output is clean, portable markdown that preserves formatting and structure.
+    /// </summary>
+    [JsonPropertyName("export_markdown_from_doc")]
+    public ExportMarkdownResult? ExportMarkdownFromDoc { get; init; }
+
+    /// <summary>
     /// Placeholder query field for automations-test microservice.
     ///   This can be replaced with actual queries as the service evolves.
     /// </summary>
@@ -188,12 +218,6 @@ public sealed partial class Query
     /// </summary>
     [JsonPropertyName("get_app_lifecycle_subscriptions")]
     public List<LifecycleSubscriptionKind>? GetAppLifecycleSubscriptions { get; init; }
-
-    /// <summary>
-    /// Get board candidates based on workspace and usage type
-    /// </summary>
-    [JsonPropertyName("board_candidates")]
-    public List<Board>? BoardCandidates { get; init; }
 
     /// <summary>
     /// Get all personal list items by list ID
@@ -545,6 +569,12 @@ public sealed partial class Query
     public List<User>? Users { get; init; }
 
     /// <summary>
+    /// Get board candidates based on workspace and usage type
+    /// </summary>
+    [JsonPropertyName("board_candidates")]
+    public List<Board>? BoardCandidates { get; init; }
+
+    /// <summary>
     /// Fetch resources information from the resource directory
     /// </summary>
     [JsonPropertyName("get_directory_resources")]
@@ -582,36 +612,6 @@ public sealed partial class Query
     /// </summary>
     [JsonPropertyName("mute_board_settings")]
     public List<BoardMuteSettings>? MuteBoardSettings { get; init; }
-
-    /// <summary>
-    /// Retrieves blocks for the published version of a specific article if the requesting user has permission to access it. Returns paginated blocks in their position order. Will return an error if the user lacks the required permissions.
-    /// </summary>
-    [JsonPropertyName("article_blocks")]
-    public List<ArticleBlock> ArticleBlocks { get; init; } = [];
-
-    /// <summary>
-    /// Retrieves a list of published articles with their metadata and content blocks that the requesting user has permission to access. Articles without proper permissions will be filtered out. By default, returns the first 25 blocks per article. To retrieve more blocks, use the article_blocks query.
-    /// </summary>
-    [JsonPropertyName("articles")]
-    public List<Article> Articles { get; init; } = [];
-
-    /// <summary>
-    /// Retrieves the content diff between two versions of a document. Pass two restoring point dates (from doc_version_history) to see what blocks were added, deleted, or changed. Only blocks with changes are returned.
-    /// </summary>
-    [JsonPropertyName("doc_version_diff")]
-    public DocVersionDiff? DocVersionDiff { get; init; }
-
-    /// <summary>
-    /// Retrieves the version history of a document. Returns a list of restoring points (snapshots) with timestamps and the users who made changes. Snapshots are grouped in 5-minute intervals. Use the since and until arguments to filter the time range.
-    /// </summary>
-    [JsonPropertyName("doc_version_history")]
-    public DocVersionHistory? DocVersionHistory { get; init; }
-
-    /// <summary>
-    /// Converts document content into standard markdown format for external use, backup, or processing. Exports the entire document by default, or specific blocks if block IDs are provided. Use this to extract content for integration with other systems, create backups, generate reports, or process document content with external tools. The output is clean, portable markdown that preserves formatting and structure.
-    /// </summary>
-    [JsonPropertyName("export_markdown_from_doc")]
-    public ExportMarkdownResult? ExportMarkdownFromDoc { get; init; }
 
     /// <summary>
     /// Platform API data.
