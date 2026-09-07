@@ -188,12 +188,6 @@ public sealed partial class Mutation
     public Department? DeleteDepartment { get; init; }
 
     /// <summary>
-    /// Execute an integration block with the provided field values
-    /// </summary>
-    [JsonPropertyName("execute_integration_block")]
-    public IntegrationExecutionResult? ExecuteIntegrationBlock { get; init; }
-
-    /// <summary>
     /// Creates a new object in the Monday.com Objects Platform. The type of object created is determined by the object_type_unique_key parameter. This mutation can create boards, docs, dashboards, workflows, or specialized objects like CRM, capacity manager, etc. Under the hood, this creates a board with the corresponding app_feature_id.
     /// </summary>
     [JsonPropertyName("create_object")]
@@ -362,84 +356,6 @@ public sealed partial class Mutation
     public ValidationRule? DeleteValidationRule { get; init; }
 
     /// <summary>
-    /// Creates a new app with the specified configuration.
-    /// </summary>
-    [JsonPropertyName("create_app")]
-    public CreateAppResponse? CreateApp { get; init; }
-
-    /// <summary>
-    /// Updates an existing app. If the app latest version is live, a new draft version is automatically created and updated.
-    /// </summary>
-    [JsonPropertyName("update_app")]
-    public AppType? UpdateApp { get; init; }
-
-    /// <summary>
-    /// Update an app feature.
-    /// </summary>
-    [JsonPropertyName("update_app_feature")]
-    public AppFeatureType? UpdateAppFeature { get; init; }
-
-    /// <summary>
-    /// Create a new app feature.
-    /// </summary>
-    [JsonPropertyName("create_app_feature")]
-    public AppFeatureType? CreateAppFeature { get; init; }
-
-    /// <summary>
-    /// Update (or create) lifecycle subscriptions for an entity. This will soft delete all existing subscriptions for this entity_identifier and create new ones.
-    /// </summary>
-    [JsonPropertyName("update_app_lifecycle_subscription")]
-    public List<LifecycleSubscriptionKind>? UpdateAppLifecycleSubscription { get; init; }
-
-    /// <summary>
-    /// Delete all lifecycle subscriptions for an entity. Returns true if deleted successfully or if no subscriptions exist.
-    /// </summary>
-    [JsonPropertyName("delete_app_lifecycle_subscription")]
-    public bool? DeleteAppLifecycleSubscription { get; init; }
-
-    /// <summary>
-    /// Installs an app on the current account. Requires account admin permission.
-    /// </summary>
-    [JsonPropertyName("install_app")]
-    public InstallAppResponse? InstallApp { get; init; }
-
-    /// <summary>
-    /// Uninstalls an app from the current account. Requires account admin permission.
-    /// </summary>
-    [JsonPropertyName("uninstall_app")]
-    public AppDeletionResponse? UninstallApp { get; init; }
-
-    /// <summary>
-    /// Add workspace object to favorites
-    /// </summary>
-    [JsonPropertyName("create_favorite")]
-    public CreateFavoriteResultType? CreateFavorite { get; init; }
-
-    /// <summary>
-    /// Remove an object from favorites
-    /// </summary>
-    [JsonPropertyName("delete_favorite")]
-    public DeleteFavoriteInputResultType? DeleteFavorite { get; init; }
-
-    /// <summary>
-    /// Update the position of an object in favorites
-    /// </summary>
-    [JsonPropertyName("update_favorite_position")]
-    public UpdateFavoriteResultType? UpdateFavoritePosition { get; init; }
-
-    [JsonPropertyName("create_timeline_item")]
-    public TimelineItem? CreateTimelineItem { get; init; }
-
-    [JsonPropertyName("delete_timeline_item")]
-    public TimelineItem? DeleteTimelineItem { get; init; }
-
-    [JsonPropertyName("create_custom_activity")]
-    public CustomActivity? CreateCustomActivity { get; init; }
-
-    [JsonPropertyName("delete_custom_activity")]
-    public CustomActivity? DeleteCustomActivity { get; init; }
-
-    /// <summary>
     /// Create managed column of type dropdown mutation.
     /// </summary>
     [JsonPropertyName("create_dropdown_managed_column")]
@@ -582,6 +498,84 @@ public sealed partial class Mutation
     /// </summary>
     [JsonPropertyName("bulk_object_schema_column_actions")]
     public List<ObjectSchemaActionResult>? BulkObjectSchemaColumnActions { get; init; }
+
+    /// <summary>
+    /// Creates a new app with the specified configuration.
+    /// </summary>
+    [JsonPropertyName("create_app")]
+    public CreateAppResponse? CreateApp { get; init; }
+
+    /// <summary>
+    /// Updates an existing app. If the app latest version is live, a new draft version is automatically created and updated.
+    /// </summary>
+    [JsonPropertyName("update_app")]
+    public AppType? UpdateApp { get; init; }
+
+    /// <summary>
+    /// Update an app feature.
+    /// </summary>
+    [JsonPropertyName("update_app_feature")]
+    public AppFeatureType? UpdateAppFeature { get; init; }
+
+    /// <summary>
+    /// Create a new app feature.
+    /// </summary>
+    [JsonPropertyName("create_app_feature")]
+    public AppFeatureType? CreateAppFeature { get; init; }
+
+    /// <summary>
+    /// Update (or create) lifecycle subscriptions for an entity. This will soft delete all existing subscriptions for this entity_identifier and create new ones.
+    /// </summary>
+    [JsonPropertyName("update_app_lifecycle_subscription")]
+    public List<LifecycleSubscriptionKind>? UpdateAppLifecycleSubscription { get; init; }
+
+    /// <summary>
+    /// Delete all lifecycle subscriptions for an entity. Returns true if deleted successfully or if no subscriptions exist.
+    /// </summary>
+    [JsonPropertyName("delete_app_lifecycle_subscription")]
+    public bool? DeleteAppLifecycleSubscription { get; init; }
+
+    /// <summary>
+    /// Installs an app on the current account. Requires account admin permission.
+    /// </summary>
+    [JsonPropertyName("install_app")]
+    public InstallAppResponse? InstallApp { get; init; }
+
+    /// <summary>
+    /// Uninstalls an app from the current account. Requires account admin permission.
+    /// </summary>
+    [JsonPropertyName("uninstall_app")]
+    public AppDeletionResponse? UninstallApp { get; init; }
+
+    /// <summary>
+    /// Add workspace object to favorites
+    /// </summary>
+    [JsonPropertyName("create_favorite")]
+    public CreateFavoriteResultType? CreateFavorite { get; init; }
+
+    /// <summary>
+    /// Remove an object from favorites
+    /// </summary>
+    [JsonPropertyName("delete_favorite")]
+    public DeleteFavoriteInputResultType? DeleteFavorite { get; init; }
+
+    /// <summary>
+    /// Update the position of an object in favorites
+    /// </summary>
+    [JsonPropertyName("update_favorite_position")]
+    public UpdateFavoriteResultType? UpdateFavoritePosition { get; init; }
+
+    [JsonPropertyName("create_timeline_item")]
+    public TimelineItem? CreateTimelineItem { get; init; }
+
+    [JsonPropertyName("delete_timeline_item")]
+    public TimelineItem? DeleteTimelineItem { get; init; }
+
+    [JsonPropertyName("create_custom_activity")]
+    public CustomActivity? CreateCustomActivity { get; init; }
+
+    [JsonPropertyName("delete_custom_activity")]
+    public CustomActivity? DeleteCustomActivity { get; init; }
 
     /// <summary>
     /// Update form properties including title, description, or question order.
@@ -1105,6 +1099,12 @@ public sealed partial class Mutation
     /// </summary>
     [JsonPropertyName("update_directory_resources_attributes")]
     public UpdateDirectoryResourceAttributesResponse? UpdateDirectoryResourcesAttributes { get; init; }
+
+    /// <summary>
+    /// Execute an integration block with the provided field values
+    /// </summary>
+    [JsonPropertyName("execute_integration_block")]
+    public IntegrationExecutionResult? ExecuteIntegrationBlock { get; init; }
 
     /// <summary>
     /// Create a new widget.

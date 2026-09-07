@@ -22,6 +22,12 @@ public sealed partial class VibeMutations
     public AiActionResponse AiActions { get; init; } = null!;
 
     /// <summary>
+    /// Generate an image at runtime and store it in the app asset library
+    /// </summary>
+    [JsonPropertyName("generate_image")]
+    public ImageActionResponse GenerateImage { get; init; } = null!;
+
+    /// <summary>
     /// Extract structured data from document files using AI
     /// </summary>
     [JsonPropertyName("document_ai_action")]

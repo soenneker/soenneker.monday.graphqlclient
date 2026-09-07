@@ -16,10 +16,10 @@ public sealed partial class CredentialsCreatedInput
     public string AiAppId { get; init; } = null!;
 
     /// <summary>
-    /// The ID of the CTA message
+    /// The ID of the CTA message (optional when connecting from settings)
     /// </summary>
     [JsonPropertyName("message_id")]
-    public string MessageId { get; init; } = null!;
+    public string? MessageId { get; init; }
 
     /// <summary>
     /// The ID of the block instance
