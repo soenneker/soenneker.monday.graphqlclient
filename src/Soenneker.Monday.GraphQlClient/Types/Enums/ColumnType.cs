@@ -25,8 +25,6 @@ public enum ColumnType
 
     Dependency,
 
-    DirectDoc,
-
     Doc,
 
     Dropdown,
@@ -57,13 +55,9 @@ public enum ColumnType
 
     Mirror,
 
-    Name,
-
     Numbers,
 
     People,
-
-    Person,
 
     Phone,
 
@@ -73,24 +67,30 @@ public enum ColumnType
 
     Status,
 
-    Subtasks,
-
     Tags,
 
     Team,
 
     Text,
 
-    TimeTracking,
-
     Timeline,
 
-    Unsupported,
+    TimeTracking,
 
     Vote,
 
     Week,
 
-    WorldClock
+    WorldClock,
+
+    Unsupported,
+
+    Name,
+
+    Person,
+
+    DirectDoc,
+
+    Subtasks
 
 }

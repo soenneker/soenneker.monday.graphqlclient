@@ -10,25 +10,25 @@ namespace Soenneker.Monday.GraphQlClient;
 public sealed partial class ExportJobStatusInfo
 {
     /// <summary>
-    /// Current job status. Terminal values: COMPLETED, FAILED.
+    /// Current job status. Terminal values: COMPLETED, FAILED, CANCELLED.
     /// </summary>
     [JsonPropertyName("status")]
     public ExportJobStatus? Status { get; init; }
 
     /// <summary>
-    /// Presigned S3 download URL, available only when status is COMPLETED and the export completed within the last hour. Returns null after 1 hour — re-trigger the export to get a new one.
+    /// Presigned S3 download URL, available only when the job completed successfully and the URL has not yet expired. Returns null once expired — re-trigger the export to get a new one.
     /// </summary>
     [JsonPropertyName("download_url")]
     public string? DownloadUrl { get; init; }
 
     /// <summary>
-    /// Structured reason for failure. Populated only when status is FAILED.
+    /// Structured reason for failure. Populated only when the job failed.
     /// </summary>
     [JsonPropertyName("failure_reason")]
     public ExportFailureReason? FailureReason { get; init; }
 
     /// <summary>
-    /// Human-readable error detail. Populated only when status is FAILED and the reason exposes safe text.
+    /// Human-readable error detail. Populated only when the job failed and the reason exposes safe text.
     /// </summary>
     [JsonPropertyName("failure_message")]
     public string? FailureMessage { get; init; }

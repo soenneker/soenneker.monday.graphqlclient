@@ -7,16 +7,16 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum CalculatedFunction
 {
-    COUNTKEYS,
+    MIN,
 
     MAX,
 
-    MIN,
+    SUM,
 
     MINMAX,
 
     NONE,
 
-    SUM
+    COUNTKEYS
 
 }

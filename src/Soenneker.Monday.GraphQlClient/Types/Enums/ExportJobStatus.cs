@@ -3,7 +3,7 @@
 namespace Soenneker.Monday.GraphQlClient;
 
 /// <summary>
-/// Lifecycle status of an async board export job. Polling clients should treat COMPLETED and FAILED as terminal.
+/// Lifecycle status of an async board export job. Polling clients should treat COMPLETED, FAILED, and CANCELLED as terminal.
 /// </summary>
 public enum ExportJobStatus
 {
@@ -11,6 +11,8 @@ public enum ExportJobStatus
 
     COMPLETED,
 
-    FAILED
+    FAILED,
+
+    CANCELLED
 
 }

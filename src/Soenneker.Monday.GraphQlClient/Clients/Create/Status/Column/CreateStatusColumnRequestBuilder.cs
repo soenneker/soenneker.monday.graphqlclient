@@ -22,7 +22,7 @@ public sealed partial class CreateStatusColumnRequestBuilder
     /// </summary>
     public ValueTask<GraphQlResponse<CreateStatusColumnData>> Execute(CreateStatusColumnVariables request, CancellationToken cancellationToken = default)
     {
-        const string gqlQuery = @"mutation CreateStatusColumn($board_id: ID!, $id: String, $title: String!, $description: String, $after_column_id: ID, $capabilities: StatusColumnCapabilitiesInput, $defaults: CreateStatusColumnSettingsInput) { create_status_column(board_id: $board_id, id: $id, title: $title, description: $description, after_column_id: $after_column_id, capabilities: $capabilities, defaults: $defaults) { archived description id settings_str title type width settings revision capabilities { calculated { function calculated_type } visibility } } }";
+        const string gqlQuery = @"mutation CreateStatusColumn($board_id: ID!, $id: String, $title: String!, $description: String, $after_column_id: ID, $capabilities: StatusColumnCapabilitiesInput, $defaults: CreateStatusColumnSettingsInput) { create_status_column(board_id: $board_id, id: $id, title: $title, description: $description, after_column_id: $after_column_id, capabilities: $capabilities, defaults: $defaults) { id title description type width archived settings settings_str revision capabilities { calculated { function calculated_type } visibility } } }";
         return _graphQlClient.Execute<CreateStatusColumnData>(gqlQuery, request, cancellationToken);
     }
 
