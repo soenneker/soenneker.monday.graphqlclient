@@ -18,7 +18,7 @@ public sealed class GraphQlHttpClient : IGraphQlClient
     public GraphQlHttpClient(HttpClient httpClient, JsonSerializerOptions? serializerOptions = null)
     {
         _httpClient = httpClient;
-        _serializerOptions = serializerOptions ?? new JsonSerializerOptions(JsonSerializerDefaults.Web);
+        _serializerOptions = serializerOptions ?? JsonSerializerOptions.Web;
     }
 
     public async ValueTask<GraphQlResponse<T>> Execute<T>(
