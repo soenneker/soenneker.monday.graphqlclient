@@ -5,12 +5,12 @@ using System.Text.Json.Serialization;
 namespace Soenneker.Monday.GraphQlClient;
 
 /// <summary>
-/// Reference to a started async board export. Use the job_id with fetch_export_job_status to poll until COMPLETED or FAILED.
+/// Reference to a started async board export. Poll export_job_status with the job_id until the status is COMPLETED, FAILED, or CANCELLED. fetch_export_job_status is a deprecated alias reachable only on dev.
 /// </summary>
 public sealed partial class ExportAsyncJob
 {
     /// <summary>
-    /// Opaque identifier for this export job. Pass to fetch_export_job_status.
+    /// Opaque identifier for this export job. Pass to export_job_status.
     /// </summary>
     [JsonPropertyName("job_id")]
     public string? JobId { get; init; }

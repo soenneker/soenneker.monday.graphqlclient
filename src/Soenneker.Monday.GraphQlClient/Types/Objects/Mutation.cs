@@ -146,6 +146,12 @@ public sealed partial class Mutation
     public EnrollToSequenceResult? EnrollItemsToSequence { get; init; }
 
     /// <summary>
+    /// Update attributes (Job Role, Skills, or Location) for multiple resources in the directory
+    /// </summary>
+    [JsonPropertyName("update_directory_resources_attributes")]
+    public UpdateDirectoryResourceAttributesResponse? UpdateDirectoryResourcesAttributes { get; init; }
+
+    /// <summary>
     /// Assigns members to a department.
     /// </summary>
     [JsonPropertyName("assign_department_members")]
@@ -356,6 +362,198 @@ public sealed partial class Mutation
     public ValidationRule? DeleteValidationRule { get; init; }
 
     /// <summary>
+    /// Creates a new app with the specified configuration.
+    /// </summary>
+    [JsonPropertyName("create_app")]
+    public CreateAppResponse? CreateApp { get; init; }
+
+    /// <summary>
+    /// Updates an existing app. If the app latest version is live, a new draft version is automatically created and updated.
+    /// </summary>
+    [JsonPropertyName("update_app")]
+    public AppType? UpdateApp { get; init; }
+
+    /// <summary>
+    /// Update an app feature.
+    /// </summary>
+    [JsonPropertyName("update_app_feature")]
+    public AppFeatureType? UpdateAppFeature { get; init; }
+
+    /// <summary>
+    /// Create a new app feature.
+    /// </summary>
+    [JsonPropertyName("create_app_feature")]
+    public AppFeatureType? CreateAppFeature { get; init; }
+
+    /// <summary>
+    /// Update (or create) lifecycle subscriptions for an entity. This will soft delete all existing subscriptions for this entity_identifier and create new ones.
+    /// </summary>
+    [JsonPropertyName("update_app_lifecycle_subscription")]
+    public List<LifecycleSubscriptionKind>? UpdateAppLifecycleSubscription { get; init; }
+
+    /// <summary>
+    /// Delete all lifecycle subscriptions for an entity. Returns true if deleted successfully or if no subscriptions exist.
+    /// </summary>
+    [JsonPropertyName("delete_app_lifecycle_subscription")]
+    public bool? DeleteAppLifecycleSubscription { get; init; }
+
+    /// <summary>
+    /// Installs an app on the current account. Requires account admin permission.
+    /// </summary>
+    [JsonPropertyName("install_app")]
+    public InstallAppResponse? InstallApp { get; init; }
+
+    /// <summary>
+    /// Uninstalls an app from the current account. Requires account admin permission.
+    /// </summary>
+    [JsonPropertyName("uninstall_app")]
+    public AppDeletionResponse? UninstallApp { get; init; }
+
+    /// <summary>
+    /// Add workspace object to favorites
+    /// </summary>
+    [JsonPropertyName("create_favorite")]
+    public CreateFavoriteResultType? CreateFavorite { get; init; }
+
+    /// <summary>
+    /// Remove an object from favorites
+    /// </summary>
+    [JsonPropertyName("delete_favorite")]
+    public DeleteFavoriteInputResultType? DeleteFavorite { get; init; }
+
+    /// <summary>
+    /// Update the position of an object in favorites
+    /// </summary>
+    [JsonPropertyName("update_favorite_position")]
+    public UpdateFavoriteResultType? UpdateFavoritePosition { get; init; }
+
+    [JsonPropertyName("create_timeline_item")]
+    public TimelineItem? CreateTimelineItem { get; init; }
+
+    [JsonPropertyName("delete_timeline_item")]
+    public TimelineItem? DeleteTimelineItem { get; init; }
+
+    [JsonPropertyName("create_custom_activity")]
+    public CustomActivity? CreateCustomActivity { get; init; }
+
+    [JsonPropertyName("delete_custom_activity")]
+    public CustomActivity? DeleteCustomActivity { get; init; }
+
+    /// <summary>
+    /// Execute an integration block with the provided field values
+    /// </summary>
+    [JsonPropertyName("execute_integration_block")]
+    public IntegrationExecutionResult? ExecuteIntegrationBlock { get; init; }
+
+    /// <summary>
+    /// Update form properties including title, description, or question order.
+    /// </summary>
+    [JsonPropertyName("update_form")]
+    public ResponseForm? UpdateForm { get; init; }
+
+    /// <summary>
+    /// Update form configuration including features, appearance, and accessibility options.
+    /// </summary>
+    [JsonPropertyName("update_form_settings")]
+    public ResponseForm? UpdateFormSettings { get; init; }
+
+    /// <summary>
+    /// Create a new question within a form. Returns the created question with auto-generated ID.
+    /// </summary>
+    [JsonPropertyName("create_form_question")]
+    public FormQuestion? CreateFormQuestion { get; init; }
+
+    /// <summary>
+    /// Update an existing question properties including title, type, or settings. Requires question ID.
+    /// </summary>
+    [JsonPropertyName("update_form_question")]
+    public FormQuestion? UpdateFormQuestion { get; init; }
+
+    /// <summary>
+    /// Permanently remove a question from a form. This action cannot be undone.
+    /// </summary>
+    [JsonPropertyName("delete_question")]
+    public bool? DeleteQuestion { get; init; }
+
+    /// <summary>
+    /// Activate a form to make it visible to users and accept new submissions.
+    /// </summary>
+    [JsonPropertyName("activate_form")]
+    public bool? ActivateForm { get; init; }
+
+    /// <summary>
+    /// Deactivate a form to hide it from users and stop accepting submissions. Form data is preserved.
+    /// </summary>
+    [JsonPropertyName("deactivate_form")]
+    public bool? DeactivateForm { get; init; }
+
+    /// <summary>
+    /// Shorten a URL for a form and store it in the form settings. Returns the shortened link object.
+    /// </summary>
+    [JsonPropertyName("shorten_form_url")]
+    public FormShortenedLink? ShortenFormUrl { get; init; }
+
+    /// <summary>
+    /// Create a new tag for a form. Tags are used to categorize and track responses. (e.g. UTM tags)
+    /// </summary>
+    [JsonPropertyName("create_form_tag")]
+    public FormTag? CreateFormTag { get; init; }
+
+    /// <summary>
+    /// Update an existing tag in a form
+    /// </summary>
+    [JsonPropertyName("update_form_tag")]
+    public bool? UpdateFormTag { get; init; }
+
+    /// <summary>
+    /// Delete a tag from a form
+    /// </summary>
+    [JsonPropertyName("delete_form_tag")]
+    public bool? DeleteFormTag { get; init; }
+
+    /// <summary>
+    /// Create a new form with specified configuration. Returns the created form with its unique token.
+    /// </summary>
+    [JsonPropertyName("create_form")]
+    public DehydratedFormResponse? CreateForm { get; init; }
+
+    /// <summary>
+    /// Set a password on a form to restrict access. This will enable password protection for the form.
+    /// </summary>
+    [JsonPropertyName("set_form_password")]
+    public ResponseForm? SetFormPassword { get; init; }
+
+    /// <summary>
+    /// Create a new table view
+    /// </summary>
+    [JsonPropertyName("create_view_table")]
+    public BoardView? CreateViewTable { get; init; }
+
+    /// <summary>
+    /// Create a view
+    /// </summary>
+    [JsonPropertyName("create_view")]
+    public BoardView? CreateView { get; init; }
+
+    /// <summary>
+    /// Update an existing board table view
+    /// </summary>
+    [JsonPropertyName("update_view_table")]
+    public BoardView? UpdateViewTable { get; init; }
+
+    /// <summary>
+    /// Update an existing view
+    /// </summary>
+    [JsonPropertyName("update_view")]
+    public BoardView? UpdateView { get; init; }
+
+    /// <summary>
+    /// Delete an existing board subset/view
+    /// </summary>
+    [JsonPropertyName("delete_view")]
+    public BoardView? DeleteView { get; init; }
+
+    /// <summary>
     /// Create managed column of type dropdown mutation.
     /// </summary>
     [JsonPropertyName("create_dropdown_managed_column")]
@@ -498,192 +696,6 @@ public sealed partial class Mutation
     /// </summary>
     [JsonPropertyName("bulk_object_schema_column_actions")]
     public List<ObjectSchemaActionResult>? BulkObjectSchemaColumnActions { get; init; }
-
-    /// <summary>
-    /// Creates a new app with the specified configuration.
-    /// </summary>
-    [JsonPropertyName("create_app")]
-    public CreateAppResponse? CreateApp { get; init; }
-
-    /// <summary>
-    /// Updates an existing app. If the app latest version is live, a new draft version is automatically created and updated.
-    /// </summary>
-    [JsonPropertyName("update_app")]
-    public AppType? UpdateApp { get; init; }
-
-    /// <summary>
-    /// Update an app feature.
-    /// </summary>
-    [JsonPropertyName("update_app_feature")]
-    public AppFeatureType? UpdateAppFeature { get; init; }
-
-    /// <summary>
-    /// Create a new app feature.
-    /// </summary>
-    [JsonPropertyName("create_app_feature")]
-    public AppFeatureType? CreateAppFeature { get; init; }
-
-    /// <summary>
-    /// Update (or create) lifecycle subscriptions for an entity. This will soft delete all existing subscriptions for this entity_identifier and create new ones.
-    /// </summary>
-    [JsonPropertyName("update_app_lifecycle_subscription")]
-    public List<LifecycleSubscriptionKind>? UpdateAppLifecycleSubscription { get; init; }
-
-    /// <summary>
-    /// Delete all lifecycle subscriptions for an entity. Returns true if deleted successfully or if no subscriptions exist.
-    /// </summary>
-    [JsonPropertyName("delete_app_lifecycle_subscription")]
-    public bool? DeleteAppLifecycleSubscription { get; init; }
-
-    /// <summary>
-    /// Installs an app on the current account. Requires account admin permission.
-    /// </summary>
-    [JsonPropertyName("install_app")]
-    public InstallAppResponse? InstallApp { get; init; }
-
-    /// <summary>
-    /// Uninstalls an app from the current account. Requires account admin permission.
-    /// </summary>
-    [JsonPropertyName("uninstall_app")]
-    public AppDeletionResponse? UninstallApp { get; init; }
-
-    /// <summary>
-    /// Add workspace object to favorites
-    /// </summary>
-    [JsonPropertyName("create_favorite")]
-    public CreateFavoriteResultType? CreateFavorite { get; init; }
-
-    /// <summary>
-    /// Remove an object from favorites
-    /// </summary>
-    [JsonPropertyName("delete_favorite")]
-    public DeleteFavoriteInputResultType? DeleteFavorite { get; init; }
-
-    /// <summary>
-    /// Update the position of an object in favorites
-    /// </summary>
-    [JsonPropertyName("update_favorite_position")]
-    public UpdateFavoriteResultType? UpdateFavoritePosition { get; init; }
-
-    [JsonPropertyName("create_timeline_item")]
-    public TimelineItem? CreateTimelineItem { get; init; }
-
-    [JsonPropertyName("delete_timeline_item")]
-    public TimelineItem? DeleteTimelineItem { get; init; }
-
-    [JsonPropertyName("create_custom_activity")]
-    public CustomActivity? CreateCustomActivity { get; init; }
-
-    [JsonPropertyName("delete_custom_activity")]
-    public CustomActivity? DeleteCustomActivity { get; init; }
-
-    /// <summary>
-    /// Update form properties including title, description, or question order.
-    /// </summary>
-    [JsonPropertyName("update_form")]
-    public ResponseForm? UpdateForm { get; init; }
-
-    /// <summary>
-    /// Update form configuration including features, appearance, and accessibility options.
-    /// </summary>
-    [JsonPropertyName("update_form_settings")]
-    public ResponseForm? UpdateFormSettings { get; init; }
-
-    /// <summary>
-    /// Create a new question within a form. Returns the created question with auto-generated ID.
-    /// </summary>
-    [JsonPropertyName("create_form_question")]
-    public FormQuestion? CreateFormQuestion { get; init; }
-
-    /// <summary>
-    /// Update an existing question properties including title, type, or settings. Requires question ID.
-    /// </summary>
-    [JsonPropertyName("update_form_question")]
-    public FormQuestion? UpdateFormQuestion { get; init; }
-
-    /// <summary>
-    /// Permanently remove a question from a form. This action cannot be undone.
-    /// </summary>
-    [JsonPropertyName("delete_question")]
-    public bool? DeleteQuestion { get; init; }
-
-    /// <summary>
-    /// Activate a form to make it visible to users and accept new submissions.
-    /// </summary>
-    [JsonPropertyName("activate_form")]
-    public bool? ActivateForm { get; init; }
-
-    /// <summary>
-    /// Deactivate a form to hide it from users and stop accepting submissions. Form data is preserved.
-    /// </summary>
-    [JsonPropertyName("deactivate_form")]
-    public bool? DeactivateForm { get; init; }
-
-    /// <summary>
-    /// Shorten a URL for a form and store it in the form settings. Returns the shortened link object.
-    /// </summary>
-    [JsonPropertyName("shorten_form_url")]
-    public FormShortenedLink? ShortenFormUrl { get; init; }
-
-    /// <summary>
-    /// Create a new tag for a form. Tags are used to categorize and track responses. (e.g. UTM tags)
-    /// </summary>
-    [JsonPropertyName("create_form_tag")]
-    public FormTag? CreateFormTag { get; init; }
-
-    /// <summary>
-    /// Update an existing tag in a form
-    /// </summary>
-    [JsonPropertyName("update_form_tag")]
-    public bool? UpdateFormTag { get; init; }
-
-    /// <summary>
-    /// Delete a tag from a form
-    /// </summary>
-    [JsonPropertyName("delete_form_tag")]
-    public bool? DeleteFormTag { get; init; }
-
-    /// <summary>
-    /// Create a new form with specified configuration. Returns the created form with its unique token.
-    /// </summary>
-    [JsonPropertyName("create_form")]
-    public DehydratedFormResponse? CreateForm { get; init; }
-
-    /// <summary>
-    /// Set a password on a form to restrict access. This will enable password protection for the form.
-    /// </summary>
-    [JsonPropertyName("set_form_password")]
-    public ResponseForm? SetFormPassword { get; init; }
-
-    /// <summary>
-    /// Create a new table view
-    /// </summary>
-    [JsonPropertyName("create_view_table")]
-    public BoardView? CreateViewTable { get; init; }
-
-    /// <summary>
-    /// Create a view
-    /// </summary>
-    [JsonPropertyName("create_view")]
-    public BoardView? CreateView { get; init; }
-
-    /// <summary>
-    /// Update an existing board table view
-    /// </summary>
-    [JsonPropertyName("update_view_table")]
-    public BoardView? UpdateViewTable { get; init; }
-
-    /// <summary>
-    /// Update an existing view
-    /// </summary>
-    [JsonPropertyName("update_view")]
-    public BoardView? UpdateView { get; init; }
-
-    /// <summary>
-    /// Delete an existing board subset/view
-    /// </summary>
-    [JsonPropertyName("delete_view")]
-    public BoardView? DeleteView { get; init; }
 
     /// <summary>
     /// Connect an existing project to a portfolio. When a callback_url is provided the mutation returns immediately with a process_id, and the result is POSTed to that URL once the operation completes. The callback payload is: { is_success: boolean, process_id: string, portfolio_item_id?: string }.
@@ -1093,18 +1105,6 @@ public sealed partial class Mutation
     /// </summary>
     [JsonPropertyName("create_project")]
     public CreateProjectResult? CreateProject { get; init; }
-
-    /// <summary>
-    /// Update attributes (Job Role, Skills, or Location) for multiple resources in the directory
-    /// </summary>
-    [JsonPropertyName("update_directory_resources_attributes")]
-    public UpdateDirectoryResourceAttributesResponse? UpdateDirectoryResourcesAttributes { get; init; }
-
-    /// <summary>
-    /// Execute an integration block with the provided field values
-    /// </summary>
-    [JsonPropertyName("execute_integration_block")]
-    public IntegrationExecutionResult? ExecuteIntegrationBlock { get; init; }
 
     /// <summary>
     /// Create a new widget.

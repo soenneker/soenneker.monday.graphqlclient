@@ -17,6 +17,12 @@ public sealed partial class DataViewSourceInput
     public DataViewSourceIdInput SourceId { get; init; } = null!;
 
     /// <summary>
+    /// main (default) or subitem — the source relation type.
+    /// </summary>
+    [JsonPropertyName("relation_type")]
+    public DataViewSourceRelationType? RelationType { get; init; }
+
+    /// <summary>
     /// The column mappings for this source. If omitted, mappings are auto-calculated by the server.
     /// </summary>
     [JsonPropertyName("mappings")]

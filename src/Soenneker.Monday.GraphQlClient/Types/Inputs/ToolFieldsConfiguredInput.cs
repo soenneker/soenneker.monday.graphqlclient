@@ -16,10 +16,10 @@ public sealed partial class ToolFieldsConfiguredInput
     public string AiAppId { get; init; } = null!;
 
     /// <summary>
-    /// The ID of the CTA message being answered
+    /// The ID of the CTA message being answered (optional when configuring from settings)
     /// </summary>
     [JsonPropertyName("message_id")]
-    public string MessageId { get; init; } = null!;
+    public string? MessageId { get; init; }
 
     /// <summary>
     /// The ID of the block instance being configured

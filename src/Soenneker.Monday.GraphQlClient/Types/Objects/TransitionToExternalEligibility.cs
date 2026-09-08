@@ -10,7 +10,7 @@ namespace Soenneker.Monday.GraphQlClient;
 public sealed partial class TransitionToExternalEligibility
 {
     /// <summary>
-    /// Whether the current user owns all boards connected to this app
+    /// Whether the current user may publish this app to the public web — they hold the account permission and own all boards connected to this app
     /// </summary>
     [JsonPropertyName("is_eligible")]
     public bool? IsEligible { get; init; }

@@ -17,6 +17,12 @@ public sealed partial class StandaloneBoardDataViewSource
     public DataViewSourceId? SourceId { get; init; }
 
     /// <summary>
+    /// Whether this source has the main (items) or subitem relation type.
+    /// </summary>
+    [JsonPropertyName("relation_type")]
+    public DataViewSourceRelationType? RelationType { get; init; }
+
+    /// <summary>
     /// The column mappings for this source.
     /// </summary>
     [JsonPropertyName("mappings")]

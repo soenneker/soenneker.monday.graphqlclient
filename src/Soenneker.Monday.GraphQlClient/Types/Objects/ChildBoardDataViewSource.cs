@@ -16,6 +16,12 @@ public sealed partial class ChildBoardDataViewSource
     public DataViewSourceId? SourceId { get; init; }
 
     /// <summary>
+    /// Whether this source has the main (items) or subitem relation type.
+    /// </summary>
+    [JsonPropertyName("relation_type")]
+    public DataViewSourceRelationType? RelationType { get; init; }
+
+    /// <summary>
     /// The parent schema source identifier.
     /// </summary>
     [JsonPropertyName("parent_source_id")]

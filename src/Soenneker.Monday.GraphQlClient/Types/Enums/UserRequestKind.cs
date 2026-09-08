@@ -17,6 +17,8 @@ public enum UserRequestKind
 
     RequestToUpgradeVibePackage,
 
-    RequestToUpgradeBeforeAppsUnpublish
+    RequestToUpgradeBeforeAppsUnpublish,
+
+    RequestToPublishApp
 
 }

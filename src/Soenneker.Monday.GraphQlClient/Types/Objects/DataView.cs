@@ -35,7 +35,25 @@ public sealed partial class DataView
     public DataViewTarget? Target { get; init; }
 
     /// <summary>
-    /// The authorization object associated with the data view.
+    /// The target schema for the subitem relation type.
+    /// </summary>
+    [JsonPropertyName("subitems_target")]
+    public DataViewTarget? SubitemsTarget { get; init; }
+
+    /// <summary>
+    /// The materialized view id for the subitem relation type.
+    /// </summary>
+    [JsonPropertyName("subitems_mv_id")]
+    public string? SubitemsMvId { get; init; }
+
+    /// <summary>
+    /// The materialized view state for the subitem relation type.
+    /// </summary>
+    [JsonPropertyName("subitems_mv_state")]
+    public string? SubitemsMvState { get; init; }
+
+    /// <summary>
+    /// The authorization object associated with a data view.
     /// </summary>
     [JsonPropertyName("authorization_object")]
     public DataViewAuthorizationObject? AuthorizationObject { get; init; }
