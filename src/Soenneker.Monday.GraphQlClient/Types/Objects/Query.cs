@@ -158,6 +158,132 @@ public sealed partial class Query
     [JsonPropertyName("object_relations")]
     public List<ObjectRelation>? ObjectRelations { get; init; }
 
+    /// <summary>
+    /// Get the connected account's information.
+    /// </summary>
+    [JsonPropertyName("account")]
+    public Account? Account { get; init; }
+
+    /// <summary>
+    /// Get a collection of installs of an app.
+    /// </summary>
+    [JsonPropertyName("app_installs")]
+    public List<AppInstall>? AppInstalls { get; init; }
+
+    /// <summary>
+    /// Get the current app subscription. Note: This query does not work in the playground
+    /// </summary>
+    [JsonPropertyName("app_subscription")]
+    public List<AppSubscription>? AppSubscription { get; init; }
+
+    /// <summary>
+    /// Get operations counter current value
+    /// </summary>
+    [JsonPropertyName("app_subscription_operations")]
+    public AppSubscriptionOperationsCounter? AppSubscriptionOperations { get; init; }
+
+    /// <summary>
+    /// Get apps monetization information for an account
+    /// </summary>
+    [JsonPropertyName("apps_monetization_info")]
+    public AppsMonetizationInfo? AppsMonetizationInfo { get; init; }
+
+    /// <summary>
+    /// Get apps monetization status for an account
+    /// </summary>
+    [JsonPropertyName("apps_monetization_status")]
+    public AppMonetizationStatus? AppsMonetizationStatus { get; init; }
+
+    /// <summary>
+    /// Get a collection of assets by ids.
+    /// </summary>
+    [JsonPropertyName("assets")]
+    public List<Asset>? Assets { get; init; }
+
+    /// <summary>
+    /// Get a collection of boards.
+    /// </summary>
+    [JsonPropertyName("boards")]
+    public List<Board>? Boards { get; init; }
+
+    /// <summary>
+    /// Get the complexity data of your queries.
+    /// </summary>
+    [JsonPropertyName("complexity")]
+    public Complexity? Complexity { get; init; }
+
+    /// <summary>
+    /// Get a collection of docs.
+    /// </summary>
+    [JsonPropertyName("docs")]
+    public List<Document>? Docs { get; init; }
+
+    /// <summary>
+    /// Get a collection of folders. Note: This query won't return folders from closed workspaces to which you are not subscribed
+    /// </summary>
+    [JsonPropertyName("folders")]
+    public List<Folder>? Folders { get; init; }
+
+    /// <summary>
+    /// Get a collection of items.
+    /// </summary>
+    [JsonPropertyName("items")]
+    public List<Item>? Items { get; init; }
+
+    /// <summary>
+    /// Search items by multiple columns and values.
+    /// </summary>
+    [JsonPropertyName("items_page_by_column_values")]
+    public ItemsResponse ItemsPageByColumnValues { get; init; } = null!;
+
+    /// <summary>
+    /// Get the connected user's information.
+    /// </summary>
+    [JsonPropertyName("me")]
+    public User? Me { get; init; }
+
+    /// <summary>
+    /// Get next pages of board's items (rows) by cursor.
+    /// </summary>
+    [JsonPropertyName("next_items_page")]
+    public ItemsResponse NextItemsPage { get; init; } = null!;
+
+    /// <summary>
+    /// Get a collection of tags.
+    /// </summary>
+    [JsonPropertyName("tags")]
+    public List<Tag>? Tags { get; init; }
+
+    /// <summary>
+    /// Get a collection of teams.
+    /// </summary>
+    [JsonPropertyName("teams")]
+    public List<Team>? Teams { get; init; }
+
+    /// <summary>
+    /// Get the API version in use
+    /// </summary>
+    [JsonPropertyName("version")]
+    public Version Version { get; init; } = null!;
+
+    /// <summary>
+    /// Get a list containing the versions of the API
+    /// </summary>
+    [JsonPropertyName("versions")]
+    public List<Version>? Versions { get; init; }
+
+    /// <summary>
+    /// Get a collection of webhooks for the board
+    /// </summary>
+    [JsonPropertyName("webhooks")]
+    public List<Webhook>? Webhooks { get; init; }
+
+    /// <summary>
+    /// Get a collection of workspaces.
+    /// </summary>
+    [JsonPropertyName("workspaces")]
+    public List<Workspace>? Workspaces { get; init; }
+
     [JsonPropertyName("marketplace_app_discounts")]
     public List<MarketplaceAppDiscount> MarketplaceAppDiscounts { get; init; } = [];
 
@@ -435,132 +561,6 @@ public sealed partial class Query
     /// </summary>
     [JsonPropertyName("audit_event_catalogue")]
     public List<AuditEventCatalogueEntry>? AuditEventCatalogue { get; init; }
-
-    /// <summary>
-    /// Get the connected account's information.
-    /// </summary>
-    [JsonPropertyName("account")]
-    public Account? Account { get; init; }
-
-    /// <summary>
-    /// Get a collection of installs of an app.
-    /// </summary>
-    [JsonPropertyName("app_installs")]
-    public List<AppInstall>? AppInstalls { get; init; }
-
-    /// <summary>
-    /// Get the current app subscription. Note: This query does not work in the playground
-    /// </summary>
-    [JsonPropertyName("app_subscription")]
-    public List<AppSubscription>? AppSubscription { get; init; }
-
-    /// <summary>
-    /// Get operations counter current value
-    /// </summary>
-    [JsonPropertyName("app_subscription_operations")]
-    public AppSubscriptionOperationsCounter? AppSubscriptionOperations { get; init; }
-
-    /// <summary>
-    /// Get apps monetization information for an account
-    /// </summary>
-    [JsonPropertyName("apps_monetization_info")]
-    public AppsMonetizationInfo? AppsMonetizationInfo { get; init; }
-
-    /// <summary>
-    /// Get apps monetization status for an account
-    /// </summary>
-    [JsonPropertyName("apps_monetization_status")]
-    public AppMonetizationStatus? AppsMonetizationStatus { get; init; }
-
-    /// <summary>
-    /// Get a collection of assets by ids.
-    /// </summary>
-    [JsonPropertyName("assets")]
-    public List<Asset>? Assets { get; init; }
-
-    /// <summary>
-    /// Get a collection of boards.
-    /// </summary>
-    [JsonPropertyName("boards")]
-    public List<Board>? Boards { get; init; }
-
-    /// <summary>
-    /// Get the complexity data of your queries.
-    /// </summary>
-    [JsonPropertyName("complexity")]
-    public Complexity? Complexity { get; init; }
-
-    /// <summary>
-    /// Get a collection of docs.
-    /// </summary>
-    [JsonPropertyName("docs")]
-    public List<Document>? Docs { get; init; }
-
-    /// <summary>
-    /// Get a collection of folders. Note: This query won't return folders from closed workspaces to which you are not subscribed
-    /// </summary>
-    [JsonPropertyName("folders")]
-    public List<Folder>? Folders { get; init; }
-
-    /// <summary>
-    /// Get a collection of items.
-    /// </summary>
-    [JsonPropertyName("items")]
-    public List<Item>? Items { get; init; }
-
-    /// <summary>
-    /// Search items by multiple columns and values.
-    /// </summary>
-    [JsonPropertyName("items_page_by_column_values")]
-    public ItemsResponse ItemsPageByColumnValues { get; init; } = null!;
-
-    /// <summary>
-    /// Get the connected user's information.
-    /// </summary>
-    [JsonPropertyName("me")]
-    public User? Me { get; init; }
-
-    /// <summary>
-    /// Get next pages of board's items (rows) by cursor.
-    /// </summary>
-    [JsonPropertyName("next_items_page")]
-    public ItemsResponse NextItemsPage { get; init; } = null!;
-
-    /// <summary>
-    /// Get a collection of tags.
-    /// </summary>
-    [JsonPropertyName("tags")]
-    public List<Tag>? Tags { get; init; }
-
-    /// <summary>
-    /// Get a collection of teams.
-    /// </summary>
-    [JsonPropertyName("teams")]
-    public List<Team>? Teams { get; init; }
-
-    /// <summary>
-    /// Get the API version in use
-    /// </summary>
-    [JsonPropertyName("version")]
-    public Version Version { get; init; } = null!;
-
-    /// <summary>
-    /// Get a list containing the versions of the API
-    /// </summary>
-    [JsonPropertyName("versions")]
-    public List<Version>? Versions { get; init; }
-
-    /// <summary>
-    /// Get a collection of webhooks for the board
-    /// </summary>
-    [JsonPropertyName("webhooks")]
-    public List<Webhook>? Webhooks { get; init; }
-
-    /// <summary>
-    /// Get a collection of workspaces.
-    /// </summary>
-    [JsonPropertyName("workspaces")]
-    public List<Workspace>? Workspaces { get; init; }
 
     /// <summary>
     /// Get all user configs for the account.

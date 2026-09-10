@@ -124,4 +124,22 @@ public sealed partial class VibeQueries
     [JsonPropertyName("whats_new")]
     public List<WhatsNewItem>? WhatsNew { get; init; }
 
+    /// <summary>
+    /// Get a page of pending "request to publish app" requests for the account (admin-only)
+    /// </summary>
+    [JsonPropertyName("pending_publish_requests")]
+    public List<UserRequest>? PendingPublishRequests { get; init; }
+
+    /// <summary>
+    /// Total count of pending "request to publish app" requests for the account (admin-only)
+    /// </summary>
+    [JsonPropertyName("pending_publish_requests_count")]
+    public int? PendingPublishRequestsCount { get; init; }
+
+    /// <summary>
+    /// Get the vibe app for a "request to publish app" review, regardless of published state (admin-only)
+    /// </summary>
+    [JsonPropertyName("publish_request_review_app")]
+    public VibeApp? PublishRequestReviewApp { get; init; }
+
 }

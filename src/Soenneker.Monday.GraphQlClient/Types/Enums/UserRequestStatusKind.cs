@@ -3,12 +3,14 @@
 namespace Soenneker.Monday.GraphQlClient;
 
 /// <summary>
-/// The board view access level of the user
+/// The status of a user request
 /// </summary>
-public enum BoardViewAccessLevel
+public enum UserRequestStatusKind
 {
-    Edit,
+    Pending,
 
-    View
+    Approved,
+
+    Declined
 
 }

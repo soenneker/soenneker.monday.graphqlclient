@@ -35,6 +35,24 @@ public sealed partial class UserRequest
     public UserRequestKind? Type { get; init; }
 
     /// <summary>
+    /// The vibe app ID the request refers to, for app-scoped request types
+    /// </summary>
+    [JsonPropertyName("app_id")]
+    public string? AppId { get; init; }
+
+    /// <summary>
+    /// The status of the request
+    /// </summary>
+    [JsonPropertyName("status")]
+    public UserRequestStatusKind? Status { get; init; }
+
+    /// <summary>
+    /// The name of the app the request refers to, when the request is app-scoped (batch-enriched)
+    /// </summary>
+    [JsonPropertyName("app_name")]
+    public string? AppName { get; init; }
+
+    /// <summary>
     /// The date and time the object was created
     /// </summary>
     [JsonPropertyName("created_at")]

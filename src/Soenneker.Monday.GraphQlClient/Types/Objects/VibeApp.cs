@@ -156,10 +156,28 @@ public sealed partial class VibeApp
     public List<VibeAppInstance> Instances { get; init; } = [];
 
     /// <summary>
-    /// All active code versions for this vibe app, ordered by version number descending
+    /// Recent code versions for this vibe app (version_number DESC). A capped slice for dialog/preview — not full history or pointer identity. Prefer current_code_version / live_code_version and versions_history for those.
     /// </summary>
     [JsonPropertyName("code_versions")]
     public List<VibeCodeVersion> CodeVersions { get; init; } = [];
+
+    /// <summary>
+    /// The product current version pointer (latest DRAFT by created_at, else LIVE, else most recently deployed non-RETIRED). Not derived from a version_number DESC limit slice.
+    /// </summary>
+    [JsonPropertyName("current_code_version")]
+    public VibeCodeVersion? CurrentCodeVersion { get; init; }
+
+    /// <summary>
+    /// The LIVE (published) code version, or null if unpublished. Strict LIVE — no deployed_at fallback.
+    /// </summary>
+    [JsonPropertyName("live_code_version")]
+    public VibeCodeVersion? LiveCodeVersion { get; init; }
+
+    /// <summary>
+    /// Paginated display-eligible version history for the linear version history panel. Always applies history eligibility on the server (checkpoint, INTERRUPTED, current, and LIVE).
+    /// </summary>
+    [JsonPropertyName("versions_history")]
+    public VibeVersionsHistory VersionsHistory { get; init; } = null!;
 
     /// <summary>
     /// All current code files for this app. Returns code files if a build exists, or the plan file if one exists, otherwise empty.

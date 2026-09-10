@@ -22,7 +22,7 @@ public sealed partial class UpdateViewRequestBuilder
     /// </summary>
     public ValueTask<GraphQlResponse<UpdateViewData>> Execute(UpdateViewVariables request, CancellationToken cancellationToken = default)
     {
-        const string gqlQuery = @"mutation UpdateView($name: String, $filter_user_id: ID, $filter_team_id: ID, $filter: ItemsQueryGroup, $sort: [ItemsQueryOrderBy!], $tags: [String!], $view_id: ID!, $board_id: ID!, $type: ViewKind!, $settings: JSON) { update_view(name: $name, filter_user_id: $filter_user_id, filter_team_id: $filter_team_id, filter: $filter, sort: $sort, tags: $tags, view_id: $view_id, board_id: $board_id, type: $type, settings: $settings) { id name type settings_str view_specific_data_str source_view_id settings sort filter_user_id filter_team_id tags filter access_level } }";
+        const string gqlQuery = @"mutation UpdateView($name: String, $filter_user_id: ID, $filter_team_id: ID, $filter: ItemsQueryGroup, $sort: [ItemsQueryOrderBy!], $tags: [String!], $view_id: ID!, $board_id: ID!, $type: ViewKind!, $settings: JSON) { update_view(name: $name, filter_user_id: $filter_user_id, filter_team_id: $filter_team_id, filter: $filter, sort: $sort, tags: $tags, view_id: $view_id, board_id: $board_id, type: $type, settings: $settings) { access_level id name settings_str source_view_id type view_specific_data_str settings sort filter_user_id filter_team_id tags filter } }";
         return _graphQlClient.Execute<UpdateViewData>(gqlQuery, request, cancellationToken);
     }
 

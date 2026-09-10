@@ -248,480 +248,6 @@ public sealed partial class Mutation
     public int? DeleteObjectRelation { get; init; }
 
     /// <summary>
-    /// Create a marketplace app discount
-    /// </summary>
-    [JsonPropertyName("create_marketplace_app_discount")]
-    public CreateMarketplaceAppDiscountResult CreateMarketplaceAppDiscount { get; init; } = null!;
-
-    [JsonPropertyName("delete_marketplace_app_discount")]
-    public DeleteMarketplaceAppDiscountResult DeleteMarketplaceAppDiscount { get; init; } = null!;
-
-    [JsonPropertyName("grant_marketplace_app_discount")]
-    public GrantMarketplaceAppDiscountResult GrantMarketplaceAppDiscount { get; init; } = null!;
-
-    /// <summary>
-    /// Adds markdown content to an existing document by converting it into document blocks. Use this to append content to the end of a document or insert content after a specific block. The markdown will be parsed and converted into the appropriate document block types (text, headers, lists, etc.). Returns the IDs of the newly created blocks on success.
-    /// </summary>
-    [JsonPropertyName("add_content_to_doc_from_markdown")]
-    public DocBlocksFromMarkdownResult? AddContentToDocFromMarkdown { get; init; }
-
-    /// <summary>
-    /// Creates a new article in the specified workspace. Optionally accepts a name and folder ID. Returns the created article metadata.
-    /// </summary>
-    [JsonPropertyName("create_article")]
-    public ArticleMetadata? CreateArticle { get; init; }
-
-    /// <summary>
-    /// Creates multiple document blocks in a single operation for efficient content creation. Use this when adding substantial content like importing documents, creating structured content (articles, reports, guides), or building complex document sections. Supports all block types including text paragraphs, headers, bullet/numbered lists, images, tables, code blocks, and more. Much faster than creating blocks individually. Perfect for content migration, template creation, or generating documents from external data. Maximum 25 blocks per request.
-    /// </summary>
-    [JsonPropertyName("create_doc_blocks")]
-    public List<DocumentBlockV2>? CreateDocBlocks { get; init; }
-
-    /// <summary>
-    /// Deletes an article with the specified object ID
-    /// </summary>
-    [JsonPropertyName("delete_article")]
-    public ArticleMetadata? DeleteArticle { get; init; }
-
-    /// <summary>
-    /// Permanently deletes a document and all its content from the system. This action cannot be undone. The document will be removed from all user views and workspaces. Use with caution - ensure the document is no longer needed before deletion. Returns success status and the deleted document ID.
-    /// </summary>
-    [JsonPropertyName("delete_doc")]
-    public string? DeleteDoc { get; init; }
-
-    /// <summary>
-    /// Deletes multiple document blocks in a single operation. Maximum 100 blocks per request.
-    /// </summary>
-    [JsonPropertyName("delete_doc_blocks")]
-    public List<DeletedDocBlock>? DeleteDocBlocks { get; init; }
-
-    /// <summary>
-    /// Creates an exact copy of an existing document, including all content, structure, and formatting. Use this to create templates, backup documents before major changes, or create variations of existing documents. The duplicated document will have a new unique ID and can be modified independently. Returns the new document's ID on success.
-    /// </summary>
-    [JsonPropertyName("duplicate_doc")]
-    public string? DuplicateDoc { get; init; }
-
-    /// <summary>
-    /// Imports HTML content as a new document by converting it into document blocks. The HTML will be parsed and converted into the appropriate document block types (text, headers, lists, etc.). Returns the ID of the newly created document on success.
-    /// </summary>
-    [JsonPropertyName("import_doc_from_html")]
-    public ImportDocFromHtmlResult? ImportDocFromHtml { get; init; }
-
-    /// <summary>
-    /// Publishes an article with the specified object ID. Allows setting privacy level, target folder, and managing subscribers (users and teams). Returns the updated article metadata.
-    /// </summary>
-    [JsonPropertyName("publish_article")]
-    public ArticleMetadata? PublishArticle { get; init; }
-
-    /// <summary>
-    /// Updates the content of a specific article block. The block must belong to a draft article that the user has permission to edit. Cannot update blocks of published articles.
-    /// </summary>
-    [JsonPropertyName("update_article_block")]
-    public ArticleBlock? UpdateArticleBlock { get; init; }
-
-    /// <summary>
-    /// Update a document's name/title. Changes are applied immediately and visible to all users with access to the document.
-    /// </summary>
-    [JsonPropertyName("update_doc_name")]
-    public string? UpdateDocName { get; init; }
-
-    /// <summary>
-    /// Sets an item description document's content with new markdown data. This mutation converts the provided markdown into document blocks and replaces the existing content of the item's description. Returns the IDs of the newly created blocks on success. Note: Markdown does not support text colors or background highlights. Any existing colored or highlighted text will be lost after replacement.
-    /// </summary>
-    [JsonPropertyName("set_item_description_content")]
-    public DocBlocksFromMarkdownResult? SetItemDescriptionContent { get; init; }
-
-    /// <summary>
-    /// Add a required column to a board
-    /// </summary>
-    [JsonPropertyName("add_required_column")]
-    public RequiredColumns? AddRequiredColumn { get; init; }
-
-    /// <summary>
-    /// Remove a required column from a board
-    /// </summary>
-    [JsonPropertyName("remove_required_column")]
-    public RequiredColumns? RemoveRequiredColumn { get; init; }
-
-    /// <summary>
-    /// Create a validation rule
-    /// </summary>
-    [JsonPropertyName("create_validation_rule")]
-    public ValidationRule? CreateValidationRule { get; init; }
-
-    /// <summary>
-    /// Update a validation rule
-    /// </summary>
-    [JsonPropertyName("update_validation_rule")]
-    public ValidationRule? UpdateValidationRule { get; init; }
-
-    /// <summary>
-    /// Delete a validation rule
-    /// </summary>
-    [JsonPropertyName("delete_validation_rule")]
-    public ValidationRule? DeleteValidationRule { get; init; }
-
-    /// <summary>
-    /// Creates a new app with the specified configuration.
-    /// </summary>
-    [JsonPropertyName("create_app")]
-    public CreateAppResponse? CreateApp { get; init; }
-
-    /// <summary>
-    /// Updates an existing app. If the app latest version is live, a new draft version is automatically created and updated.
-    /// </summary>
-    [JsonPropertyName("update_app")]
-    public AppType? UpdateApp { get; init; }
-
-    /// <summary>
-    /// Update an app feature.
-    /// </summary>
-    [JsonPropertyName("update_app_feature")]
-    public AppFeatureType? UpdateAppFeature { get; init; }
-
-    /// <summary>
-    /// Create a new app feature.
-    /// </summary>
-    [JsonPropertyName("create_app_feature")]
-    public AppFeatureType? CreateAppFeature { get; init; }
-
-    /// <summary>
-    /// Update (or create) lifecycle subscriptions for an entity. This will soft delete all existing subscriptions for this entity_identifier and create new ones.
-    /// </summary>
-    [JsonPropertyName("update_app_lifecycle_subscription")]
-    public List<LifecycleSubscriptionKind>? UpdateAppLifecycleSubscription { get; init; }
-
-    /// <summary>
-    /// Delete all lifecycle subscriptions for an entity. Returns true if deleted successfully or if no subscriptions exist.
-    /// </summary>
-    [JsonPropertyName("delete_app_lifecycle_subscription")]
-    public bool? DeleteAppLifecycleSubscription { get; init; }
-
-    /// <summary>
-    /// Installs an app on the current account. Requires account admin permission.
-    /// </summary>
-    [JsonPropertyName("install_app")]
-    public InstallAppResponse? InstallApp { get; init; }
-
-    /// <summary>
-    /// Uninstalls an app from the current account. Requires account admin permission.
-    /// </summary>
-    [JsonPropertyName("uninstall_app")]
-    public AppDeletionResponse? UninstallApp { get; init; }
-
-    /// <summary>
-    /// Add workspace object to favorites
-    /// </summary>
-    [JsonPropertyName("create_favorite")]
-    public CreateFavoriteResultType? CreateFavorite { get; init; }
-
-    /// <summary>
-    /// Remove an object from favorites
-    /// </summary>
-    [JsonPropertyName("delete_favorite")]
-    public DeleteFavoriteInputResultType? DeleteFavorite { get; init; }
-
-    /// <summary>
-    /// Update the position of an object in favorites
-    /// </summary>
-    [JsonPropertyName("update_favorite_position")]
-    public UpdateFavoriteResultType? UpdateFavoritePosition { get; init; }
-
-    [JsonPropertyName("create_timeline_item")]
-    public TimelineItem? CreateTimelineItem { get; init; }
-
-    [JsonPropertyName("delete_timeline_item")]
-    public TimelineItem? DeleteTimelineItem { get; init; }
-
-    [JsonPropertyName("create_custom_activity")]
-    public CustomActivity? CreateCustomActivity { get; init; }
-
-    [JsonPropertyName("delete_custom_activity")]
-    public CustomActivity? DeleteCustomActivity { get; init; }
-
-    /// <summary>
-    /// Execute an integration block with the provided field values
-    /// </summary>
-    [JsonPropertyName("execute_integration_block")]
-    public IntegrationExecutionResult? ExecuteIntegrationBlock { get; init; }
-
-    /// <summary>
-    /// Update form properties including title, description, or question order.
-    /// </summary>
-    [JsonPropertyName("update_form")]
-    public ResponseForm? UpdateForm { get; init; }
-
-    /// <summary>
-    /// Update form configuration including features, appearance, and accessibility options.
-    /// </summary>
-    [JsonPropertyName("update_form_settings")]
-    public ResponseForm? UpdateFormSettings { get; init; }
-
-    /// <summary>
-    /// Create a new question within a form. Returns the created question with auto-generated ID.
-    /// </summary>
-    [JsonPropertyName("create_form_question")]
-    public FormQuestion? CreateFormQuestion { get; init; }
-
-    /// <summary>
-    /// Update an existing question properties including title, type, or settings. Requires question ID.
-    /// </summary>
-    [JsonPropertyName("update_form_question")]
-    public FormQuestion? UpdateFormQuestion { get; init; }
-
-    /// <summary>
-    /// Permanently remove a question from a form. This action cannot be undone.
-    /// </summary>
-    [JsonPropertyName("delete_question")]
-    public bool? DeleteQuestion { get; init; }
-
-    /// <summary>
-    /// Activate a form to make it visible to users and accept new submissions.
-    /// </summary>
-    [JsonPropertyName("activate_form")]
-    public bool? ActivateForm { get; init; }
-
-    /// <summary>
-    /// Deactivate a form to hide it from users and stop accepting submissions. Form data is preserved.
-    /// </summary>
-    [JsonPropertyName("deactivate_form")]
-    public bool? DeactivateForm { get; init; }
-
-    /// <summary>
-    /// Shorten a URL for a form and store it in the form settings. Returns the shortened link object.
-    /// </summary>
-    [JsonPropertyName("shorten_form_url")]
-    public FormShortenedLink? ShortenFormUrl { get; init; }
-
-    /// <summary>
-    /// Create a new tag for a form. Tags are used to categorize and track responses. (e.g. UTM tags)
-    /// </summary>
-    [JsonPropertyName("create_form_tag")]
-    public FormTag? CreateFormTag { get; init; }
-
-    /// <summary>
-    /// Update an existing tag in a form
-    /// </summary>
-    [JsonPropertyName("update_form_tag")]
-    public bool? UpdateFormTag { get; init; }
-
-    /// <summary>
-    /// Delete a tag from a form
-    /// </summary>
-    [JsonPropertyName("delete_form_tag")]
-    public bool? DeleteFormTag { get; init; }
-
-    /// <summary>
-    /// Create a new form with specified configuration. Returns the created form with its unique token.
-    /// </summary>
-    [JsonPropertyName("create_form")]
-    public DehydratedFormResponse? CreateForm { get; init; }
-
-    /// <summary>
-    /// Set a password on a form to restrict access. This will enable password protection for the form.
-    /// </summary>
-    [JsonPropertyName("set_form_password")]
-    public ResponseForm? SetFormPassword { get; init; }
-
-    /// <summary>
-    /// Create a new table view
-    /// </summary>
-    [JsonPropertyName("create_view_table")]
-    public BoardView? CreateViewTable { get; init; }
-
-    /// <summary>
-    /// Create a view
-    /// </summary>
-    [JsonPropertyName("create_view")]
-    public BoardView? CreateView { get; init; }
-
-    /// <summary>
-    /// Update an existing board table view
-    /// </summary>
-    [JsonPropertyName("update_view_table")]
-    public BoardView? UpdateViewTable { get; init; }
-
-    /// <summary>
-    /// Update an existing view
-    /// </summary>
-    [JsonPropertyName("update_view")]
-    public BoardView? UpdateView { get; init; }
-
-    /// <summary>
-    /// Delete an existing board subset/view
-    /// </summary>
-    [JsonPropertyName("delete_view")]
-    public BoardView? DeleteView { get; init; }
-
-    /// <summary>
-    /// Create managed column of type dropdown mutation.
-    /// </summary>
-    [JsonPropertyName("create_dropdown_managed_column")]
-    public DropdownManagedColumn? CreateDropdownManagedColumn { get; init; }
-
-    /// <summary>
-    /// Create managed column of type status mutation.
-    /// </summary>
-    [JsonPropertyName("create_status_managed_column")]
-    public StatusManagedColumn? CreateStatusManagedColumn { get; init; }
-
-    /// <summary>
-    /// Update managed column of type dropdown mutation.
-    /// </summary>
-    [JsonPropertyName("update_dropdown_managed_column")]
-    public DropdownManagedColumn? UpdateDropdownManagedColumn { get; init; }
-
-    /// <summary>
-    /// Update managed column of type status mutation.
-    /// </summary>
-    [JsonPropertyName("update_status_managed_column")]
-    public StatusManagedColumn? UpdateStatusManagedColumn { get; init; }
-
-    /// <summary>
-    /// Activate managed column mutation.
-    /// </summary>
-    [JsonPropertyName("activate_managed_column")]
-    public ManagedColumn? ActivateManagedColumn { get; init; }
-
-    /// <summary>
-    /// Deactivate managed column mutation.
-    /// </summary>
-    [JsonPropertyName("deactivate_managed_column")]
-    public ManagedColumn? DeactivateManagedColumn { get; init; }
-
-    /// <summary>
-    /// Delete managed column mutation.
-    /// </summary>
-    [JsonPropertyName("delete_managed_column")]
-    public ManagedColumn? DeleteManagedColumn { get; init; }
-
-    /// <summary>
-    /// Updates a status column's properties including title, description, and status label settings. Status columns allow users to track item progress through customizable labels (e.g., "Working on it", "Done", "Stuck"). This mutation is specifically for status/color columns and provides type-safe updates.
-    /// </summary>
-    [JsonPropertyName("update_status_column")]
-    public Column? UpdateStatusColumn { get; init; }
-
-    /// <summary>
-    /// Updates a dropdown column's properties including title, description, and dropdown label settings. Dropdown columns allow users to select from a predefined list of options. This mutation is specifically for dropdown columns and provides type-safe updates.
-    /// </summary>
-    [JsonPropertyName("update_dropdown_column")]
-    public Column? UpdateDropdownColumn { get; init; }
-
-    /// <summary>
-    /// Generic mutation for updating any column type with validation. Supports updating column properties like title, description, and type-specific defaults/settings. The mutation validates input against the column type's schema before applying changes. Use get_column_type_schema query to understand available properties for each column type.
-    /// </summary>
-    [JsonPropertyName("update_column")]
-    public Column? UpdateColumn { get; init; }
-
-    /// <summary>
-    /// Creates a new status column with strongly typed settings. Status columns allow users to track item progress through customizable labels (e.g., "Working on it", "Done", "Stuck"). This mutation is specifically for status/color columns and provides type-safe creation with label configuration.
-    /// </summary>
-    [JsonPropertyName("create_status_column")]
-    public Column? CreateStatusColumn { get; init; }
-
-    /// <summary>
-    /// Creates a new dropdown column with strongly typed settings. Dropdown columns allow users to select from a predefined list of options. This mutation is specifically for dropdown columns and provides type-safe creation with dropdown options configuration.
-    /// </summary>
-    [JsonPropertyName("create_dropdown_column")]
-    public Column? CreateDropdownColumn { get; init; }
-
-    /// <summary>
-    /// Generic mutation for creating any column type with validation. Supports creating column with properties like title, description, and type-specific defaults/settings. The mutation validates input against the column type's schema before applying changes. Use get_column_type_schema query to understand available properties for each column type.
-    /// </summary>
-    [JsonPropertyName("create_column")]
-    public Column? CreateColumn { get; init; }
-
-    /// <summary>
-    /// Creates a new status column in a board that is linked to a managed column. The column data and settings are controlled by the managed column. Only title and description can be overridden locally.
-    /// </summary>
-    [JsonPropertyName("attach_status_managed_column")]
-    public Column? AttachStatusManagedColumn { get; init; }
-
-    /// <summary>
-    /// Creates a new dropdown column in a board that is linked to a managed column. The column data and settings are controlled by the managed column. Title, description, and dropdown-specific settings (limit_select, label_limit_count) can be overridden locally.
-    /// </summary>
-    [JsonPropertyName("attach_dropdown_managed_column")]
-    public Column? AttachDropdownManagedColumn { get; init; }
-
-    /// <summary>
-    /// Create a new account object schema.
-    /// </summary>
-    [JsonPropertyName("create_object_schema")]
-    public ObjectSchema? CreateObjectSchema { get; init; }
-
-    /// <summary>
-    /// Update an account object schema.
-    /// </summary>
-    [JsonPropertyName("update_object_schema")]
-    public ObjectSchema? UpdateObjectSchema { get; init; }
-
-    /// <summary>
-    /// Delete an account object schema. Can only delete if there are no boards attached to the object schema. Object schemas define the structure and columns of boards.
-    /// </summary>
-    [JsonPropertyName("delete_object_schema")]
-    public ObjectSchema? DeleteObjectSchema { get; init; }
-
-    /// <summary>
-    /// Connect a board to an object schema.
-    /// </summary>
-    [JsonPropertyName("connect_board_to_object_schema")]
-    public BoardConnection? ConnectBoardToObjectSchema { get; init; }
-
-    /// <summary>
-    /// Create columns on an account object schema.
-    /// </summary>
-    [JsonPropertyName("create_object_schema_columns")]
-    public ObjectSchema? CreateObjectSchemaColumns { get; init; }
-
-    /// <summary>
-    /// Deactivate or reactivate a column on an account object schema.
-    /// </summary>
-    [JsonPropertyName("set_object_schema_column_active_state")]
-    public ObjectSchema? SetObjectSchemaColumnActiveState { get; init; }
-
-    /// <summary>
-    /// Detach boards from their object schemas.
-    /// </summary>
-    [JsonPropertyName("detach_boards_from_object_schema")]
-    public List<BulkDetachBoardResult>? DetachBoardsFromObjectSchema { get; init; }
-
-    /// <summary>
-    /// Update columns on an account object schema.
-    /// </summary>
-    [JsonPropertyName("update_object_schema_columns")]
-    public ObjectSchema? UpdateObjectSchemaColumns { get; init; }
-
-    /// <summary>
-    /// Execute multiple object schema column actions in a single request. Actions are executed sequentially in the order provided. If any action fails, execution stops and an error is returned.
-    /// </summary>
-    [JsonPropertyName("bulk_object_schema_column_actions")]
-    public List<ObjectSchemaActionResult>? BulkObjectSchemaColumnActions { get; init; }
-
-    /// <summary>
-    /// Connect an existing project to a portfolio. When a callback_url is provided the mutation returns immediately with a process_id, and the result is POSTed to that URL once the operation completes. The callback payload is: { is_success: boolean, process_id: string, portfolio_item_id?: string }.
-    /// </summary>
-    [JsonPropertyName("connect_project_to_portfolio")]
-    public ConnectProjectResult? ConnectProjectToPortfolio { get; init; }
-
-    /// <summary>
-    /// Create a new portfolio. When a callback_url is provided the mutation returns immediately with a process_id, and the portfolio_id is POSTed to that URL once the portfolio is actually created. The callback payload is: { is_success: boolean, process_id: string, portfolio_id?: number }.
-    /// </summary>
-    [JsonPropertyName("create_portfolio")]
-    public CreatePortfolioResult? CreatePortfolio { get; init; }
-
-    /// <summary>
-    /// Update the dependency column for a specific pulse
-    /// </summary>
-    [JsonPropertyName("update_dependency_column")]
-    public string UpdateDependencyColumn { get; init; } = null!;
-
-    /// <summary>
-    /// Batch update the dependency column values in a board. Limited to 50 items per batch.
-    /// </summary>
-    [JsonPropertyName("batch_update_dependency_column")]
-    public string BatchUpdateDependencyColumn { get; init; } = null!;
-
-    /// <summary>
     /// Add a file to a column value.
     /// </summary>
     [JsonPropertyName("add_file_to_column")]
@@ -846,6 +372,12 @@ public sealed partial class Mutation
     /// </summary>
     [JsonPropertyName("create_board")]
     public Board? CreateBoard { get; init; }
+
+    /// <summary>
+    /// Generic mutation for creating any column type with validation. Supports creating column with properties like title, description, and type-specific defaults/settings. The mutation validates input against the column type's schema before applying changes. Use get_column_type_schema query to understand available properties for each column type.
+    /// </summary>
+    [JsonPropertyName("create_column")]
+    public Column? CreateColumn { get; init; }
 
     /// <summary>
     /// Create a new doc.
@@ -1093,6 +625,474 @@ public sealed partial class Mutation
     /// </summary>
     [JsonPropertyName("use_template")]
     public Template? UseTemplate { get; init; }
+
+    /// <summary>
+    /// Create a marketplace app discount
+    /// </summary>
+    [JsonPropertyName("create_marketplace_app_discount")]
+    public CreateMarketplaceAppDiscountResult CreateMarketplaceAppDiscount { get; init; } = null!;
+
+    [JsonPropertyName("delete_marketplace_app_discount")]
+    public DeleteMarketplaceAppDiscountResult DeleteMarketplaceAppDiscount { get; init; } = null!;
+
+    [JsonPropertyName("grant_marketplace_app_discount")]
+    public GrantMarketplaceAppDiscountResult GrantMarketplaceAppDiscount { get; init; } = null!;
+
+    /// <summary>
+    /// Adds markdown content to an existing document by converting it into document blocks. Use this to append content to the end of a document or insert content after a specific block. The markdown will be parsed and converted into the appropriate document block types (text, headers, lists, etc.). Returns the IDs of the newly created blocks on success.
+    /// </summary>
+    [JsonPropertyName("add_content_to_doc_from_markdown")]
+    public DocBlocksFromMarkdownResult? AddContentToDocFromMarkdown { get; init; }
+
+    /// <summary>
+    /// Creates a new article in the specified workspace. Optionally accepts a name and folder ID. Returns the created article metadata.
+    /// </summary>
+    [JsonPropertyName("create_article")]
+    public ArticleMetadata? CreateArticle { get; init; }
+
+    /// <summary>
+    /// Creates multiple document blocks in a single operation for efficient content creation. Use this when adding substantial content like importing documents, creating structured content (articles, reports, guides), or building complex document sections. Supports all block types including text paragraphs, headers, bullet/numbered lists, images, tables, code blocks, and more. Much faster than creating blocks individually. Perfect for content migration, template creation, or generating documents from external data. Maximum 25 blocks per request.
+    /// </summary>
+    [JsonPropertyName("create_doc_blocks")]
+    public List<DocumentBlockV2>? CreateDocBlocks { get; init; }
+
+    /// <summary>
+    /// Deletes an article with the specified object ID
+    /// </summary>
+    [JsonPropertyName("delete_article")]
+    public ArticleMetadata? DeleteArticle { get; init; }
+
+    /// <summary>
+    /// Permanently deletes a document and all its content from the system. This action cannot be undone. The document will be removed from all user views and workspaces. Use with caution - ensure the document is no longer needed before deletion. Returns success status and the deleted document ID.
+    /// </summary>
+    [JsonPropertyName("delete_doc")]
+    public string? DeleteDoc { get; init; }
+
+    /// <summary>
+    /// Deletes multiple document blocks in a single operation. Maximum 100 blocks per request.
+    /// </summary>
+    [JsonPropertyName("delete_doc_blocks")]
+    public List<DeletedDocBlock>? DeleteDocBlocks { get; init; }
+
+    /// <summary>
+    /// Creates an exact copy of an existing document, including all content, structure, and formatting. Use this to create templates, backup documents before major changes, or create variations of existing documents. The duplicated document will have a new unique ID and can be modified independently. Returns the new document's ID on success.
+    /// </summary>
+    [JsonPropertyName("duplicate_doc")]
+    public string? DuplicateDoc { get; init; }
+
+    /// <summary>
+    /// Imports HTML content as a new document by converting it into document blocks. The HTML will be parsed and converted into the appropriate document block types (text, headers, lists, etc.). Returns the ID of the newly created document on success.
+    /// </summary>
+    [JsonPropertyName("import_doc_from_html")]
+    public ImportDocFromHtmlResult? ImportDocFromHtml { get; init; }
+
+    /// <summary>
+    /// Publishes an article with the specified object ID. Allows setting privacy level, target folder, and managing subscribers (users and teams). Returns the updated article metadata.
+    /// </summary>
+    [JsonPropertyName("publish_article")]
+    public ArticleMetadata? PublishArticle { get; init; }
+
+    /// <summary>
+    /// Updates the content of a specific article block. The block must belong to a draft article that the user has permission to edit. Cannot update blocks of published articles.
+    /// </summary>
+    [JsonPropertyName("update_article_block")]
+    public ArticleBlock? UpdateArticleBlock { get; init; }
+
+    /// <summary>
+    /// Update a document's name/title. Changes are applied immediately and visible to all users with access to the document.
+    /// </summary>
+    [JsonPropertyName("update_doc_name")]
+    public string? UpdateDocName { get; init; }
+
+    /// <summary>
+    /// Sets an item description document's content with new markdown data. This mutation converts the provided markdown into document blocks and replaces the existing content of the item's description. Returns the IDs of the newly created blocks on success. Note: Markdown does not support text colors or background highlights. Any existing colored or highlighted text will be lost after replacement.
+    /// </summary>
+    [JsonPropertyName("set_item_description_content")]
+    public DocBlocksFromMarkdownResult? SetItemDescriptionContent { get; init; }
+
+    /// <summary>
+    /// Add a required column to a board
+    /// </summary>
+    [JsonPropertyName("add_required_column")]
+    public RequiredColumns? AddRequiredColumn { get; init; }
+
+    /// <summary>
+    /// Remove a required column from a board
+    /// </summary>
+    [JsonPropertyName("remove_required_column")]
+    public RequiredColumns? RemoveRequiredColumn { get; init; }
+
+    /// <summary>
+    /// Create a validation rule
+    /// </summary>
+    [JsonPropertyName("create_validation_rule")]
+    public ValidationRule? CreateValidationRule { get; init; }
+
+    /// <summary>
+    /// Update a validation rule
+    /// </summary>
+    [JsonPropertyName("update_validation_rule")]
+    public ValidationRule? UpdateValidationRule { get; init; }
+
+    /// <summary>
+    /// Delete a validation rule
+    /// </summary>
+    [JsonPropertyName("delete_validation_rule")]
+    public ValidationRule? DeleteValidationRule { get; init; }
+
+    /// <summary>
+    /// Creates a new app with the specified configuration.
+    /// </summary>
+    [JsonPropertyName("create_app")]
+    public CreateAppResponse? CreateApp { get; init; }
+
+    /// <summary>
+    /// Updates an existing app. If the app latest version is live, a new draft version is automatically created and updated.
+    /// </summary>
+    [JsonPropertyName("update_app")]
+    public AppType? UpdateApp { get; init; }
+
+    /// <summary>
+    /// Update an app feature.
+    /// </summary>
+    [JsonPropertyName("update_app_feature")]
+    public AppFeatureType? UpdateAppFeature { get; init; }
+
+    /// <summary>
+    /// Create a new app feature.
+    /// </summary>
+    [JsonPropertyName("create_app_feature")]
+    public AppFeatureType? CreateAppFeature { get; init; }
+
+    /// <summary>
+    /// Update (or create) lifecycle subscriptions for an entity. This will soft delete all existing subscriptions for this entity_identifier and create new ones.
+    /// </summary>
+    [JsonPropertyName("update_app_lifecycle_subscription")]
+    public List<LifecycleSubscriptionKind>? UpdateAppLifecycleSubscription { get; init; }
+
+    /// <summary>
+    /// Delete all lifecycle subscriptions for an entity. Returns true if deleted successfully or if no subscriptions exist.
+    /// </summary>
+    [JsonPropertyName("delete_app_lifecycle_subscription")]
+    public bool? DeleteAppLifecycleSubscription { get; init; }
+
+    /// <summary>
+    /// Installs an app on the current account. Requires account admin permission.
+    /// </summary>
+    [JsonPropertyName("install_app")]
+    public InstallAppResponse? InstallApp { get; init; }
+
+    /// <summary>
+    /// Uninstalls an app from the current account. Requires account admin permission.
+    /// </summary>
+    [JsonPropertyName("uninstall_app")]
+    public AppDeletionResponse? UninstallApp { get; init; }
+
+    /// <summary>
+    /// Add workspace object to favorites
+    /// </summary>
+    [JsonPropertyName("create_favorite")]
+    public CreateFavoriteResultType? CreateFavorite { get; init; }
+
+    /// <summary>
+    /// Remove an object from favorites
+    /// </summary>
+    [JsonPropertyName("delete_favorite")]
+    public DeleteFavoriteInputResultType? DeleteFavorite { get; init; }
+
+    /// <summary>
+    /// Update the position of an object in favorites
+    /// </summary>
+    [JsonPropertyName("update_favorite_position")]
+    public UpdateFavoriteResultType? UpdateFavoritePosition { get; init; }
+
+    [JsonPropertyName("create_timeline_item")]
+    public TimelineItem? CreateTimelineItem { get; init; }
+
+    [JsonPropertyName("delete_timeline_item")]
+    public TimelineItem? DeleteTimelineItem { get; init; }
+
+    [JsonPropertyName("create_custom_activity")]
+    public CustomActivity? CreateCustomActivity { get; init; }
+
+    [JsonPropertyName("delete_custom_activity")]
+    public CustomActivity? DeleteCustomActivity { get; init; }
+
+    /// <summary>
+    /// Update form properties including title, description, or question order.
+    /// </summary>
+    [JsonPropertyName("update_form")]
+    public ResponseForm? UpdateForm { get; init; }
+
+    /// <summary>
+    /// Update form configuration including features, appearance, and accessibility options.
+    /// </summary>
+    [JsonPropertyName("update_form_settings")]
+    public ResponseForm? UpdateFormSettings { get; init; }
+
+    /// <summary>
+    /// Create a new question within a form. Returns the created question with auto-generated ID.
+    /// </summary>
+    [JsonPropertyName("create_form_question")]
+    public FormQuestion? CreateFormQuestion { get; init; }
+
+    /// <summary>
+    /// Update an existing question properties including title, type, or settings. Requires question ID.
+    /// </summary>
+    [JsonPropertyName("update_form_question")]
+    public FormQuestion? UpdateFormQuestion { get; init; }
+
+    /// <summary>
+    /// Permanently remove a question from a form. This action cannot be undone.
+    /// </summary>
+    [JsonPropertyName("delete_question")]
+    public bool? DeleteQuestion { get; init; }
+
+    /// <summary>
+    /// Activate a form to make it visible to users and accept new submissions.
+    /// </summary>
+    [JsonPropertyName("activate_form")]
+    public bool? ActivateForm { get; init; }
+
+    /// <summary>
+    /// Deactivate a form to hide it from users and stop accepting submissions. Form data is preserved.
+    /// </summary>
+    [JsonPropertyName("deactivate_form")]
+    public bool? DeactivateForm { get; init; }
+
+    /// <summary>
+    /// Shorten a URL for a form and store it in the form settings. Returns the shortened link object.
+    /// </summary>
+    [JsonPropertyName("shorten_form_url")]
+    public FormShortenedLink? ShortenFormUrl { get; init; }
+
+    /// <summary>
+    /// Create a new tag for a form. Tags are used to categorize and track responses. (e.g. UTM tags)
+    /// </summary>
+    [JsonPropertyName("create_form_tag")]
+    public FormTag? CreateFormTag { get; init; }
+
+    /// <summary>
+    /// Update an existing tag in a form
+    /// </summary>
+    [JsonPropertyName("update_form_tag")]
+    public bool? UpdateFormTag { get; init; }
+
+    /// <summary>
+    /// Delete a tag from a form
+    /// </summary>
+    [JsonPropertyName("delete_form_tag")]
+    public bool? DeleteFormTag { get; init; }
+
+    /// <summary>
+    /// Create a new form with specified configuration. Returns the created form with its unique token.
+    /// </summary>
+    [JsonPropertyName("create_form")]
+    public DehydratedFormResponse? CreateForm { get; init; }
+
+    /// <summary>
+    /// Set a password on a form to restrict access. This will enable password protection for the form.
+    /// </summary>
+    [JsonPropertyName("set_form_password")]
+    public ResponseForm? SetFormPassword { get; init; }
+
+    /// <summary>
+    /// Create a new table view
+    /// </summary>
+    [JsonPropertyName("create_view_table")]
+    public BoardView? CreateViewTable { get; init; }
+
+    /// <summary>
+    /// Create a view
+    /// </summary>
+    [JsonPropertyName("create_view")]
+    public BoardView? CreateView { get; init; }
+
+    /// <summary>
+    /// Update an existing board table view
+    /// </summary>
+    [JsonPropertyName("update_view_table")]
+    public BoardView? UpdateViewTable { get; init; }
+
+    /// <summary>
+    /// Update an existing view
+    /// </summary>
+    [JsonPropertyName("update_view")]
+    public BoardView? UpdateView { get; init; }
+
+    /// <summary>
+    /// Delete an existing board subset/view
+    /// </summary>
+    [JsonPropertyName("delete_view")]
+    public BoardView? DeleteView { get; init; }
+
+    /// <summary>
+    /// Create managed column of type dropdown mutation.
+    /// </summary>
+    [JsonPropertyName("create_dropdown_managed_column")]
+    public DropdownManagedColumn? CreateDropdownManagedColumn { get; init; }
+
+    /// <summary>
+    /// Create managed column of type status mutation.
+    /// </summary>
+    [JsonPropertyName("create_status_managed_column")]
+    public StatusManagedColumn? CreateStatusManagedColumn { get; init; }
+
+    /// <summary>
+    /// Update managed column of type dropdown mutation.
+    /// </summary>
+    [JsonPropertyName("update_dropdown_managed_column")]
+    public DropdownManagedColumn? UpdateDropdownManagedColumn { get; init; }
+
+    /// <summary>
+    /// Update managed column of type status mutation.
+    /// </summary>
+    [JsonPropertyName("update_status_managed_column")]
+    public StatusManagedColumn? UpdateStatusManagedColumn { get; init; }
+
+    /// <summary>
+    /// Activate managed column mutation.
+    /// </summary>
+    [JsonPropertyName("activate_managed_column")]
+    public ManagedColumn? ActivateManagedColumn { get; init; }
+
+    /// <summary>
+    /// Deactivate managed column mutation.
+    /// </summary>
+    [JsonPropertyName("deactivate_managed_column")]
+    public ManagedColumn? DeactivateManagedColumn { get; init; }
+
+    /// <summary>
+    /// Delete managed column mutation.
+    /// </summary>
+    [JsonPropertyName("delete_managed_column")]
+    public ManagedColumn? DeleteManagedColumn { get; init; }
+
+    /// <summary>
+    /// Updates a status column's properties including title, description, and status label settings. Status columns allow users to track item progress through customizable labels (e.g., "Working on it", "Done", "Stuck"). This mutation is specifically for status/color columns and provides type-safe updates.
+    /// </summary>
+    [JsonPropertyName("update_status_column")]
+    public Column? UpdateStatusColumn { get; init; }
+
+    /// <summary>
+    /// Updates a dropdown column's properties including title, description, and dropdown label settings. Dropdown columns allow users to select from a predefined list of options. This mutation is specifically for dropdown columns and provides type-safe updates.
+    /// </summary>
+    [JsonPropertyName("update_dropdown_column")]
+    public Column? UpdateDropdownColumn { get; init; }
+
+    /// <summary>
+    /// Generic mutation for updating any column type with validation. Supports updating column properties like title, description, and type-specific defaults/settings. The mutation validates input against the column type's schema before applying changes. Use get_column_type_schema query to understand available properties for each column type.
+    /// </summary>
+    [JsonPropertyName("update_column")]
+    public Column? UpdateColumn { get; init; }
+
+    /// <summary>
+    /// Creates a new status column with strongly typed settings. Status columns allow users to track item progress through customizable labels (e.g., "Working on it", "Done", "Stuck"). This mutation is specifically for status/color columns and provides type-safe creation with label configuration.
+    /// </summary>
+    [JsonPropertyName("create_status_column")]
+    public Column? CreateStatusColumn { get; init; }
+
+    /// <summary>
+    /// Creates a new dropdown column with strongly typed settings. Dropdown columns allow users to select from a predefined list of options. This mutation is specifically for dropdown columns and provides type-safe creation with dropdown options configuration.
+    /// </summary>
+    [JsonPropertyName("create_dropdown_column")]
+    public Column? CreateDropdownColumn { get; init; }
+
+    /// <summary>
+    /// Creates a new status column in a board that is linked to a managed column. The column data and settings are controlled by the managed column. Only title and description can be overridden locally.
+    /// </summary>
+    [JsonPropertyName("attach_status_managed_column")]
+    public Column? AttachStatusManagedColumn { get; init; }
+
+    /// <summary>
+    /// Creates a new dropdown column in a board that is linked to a managed column. The column data and settings are controlled by the managed column. Title, description, and dropdown-specific settings (limit_select, label_limit_count) can be overridden locally.
+    /// </summary>
+    [JsonPropertyName("attach_dropdown_managed_column")]
+    public Column? AttachDropdownManagedColumn { get; init; }
+
+    /// <summary>
+    /// Create a new account object schema.
+    /// </summary>
+    [JsonPropertyName("create_object_schema")]
+    public ObjectSchema? CreateObjectSchema { get; init; }
+
+    /// <summary>
+    /// Update an account object schema.
+    /// </summary>
+    [JsonPropertyName("update_object_schema")]
+    public ObjectSchema? UpdateObjectSchema { get; init; }
+
+    /// <summary>
+    /// Delete an account object schema. Can only delete if there are no boards attached to the object schema. Object schemas define the structure and columns of boards.
+    /// </summary>
+    [JsonPropertyName("delete_object_schema")]
+    public ObjectSchema? DeleteObjectSchema { get; init; }
+
+    /// <summary>
+    /// Connect a board to an object schema.
+    /// </summary>
+    [JsonPropertyName("connect_board_to_object_schema")]
+    public BoardConnection? ConnectBoardToObjectSchema { get; init; }
+
+    /// <summary>
+    /// Create columns on an account object schema.
+    /// </summary>
+    [JsonPropertyName("create_object_schema_columns")]
+    public ObjectSchema? CreateObjectSchemaColumns { get; init; }
+
+    /// <summary>
+    /// Deactivate or reactivate a column on an account object schema.
+    /// </summary>
+    [JsonPropertyName("set_object_schema_column_active_state")]
+    public ObjectSchema? SetObjectSchemaColumnActiveState { get; init; }
+
+    /// <summary>
+    /// Detach boards from their object schemas.
+    /// </summary>
+    [JsonPropertyName("detach_boards_from_object_schema")]
+    public List<BulkDetachBoardResult>? DetachBoardsFromObjectSchema { get; init; }
+
+    /// <summary>
+    /// Update columns on an account object schema.
+    /// </summary>
+    [JsonPropertyName("update_object_schema_columns")]
+    public ObjectSchema? UpdateObjectSchemaColumns { get; init; }
+
+    /// <summary>
+    /// Execute multiple object schema column actions in a single request. Actions are executed sequentially in the order provided. If any action fails, execution stops and an error is returned.
+    /// </summary>
+    [JsonPropertyName("bulk_object_schema_column_actions")]
+    public List<ObjectSchemaActionResult>? BulkObjectSchemaColumnActions { get; init; }
+
+    /// <summary>
+    /// Execute an integration block with the provided field values
+    /// </summary>
+    [JsonPropertyName("execute_integration_block")]
+    public IntegrationExecutionResult? ExecuteIntegrationBlock { get; init; }
+
+    /// <summary>
+    /// Connect an existing project to a portfolio. When a callback_url is provided the mutation returns immediately with a process_id, and the result is POSTed to that URL once the operation completes. The callback payload is: { is_success: boolean, process_id: string, portfolio_item_id?: string }.
+    /// </summary>
+    [JsonPropertyName("connect_project_to_portfolio")]
+    public ConnectProjectResult? ConnectProjectToPortfolio { get; init; }
+
+    /// <summary>
+    /// Create a new portfolio. When a callback_url is provided the mutation returns immediately with a process_id, and the portfolio_id is POSTed to that URL once the portfolio is actually created. The callback payload is: { is_success: boolean, process_id: string, portfolio_id?: number }.
+    /// </summary>
+    [JsonPropertyName("create_portfolio")]
+    public CreatePortfolioResult? CreatePortfolio { get; init; }
+
+    /// <summary>
+    /// Update the dependency column for a specific pulse
+    /// </summary>
+    [JsonPropertyName("update_dependency_column")]
+    public string UpdateDependencyColumn { get; init; } = null!;
+
+    /// <summary>
+    /// Batch update the dependency column values in a board. Limited to 50 items per batch.
+    /// </summary>
+    [JsonPropertyName("batch_update_dependency_column")]
+    public string BatchUpdateDependencyColumn { get; init; } = null!;
 
     /// <summary>
     /// Convert an existing monday.com board into a project with enhanced project management capabilities. This mutation transforms a regular board by applying project-specific features and configurations through column mappings that define how existing board columns should be interpreted in the project context. The conversion process is asynchronous and returns a process_id for tracking completion. Optionally accepts a callback URL for notification when the conversion completes. Use this when you have an existing board with data that needs to be upgraded to a full project with advanced project management features like Resource Planner integration.

@@ -22,7 +22,7 @@ public sealed partial class ChangeColumnTitleRequestBuilder
     /// </summary>
     public ValueTask<GraphQlResponse<ChangeColumnTitleData>> Execute(ChangeColumnTitleVariables request, CancellationToken cancellationToken = default)
     {
-        const string gqlQuery = @"mutation ChangeColumnTitle($board_id: ID!, $column_id: String!, $title: String!) { change_column_title(board_id: $board_id, column_id: $column_id, title: $title) { id title description type width archived settings settings_str revision capabilities { calculated { function calculated_type } visibility } } }";
+        const string gqlQuery = @"mutation ChangeColumnTitle($board_id: ID!, $column_id: String!, $title: String!) { change_column_title(board_id: $board_id, column_id: $column_id, title: $title) { archived description id settings_str title type width settings revision capabilities { calculated { function calculated_type } visibility } } }";
         return _graphQlClient.Execute<ChangeColumnTitleData>(gqlQuery, request, cancellationToken);
     }
 
