@@ -346,6 +346,10 @@ type Mutation {
   """
   undo_action(job_id: ID!): UndoResult
   """
+  Update attributes (Job Role, Skills, or Location) for multiple resources in the directory
+  """
+  update_directory_resources_attributes(attribute: DirectoryResourceAttribute!, values: [String!]!, resource_ids: [ID!]!): UpdateDirectoryResourceAttributesResponse
+  """
   Creates a new team.
   """
   create_team(input: CreateTeamAttributesInput!, options: CreateTeamOptionsInput): Team
@@ -401,10 +405,6 @@ type Mutation {
   Enroll multiple items to a single sequence. Maximum 50 items per request.
   """
   enroll_items_to_sequence(input: EnrollToSequenceInput!): EnrollToSequenceResult
-  """
-  Update attributes (Job Role, Skills, or Location) for multiple resources in the directory
-  """
-  update_directory_resources_attributes(attribute: DirectoryResourceAttribute!, values: [String!]!, resource_ids: [ID!]!): UpdateDirectoryResourceAttributesResponse
   """
   Assigns members to a department.
   """
@@ -840,82 +840,6 @@ type Mutation {
   Update the position of an object in favorites
   """
   update_favorite_position(input: UpdateObjectHierarchyPositionInput!): UpdateFavoriteResultType
-  create_timeline_item(item_id: ID!, user_id: Int, title: String!, timestamp: ISO8601DateTime!, summary: String, content: String, location: String, phone: String, url: String, time_range: TimelineItemTimeRange, custom_activity_id: String!): TimelineItem
-  delete_timeline_item(id: String!): TimelineItem
-  create_custom_activity(name: String!, icon_id: CustomActivityIcon!, color: CustomActivityColor!): CustomActivity
-  delete_custom_activity(id: String!): CustomActivity
-  """
-  Update form properties including title, description, or question order.
-  """
-  update_form(formToken: String!, input: UpdateFormInput!): ResponseForm
-  """
-  Update form configuration including features, appearance, and accessibility options.
-  """
-  update_form_settings(formToken: String!, settings: UpdateFormSettingsInput!): ResponseForm
-  """
-  Create a new question within a form. Returns the created question with auto-generated ID.
-  """
-  create_form_question(formToken: String!, question: CreateQuestionInput!): FormQuestion
-  """
-  Update an existing question properties including title, type, or settings. Requires question ID.
-  """
-  update_form_question(formToken: String!, questionId: String!, question: UpdateQuestionInput!): FormQuestion
-  """
-  Permanently remove a question from a form. This action cannot be undone.
-  """
-  delete_question(formToken: String!, questionId: String!): Boolean
-  """
-  Activate a form to make it visible to users and accept new submissions.
-  """
-  activate_form(formToken: String!): Boolean
-  """
-  Deactivate a form to hide it from users and stop accepting submissions. Form data is preserved.
-  """
-  deactivate_form(formToken: String!): Boolean
-  """
-  Shorten a URL for a form and store it in the form settings. Returns the shortened link object.
-  """
-  shorten_form_url(formToken: String!): FormShortenedLink
-  """
-  Create a new tag for a form. Tags are used to categorize and track responses. (e.g. UTM tags)
-  """
-  create_form_tag(formToken: String!, tag: CreateFormTagInput!): FormTag
-  """
-  Update an existing tag in a form
-  """
-  update_form_tag(formToken: String!, tagId: String!, tag: UpdateFormTagInput!): Boolean @deprecated(reason: "Updating tag values is no longer supported after version 2026-07.")
-  """
-  Delete a tag from a form
-  """
-  delete_form_tag(formToken: String!, tagId: String!, options: DeleteFormTagInput): Boolean
-  """
-  Create a new form with specified configuration. Returns the created form with its unique token.
-  """
-  create_form(destination_workspace_id: ID!, destination_folder_id: ID, destination_folder_name: String, board_kind: BoardKind, destination_name: String, board_owner_ids: [ID!], board_owner_team_ids: [ID!], board_subscriber_ids: [ID!], board_subscriber_teams_ids: [ID!]): DehydratedFormResponse
-  """
-  Set a password on a form to restrict access. This will enable password protection for the form.
-  """
-  set_form_password(formToken: String!, input: SetFormPasswordInput!): ResponseForm
-  """
-  Create a new table view
-  """
-  create_view_table(board_id: ID!, name: String, filter_user_id: ID, filter_team_id: ID, filter: ItemsQueryGroup, sort: [ItemsQueryOrderBy!], tags: [String!], settings: TableViewSettingsInput): BoardView
-  """
-  Create a view
-  """
-  create_view(board_id: ID!, type: ViewKind!, name: String, filter_user_id: ID, filter_team_id: ID, filter: ItemsQueryGroup, sort: [ItemsQueryOrderBy!], tags: [String!], settings: JSON): BoardView
-  """
-  Update an existing board table view
-  """
-  update_view_table(view_id: ID!, board_id: ID!, name: String, filter_user_id: ID, filter_team_id: ID, filter: ItemsQueryGroup, sort: [ItemsQueryOrderBy!], tags: [String!], settings: TableViewSettingsInput): BoardView
-  """
-  Update an existing view
-  """
-  update_view(name: String, filter_user_id: ID, filter_team_id: ID, filter: ItemsQueryGroup, sort: [ItemsQueryOrderBy!], tags: [String!], view_id: ID!, board_id: ID!, type: ViewKind!, settings: JSON): BoardView
-  """
-  Delete an existing board subset/view
-  """
-  delete_view(view_id: ID!, board_id: ID!): BoardView
   """
   Create managed column of type dropdown mutation.
   """
@@ -1008,6 +932,82 @@ type Mutation {
   Execute multiple object schema column actions in a single request. Actions are executed sequentially in the order provided. If any action fails, execution stops and an error is returned.
   """
   bulk_object_schema_column_actions(object_schema_id: ID, object_schema_name: String, actions: [ObjectSchemaActionInput!]!): [ObjectSchemaActionResult!]
+  create_timeline_item(item_id: ID!, user_id: Int, title: String!, timestamp: ISO8601DateTime!, summary: String, content: String, location: String, phone: String, url: String, time_range: TimelineItemTimeRange, custom_activity_id: String!): TimelineItem
+  delete_timeline_item(id: String!): TimelineItem
+  create_custom_activity(name: String!, icon_id: CustomActivityIcon!, color: CustomActivityColor!): CustomActivity
+  delete_custom_activity(id: String!): CustomActivity
+  """
+  Update form properties including title, description, or question order.
+  """
+  update_form(formToken: String!, input: UpdateFormInput!): ResponseForm
+  """
+  Update form configuration including features, appearance, and accessibility options.
+  """
+  update_form_settings(formToken: String!, settings: UpdateFormSettingsInput!): ResponseForm
+  """
+  Create a new question within a form. Returns the created question with auto-generated ID.
+  """
+  create_form_question(formToken: String!, question: CreateQuestionInput!): FormQuestion
+  """
+  Update an existing question properties including title, type, or settings. Requires question ID.
+  """
+  update_form_question(formToken: String!, questionId: String!, question: UpdateQuestionInput!): FormQuestion
+  """
+  Permanently remove a question from a form. This action cannot be undone.
+  """
+  delete_question(formToken: String!, questionId: String!): Boolean
+  """
+  Activate a form to make it visible to users and accept new submissions.
+  """
+  activate_form(formToken: String!): Boolean
+  """
+  Deactivate a form to hide it from users and stop accepting submissions. Form data is preserved.
+  """
+  deactivate_form(formToken: String!): Boolean
+  """
+  Shorten a URL for a form and store it in the form settings. Returns the shortened link object.
+  """
+  shorten_form_url(formToken: String!): FormShortenedLink
+  """
+  Create a new tag for a form. Tags are used to categorize and track responses. (e.g. UTM tags)
+  """
+  create_form_tag(formToken: String!, tag: CreateFormTagInput!): FormTag
+  """
+  Update an existing tag in a form
+  """
+  update_form_tag(formToken: String!, tagId: String!, tag: UpdateFormTagInput!): Boolean @deprecated(reason: "Updating tag values is no longer supported after version 2026-07.")
+  """
+  Delete a tag from a form
+  """
+  delete_form_tag(formToken: String!, tagId: String!, options: DeleteFormTagInput): Boolean
+  """
+  Create a new form with specified configuration. Returns the created form with its unique token.
+  """
+  create_form(destination_workspace_id: ID!, destination_folder_id: ID, destination_folder_name: String, board_kind: BoardKind, destination_name: String, board_owner_ids: [ID!], board_owner_team_ids: [ID!], board_subscriber_ids: [ID!], board_subscriber_teams_ids: [ID!]): DehydratedFormResponse
+  """
+  Set a password on a form to restrict access. This will enable password protection for the form.
+  """
+  set_form_password(formToken: String!, input: SetFormPasswordInput!): ResponseForm
+  """
+  Create a new table view
+  """
+  create_view_table(board_id: ID!, name: String, filter_user_id: ID, filter_team_id: ID, filter: ItemsQueryGroup, sort: [ItemsQueryOrderBy!], tags: [String!], settings: TableViewSettingsInput): BoardView
+  """
+  Create a view
+  """
+  create_view(board_id: ID!, type: ViewKind!, name: String, filter_user_id: ID, filter_team_id: ID, filter: ItemsQueryGroup, sort: [ItemsQueryOrderBy!], tags: [String!], settings: JSON): BoardView
+  """
+  Update an existing board table view
+  """
+  update_view_table(view_id: ID!, board_id: ID!, name: String, filter_user_id: ID, filter_team_id: ID, filter: ItemsQueryGroup, sort: [ItemsQueryOrderBy!], tags: [String!], settings: TableViewSettingsInput): BoardView
+  """
+  Update an existing view
+  """
+  update_view(name: String, filter_user_id: ID, filter_team_id: ID, filter: ItemsQueryGroup, sort: [ItemsQueryOrderBy!], tags: [String!], view_id: ID!, board_id: ID!, type: ViewKind!, settings: JSON): BoardView
+  """
+  Delete an existing board subset/view
+  """
+  delete_view(view_id: ID!, board_id: ID!): BoardView
   """
   Execute an integration block with the provided field values
   """
@@ -1084,6 +1084,10 @@ type Query {
   """
   fetch_job_status(job_id: ID!): JobStatus!
   """
+  Fetch resources information from the resource directory
+  """
+  get_directory_resources(query_params: ItemsQuery, cursor: String, limit: Int = 25): DirectoryResourcesResponse
+  """
   Get all roles for the account
   """
   account_roles: [AccountRole!]
@@ -1123,10 +1127,6 @@ type Query {
   Get sequences that the current user is allowed to enroll items to, that are connected to the provided board. Returns sequences owned by the user or sequences where the user has access to the sender connection.
   """
   allowed_sequences_to_enroll(board_id: ID!): [Sequence!]
-  """
-  Fetch resources information from the resource directory
-  """
-  get_directory_resources(query_params: ItemsQuery, cursor: String, limit: Int = 25): DirectoryResourcesResponse
   """
   Performs aggregation operations on board data
   """
@@ -1298,6 +1298,18 @@ type Query {
   Get all personal list items by list ID
   """
   favorites: [GraphqlHierarchyObjectItem!]
+  """
+  Get managed column data.
+  """
+  managed_column(id: [String!], state: [ManagedColumnState!]): [ManagedColumn!]
+  """
+  Retrieves the JSON schema definition for a specific column type. Use this query before calling update_column mutation to understand the structure and validation rules for the defaults parameter. The schema defines what properties are available when updating columns of a specific type.
+  """
+  get_column_type_schema(type: ColumnType!): JSON
+  """
+  Retrieve active account object schemas by their IDs or names. Only returns account-level object schemas (not global). Object schemas define the structure and columns of boards. If no parameters are provided, all account object schemas are returned. Pass exclude_created_by_monday: true to omit the schemas seeded by monday.com and return only schemas created by users in this account. Results are paginated using page and limit parameters.
+  """
+  get_object_schemas(ids: [ID!], names: [String!], limit: Int, page: Int, exclude_created_by_monday: Boolean): [ObjectSchema!]
   custom_activity(ids: [String!], name: String, icon_id: CustomActivityIcon, color: CustomActivityColor): [CustomActivity!]
   timeline_item(id: ID!): TimelineItem
   """
@@ -1354,18 +1366,6 @@ type Query {
     The schema defines what properties are available when creating views of a specific type.
   """
   get_view_schema_by_type(type: ViewKind!, mutationType: ViewMutationKind!): JSON
-  """
-  Get managed column data.
-  """
-  managed_column(id: [String!], state: [ManagedColumnState!]): [ManagedColumn!]
-  """
-  Retrieves the JSON schema definition for a specific column type. Use this query before calling update_column mutation to understand the structure and validation rules for the defaults parameter. The schema defines what properties are available when updating columns of a specific type.
-  """
-  get_column_type_schema(type: ColumnType!): JSON
-  """
-  Retrieve active account object schemas by their IDs or names. Only returns account-level object schemas (not global). Object schemas define the structure and columns of boards. If no parameters are provided, all account object schemas are returned. Pass exclude_created_by_monday: true to omit the schemas seeded by monday.com and return only schemas created by users in this account. Results are paginated using page and limit parameters.
-  """
-  get_object_schemas(ids: [ID!], names: [String!], limit: Int, page: Int, exclude_created_by_monday: Boolean): [ObjectSchema!]
   """
   Search knowledge base snippets.
   """
@@ -2291,6 +2291,1398 @@ type UploadJobInit {
   The URL where the file should be uploaded for processing
   """
   upload_url: String
+}
+
+"""
+The account-level default work schedule and time off schedule
+"""
+type AccountAvailabilityDefaults {
+  """
+  The account-level default work schedule
+  """
+  work_schedule: WorkSchedule!
+  """
+  The account-level default time off schedule
+  """
+  time_off: TimeOff!
+}
+
+"""
+Response containing per-item results for adding allocations to resources
+"""
+type AddAllocationsToResourcesResponse {
+  """
+  Per-item results for each allocation in the request
+  """
+  results: [AllocationToResourceResult!]!
+}
+
+"""
+A successfully added allocated resource
+"""
+type AddedAllocatedResource {
+  """
+  The resource ID (includes placeholder index for placeholders, e.g. "134007785_1")
+  """
+  resource_id: ID!
+  """
+  Type of resource: USER or PLACEHOLDER
+  """
+  resource_type: PlannerResourceKind!
+}
+
+"""
+A unique resource present in the planner
+"""
+type AllocatedResource {
+  """
+  The Resource id
+  """
+  resource_id: ID!
+  """
+  Type of resource
+  """
+  resource_type: PlannerResourceKind!
+  """
+  The Resource's name
+  """
+  resource_name: String!
+}
+
+"""
+A resource to add to the planner without allocations
+"""
+input AllocatedResourceInput {
+  """
+  Resource or placeholder ID
+  """
+  id: ID!
+  """
+  Type of resource: USER or PLACEHOLDER
+  """
+  resource_type: PlannerResourceKind!
+}
+
+"""
+Result of an individual resource allocation operation
+"""
+type AllocatedResourceOperationResult {
+  """
+  Whether the resource was successfully added
+  """
+  success: Boolean!
+  """
+  The successfully added resource, present when success is true
+  """
+  resource: AddedAllocatedResource
+  """
+  Error details, present when success is false
+  """
+  error: Error
+}
+
+"""
+A single allocation in the planner
+"""
+type Allocation {
+  """
+  The allocation ID
+  """
+  id: ID!
+  """
+  The resource allocated
+  """
+  resource: AllocationResource!
+  """
+  The allocation timeline
+  """
+  timeline: AllocationTimeline!
+  """
+  Effort allocation data
+  """
+  effort: AllocationEffort!
+}
+
+"""
+Effort allocation data
+"""
+type AllocationEffort {
+  """
+  Total effort of the allocation
+  """
+  total_effort: Float!
+  """
+  Calculated effort for the period
+  """
+  effort_per_period: Float
+}
+
+"""
+The resource allocated
+"""
+type AllocationResource {
+  """
+  Resource ID
+  """
+  id: ID!
+  """
+  Type of resource
+  """
+  type: PlannerResourceKind!
+  """
+  Resource Name
+  """
+  name: String!
+}
+
+"""
+A timeline with start and end dates
+"""
+type AllocationTimeline {
+  """
+  Start date
+  """
+  from: Date!
+  """
+  End date
+  """
+  to: Date!
+}
+
+"""
+An allocation to add to an existing resource on the planner
+"""
+input AllocationToResourceInput {
+  """
+  Resource ID (plain "123" for users, "456_2" for placeholder #2)
+  """
+  resource_id: ID!
+  """
+  Type of resource
+  """
+  resource_type: PlannerResourceKind!
+  """
+  Effort value (e.g., 1 FTE, 8 hours). Must be greater than 0
+  """
+  effort: Float!
+  """
+  Unit of effort: DAILY, WEEKLY, MONTHLY, FTE, or TOTAL
+  """
+  effort_type: EffortUnit!
+  """
+  Start date (ISO 8601 format: YYYY-MM-DD)
+  """
+  from: String!
+  """
+  End date (ISO 8601 format: YYYY-MM-DD)
+  """
+  to: String!
+}
+
+"""
+Result of adding a single allocation to a resource
+"""
+type AllocationToResourceResult {
+  """
+  Resource ID
+  """
+  resource_id: ID!
+  """
+  The created allocation item ID, null if creation failed
+  """
+  allocation_id: ID
+  """
+  Whether the allocation was created successfully
+  """
+  success: Boolean!
+  """
+  Error details if the allocation failed
+  """
+  error: Error
+}
+
+"""
+A single allocation update. All fields except allocation_id are optional - only provided fields will be updated.
+"""
+input AllocationUpdateInput {
+  """
+  ID of the allocation to update
+  """
+  allocation_id: ID!
+  """
+  New effort value
+  """
+  effort: Float
+  """
+  New effort unit: DAILY, WEEKLY, MONTHLY, FTE, or TOTAL
+  """
+  effort_type: EffortUnit
+  """
+  New start date (ISO 8601 format: YYYY-MM-DD)
+  """
+  from: String
+  """
+  New end date (ISO 8601 format: YYYY-MM-DD)
+  """
+  to: String
+  """
+  Reassign allocation to a different resource (must exist in the planner)
+  """
+  resource_id: ID
+}
+
+"""
+Input for assigning a time off schedule to multiple users and/or teams
+"""
+input AssignTimeOffInput {
+  """
+  IDs of the users to assign the time off schedule to; maximum 100 per call
+  """
+  user_ids: [ID!]
+  """
+  IDs of the teams to assign the time off schedule to; maximum 100 per call
+  """
+  team_ids: [ID!]
+  """
+  ID of the time off schedule to assign; pass the account default time off ID to revert the resource to the account default
+  """
+  time_off_id: ID!
+}
+
+"""
+Per-resource outcomes of a time off assignment, split by resource kind
+"""
+type AssignTimeOffResult {
+  """
+  One result per user id passed to the mutation
+  """
+  users: [AssignTimeOffUserResult!]!
+  """
+  One result per team id passed to the mutation
+  """
+  teams: [AssignTimeOffTeamResult!]!
+}
+
+"""
+Result of a time off assignment for a single team. Batch mutations return one of these per requested team, allowing partial success.
+"""
+type AssignTimeOffTeamResult {
+  """
+  ID of the team this result applies to
+  """
+  team_id: ID!
+  """
+  Whether the operation succeeded
+  """
+  success: Boolean!
+  """
+  Structured error details, null if the operation succeeded
+  """
+  error: Error
+}
+
+"""
+Result of a time off assignment for a single user. Batch mutations return one of these per requested user, allowing partial success.
+"""
+type AssignTimeOffUserResult {
+  """
+  ID of the user this result applies to
+  """
+  user_id: ID!
+  """
+  Whether the operation succeeded
+  """
+  success: Boolean!
+  """
+  Structured error details, null if the operation succeeded
+  """
+  error: Error
+}
+
+"""
+Input for assigning a work schedule to multiple users and/or teams
+"""
+input AssignWorkScheduleInput {
+  """
+  IDs of the users to assign the work schedule to; maximum 100 per call
+  """
+  user_ids: [ID!]
+  """
+  IDs of the teams to assign the work schedule to; maximum 100 per call
+  """
+  team_ids: [ID!]
+  """
+  ID of the work schedule to assign; pass the account default schedule ID to revert to the account default
+  """
+  work_schedule_id: ID!
+}
+
+"""
+Per-resource outcomes of a work schedule assignment, split by resource kind
+"""
+type AssignWorkScheduleResult {
+  """
+  One result per user id passed to the mutation
+  """
+  users: [AssignWorkScheduleUserResult!]
+  """
+  One result per team id passed to the mutation
+  """
+  teams: [AssignWorkScheduleTeamResult!]
+}
+
+"""
+Per-team outcome of a work schedule assignment
+"""
+type AssignWorkScheduleTeamResult {
+  """
+  ID of the team this result applies to
+  """
+  team_id: ID
+  """
+  Whether the operation succeeded
+  """
+  success: Boolean!
+  """
+  Structured error details, null if the operation succeeded
+  """
+  error: Error
+}
+
+"""
+Per-user outcome of a work schedule assignment
+"""
+type AssignWorkScheduleUserResult {
+  """
+  ID of the user this result applies to
+  """
+  user_id: ID
+  """
+  Whether the operation succeeded
+  """
+  success: Boolean!
+  """
+  Structured error details, null if the operation succeeded
+  """
+  error: Error
+}
+
+"""
+Represents a single attribute type option for a resource
+"""
+type Attribute {
+  """
+  Unique identifier for the attribute
+  """
+  id: ID!
+  """
+  Name of the attribute
+  """
+  name: String!
+  """
+  Whether the attribute is enabled and can be used
+  """
+  is_active: Boolean!
+}
+
+"""
+A string or number value for comparison
+"""
+scalar CompareValue
+
+"""
+Severity of a schedule conflict.
+"""
+enum ConflictSeverity {
+  PARTIAL
+  FULL
+}
+
+"""
+Input for creating a PTO entry for a user
+"""
+input CreatePtoEntryInput {
+  """
+  ID of the user to create the PTO entry for
+  """
+  user_id: ID!
+  """
+  Start date of the PTO period in YYYY-MM-DD format; must be within 1 year in the past and 20 years in the future
+  """
+  start: String!
+  """
+  End date of the PTO period in YYYY-MM-DD format; must be within 1 year in the past and 20 years in the future
+  """
+  end: String!
+}
+
+"""
+Input for adding a non-working date entry to a time off schedule
+"""
+input CreateTimeOffEntryInput {
+  """
+  ID of the time off schedule to add this entry to
+  """
+  time_off_id: ID!
+  """
+  Display name for this time off entry
+  """
+  name: String!
+  """
+  Start date of the non-working period in YYYY-MM-DD format; must be within 1 year in the past and 20 years in the future
+  """
+  start: String!
+  """
+  Type of the time off entry. Defaults to CUSTOM when omitted.
+  """
+  type: TimeOffEntryKind
+  """
+  End date of the non-working period in YYYY-MM-DD format; must be within 1 year in the past and 20 years in the future
+  """
+  end: String!
+}
+
+"""
+Input for creating a new time off schedule
+"""
+input CreateTimeOffInput {
+  """
+  Display name for the new time off schedule
+  """
+  name: String!
+  """
+  Non-working date entries to create alongside the schedule. Subsequent additions/updates use the dedicated time off entry mutations.
+  """
+  entries: [TimeOffEntryInput!]
+}
+
+"""
+Input for creating a new work schedule
+"""
+input CreateWorkScheduleInput {
+  """
+  Display name for the new work schedule
+  """
+  name: String!
+  """
+  Per-weekday working hours; if omitted, all seven days are created as inactive
+  """
+  days: [WorkScheduleDayInput!]
+}
+
+"""
+Response indicating whether the allocation deletion succeeded
+"""
+type DeleteAllocationResponse {
+  """
+  Indicates whether the allocation was successfully deleted.
+  """
+  success: Boolean!
+  """
+  The ID of the allocation that was targeted for deletion.
+  """
+  allocation_id: ID!
+}
+
+"""
+Response indicating whether the planner resource deletion succeeded
+"""
+type DeletePlannerResourceResponse {
+  """
+  Indicates whether the resource was successfully deleted.
+  """
+  success: Boolean!
+  """
+  The ID of the resource that was targeted for deletion.
+  """
+  resource_id: ID!
+  """
+  Number of allocation items that were deleted.
+  """
+  deleted_allocation_count: Int!
+}
+
+"""
+A resource from the directory
+"""
+type DirectoryResource {
+  """
+  The identifier of the directory resource.
+  """
+  id: ID!
+  """
+  The name of the directory resource.
+  """
+  name: String!
+  """
+  The email address of the directory resource.
+  """
+  email: String
+  """
+  The job role of the directory resource.
+  """
+  job_role: String
+  """
+  The skills of the directory resource.
+  """
+  skills: [String!]
+  """
+  The location of the directory resource.
+  """
+  location: String
+  """
+  The type of the resource (user, viewer, or guest).
+  """
+  resource_type: DirectoryResourceKind
+}
+
+"""
+Attributes that can be updated on a resource directory entry
+"""
+enum DirectoryResourceAttribute {
+  JOB_ROLE
+  SKILLS
+  LOCATION
+}
+
+"""
+The type of a directory resource
+"""
+enum DirectoryResourceKind {
+  USER
+  VIEWER
+  GUEST
+}
+
+"""
+Paginated response containing directory resources and cursor for next page
+"""
+type DirectoryResourcesResponse {
+  """
+  Response identifier
+  """
+  id: ID!
+  """
+  List of directory resources
+  """
+  resources: [DirectoryResource!]!
+  """
+  Cursor for fetching the next page of results
+  """
+  cursor: String
+}
+
+"""
+Unit of effort calculation
+"""
+enum EffortUnit {
+  DAILY
+  WEEKLY
+  MONTHLY
+  FTE
+  TOTAL
+}
+
+"""
+User-facing error with code and optional path
+"""
+type Error {
+  """
+  Human-readable error message
+  """
+  message: String!
+  """
+  Machine-readable error code for client handling
+  """
+  code: String!
+  """
+  Field path that caused the error (e.g., ["input", "from"])
+  """
+  path: [String!]
+}
+
+"""
+Paginated response containing allocations
+"""
+type GetAllocationsResponse {
+  """
+  List of allocations
+  """
+  allocations: [Allocation!]
+  """
+  Cursor for fetching the next page of results
+  """
+  cursor: String
+}
+
+"""
+Successful response containing available attribute options for a specific attribute type
+"""
+type GetAttributesResponse {
+  """
+  The attribute type for which attributes were fetched
+  """
+  attribute_type: String!
+  """
+  List of available attributes containing id, name, and is_active
+  """
+  attributes: [Attribute!]!
+}
+
+"""
+The direction to order the items by
+"""
+enum ItemsOrderByDirection {
+  asc
+  desc
+}
+
+input ItemsQuery {
+  """
+  A list of rules
+  """
+  rules: [ItemsQueryRule!]
+  """
+  A list of rule groups
+  """
+  groups: [ItemsQueryGroup!]
+  """
+  The operator to use for the query rules or rule groups. Default: AND
+  """
+  operator: ItemsQueryOperator = and
+  """
+  A list of item IDs to fetch. Use this to fetch a specific set of items by their IDs. Limited to 100 IDs in ItemsQuery
+  """
+  ids: [ID!]
+  """
+  Sort the results by specified columns
+  """
+  order_by: [ItemsQueryOrderBy!]
+}
+
+"""
+A group of rules or rule groups
+"""
+input ItemsQueryGroup {
+  """
+  A list of rules
+  """
+  rules: [ItemsQueryRule!]
+  """
+  A list of rule groups
+  """
+  groups: [ItemsQueryGroup!]
+  """
+  The operator to use for the query rules or rule groups. Default: AND
+  """
+  operator: ItemsQueryOperator = and
+}
+
+"""
+The condition between the query rules
+"""
+enum ItemsQueryOperator {
+  or
+  and
+}
+
+"""
+Sort the results by specified columns
+"""
+input ItemsQueryOrderBy {
+  column_id: String!
+  """
+  Sort direction (defaults to ASC)
+  """
+  direction: ItemsOrderByDirection = asc
+}
+
+"""
+A rule to filter items by a specific column
+"""
+input ItemsQueryRule {
+  column_id: ID!
+  compare_value: CompareValue!
+  compare_attribute: String
+  operator: ItemsQueryRuleOperator = any_of
+}
+
+"""
+The operator to use for the value comparison
+"""
+enum ItemsQueryRuleOperator {
+  any_of
+  not_any_of
+  is_empty
+  is_not_empty
+  within_the_last
+  within_the_next
+  greater_than
+  greater_than_or_equals
+  lower_than
+  lower_than_or_equal
+  between
+  starts_with
+  ends_with
+  contains_text
+  contains_terms
+  not_contains_text
+}
+
+"""
+Type of resource in the planner
+"""
+enum PlannerResourceKind {
+  USER
+  PLACEHOLDER
+}
+
+"""
+All schedule conflicts detected on a project.
+"""
+type ProjectScheduleConflicts {
+  """
+  Conflicts found. Empty array when no conflicts exist.
+  """
+  conflicts: [ScheduleConflict!]!
+}
+
+"""
+A personal time off entry for a user
+"""
+type PtoEntry {
+  """
+  Unique identifier of the time off entry
+  """
+  id: ID!
+  """
+  Start date of the non-working period in YYYY-MM-DD format
+  """
+  start: String!
+  """
+  End date of the non-working period in YYYY-MM-DD format
+  """
+  end: String!
+  """
+  ID of the user who created this entry
+  """
+  created_by: ID!
+  """
+  ISO 8601 timestamp when this record was created
+  """
+  created_at: Date!
+  """
+  ISO 8601 timestamp when this record was last updated
+  """
+  updated_at: Date!
+}
+
+"""
+Information about a resource directory attribute type
+"""
+type ResourceAttributeTypeInfo {
+  """
+  The attribute type enum value
+  """
+  type: ResourceAttributeTypeKey
+  """
+  Human-readable description of the attribute
+  """
+  description: String
+  """
+  User-friendly display name
+  """
+  display_name: String
+  """
+  Whether the attribute values are managed by resource managers
+  """
+  is_managed: Boolean
+  """
+  Whether the attribute can be used for filtering the directory
+  """
+  is_filterable: Boolean
+}
+
+"""
+Available attribute types that can be retrieved from the resource directory
+"""
+enum ResourceAttributeTypeKey {
+  NAME
+  EMAIL
+  TEAMS
+  BASE_ROLE
+  STATUS
+  LOCATION
+  SKILLS
+  JOB_ROLE
+  RESOURCE_MANAGER
+}
+
+"""
+Recurring weekly work-schedule mask for a resource. Does not account for time-offs or specific dates.
+"""
+type ResourceWorkWeekday {
+  """
+  Resource ID
+  """
+  resource_id: ID!
+  """
+  Sunday-first length-7 mask of active work days for the resource work schedule
+  """
+  active_weekdays: [Boolean!]!
+}
+
+"""
+Resources availability with per-resource references and top-level schedule/time-off data
+"""
+type ResourcesAvailability {
+  """
+  Per-user availability references
+  """
+  users_assigned_schedules: [UserAssignment!]!
+  """
+  Per-team availability references
+  """
+  teams_assigned_schedules: [TeamAssignment!]!
+  """
+  All work schedules referenced by users_assigned_schedules or teams_assigned_schedules entries
+  """
+  work_schedules: [WorkSchedule!]!
+  """
+  All time off schedules referenced by users_assigned_schedules or teams_assigned_schedules entries
+  """
+  company_time_offs: [TimeOff!]!
+  """
+  ID of the account-level default work schedule
+  """
+  default_work_schedule_id: ID!
+  """
+  ID of the account-level default time off schedule
+  """
+  default_company_time_off_id: ID!
+}
+
+"""
+A detected schedule conflict between a task timeline and a resource availability.
+"""
+type ScheduleConflict {
+  """
+  The task with the conflict.
+  """
+  pulse_id: ID!
+  """
+  The resource whose schedule conflicts with the task timeline.
+  """
+  resource_id: ID!
+  """
+  Whether the resource is fully or partially unavailable within the task timeline.
+  """
+  severity: ConflictSeverity
+}
+
+"""
+A team's assigned work schedule and time off schedule IDs
+"""
+type TeamAssignment {
+  """
+  ID of the team
+  """
+  team_id: ID!
+  """
+  ID of the work schedule assigned to this team
+  """
+  work_schedule_id: ID!
+  """
+  ID of the time off schedule assigned to this team
+  """
+  company_time_off_id: ID!
+}
+
+"""
+A named time off schedule with all its non-working date entries
+"""
+type TimeOff {
+  """
+  Unique identifier of the time off schedule
+  """
+  id: ID!
+  """
+  Display name of the time off schedule
+  """
+  name: String!
+  """
+  Whether this is the account-level default time off schedule
+  """
+  is_default: Boolean!
+  """
+  ID of the user who created this time off schedule, null if system-generated
+  """
+  created_by: ID
+  """
+  ISO 8601 timestamp when this record was created
+  """
+  created_at: Date!
+  """
+  ISO 8601 timestamp when this record was last updated
+  """
+  updated_at: Date!
+  """
+  All non-working date entries in this time off schedule
+  """
+  entries: [TimeOffEntry!]!
+  """
+  Whether any users are currently assigned to this time off schedule
+  """
+  has_assignments: Boolean!
+}
+
+"""
+Result of a time off schedule delete operation
+"""
+type TimeOffDeleteResult {
+  """
+  ID of the deleted time off schedule, null if the operation failed
+  """
+  id: ID
+  """
+  Whether the operation succeeded
+  """
+  success: Boolean!
+  """
+  Structured error details, null if the operation succeeded
+  """
+  error: Error
+}
+
+"""
+A non-working date entry within a time off schedule
+"""
+type TimeOffEntry {
+  """
+  Unique identifier of the time off entry
+  """
+  id: ID!
+  """
+  ID of the time off schedule this entry belongs to
+  """
+  time_off_id: ID!
+  """
+  Display name for this time off entry
+  """
+  name: String!
+  """
+  Type of the time off entry
+  """
+  type: TimeOffEntryKind
+  """
+  Start date of the non-working period in YYYY-MM-DD format
+  """
+  start: String!
+  """
+  End date of the non-working period in YYYY-MM-DD format
+  """
+  end: String!
+  """
+  ID of the user who created this entry
+  """
+  created_by: ID!
+  """
+  ISO 8601 timestamp when this record was created
+  """
+  created_at: Date!
+  """
+  ISO 8601 timestamp when this record was last updated
+  """
+  updated_at: Date!
+}
+
+"""
+Result of a time off entry delete operation
+"""
+type TimeOffEntryDeleteResult {
+  """
+  ID of the deleted time off entry, null only if an internal error prevented identification
+  """
+  id: ID
+  """
+  Whether the operation succeeded
+  """
+  success: Boolean!
+  """
+  Structured error details, null if the operation succeeded
+  """
+  error: Error
+}
+
+"""
+A non-working date entry to create inline with a time off schedule
+"""
+input TimeOffEntryInput {
+  """
+  Display name for this time off entry
+  """
+  name: String!
+  """
+  Type of the time off entry. Defaults to CUSTOM when omitted.
+  """
+  type: TimeOffEntryKind
+  """
+  Start date of the non-working period in YYYY-MM-DD format; must be within 1 year in the past and 20 years in the future
+  """
+  start: String!
+  """
+  End date of the non-working period in YYYY-MM-DD format; must be within 1 year in the past and 20 years in the future
+  """
+  end: String!
+}
+
+"""
+Type of a time off entry
+"""
+enum TimeOffEntryKind {
+  CUSTOM
+  HOLIDAY
+}
+
+"""
+Result of a time off entry create or update operation
+"""
+type TimeOffEntryResult {
+  """
+  The created or updated time off entry, null if the operation failed
+  """
+  time_off_entry: TimeOffEntry
+  """
+  Whether the operation succeeded
+  """
+  success: Boolean!
+  """
+  Structured error details, null if the operation succeeded
+  """
+  error: Error
+}
+
+"""
+Result of a time off schedule create or update operation
+"""
+type TimeOffResult {
+  """
+  The created or updated time off schedule, null if the operation failed
+  """
+  time_off: TimeOff
+  """
+  Whether the operation succeeded
+  """
+  success: Boolean!
+  """
+  Structured error details, null if the operation succeeded
+  """
+  error: Error
+}
+
+"""
+Paginated list of time off schedules, each with all their entries
+"""
+type TimesOffPage {
+  """
+  Time off schedules in this page
+  """
+  time_offs: [TimeOff!]!
+  """
+  Opaque cursor for fetching the next page, null when no more pages exist
+  """
+  cursor: String
+}
+
+"""
+Result of a single allocation update operation
+"""
+type UpdateAllocationResult {
+  """
+  Whether the operation succeeded
+  """
+  success: Boolean!
+  """
+  ID of the allocation that was updated (or attempted to update)
+  """
+  allocation_id: ID!
+  """
+  The updated allocation (null if operation failed)
+  """
+  allocation: Allocation
+  """
+  Error details if operation failed (null if succeeded)
+  """
+  error: Error
+}
+
+"""
+Response indicating whether the directory attribute update succeeded
+"""
+type UpdateDirectoryResourceAttributesResponse {
+  """
+  Indicates whether the batch update completed successfully.
+  """
+  success: Boolean!
+}
+
+"""
+Input for updating an existing PTO entry
+"""
+input UpdatePtoEntryInput {
+  """
+  ID of the PTO entry to update
+  """
+  id: ID!
+  """
+  New start date in YYYY-MM-DD format; must be within 1 year in the past and 20 years in the future
+  """
+  start: String
+  """
+  New end date in YYYY-MM-DD format; must be within 1 year in the past and 20 years in the future
+  """
+  end: String
+}
+
+"""
+Input for updating an existing time off entry
+"""
+input UpdateTimeOffEntryInput {
+  """
+  ID of the time off entry to update
+  """
+  id: ID!
+  """
+  New display name for the time off entry
+  """
+  name: String
+  """
+  New start date in YYYY-MM-DD format; must be within 1 year in the past and 20 years in the future
+  """
+  start: String
+  """
+  New end date in YYYY-MM-DD format; must be within 1 year in the past and 20 years in the future
+  """
+  end: String
+}
+
+"""
+Input for updating an existing time off schedule. Entries are managed via the dedicated time off entry mutations (create_time_off_entry, update_time_off_entry, delete_time_off_entry).
+"""
+input UpdateTimeOffInput {
+  """
+  New display name for the time off schedule
+  """
+  name: String
+}
+
+"""
+Input for updating an existing work schedule
+"""
+input UpdateWorkScheduleInput {
+  """
+  New display name for the work schedule
+  """
+  name: String
+  """
+  Updated per-weekday working hours
+  """
+  days: [WorkScheduleDayInput!]
+}
+
+"""
+A user's assigned work schedule and time off schedule IDs
+"""
+type UserAssignment {
+  """
+  ID of the user
+  """
+  user_id: ID!
+  """
+  ID of the work schedule assigned to this user
+  """
+  work_schedule_id: ID!
+  """
+  ID of the company time off schedule assigned to this user
+  """
+  company_time_off_id: ID!
+  """
+  Personal time off entries for this user
+  """
+  personal_time_offs: [PtoEntry!]!
+}
+
+"""
+A user's personal time off collection with all its active PTO entries
+"""
+type UserPto {
+  """
+  ID of the user this PTO collection belongs to
+  """
+  user_id: ID!
+  """
+  ID of the user's personal time off record; null if the user has no PTO collection yet
+  """
+  time_off_id: ID
+  """
+  All active PTO entries for this user
+  """
+  entries: [PtoEntry!]!
+}
+
+"""
+Day of the week
+"""
+enum WeekDay {
+  SUNDAY
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+}
+
+"""
+A named work schedule with per-weekday working hours
+"""
+type WorkSchedule {
+  """
+  Unique identifier of the work schedule
+  """
+  id: ID!
+  """
+  Display name of the work schedule
+  """
+  name: String!
+  """
+  Whether this is the account-level default work schedule
+  """
+  is_default: Boolean!
+  """
+  ID of the user who created this work schedule, null if system-generated
+  """
+  created_by: ID
+  """
+  ISO 8601 timestamp when this record was created
+  """
+  created_at: Date!
+  """
+  ISO 8601 timestamp when this record was last updated
+  """
+  updated_at: Date!
+  """
+  Per-weekday working hours for this schedule
+  """
+  days: [WorkScheduleDay!]!
+  """
+  Whether any users are currently assigned to this work schedule
+  """
+  has_assignments: Boolean!
+}
+
+"""
+Per-weekday working hours for a work schedule
+"""
+type WorkScheduleDay {
+  """
+  Day of the week this entry applies to
+  """
+  week_day: WeekDay!
+  """
+  Start of the working day in HH:MM format, null when is_active is false
+  """
+  start_time: String
+  """
+  End of the working day in HH:MM format, null when is_active is false
+  """
+  end_time: String
+  """
+  Whether this day is a working day
+  """
+  is_active: Boolean!
+}
+
+"""
+Working hours for a specific day of the week
+"""
+input WorkScheduleDayInput {
+  """
+  Day of the week this entry applies to
+  """
+  week_day: WeekDay!
+  """
+  Start of the working day in HH:MM format. Required when is_active is true; ignored otherwise.
+  """
+  start_time: String
+  """
+  End of the working day in HH:MM format. Required when is_active is true; ignored otherwise.
+  """
+  end_time: String
+  """
+  Whether this day is a working day
+  """
+  is_active: Boolean!
+}
+
+"""
+Result of a work schedule delete operation
+"""
+type WorkScheduleDeleteResult {
+  """
+  ID of the deleted work schedule, null if the operation failed
+  """
+  id: ID
+  """
+  Whether the operation succeeded
+  """
+  success: Boolean!
+  """
+  Structured error details, null if the operation succeeded
+  """
+  error: Error
+}
+
+"""
+Paginated list of work schedules
+"""
+type WorkSchedulePage {
+  """
+  Work schedules in this page
+  """
+  work_schedules: [WorkSchedule!]!
+  """
+  Opaque cursor for fetching the next page, null when no more pages exist
+  """
+  cursor: String
+}
+
+"""
+Result of a work schedule create or update operation
+"""
+type WorkScheduleResult {
+  """
+  The created or updated work schedule, null if the operation failed
+  """
+  work_schedule: WorkSchedule
+  """
+  Whether the operation succeeded
+  """
+  success: Boolean!
+  """
+  Structured error details, null if the operation succeeded
+  """
+  error: Error
+}
+
+"""
+List of work schedules
+"""
+type WorkSchedules {
+  """
+  Work schedules
+  """
+  work_schedules: [WorkSchedule!]!
 }
 
 """
@@ -3801,6 +5193,193 @@ type TriggerEventsPage {
 }
 
 """
+Output format for connected items (Connect Boards) column values in CSV exports.
+"""
+enum ConnectedItemColumnFormat {
+  NAME
+  ID
+}
+
+"""
+Options for board export
+"""
+input CreateBoardExportOptionsInput {
+  """
+  Include subitems in the export
+  """
+  include_subitems: Boolean = false
+  """
+  Header row format for CSV exports. Ignored for other formats.
+  """
+  header_row: HeaderFormat
+  """
+  Include item_id (and parent_item_id when subitems are enabled) columns at the end of CSV exports.
+  """
+  include_item_identifiers: Boolean = false
+  """
+  Output format for people column values in CSV exports. When set to NAME, display names are used instead of IDs (e.g. "Alice Smith" instead of "user:123"). Ignored for non-CSV formats.
+  """
+  people_column_format: PeopleColumnFormat
+  """
+  Output format for connected items (Connect Boards) column values in CSV exports. NAME (the default) uses the linked items' display names; ID uses their IDs instead. Ignored for non-CSV formats.
+  """
+  connected_item_column_format: ConnectedItemColumnFormat = NAME
+  """
+  Column IDs in desired display order
+  """
+  columns_order: [String!]
+}
+
+"""
+Reference to a started async board export. Poll export_job_status with the job_id until the status is COMPLETED, FAILED, or CANCELLED. fetch_export_job_status is a deprecated alias reachable only on dev.
+"""
+type ExportAsyncJob {
+  """
+  Opaque identifier for this export job. Pass to export_job_status.
+  """
+  job_id: ID
+}
+
+"""
+Result of a board export operation
+"""
+type ExportBoardResult {
+  """
+  URL to download the exported Excel file
+  """
+  download_url: String
+  """
+  Expiration timestamp of the download URL
+  """
+  expires_at: String
+}
+
+"""
+Structured reason an async export job failed.
+"""
+enum ExportFailureReason {
+  BOARD_UNAVAILABLE
+  BOARD_INACCESSIBLE
+  ITEM_LIMIT_EXCEEDED
+  INVALID_REQUEST
+  NOT_FOUND
+  INTERNAL_ERROR
+}
+
+"""
+A completed synchronous board export, ready to download.
+"""
+type ExportFile {
+  """
+  Presigned URL to download the exported file.
+  """
+  download_url: String
+  """
+  When download_url stops working, ISO 8601. Re-export to get a new URL.
+  """
+  expires_at: String
+}
+
+"""
+Output format for the exported board file.
+"""
+enum ExportFormat {
+  XLSX
+  CSV
+}
+
+"""
+Lifecycle status of an async board export job. Polling clients should treat COMPLETED, FAILED, and CANCELLED as terminal.
+"""
+enum ExportJobStatus {
+  RUNNING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+"""
+Status of an async board export job, including download URL when completed.
+"""
+type ExportJobStatusInfo {
+  """
+  Current job status. Terminal values: COMPLETED, FAILED, CANCELLED.
+  """
+  status: ExportJobStatus
+  """
+  Presigned S3 download URL, available only when the job completed successfully and the URL has not yet expired. Returns null once expired — re-trigger the export to get a new one.
+  """
+  download_url: String
+  """
+  Structured reason for failure. Populated only when the job failed.
+  """
+  failure_reason: ExportFailureReason
+  """
+  Human-readable error detail. Populated only when the job failed and the reason exposes safe text.
+  """
+  failure_message: String
+}
+
+"""
+Options for board export
+"""
+input ExportOptionsInput {
+  """
+  Include subitems in the export
+  """
+  include_subitems: Boolean = false
+  """
+  Header row format for CSV exports. Ignored for other formats.
+  """
+  header_row: HeaderFormat
+  """
+  Behavior for columns with no codec support in CSV exports. Ignored for other formats.
+  """
+  non_importable_columns: NonImportableColumns = INCLUDE
+  """
+  Include item_id (and parent_item_id when subitems are enabled) columns at the end of CSV exports.
+  """
+  include_item_identifiers: Boolean = false
+  """
+  Output format for people column values in CSV exports. When set to NAME, display names are used instead of IDs (e.g. "Alice Smith" instead of "user:123"). Ignored for non-CSV formats.
+  """
+  people_column_format: PeopleColumnFormat
+  """
+  Output format for connected items (Connect Boards) column values in CSV exports. NAME (the default) uses the linked items' display names; ID uses their IDs instead. Ignored for non-CSV formats.
+  """
+  connected_item_column_format: ConnectedItemColumnFormat = NAME
+}
+
+"""
+Result of create_board_export. Either a completed synchronous export (ExportFile) or a started async job (ExportAsyncJob). The server chooses which branch to return; callers MUST handle both. Use ... on ExportFile { download_url } and ... on ExportAsyncJob { job_id }.
+"""
+union ExportResult = ExportFile | ExportAsyncJob
+
+"""
+CSV header row format.
+"""
+enum HeaderFormat {
+  TITLE
+  COLUMN_ID
+}
+
+"""
+Handling for columns without a round-trippable codec in CSV mode.
+"""
+enum NonImportableColumns {
+  INCLUDE
+  SKIP
+  ERROR
+}
+
+"""
+Output format for people column values in CSV exports.
+"""
+enum PeopleColumnFormat {
+  NAME
+}
+
+"""
 Input for enrolling multiple items to a single sequence
 """
 input EnrollToSequenceInput {
@@ -3937,1398 +5516,6 @@ Outcome of loading a single widget within loadDashboardData.
 enum WidgetStatus {
   OK
   ERROR
-}
-
-"""
-The account-level default work schedule and time off schedule
-"""
-type AccountAvailabilityDefaults {
-  """
-  The account-level default work schedule
-  """
-  work_schedule: WorkSchedule!
-  """
-  The account-level default time off schedule
-  """
-  time_off: TimeOff!
-}
-
-"""
-Response containing per-item results for adding allocations to resources
-"""
-type AddAllocationsToResourcesResponse {
-  """
-  Per-item results for each allocation in the request
-  """
-  results: [AllocationToResourceResult!]!
-}
-
-"""
-A successfully added allocated resource
-"""
-type AddedAllocatedResource {
-  """
-  The resource ID (includes placeholder index for placeholders, e.g. "134007785_1")
-  """
-  resource_id: ID!
-  """
-  Type of resource: USER or PLACEHOLDER
-  """
-  resource_type: PlannerResourceKind!
-}
-
-"""
-A unique resource present in the planner
-"""
-type AllocatedResource {
-  """
-  The Resource id
-  """
-  resource_id: ID!
-  """
-  Type of resource
-  """
-  resource_type: PlannerResourceKind!
-  """
-  The Resource's name
-  """
-  resource_name: String!
-}
-
-"""
-A resource to add to the planner without allocations
-"""
-input AllocatedResourceInput {
-  """
-  Resource or placeholder ID
-  """
-  id: ID!
-  """
-  Type of resource: USER or PLACEHOLDER
-  """
-  resource_type: PlannerResourceKind!
-}
-
-"""
-Result of an individual resource allocation operation
-"""
-type AllocatedResourceOperationResult {
-  """
-  Whether the resource was successfully added
-  """
-  success: Boolean!
-  """
-  The successfully added resource, present when success is true
-  """
-  resource: AddedAllocatedResource
-  """
-  Error details, present when success is false
-  """
-  error: Error
-}
-
-"""
-A single allocation in the planner
-"""
-type Allocation {
-  """
-  The allocation ID
-  """
-  id: ID!
-  """
-  The resource allocated
-  """
-  resource: AllocationResource!
-  """
-  The allocation timeline
-  """
-  timeline: AllocationTimeline!
-  """
-  Effort allocation data
-  """
-  effort: AllocationEffort!
-}
-
-"""
-Effort allocation data
-"""
-type AllocationEffort {
-  """
-  Total effort of the allocation
-  """
-  total_effort: Float!
-  """
-  Calculated effort for the period
-  """
-  effort_per_period: Float
-}
-
-"""
-The resource allocated
-"""
-type AllocationResource {
-  """
-  Resource ID
-  """
-  id: ID!
-  """
-  Type of resource
-  """
-  type: PlannerResourceKind!
-  """
-  Resource Name
-  """
-  name: String!
-}
-
-"""
-A timeline with start and end dates
-"""
-type AllocationTimeline {
-  """
-  Start date
-  """
-  from: Date!
-  """
-  End date
-  """
-  to: Date!
-}
-
-"""
-An allocation to add to an existing resource on the planner
-"""
-input AllocationToResourceInput {
-  """
-  Resource ID (plain "123" for users, "456_2" for placeholder #2)
-  """
-  resource_id: ID!
-  """
-  Type of resource
-  """
-  resource_type: PlannerResourceKind!
-  """
-  Effort value (e.g., 1 FTE, 8 hours). Must be greater than 0
-  """
-  effort: Float!
-  """
-  Unit of effort: DAILY, WEEKLY, MONTHLY, FTE, or TOTAL
-  """
-  effort_type: EffortUnit!
-  """
-  Start date (ISO 8601 format: YYYY-MM-DD)
-  """
-  from: String!
-  """
-  End date (ISO 8601 format: YYYY-MM-DD)
-  """
-  to: String!
-}
-
-"""
-Result of adding a single allocation to a resource
-"""
-type AllocationToResourceResult {
-  """
-  Resource ID
-  """
-  resource_id: ID!
-  """
-  The created allocation item ID, null if creation failed
-  """
-  allocation_id: ID
-  """
-  Whether the allocation was created successfully
-  """
-  success: Boolean!
-  """
-  Error details if the allocation failed
-  """
-  error: Error
-}
-
-"""
-A single allocation update. All fields except allocation_id are optional - only provided fields will be updated.
-"""
-input AllocationUpdateInput {
-  """
-  ID of the allocation to update
-  """
-  allocation_id: ID!
-  """
-  New effort value
-  """
-  effort: Float
-  """
-  New effort unit: DAILY, WEEKLY, MONTHLY, FTE, or TOTAL
-  """
-  effort_type: EffortUnit
-  """
-  New start date (ISO 8601 format: YYYY-MM-DD)
-  """
-  from: String
-  """
-  New end date (ISO 8601 format: YYYY-MM-DD)
-  """
-  to: String
-  """
-  Reassign allocation to a different resource (must exist in the planner)
-  """
-  resource_id: ID
-}
-
-"""
-Input for assigning a time off schedule to multiple users and/or teams
-"""
-input AssignTimeOffInput {
-  """
-  IDs of the users to assign the time off schedule to; maximum 100 per call
-  """
-  user_ids: [ID!]
-  """
-  IDs of the teams to assign the time off schedule to; maximum 100 per call
-  """
-  team_ids: [ID!]
-  """
-  ID of the time off schedule to assign; pass the account default time off ID to revert the resource to the account default
-  """
-  time_off_id: ID!
-}
-
-"""
-Per-resource outcomes of a time off assignment, split by resource kind
-"""
-type AssignTimeOffResult {
-  """
-  One result per user id passed to the mutation
-  """
-  users: [AssignTimeOffUserResult!]!
-  """
-  One result per team id passed to the mutation
-  """
-  teams: [AssignTimeOffTeamResult!]!
-}
-
-"""
-Result of a time off assignment for a single team. Batch mutations return one of these per requested team, allowing partial success.
-"""
-type AssignTimeOffTeamResult {
-  """
-  ID of the team this result applies to
-  """
-  team_id: ID!
-  """
-  Whether the operation succeeded
-  """
-  success: Boolean!
-  """
-  Structured error details, null if the operation succeeded
-  """
-  error: Error
-}
-
-"""
-Result of a time off assignment for a single user. Batch mutations return one of these per requested user, allowing partial success.
-"""
-type AssignTimeOffUserResult {
-  """
-  ID of the user this result applies to
-  """
-  user_id: ID!
-  """
-  Whether the operation succeeded
-  """
-  success: Boolean!
-  """
-  Structured error details, null if the operation succeeded
-  """
-  error: Error
-}
-
-"""
-Input for assigning a work schedule to multiple users and/or teams
-"""
-input AssignWorkScheduleInput {
-  """
-  IDs of the users to assign the work schedule to; maximum 100 per call
-  """
-  user_ids: [ID!]
-  """
-  IDs of the teams to assign the work schedule to; maximum 100 per call
-  """
-  team_ids: [ID!]
-  """
-  ID of the work schedule to assign; pass the account default schedule ID to revert to the account default
-  """
-  work_schedule_id: ID!
-}
-
-"""
-Per-resource outcomes of a work schedule assignment, split by resource kind
-"""
-type AssignWorkScheduleResult {
-  """
-  One result per user id passed to the mutation
-  """
-  users: [AssignWorkScheduleUserResult!]
-  """
-  One result per team id passed to the mutation
-  """
-  teams: [AssignWorkScheduleTeamResult!]
-}
-
-"""
-Per-team outcome of a work schedule assignment
-"""
-type AssignWorkScheduleTeamResult {
-  """
-  ID of the team this result applies to
-  """
-  team_id: ID
-  """
-  Whether the operation succeeded
-  """
-  success: Boolean!
-  """
-  Structured error details, null if the operation succeeded
-  """
-  error: Error
-}
-
-"""
-Per-user outcome of a work schedule assignment
-"""
-type AssignWorkScheduleUserResult {
-  """
-  ID of the user this result applies to
-  """
-  user_id: ID
-  """
-  Whether the operation succeeded
-  """
-  success: Boolean!
-  """
-  Structured error details, null if the operation succeeded
-  """
-  error: Error
-}
-
-"""
-Represents a single attribute type option for a resource
-"""
-type Attribute {
-  """
-  Unique identifier for the attribute
-  """
-  id: ID!
-  """
-  Name of the attribute
-  """
-  name: String!
-  """
-  Whether the attribute is enabled and can be used
-  """
-  is_active: Boolean!
-}
-
-"""
-A string or number value for comparison
-"""
-scalar CompareValue
-
-"""
-Severity of a schedule conflict.
-"""
-enum ConflictSeverity {
-  PARTIAL
-  FULL
-}
-
-"""
-Input for creating a PTO entry for a user
-"""
-input CreatePtoEntryInput {
-  """
-  ID of the user to create the PTO entry for
-  """
-  user_id: ID!
-  """
-  Start date of the PTO period in YYYY-MM-DD format; must be within 1 year in the past and 20 years in the future
-  """
-  start: String!
-  """
-  End date of the PTO period in YYYY-MM-DD format; must be within 1 year in the past and 20 years in the future
-  """
-  end: String!
-}
-
-"""
-Input for adding a non-working date entry to a time off schedule
-"""
-input CreateTimeOffEntryInput {
-  """
-  ID of the time off schedule to add this entry to
-  """
-  time_off_id: ID!
-  """
-  Display name for this time off entry
-  """
-  name: String!
-  """
-  Start date of the non-working period in YYYY-MM-DD format; must be within 1 year in the past and 20 years in the future
-  """
-  start: String!
-  """
-  Type of the time off entry. Defaults to CUSTOM when omitted.
-  """
-  type: TimeOffEntryKind
-  """
-  End date of the non-working period in YYYY-MM-DD format; must be within 1 year in the past and 20 years in the future
-  """
-  end: String!
-}
-
-"""
-Input for creating a new time off schedule
-"""
-input CreateTimeOffInput {
-  """
-  Display name for the new time off schedule
-  """
-  name: String!
-  """
-  Non-working date entries to create alongside the schedule. Subsequent additions/updates use the dedicated time off entry mutations.
-  """
-  entries: [TimeOffEntryInput!]
-}
-
-"""
-Input for creating a new work schedule
-"""
-input CreateWorkScheduleInput {
-  """
-  Display name for the new work schedule
-  """
-  name: String!
-  """
-  Per-weekday working hours; if omitted, all seven days are created as inactive
-  """
-  days: [WorkScheduleDayInput!]
-}
-
-"""
-Response indicating whether the allocation deletion succeeded
-"""
-type DeleteAllocationResponse {
-  """
-  Indicates whether the allocation was successfully deleted.
-  """
-  success: Boolean!
-  """
-  The ID of the allocation that was targeted for deletion.
-  """
-  allocation_id: ID!
-}
-
-"""
-Response indicating whether the planner resource deletion succeeded
-"""
-type DeletePlannerResourceResponse {
-  """
-  Indicates whether the resource was successfully deleted.
-  """
-  success: Boolean!
-  """
-  The ID of the resource that was targeted for deletion.
-  """
-  resource_id: ID!
-  """
-  Number of allocation items that were deleted.
-  """
-  deleted_allocation_count: Int!
-}
-
-"""
-A resource from the directory
-"""
-type DirectoryResource {
-  """
-  The identifier of the directory resource.
-  """
-  id: ID!
-  """
-  The name of the directory resource.
-  """
-  name: String!
-  """
-  The email address of the directory resource.
-  """
-  email: String
-  """
-  The job role of the directory resource.
-  """
-  job_role: String
-  """
-  The skills of the directory resource.
-  """
-  skills: [String!]
-  """
-  The location of the directory resource.
-  """
-  location: String
-  """
-  The type of the resource (user, viewer, or guest).
-  """
-  resource_type: DirectoryResourceKind
-}
-
-"""
-Attributes that can be updated on a resource directory entry
-"""
-enum DirectoryResourceAttribute {
-  JOB_ROLE
-  SKILLS
-  LOCATION
-}
-
-"""
-The type of a directory resource
-"""
-enum DirectoryResourceKind {
-  USER
-  VIEWER
-  GUEST
-}
-
-"""
-Paginated response containing directory resources and cursor for next page
-"""
-type DirectoryResourcesResponse {
-  """
-  Response identifier
-  """
-  id: ID!
-  """
-  List of directory resources
-  """
-  resources: [DirectoryResource!]!
-  """
-  Cursor for fetching the next page of results
-  """
-  cursor: String
-}
-
-"""
-Unit of effort calculation
-"""
-enum EffortUnit {
-  DAILY
-  WEEKLY
-  MONTHLY
-  FTE
-  TOTAL
-}
-
-"""
-User-facing error with code and optional path
-"""
-type Error {
-  """
-  Human-readable error message
-  """
-  message: String!
-  """
-  Machine-readable error code for client handling
-  """
-  code: String!
-  """
-  Field path that caused the error (e.g., ["input", "from"])
-  """
-  path: [String!]
-}
-
-"""
-Paginated response containing allocations
-"""
-type GetAllocationsResponse {
-  """
-  List of allocations
-  """
-  allocations: [Allocation!]
-  """
-  Cursor for fetching the next page of results
-  """
-  cursor: String
-}
-
-"""
-Successful response containing available attribute options for a specific attribute type
-"""
-type GetAttributesResponse {
-  """
-  The attribute type for which attributes were fetched
-  """
-  attribute_type: String!
-  """
-  List of available attributes containing id, name, and is_active
-  """
-  attributes: [Attribute!]!
-}
-
-"""
-The direction to order the items by
-"""
-enum ItemsOrderByDirection {
-  asc
-  desc
-}
-
-input ItemsQuery {
-  """
-  A list of rules
-  """
-  rules: [ItemsQueryRule!]
-  """
-  A list of rule groups
-  """
-  groups: [ItemsQueryGroup!]
-  """
-  The operator to use for the query rules or rule groups. Default: AND
-  """
-  operator: ItemsQueryOperator = and
-  """
-  A list of item IDs to fetch. Use this to fetch a specific set of items by their IDs. Limited to 100 IDs in ItemsQuery
-  """
-  ids: [ID!]
-  """
-  Sort the results by specified columns
-  """
-  order_by: [ItemsQueryOrderBy!]
-}
-
-"""
-A group of rules or rule groups
-"""
-input ItemsQueryGroup {
-  """
-  A list of rules
-  """
-  rules: [ItemsQueryRule!]
-  """
-  A list of rule groups
-  """
-  groups: [ItemsQueryGroup!]
-  """
-  The operator to use for the query rules or rule groups. Default: AND
-  """
-  operator: ItemsQueryOperator = and
-}
-
-"""
-The condition between the query rules
-"""
-enum ItemsQueryOperator {
-  or
-  and
-}
-
-"""
-Sort the results by specified columns
-"""
-input ItemsQueryOrderBy {
-  column_id: String!
-  """
-  Sort direction (defaults to ASC)
-  """
-  direction: ItemsOrderByDirection = asc
-}
-
-"""
-A rule to filter items by a specific column
-"""
-input ItemsQueryRule {
-  column_id: ID!
-  compare_value: CompareValue!
-  compare_attribute: String
-  operator: ItemsQueryRuleOperator = any_of
-}
-
-"""
-The operator to use for the value comparison
-"""
-enum ItemsQueryRuleOperator {
-  any_of
-  not_any_of
-  is_empty
-  is_not_empty
-  within_the_last
-  within_the_next
-  greater_than
-  greater_than_or_equals
-  lower_than
-  lower_than_or_equal
-  between
-  starts_with
-  ends_with
-  contains_text
-  contains_terms
-  not_contains_text
-}
-
-"""
-Type of resource in the planner
-"""
-enum PlannerResourceKind {
-  USER
-  PLACEHOLDER
-}
-
-"""
-All schedule conflicts detected on a project.
-"""
-type ProjectScheduleConflicts {
-  """
-  Conflicts found. Empty array when no conflicts exist.
-  """
-  conflicts: [ScheduleConflict!]!
-}
-
-"""
-A personal time off entry for a user
-"""
-type PtoEntry {
-  """
-  Unique identifier of the time off entry
-  """
-  id: ID!
-  """
-  Start date of the non-working period in YYYY-MM-DD format
-  """
-  start: String!
-  """
-  End date of the non-working period in YYYY-MM-DD format
-  """
-  end: String!
-  """
-  ID of the user who created this entry
-  """
-  created_by: ID!
-  """
-  ISO 8601 timestamp when this record was created
-  """
-  created_at: Date!
-  """
-  ISO 8601 timestamp when this record was last updated
-  """
-  updated_at: Date!
-}
-
-"""
-Information about a resource directory attribute type
-"""
-type ResourceAttributeTypeInfo {
-  """
-  The attribute type enum value
-  """
-  type: ResourceAttributeTypeKey
-  """
-  Human-readable description of the attribute
-  """
-  description: String
-  """
-  User-friendly display name
-  """
-  display_name: String
-  """
-  Whether the attribute values are managed by resource managers
-  """
-  is_managed: Boolean
-  """
-  Whether the attribute can be used for filtering the directory
-  """
-  is_filterable: Boolean
-}
-
-"""
-Available attribute types that can be retrieved from the resource directory
-"""
-enum ResourceAttributeTypeKey {
-  NAME
-  EMAIL
-  TEAMS
-  BASE_ROLE
-  STATUS
-  LOCATION
-  SKILLS
-  JOB_ROLE
-  RESOURCE_MANAGER
-}
-
-"""
-Recurring weekly work-schedule mask for a resource. Does not account for time-offs or specific dates.
-"""
-type ResourceWorkWeekday {
-  """
-  Resource ID
-  """
-  resource_id: ID!
-  """
-  Sunday-first length-7 mask of active work days for the resource work schedule
-  """
-  active_weekdays: [Boolean!]!
-}
-
-"""
-Resources availability with per-resource references and top-level schedule/time-off data
-"""
-type ResourcesAvailability {
-  """
-  Per-user availability references
-  """
-  users_assigned_schedules: [UserAssignment!]!
-  """
-  Per-team availability references
-  """
-  teams_assigned_schedules: [TeamAssignment!]!
-  """
-  All work schedules referenced by users_assigned_schedules or teams_assigned_schedules entries
-  """
-  work_schedules: [WorkSchedule!]!
-  """
-  All time off schedules referenced by users_assigned_schedules or teams_assigned_schedules entries
-  """
-  company_time_offs: [TimeOff!]!
-  """
-  ID of the account-level default work schedule
-  """
-  default_work_schedule_id: ID!
-  """
-  ID of the account-level default time off schedule
-  """
-  default_company_time_off_id: ID!
-}
-
-"""
-A detected schedule conflict between a task timeline and a resource availability.
-"""
-type ScheduleConflict {
-  """
-  The task with the conflict.
-  """
-  pulse_id: ID!
-  """
-  The resource whose schedule conflicts with the task timeline.
-  """
-  resource_id: ID!
-  """
-  Whether the resource is fully or partially unavailable within the task timeline.
-  """
-  severity: ConflictSeverity
-}
-
-"""
-A team's assigned work schedule and time off schedule IDs
-"""
-type TeamAssignment {
-  """
-  ID of the team
-  """
-  team_id: ID!
-  """
-  ID of the work schedule assigned to this team
-  """
-  work_schedule_id: ID!
-  """
-  ID of the time off schedule assigned to this team
-  """
-  company_time_off_id: ID!
-}
-
-"""
-A named time off schedule with all its non-working date entries
-"""
-type TimeOff {
-  """
-  Unique identifier of the time off schedule
-  """
-  id: ID!
-  """
-  Display name of the time off schedule
-  """
-  name: String!
-  """
-  Whether this is the account-level default time off schedule
-  """
-  is_default: Boolean!
-  """
-  ID of the user who created this time off schedule, null if system-generated
-  """
-  created_by: ID
-  """
-  ISO 8601 timestamp when this record was created
-  """
-  created_at: Date!
-  """
-  ISO 8601 timestamp when this record was last updated
-  """
-  updated_at: Date!
-  """
-  All non-working date entries in this time off schedule
-  """
-  entries: [TimeOffEntry!]!
-  """
-  Whether any users are currently assigned to this time off schedule
-  """
-  has_assignments: Boolean!
-}
-
-"""
-Result of a time off schedule delete operation
-"""
-type TimeOffDeleteResult {
-  """
-  ID of the deleted time off schedule, null if the operation failed
-  """
-  id: ID
-  """
-  Whether the operation succeeded
-  """
-  success: Boolean!
-  """
-  Structured error details, null if the operation succeeded
-  """
-  error: Error
-}
-
-"""
-A non-working date entry within a time off schedule
-"""
-type TimeOffEntry {
-  """
-  Unique identifier of the time off entry
-  """
-  id: ID!
-  """
-  ID of the time off schedule this entry belongs to
-  """
-  time_off_id: ID!
-  """
-  Display name for this time off entry
-  """
-  name: String!
-  """
-  Type of the time off entry
-  """
-  type: TimeOffEntryKind
-  """
-  Start date of the non-working period in YYYY-MM-DD format
-  """
-  start: String!
-  """
-  End date of the non-working period in YYYY-MM-DD format
-  """
-  end: String!
-  """
-  ID of the user who created this entry
-  """
-  created_by: ID!
-  """
-  ISO 8601 timestamp when this record was created
-  """
-  created_at: Date!
-  """
-  ISO 8601 timestamp when this record was last updated
-  """
-  updated_at: Date!
-}
-
-"""
-Result of a time off entry delete operation
-"""
-type TimeOffEntryDeleteResult {
-  """
-  ID of the deleted time off entry, null only if an internal error prevented identification
-  """
-  id: ID
-  """
-  Whether the operation succeeded
-  """
-  success: Boolean!
-  """
-  Structured error details, null if the operation succeeded
-  """
-  error: Error
-}
-
-"""
-A non-working date entry to create inline with a time off schedule
-"""
-input TimeOffEntryInput {
-  """
-  Optional display name for this time off entry
-  """
-  name: String
-  """
-  Type of the time off entry. Defaults to CUSTOM when omitted.
-  """
-  type: TimeOffEntryKind
-  """
-  Start date of the non-working period in YYYY-MM-DD format; must be within 1 year in the past and 20 years in the future
-  """
-  start: String!
-  """
-  End date of the non-working period in YYYY-MM-DD format; must be within 1 year in the past and 20 years in the future
-  """
-  end: String!
-}
-
-"""
-Type of a time off entry
-"""
-enum TimeOffEntryKind {
-  CUSTOM
-  HOLIDAY
-}
-
-"""
-Result of a time off entry create or update operation
-"""
-type TimeOffEntryResult {
-  """
-  The created or updated time off entry, null if the operation failed
-  """
-  time_off_entry: TimeOffEntry
-  """
-  Whether the operation succeeded
-  """
-  success: Boolean!
-  """
-  Structured error details, null if the operation succeeded
-  """
-  error: Error
-}
-
-"""
-Result of a time off schedule create or update operation
-"""
-type TimeOffResult {
-  """
-  The created or updated time off schedule, null if the operation failed
-  """
-  time_off: TimeOff
-  """
-  Whether the operation succeeded
-  """
-  success: Boolean!
-  """
-  Structured error details, null if the operation succeeded
-  """
-  error: Error
-}
-
-"""
-Paginated list of time off schedules, each with all their entries
-"""
-type TimesOffPage {
-  """
-  Time off schedules in this page
-  """
-  time_offs: [TimeOff!]!
-  """
-  Opaque cursor for fetching the next page, null when no more pages exist
-  """
-  cursor: String
-}
-
-"""
-Result of a single allocation update operation
-"""
-type UpdateAllocationResult {
-  """
-  Whether the operation succeeded
-  """
-  success: Boolean!
-  """
-  ID of the allocation that was updated (or attempted to update)
-  """
-  allocation_id: ID!
-  """
-  The updated allocation (null if operation failed)
-  """
-  allocation: Allocation
-  """
-  Error details if operation failed (null if succeeded)
-  """
-  error: Error
-}
-
-"""
-Response indicating whether the directory attribute update succeeded
-"""
-type UpdateDirectoryResourceAttributesResponse {
-  """
-  Indicates whether the batch update completed successfully.
-  """
-  success: Boolean!
-}
-
-"""
-Input for updating an existing PTO entry
-"""
-input UpdatePtoEntryInput {
-  """
-  ID of the PTO entry to update
-  """
-  id: ID!
-  """
-  New start date in YYYY-MM-DD format; must be within 1 year in the past and 20 years in the future
-  """
-  start: String
-  """
-  New end date in YYYY-MM-DD format; must be within 1 year in the past and 20 years in the future
-  """
-  end: String
-}
-
-"""
-Input for updating an existing time off entry
-"""
-input UpdateTimeOffEntryInput {
-  """
-  ID of the time off entry to update
-  """
-  id: ID!
-  """
-  New display name for the time off entry
-  """
-  name: String
-  """
-  New start date in YYYY-MM-DD format; must be within 1 year in the past and 20 years in the future
-  """
-  start: String
-  """
-  New end date in YYYY-MM-DD format; must be within 1 year in the past and 20 years in the future
-  """
-  end: String
-}
-
-"""
-Input for updating an existing time off schedule. Entries are managed via the dedicated time off entry mutations (create_time_off_entry, update_time_off_entry, delete_time_off_entry).
-"""
-input UpdateTimeOffInput {
-  """
-  New display name for the time off schedule
-  """
-  name: String
-}
-
-"""
-Input for updating an existing work schedule
-"""
-input UpdateWorkScheduleInput {
-  """
-  New display name for the work schedule
-  """
-  name: String
-  """
-  Updated per-weekday working hours
-  """
-  days: [WorkScheduleDayInput!]
-}
-
-"""
-A user's assigned work schedule and time off schedule IDs
-"""
-type UserAssignment {
-  """
-  ID of the user
-  """
-  user_id: ID!
-  """
-  ID of the work schedule assigned to this user
-  """
-  work_schedule_id: ID!
-  """
-  ID of the company time off schedule assigned to this user
-  """
-  company_time_off_id: ID!
-  """
-  Personal time off entries for this user
-  """
-  personal_time_offs: [PtoEntry!]!
-}
-
-"""
-A user's personal time off collection with all its active PTO entries
-"""
-type UserPto {
-  """
-  ID of the user this PTO collection belongs to
-  """
-  user_id: ID!
-  """
-  ID of the user's personal time off record; null if the user has no PTO collection yet
-  """
-  time_off_id: ID
-  """
-  All active PTO entries for this user
-  """
-  entries: [PtoEntry!]!
-}
-
-"""
-Day of the week
-"""
-enum WeekDay {
-  SUNDAY
-  MONDAY
-  TUESDAY
-  WEDNESDAY
-  THURSDAY
-  FRIDAY
-  SATURDAY
-}
-
-"""
-A named work schedule with per-weekday working hours
-"""
-type WorkSchedule {
-  """
-  Unique identifier of the work schedule
-  """
-  id: ID!
-  """
-  Display name of the work schedule
-  """
-  name: String!
-  """
-  Whether this is the account-level default work schedule
-  """
-  is_default: Boolean!
-  """
-  ID of the user who created this work schedule, null if system-generated
-  """
-  created_by: ID
-  """
-  ISO 8601 timestamp when this record was created
-  """
-  created_at: Date!
-  """
-  ISO 8601 timestamp when this record was last updated
-  """
-  updated_at: Date!
-  """
-  Per-weekday working hours for this schedule
-  """
-  days: [WorkScheduleDay!]!
-  """
-  Whether any users are currently assigned to this work schedule
-  """
-  has_assignments: Boolean!
-}
-
-"""
-Per-weekday working hours for a work schedule
-"""
-type WorkScheduleDay {
-  """
-  Day of the week this entry applies to
-  """
-  week_day: WeekDay!
-  """
-  Start of the working day in HH:MM format, null when is_active is false
-  """
-  start_time: String
-  """
-  End of the working day in HH:MM format, null when is_active is false
-  """
-  end_time: String
-  """
-  Whether this day is a working day
-  """
-  is_active: Boolean!
-}
-
-"""
-Working hours for a specific day of the week
-"""
-input WorkScheduleDayInput {
-  """
-  Day of the week this entry applies to
-  """
-  week_day: WeekDay!
-  """
-  Start of the working day in HH:MM format. Required when is_active is true; ignored otherwise.
-  """
-  start_time: String
-  """
-  End of the working day in HH:MM format. Required when is_active is true; ignored otherwise.
-  """
-  end_time: String
-  """
-  Whether this day is a working day
-  """
-  is_active: Boolean!
-}
-
-"""
-Result of a work schedule delete operation
-"""
-type WorkScheduleDeleteResult {
-  """
-  ID of the deleted work schedule, null if the operation failed
-  """
-  id: ID
-  """
-  Whether the operation succeeded
-  """
-  success: Boolean!
-  """
-  Structured error details, null if the operation succeeded
-  """
-  error: Error
-}
-
-"""
-Paginated list of work schedules
-"""
-type WorkSchedulePage {
-  """
-  Work schedules in this page
-  """
-  work_schedules: [WorkSchedule!]!
-  """
-  Opaque cursor for fetching the next page, null when no more pages exist
-  """
-  cursor: String
-}
-
-"""
-Result of a work schedule create or update operation
-"""
-type WorkScheduleResult {
-  """
-  The created or updated work schedule, null if the operation failed
-  """
-  work_schedule: WorkSchedule
-  """
-  Whether the operation succeeded
-  """
-  success: Boolean!
-  """
-  Structured error details, null if the operation succeeded
-  """
-  error: Error
-}
-
-"""
-List of work schedules
-"""
-type WorkSchedules {
-  """
-  Work schedules
-  """
-  work_schedules: [WorkSchedule!]!
 }
 
 type AggregateBasicAggregationResult {
@@ -11693,6 +11880,7 @@ Lifecycle state of an artifact
 enum ArtifactState {
   ACTIVE
   DELETED
+  ARCHIVE
 }
 
 """
@@ -13307,6 +13495,1262 @@ enum WorkflowCutoffNode {
   PLANNING
   STRUCTURE_CREATION
   CONTENT_CREATION
+}
+
+"""
+Represents a board and its connection to an object schema.
+"""
+type BoardConnection {
+  """
+  The unique identifier of the board.
+  """
+  id: ID
+  """
+  The object schema ID that this board is connected to.
+  """
+  object_schema_id: ID
+}
+
+"""
+Result of a single board detach operation within a bulk detach request.
+"""
+type BulkDetachBoardResult {
+  """
+  The board ID that was detached.
+  """
+  board_id: ID
+  """
+  Whether the detach operation succeeded.
+  """
+  success: Boolean
+  """
+  Error message if the detach failed.
+  """
+  error: String
+}
+
+"""
+Calculated capability settings for a column
+"""
+type CalculatedCapability {
+  """
+  Function to calculate the parent values
+  """
+  function: CalculatedFunction!
+  """
+  Type of the calculated value
+  """
+  calculated_type: ColumnType
+}
+
+"""
+Fields that can be overridden in a column policy
+"""
+enum CanOverrideField {
+  settings
+  title
+  description
+}
+
+"""
+A board-type data view source that is a child of a schema source.
+"""
+type ChildBoardDataViewSource {
+  """
+  The source identifier.
+  """
+  source_id: DataViewSourceId
+  """
+  Whether this source has the main (items) or subitem relation type.
+  """
+  relation_type: DataViewSourceRelationType
+  """
+  The parent schema source identifier.
+  """
+  parent_source_id: DataViewSourceId
+}
+
+"""
+Action to perform on an object schema column to change its active state. A column can be reactivated if it was previously deactivated.
+"""
+enum ColumnActiveStateAction {
+  DEACTIVATE
+  REACTIVATE
+}
+
+"""
+Capabilities available for a column
+"""
+type ColumnCapabilities {
+  """
+  Calculated capability settings
+  """
+  calculated: CalculatedCapability
+  """
+  Visibility capability settings
+  """
+  visibility: String
+}
+
+"""
+Policy rules that control what actions can be performed on a column
+"""
+input ColumnPolicyInput {
+  """
+  User-facing messages explaining why certain actions are disabled
+  """
+  messages: PolicyMessagesInput
+  """
+  List of fields that can be overridden
+  """
+  can_override: [CanOverrideField!]!
+  """
+  Whether the column cannot be deleted
+  """
+  cannot_delete: Boolean!
+}
+
+union ColumnSettings = StatusColumnSettings | DropdownColumnSettings
+
+input CreateDropdownColumnSettingsInput {
+  labels: [CreateDropdownLabelInput!]!
+  """
+  Whether to limit the number of labels that can be selected
+  """
+  limit_select: Boolean
+  """
+  Maximum number of labels that can be selected when limit_select is enabled
+  """
+  label_limit_count: Int
+}
+
+input CreateDropdownLabelInput {
+  label: String!
+}
+
+"""
+Input for creating a new column on an object schema
+"""
+input CreateObjectSchemaColumnInput {
+  """
+  The column type (e.g., "status", "dropdown", "text", "date")
+  """
+  type: ColumnType!
+  """
+  The column title
+  """
+  title: String!
+  """
+  Optional column description
+  """
+  description: String
+  """
+  Type-specific configuration object containing column defaults and settings. Use get_column_type_schema query to see available properties and validation rules. Examples: status column labels, dropdown options, number formatting rules, date display preferences.
+  """
+  defaults: JSON
+  """
+  Whether this column should be opted-out by default on boards. If false or not provided, the column will be automatically included on all boards using this object schema (opt-in by default).
+  """
+  opt_out_by_default: Boolean
+  """
+  Policy rules controlling what can be done with the column
+  """
+  policy: ColumnPolicyInput!
+}
+
+"""
+Input for the create_object_schema_columns action.
+"""
+input CreateObjectSchemaColumnsActionInput {
+  """
+  Array of columns to create.
+  """
+  columns: [CreateObjectSchemaColumnInput!]!
+}
+
+input CreateStatusColumnSettingsInput {
+  labels: [CreateStatusLabelInput!]!
+}
+
+input CreateStatusLabelInput {
+  label: String!
+  color: StatusColumnColors!
+  index: Int!
+  description: String
+  is_done: Boolean
+}
+
+"""
+The added target column plus the per-source mappings that were auto-created for it.
+"""
+type DataViewAddTargetColumnResult {
+  """
+  The column that was added to the target.
+  """
+  column: DataViewColumn
+  """
+  One entry per standalone source that the new column could be auto-mapped to. Sources with no matching column are omitted.
+  """
+  sources: [DataViewAddTargetColumnSourceMapping!]
+}
+
+"""
+A mapping auto-created for one source when the target column was added.
+"""
+type DataViewAddTargetColumnSourceMapping {
+  """
+  The source the mapping was created for.
+  """
+  source_id: DataViewSourceId
+  """
+  The mapping created between the source column and the new target column.
+  """
+  mapping: DataViewColumnMapping
+}
+
+"""
+The kind of object that authorizes access to a data view.
+"""
+enum DataViewAuthorizationKind {
+  BOARD
+  OVERVIEW
+  VIBE_APP
+}
+
+"""
+The authorization object associated with a data view.
+"""
+type DataViewAuthorizationObject {
+  """
+  The identifier of the authorization object.
+  """
+  id: ID
+  """
+  The type of the authorization object.
+  """
+  type: String
+}
+
+"""
+The authorization object that gates access to the data view.
+"""
+input DataViewAuthorizationObjectInput {
+  """
+  The identifier of the authorization object.
+  """
+  id: ID!
+  """
+  The type of the authorization object.
+  """
+  type: DataViewAuthorizationKind!
+}
+
+"""
+The result of calculating a data view target schema and per-source column mappings.
+"""
+type DataViewAutomapping {
+  """
+  The calculated (or provided) target schema.
+  """
+  target: DataViewTarget
+  """
+  The calculated sources with their mappings and errors.
+  """
+  sources: DataViewAutomappingSources
+}
+
+"""
+The calculated sources of a data view automapping, each with its computed mappings and errors.
+"""
+type DataViewAutomappingSources {
+  """
+  The calculated sources.
+  """
+  items: [DataViewSource!]
+}
+
+"""
+A column definition within a data view target.
+"""
+type DataViewColumn {
+  """
+  The unique identifier of the column.
+  """
+  id: ID
+  """
+  The display title of the column.
+  """
+  title: String
+  """
+  The column type.
+  """
+  type: String
+  """
+  For mirror/lookup columns, the type of the column being displayed.
+  """
+  sub_type: String
+  """
+  The column settings.
+  """
+  settings: JSON
+  """
+  The column labels.
+  """
+  labels: JSON
+  """
+  The column label positions.
+  """
+  labels_positions_v2: JSON
+  """
+  Whether the column is archived.
+  """
+  archived: Boolean
+  """
+  The column description.
+  """
+  description: String
+  """
+  The column model identifier.
+  """
+  column_model_id: ID
+  """
+  The column model strategy.
+  """
+  column_model_strategy: String
+  """
+  The global column identifier.
+  """
+  global_column_id: ID
+  """
+  The numeric column unit settings.
+  """
+  unit: JSON
+}
+
+"""
+A column definition within a data view target.
+"""
+input DataViewColumnInput {
+  """
+  The unique identifier of the column.
+  """
+  id: ID!
+  """
+  The display title of the column.
+  """
+  title: String
+  """
+  The column type.
+  """
+  type: String
+  """
+  For mirror/lookup columns, the type of the column being displayed.
+  """
+  sub_type: ColumnType
+  """
+  The column settings.
+  """
+  settings: JSON
+  """
+  The column labels.
+  """
+  labels: JSON
+  """
+  The column label positions.
+  """
+  labels_positions_v2: JSON
+  """
+  Whether the column is archived.
+  """
+  archived: Boolean
+  """
+  The column description.
+  """
+  description: String
+  """
+  The column model identifier.
+  """
+  column_model_id: ID
+  """
+  The column model strategy.
+  """
+  column_model_strategy: String
+  """
+  The global column identifier.
+  """
+  global_column_id: ID
+  """
+  The numeric column unit settings.
+  """
+  unit: JSON
+}
+
+"""
+A column-level error indicating an issue with a specific column in the source.
+"""
+type DataViewColumnLevelError {
+  """
+  The error type discriminator.
+  """
+  type: String
+  """
+  The error code.
+  """
+  error: String
+  """
+  The identifier of the column with the error.
+  """
+  column_id: ID
+}
+
+"""
+A mapping between a source column and a target column.
+"""
+type DataViewColumnMapping {
+  """
+  The source column identifier.
+  """
+  source_column_id: ID
+  """
+  The target column identifier.
+  """
+  target_column_id: ID
+}
+
+"""
+A mapping between a source column and a target column.
+"""
+input DataViewColumnMappingInput {
+  """
+  The source column identifier.
+  """
+  source_column_id: ID!
+  """
+  The target column identifier.
+  """
+  target_column_id: ID!
+}
+
+"""
+A column to add to a data view target. Unlike DataViewColumnInput, `id` is optional: when omitted the server generates one from the column type.
+"""
+input DataViewNewTargetColumnInput {
+  """
+  The column identifier. Generated by the server when omitted.
+  """
+  id: ID
+  """
+  The display title of the column.
+  """
+  title: String
+  """
+  The column type.
+  """
+  type: String
+  """
+  For mirror/lookup columns, the type of the column being displayed.
+  """
+  sub_type: ColumnType
+  """
+  The column settings.
+  """
+  settings: JSON
+  """
+  The column labels.
+  """
+  labels: JSON
+  """
+  The column label positions.
+  """
+  labels_positions_v2: JSON
+  """
+  Whether the column is archived.
+  """
+  archived: Boolean
+  """
+  The column description.
+  """
+  description: String
+  """
+  The column model identifier.
+  """
+  column_model_id: ID
+  """
+  The column model strategy.
+  """
+  column_model_strategy: String
+  """
+  The global column identifier.
+  """
+  global_column_id: ID
+  """
+  The numeric column unit settings.
+  """
+  unit: JSON
+}
+
+"""
+A paginated list of data view sources.
+"""
+type DataViewPaginatedSources {
+  """
+  The data view sources for the current page.
+  """
+  items: [DataViewSource!]
+  """
+  The pagination metadata.
+  """
+  pagination: DataViewPaginationMetadata
+}
+
+"""
+Pagination metadata for data view sources.
+"""
+type DataViewPaginationMetadata {
+  """
+  The current page number.
+  """
+  page: Int
+  """
+  The number of items per page.
+  """
+  page_size: Int
+  """
+  The total number of items.
+  """
+  total_count: Int
+  """
+  The total number of pages.
+  """
+  total_pages: Int
+}
+
+"""
+Why a source was not restored with its data view.
+"""
+enum DataViewRestoreDroppedReason {
+  NOT_INCLUDED
+  PROJECT_DELETED
+}
+
+"""
+A source that was on the deleted data view but was not restored with it.
+"""
+type DataViewRestoreDroppedSource {
+  """
+  The identifier of the source that was dropped.
+  """
+  source_id: DataViewSourceId
+  """
+  Why the source was dropped.
+  """
+  reason: DataViewRestoreDroppedReason
+}
+
+"""
+A mapping that could not be re-established on restore.
+"""
+type DataViewRestoreMappingError {
+  """
+  The source whose mapping could not be restored.
+  """
+  source_id: DataViewSourceId
+  """
+  The target column the mapping pointed at.
+  """
+  column_id: ID
+}
+
+"""
+The outcome of restoring a deleted data view.
+"""
+type DataViewRestoreResult {
+  """
+  The restored data view.
+  """
+  data_view: DataView
+  """
+  The sources that were not restored, and why. Empty when everything was restored.
+  """
+  dropped: [DataViewRestoreDroppedSource!]
+  """
+  The mappings that could not be re-established. Empty when every mapping was restored.
+  """
+  mapping_errors: [DataViewRestoreMappingError!]
+}
+
+"""
+A union of possible data view source types.
+"""
+union DataViewSource = StandaloneBoardDataViewSource | ChildBoardDataViewSource | EntityDataViewSource
+
+"""
+A column of a data view source, used to render source column options.
+"""
+type DataViewSourceColumn {
+  """
+  The column identifier.
+  """
+  id: ID
+  """
+  The column title.
+  """
+  title: String
+  """
+  The column type.
+  """
+  type: String
+}
+
+"""
+A union of possible source errors.
+"""
+union DataViewSourceError = DataViewColumnLevelError
+
+"""
+The identifier of a data view source, consisting of an id and type that uniquely identify the source
+"""
+type DataViewSourceId {
+  """
+  The object identifier.
+  """
+  object_id: ID
+  """
+  The object type.
+  """
+  object_type: String
+}
+
+"""
+The identifier of a data view source, consisting of an id and type that uniquely identify the source.
+"""
+input DataViewSourceIdInput {
+  """
+  The object identifier.
+  """
+  object_id: ID!
+  """
+  The object type.
+  """
+  object_type: DataViewSourceKind!
+}
+
+"""
+A source to include in a data view.
+"""
+input DataViewSourceInput {
+  """
+  The source identifier.
+  """
+  source_id: DataViewSourceIdInput!
+  """
+  main (default) or subitem — the source relation type.
+  """
+  relation_type: DataViewSourceRelationType
+  """
+  The column mappings for this source. If omitted, mappings are auto-calculated by the server.
+  """
+  mappings: [DataViewColumnMappingInput!]
+}
+
+"""
+The kind of object backing a data view source.
+"""
+enum DataViewSourceKind {
+  BOARD
+  DATA_ENTITY
+}
+
+"""
+The relation type of a data view source.
+"""
+enum DataViewSourceRelationType {
+  MAIN
+  SUBITEM
+}
+
+"""
+A source already attached to a data view, whose column mappings are being replaced. Unlike DataViewSourceInput, mappings are required: omitting them would leave the stored mappings untouched, making the update a no-op.
+"""
+input DataViewSourceUpdateInput {
+  """
+  The source identifier. Must already be attached to the data view.
+  """
+  source_id: DataViewSourceIdInput!
+  """
+  The full set of column mappings for this source. Replaces the stored mappings entirely.
+  """
+  mappings: [DataViewColumnMappingInput!]!
+}
+
+"""
+The target schema of a data view, defining the unified column structure.
+"""
+type DataViewTarget {
+  """
+  The columns in the target schema.
+  """
+  columns: [DataViewColumn!]
+  """
+  The column configurations for the target.
+  """
+  column_configurations: JSON
+}
+
+"""
+The editable properties of an existing data view target column.
+"""
+input DataViewTargetColumnChangesInput {
+  """
+  The new display title.
+  """
+  title: String
+  """
+  The new description. Pass null to clear it.
+  """
+  description: String
+}
+
+"""
+The target schema of a data view, defining the unified column structure.
+"""
+input DataViewTargetInput {
+  """
+  The columns in the target schema.
+  """
+  columns: [DataViewColumnInput!]!
+  """
+  The column configurations for the target, keyed by column id.
+  """
+  column_configurations: JSON
+}
+
+"""
+Input for the delete_object_schema_columns action.
+"""
+input DeleteObjectSchemaColumnsActionInput {
+  """
+  The IDs of the columns to delete.
+  """
+  column_ids: [ID!]!
+}
+
+"""
+Reasons why specific actions are disabled on a column
+"""
+input DisabledReasonInput {
+  """
+  Reason why the column cannot be deleted
+  """
+  delete: String
+  """
+  Reason why the column title cannot be edited
+  """
+  edit_title: String
+  """
+  Reason why the column labels cannot be edited
+  """
+  edit_labels: String
+  """
+  Reason why the column settings cannot be edited
+  """
+  edit_settings: String
+  """
+  Reason why the column description cannot be edited
+  """
+  edit_description: String
+  """
+  Reason why the column label positions cannot be edited
+  """
+  edit_labels_positions_v2: String
+}
+
+type DropdownColumnSettings {
+  type: ManagedColumnTypes
+  labels: [DropdownLabel!]
+}
+
+type DropdownLabel {
+  id: Int
+  label: String
+  is_deactivated: Boolean
+}
+
+type DropdownManagedColumn {
+  id: String
+  title: String
+  description: String
+  settings_json: JSON
+  created_by: ID
+  updated_by: ID
+  revision: Int
+  state: ManagedColumnState
+  """
+  The date and time of creation.
+  """
+  created_at: Date
+  """
+  The date and time of the last update.
+  """
+  updated_at: Date
+  settings: DropdownColumnSettings
+}
+
+"""
+Overridable settings for dropdown columns attached to a managed column.
+"""
+input DropdownSettingsOverridesInput {
+  """
+  Whether to limit the number of selectable labels.
+  """
+  limit_select: Boolean
+  """
+  Maximum number of labels that can be selected when limit_select is enabled.
+  """
+  label_limit_count: Int
+}
+
+"""
+A schema-type data view source.
+"""
+type EntityDataViewSource {
+  """
+  The source identifier.
+  """
+  source_id: DataViewSourceId
+  """
+  Whether this source has the main (items) or subitem relation type.
+  """
+  relation_type: DataViewSourceRelationType
+  """
+  The column mappings for this source.
+  """
+  mappings: [DataViewColumnMapping!]
+  """
+  The errors associated with this source.
+  """
+  errors: [DataViewSourceError!]
+  """
+  The live columns of this source. Populated by the automapping query.
+  """
+  columns: [DataViewSourceColumn!]
+  """
+  Number of child board sources under this schema.
+  """
+  children_count: Int
+}
+
+type ManagedColumn {
+  id: String
+  title: String
+  description: String
+  settings_json: JSON
+  created_by: ID
+  updated_by: ID
+  revision: Int
+  state: ManagedColumnState
+  """
+  The date and time of creation.
+  """
+  created_at: Date
+  """
+  The date and time of the last update.
+  """
+  updated_at: Date
+  settings: ColumnSettings
+}
+
+enum ManagedColumnState {
+  active
+  deleted
+  inactive
+}
+
+enum ManagedColumnTypes {
+  status
+  dropdown
+}
+
+"""
+Represents an account-level object schema that can be customized per account.
+"""
+type ObjectSchema {
+  """
+  The unique identifier of the object schema.
+  """
+  id: ID!
+  """
+  The account ID this object schema belongs to.
+  """
+  account_id: ID!
+  """
+  The user ID who created this object schema.
+  """
+  created_by: ID!
+  """
+  The revision number for optimistic locking.
+  """
+  revision: Int!
+  """
+  The date and time of creation.
+  """
+  created_at: Date
+  """
+  The date and time of the last update.
+  """
+  updated_at: Date
+  """
+  The columns defined in this object schema.
+  """
+  columns: [ObjectSchemaColumn!]!
+  """
+  The ID of the parent object schema (typically a global object schema).
+  """
+  parent_id: ID
+  """
+  The name of this object schema.
+  """
+  name: String
+  """
+  The description for this object schema.
+  """
+  description: String
+  """
+  The number of boards connected to this object schema.
+  """
+  connected_boards_count: Int!
+}
+
+"""
+The type of column action to perform in a bulk object schema mutation.
+"""
+enum ObjectSchemaAction {
+  CREATE_OBJECT_SCHEMA_COLUMNS
+  UPDATE_OBJECT_SCHEMA_COLUMNS
+  DELETE_OBJECT_SCHEMA_COLUMNS
+}
+
+"""
+A single action in a bulk object schema mutation. Provide the action type and the corresponding input field.
+"""
+input ObjectSchemaActionInput {
+  """
+  The type of action to perform.
+  """
+  action: ObjectSchemaAction!
+  """
+  Input for create_object_schema_columns action. Required when action is create_object_schema_columns.
+  """
+  create_object_schema_columns: CreateObjectSchemaColumnsActionInput
+  """
+  Input for update_object_schema_columns action. Required when action is update_object_schema_columns.
+  """
+  update_object_schema_columns: UpdateObjectSchemaColumnsActionInput
+  """
+  Input for delete_object_schema_columns action. Required when action is delete_object_schema_columns.
+  """
+  delete_object_schema_columns: DeleteObjectSchemaColumnsActionInput
+}
+
+"""
+Result of a single action within a bulk object schema mutation.
+"""
+type ObjectSchemaActionResult {
+  """
+  The type of action that was performed.
+  """
+  action: ObjectSchemaAction
+  """
+  The resulting object schema after the action.
+  """
+  object_schema: ObjectSchema
+}
+
+"""
+A column definition within an object schema.
+"""
+type ObjectSchemaColumn {
+  """
+  The unique identifier of the column.
+  """
+  id: ID
+  """
+  The column's title.
+  """
+  title: String!
+  """
+  The column's type.
+  """
+  type: ColumnType
+  """
+  The column's description.
+  """
+  description: String
+  """
+  The column's settings in a JSON form.
+  """
+  settings: JSON
+  """
+  Policy rules for this column.
+  """
+  policy: ObjectSchemaColumnPolicy
+  """
+  Tags indicating column status (deprecated, inherited, etc.).
+  """
+  tags: ObjectSchemaColumnTags
+}
+
+"""
+Policy rules governing how an object schema column can be modified.
+"""
+type ObjectSchemaColumnPolicy {
+  """
+  List of column properties that can be overridden by board-level columns.
+  """
+  can_override: [String!]!
+  """
+  Whether this column is protected from deletion.
+  """
+  cannot_delete: Boolean!
+  """
+  Whether this column is read-only.
+  """
+  read_only: Boolean!
+  """
+  Policy-related messages, such as disabled reasons.
+  """
+  messages: JSON
+}
+
+"""
+Tags applied to an object schema column indicating its status or behavior.
+"""
+type ObjectSchemaColumnTags {
+  """
+  Deprecation info with a start timestamp, if the column is deprecated.
+  """
+  deprecated: JSON
+  """
+  Opt-in by default info with an optional end timestamp.
+  """
+  opt_in_by_default: JSON
+  """
+  Whether this column is inherited from a parent object schema.
+  """
+  inherited: Boolean
+}
+
+"""
+Policy messages that explain why certain actions are disabled on a column
+"""
+input PolicyMessagesInput {
+  """
+  Structured reasons for disabled actions
+  """
+  disabled_reason: DisabledReasonInput
+}
+
+"""
+A standalone board-type data view source.
+"""
+type StandaloneBoardDataViewSource {
+  """
+  The source identifier.
+  """
+  source_id: DataViewSourceId
+  """
+  Whether this source has the main (items) or subitem relation type.
+  """
+  relation_type: DataViewSourceRelationType
+  """
+  The column mappings for this source.
+  """
+  mappings: [DataViewColumnMapping!]
+  """
+  The errors associated with this source.
+  """
+  errors: [DataViewSourceError!]
+  """
+  The live columns of this source. Populated by the automapping query.
+  """
+  columns: [DataViewSourceColumn!]
+}
+
+"""
+Input for configuring calculated capability settings on a status column
+"""
+input StatusCalculatedCapabilityInput {
+  """
+  Function to calculate the values. For status columns, only COUNT_KEYS function is supported.
+  """
+  function: StatusCalculatedFunction!
+}
+
+"""
+Available functions for calculating values in status column capabilities
+"""
+enum StatusCalculatedFunction {
+  COUNT_KEYS
+}
+
+"""
+Input for configuring status column capabilities during creation
+"""
+input StatusColumnCapabilitiesInput {
+  """
+  Calculated capability settings. If provided, enables calculated functionality for the status column.
+  """
+  calculated: StatusCalculatedCapabilityInput
+}
+
+enum StatusColumnColors {
+  working_orange
+  done_green
+  stuck_red
+  dark_blue
+  purple
+  explosive
+  grass_green
+  bright_blue
+  saladish
+  egg_yolk
+  blackish
+  dark_red
+  sofia_pink
+  lipstick
+  dark_purple
+  bright_green
+  chili_blue
+  american_gray
+  brown
+  dark_orange
+  sunset
+  bubble
+  peach
+  berry
+  winter
+  river
+  navy
+  aquamarine
+  indigo
+  dark_indigo
+  pecan
+  lavender
+  royal
+  steel
+  orchid
+  lilac
+  tan
+  sky
+  coffee
+  teal
+}
+
+type StatusColumnSettings {
+  type: ManagedColumnTypes
+  labels: [StatusLabel!]
+}
+
+type StatusLabel {
+  id: Int
+  label: String
+  color: StatusColumnColors
+  index: Int
+  description: String
+  is_deactivated: Boolean
+  is_done: Boolean
+}
+
+type StatusManagedColumn {
+  id: String
+  title: String
+  description: String
+  settings_json: JSON
+  created_by: ID
+  updated_by: ID
+  revision: Int
+  state: ManagedColumnState
+  """
+  The date and time of creation.
+  """
+  created_at: Date
+  """
+  The date and time of the last update.
+  """
+  updated_at: Date
+  settings: StatusColumnSettings
+}
+
+input UpdateDropdownColumnSettingsInput {
+  labels: [UpdateDropdownLabelInput!]!
+  """
+  Whether to limit the number of labels that can be selected
+  """
+  limit_select: Boolean
+  """
+  Maximum number of labels that can be selected when limit_select is enabled
+  """
+  label_limit_count: Int
+}
+
+input UpdateDropdownLabelInput {
+  label: String!
+  id: Int
+  is_deactivated: Boolean
+}
+
+"""
+Input for updating an existing column on an object schema
+"""
+input UpdateObjectSchemaColumnInput {
+  """
+  The ID of the column to update
+  """
+  column_id: ID!
+  """
+  The column title
+  """
+  title: String
+  """
+  Optional column description
+  """
+  description: String
+  """
+  Type-specific configuration object containing column defaults and settings. Use get_column_type_schema query to see available properties and validation rules. Examples: status column labels, dropdown options, number formatting rules, date display preferences.
+  """
+  defaults: JSON
+  """
+  Whether this column should be opted-out by default on boards. If false, the column will be automatically included on all boards using this object schema (opt-in by default).
+  """
+  opt_out_by_default: Boolean
+  """
+  Policy rules controlling what can be done with the column
+  """
+  policy: ColumnPolicyInput
+}
+
+"""
+Input for the update_object_schema_columns action.
+"""
+input UpdateObjectSchemaColumnsActionInput {
+  """
+  Array of column updates.
+  """
+  columns: [UpdateObjectSchemaColumnInput!]!
+}
+
+input UpdateStatusColumnSettingsInput {
+  labels: [UpdateStatusLabelInput!]!
+}
+
+input UpdateStatusLabelInput {
+  label: String!
+  color: StatusColumnColors!
+  index: Int!
+  description: String
+  is_done: Boolean
+  id: Int
+  is_deactivated: Boolean
 }
 
 """
@@ -16615,167 +18059,6 @@ type UpsertEntityIdMappingsResult {
 }
 
 """
-Output format for connected items (Connect Boards) column values in CSV exports.
-"""
-enum ConnectedItemColumnFormat {
-  NAME
-  ID
-}
-
-"""
-Reference to a started async board export. Poll export_job_status with the job_id until the status is COMPLETED, FAILED, or CANCELLED. fetch_export_job_status is a deprecated alias reachable only on dev.
-"""
-type ExportAsyncJob {
-  """
-  Opaque identifier for this export job. Pass to export_job_status.
-  """
-  job_id: ID
-}
-
-"""
-Result of a board export operation
-"""
-type ExportBoardResult {
-  """
-  URL to download the exported Excel file
-  """
-  download_url: String
-  """
-  Expiration timestamp of the download URL
-  """
-  expires_at: String
-}
-
-"""
-Structured reason an async export job failed.
-"""
-enum ExportFailureReason {
-  BOARD_UNAVAILABLE
-  BOARD_INACCESSIBLE
-  ITEM_LIMIT_EXCEEDED
-  INVALID_REQUEST
-  NOT_FOUND
-  INTERNAL_ERROR
-}
-
-"""
-A completed synchronous board export, ready to download.
-"""
-type ExportFile {
-  """
-  Presigned URL to download the exported file.
-  """
-  download_url: String
-  """
-  When download_url stops working, ISO 8601. Re-export to get a new URL.
-  """
-  expires_at: String
-}
-
-"""
-Output format for the exported board file.
-"""
-enum ExportFormat {
-  XLSX
-  CSV
-}
-
-"""
-Lifecycle status of an async board export job. Polling clients should treat COMPLETED, FAILED, and CANCELLED as terminal.
-"""
-enum ExportJobStatus {
-  RUNNING
-  COMPLETED
-  FAILED
-  CANCELLED
-}
-
-"""
-Status of an async board export job, including download URL when completed.
-"""
-type ExportJobStatusInfo {
-  """
-  Current job status. Terminal values: COMPLETED, FAILED, CANCELLED.
-  """
-  status: ExportJobStatus
-  """
-  Presigned S3 download URL, available only when the job completed successfully and the URL has not yet expired. Returns null once expired — re-trigger the export to get a new one.
-  """
-  download_url: String
-  """
-  Structured reason for failure. Populated only when the job failed.
-  """
-  failure_reason: ExportFailureReason
-  """
-  Human-readable error detail. Populated only when the job failed and the reason exposes safe text.
-  """
-  failure_message: String
-}
-
-"""
-Options for board export
-"""
-input ExportOptionsInput {
-  """
-  Include subitems in the export
-  """
-  include_subitems: Boolean = false
-  """
-  Include updates/comments in the export
-  """
-  include_updates: Boolean = false
-  """
-  Header row format for CSV exports. Ignored for other formats.
-  """
-  header_row: HeaderFormat
-  """
-  Behavior for columns with no codec support in CSV exports. Ignored for other formats.
-  """
-  non_importable_columns: NonImportableColumns = INCLUDE
-  """
-  Include item_id (and parent_item_id when subitems are enabled) columns at the end of CSV exports.
-  """
-  include_item_identifiers: Boolean = false
-  """
-  Output format for people column values in CSV exports. When set to NAME, display names are used instead of IDs (e.g. "Alice Smith" instead of "user:123"). Ignored for non-CSV formats.
-  """
-  people_column_format: PeopleColumnFormat
-  """
-  Output format for connected items (Connect Boards) column values in CSV exports. NAME (the default) uses the linked items' display names; ID uses their IDs instead. Ignored for non-CSV formats.
-  """
-  connected_item_column_format: ConnectedItemColumnFormat = NAME
-}
-
-"""
-Result of create_board_export. Either a completed synchronous export (ExportFile) or a started async job (ExportAsyncJob). The server chooses which branch to return; callers MUST handle both. Use ... on ExportFile { download_url } and ... on ExportAsyncJob { job_id }.
-"""
-union ExportResult = ExportFile | ExportAsyncJob
-
-"""
-CSV header row format.
-"""
-enum HeaderFormat {
-  TITLE
-  COLUMN_ID
-}
-
-"""
-Handling for columns without a round-trippable codec in CSV mode.
-"""
-enum NonImportableColumns {
-  INCLUDE
-  SKIP
-  ERROR
-}
-
-"""
-Output format for people column values in CSV exports.
-"""
-enum PeopleColumnFormat {
-  NAME
-}
-
-"""
 The privacy kind for a board
 """
 enum BoardKindInput {
@@ -17005,1108 +18288,6 @@ Type of mutation operation
 enum ViewMutationKind {
   CREATE
   UPDATE
-}
-
-"""
-Represents a board and its connection to an object schema.
-"""
-type BoardConnection {
-  """
-  The unique identifier of the board.
-  """
-  id: ID
-  """
-  The object schema ID that this board is connected to.
-  """
-  object_schema_id: ID
-}
-
-"""
-Result of a single board detach operation within a bulk detach request.
-"""
-type BulkDetachBoardResult {
-  """
-  The board ID that was detached.
-  """
-  board_id: ID
-  """
-  Whether the detach operation succeeded.
-  """
-  success: Boolean
-  """
-  Error message if the detach failed.
-  """
-  error: String
-}
-
-"""
-Calculated capability settings for a column
-"""
-type CalculatedCapability {
-  """
-  Function to calculate the parent values
-  """
-  function: CalculatedFunction!
-  """
-  Type of the calculated value
-  """
-  calculated_type: ColumnType
-}
-
-"""
-Fields that can be overridden in a column policy
-"""
-enum CanOverrideField {
-  settings
-  title
-  description
-}
-
-"""
-A board-type data view source that is a child of a schema source.
-"""
-type ChildBoardDataViewSource {
-  """
-  The source identifier.
-  """
-  source_id: DataViewSourceId
-  """
-  Whether this source has the main (items) or subitem relation type.
-  """
-  relation_type: DataViewSourceRelationType
-  """
-  The parent schema source identifier.
-  """
-  parent_source_id: DataViewSourceId
-}
-
-"""
-Action to perform on an object schema column to change its active state. A column can be reactivated if it was previously deactivated.
-"""
-enum ColumnActiveStateAction {
-  DEACTIVATE
-  REACTIVATE
-}
-
-"""
-Capabilities available for a column
-"""
-type ColumnCapabilities {
-  """
-  Calculated capability settings
-  """
-  calculated: CalculatedCapability
-  """
-  Visibility capability settings
-  """
-  visibility: String
-}
-
-"""
-Policy rules that control what actions can be performed on a column
-"""
-input ColumnPolicyInput {
-  """
-  User-facing messages explaining why certain actions are disabled
-  """
-  messages: PolicyMessagesInput
-  """
-  List of fields that can be overridden
-  """
-  can_override: [CanOverrideField!]!
-  """
-  Whether the column cannot be deleted
-  """
-  cannot_delete: Boolean!
-}
-
-union ColumnSettings = StatusColumnSettings | DropdownColumnSettings
-
-input CreateDropdownColumnSettingsInput {
-  labels: [CreateDropdownLabelInput!]!
-  """
-  Whether to limit the number of labels that can be selected
-  """
-  limit_select: Boolean
-  """
-  Maximum number of labels that can be selected when limit_select is enabled
-  """
-  label_limit_count: Int
-}
-
-input CreateDropdownLabelInput {
-  label: String!
-}
-
-"""
-Input for creating a new column on an object schema
-"""
-input CreateObjectSchemaColumnInput {
-  """
-  The column type (e.g., "status", "dropdown", "text", "date")
-  """
-  type: ColumnType!
-  """
-  The column title
-  """
-  title: String!
-  """
-  Optional column description
-  """
-  description: String
-  """
-  Type-specific configuration object containing column defaults and settings. Use get_column_type_schema query to see available properties and validation rules. Examples: status column labels, dropdown options, number formatting rules, date display preferences.
-  """
-  defaults: JSON
-  """
-  Whether this column should be opted-out by default on boards. If false or not provided, the column will be automatically included on all boards using this object schema (opt-in by default).
-  """
-  opt_out_by_default: Boolean
-  """
-  Policy rules controlling what can be done with the column
-  """
-  policy: ColumnPolicyInput!
-}
-
-"""
-Input for the create_object_schema_columns action.
-"""
-input CreateObjectSchemaColumnsActionInput {
-  """
-  Array of columns to create.
-  """
-  columns: [CreateObjectSchemaColumnInput!]!
-}
-
-input CreateStatusColumnSettingsInput {
-  labels: [CreateStatusLabelInput!]!
-}
-
-input CreateStatusLabelInput {
-  label: String!
-  color: StatusColumnColors!
-  index: Int!
-  description: String
-  is_done: Boolean
-}
-
-"""
-The kind of object that authorizes access to a data view.
-"""
-enum DataViewAuthorizationKind {
-  BOARD
-  OVERVIEW
-  VIBE_APP
-}
-
-"""
-The authorization object associated with a data view.
-"""
-type DataViewAuthorizationObject {
-  """
-  The identifier of the authorization object.
-  """
-  id: ID
-  """
-  The type of the authorization object.
-  """
-  type: String
-}
-
-"""
-The authorization object that gates access to the data view.
-"""
-input DataViewAuthorizationObjectInput {
-  """
-  The identifier of the authorization object.
-  """
-  id: ID!
-  """
-  The type of the authorization object.
-  """
-  type: DataViewAuthorizationKind!
-}
-
-"""
-The result of calculating a data view target schema and per-source column mappings.
-"""
-type DataViewAutomapping {
-  """
-  The calculated (or provided) target schema.
-  """
-  target: DataViewTarget
-  """
-  The calculated sources with their mappings and errors.
-  """
-  sources: DataViewAutomappingSources
-}
-
-"""
-The calculated sources of a data view automapping, each with its computed mappings and errors.
-"""
-type DataViewAutomappingSources {
-  """
-  The calculated sources.
-  """
-  items: [DataViewSource!]
-}
-
-"""
-A column definition within a data view target.
-"""
-type DataViewColumn {
-  """
-  The unique identifier of the column.
-  """
-  id: ID
-  """
-  The display title of the column.
-  """
-  title: String
-  """
-  The column type.
-  """
-  type: String
-  """
-  For mirror/lookup columns, the type of the column being displayed.
-  """
-  sub_type: String
-  """
-  The column settings.
-  """
-  settings: JSON
-  """
-  The column labels.
-  """
-  labels: JSON
-  """
-  The column label positions.
-  """
-  labels_positions_v2: JSON
-  """
-  Whether the column is archived.
-  """
-  archived: Boolean
-  """
-  The column description.
-  """
-  description: String
-  """
-  The column model identifier.
-  """
-  column_model_id: ID
-  """
-  The column model strategy.
-  """
-  column_model_strategy: String
-  """
-  The global column identifier.
-  """
-  global_column_id: ID
-  """
-  The numeric column unit settings.
-  """
-  unit: JSON
-}
-
-"""
-A column definition within a data view target.
-"""
-input DataViewColumnInput {
-  """
-  The unique identifier of the column.
-  """
-  id: ID!
-  """
-  The display title of the column.
-  """
-  title: String
-  """
-  The column type.
-  """
-  type: String
-  """
-  For mirror/lookup columns, the type of the column being displayed.
-  """
-  sub_type: ColumnType
-  """
-  The column settings.
-  """
-  settings: JSON
-  """
-  The column labels.
-  """
-  labels: JSON
-  """
-  The column label positions.
-  """
-  labels_positions_v2: JSON
-  """
-  Whether the column is archived.
-  """
-  archived: Boolean
-  """
-  The column description.
-  """
-  description: String
-  """
-  The column model identifier.
-  """
-  column_model_id: ID
-  """
-  The column model strategy.
-  """
-  column_model_strategy: String
-  """
-  The global column identifier.
-  """
-  global_column_id: ID
-  """
-  The numeric column unit settings.
-  """
-  unit: JSON
-}
-
-"""
-A column-level error indicating an issue with a specific column in the source.
-"""
-type DataViewColumnLevelError {
-  """
-  The error type discriminator.
-  """
-  type: String
-  """
-  The error code.
-  """
-  error: String
-  """
-  The identifier of the column with the error.
-  """
-  column_id: ID
-}
-
-"""
-A mapping between a source column and a target column.
-"""
-type DataViewColumnMapping {
-  """
-  The source column identifier.
-  """
-  source_column_id: ID
-  """
-  The target column identifier.
-  """
-  target_column_id: ID
-}
-
-"""
-A mapping between a source column and a target column.
-"""
-input DataViewColumnMappingInput {
-  """
-  The source column identifier.
-  """
-  source_column_id: ID!
-  """
-  The target column identifier.
-  """
-  target_column_id: ID!
-}
-
-"""
-A paginated list of data view sources.
-"""
-type DataViewPaginatedSources {
-  """
-  The data view sources for the current page.
-  """
-  items: [DataViewSource!]
-  """
-  The pagination metadata.
-  """
-  pagination: DataViewPaginationMetadata
-}
-
-"""
-Pagination metadata for data view sources.
-"""
-type DataViewPaginationMetadata {
-  """
-  The current page number.
-  """
-  page: Int
-  """
-  The number of items per page.
-  """
-  page_size: Int
-  """
-  The total number of items.
-  """
-  total_count: Int
-  """
-  The total number of pages.
-  """
-  total_pages: Int
-}
-
-"""
-A union of possible data view source types.
-"""
-union DataViewSource = StandaloneBoardDataViewSource | ChildBoardDataViewSource | EntityDataViewSource
-
-"""
-A column of a data view source, used to render source column options.
-"""
-type DataViewSourceColumn {
-  """
-  The column identifier.
-  """
-  id: ID
-  """
-  The column title.
-  """
-  title: String
-  """
-  The column type.
-  """
-  type: String
-}
-
-"""
-A union of possible source errors.
-"""
-union DataViewSourceError = DataViewColumnLevelError
-
-"""
-The identifier of a data view source, consisting of an id and type that uniquely identify the source
-"""
-type DataViewSourceId {
-  """
-  The object identifier.
-  """
-  object_id: ID
-  """
-  The object type.
-  """
-  object_type: String
-}
-
-"""
-The identifier of a data view source, consisting of an id and type that uniquely identify the source.
-"""
-input DataViewSourceIdInput {
-  """
-  The object identifier.
-  """
-  object_id: ID!
-  """
-  The object type.
-  """
-  object_type: DataViewSourceKind!
-}
-
-"""
-A source to include in a data view.
-"""
-input DataViewSourceInput {
-  """
-  The source identifier.
-  """
-  source_id: DataViewSourceIdInput!
-  """
-  main (default) or subitem — the source relation type.
-  """
-  relation_type: DataViewSourceRelationType
-  """
-  The column mappings for this source. If omitted, mappings are auto-calculated by the server.
-  """
-  mappings: [DataViewColumnMappingInput!]
-}
-
-"""
-The kind of object backing a data view source.
-"""
-enum DataViewSourceKind {
-  BOARD
-  DATA_ENTITY
-}
-
-"""
-The relation type of a data view source.
-"""
-enum DataViewSourceRelationType {
-  MAIN
-  SUBITEM
-}
-
-"""
-A source already attached to a data view, whose column mappings are being replaced. Unlike DataViewSourceInput, mappings are required: omitting them would leave the stored mappings untouched, making the update a no-op.
-"""
-input DataViewSourceUpdateInput {
-  """
-  The source identifier. Must already be attached to the data view.
-  """
-  source_id: DataViewSourceIdInput!
-  """
-  The full set of column mappings for this source. Replaces the stored mappings entirely.
-  """
-  mappings: [DataViewColumnMappingInput!]!
-}
-
-"""
-The target schema of a data view, defining the unified column structure.
-"""
-type DataViewTarget {
-  """
-  The columns in the target schema.
-  """
-  columns: [DataViewColumn!]
-  """
-  The column configurations for the target.
-  """
-  column_configurations: JSON
-}
-
-"""
-The target schema of a data view, defining the unified column structure.
-"""
-input DataViewTargetInput {
-  """
-  The columns in the target schema.
-  """
-  columns: [DataViewColumnInput!]!
-  """
-  The column configurations for the target, keyed by column id.
-  """
-  column_configurations: JSON
-}
-
-"""
-Input for the delete_object_schema_columns action.
-"""
-input DeleteObjectSchemaColumnsActionInput {
-  """
-  The IDs of the columns to delete.
-  """
-  column_ids: [ID!]!
-}
-
-"""
-Reasons why specific actions are disabled on a column
-"""
-input DisabledReasonInput {
-  """
-  Reason why the column cannot be deleted
-  """
-  delete: String
-  """
-  Reason why the column title cannot be edited
-  """
-  edit_title: String
-  """
-  Reason why the column labels cannot be edited
-  """
-  edit_labels: String
-  """
-  Reason why the column settings cannot be edited
-  """
-  edit_settings: String
-  """
-  Reason why the column description cannot be edited
-  """
-  edit_description: String
-  """
-  Reason why the column label positions cannot be edited
-  """
-  edit_labels_positions_v2: String
-}
-
-type DropdownColumnSettings {
-  type: ManagedColumnTypes
-  labels: [DropdownLabel!]
-}
-
-type DropdownLabel {
-  id: Int
-  label: String
-  is_deactivated: Boolean
-}
-
-type DropdownManagedColumn {
-  id: String
-  title: String
-  description: String
-  settings_json: JSON
-  created_by: ID
-  updated_by: ID
-  revision: Int
-  state: ManagedColumnState
-  """
-  The date and time of creation.
-  """
-  created_at: Date
-  """
-  The date and time of the last update.
-  """
-  updated_at: Date
-  settings: DropdownColumnSettings
-}
-
-"""
-Overridable settings for dropdown columns attached to a managed column.
-"""
-input DropdownSettingsOverridesInput {
-  """
-  Whether to limit the number of selectable labels.
-  """
-  limit_select: Boolean
-  """
-  Maximum number of labels that can be selected when limit_select is enabled.
-  """
-  label_limit_count: Int
-}
-
-"""
-A schema-type data view source.
-"""
-type EntityDataViewSource {
-  """
-  The source identifier.
-  """
-  source_id: DataViewSourceId
-  """
-  Whether this source has the main (items) or subitem relation type.
-  """
-  relation_type: DataViewSourceRelationType
-  """
-  The column mappings for this source.
-  """
-  mappings: [DataViewColumnMapping!]
-  """
-  The errors associated with this source.
-  """
-  errors: [DataViewSourceError!]
-  """
-  The live columns of this source. Populated by the automapping query.
-  """
-  columns: [DataViewSourceColumn!]
-  """
-  Number of child board sources under this schema.
-  """
-  children_count: Int
-}
-
-type ManagedColumn {
-  id: String
-  title: String
-  description: String
-  settings_json: JSON
-  created_by: ID
-  updated_by: ID
-  revision: Int
-  state: ManagedColumnState
-  """
-  The date and time of creation.
-  """
-  created_at: Date
-  """
-  The date and time of the last update.
-  """
-  updated_at: Date
-  settings: ColumnSettings
-}
-
-enum ManagedColumnState {
-  active
-  deleted
-  inactive
-}
-
-enum ManagedColumnTypes {
-  status
-  dropdown
-}
-
-"""
-Represents an account-level object schema that can be customized per account.
-"""
-type ObjectSchema {
-  """
-  The unique identifier of the object schema.
-  """
-  id: ID!
-  """
-  The account ID this object schema belongs to.
-  """
-  account_id: ID!
-  """
-  The user ID who created this object schema.
-  """
-  created_by: ID!
-  """
-  The revision number for optimistic locking.
-  """
-  revision: Int!
-  """
-  The date and time of creation.
-  """
-  created_at: Date
-  """
-  The date and time of the last update.
-  """
-  updated_at: Date
-  """
-  The columns defined in this object schema.
-  """
-  columns: [ObjectSchemaColumn!]!
-  """
-  The ID of the parent object schema (typically a global object schema).
-  """
-  parent_id: ID
-  """
-  The name of this object schema.
-  """
-  name: String
-  """
-  The description for this object schema.
-  """
-  description: String
-  """
-  The number of boards connected to this object schema.
-  """
-  connected_boards_count: Int!
-}
-
-"""
-The type of column action to perform in a bulk object schema mutation.
-"""
-enum ObjectSchemaAction {
-  CREATE_OBJECT_SCHEMA_COLUMNS
-  UPDATE_OBJECT_SCHEMA_COLUMNS
-  DELETE_OBJECT_SCHEMA_COLUMNS
-}
-
-"""
-A single action in a bulk object schema mutation. Provide the action type and the corresponding input field.
-"""
-input ObjectSchemaActionInput {
-  """
-  The type of action to perform.
-  """
-  action: ObjectSchemaAction!
-  """
-  Input for create_object_schema_columns action. Required when action is create_object_schema_columns.
-  """
-  create_object_schema_columns: CreateObjectSchemaColumnsActionInput
-  """
-  Input for update_object_schema_columns action. Required when action is update_object_schema_columns.
-  """
-  update_object_schema_columns: UpdateObjectSchemaColumnsActionInput
-  """
-  Input for delete_object_schema_columns action. Required when action is delete_object_schema_columns.
-  """
-  delete_object_schema_columns: DeleteObjectSchemaColumnsActionInput
-}
-
-"""
-Result of a single action within a bulk object schema mutation.
-"""
-type ObjectSchemaActionResult {
-  """
-  The type of action that was performed.
-  """
-  action: ObjectSchemaAction
-  """
-  The resulting object schema after the action.
-  """
-  object_schema: ObjectSchema
-}
-
-"""
-A column definition within an object schema.
-"""
-type ObjectSchemaColumn {
-  """
-  The unique identifier of the column.
-  """
-  id: ID
-  """
-  The column's title.
-  """
-  title: String!
-  """
-  The column's type.
-  """
-  type: ColumnType
-  """
-  The column's description.
-  """
-  description: String
-  """
-  The column's settings in a JSON form.
-  """
-  settings: JSON
-  """
-  Policy rules for this column.
-  """
-  policy: ObjectSchemaColumnPolicy
-  """
-  Tags indicating column status (deprecated, inherited, etc.).
-  """
-  tags: ObjectSchemaColumnTags
-}
-
-"""
-Policy rules governing how an object schema column can be modified.
-"""
-type ObjectSchemaColumnPolicy {
-  """
-  List of column properties that can be overridden by board-level columns.
-  """
-  can_override: [String!]!
-  """
-  Whether this column is protected from deletion.
-  """
-  cannot_delete: Boolean!
-  """
-  Whether this column is read-only.
-  """
-  read_only: Boolean!
-  """
-  Policy-related messages, such as disabled reasons.
-  """
-  messages: JSON
-}
-
-"""
-Tags applied to an object schema column indicating its status or behavior.
-"""
-type ObjectSchemaColumnTags {
-  """
-  Deprecation info with a start timestamp, if the column is deprecated.
-  """
-  deprecated: JSON
-  """
-  Opt-in by default info with an optional end timestamp.
-  """
-  opt_in_by_default: JSON
-  """
-  Whether this column is inherited from a parent object schema.
-  """
-  inherited: Boolean
-}
-
-"""
-Policy messages that explain why certain actions are disabled on a column
-"""
-input PolicyMessagesInput {
-  """
-  Structured reasons for disabled actions
-  """
-  disabled_reason: DisabledReasonInput
-}
-
-"""
-A standalone board-type data view source.
-"""
-type StandaloneBoardDataViewSource {
-  """
-  The source identifier.
-  """
-  source_id: DataViewSourceId
-  """
-  Whether this source has the main (items) or subitem relation type.
-  """
-  relation_type: DataViewSourceRelationType
-  """
-  The column mappings for this source.
-  """
-  mappings: [DataViewColumnMapping!]
-  """
-  The errors associated with this source.
-  """
-  errors: [DataViewSourceError!]
-  """
-  The live columns of this source. Populated by the automapping query.
-  """
-  columns: [DataViewSourceColumn!]
-}
-
-"""
-Input for configuring calculated capability settings on a status column
-"""
-input StatusCalculatedCapabilityInput {
-  """
-  Function to calculate the values. For status columns, only COUNT_KEYS function is supported.
-  """
-  function: StatusCalculatedFunction!
-}
-
-"""
-Available functions for calculating values in status column capabilities
-"""
-enum StatusCalculatedFunction {
-  COUNT_KEYS
-}
-
-"""
-Input for configuring status column capabilities during creation
-"""
-input StatusColumnCapabilitiesInput {
-  """
-  Calculated capability settings. If provided, enables calculated functionality for the status column.
-  """
-  calculated: StatusCalculatedCapabilityInput
-}
-
-enum StatusColumnColors {
-  working_orange
-  done_green
-  stuck_red
-  dark_blue
-  purple
-  explosive
-  grass_green
-  bright_blue
-  saladish
-  egg_yolk
-  blackish
-  dark_red
-  sofia_pink
-  lipstick
-  dark_purple
-  bright_green
-  chili_blue
-  american_gray
-  brown
-  dark_orange
-  sunset
-  bubble
-  peach
-  berry
-  winter
-  river
-  navy
-  aquamarine
-  indigo
-  dark_indigo
-  pecan
-  lavender
-  royal
-  steel
-  orchid
-  lilac
-  tan
-  sky
-  coffee
-  teal
-}
-
-type StatusColumnSettings {
-  type: ManagedColumnTypes
-  labels: [StatusLabel!]
-}
-
-type StatusLabel {
-  id: Int
-  label: String
-  color: StatusColumnColors
-  index: Int
-  description: String
-  is_deactivated: Boolean
-  is_done: Boolean
-}
-
-type StatusManagedColumn {
-  id: String
-  title: String
-  description: String
-  settings_json: JSON
-  created_by: ID
-  updated_by: ID
-  revision: Int
-  state: ManagedColumnState
-  """
-  The date and time of creation.
-  """
-  created_at: Date
-  """
-  The date and time of the last update.
-  """
-  updated_at: Date
-  settings: StatusColumnSettings
-}
-
-input UpdateDropdownColumnSettingsInput {
-  labels: [UpdateDropdownLabelInput!]!
-  """
-  Whether to limit the number of labels that can be selected
-  """
-  limit_select: Boolean
-  """
-  Maximum number of labels that can be selected when limit_select is enabled
-  """
-  label_limit_count: Int
-}
-
-input UpdateDropdownLabelInput {
-  label: String!
-  id: Int
-  is_deactivated: Boolean
-}
-
-"""
-Input for updating an existing column on an object schema
-"""
-input UpdateObjectSchemaColumnInput {
-  """
-  The ID of the column to update
-  """
-  column_id: ID!
-  """
-  The column title
-  """
-  title: String
-  """
-  Optional column description
-  """
-  description: String
-  """
-  Type-specific configuration object containing column defaults and settings. Use get_column_type_schema query to see available properties and validation rules. Examples: status column labels, dropdown options, number formatting rules, date display preferences.
-  """
-  defaults: JSON
-  """
-  Whether this column should be opted-out by default on boards. If false, the column will be automatically included on all boards using this object schema (opt-in by default).
-  """
-  opt_out_by_default: Boolean
-  """
-  Policy rules controlling what can be done with the column
-  """
-  policy: ColumnPolicyInput
-}
-
-"""
-Input for the update_object_schema_columns action.
-"""
-input UpdateObjectSchemaColumnsActionInput {
-  """
-  Array of column updates.
-  """
-  columns: [UpdateObjectSchemaColumnInput!]!
-}
-
-input UpdateStatusColumnSettingsInput {
-  labels: [UpdateStatusLabelInput!]!
-}
-
-input UpdateStatusLabelInput {
-  label: String!
-  color: StatusColumnColors!
-  index: Int!
-  description: String
-  is_done: Boolean
-  id: Int
-  is_deactivated: Boolean
 }
 
 """

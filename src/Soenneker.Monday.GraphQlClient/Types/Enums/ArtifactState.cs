@@ -9,6 +9,8 @@ public enum ArtifactState
 {
     ACTIVE,
 
-    DELETED
+    DELETED,
+
+    ARCHIVE
 
 }

@@ -10,10 +10,10 @@ namespace Soenneker.Monday.GraphQlClient;
 public sealed partial class TimeOffEntryInput
 {
     /// <summary>
-    /// Optional display name for this time off entry
+    /// Display name for this time off entry
     /// </summary>
     [JsonPropertyName("name")]
-    public string? Name { get; init; }
+    public string Name { get; init; } = null!;
 
     /// <summary>
     /// Type of the time off entry. Defaults to CUSTOM when omitted.
