@@ -989,6 +989,18 @@ type Mutation {
   """
   set_form_password(formToken: String!, input: SetFormPasswordInput!): ResponseForm
   """
+  Execute an integration block with the provided field values
+  """
+  execute_integration_block(block_instance_id: ID!, inbound_field_values: JSON!): IntegrationExecutionResult
+  """
+  Connect an existing project to a portfolio. When a callback_url is provided the mutation returns immediately with a process_id, and the result is POSTed to that URL once the operation completes. The callback payload is: { is_success: boolean, process_id: string, portfolio_item_id?: string }.
+  """
+  connect_project_to_portfolio(projectBoardId: ID!, portfolioBoardId: ID!, callback_url: String): ConnectProjectResult
+  """
+  Create a new portfolio. When a callback_url is provided the mutation returns immediately with a process_id, and the portfolio_id is POSTed to that URL once the portfolio is actually created. The callback payload is: { is_success: boolean, process_id: string, portfolio_id?: number }.
+  """
+  create_portfolio(boardName: String!, boardPrivacy: String!, destinationWorkspaceId: Int, callback_url: String): CreatePortfolioResult
+  """
   Create a new table view
   """
   create_view_table(board_id: ID!, name: String, filter_user_id: ID, filter_team_id: ID, filter: ItemsQueryGroup, sort: [ItemsQueryOrderBy!], tags: [String!], settings: TableViewSettingsInput): BoardView
@@ -1008,18 +1020,6 @@ type Mutation {
   Delete an existing board subset/view
   """
   delete_view(view_id: ID!, board_id: ID!): BoardView
-  """
-  Execute an integration block with the provided field values
-  """
-  execute_integration_block(block_instance_id: ID!, inbound_field_values: JSON!): IntegrationExecutionResult
-  """
-  Connect an existing project to a portfolio. When a callback_url is provided the mutation returns immediately with a process_id, and the result is POSTed to that URL once the operation completes. The callback payload is: { is_success: boolean, process_id: string, portfolio_item_id?: string }.
-  """
-  connect_project_to_portfolio(projectBoardId: ID!, portfolioBoardId: ID!, callback_url: String): ConnectProjectResult
-  """
-  Create a new portfolio. When a callback_url is provided the mutation returns immediately with a process_id, and the portfolio_id is POSTed to that URL once the portfolio is actually created. The callback payload is: { is_success: boolean, process_id: string, portfolio_id?: number }.
-  """
-  create_portfolio(boardName: String!, boardPrivacy: String!, destinationWorkspaceId: Int, callback_url: String): CreatePortfolioResult
   """
   Update the dependency column for a specific pulse
   """
@@ -1361,15 +1361,15 @@ type Query {
   """
   form(formToken: String!): ResponseForm
   """
+  Search knowledge base snippets.
+  """
+  knowledge_base_search(query: String!, limit: Int = 5): KnowledgeBaseAnswer
+  """
   Retrieves the JSON schema definition for a specific create view type. 
     Use this query before calling create_view mutation to understand the structure and validation rules for the settings parameter. 
     The schema defines what properties are available when creating views of a specific type.
   """
   get_view_schema_by_type(type: ViewKind!, mutationType: ViewMutationKind!): JSON
-  """
-  Search knowledge base snippets.
-  """
-  knowledge_base_search(query: String!, limit: Int = 5): KnowledgeBaseAnswer
   """
   Export the dependency graph for a specific board
   """
@@ -11884,137 +11884,6 @@ enum ArtifactState {
 }
 
 """
-A page of live workflow automations with cursor-based pagination metadata
-"""
-type LiveWorkflowAutomationsPage {
-  """
-  List of live workflow automations in this page
-  """
-  data: [WorkflowAutomation!]
-  """
-  Cursor-based pagination metadata
-  """
-  page_info: WorkflowAutomationsPageInfo
-}
-
-"""
-A workflow and its steps
-"""
-type WorkflowAutomation {
-  """
-  Workflow entity ID
-  """
-  id: ID
-  """
-  Workflow title
-  """
-  title: String
-  """
-  Workflow description
-  """
-  description: String
-  """
-  Whether the workflow is currently active
-  """
-  active: Boolean
-  """
-  Last update timestamp
-  """
-  updated_at: String
-  """
-  Creation timestamp
-  """
-  created_at: String
-  """
-  The steps that make up this workflow
-  """
-  steps: [WorkflowStep!]
-}
-
-"""
-Cursor-based pagination metadata for live workflow automation queries
-"""
-type WorkflowAutomationsPageInfo {
-  """
-  Whether there are more results beyond the current page
-  """
-  has_next_page: Boolean
-  """
-  Cursor of the last item in this page; pass as last_id to fetch the next page
-  """
-  end_cursor: ID
-}
-
-"""
-Cursor-based pagination parameters for workflow automation queries
-"""
-input WorkflowAutomationsPaginationInput {
-  """
-  Maximum number of results to return (default 50, max 100)
-  """
-  limit: Int
-  """
-  Cursor of the last item from the previous page; pass page_info.end_cursor from the previous response
-  """
-  last_id: ID
-}
-
-"""
-Identifiers for a newly created workflow
-"""
-type WorkflowBuilderCreateResult {
-  """
-  Stable workflow entity ID
-  """
-  workflow_object_id: ID
-  """
-  Draft workflow ID
-  """
-  workflow_draft_id: ID
-}
-
-"""
-Privacy level for a workflow
-"""
-enum WorkflowBuilderPrivacyKind {
-  PUBLIC
-  PRIVATE
-  SHAREABLE
-}
-
-"""
-Identifiers for a published workflow
-"""
-type WorkflowBuilderPublishResult {
-  """
-  Stable workflow entity ID
-  """
-  workflow_object_id: ID
-  """
-  Live workflow ID after promotion
-  """
-  workflow_live_id: ID
-}
-
-"""
-A step instance within a workflow
-"""
-type WorkflowStep {
-  """
-  Unique node ID within the workflow
-  """
-  node_id: ID
-  """
-  ID of the block type this step uses
-  """
-  block_reference_id: ID
-  """
-  Display title of the step
-  """
-  title: String
-}
-
-"""
 Input for a group of validation rules with a logical operator
 """
 input GroupInput {
@@ -13140,6 +13009,469 @@ input UpdateObjectHierarchyPositionInput {
   The new position for the object
   """
   newPosition: ObjectDynamicPositionInput
+}
+
+"""
+The result of the connect_migration_job mutation.
+"""
+type ConnectMigrationJobResult {
+  """
+  Whether the connection was successfully created or already exists.
+  """
+  success: Boolean
+  """
+  The unique identifier of the migration job connection.
+  """
+  migrationJobConnectionId: ID
+}
+
+type CreateEntitySnapshotResult {
+  """
+  The unique identifier of the snapshot.
+  """
+  snapshotId: ID!
+  """
+  The date and time the snapshot was created.
+  """
+  createdAt: String!
+  """
+  The entity that was snapshot.
+  """
+  entity: String!
+  """
+  The unique identifier of the migration job.
+  """
+  migrationJobId: String!
+}
+
+type CreateMigrationJobResult {
+  """
+  The unique identifier of the migration job.
+  """
+  id: ID!
+}
+
+"""
+The result of deleting entity ID mappings.
+"""
+type DeleteEntityIdMappingsResult {
+  """
+  Whether the delete operation was successful.
+  """
+  success: Boolean
+  """
+  The number of mappings that were deleted.
+  """
+  count: Int
+}
+
+"""
+Input type for entity ID mapping.
+"""
+input EntityIdMappingInput {
+  """
+  The old ID of the entity.
+  """
+  oldId: String!
+  """
+  The new ID of the entity.
+  """
+  newId: String!
+}
+
+type GetEntitiesForMigrationResult {
+  """
+  The entities for migration.
+  """
+  entityId: String
+}
+
+"""
+The result of querying entity restores.
+"""
+type GetRestoresQueryResults {
+  """
+  The unique identifier of the restore.
+  """
+  id: ID!
+  """
+  The date and time the restore was created.
+  """
+  createdAt: String!
+  """
+  The entity id of the restore.
+  """
+  entityId: String!
+  """
+  The unique identifier of the migration job.
+  """
+  migrationJobId: String!
+  """
+  The status of the restore.
+  """
+  status: RestoreStatus!
+  """
+  Progress counters for the restore operation.
+  """
+  progress: MigrationProgress
+}
+
+type GetSnapshotsQueryResults {
+  """
+  The unique identifier of the snapshot.
+  """
+  id: ID!
+  """
+  The date and time the snapshot was created.
+  """
+  createdAt: String!
+  """
+  The entity id of the snapshot.
+  """
+  entityId: String!
+  """
+  The unique identifier of the migration job.
+  """
+  migrationJobId: String!
+  """
+  The status of the snapshot.
+  """
+  status: SnapshotStatus!
+  """
+  Progress counters for the snapshot operation.
+  """
+  progress: MigrationProgress
+}
+
+type MigratedEntityIdMappingsResult {
+  """
+  The entity type of migrated entities.
+  """
+  entityType: String
+  """
+  The old ID of the migrated entity.
+  """
+  oldId: String
+  """
+  The new ID of the migrated entity.
+  """
+  newId: String
+}
+
+"""
+Progress counters for a snapshot or restore operation.
+"""
+type MigrationProgress {
+  """
+  Live progress counters. Present only while the operation is in progress.
+  """
+  ongoing: OngoingProgress
+  """
+  Final progress result. Present only after the operation completes.
+  """
+  result: ProgressResult
+}
+
+"""
+Live progress counters for an in-progress migration operation.
+"""
+type OngoingProgress {
+  """
+  The total number of entities to process.
+  """
+  total: Int!
+  """
+  The number of entities currently being processed.
+  """
+  processing: Int!
+  """
+  The number of entities successfully processed.
+  """
+  success: Int!
+  """
+  The number of entities that failed processing.
+  """
+  failed: Int!
+  """
+  Number of components excluded from migration.
+  """
+  excluded: Int!
+  """
+  List of nodes currently being processed.
+  """
+  currently_processing: [ProcessingNode!]!
+}
+
+"""
+A node currently being processed in a migration operation.
+"""
+type ProcessingNode {
+  """
+  The component type, e.g. BoardPosts, BoardPermissions.
+  """
+  type: String!
+  """
+  The unique identifier of the entity being processed.
+  """
+  id: ID!
+  """
+  ISO timestamp when processing began.
+  """
+  started_at: String
+}
+
+"""
+Final progress result for a completed migration operation.
+"""
+type ProgressResult {
+  """
+  The total number of entities processed.
+  """
+  total: Int!
+  """
+  The number of entities successfully processed.
+  """
+  success: Int!
+  """
+  The number of entities that failed processing.
+  """
+  failed: Int!
+  """
+  Number of components excluded from migration.
+  """
+  excluded: Int!
+  """
+  The full manifest JSON with per-component summary baked in.
+  """
+  raw_manifest: JSON!
+}
+
+"""
+The result of the restore entity mutation.
+"""
+type RestoreEntityResult {
+  """
+  Confirms the restore request was accepted.
+  """
+  accepted: Boolean
+}
+
+"""
+A point-in-time record of a restore status change.
+"""
+type RestoreHistoryEntry {
+  """
+  The restore ID at the time this history entry was recorded.
+  """
+  restore_id: ID!
+  """
+  The entity id (package id) of the restore.
+  """
+  entity_id: ID!
+  """
+  The status of the restore at the time this history entry was recorded.
+  """
+  status: RestoreStatus!
+  """
+  The date and time this history entry was recorded.
+  """
+  recorded_at: String!
+}
+
+"""
+The possible statuses of a restore operation.
+"""
+enum RestoreStatus {
+  pending
+  processing
+  success
+  failed
+  rollback
+}
+
+"""
+Result of a restore rollback operation.
+"""
+type RollbackRestoreMutationResult {
+  """
+  The unique identifier of the restore.
+  """
+  restore_id: ID!
+  """
+  The new status of the restore (rollback).
+  """
+  status: RestoreStatus!
+}
+
+"""
+Result of a snapshot rollback operation.
+"""
+type RollbackSnapshotMutationResult {
+  """
+  The unique identifier of the snapshot.
+  """
+  snapshot_id: ID!
+  """
+  The new status of the snapshot (rollback).
+  """
+  status: SnapshotStatus!
+}
+
+"""
+A point-in-time record of a snapshot status change.
+"""
+type SnapshotHistoryEntry {
+  """
+  The snapshot ID at the time this history entry was recorded.
+  """
+  snapshot_id: ID!
+  """
+  The entity id (package id) of the snapshot.
+  """
+  entity_id: ID!
+  """
+  The status of the snapshot at the time this history entry was recorded.
+  """
+  status: SnapshotStatus!
+  """
+  The date and time this history entry was recorded.
+  """
+  recorded_at: String!
+}
+
+"""
+The possible statuses of a snapshot operation.
+"""
+enum SnapshotStatus {
+  pending
+  processing
+  success
+  failed
+  rollback
+}
+
+"""
+A board that can be snapshotted, with metadata and relations.
+"""
+type SnapshottableBoard {
+  """
+  The board ID.
+  """
+  id: ID
+  """
+  The board name.
+  """
+  name: String
+  """
+  The board owner user ID.
+  """
+  owner: ID
+  """
+  The workspace ID this board belongs to.
+  """
+  workspace_id: ID
+  """
+  Whether this board is a document.
+  """
+  is_doc: Boolean
+  """
+  Whether this board is a managed template instance.
+  """
+  is_managed_template_instance: Boolean
+  """
+  Related boards by relation type. Limited to 1 level of depth.
+  """
+  board_relations(relation_type: String!): [SnapshottableBoard!]
+}
+
+"""
+A paginated connection of snapshottable boards.
+"""
+type SnapshottableBoardConnection {
+  """
+  The list of boards in this page.
+  """
+  items: [SnapshottableBoard!]
+  """
+  The cursor for the next page.
+  """
+  cursor: String
+  """
+  Whether there are more pages.
+  """
+  has_next_page: Boolean
+}
+
+"""
+An overview that can be snapshotted, with connected boards.
+"""
+type SnapshottableOverview {
+  """
+  The overview ID.
+  """
+  id: ID
+  """
+  Boards connected to this overview.
+  """
+  connected_boards: [SnapshottableBoard!]
+}
+
+"""
+A paginated connection of snapshottable overviews.
+"""
+type SnapshottableOverviewConnection {
+  """
+  The list of overviews in this page.
+  """
+  items: [SnapshottableOverview!]
+  """
+  The cursor for the next page.
+  """
+  cursor: String
+  """
+  Whether there are more pages.
+  """
+  has_next_page: Boolean
+}
+
+"""
+A workspace that can be snapshotted, with paginated boards and overviews.
+"""
+type SnapshottableWorkspace {
+  """
+  The workspace ID.
+  """
+  id: ID
+  """
+  The workspace name.
+  """
+  name: String
+  """
+  The workspace owner user ID.
+  """
+  owner: ID
+  """
+  Paginated boards in this workspace.
+  """
+  boards(cursor: String): SnapshottableBoardConnection
+  """
+  Paginated overviews in this workspace.
+  """
+  overviews(cursor: String): SnapshottableOverviewConnection
+}
+
+"""
+The result of upserting entity ID mappings.
+"""
+type UpsertEntityIdMappingsResult {
+  """
+  Whether the upsert operation was successful.
+  """
+  success: Boolean
+  """
+  The number of mappings that were upserted.
+  """
+  count: Int
 }
 
 """
@@ -17596,701 +17928,6 @@ enum ValidationErrorType {
 }
 
 """
-The result of the connect_migration_job mutation.
-"""
-type ConnectMigrationJobResult {
-  """
-  Whether the connection was successfully created or already exists.
-  """
-  success: Boolean
-  """
-  The unique identifier of the migration job connection.
-  """
-  migrationJobConnectionId: ID
-}
-
-type CreateEntitySnapshotResult {
-  """
-  The unique identifier of the snapshot.
-  """
-  snapshotId: ID!
-  """
-  The date and time the snapshot was created.
-  """
-  createdAt: String!
-  """
-  The entity that was snapshot.
-  """
-  entity: String!
-  """
-  The unique identifier of the migration job.
-  """
-  migrationJobId: String!
-}
-
-type CreateMigrationJobResult {
-  """
-  The unique identifier of the migration job.
-  """
-  id: ID!
-}
-
-"""
-The result of deleting entity ID mappings.
-"""
-type DeleteEntityIdMappingsResult {
-  """
-  Whether the delete operation was successful.
-  """
-  success: Boolean
-  """
-  The number of mappings that were deleted.
-  """
-  count: Int
-}
-
-"""
-Input type for entity ID mapping.
-"""
-input EntityIdMappingInput {
-  """
-  The old ID of the entity.
-  """
-  oldId: String!
-  """
-  The new ID of the entity.
-  """
-  newId: String!
-}
-
-type GetEntitiesForMigrationResult {
-  """
-  The entities for migration.
-  """
-  entityId: String
-}
-
-"""
-The result of querying entity restores.
-"""
-type GetRestoresQueryResults {
-  """
-  The unique identifier of the restore.
-  """
-  id: ID!
-  """
-  The date and time the restore was created.
-  """
-  createdAt: String!
-  """
-  The entity id of the restore.
-  """
-  entityId: String!
-  """
-  The unique identifier of the migration job.
-  """
-  migrationJobId: String!
-  """
-  The status of the restore.
-  """
-  status: RestoreStatus!
-  """
-  Progress counters for the restore operation.
-  """
-  progress: MigrationProgress
-}
-
-type GetSnapshotsQueryResults {
-  """
-  The unique identifier of the snapshot.
-  """
-  id: ID!
-  """
-  The date and time the snapshot was created.
-  """
-  createdAt: String!
-  """
-  The entity id of the snapshot.
-  """
-  entityId: String!
-  """
-  The unique identifier of the migration job.
-  """
-  migrationJobId: String!
-  """
-  The status of the snapshot.
-  """
-  status: SnapshotStatus!
-  """
-  Progress counters for the snapshot operation.
-  """
-  progress: MigrationProgress
-}
-
-type MigratedEntityIdMappingsResult {
-  """
-  The entity type of migrated entities.
-  """
-  entityType: String
-  """
-  The old ID of the migrated entity.
-  """
-  oldId: String
-  """
-  The new ID of the migrated entity.
-  """
-  newId: String
-}
-
-"""
-Progress counters for a snapshot or restore operation.
-"""
-type MigrationProgress {
-  """
-  Live progress counters. Present only while the operation is in progress.
-  """
-  ongoing: OngoingProgress
-  """
-  Final progress result. Present only after the operation completes.
-  """
-  result: ProgressResult
-}
-
-"""
-Live progress counters for an in-progress migration operation.
-"""
-type OngoingProgress {
-  """
-  The total number of entities to process.
-  """
-  total: Int!
-  """
-  The number of entities currently being processed.
-  """
-  processing: Int!
-  """
-  The number of entities successfully processed.
-  """
-  success: Int!
-  """
-  The number of entities that failed processing.
-  """
-  failed: Int!
-  """
-  Number of components excluded from migration.
-  """
-  excluded: Int!
-  """
-  List of nodes currently being processed.
-  """
-  currently_processing: [ProcessingNode!]!
-}
-
-"""
-A node currently being processed in a migration operation.
-"""
-type ProcessingNode {
-  """
-  The component type, e.g. BoardPosts, BoardPermissions.
-  """
-  type: String!
-  """
-  The unique identifier of the entity being processed.
-  """
-  id: ID!
-  """
-  ISO timestamp when processing began.
-  """
-  started_at: String
-}
-
-"""
-Final progress result for a completed migration operation.
-"""
-type ProgressResult {
-  """
-  The total number of entities processed.
-  """
-  total: Int!
-  """
-  The number of entities successfully processed.
-  """
-  success: Int!
-  """
-  The number of entities that failed processing.
-  """
-  failed: Int!
-  """
-  Number of components excluded from migration.
-  """
-  excluded: Int!
-  """
-  The full manifest JSON with per-component summary baked in.
-  """
-  raw_manifest: JSON!
-}
-
-"""
-The result of the restore entity mutation.
-"""
-type RestoreEntityResult {
-  """
-  Confirms the restore request was accepted.
-  """
-  accepted: Boolean
-}
-
-"""
-A point-in-time record of a restore status change.
-"""
-type RestoreHistoryEntry {
-  """
-  The restore ID at the time this history entry was recorded.
-  """
-  restore_id: ID!
-  """
-  The entity id (package id) of the restore.
-  """
-  entity_id: ID!
-  """
-  The status of the restore at the time this history entry was recorded.
-  """
-  status: RestoreStatus!
-  """
-  The date and time this history entry was recorded.
-  """
-  recorded_at: String!
-}
-
-"""
-The possible statuses of a restore operation.
-"""
-enum RestoreStatus {
-  pending
-  processing
-  success
-  failed
-  rollback
-}
-
-"""
-Result of a restore rollback operation.
-"""
-type RollbackRestoreMutationResult {
-  """
-  The unique identifier of the restore.
-  """
-  restore_id: ID!
-  """
-  The new status of the restore (rollback).
-  """
-  status: RestoreStatus!
-}
-
-"""
-Result of a snapshot rollback operation.
-"""
-type RollbackSnapshotMutationResult {
-  """
-  The unique identifier of the snapshot.
-  """
-  snapshot_id: ID!
-  """
-  The new status of the snapshot (rollback).
-  """
-  status: SnapshotStatus!
-}
-
-"""
-A point-in-time record of a snapshot status change.
-"""
-type SnapshotHistoryEntry {
-  """
-  The snapshot ID at the time this history entry was recorded.
-  """
-  snapshot_id: ID!
-  """
-  The entity id (package id) of the snapshot.
-  """
-  entity_id: ID!
-  """
-  The status of the snapshot at the time this history entry was recorded.
-  """
-  status: SnapshotStatus!
-  """
-  The date and time this history entry was recorded.
-  """
-  recorded_at: String!
-}
-
-"""
-The possible statuses of a snapshot operation.
-"""
-enum SnapshotStatus {
-  pending
-  processing
-  success
-  failed
-  rollback
-}
-
-"""
-A board that can be snapshotted, with metadata and relations.
-"""
-type SnapshottableBoard {
-  """
-  The board ID.
-  """
-  id: ID
-  """
-  The board name.
-  """
-  name: String
-  """
-  The board owner user ID.
-  """
-  owner: ID
-  """
-  The workspace ID this board belongs to.
-  """
-  workspace_id: ID
-  """
-  Whether this board is a document.
-  """
-  is_doc: Boolean
-  """
-  Whether this board is a managed template instance.
-  """
-  is_managed_template_instance: Boolean
-  """
-  Related boards by relation type. Limited to 1 level of depth.
-  """
-  board_relations(relation_type: String!): [SnapshottableBoard!]
-}
-
-"""
-A paginated connection of snapshottable boards.
-"""
-type SnapshottableBoardConnection {
-  """
-  The list of boards in this page.
-  """
-  items: [SnapshottableBoard!]
-  """
-  The cursor for the next page.
-  """
-  cursor: String
-  """
-  Whether there are more pages.
-  """
-  has_next_page: Boolean
-}
-
-"""
-An overview that can be snapshotted, with connected boards.
-"""
-type SnapshottableOverview {
-  """
-  The overview ID.
-  """
-  id: ID
-  """
-  Boards connected to this overview.
-  """
-  connected_boards: [SnapshottableBoard!]
-}
-
-"""
-A paginated connection of snapshottable overviews.
-"""
-type SnapshottableOverviewConnection {
-  """
-  The list of overviews in this page.
-  """
-  items: [SnapshottableOverview!]
-  """
-  The cursor for the next page.
-  """
-  cursor: String
-  """
-  Whether there are more pages.
-  """
-  has_next_page: Boolean
-}
-
-"""
-A workspace that can be snapshotted, with paginated boards and overviews.
-"""
-type SnapshottableWorkspace {
-  """
-  The workspace ID.
-  """
-  id: ID
-  """
-  The workspace name.
-  """
-  name: String
-  """
-  The workspace owner user ID.
-  """
-  owner: ID
-  """
-  Paginated boards in this workspace.
-  """
-  boards(cursor: String): SnapshottableBoardConnection
-  """
-  Paginated overviews in this workspace.
-  """
-  overviews(cursor: String): SnapshottableOverviewConnection
-}
-
-"""
-The result of upserting entity ID mappings.
-"""
-type UpsertEntityIdMappingsResult {
-  """
-  Whether the upsert operation was successful.
-  """
-  success: Boolean
-  """
-  The number of mappings that were upserted.
-  """
-  count: Int
-}
-
-"""
-The privacy kind for a board
-"""
-enum BoardKindInput {
-  PUBLIC
-  PRIVATE
-  SHARE
-}
-
-type ChangeBoardKindResult {
-  id: ID!
-  board_kind: String!
-}
-
-input ColumnPropertyInput {
-  """
-  The ID of the column
-  """
-  column_id: String!
-  """
-  Whether the column is visible
-  """
-  visible: Boolean!
-}
-
-input ColumnsConfigInput {
-  """
-  Configuration for main board columns
-  """
-  column_properties: [ColumnPropertyInput!]
-  """
-  Configuration for subitems columns
-  """
-  subitems_column_properties: [ColumnPropertyInput!]
-  """
-  Number of floating columns to display
-  """
-  floating_columns_count: Int
-  """
-  Order of columns
-  """
-  column_order: [String!]
-}
-
-"""
-A single conditional formatting condition that defines when and how to highlight rows or cells
-"""
-input ConditionalFormattingConditionInput {
-  """
-  Unique identifier for the condition (client-generated GUID)
-  """
-  id: String
-  """
-  The formatting to apply when this condition matches
-  """
-  formatting: ConditionalFormattingFormattingInput
-  """
-  Rules that trigger this condition
-  """
-  rules: [ConditionalFormattingRuleBucketInput!]
-  """
-  What to highlight when the condition matches
-  """
-  target: ConditionalFormattingTargetInput
-}
-
-input ConditionalFormattingFormattingInput {
-  """
-  Color name(s) to apply as highlight (e.g. ["orange"], ["dark_red", "done-green"])
-  """
-  highlight_color: [String!]
-}
-
-input ConditionalFormattingRuleBucketInput {
-  """
-  Bucket type (e.g. RULE)
-  """
-  type: String
-  """
-  Logical operator (e.g. ANY_OF, ALL_OF)
-  """
-  operator: String
-  """
-  The rule definition
-  """
-  rule: ConditionalFormattingRuleInput
-}
-
-input ConditionalFormattingRuleContextInput {
-  """
-  ID of the column to evaluate
-  """
-  column_id: String
-  """
-  Type of the column (e.g. color, text, date)
-  """
-  column_type: String
-  """
-  Column attribute to compare against
-  """
-  compare_attribute: String
-  """
-  Board ID the column belongs to
-  """
-  board_id: ID
-}
-
-input ConditionalFormattingRuleInput {
-  """
-  Rule type (e.g. BOARD_COLUMN)
-  """
-  type: String
-  """
-  The column context for this rule
-  """
-  context: ConditionalFormattingRuleContextInput
-  """
-  Array of internal label IDs to match against (e.g. [2] for Stuck)
-  """
-  compare_value: JSON
-}
-
-input ConditionalFormattingTargetInput {
-  """
-  Column IDs to highlight
-  """
-  column_ids: [String!]
-  """
-  Whether to highlight the entire row
-  """
-  entire_row: Boolean
-}
-
-"""
-Configuration settings for group by column
-"""
-input GroupByColumnConfigInput {
-  """
-  Sort settings for the column
-  """
-  sortSettings: GroupBySortSettingsInput
-}
-
-"""
-Condition for grouping items by column
-"""
-input GroupByConditionInput {
-  """
-  ID of the column to group by
-  """
-  columnId: String!
-  """
-  Configuration for the group by column
-  """
-  config: GroupByColumnConfigInput
-}
-
-"""
-Settings for grouping board items
-"""
-input GroupBySettingsInput {
-  """
-  List of conditions for grouping items
-  """
-  conditions: [GroupByConditionInput!]!
-  """
-  Whether to hide groups with no items
-  """
-  hideEmptyGroups: Boolean
-}
-
-"""
-Sort settings for group by configuration
-"""
-input GroupBySortSettingsInput {
-  """
-  Sort direction for the group
-  """
-  direction: SortDirection!
-  """
-  Type of sorting to apply
-  """
-  type: String
-}
-
-"""
-Direction for sorting items
-"""
-enum SortDirection {
-  ASC
-  DESC
-}
-
-"""
-Settings configuration for table view display options
-"""
-input TableViewSettingsInput {
-  """
-  Column visibility configuration for the board view
-  """
-  columns: ColumnsConfigInput
-  """
-  The group by to apply to the board view
-  """
-  group_by: GroupBySettingsInput
-}
-
-"""
-Specifies the entity scope for the created view
-"""
-enum ViewContext {
-  BOARD
-}
-
-"""
-Available view types for board displays
-"""
-enum ViewKind {
-  DASHBOARD
-  TABLE
-  FORM
-  APP
-}
-
-"""
-Type of mutation operation
-"""
-enum ViewMutationKind {
-  CREATE
-  UPDATE
-}
-
-"""
 Knowledge base answer generated from snippets using LLM.
 """
 type KnowledgeBaseAnswer {
@@ -21387,6 +21024,369 @@ type CreatePortfolioResult {
   Unique process ID for tracking this request. Included in the callback payload when the operation completes.
   """
   process_id: ID
+}
+
+"""
+The privacy kind for a board
+"""
+enum BoardKindInput {
+  PUBLIC
+  PRIVATE
+  SHARE
+}
+
+type ChangeBoardKindResult {
+  id: ID!
+  board_kind: String!
+}
+
+input ColumnPropertyInput {
+  """
+  The ID of the column
+  """
+  column_id: String!
+  """
+  Whether the column is visible
+  """
+  visible: Boolean!
+}
+
+input ColumnsConfigInput {
+  """
+  Configuration for main board columns
+  """
+  column_properties: [ColumnPropertyInput!]
+  """
+  Configuration for subitems columns
+  """
+  subitems_column_properties: [ColumnPropertyInput!]
+  """
+  Number of floating columns to display
+  """
+  floating_columns_count: Int
+  """
+  Order of columns
+  """
+  column_order: [String!]
+}
+
+"""
+A single conditional formatting condition that defines when and how to highlight rows or cells
+"""
+input ConditionalFormattingConditionInput {
+  """
+  Unique identifier for the condition (client-generated GUID)
+  """
+  id: String
+  """
+  The formatting to apply when this condition matches
+  """
+  formatting: ConditionalFormattingFormattingInput
+  """
+  Rules that trigger this condition
+  """
+  rules: [ConditionalFormattingRuleBucketInput!]
+  """
+  What to highlight when the condition matches
+  """
+  target: ConditionalFormattingTargetInput
+}
+
+input ConditionalFormattingFormattingInput {
+  """
+  Color name(s) to apply as highlight (e.g. ["orange"], ["dark_red", "done-green"])
+  """
+  highlight_color: [String!]
+}
+
+input ConditionalFormattingRuleBucketInput {
+  """
+  Bucket type (e.g. RULE)
+  """
+  type: String
+  """
+  Logical operator (e.g. ANY_OF, ALL_OF)
+  """
+  operator: String
+  """
+  The rule definition
+  """
+  rule: ConditionalFormattingRuleInput
+}
+
+input ConditionalFormattingRuleContextInput {
+  """
+  ID of the column to evaluate
+  """
+  column_id: String
+  """
+  Type of the column (e.g. color, text, date)
+  """
+  column_type: String
+  """
+  Column attribute to compare against
+  """
+  compare_attribute: String
+  """
+  Board ID the column belongs to
+  """
+  board_id: ID
+}
+
+input ConditionalFormattingRuleInput {
+  """
+  Rule type (e.g. BOARD_COLUMN)
+  """
+  type: String
+  """
+  The column context for this rule
+  """
+  context: ConditionalFormattingRuleContextInput
+  """
+  Array of internal label IDs to match against (e.g. [2] for Stuck)
+  """
+  compare_value: JSON
+}
+
+input ConditionalFormattingTargetInput {
+  """
+  Column IDs to highlight
+  """
+  column_ids: [String!]
+  """
+  Whether to highlight the entire row
+  """
+  entire_row: Boolean
+}
+
+"""
+Configuration settings for group by column
+"""
+input GroupByColumnConfigInput {
+  """
+  Sort settings for the column
+  """
+  sortSettings: GroupBySortSettingsInput
+}
+
+"""
+Condition for grouping items by column
+"""
+input GroupByConditionInput {
+  """
+  ID of the column to group by
+  """
+  columnId: String!
+  """
+  Configuration for the group by column
+  """
+  config: GroupByColumnConfigInput
+}
+
+"""
+Settings for grouping board items
+"""
+input GroupBySettingsInput {
+  """
+  List of conditions for grouping items
+  """
+  conditions: [GroupByConditionInput!]!
+  """
+  Whether to hide groups with no items
+  """
+  hideEmptyGroups: Boolean
+}
+
+"""
+Sort settings for group by configuration
+"""
+input GroupBySortSettingsInput {
+  """
+  Sort direction for the group
+  """
+  direction: SortDirection!
+  """
+  Type of sorting to apply
+  """
+  type: String
+}
+
+"""
+Direction for sorting items
+"""
+enum SortDirection {
+  ASC
+  DESC
+}
+
+"""
+Settings configuration for table view display options
+"""
+input TableViewSettingsInput {
+  """
+  Column visibility configuration for the board view
+  """
+  columns: ColumnsConfigInput
+  """
+  The group by to apply to the board view
+  """
+  group_by: GroupBySettingsInput
+}
+
+"""
+Specifies the entity scope for the created view
+"""
+enum ViewContext {
+  BOARD
+}
+
+"""
+Available view types for board displays
+"""
+enum ViewKind {
+  DASHBOARD
+  TABLE
+  FORM
+  APP
+}
+
+"""
+Type of mutation operation
+"""
+enum ViewMutationKind {
+  CREATE
+  UPDATE
+}
+
+"""
+A page of live workflow automations with cursor-based pagination metadata
+"""
+type LiveWorkflowAutomationsPage {
+  """
+  List of live workflow automations in this page
+  """
+  data: [WorkflowAutomation!]
+  """
+  Cursor-based pagination metadata
+  """
+  page_info: WorkflowAutomationsPageInfo
+}
+
+"""
+A workflow and its steps
+"""
+type WorkflowAutomation {
+  """
+  Workflow entity ID
+  """
+  id: ID
+  """
+  Workflow title
+  """
+  title: String
+  """
+  Workflow description
+  """
+  description: String
+  """
+  Whether the workflow is currently active
+  """
+  active: Boolean
+  """
+  Last update timestamp
+  """
+  updated_at: String
+  """
+  Creation timestamp
+  """
+  created_at: String
+  """
+  The steps that make up this workflow
+  """
+  steps: [WorkflowStep!]
+}
+
+"""
+Cursor-based pagination metadata for live workflow automation queries
+"""
+type WorkflowAutomationsPageInfo {
+  """
+  Whether there are more results beyond the current page
+  """
+  has_next_page: Boolean
+  """
+  Cursor of the last item in this page; pass as last_id to fetch the next page
+  """
+  end_cursor: ID
+}
+
+"""
+Cursor-based pagination parameters for workflow automation queries
+"""
+input WorkflowAutomationsPaginationInput {
+  """
+  Maximum number of results to return (default 50, max 100)
+  """
+  limit: Int
+  """
+  Cursor of the last item from the previous page; pass page_info.end_cursor from the previous response
+  """
+  last_id: ID
+}
+
+"""
+Identifiers for a newly created workflow
+"""
+type WorkflowBuilderCreateResult {
+  """
+  Stable workflow entity ID
+  """
+  workflow_object_id: ID
+  """
+  Draft workflow ID
+  """
+  workflow_draft_id: ID
+}
+
+"""
+Privacy level for a workflow
+"""
+enum WorkflowBuilderPrivacyKind {
+  PUBLIC
+  PRIVATE
+  SHAREABLE
+}
+
+"""
+Identifiers for a published workflow
+"""
+type WorkflowBuilderPublishResult {
+  """
+  Stable workflow entity ID
+  """
+  workflow_object_id: ID
+  """
+  Live workflow ID after promotion
+  """
+  workflow_live_id: ID
+}
+
+"""
+A step instance within a workflow
+"""
+type WorkflowStep {
+  """
+  Unique node ID within the workflow
+  """
+  node_id: ID
+  """
+  ID of the block type this step uses
+  """
+  block_reference_id: ID
+  """
+  Display title of the step
+  """
+  title: String
 }
 
 """

@@ -454,18 +454,18 @@ public sealed partial class Query
     public ResponseForm? Form { get; init; }
 
     /// <summary>
+    /// Search knowledge base snippets.
+    /// </summary>
+    [JsonPropertyName("knowledge_base_search")]
+    public KnowledgeBaseAnswer? KnowledgeBaseSearch { get; init; }
+
+    /// <summary>
     /// Retrieves the JSON schema definition for a specific create view type. 
     ///   Use this query before calling create_view mutation to understand the structure and validation rules for the settings parameter. 
     ///   The schema defines what properties are available when creating views of a specific type.
     /// </summary>
     [JsonPropertyName("get_view_schema_by_type")]
     public string? GetViewSchemaByType { get; init; }
-
-    /// <summary>
-    /// Search knowledge base snippets.
-    /// </summary>
-    [JsonPropertyName("knowledge_base_search")]
-    public KnowledgeBaseAnswer? KnowledgeBaseSearch { get; init; }
 
     /// <summary>
     /// Export the dependency graph for a specific board
