@@ -797,38 +797,6 @@ type Mutation {
   """
   delete_validation_rule(id: ID!, type: ValidationsEntityType = board, rule_id: ID!): ValidationRule
   """
-  Creates a new app with the specified configuration.
-  """
-  create_app(input: CreateAppInput!): CreateAppResponse
-  """
-  Updates an existing app. If the app latest version is live, a new draft version is automatically created and updated.
-  """
-  update_app(id: ID!, input: UpdateAppInput!): AppType
-  """
-  Update an app feature.
-  """
-  update_app_feature(id: ID!, input: UpdateAppFeatureInput!): AppFeatureType
-  """
-  Create a new app feature.
-  """
-  create_app_feature(name: String, slug: String!, app_id: ID!, app_version_id: ID, type: AppFeatureTypeE!, data: JSON, deployment: AppFeatureReleaseInput): AppFeatureType
-  """
-  Update (or create) lifecycle subscriptions for an entity. This will soft delete all existing subscriptions for this entity_identifier and create new ones.
-  """
-  update_app_lifecycle_subscription(entity_identifier: ID!, entity_type: String!, input: UpdateLifecycleSubscriptionsInput!): [LifecycleSubscriptionKind!]
-  """
-  Delete all lifecycle subscriptions for an entity. Returns true if deleted successfully or if no subscriptions exist.
-  """
-  delete_app_lifecycle_subscription(entity_identifier: ID!, entity_type: String!): Boolean
-  """
-  Installs an app on the current account. Requires account admin permission.
-  """
-  install_app(input: InstallAppInput!): InstallAppResponse
-  """
-  Uninstalls an app from the current account. Requires account admin permission.
-  """
-  uninstall_app(app_identifier: ID!): AppDeletionResponse
-  """
   Add workspace object to favorites
   """
   create_favorite(input: CreateFavoriteInput!): CreateFavoriteResultType
@@ -1064,6 +1032,38 @@ type Mutation {
   Update mute notification settings for a board. Allows muting all notifications for all users, only for the current user, or setting mentions/assigns-only. Returns the updated mute state for the board. Requires appropriate permissions for muting all users.
   """
   update_mute_board_settings(board_id: String!, mute_state: BoardMuteState!, enabled: [CustomizableBoardSettings!]): [BoardMuteSettings!]
+  """
+  Creates a new app with the specified configuration.
+  """
+  create_app(input: CreateAppInput!): CreateAppResponse
+  """
+  Updates an existing app. If the app latest version is live, a new draft version is automatically created and updated.
+  """
+  update_app(id: ID!, input: UpdateAppInput!): AppType
+  """
+  Update an app feature.
+  """
+  update_app_feature(id: ID!, input: UpdateAppFeatureInput!): AppFeatureType
+  """
+  Create a new app feature.
+  """
+  create_app_feature(name: String, slug: String!, app_id: ID!, app_version_id: ID, type: AppFeatureTypeE!, data: JSON, deployment: AppFeatureReleaseInput): AppFeatureType
+  """
+  Update (or create) lifecycle subscriptions for an entity. This will soft delete all existing subscriptions for this entity_identifier and create new ones.
+  """
+  update_app_lifecycle_subscription(entity_identifier: ID!, entity_type: String!, input: UpdateLifecycleSubscriptionsInput!): [LifecycleSubscriptionKind!]
+  """
+  Delete all lifecycle subscriptions for an entity. Returns true if deleted successfully or if no subscriptions exist.
+  """
+  delete_app_lifecycle_subscription(entity_identifier: ID!, entity_type: String!): Boolean
+  """
+  Installs an app on the current account. Requires account admin permission.
+  """
+  install_app(input: InstallAppInput!): InstallAppResponse
+  """
+  Uninstalls an app from the current account. Requires account admin permission.
+  """
+  uninstall_app(app_identifier: ID!): AppDeletionResponse
 }
 
 """
@@ -1099,30 +1099,6 @@ type Query {
   Retrieves all service users in the account with their token last activity.
   """
   service_users: [ServiceUser!]
-  """
-  List trigger events with optional filters
-  """
-  trigger_events(nextPageOffset: Int = 0, filters: TriggerEventsFiltersInput): TriggerEventsPage
-  """
-  Fetch a single trigger event by UUID
-  """
-  trigger_event(triggerUuid: String!): TriggerEvent
-  """
-  List block events for a given trigger UUID
-  """
-  block_events(triggerUuid: String!, nextPageOffset: Int = 0): BlockEventsPage
-  """
-  List tool events for a given trigger UUID
-  """
-  tool_events(trigger_uuid: String!, next_page_offset: Int = 0): ToolEventsPage
-  """
-  Get aggregated automation runs statistics in the account
-  """
-  account_trigger_statistics(filters: AccountTriggerStatisticsFiltersInput): AccountTriggerStatistics
-  """
-  Get aggregated automation runs statistics grouped by entity Ids
-  """
-  account_triggers_statistics_by_entity_id(run_status: TriggerEventState!, filters: AccountTriggersByEntityIdFiltersInput): AccountTriggersByEntityId
   """
   Get sequences that the current user is allowed to enroll items to, that are connected to the provided board. Returns sequences owned by the user or sequences where the user has access to the sender connection.
   """
@@ -1279,21 +1255,33 @@ type Query {
   """
   empty: String
   """
+  List trigger events with optional filters
+  """
+  trigger_events(nextPageOffset: Int = 0, filters: TriggerEventsFiltersInput): TriggerEventsPage
+  """
+  Fetch a single trigger event by UUID
+  """
+  trigger_event(triggerUuid: String!): TriggerEvent
+  """
+  List block events for a given trigger UUID
+  """
+  block_events(triggerUuid: String!, nextPageOffset: Int = 0): BlockEventsPage
+  """
+  List tool events for a given trigger UUID
+  """
+  tool_events(trigger_uuid: String!, next_page_offset: Int = 0): ToolEventsPage
+  """
+  Get aggregated automation runs statistics in the account
+  """
+  account_trigger_statistics(filters: AccountTriggerStatisticsFiltersInput): AccountTriggerStatistics
+  """
+  Get aggregated automation runs statistics grouped by entity Ids
+  """
+  account_triggers_statistics_by_entity_id(run_status: TriggerEventState!, filters: AccountTriggersByEntityIdFiltersInput): AccountTriggersByEntityId
+  """
   Get validations configuration for a board
   """
   validations(id: ID!, type: ValidationsEntityType = board): Validations
-  """
-  Get an app by ID or slug.
-  """
-  app(id: ID!): AppType
-  """
-  Query the monday.com apps documentation using AI. Returns an AI-generated answer based on the documentation.
-  """
-  ask_developer_docs(query: String!): AppDocumentationAiResponse
-  """
-  Get lifecycle subscriptions for all entity types in a specific app version. If version_id is not provided, resolves the active version (user testing version, live, or latest).
-  """
-  get_app_lifecycle_subscriptions(app_id: ID!, version_id: ID): [LifecycleSubscriptionKind!]
   """
   Get all personal list items by list ID
   """
@@ -1484,6 +1472,18 @@ type Query {
   Get mute board notification settings for the current user
   """
   mute_board_settings(board_ids: [ID!]!): [BoardMuteSettings!]
+  """
+  Get an app by ID or slug.
+  """
+  app(id: ID!): AppType
+  """
+  Query the monday.com apps documentation using AI. Returns an AI-generated answer based on the documentation.
+  """
+  ask_developer_docs(query: String!): AppDocumentationAiResponse
+  """
+  Get lifecycle subscriptions for all entity types in a specific app version. If version_id is not provided, resolves the active version (user testing version, live, or latest).
+  """
+  get_app_lifecycle_subscriptions(app_id: ID!, version_id: ID): [LifecycleSubscriptionKind!]
   """
   Platform API data.
   """
@@ -4765,431 +4765,6 @@ enum UserRole {
 input UserUpdateInput {
   user_id: ID!
   user_attribute_updates: UserAttributesInput!
-}
-
-"""
-Aggregated automation runs statistics in the account
-"""
-type AccountTriggerStatistics {
-  """
-  Unique identifier for the statistics result
-  """
-  id: ID!
-  """
-  Number of successful automation runs
-  """
-  success: Int
-  """
-  Number of failed automation runs
-  """
-  failure: Int
-  """
-  Total number of automation runs
-  """
-  total: Int
-}
-
-"""
-Filters for account trigger statistics query
-"""
-input AccountTriggerStatisticsFiltersInput {
-  """
-  Filter by board Id
-  """
-  board_id: Int
-  """
-  Filter by multiple user Ids
-  """
-  user_ids: [Int!]
-}
-
-"""
-Aggregated automation runs statistics grouped by entity Ids
-"""
-type AccountTriggersByEntityId {
-  """
-  Unique identifier for the statistics result
-  """
-  id: ID!
-  """
-  Statistics for automations grouped by automation Id. Returns an object where each key is an automation Id, and the value contains the total count and breakdown by error reason
-  """
-  automation_statistics: JSON
-  """
-  Statistics for workflows grouped by workflow entity Id. Returns an object where each key is a workflow entity Id, and the value contains the total count and breakdown by error reason
-  """
-  workflow_statistics: JSON
-}
-
-"""
-Filters for account triggers statistics by entity Id query
-"""
-input AccountTriggersByEntityIdFiltersInput {
-  """
-  Filter by board Id
-  """
-  board_id: Int
-  """
-  Exclude statistics for the specified automation Ids
-  """
-  automation_ids: [Int!]
-  """
-  Filter by multiple user Ids
-  """
-  user_ids: [Int!]
-}
-
-"""
-Automation block execution event
-"""
-type BlockEvent {
-  """
-  Document identifier
-  """
-  id: String
-  """
-  Account identifier
-  """
-  accountId: Int
-  """
-  User identifier who triggered the automation
-  """
-  userId: Int
-  """
-  Board identifier
-  """
-  boardId: Int
-  """
-  Kind of the block event
-  """
-  eventKind: String
-  """
-  Current state of the block event
-  """
-  eventState: String
-  """
-  UUID of the parent trigger event
-  """
-  triggerUuid: String
-  """
-  Timestamp (epoch) when parent trigger started
-  """
-  triggerStarted: Float
-  """
-  Date when parent trigger started
-  """
-  triggerStartedAt: ISO8601DateTime
-  """
-  Timestamp (epoch) when block started
-  """
-  blockStartTimestamp: Float
-  """
-  Timestamp (epoch) when block finished
-  """
-  blockFinishTimestamp: Float
-  """
-  Atomic action identifier
-  """
-  atomicActionId: String
-  """
-  Block title
-  """
-  title: String
-  """
-  Whether block condition was satisfied
-  """
-  conditionSatisfied: Boolean
-  """
-  Workflow node identifier
-  """
-  workflowNodeId: Int
-  """
-  Entity kind for the block
-  """
-  entityKind: String
-  """
-  Number of billing actions counted in this block
-  """
-  billingActionCountForBlock: Int
-  """
-  Error reason if block failed
-  """
-  errorReason: String
-  """
-  Iterator identifier if block is part of a loop
-  """
-  iterator_id: ID
-  """
-  Current iteration number within the loop
-  """
-  current_iteration: Int
-  """
-  Total number of iterations configured for the loop
-  """
-  max_iterations: Int
-  """
-  Whether the block was executed as part of a test run
-  """
-  is_test_run: Boolean
-}
-
-"""
-A page of block events
-"""
-type BlockEventsPage {
-  """
-  List of block events in the current page
-  """
-  blockEvents: [BlockEvent!]
-}
-
-"""
-Date range filter (inclusive)
-"""
-input DateRangeInput {
-  """
-  Start date (ISO 8601)
-  """
-  startDate: String!
-  """
-  End date (ISO 8601)
-  """
-  endDate: String!
-}
-
-"""
-MCP tool execution event
-"""
-type ToolEvent {
-  """
-  Document identifier
-  """
-  id: ID
-  """
-  Account identifier
-  """
-  account_id: ID
-  """
-  User identifier
-  """
-  user_id: ID
-  """
-  UUID of the parent trigger event
-  """
-  trigger_uuid: String
-  """
-  Atomic action identifier
-  """
-  atomic_action_id: ID
-  """
-  Recipe identifier
-  """
-  recipe_id: ID
-  """
-  Integration identifier
-  """
-  integration_id: ID
-  """
-  Name of the MCP tool
-  """
-  tool_name: String
-  """
-  MCP server name
-  """
-  mcp_server: String
-  """
-  Status of the tool execution
-  """
-  event_status: String
-  """
-  Error message if tool execution failed
-  """
-  error_message: String
-  """
-  Timestamp (epoch) when tool execution started
-  """
-  tool_start_timestamp: Float
-  """
-  Timestamp (epoch) when tool execution finished
-  """
-  tool_finish_timestamp: Float
-  """
-  Execution duration in milliseconds
-  """
-  execution_duration_ms: Int
-}
-
-"""
-A page of tool events
-"""
-type ToolEventsPage {
-  """
-  List of tool events in the current page
-  """
-  tool_events: [ToolEvent!]
-}
-
-"""
-Represents a single automation trigger event
-"""
-type TriggerEvent {
-  """
-  Account identifier
-  """
-  accountId: Int
-  """
-  Trigger UUID
-  """
-  triggerUuid: String
-  """
-  Kind of the event
-  """
-  eventKind: String
-  """
-  Current state of the event
-  """
-  eventState: String
-  """
-  Timestamp (epoch) when trigger started
-  """
-  triggerStarted: Float
-  """
-  Date when trigger started
-  """
-  triggerStartedAt: ISO8601DateTime
-  """
-  Creation time of the record
-  """
-  createdAt: ISO8601DateTime
-  """
-  Error reason if the event failed
-  """
-  errorReason: String
-  """
-  Number of billing actions counted for this trigger
-  """
-  billingActionsCount: Int
-  """
-  Waiting trigger name, when applicable
-  """
-  waitingForTriggerName: String
-  """
-  Duration of the trigger in milliseconds
-  """
-  triggerDuration: Float
-  """
-  Entity kind for the trigger (item / subitem / etc.)
-  """
-  entityKind: String
-  """
-  Reignition subscription ID if trigger was reignited
-  """
-  reignitionSubscriptionId: String
-  """
-  Host type on which the automation is executed
-  """
-  hostType: String
-  """
-  Host instance ID
-  """
-  hostInstanceId: String
-  """
-  Original creator feature reference ID
-  """
-  creatorAppFeatureReferenceId: String
-  """
-  Whether the trigger was fired as part of a test run
-  """
-  is_test_run: Boolean
-}
-
-"""
-Automation run status
-"""
-enum TriggerEventState {
-  success
-  failure
-  exhausted
-}
-
-"""
-Filters for querying trigger events
-"""
-input TriggerEventsFiltersInput {
-  """
-  Date range filter
-  """
-  dateRange: DateRangeInput
-  """
-  Filter by entity kind
-  """
-  entityKind: String
-  """
-  Filter by automation IDs
-  """
-  automationIds: [Int!]
-  """
-  Filter by workflow entity IDs
-  """
-  workflowEntityIds: [Int!]
-  """
-  Filter by event state
-  """
-  stateFilter: [String!]
-  """
-  Filter by item identifier
-  """
-  itemId: String
-  """
-  Whether to filter only monday automations
-  """
-  filterByEntity: Boolean
-  """
-  True if entity is automation
-  """
-  isAutomationsEntity: Boolean
-  """
-  Filter by app names
-  """
-  appFilter: [String!]
-  """
-  Filter by host type
-  """
-  hostType: String
-  """
-  Filter by host instance identifier
-  """
-  hostInstanceId: String
-  """
-  Filter by creator app feature reference ID
-  """
-  creatorAppFeatureReferenceId: Int
-  """
-  Billing action count field to filter by
-  """
-  billingActionCountField: String
-  """
-  Whether workflow filter is applied
-  """
-  isWorkflowFilter: Boolean
-  """
-  Filter by board identifier
-  """
-  boardId: String
-  """
-  Filter by status
-  """
-  statusFilter: [String!]
-}
-
-"""
-A page of trigger events and pagination data
-"""
-type TriggerEventsPage {
-  """
-  List of trigger events in the current page
-  """
-  triggerEvents: [TriggerEvent!]
 }
 
 """
@@ -11884,6 +11459,431 @@ enum ArtifactState {
 }
 
 """
+Aggregated automation runs statistics in the account
+"""
+type AccountTriggerStatistics {
+  """
+  Unique identifier for the statistics result
+  """
+  id: ID!
+  """
+  Number of successful automation runs
+  """
+  success: Int
+  """
+  Number of failed automation runs
+  """
+  failure: Int
+  """
+  Total number of automation runs
+  """
+  total: Int
+}
+
+"""
+Filters for account trigger statistics query
+"""
+input AccountTriggerStatisticsFiltersInput {
+  """
+  Filter by board Id
+  """
+  board_id: Int
+  """
+  Filter by multiple user Ids
+  """
+  user_ids: [Int!]
+}
+
+"""
+Aggregated automation runs statistics grouped by entity Ids
+"""
+type AccountTriggersByEntityId {
+  """
+  Unique identifier for the statistics result
+  """
+  id: ID!
+  """
+  Statistics for automations grouped by automation Id. Returns an object where each key is an automation Id, and the value contains the total count and breakdown by error reason
+  """
+  automation_statistics: JSON
+  """
+  Statistics for workflows grouped by workflow entity Id. Returns an object where each key is a workflow entity Id, and the value contains the total count and breakdown by error reason
+  """
+  workflow_statistics: JSON
+}
+
+"""
+Filters for account triggers statistics by entity Id query
+"""
+input AccountTriggersByEntityIdFiltersInput {
+  """
+  Filter by board Id
+  """
+  board_id: Int
+  """
+  Exclude statistics for the specified automation Ids
+  """
+  automation_ids: [Int!]
+  """
+  Filter by multiple user Ids
+  """
+  user_ids: [Int!]
+}
+
+"""
+Automation block execution event
+"""
+type BlockEvent {
+  """
+  Document identifier
+  """
+  id: String
+  """
+  Account identifier
+  """
+  accountId: Int
+  """
+  User identifier who triggered the automation
+  """
+  userId: Int
+  """
+  Board identifier
+  """
+  boardId: Int
+  """
+  Kind of the block event
+  """
+  eventKind: String
+  """
+  Current state of the block event
+  """
+  eventState: String
+  """
+  UUID of the parent trigger event
+  """
+  triggerUuid: String
+  """
+  Timestamp (epoch) when parent trigger started
+  """
+  triggerStarted: Float
+  """
+  Date when parent trigger started
+  """
+  triggerStartedAt: ISO8601DateTime
+  """
+  Timestamp (epoch) when block started
+  """
+  blockStartTimestamp: Float
+  """
+  Timestamp (epoch) when block finished
+  """
+  blockFinishTimestamp: Float
+  """
+  Atomic action identifier
+  """
+  atomicActionId: String
+  """
+  Block title
+  """
+  title: String
+  """
+  Whether block condition was satisfied
+  """
+  conditionSatisfied: Boolean
+  """
+  Workflow node identifier
+  """
+  workflowNodeId: Int
+  """
+  Entity kind for the block
+  """
+  entityKind: String
+  """
+  Number of billing actions counted in this block
+  """
+  billingActionCountForBlock: Int
+  """
+  Error reason if block failed
+  """
+  errorReason: String
+  """
+  Iterator identifier if block is part of a loop
+  """
+  iterator_id: ID
+  """
+  Current iteration number within the loop
+  """
+  current_iteration: Int
+  """
+  Total number of iterations configured for the loop
+  """
+  max_iterations: Int
+  """
+  Whether the block was executed as part of a test run
+  """
+  is_test_run: Boolean
+}
+
+"""
+A page of block events
+"""
+type BlockEventsPage {
+  """
+  List of block events in the current page
+  """
+  blockEvents: [BlockEvent!]
+}
+
+"""
+Date range filter (inclusive)
+"""
+input DateRangeInput {
+  """
+  Start date (ISO 8601)
+  """
+  startDate: String!
+  """
+  End date (ISO 8601)
+  """
+  endDate: String!
+}
+
+"""
+MCP tool execution event
+"""
+type ToolEvent {
+  """
+  Document identifier
+  """
+  id: ID
+  """
+  Account identifier
+  """
+  account_id: ID
+  """
+  User identifier
+  """
+  user_id: ID
+  """
+  UUID of the parent trigger event
+  """
+  trigger_uuid: String
+  """
+  Atomic action identifier
+  """
+  atomic_action_id: ID
+  """
+  Recipe identifier
+  """
+  recipe_id: ID
+  """
+  Integration identifier
+  """
+  integration_id: ID
+  """
+  Name of the MCP tool
+  """
+  tool_name: String
+  """
+  MCP server name
+  """
+  mcp_server: String
+  """
+  Status of the tool execution
+  """
+  event_status: String
+  """
+  Error message if tool execution failed
+  """
+  error_message: String
+  """
+  Timestamp (epoch) when tool execution started
+  """
+  tool_start_timestamp: Float
+  """
+  Timestamp (epoch) when tool execution finished
+  """
+  tool_finish_timestamp: Float
+  """
+  Execution duration in milliseconds
+  """
+  execution_duration_ms: Int
+}
+
+"""
+A page of tool events
+"""
+type ToolEventsPage {
+  """
+  List of tool events in the current page
+  """
+  tool_events: [ToolEvent!]
+}
+
+"""
+Represents a single automation trigger event
+"""
+type TriggerEvent {
+  """
+  Account identifier
+  """
+  accountId: Int
+  """
+  Trigger UUID
+  """
+  triggerUuid: String
+  """
+  Kind of the event
+  """
+  eventKind: String
+  """
+  Current state of the event
+  """
+  eventState: String
+  """
+  Timestamp (epoch) when trigger started
+  """
+  triggerStarted: Float
+  """
+  Date when trigger started
+  """
+  triggerStartedAt: ISO8601DateTime
+  """
+  Creation time of the record
+  """
+  createdAt: ISO8601DateTime
+  """
+  Error reason if the event failed
+  """
+  errorReason: String
+  """
+  Number of billing actions counted for this trigger
+  """
+  billingActionsCount: Int
+  """
+  Waiting trigger name, when applicable
+  """
+  waitingForTriggerName: String
+  """
+  Duration of the trigger in milliseconds
+  """
+  triggerDuration: Float
+  """
+  Entity kind for the trigger (item / subitem / etc.)
+  """
+  entityKind: String
+  """
+  Reignition subscription ID if trigger was reignited
+  """
+  reignitionSubscriptionId: String
+  """
+  Host type on which the automation is executed
+  """
+  hostType: String
+  """
+  Host instance ID
+  """
+  hostInstanceId: String
+  """
+  Original creator feature reference ID
+  """
+  creatorAppFeatureReferenceId: String
+  """
+  Whether the trigger was fired as part of a test run
+  """
+  is_test_run: Boolean
+}
+
+"""
+Automation run status
+"""
+enum TriggerEventState {
+  success
+  failure
+  exhausted
+}
+
+"""
+Filters for querying trigger events
+"""
+input TriggerEventsFiltersInput {
+  """
+  Date range filter
+  """
+  dateRange: DateRangeInput
+  """
+  Filter by entity kind
+  """
+  entityKind: String
+  """
+  Filter by automation IDs
+  """
+  automationIds: [Int!]
+  """
+  Filter by workflow entity IDs
+  """
+  workflowEntityIds: [Int!]
+  """
+  Filter by event state
+  """
+  stateFilter: [String!]
+  """
+  Filter by item identifier
+  """
+  itemId: String
+  """
+  Whether to filter only monday automations
+  """
+  filterByEntity: Boolean
+  """
+  True if entity is automation
+  """
+  isAutomationsEntity: Boolean
+  """
+  Filter by app names
+  """
+  appFilter: [String!]
+  """
+  Filter by host type
+  """
+  hostType: String
+  """
+  Filter by host instance identifier
+  """
+  hostInstanceId: String
+  """
+  Filter by creator app feature reference ID
+  """
+  creatorAppFeatureReferenceId: Int
+  """
+  Billing action count field to filter by
+  """
+  billingActionCountField: String
+  """
+  Whether workflow filter is applied
+  """
+  isWorkflowFilter: Boolean
+  """
+  Filter by board identifier
+  """
+  boardId: String
+  """
+  Filter by status
+  """
+  statusFilter: [String!]
+}
+
+"""
+A page of trigger events and pagination data
+"""
+type TriggerEventsPage {
+  """
+  List of trigger events in the current page
+  """
+  triggerEvents: [TriggerEvent!]
+}
+
+"""
 Input for a group of validation rules with a logical operator
 """
 input GroupInput {
@@ -12107,573 +12107,6 @@ type WidgetsSurface {
   The JSON Schema used as the data structure for widgets surface generation.
   """
   data_structure: JSON
-}
-
-"""
-Response object for app deletion operations
-"""
-type AppDeletionResponse {
-  """
-  Whether the deletion was successful
-  """
-  success: Boolean
-  """
-  Deletion result message
-  """
-  message: String
-}
-
-"""
-Response from querying the apps documentation AI.
-"""
-type AppDocumentationAiResponse {
-  """
-  Unique identifier for this query response.
-  """
-  id: ID
-  """
-  The original question that was asked.
-  """
-  question: String
-  """
-  The AI-generated answer based on the documentation.
-  """
-  answer: String!
-  """
-  The conversation ID for follow-up queries.
-  """
-  conversation_id: ID
-}
-
-"""
-Represents a relation between two app features in an app version.
-"""
-type AppFeatureRelation {
-  """
-  Unique identifier of the app feature relation.
-  """
-  id: ID!
-  """
-  Date when the relation was created.
-  """
-  created_at: Date!
-  """
-  Date when the relation was last updated.
-  """
-  updated_at: Date!
-  """
-  The ID of the source app feature for this relation.
-  """
-  source_id: ID
-  """
-  The reference ID of the target app feature for this relation.
-  """
-  target_reference_id: ID
-  """
-  The name of the app feature relation.
-  """
-  name: String
-  """
-  The type of the app feature relation.
-  """
-  type: AppFeatureRelationKind
-  """
-  Additional metadata for this app feature relation.
-  """
-  data: JSON
-}
-
-"""
-The kind of the app feature relation.
-"""
-enum AppFeatureRelationKind {
-  DEPENDENCY
-  HOSTING
-}
-
-"""
-Input for app feature release data.
-"""
-input AppFeatureReleaseDataInput {
-  """
-  The URL for the release.
-  """
-  url: String
-}
-
-"""
-Input for updating an app feature release.
-"""
-input AppFeatureReleaseInput {
-  """
-  The hosting type for the release. The app release category will be automatically determined based on this value.
-  """
-  kind: AppFeatureReleaseKind
-  """
-  The data of the release.
-  """
-  data: AppFeatureReleaseDataInput
-}
-
-"""
-The hosting type for the app feature release
-"""
-enum AppFeatureReleaseKind {
-  SERVER_SIDE_CODE
-  CLIENT_SIDE_CODE
-  EXTERNAL_HOSTING
-}
-
-type AppFeatureType {
-  id: ID!
-  created_at: Date
-  updated_at: Date
-  """
-  The name of the app feature
-  """
-  name: String
-  """
-  The app feature app id
-  """
-  app_id: ID
-  """
-  The reference ID of the app feature
-  """
-  reference_id: ID
-  """
-  The type of the app feature
-  """
-  type: String
-  """
-  The data of the app feature
-  """
-  data: JSON
-  """
-  The deployment information for the app feature
-  """
-  deployment: JSON
-}
-
-"""
-The type of the app feature.
-"""
-enum AppFeatureTypeE {
-  OAUTH
-  BOARD_VIEW
-  INTEGRATION
-  SOLUTION
-  ITEM_VIEW
-  DASHBOARD_WIDGET
-  ACCOUNT_SETTINGS_VIEW
-  DOC_ACTIONS
-  OBJECT
-  WORKSPACE_VIEW
-  AI
-  AI_BOARD_MAIN_MENU_HEADER
-  AI_ITEM_UPDATE_ACTIONS
-  AI_DOC_SLASH_COMMAND
-  AI_DOC_CONTEXTUAL_MENU
-  AI_DOC_QUICK_START
-  AI_DOC_TOP_BAR
-  COLUMN_TEMPLATE
-  AI_IC_ASSISTANT_HELP_CENTER
-  APP_WIZARD
-  GROUP_MENU_ACTION
-  ITEM_MENU_ACTION
-  NOTIFICATION_KIND
-  NOTIFICATION_SETTING_KIND
-  BLOCK
-  ITEM_BATCH_ACTION
-  AI_FORMULA
-  AI_ITEM_EMAILS_AND_ACTIVITIES_ACTIONS
-  AI_EMAILS_AND_ACTIVITIES_HEADER_ACTIONS
-  FIELD_TYPE
-  PRODUCT
-  PRODUCT_VIEW
-  BOARD_COLUMN_ACTION
-  BOARD_COLUMN_EXTENSION
-  PACKAGED_BLOCK
-  CREDENTIALS
-  TOPBAR
-  WORKFLOW_TEMPLATE
-  COLUMN
-  SUB_WORKFLOW
-  BOARD_HEADER_ACTION
-  DIALOG
-  DATA_ENTITY
-  SYNCABLE_RESOURCE
-  AI_AGENT
-  SURFACE_VIEW
-  GROWTH_CONFIG
-  MODAL
-  ADMIN_VIEW
-  DIGITAL_WORKER
-  AI_AGENT_SKILL
-  SKILL
-  VIBE_OBJECT
-  VIBE_ITEM_VIEW
-  AI_PLATFORM_AGENT
-}
-
-"""
-The visibility type of an app
-"""
-enum AppKind {
-  PRIVATE
-  PUBLIC
-}
-
-"""
-Permitted OAuth scopes for apps
-"""
-enum AppPermission {
-  ME_READ
-  BOARDS_READ
-  BOARDS_WRITE
-  WORKSPACES_READ
-  WORKSPACES_WRITE
-  USERS_READ
-  USERS_WRITE
-  ACCOUNT_READ
-  UPDATES_READ
-  UPDATES_WRITE
-  TAGS_READ
-  ASSETS_READ
-  TEAMS_READ
-  TEAMS_WRITE
-  DEPARTMENTS_READ
-  DEPARTMENTS_WRITE
-  NOTIFICATIONS_WRITE
-  WEBHOOKS_WRITE
-  WEBHOOKS_READ
-  DOCS_READ
-  DOCS_WRITE
-}
-
-"""
-The current state of an app based on its version status
-"""
-enum AppStatus {
-  DRAFT
-  LIVE
-}
-
-type AppType {
-  id: ID!
-  created_at: Date
-  updated_at: Date
-  """
-  The app name
-  """
-  name: String
-  """
-  The API app ID
-  """
-  api_app_id: ID
-  """
-  The client ID used to identify the app for OAuth and API access
-  """
-  client_id: String
-  """
-  The app photo URL
-  """
-  photo_url: String
-  """
-  The app photo URL for small size
-  """
-  photo_url_small: String
-  """
-  The app kind
-  """
-  kind: AppKind
-  """
-  The app status (i.e. is live?)
-  """
-  status: AppStatus
-  """
-  The latest version type
-  """
-  version_type: String
-  """
-  The description of the app
-  """
-  description: String
-  """
-  The URL-friendly identifier
-  """
-  slug: String
-  """
-  The array of permission scopes
-  """
-  permissions: [String!]
-  """
-  The webhook endpoint URL
-  """
-  webhook_url: String
-  """
-  The user who created the app
-  """
-  created_by: ID
-  """
-  The app account ID
-  """
-  account_id: ID
-  """
-  The app collaborators
-  """
-  collaborators: [User!]
-  """
-  The apps' features
-  """
-  features(live_version_only: Boolean = false, limit: Int = 25, page: Int = 1): [AppFeatureType!]
-}
-
-"""
-The lifecycle status of an app version
-"""
-enum AppVersionStatus {
-  DRAFT
-  LIVE
-  DEPRECATED
-  PROMOTING
-}
-
-"""
-Input for creating an app feature relation.
-"""
-input CreateAppFeatureRelationInput {
-  """
-  The ID of the source app feature for this relation.
-  """
-  app_feature_id: ID!
-  """
-  The app feature full slug of the target app feature.
-  """
-  target_app_feature_slug: String!
-  """
-  The type of the app feature relation.
-  """
-  type: AppFeatureRelationKind!
-  """
-  The name of the relation.
-  """
-  name: String
-  """
-  Additional metadata for this relation.
-  """
-  data: JSON
-}
-
-"""
-Input for creating an app with its configuration data.
-"""
-input CreateAppInput {
-  """
-  The display name of the app
-  """
-  name: String!
-  """
-  App visibility type
-  """
-  kind: AppKind
-  """
-  Detailed description of the app
-  """
-  description: String
-  """
-  URL-friendly identifier in the format {account_slug}_{app_slug}. Must contain only letters, numbers, dashes, and underscores. Example: "account-slug_my-scheduler"
-  """
-  slug: String
-  """
-  Array of permission scopes
-  """
-  permissions: [AppPermission!]
-  """
-  Webhook endpoint URL
-  """
-  webhook_url: String
-  """
-  Array of user IDs with access
-  """
-  collaborators: [ID!]
-}
-
-"""
-Response object for app creation operations, including app data and API credentials
-"""
-type CreateAppResponse {
-  """
-  The app's ID
-  """
-  id: ID
-  """
-  The app's API app ID
-  """
-  api_app_id: ID
-  """
-  The app's client ID
-  """
-  client_id: String
-  """
-  The app's client secret
-  """
-  client_secret: String
-  """
-  The app's signing secret used for webhook signature verification
-  """
-  signing_secret: String
-}
-
-"""
-An app version
-"""
-type DeveloperAppVersion {
-  """
-  The unique identifier of the app version
-  """
-  id: ID
-}
-
-"""
-Input for installing an app on the current account.
-"""
-input InstallAppInput {
-  """
-  The app identifier (numeric ID or slug)
-  """
-  app_identifier: ID!
-  """
-  Optional list of workspace IDs to restrict app access to specific workspaces
-  """
-  permitted_workspaces: [ID!]
-}
-
-"""
-Response object for app installation
-"""
-type InstallAppResponse {
-  """
-  The installed app identifier
-  """
-  app_id: ID
-  """
-  Whether a new install was created (false if app was already installed)
-  """
-  created: Boolean
-}
-
-"""
-Input for a single lifecycle event subscription
-"""
-input LifecycleEventInput {
-  """
-  The lifecycle event type (e.g., "AppFeatureColumn:create")
-  """
-  event_type: String!
-  """
-  The webhook URL for this event (max 2048 characters)
-  """
-  webhook_url: String!
-  """
-  Whether the subscription is synchronous (defaults to false)
-  """
-  is_sync: Boolean
-}
-
-"""
-A lifecycle subscription configuration for an entity
-"""
-type LifecycleSubscriptionKind {
-  """
-  The subscription ID
-  """
-  id: ID
-  """
-  The entity ID (e.g., app feature ID)
-  """
-  entity_id: ID
-  """
-  The type of entity (e.g., "appFeature")
-  """
-  entity_type: String
-  """
-  The lifecycle event type (e.g., "AppFeatureColumn:create")
-  """
-  event_type: String
-  """
-  The webhook URL for notifications
-  """
-  webhook_url: String
-  """
-  Whether the subscription is synchronous
-  """
-  is_sync: Boolean
-  """
-  When the subscription was created
-  """
-  created_at: Date
-  """
-  When the subscription was last updated
-  """
-  updated_at: Date
-}
-
-"""
-Input for updating an app feature with its associated data and release information.
-"""
-input UpdateAppFeatureInput {
-  """
-  The app feature data to update. This structure is dynamic and depends on the different app feature types.
-  """
-  data: JSON
-  """
-  The deployment data to update. https://developer.monday.com/apps/docs/deploy-your-app
-  """
-  deployment: AppFeatureReleaseInput
-}
-
-"""
-Input for updating an existing app. Creates draft version for live apps.
-"""
-input UpdateAppInput {
-  """
-  The display name of the app
-  """
-  name: String
-  """
-  App visibility type
-  """
-  kind: AppKind
-  """
-  Detailed description of the app
-  """
-  description: String
-  """
-  URL-friendly identifier (only settable if app has no existing slug)
-  """
-  slug: String
-  """
-  Array of permission scopes (replaces existing permissions)
-  """
-  permissions: [AppPermission!]
-  """
-  Webhook endpoint URL
-  """
-  webhook_url: String
-  """
-  Array of user IDs with access (replaces existing collaborators)
-  """
-  collaborators: [ID!]
-}
-
-"""
-Input for updating lifecycle subscriptions for an entity
-"""
-input UpdateLifecycleSubscriptionsInput {
-  """
-  List of lifecycle event configurations (must have unique eventType values)
-  """
-  lifecycle_events: [LifecycleEventInput!]!
 }
 
 """
@@ -13830,6 +13263,113 @@ enum WorkflowCutoffNode {
 }
 
 """
+A single execution of an agent.
+"""
+type AgentActivityRun {
+  """
+  Unique identifier for the run.
+  """
+  id: ID!
+  """
+  The current or final status of the run.
+  """
+  status: AgentActivityRunStatus!
+  """
+  What triggered this run (raw value as reported by the agent SDK, e.g. api, assign, chat).
+  """
+  trigger: String
+  """
+  ID of the user who triggered the run, if applicable.
+  """
+  triggering_user_id: ID
+  """
+  Number of credits consumed by this run.
+  """
+  credits_used: Int
+  """
+  List of tool names used during this run.
+  """
+  tools: [String!]
+  """
+  Human-readable description of what the run did.
+  """
+  description: String
+  """
+  ISO 8601 timestamp when the run started.
+  """
+  started_at: String!
+  """
+  ISO 8601 timestamp when the run ended.
+  """
+  ended_at: String
+  """
+  The individual steps performed during this run.
+  """
+  steps: [AgentActivityStep!]!
+}
+
+"""
+The current or final status of an agent activity run.
+"""
+enum AgentActivityRunStatus {
+  RUNNING
+  SUCCESS
+  FAILED
+  CANCELLED
+}
+
+"""
+A paginated list of agent activity runs.
+"""
+type AgentActivityRunsConnection {
+  """
+  The agent activity runs on this page.
+  """
+  nodes: [AgentActivityRun]!
+  """
+  Cursor for fetching the next page.
+  """
+  cursor: String
+}
+
+"""
+A single step within an agent activity run.
+"""
+type AgentActivityStep {
+  """
+  A description of what this step did.
+  """
+  description: String
+  """
+  ISO 8601 timestamp when this step occurred.
+  """
+  created_at: String!
+}
+
+"""
+The governance risk level of an agent.
+"""
+enum GovernanceRisk {
+  High
+  Medium
+  Low
+}
+
+"""
+The computed governance risk classification for an agent.
+"""
+type Risk {
+  """
+  The risk level: high, medium, or low.
+  """
+  risk_level: GovernanceRisk
+  """
+  The combined weighted score used to determine the risk level (0–1).
+  """
+  risk_score: Float
+}
+
+"""
 Represents a board and its connection to an object schema.
 """
 type BoardConnection {
@@ -14432,6 +13972,10 @@ type DataViewSourceColumn {
   The column type.
   """
   type: String
+  """
+  For a mirror column, the column type it displays (e.g. color, numeric, date, timerange, multiple-person). Null for every other column type.
+  """
+  sub_type: String
 }
 
 """
@@ -14516,6 +14060,50 @@ input DataViewSourceUpdateInput {
 }
 
 """
+The structure of a data view: per source, the mapped columns and — for entities — the boards behind it. Deleted and archived boards are omitted.
+"""
+type DataViewStructure {
+  """
+  The sources of the data view, in the data view’s own order.
+  """
+  sources: [DataViewStructureSource!]
+}
+
+"""
+The resolved structure of a single data view source.
+"""
+type DataViewStructureSource {
+  """
+  The source identifier.
+  """
+  source_id: DataViewSourceId
+  """
+  How this source is grouped.
+  """
+  source_kind: DataViewStructureSourceKind
+  """
+  The boards implementing this entity. Present only when source_kind is ENTITY.
+  """
+  managed_board_ids: [ID!]
+  """
+  Only the source columns that are mapped into the target. Fields the structure lookup does not resolve — such as archived, description and the column model fields — are always null here.
+  """
+  columns: [DataViewColumn!]
+  """
+  The column mappings for this source.
+  """
+  mappings: [DataViewColumnMapping!]
+}
+
+"""
+How the structure endpoint groups a data view source.
+"""
+enum DataViewStructureSourceKind {
+  ENTITY
+  STANDALONE_BOARD
+}
+
+"""
 The target schema of a data view, defining the unified column structure.
 """
 type DataViewTarget {
@@ -14555,6 +14143,56 @@ input DataViewTargetInput {
   The column configurations for the target, keyed by column id.
   """
   column_configurations: JSON
+}
+
+"""
+Details of why a validation check did not pass.
+"""
+type DataViewValidationFailure {
+  """
+  The input field the failure relates to.
+  """
+  field: String
+  """
+  A human readable explanation of the failure.
+  """
+  reason: String
+  """
+  Present only when the failure is a sources limit breach.
+  """
+  limit_details: DataViewValidationLimitDetails
+}
+
+"""
+The counts behind a sources limit failure.
+"""
+type DataViewValidationLimitDetails {
+  """
+  The maximum number of sources allowed for this account.
+  """
+  limit: Int
+  """
+  The number of sources already on the data view.
+  """
+  current: Int
+  """
+  The number of sources the caller asked to add.
+  """
+  requested: Int
+}
+
+"""
+The outcome of a data view validation check.
+"""
+type DataViewValidationResult {
+  """
+  Whether the validation passed.
+  """
+  valid: Boolean
+  """
+  Present only when `valid` is false.
+  """
+  invalid_result: DataViewValidationFailure
 }
 
 """
@@ -15083,113 +14721,6 @@ input UpdateStatusLabelInput {
   is_done: Boolean
   id: Int
   is_deactivated: Boolean
-}
-
-"""
-A single execution of an agent.
-"""
-type AgentActivityRun {
-  """
-  Unique identifier for the run.
-  """
-  id: ID!
-  """
-  The current or final status of the run.
-  """
-  status: AgentActivityRunStatus!
-  """
-  What triggered this run (raw value as reported by the agent SDK, e.g. api, assign, chat).
-  """
-  trigger: String
-  """
-  ID of the user who triggered the run, if applicable.
-  """
-  triggering_user_id: ID
-  """
-  Number of credits consumed by this run.
-  """
-  credits_used: Int
-  """
-  List of tool names used during this run.
-  """
-  tools: [String!]
-  """
-  Human-readable description of what the run did.
-  """
-  description: String
-  """
-  ISO 8601 timestamp when the run started.
-  """
-  started_at: String!
-  """
-  ISO 8601 timestamp when the run ended.
-  """
-  ended_at: String
-  """
-  The individual steps performed during this run.
-  """
-  steps: [AgentActivityStep!]!
-}
-
-"""
-The current or final status of an agent activity run.
-"""
-enum AgentActivityRunStatus {
-  RUNNING
-  SUCCESS
-  FAILED
-  CANCELLED
-}
-
-"""
-A paginated list of agent activity runs.
-"""
-type AgentActivityRunsConnection {
-  """
-  The agent activity runs on this page.
-  """
-  nodes: [AgentActivityRun]!
-  """
-  Cursor for fetching the next page.
-  """
-  cursor: String
-}
-
-"""
-A single step within an agent activity run.
-"""
-type AgentActivityStep {
-  """
-  A description of what this step did.
-  """
-  description: String
-  """
-  ISO 8601 timestamp when this step occurred.
-  """
-  created_at: String!
-}
-
-"""
-The governance risk level of an agent.
-"""
-enum GovernanceRisk {
-  High
-  Medium
-  Low
-}
-
-"""
-The computed governance risk classification for an agent.
-"""
-type Risk {
-  """
-  The risk level: high, medium, or low.
-  """
-  risk_level: GovernanceRisk
-  """
-  The combined weighted score used to determine the risk level (0–1).
-  """
-  risk_score: Float
 }
 
 type CustomActivity {
@@ -23351,6 +22882,573 @@ type UnsaveAgentResult {
   The agent user id of the agent that was removed from the saved list
   """
   agent_user_id: ID
+}
+
+"""
+Response object for app deletion operations
+"""
+type AppDeletionResponse {
+  """
+  Whether the deletion was successful
+  """
+  success: Boolean
+  """
+  Deletion result message
+  """
+  message: String
+}
+
+"""
+Response from querying the apps documentation AI.
+"""
+type AppDocumentationAiResponse {
+  """
+  Unique identifier for this query response.
+  """
+  id: ID
+  """
+  The original question that was asked.
+  """
+  question: String
+  """
+  The AI-generated answer based on the documentation.
+  """
+  answer: String!
+  """
+  The conversation ID for follow-up queries.
+  """
+  conversation_id: ID
+}
+
+"""
+Represents a relation between two app features in an app version.
+"""
+type AppFeatureRelation {
+  """
+  Unique identifier of the app feature relation.
+  """
+  id: ID!
+  """
+  Date when the relation was created.
+  """
+  created_at: Date!
+  """
+  Date when the relation was last updated.
+  """
+  updated_at: Date!
+  """
+  The ID of the source app feature for this relation.
+  """
+  source_id: ID
+  """
+  The reference ID of the target app feature for this relation.
+  """
+  target_reference_id: ID
+  """
+  The name of the app feature relation.
+  """
+  name: String
+  """
+  The type of the app feature relation.
+  """
+  type: AppFeatureRelationKind
+  """
+  Additional metadata for this app feature relation.
+  """
+  data: JSON
+}
+
+"""
+The kind of the app feature relation.
+"""
+enum AppFeatureRelationKind {
+  DEPENDENCY
+  HOSTING
+}
+
+"""
+Input for app feature release data.
+"""
+input AppFeatureReleaseDataInput {
+  """
+  The URL for the release.
+  """
+  url: String
+}
+
+"""
+Input for updating an app feature release.
+"""
+input AppFeatureReleaseInput {
+  """
+  The hosting type for the release. The app release category will be automatically determined based on this value.
+  """
+  kind: AppFeatureReleaseKind
+  """
+  The data of the release.
+  """
+  data: AppFeatureReleaseDataInput
+}
+
+"""
+The hosting type for the app feature release
+"""
+enum AppFeatureReleaseKind {
+  SERVER_SIDE_CODE
+  CLIENT_SIDE_CODE
+  EXTERNAL_HOSTING
+}
+
+type AppFeatureType {
+  id: ID!
+  created_at: Date
+  updated_at: Date
+  """
+  The name of the app feature
+  """
+  name: String
+  """
+  The app feature app id
+  """
+  app_id: ID
+  """
+  The reference ID of the app feature
+  """
+  reference_id: ID
+  """
+  The type of the app feature
+  """
+  type: String
+  """
+  The data of the app feature. Icon/logo fields (iconUrl, logoUrl, etc., including nested headerConfig.*.iconUrl) must be HTTPS URLs or Vibe icon names.
+  """
+  data: JSON
+  """
+  The deployment information for the app feature
+  """
+  deployment: JSON
+}
+
+"""
+The type of the app feature.
+"""
+enum AppFeatureTypeE {
+  OAUTH
+  BOARD_VIEW
+  INTEGRATION
+  SOLUTION
+  ITEM_VIEW
+  DASHBOARD_WIDGET
+  ACCOUNT_SETTINGS_VIEW
+  DOC_ACTIONS
+  OBJECT
+  WORKSPACE_VIEW
+  AI
+  AI_BOARD_MAIN_MENU_HEADER
+  AI_ITEM_UPDATE_ACTIONS
+  AI_DOC_SLASH_COMMAND
+  AI_DOC_CONTEXTUAL_MENU
+  AI_DOC_QUICK_START
+  AI_DOC_TOP_BAR
+  COLUMN_TEMPLATE
+  AI_IC_ASSISTANT_HELP_CENTER
+  APP_WIZARD
+  GROUP_MENU_ACTION
+  ITEM_MENU_ACTION
+  NOTIFICATION_KIND
+  NOTIFICATION_SETTING_KIND
+  BLOCK
+  ITEM_BATCH_ACTION
+  AI_FORMULA
+  AI_ITEM_EMAILS_AND_ACTIVITIES_ACTIONS
+  AI_EMAILS_AND_ACTIVITIES_HEADER_ACTIONS
+  FIELD_TYPE
+  PRODUCT
+  PRODUCT_VIEW
+  BOARD_COLUMN_ACTION
+  BOARD_COLUMN_EXTENSION
+  PACKAGED_BLOCK
+  CREDENTIALS
+  TOPBAR
+  WORKFLOW_TEMPLATE
+  COLUMN
+  SUB_WORKFLOW
+  BOARD_HEADER_ACTION
+  DIALOG
+  DATA_ENTITY
+  SYNCABLE_RESOURCE
+  AI_AGENT
+  SURFACE_VIEW
+  GROWTH_CONFIG
+  MODAL
+  ADMIN_VIEW
+  DIGITAL_WORKER
+  AI_AGENT_SKILL
+  SKILL
+  VIBE_OBJECT
+  VIBE_ITEM_VIEW
+  AI_PLATFORM_AGENT
+}
+
+"""
+The visibility type of an app
+"""
+enum AppKind {
+  PRIVATE
+  PUBLIC
+}
+
+"""
+Permitted OAuth scopes for apps
+"""
+enum AppPermission {
+  ME_READ
+  BOARDS_READ
+  BOARDS_WRITE
+  WORKSPACES_READ
+  WORKSPACES_WRITE
+  USERS_READ
+  USERS_WRITE
+  ACCOUNT_READ
+  UPDATES_READ
+  UPDATES_WRITE
+  TAGS_READ
+  ASSETS_READ
+  TEAMS_READ
+  TEAMS_WRITE
+  DEPARTMENTS_READ
+  DEPARTMENTS_WRITE
+  NOTIFICATIONS_WRITE
+  WEBHOOKS_WRITE
+  WEBHOOKS_READ
+  DOCS_READ
+  DOCS_WRITE
+}
+
+"""
+The current state of an app based on its version status
+"""
+enum AppStatus {
+  DRAFT
+  LIVE
+}
+
+type AppType {
+  id: ID!
+  created_at: Date
+  updated_at: Date
+  """
+  The app name
+  """
+  name: String
+  """
+  The API app ID
+  """
+  api_app_id: ID
+  """
+  The client ID used to identify the app for OAuth and API access
+  """
+  client_id: String
+  """
+  The app photo URL
+  """
+  photo_url: String
+  """
+  The app photo URL for small size
+  """
+  photo_url_small: String
+  """
+  The app kind
+  """
+  kind: AppKind
+  """
+  The app status (i.e. is live?)
+  """
+  status: AppStatus
+  """
+  The latest version type
+  """
+  version_type: String
+  """
+  The description of the app
+  """
+  description: String
+  """
+  The URL-friendly identifier
+  """
+  slug: String
+  """
+  The array of permission scopes
+  """
+  permissions: [String!]
+  """
+  The webhook endpoint URL
+  """
+  webhook_url: String
+  """
+  The user who created the app
+  """
+  created_by: ID
+  """
+  The app account ID
+  """
+  account_id: ID
+  """
+  The app collaborators
+  """
+  collaborators: [User!]
+  """
+  The apps' features
+  """
+  features(live_version_only: Boolean = false, limit: Int = 25, page: Int = 1): [AppFeatureType!]
+}
+
+"""
+The lifecycle status of an app version
+"""
+enum AppVersionStatus {
+  DRAFT
+  LIVE
+  DEPRECATED
+  PROMOTING
+}
+
+"""
+Input for creating an app feature relation.
+"""
+input CreateAppFeatureRelationInput {
+  """
+  The ID of the source app feature for this relation.
+  """
+  app_feature_id: ID!
+  """
+  The app feature full slug of the target app feature.
+  """
+  target_app_feature_slug: String!
+  """
+  The type of the app feature relation.
+  """
+  type: AppFeatureRelationKind!
+  """
+  The name of the relation.
+  """
+  name: String
+  """
+  Additional metadata for this relation.
+  """
+  data: JSON
+}
+
+"""
+Input for creating an app with its configuration data.
+"""
+input CreateAppInput {
+  """
+  The display name of the app
+  """
+  name: String!
+  """
+  App visibility type
+  """
+  kind: AppKind
+  """
+  Detailed description of the app
+  """
+  description: String
+  """
+  URL-friendly identifier in the format {account_slug}_{app_slug}. Must contain only letters, numbers, dashes, and underscores. Example: "account-slug_my-scheduler"
+  """
+  slug: String
+  """
+  Array of permission scopes
+  """
+  permissions: [AppPermission!]
+  """
+  Webhook endpoint URL
+  """
+  webhook_url: String
+  """
+  Array of user IDs with access
+  """
+  collaborators: [ID!]
+}
+
+"""
+Response object for app creation operations, including app data and API credentials
+"""
+type CreateAppResponse {
+  """
+  The app's ID
+  """
+  id: ID
+  """
+  The app's API app ID
+  """
+  api_app_id: ID
+  """
+  The app's client ID
+  """
+  client_id: String
+  """
+  The app's client secret
+  """
+  client_secret: String
+  """
+  The app's signing secret used for webhook signature verification
+  """
+  signing_secret: String
+}
+
+"""
+An app version
+"""
+type DeveloperAppVersion {
+  """
+  The unique identifier of the app version
+  """
+  id: ID
+}
+
+"""
+Input for installing an app on the current account.
+"""
+input InstallAppInput {
+  """
+  The app identifier (numeric ID or slug)
+  """
+  app_identifier: ID!
+  """
+  Optional list of workspace IDs to restrict app access to specific workspaces
+  """
+  permitted_workspaces: [ID!]
+}
+
+"""
+Response object for app installation
+"""
+type InstallAppResponse {
+  """
+  The installed app identifier
+  """
+  app_id: ID
+  """
+  Whether a new install was created (false if app was already installed)
+  """
+  created: Boolean
+}
+
+"""
+Input for a single lifecycle event subscription
+"""
+input LifecycleEventInput {
+  """
+  The lifecycle event type (e.g., "AppFeatureColumn:create")
+  """
+  event_type: String!
+  """
+  The webhook URL for this event (max 2048 characters)
+  """
+  webhook_url: String!
+  """
+  Whether the subscription is synchronous (defaults to false)
+  """
+  is_sync: Boolean
+}
+
+"""
+A lifecycle subscription configuration for an entity
+"""
+type LifecycleSubscriptionKind {
+  """
+  The subscription ID
+  """
+  id: ID
+  """
+  The entity ID (e.g., app feature ID)
+  """
+  entity_id: ID
+  """
+  The type of entity (e.g., "appFeature")
+  """
+  entity_type: String
+  """
+  The lifecycle event type (e.g., "AppFeatureColumn:create")
+  """
+  event_type: String
+  """
+  The webhook URL for notifications
+  """
+  webhook_url: String
+  """
+  Whether the subscription is synchronous
+  """
+  is_sync: Boolean
+  """
+  When the subscription was created
+  """
+  created_at: Date
+  """
+  When the subscription was last updated
+  """
+  updated_at: Date
+}
+
+"""
+Input for updating an app feature with its associated data and release information.
+"""
+input UpdateAppFeatureInput {
+  """
+  The app feature data to update. Structure is dynamic per feature type. Any iconUrl/logoUrl/thumbnailUrl (including nested under headerConfig) must be an HTTPS URL or Vibe icon name.
+  """
+  data: JSON
+  """
+  The deployment data to update. https://developer.monday.com/apps/docs/deploy-your-app
+  """
+  deployment: AppFeatureReleaseInput
+}
+
+"""
+Input for updating an existing app. Creates draft version for live apps.
+"""
+input UpdateAppInput {
+  """
+  The display name of the app
+  """
+  name: String
+  """
+  App visibility type
+  """
+  kind: AppKind
+  """
+  Detailed description of the app
+  """
+  description: String
+  """
+  URL-friendly identifier (only settable if app has no existing slug)
+  """
+  slug: String
+  """
+  Array of permission scopes (replaces existing permissions)
+  """
+  permissions: [AppPermission!]
+  """
+  Webhook endpoint URL
+  """
+  webhook_url: String
+  """
+  Array of user IDs with access (replaces existing collaborators)
+  """
+  collaborators: [ID!]
+}
+
+"""
+Input for updating lifecycle subscriptions for an entity
+"""
+input UpdateLifecycleSubscriptionsInput {
+  """
+  List of lifecycle event configurations (must have unique eventType values)
+  """
+  lifecycle_events: [LifecycleEventInput!]!
 }
 
 """

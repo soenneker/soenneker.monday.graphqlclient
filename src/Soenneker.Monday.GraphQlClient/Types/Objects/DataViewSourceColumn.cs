@@ -27,4 +27,10 @@ public sealed partial class DataViewSourceColumn
     [JsonPropertyName("type")]
     public string? Type { get; init; }
 
+    /// <summary>
+    /// For a mirror column, the column type it displays (e.g. color, numeric, date, timerange, multiple-person). Null for every other column type.
+    /// </summary>
+    [JsonPropertyName("sub_type")]
+    public string? SubType { get; init; }
+
 }

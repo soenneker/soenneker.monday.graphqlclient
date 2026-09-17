@@ -57,42 +57,6 @@ public sealed partial class Query
     public List<ServiceUser>? ServiceUsers { get; init; }
 
     /// <summary>
-    /// List trigger events with optional filters
-    /// </summary>
-    [JsonPropertyName("trigger_events")]
-    public TriggerEventsPage? TriggerEvents { get; init; }
-
-    /// <summary>
-    /// Fetch a single trigger event by UUID
-    /// </summary>
-    [JsonPropertyName("trigger_event")]
-    public TriggerEvent? TriggerEvent { get; init; }
-
-    /// <summary>
-    /// List block events for a given trigger UUID
-    /// </summary>
-    [JsonPropertyName("block_events")]
-    public BlockEventsPage? BlockEvents { get; init; }
-
-    /// <summary>
-    /// List tool events for a given trigger UUID
-    /// </summary>
-    [JsonPropertyName("tool_events")]
-    public ToolEventsPage? ToolEvents { get; init; }
-
-    /// <summary>
-    /// Get aggregated automation runs statistics in the account
-    /// </summary>
-    [JsonPropertyName("account_trigger_statistics")]
-    public AccountTriggerStatistics? AccountTriggerStatistics { get; init; }
-
-    /// <summary>
-    /// Get aggregated automation runs statistics grouped by entity Ids
-    /// </summary>
-    [JsonPropertyName("account_triggers_statistics_by_entity_id")]
-    public AccountTriggersByEntityId? AccountTriggersStatisticsByEntityId { get; init; }
-
-    /// <summary>
     /// Get sequences that the current user is allowed to enroll items to, that are connected to the provided board. Returns sequences owned by the user or sequences where the user has access to the sender connection.
     /// </summary>
     [JsonPropertyName("allowed_sequences_to_enroll")]
@@ -328,28 +292,46 @@ public sealed partial class Query
     public string? Empty { get; init; }
 
     /// <summary>
+    /// List trigger events with optional filters
+    /// </summary>
+    [JsonPropertyName("trigger_events")]
+    public TriggerEventsPage? TriggerEvents { get; init; }
+
+    /// <summary>
+    /// Fetch a single trigger event by UUID
+    /// </summary>
+    [JsonPropertyName("trigger_event")]
+    public TriggerEvent? TriggerEvent { get; init; }
+
+    /// <summary>
+    /// List block events for a given trigger UUID
+    /// </summary>
+    [JsonPropertyName("block_events")]
+    public BlockEventsPage? BlockEvents { get; init; }
+
+    /// <summary>
+    /// List tool events for a given trigger UUID
+    /// </summary>
+    [JsonPropertyName("tool_events")]
+    public ToolEventsPage? ToolEvents { get; init; }
+
+    /// <summary>
+    /// Get aggregated automation runs statistics in the account
+    /// </summary>
+    [JsonPropertyName("account_trigger_statistics")]
+    public AccountTriggerStatistics? AccountTriggerStatistics { get; init; }
+
+    /// <summary>
+    /// Get aggregated automation runs statistics grouped by entity Ids
+    /// </summary>
+    [JsonPropertyName("account_triggers_statistics_by_entity_id")]
+    public AccountTriggersByEntityId? AccountTriggersStatisticsByEntityId { get; init; }
+
+    /// <summary>
     /// Get validations configuration for a board
     /// </summary>
     [JsonPropertyName("validations")]
     public Validations? Validations { get; init; }
-
-    /// <summary>
-    /// Get an app by ID or slug.
-    /// </summary>
-    [JsonPropertyName("app")]
-    public AppType? App { get; init; }
-
-    /// <summary>
-    /// Query the monday.com apps documentation using AI. Returns an AI-generated answer based on the documentation.
-    /// </summary>
-    [JsonPropertyName("ask_developer_docs")]
-    public AppDocumentationAiResponse? AskDeveloperDocs { get; init; }
-
-    /// <summary>
-    /// Get lifecycle subscriptions for all entity types in a specific app version. If version_id is not provided, resolves the active version (user testing version, live, or latest).
-    /// </summary>
-    [JsonPropertyName("get_app_lifecycle_subscriptions")]
-    public List<LifecycleSubscriptionKind>? GetAppLifecycleSubscriptions { get; init; }
 
     /// <summary>
     /// Get all personal list items by list ID
@@ -612,6 +594,24 @@ public sealed partial class Query
     /// </summary>
     [JsonPropertyName("mute_board_settings")]
     public List<BoardMuteSettings>? MuteBoardSettings { get; init; }
+
+    /// <summary>
+    /// Get an app by ID or slug.
+    /// </summary>
+    [JsonPropertyName("app")]
+    public AppType? App { get; init; }
+
+    /// <summary>
+    /// Query the monday.com apps documentation using AI. Returns an AI-generated answer based on the documentation.
+    /// </summary>
+    [JsonPropertyName("ask_developer_docs")]
+    public AppDocumentationAiResponse? AskDeveloperDocs { get; init; }
+
+    /// <summary>
+    /// Get lifecycle subscriptions for all entity types in a specific app version. If version_id is not provided, resolves the active version (user testing version, live, or latest).
+    /// </summary>
+    [JsonPropertyName("get_app_lifecycle_subscriptions")]
+    public List<LifecycleSubscriptionKind>? GetAppLifecycleSubscriptions { get; init; }
 
     /// <summary>
     /// Platform API data.

@@ -10,7 +10,7 @@ namespace Soenneker.Monday.GraphQlClient;
 public sealed partial class UpdateAppFeatureInput
 {
     /// <summary>
-    /// The app feature data to update. This structure is dynamic and depends on the different app feature types.
+    /// The app feature data to update. Structure is dynamic per feature type. Any iconUrl/logoUrl/thumbnailUrl (including nested under headerConfig) must be an HTTPS URL or Vibe icon name.
     /// </summary>
     [JsonPropertyName("data")]
     public string? Data { get; init; }

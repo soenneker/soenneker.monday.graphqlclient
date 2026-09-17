@@ -741,54 +741,6 @@ public sealed partial class Mutation
     public ValidationRule? DeleteValidationRule { get; init; }
 
     /// <summary>
-    /// Creates a new app with the specified configuration.
-    /// </summary>
-    [JsonPropertyName("create_app")]
-    public CreateAppResponse? CreateApp { get; init; }
-
-    /// <summary>
-    /// Updates an existing app. If the app latest version is live, a new draft version is automatically created and updated.
-    /// </summary>
-    [JsonPropertyName("update_app")]
-    public AppType? UpdateApp { get; init; }
-
-    /// <summary>
-    /// Update an app feature.
-    /// </summary>
-    [JsonPropertyName("update_app_feature")]
-    public AppFeatureType? UpdateAppFeature { get; init; }
-
-    /// <summary>
-    /// Create a new app feature.
-    /// </summary>
-    [JsonPropertyName("create_app_feature")]
-    public AppFeatureType? CreateAppFeature { get; init; }
-
-    /// <summary>
-    /// Update (or create) lifecycle subscriptions for an entity. This will soft delete all existing subscriptions for this entity_identifier and create new ones.
-    /// </summary>
-    [JsonPropertyName("update_app_lifecycle_subscription")]
-    public List<LifecycleSubscriptionKind>? UpdateAppLifecycleSubscription { get; init; }
-
-    /// <summary>
-    /// Delete all lifecycle subscriptions for an entity. Returns true if deleted successfully or if no subscriptions exist.
-    /// </summary>
-    [JsonPropertyName("delete_app_lifecycle_subscription")]
-    public bool? DeleteAppLifecycleSubscription { get; init; }
-
-    /// <summary>
-    /// Installs an app on the current account. Requires account admin permission.
-    /// </summary>
-    [JsonPropertyName("install_app")]
-    public InstallAppResponse? InstallApp { get; init; }
-
-    /// <summary>
-    /// Uninstalls an app from the current account. Requires account admin permission.
-    /// </summary>
-    [JsonPropertyName("uninstall_app")]
-    public AppDeletionResponse? UninstallApp { get; init; }
-
-    /// <summary>
     /// Add workspace object to favorites
     /// </summary>
     [JsonPropertyName("create_favorite")]
@@ -1147,5 +1099,53 @@ public sealed partial class Mutation
     /// </summary>
     [JsonPropertyName("update_mute_board_settings")]
     public List<BoardMuteSettings>? UpdateMuteBoardSettings { get; init; }
+
+    /// <summary>
+    /// Creates a new app with the specified configuration.
+    /// </summary>
+    [JsonPropertyName("create_app")]
+    public CreateAppResponse? CreateApp { get; init; }
+
+    /// <summary>
+    /// Updates an existing app. If the app latest version is live, a new draft version is automatically created and updated.
+    /// </summary>
+    [JsonPropertyName("update_app")]
+    public AppType? UpdateApp { get; init; }
+
+    /// <summary>
+    /// Update an app feature.
+    /// </summary>
+    [JsonPropertyName("update_app_feature")]
+    public AppFeatureType? UpdateAppFeature { get; init; }
+
+    /// <summary>
+    /// Create a new app feature.
+    /// </summary>
+    [JsonPropertyName("create_app_feature")]
+    public AppFeatureType? CreateAppFeature { get; init; }
+
+    /// <summary>
+    /// Update (or create) lifecycle subscriptions for an entity. This will soft delete all existing subscriptions for this entity_identifier and create new ones.
+    /// </summary>
+    [JsonPropertyName("update_app_lifecycle_subscription")]
+    public List<LifecycleSubscriptionKind>? UpdateAppLifecycleSubscription { get; init; }
+
+    /// <summary>
+    /// Delete all lifecycle subscriptions for an entity. Returns true if deleted successfully or if no subscriptions exist.
+    /// </summary>
+    [JsonPropertyName("delete_app_lifecycle_subscription")]
+    public bool? DeleteAppLifecycleSubscription { get; init; }
+
+    /// <summary>
+    /// Installs an app on the current account. Requires account admin permission.
+    /// </summary>
+    [JsonPropertyName("install_app")]
+    public InstallAppResponse? InstallApp { get; init; }
+
+    /// <summary>
+    /// Uninstalls an app from the current account. Requires account admin permission.
+    /// </summary>
+    [JsonPropertyName("uninstall_app")]
+    public AppDeletionResponse? UninstallApp { get; init; }
 
 }

@@ -41,7 +41,7 @@ public sealed partial class AppFeatureType
     public string? Type { get; init; }
 
     /// <summary>
-    /// The data of the app feature
+    /// The data of the app feature. Icon/logo fields (iconUrl, logoUrl, etc., including nested headerConfig.*.iconUrl) must be HTTPS URLs or Vibe icon names.
     /// </summary>
     [JsonPropertyName("data")]
     public string? Data { get; init; }
