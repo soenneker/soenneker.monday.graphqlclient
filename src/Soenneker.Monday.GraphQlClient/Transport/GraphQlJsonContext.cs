@@ -1830,6 +1830,8 @@ namespace Soenneker.Monday.GraphQlClient;
 [JsonSerializable(typeof(GraphQlResponse<ItemDescription>))]
 [JsonSerializable(typeof(ItemIdValue))]
 [JsonSerializable(typeof(GraphQlResponse<ItemIdValue>))]
+[JsonSerializable(typeof(ItemMetadataField))]
+[JsonSerializable(typeof(GraphQlResponse<ItemMetadataField>))]
 [JsonSerializable(typeof(ItemNicknameInput))]
 [JsonSerializable(typeof(GraphQlResponse<ItemNicknameInput>))]
 [JsonSerializable(typeof(ItemsJobItemCounts))]

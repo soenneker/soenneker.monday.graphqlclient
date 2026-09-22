@@ -15,6 +15,10 @@ public enum VibeAppState
 
     OLDPRIVATE,
 
-    OLDINTERNAL
+    OLDINTERNAL,
+
+    DISABLED,
+
+    OLDDISABLED
 
 }

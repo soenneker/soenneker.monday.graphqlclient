@@ -25,6 +25,8 @@ public enum ChatMessageKind
 
     BOARDDISCONNECTED,
 
-    CHIPS
+    CHIPS,
+
+    PROCESS
 
 }
