@@ -69,4 +69,16 @@ public sealed partial class VibeConnectedIntegrationDetail
     [JsonPropertyName("credentials_id")]
     public string? CredentialsId { get; init; }
 
+    /// <summary>
+    /// The credentials slot on the instance, needed to reconnect it
+    /// </summary>
+    [JsonPropertyName("credentials_key")]
+    public string? CredentialsKey { get; init; }
+
+    /// <summary>
+    /// The variable currently wired into that slot, so a reconnect updates it in place
+    /// </summary>
+    [JsonPropertyName("variable_key")]
+    public int? VariableKey { get; init; }
+
 }

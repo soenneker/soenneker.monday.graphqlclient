@@ -957,6 +957,10 @@ type Mutation {
   """
   set_form_password(formToken: String!, input: SetFormPasswordInput!): ResponseForm
   """
+  Execute an integration block with the provided field values
+  """
+  execute_integration_block(block_instance_id: ID!, inbound_field_values: JSON!): IntegrationExecutionResult
+  """
   Connect an existing project to a portfolio. When a callback_url is provided the mutation returns immediately with a process_id, and the result is POSTed to that URL once the operation completes. The callback payload is: { is_success: boolean, process_id: string, portfolio_item_id?: string }.
   """
   connect_project_to_portfolio(projectBoardId: ID!, portfolioBoardId: ID!, callback_url: String): ConnectProjectResult
@@ -1028,10 +1032,6 @@ type Mutation {
   Update mute notification settings for a board. Allows muting all notifications for all users, only for the current user, or setting mentions/assigns-only. Returns the updated mute state for the board. Requires appropriate permissions for muting all users.
   """
   update_mute_board_settings(board_id: String!, mute_state: BoardMuteState!, enabled: [CustomizableBoardSettings!]): [BoardMuteSettings!]
-  """
-  Execute an integration block with the provided field values
-  """
-  execute_integration_block(block_instance_id: ID!, inbound_field_values: JSON!): IntegrationExecutionResult
   """
   Creates a new app with the specified configuration.
   """
@@ -17272,2399 +17272,6 @@ enum ValidationErrorType {
 }
 
 """
-Knowledge base answer generated from snippets using LLM.
-"""
-type KnowledgeBaseAnswer {
-  """
-  List of knowledge base snippets used to generate the answer.
-  """
-  raw_snippets: [SnippetSearchResult!]
-  """
-  LLM-generated answer based on the knowledge base snippets.
-  """
-  answer: String
-}
-
-"""
-A knowledge base for monday.com which returns a list of snippet search results containing document content and metadata.
-"""
-type SnippetSearchResult {
-  """
-  The unique identifier of the snippet.
-  """
-  id: ID!
-  """
-  The title of the article.
-  """
-  title: String
-  """
-  The content of the snippet.
-  """
-  text: String
-  """
-  The parent document ID.
-  """
-  parent_id: ID
-  """
-  When the snippet was created.
-  """
-  created_at: String
-  """
-  When the snippet was last updated.
-  """
-  updated_at: String
-  """
-  The vector distance score. Lower is better. value between 0 and 1.
-  """
-  distance: Float
-  """
-  The URL of the source article.
-  """
-  url: String
-}
-
-type ConnectProjectResult {
-  """
-  Indicates if the operation was successful.
-  """
-  success: Boolean
-  """
-  A message describing the result of the operation.
-  """
-  message: String
-  """
-  The ID of the created portfolio item, if successful.
-  """
-  portfolio_item_id: String
-  """
-  Unique process ID for tracking this request. Included in the callback payload when the operation completes.
-  """
-  process_id: ID
-}
-
-type CreatePortfolioResult {
-  """
-  The ID of the solution that was created
-  """
-  solution_live_version_id: String
-  """
-  Indicates if the operation was successful.
-  """
-  success: Boolean
-  """
-  A message describing the result of the operation.
-  """
-  message: String
-  """
-  Unique process ID for tracking this request. Included in the callback payload when the operation completes.
-  """
-  process_id: ID
-}
-
-"""
-The privacy kind for a board
-"""
-enum BoardKindInput {
-  PUBLIC
-  PRIVATE
-  SHARE
-}
-
-type ChangeBoardKindResult {
-  id: ID!
-  board_kind: String!
-}
-
-input ColumnPropertyInput {
-  """
-  The ID of the column
-  """
-  column_id: String!
-  """
-  Whether the column is visible
-  """
-  visible: Boolean!
-}
-
-input ColumnsConfigInput {
-  """
-  Configuration for main board columns
-  """
-  column_properties: [ColumnPropertyInput!]
-  """
-  Configuration for subitems columns
-  """
-  subitems_column_properties: [ColumnPropertyInput!]
-  """
-  Number of floating columns to display
-  """
-  floating_columns_count: Int
-  """
-  Order of columns
-  """
-  column_order: [String!]
-}
-
-"""
-A single conditional formatting condition that defines when and how to highlight rows or cells
-"""
-input ConditionalFormattingConditionInput {
-  """
-  Unique identifier for the condition (client-generated GUID)
-  """
-  id: String
-  """
-  The formatting to apply when this condition matches
-  """
-  formatting: ConditionalFormattingFormattingInput
-  """
-  Rules that trigger this condition
-  """
-  rules: [ConditionalFormattingRuleBucketInput!]
-  """
-  What to highlight when the condition matches
-  """
-  target: ConditionalFormattingTargetInput
-}
-
-input ConditionalFormattingFormattingInput {
-  """
-  Color name(s) to apply as highlight (e.g. ["orange"], ["dark_red", "done-green"])
-  """
-  highlight_color: [String!]
-}
-
-input ConditionalFormattingRuleBucketInput {
-  """
-  Bucket type (e.g. RULE)
-  """
-  type: String
-  """
-  Logical operator (e.g. ANY_OF, ALL_OF)
-  """
-  operator: String
-  """
-  The rule definition
-  """
-  rule: ConditionalFormattingRuleInput
-}
-
-input ConditionalFormattingRuleContextInput {
-  """
-  ID of the column to evaluate
-  """
-  column_id: String
-  """
-  Type of the column (e.g. color, text, date)
-  """
-  column_type: String
-  """
-  Column attribute to compare against
-  """
-  compare_attribute: String
-  """
-  Board ID the column belongs to
-  """
-  board_id: ID
-}
-
-input ConditionalFormattingRuleInput {
-  """
-  Rule type (e.g. BOARD_COLUMN)
-  """
-  type: String
-  """
-  The column context for this rule
-  """
-  context: ConditionalFormattingRuleContextInput
-  """
-  Array of internal label IDs to match against (e.g. [2] for Stuck)
-  """
-  compare_value: JSON
-}
-
-input ConditionalFormattingTargetInput {
-  """
-  Column IDs to highlight
-  """
-  column_ids: [String!]
-  """
-  Whether to highlight the entire row
-  """
-  entire_row: Boolean
-}
-
-"""
-Configuration settings for group by column
-"""
-input GroupByColumnConfigInput {
-  """
-  Sort settings for the column
-  """
-  sortSettings: GroupBySortSettingsInput
-}
-
-"""
-Condition for grouping items by column
-"""
-input GroupByConditionInput {
-  """
-  ID of the column to group by
-  """
-  columnId: String!
-  """
-  Configuration for the group by column
-  """
-  config: GroupByColumnConfigInput
-}
-
-"""
-Settings for grouping board items
-"""
-input GroupBySettingsInput {
-  """
-  List of conditions for grouping items
-  """
-  conditions: [GroupByConditionInput!]!
-  """
-  Whether to hide groups with no items
-  """
-  hideEmptyGroups: Boolean
-}
-
-"""
-Sort settings for group by configuration
-"""
-input GroupBySortSettingsInput {
-  """
-  Sort direction for the group
-  """
-  direction: SortDirection!
-  """
-  Type of sorting to apply
-  """
-  type: String
-}
-
-"""
-Direction for sorting items
-"""
-enum SortDirection {
-  ASC
-  DESC
-}
-
-"""
-Settings configuration for table view display options
-"""
-input TableViewSettingsInput {
-  """
-  Column visibility configuration for the board view
-  """
-  columns: ColumnsConfigInput
-  """
-  The group by to apply to the board view
-  """
-  group_by: GroupBySettingsInput
-}
-
-"""
-Specifies the entity scope for the created view
-"""
-enum ViewContext {
-  BOARD
-}
-
-"""
-Available view types for board displays
-"""
-enum ViewKind {
-  DASHBOARD
-  TABLE
-  FORM
-  APP
-}
-
-"""
-Type of mutation operation
-"""
-enum ViewMutationKind {
-  CREATE
-  UPDATE
-}
-
-"""
-A page of live workflow automations with cursor-based pagination metadata
-"""
-type LiveWorkflowAutomationsPage {
-  """
-  List of live workflow automations in this page
-  """
-  data: [WorkflowAutomation!]
-  """
-  Cursor-based pagination metadata
-  """
-  page_info: WorkflowAutomationsPageInfo
-}
-
-"""
-A workflow and its steps
-"""
-type WorkflowAutomation {
-  """
-  Workflow entity ID
-  """
-  id: ID
-  """
-  Workflow title
-  """
-  title: String
-  """
-  Workflow description
-  """
-  description: String
-  """
-  Whether the workflow is currently active
-  """
-  active: Boolean
-  """
-  Last update timestamp
-  """
-  updated_at: String
-  """
-  Creation timestamp
-  """
-  created_at: String
-  """
-  The steps that make up this workflow
-  """
-  steps: [WorkflowStep!]
-}
-
-"""
-Cursor-based pagination metadata for live workflow automation queries
-"""
-type WorkflowAutomationsPageInfo {
-  """
-  Whether there are more results beyond the current page
-  """
-  has_next_page: Boolean
-  """
-  Cursor of the last item in this page; pass as last_id to fetch the next page
-  """
-  end_cursor: ID
-}
-
-"""
-Cursor-based pagination parameters for workflow automation queries
-"""
-input WorkflowAutomationsPaginationInput {
-  """
-  Maximum number of results to return (default 50, max 100)
-  """
-  limit: Int
-  """
-  Cursor of the last item from the previous page; pass page_info.end_cursor from the previous response
-  """
-  last_id: ID
-}
-
-"""
-Identifiers for a newly created workflow
-"""
-type WorkflowBuilderCreateResult {
-  """
-  Stable workflow entity ID
-  """
-  workflow_object_id: ID
-  """
-  Draft workflow ID
-  """
-  workflow_draft_id: ID
-}
-
-"""
-Privacy level for a workflow
-"""
-enum WorkflowBuilderPrivacyKind {
-  PUBLIC
-  PRIVATE
-  SHAREABLE
-}
-
-"""
-Identifiers for a published workflow
-"""
-type WorkflowBuilderPublishResult {
-  """
-  Stable workflow entity ID
-  """
-  workflow_object_id: ID
-  """
-  Live workflow ID after promotion
-  """
-  workflow_live_id: ID
-}
-
-"""
-A step instance within a workflow
-"""
-type WorkflowStep {
-  """
-  Unique node ID within the workflow
-  """
-  node_id: ID
-  """
-  ID of the block type this step uses
-  """
-  block_reference_id: ID
-  """
-  Display title of the step
-  """
-  title: String
-}
-
-"""
-The results of the search for benchmark.
-"""
-type SearchBenchmarkResults {
-  data: String
-}
-
-"""
-Paginated list of items with their dependency predecessor edges for a board
-"""
-type BoardDependencies {
-  """
-  List of items with their predecessor edges for the current page
-  """
-  items: [ItemDependency!]
-  """
-  Total number of items across all pages
-  """
-  total_count: Int
-}
-
-"""
-The complete graph export for a board
-"""
-type BoardGraphExport {
-  """
-  The ID of the board
-  """
-  boardId: String
-  """
-  The graph data structure
-  """
-  graphData: JSON
-  """
-  The timestamp when the graph was exported
-  """
-  exportedAt: String
-  """
-  The total number of nodes in the graph
-  """
-  nodeCount: Int
-  """
-  The total number of edges in the graph
-  """
-  edgeCount: Int
-  """
-  The attributes of the graph
-  """
-  graphAttributes: JSON
-  """
-  The cycles in the graph
-  """
-  cycles: JSON
-}
-
-"""
-Configuration record for a dependency column
-"""
-type DependencyColumnConfig {
-  """
-  The ID of the configuration record
-  """
-  id: ID
-  """
-  The account ID
-  """
-  account_id: ID
-  """
-  The board ID
-  """
-  board_id: ID
-  """
-  Configuration data containing mode and is_new_dependency
-  """
-  data: JSON
-  """
-  Creation timestamp
-  """
-  created_at: String
-  """
-  Last update timestamp
-  """
-  updated_at: String
-  """
-  The type of configuration (always "dependency")
-  """
-  config_type: String
-}
-
-"""
-Result containing dependency column configurations for a board
-"""
-type DependencyColumnConfigResult {
-  """
-  The ID of the board
-  """
-  board_id: ID
-  """
-  Array of dependency column configurations
-  """
-  dependency_columns: [DependencyColumnConfig!]
-}
-
-"""
-A dependency edge representing a predecessor relationship between two items
-"""
-type DependencyEdge {
-  """
-  The ID of the predecessor item
-  """
-  source_item_id: ID
-  """
-  The type of dependency relationship (FS, SS, FF, SF)
-  """
-  dependency_type: DependencyRelation
-  """
-  The lag in days between the predecessor and dependent item (can be negative)
-  """
-  lag: Int
-}
-
-"""
-Input type for updating a single pulse dependency value
-"""
-input DependencyPulseValueInput {
-  """
-  The ID of the pulse to update the dependency value for
-  """
-  pulseId: ID!
-  """
-  The value of the dependency pulse value to update
-  """
-  value: DependencyValueInput!
-}
-
-"""
-The type of the dependency related column
-"""
-enum DependencyRelatedColumnTypes {
-  DATE
-  TIMELINE
-}
-
-"""
-The value of the dependency related column. when updating a date column the from and to fields should have the same value
-"""
-input DependencyRelatedValueInput {
-  """
-  From value
-  """
-  from: String
-  """
-  To value
-  """
-  to: String
-}
-
-"""
-Type of dependency relationship between items
-"""
-enum DependencyRelation {
-  FS
-  SS
-  FF
-  SF
-}
-
-"""
-Input type for updating dependency column value, supporting both adding and removing dependencies
-"""
-input DependencyValueInput {
-  """
-  List of pulses to add as dependencies with their configuration
-  """
-  added_pulse: [UpdateDependencyColumnInput!]
-  """
-  List of pulses to remove from dependencies
-  """
-  removed_pulse: [UpdateDependencyColumnInput!]
-}
-
-"""
-A single event record
-"""
-type Event {
-  """
-  The unique identifier of the event
-  """
-  id: ID
-  """
-  The type of the event
-  """
-  type: String
-  """
-  The current state of the event
-  """
-  state: String
-  """
-  The ID of the board associated with this event
-  """
-  board_id: ID
-  """
-  The event data payload
-  """
-  event_data: JSON
-  """
-  The timestamp of the origin last update
-  """
-  origin_last_updated: String
-  """
-  The timestamp when the event was created
-  """
-  created_at: String
-  """
-  The timestamp when the event was last updated
-  """
-  updated_at: String
-}
-
-"""
-Paginated export of events
-"""
-type EventsExport {
-  """
-  The list of events
-  """
-  events: [Event!]
-  """
-  The total number of events matching the query
-  """
-  total: Int
-  """
-  The maximum number of events returned
-  """
-  limit: Int
-  """
-  The offset from which events are returned
-  """
-  offset: Int
-}
-
-"""
-An item and all its dependency predecessor edges
-"""
-type ItemDependency {
-  """
-  The ID of the item
-  """
-  item_id: ID
-  """
-  List of predecessor dependency edges for this item
-  """
-  predecessors: [DependencyEdge!]
-}
-
-"""
-Metadata wrapper containing payload information for dependency configuration
-"""
-input MetadataInput {
-  """
-  The dependency configuration payload containing type and lag settings
-  """
-  payload: PayloadInput
-}
-
-"""
-Input type for dependency metadata payload containing dependency type and lag configuration
-"""
-input PayloadInput {
-  """
-  Type of dependency relationship between the items
-  """
-  dependency_type: DependencyRelation
-  """
-  Number of days offset between the dependent items (can be negative)
-  """
-  lag: Int
-}
-
-"""
-Input type for timeline dates with from and to date strings
-"""
-input TimelineDateInput {
-  """
-  The ID of the successor pulse whose date should be updated
-  """
-  id: ID!
-  """
-  Start date of the timeline in ISO format
-  """
-  from: String!
-  """
-  End date of the timeline in ISO format
-  """
-  to: String!
-}
-
-"""
-Input type for updating a single dependency relationship between pulses
-"""
-input UpdateDependencyColumnInput {
-  """
-  The ID of the pulse to create or remove a dependency relationship with
-  """
-  linkedPulseId: ID!
-  """
-  Optional metadata containing dependency configuration (type and lag)
-  """
-  metadata: MetadataInput
-}
-
-type AuditEventCatalogueEntry {
-  name: String
-  description: String
-  metadata_details: JSON
-}
-
-type AuditLogEntry {
-  timestamp: String
-  account_id: String
-  user: User
-  event: String
-  slug: String
-  ip_address: String
-  user_agent: String
-  client_name: String
-  client_version: String
-  os_name: String
-  os_version: String
-  device_name: String
-  device_type: String
-  activity_metadata: JSON
-}
-
-"""
-A paginated collection of audit log entries. This object contains two properties:
-logs, the requested page of AuditLogEntry objects matching your query, and pagination, which 
-contains metadata about the current and next page (if present).
-"""
-type AuditLogPage {
-  """
-  List of audit log entries for the current page. See the audit log entry object
-    for more details on this object.
-  """
-  logs: [AuditLogEntry!]
-  """
-  Pagination metadata. See the pagination object for more details.
-  """
-  pagination: Pagination
-}
-
-"""
-Pagination metadata: indicates the current page and page size, whether there
-are more pages, and the next page number if one exists. Note that the page size reflects
-the number of items requested, not the number of items returned.
-"""
-type Pagination {
-  """
-  Current page number (1-based)
-  """
-  page: Int
-  """
-  Number of items per page
-  """
-  page_size: Int
-  """
-  Indicates if there are more pages available
-  """
-  has_more_pages: Boolean
-  """
-  Number of the next page
-  """
-  next_page_number: Int
-}
-
-"""
-Result of creating an API user.
-"""
-type CreateApiUserResult {
-  """
-  The user ID of the created API user.
-  """
-  id: ID
-}
-
-"""
-Result of creating multiple users.
-"""
-type CreateMultipleUsersResult {
-  """
-  Successfully created users.
-  """
-  created_users: [User!]
-  """
-  Users that could not be created.
-  """
-  uncreated_users: [UncreatedUser!]
-}
-
-"""
-Input for creating a single user.
-"""
-input CreateUserInput {
-  """
-  The kind of user to create.
-  """
-  kind: UserKindValue!
-  """
-  The name for the user.
-  """
-  name: String!
-  """
-  The email for the user.
-  """
-  email: String!
-  """
-  The title for the user.
-  """
-  title: String
-  """
-  The user creation flow to use.
-  """
-  user_creation_flow: UserCreationFlow!
-  """
-  The invitation method for the user.
-  """
-  invitation_method: CreateUserInvitationMethod!
-  """
-  The activation status for the user.
-  """
-  status: UserStatus = ACTIVE
-  """
-  Whether the email is confirmed.
-  """
-  confirmed_email: Boolean = true
-  """
-  Photo URL for the user (HTTPS only).
-  """
-  photo_url: String
-}
-
-"""
-The invitation method allowed when creating a user via create_multiple_users.
-"""
-enum CreateUserInvitationMethod {
-  API_USER_CREATION
-  AGENT_USER_CREATION
-  SYSTEM_CREATION
-}
-
-"""
-A user whose profile picture could not be updated, with the requested URL and failure reason.
-"""
-type FailedUserProfilePicture {
-  """
-  The ID of the user that failed to update.
-  """
-  id: ID!
-  """
-  The profile picture URL that was requested.
-  """
-  photo_url: String
-  """
-  The reason the profile picture could not be updated.
-  """
-  reason: String
-}
-
-"""
-The method by which a user was added to the account.
-"""
-enum InvitationMethod {
-  USER
-  SCIM
-  SSO
-  AUTH_DOMAIN
-  FIRST_USER
-  CONSOLIDATION
-  INTERNAL_CREATION
-  UNKNOWN
-  SERVICE_PORTAL_AUTH_DOMAIN
-  SERVICE_PORTAL_USER_INVITATION
-  API_USER_CREATION
-  AGENT_USER_CREATION
-  SYSTEM_CREATION
-}
-
-"""
-URLs for the user's profile photo in various sizes.
-"""
-type PhotoUrl {
-  """
-  The user's photo in original size.
-  """
-  original: String
-  """
-  The user's photo in small size (150x150).
-  """
-  small: String
-  """
-  The user's photo in thumbnail size (100x100).
-  """
-  thumb: String
-  """
-  The user's photo in small thumbnail size (50x50).
-  """
-  thumb_small: String
-  """
-  The user's photo in tiny size (30x30).
-  """
-  tiny: String
-}
-
-"""
-A user that could not be created, returning the original input and failure reason.
-"""
-type UncreatedUser {
-  """
-  The kind of user to create.
-  """
-  kind: String
-  """
-  The name for the user.
-  """
-  name: String
-  """
-  The email for the user.
-  """
-  email: String
-  """
-  The title for the user.
-  """
-  title: String
-  """
-  The activation status for the user.
-  """
-  status: UserStatus
-  """
-  Whether the email is confirmed.
-  """
-  confirmed_email: Boolean
-  """
-  Photo URL for the user (HTTPS only).
-  """
-  photo_url: String
-  """
-  The reason the user could not be created.
-  """
-  reason: String
-}
-
-"""
-A user that could not be updated, returning the original input and failure reason.
-"""
-type UnupdatedUser {
-  """
-  The user ID that failed to update.
-  """
-  id: ID!
-  """
-  The name that was requested.
-  """
-  name: String
-  """
-  The title that was requested.
-  """
-  title: String
-  """
-  The photo URL that was requested.
-  """
-  photo_url: String
-  """
-  The status that was requested.
-  """
-  status: UpdatableUserStatus
-  """
-  The reason the user could not be updated.
-  """
-  reason: String
-}
-
-"""
-Activation status values that can be set via mutations.
-"""
-enum UpdatableUserStatus {
-  ACTIVE
-  INACTIVE
-}
-
-"""
-Input for updating a single user.
-"""
-input UpdateUserInput {
-  """
-  The user ID to update.
-  """
-  id: ID!
-  """
-  New name for the user.
-  """
-  name: String
-  """
-  New title for the user.
-  """
-  title: String
-  """
-  New photo URL for the user (HTTPS only).
-  """
-  photo_url: String
-  """
-  New activation status (ACTIVE or INACTIVE).
-  """
-  status: UpdatableUserStatus
-}
-
-"""
-A user ID paired with the profile picture URL to set for that user.
-"""
-input UpdateUserProfilePictureInput {
-  """
-  The ID of the user whose profile picture will be updated.
-  """
-  id: ID!
-  """
-  The new profile picture URL. Must be an absolute HTTPS URL.
-  """
-  photo_url: String!
-}
-
-"""
-Result of updating the profile picture of multiple users.
-"""
-type UpdateUsersProfilePictureResult {
-  """
-  Users whose profile picture was successfully updated.
-  """
-  updated_users: [User!]
-  """
-  Users whose profile picture could not be updated.
-  """
-  failed_to_update: [FailedUserProfilePicture!]
-}
-
-"""
-Result of updating multiple users.
-"""
-type UpdateUsersResult {
-  """
-  Successfully updated users.
-  """
-  updated_users: [User!]
-  """
-  Users that could not be updated.
-  """
-  unupdated_users: [UnupdatedUser!]
-}
-
-"""
-User config of a user kind within the account.
-"""
-type UserConfig {
-  """
-  The user kind for the user config.
-  """
-  kind: String!
-  """
-  The role ID associated with this user config.
-  """
-  role_id: ID!
-  """
-  The visibility for this user config.
-  """
-  visibility: [String!]!
-  """
-  The behavior IDs that are true for this user kind.
-  """
-  behaviors: [String!]!
-  """
-  The group this user config belongs to.
-  """
-  group: String!
-}
-
-"""
-The user creation flow/context type.
-"""
-enum UserCreationFlow {
-  API_USER_CREATION
-  AGENT_USER_CREATION
-  SYSTEM_CREATION
-}
-
-"""
-Filter for user kinds, including kind groups.
-"""
-enum UserKindFilter {
-  ADMIN
-  MEMBER
-  GUEST
-  VIEW_ONLY
-  AGENT_MEMBER
-  PERSONAL_AGENT_MEMBER
-  AGENT_SIGNUP_USER
-  WORK_MANAGEMENT_AGENT_MEMBER
-  EXTERNAL_AGENT_MEMBER
-  EXTERNAL_AGENT_DETACHED_MEMBER
-  WORKSPACE_PRIMARY_AGENT_MEMBER
-  SERVICE_USER
-  VIBE_USER
-  PORTAL
-  PORTFOLIO_API_USER
-  NEXUS_API_USER
-  RESOURCE_DIRECTORY_API_USER
-  OMNICHANNEL_API_USER
-  GOALS_API_USER
-  PROJECTS_API_USER
-  SPRINT_MANAGEMENT_API_USER
-  CRM_COMMERCE_API_USER
-  CAMPAIGNS_API_USER
-  DATA_RETENTION_API_USER
-  MONDAY_SERVICE_API_USER
-  AI_PLATFORM_AGENT_API_USER
-  DEPENDENCIES_API_USER
-  HISTORICAL_TRACKING_BACKFILL_API_USER
-  ENTITY_KNOWLEDGE_API_USER
-  ORG_HUB_API_USER
-  BASIC
-}
-
-"""
-Filter users by kind. Supports individual kinds and groups (e.g. BASIC = admin, member, guest, view_only). The not_in values are removed from the expanded in set.
-"""
-input UserKindFilterInput {
-  """
-  Include users matching these kinds or kind groups.
-  """
-  in: [UserKindFilter!]
-  """
-  Exclude users matching these kinds or kind groups.
-  """
-  not_in: [UserKindFilter!]
-}
-
-"""
-A specific user kind value.
-"""
-enum UserKindValue {
-  ADMIN
-  MEMBER
-  GUEST
-  VIEW_ONLY
-  AGENT_MEMBER
-  PERSONAL_AGENT_MEMBER
-  AGENT_SIGNUP_USER
-  WORK_MANAGEMENT_AGENT_MEMBER
-  EXTERNAL_AGENT_MEMBER
-  EXTERNAL_AGENT_DETACHED_MEMBER
-  WORKSPACE_PRIMARY_AGENT_MEMBER
-  SERVICE_USER
-  VIBE_USER
-  PORTAL
-  PORTFOLIO_API_USER
-  NEXUS_API_USER
-  RESOURCE_DIRECTORY_API_USER
-  OMNICHANNEL_API_USER
-  GOALS_API_USER
-  PROJECTS_API_USER
-  SPRINT_MANAGEMENT_API_USER
-  CRM_COMMERCE_API_USER
-  CAMPAIGNS_API_USER
-  DATA_RETENTION_API_USER
-  MONDAY_SERVICE_API_USER
-  AI_PLATFORM_AGENT_API_USER
-  DEPENDENCIES_API_USER
-  HISTORICAL_TRACKING_BACKFILL_API_USER
-  ENTITY_KNOWLEDGE_API_USER
-  ORG_HUB_API_USER
-}
-
-"""
-The activation status of a user.
-"""
-enum UserStatus {
-  ACTIVE
-  INACTIVE
-  PENDING
-}
-
-"""
-The direction to sort users.
-"""
-enum UsersSortDirection {
-  ASC
-  DESC
-}
-
-"""
-The field to sort users by.
-"""
-enum UsersSortField {
-  CREATED_AT
-}
-
-"""
-Input for sorting users.
-"""
-input UsersSortInput {
-  """
-  The field to sort by.
-  """
-  field: UsersSortField!
-  """
-  The sort direction.
-  """
-  direction: UsersSortDirection!
-}
-
-"""
-A page of automations with cursor for pagination
-"""
-type AutomationsPage {
-  """
-  Opaque cursor for fetching the next page. Null if no more results.
-  """
-  cursor: String
-  """
-  The automations in this page
-  """
-  items: [BoardAutomation!]
-  """
-  Read-only automations on this board that were set up in an older way. These ARE automations on the user's board — always list and describe them together with `items`, never omit them. They cannot be activated, deactivated, edited, or deleted. Resolved only for board-scoped queries (null otherwise); best-effort, so it may carry an error marker instead of data.
-  """
-  legacy_automations: JSON
-}
-
-"""
-A board automation
-"""
-type BoardAutomation {
-  """
-  Automation ID
-  """
-  id: ID
-  """
-  Creator user ID
-  """
-  user_id: ID
-  """
-  Whether the automation is active
-  """
-  active: Boolean
-  """
-  Automation title
-  """
-  title: String
-  """
-  Automation description
-  """
-  description: String
-  """
-  Creation timestamp
-  """
-  created_at: String
-  """
-  Last update timestamp
-  """
-  updated_at: String
-  """
-  Host data (board ID and type)
-  """
-  workflow_host_data: JSON
-  """
-  Workflow block definitions
-  """
-  workflow_blocks: JSON
-  """
-  Workflow variable definitions
-  """
-  workflow_variables: JSON
-  """
-  Automation importance level
-  """
-  importance: Int
-  """
-  Notice message for the automation
-  """
-  notice_message: String
-  """
-  Template reference ID if created from template
-  """
-  template_reference_id: ID
-}
-
-"""
-Input for creating a board automation. Provide template_reference_id to create from a template, or workflow_blocks and workflow_variables for a direct creation.
-"""
-input BoardAutomationCreateInput {
-  """
-  Board ID to host the automation
-  """
-  board_id: String!
-  """
-  Automation title
-  """
-  title: String!
-  """
-  Automation description
-  """
-  description: String
-  """
-  Template reference ID (for template-based creation)
-  """
-  template_reference_id: ID
-  """
-  Automation block definitions (for direct creation)
-  """
-  workflow_blocks: JSON
-  """
-  Automation variable definitions (for direct creation)
-  """
-  workflow_variables: JSON
-  """
-  Template variable values (for template-based creation)
-  """
-  workflow_variables_values: JSON
-}
-
-"""
-Result of creating a board automation
-"""
-type BoardAutomationCreateResult {
-  """
-  The ID of the created automation
-  """
-  workflow_id: ID
-}
-
-"""
-Result of deleting a board automation
-"""
-type BoardAutomationDeleteResult {
-  """
-  Whether the deletion was successful
-  """
-  is_success: Boolean
-}
-
-"""
-Available AI model tiers.
-"""
-enum AiModel {
-  MONDAY_FAST
-  MONDAY_STANDARD
-  MONDAY_POWERFUL
-}
-
-"""
-Configuration options for the AI completion request.
-"""
-input RunPromptConfigInput {
-  """
-  The AI model to use for the completion.
-  """
-  model: AiModel
-  """
-  An optional system prompt to set context for the model.
-  """
-  system_prompt: String
-  """
-  Sampling temperature between 0 and 1.
-  """
-  temperature: Float
-  """
-  Maximum number of tokens to generate.
-  """
-  max_tokens: Int
-}
-
-"""
-The result of running a prompt against an AI model.
-"""
-type RunPromptResult {
-  """
-  The generated text content from the model.
-  """
-  content: String
-}
-
-"""
-Enum representing different usage types for board operations
-"""
-enum BoardUsage {
-  CONVERT_TO_PROJECT
-  CONNECT_TO_PORTFOLIO
-}
-
-input ColumnsMappingInput {
-  project_status: ID!
-  project_timeline: ID!
-  project_owner: ID!
-}
-
-input ConvertBoardToProjectInput {
-  board_id: ID!
-  column_mappings: ColumnsMappingInput!
-  callback_url: String
-}
-
-type ConvertBoardToProjectResult {
-  success: Boolean
-  message: String
-  projectId: ID
-  process_id: String
-}
-
-input CreateProjectInput {
-  """
-  The name of the project to create
-  """
-  name: String!
-  """
-  The project's privacy setting (public / private)
-  """
-  board_kind: BoardKind!
-  """
-  Optional template id to create the project from. Currently only supported for solution templates
-  """
-  template_id: ID
-  """
-  Optional list of companion features to enable (currently only "resource_planner")
-  """
-  companions: [String!]
-  """
-  Optional workspace ID to associate with the project
-  """
-  workspace_id: String
-  """
-  Optional folder ID to associate with the project
-  """
-  folder_id: String
-  """
-  Optional external callback URL where the project ID will be sent after async creation. The callback will receive a POST request with { is_success: boolean, process_id: string, project_id?: number }
-  """
-  callback_url: String
-}
-
-type CreateProjectResult {
-  """
-  Indicates if the project creation request was accepted
-  """
-  success: Boolean
-  """
-  Success message when project creation is initiated
-  """
-  message: String
-  """
-  Error message if project creation request failed
-  """
-  error: String
-  """
-  Unique process ID for tracking this creation request. This will be included in the callback when creation completes.
-  """
-  process_id: ID
-}
-
-"""
-Type of entity to extract from text.
-"""
-enum AiColumnEntity {
-  email_address
-  first_name
-  last_name
-  phone_number
-  company_name
-  domain_name
-  url
-  date
-  time
-  year
-  custom
-}
-
-"""
-Optional settings controlling backfill behavior when configuring an AI column.
-"""
-input AiColumnExtraSettingsInput {
-  """
-  Whether to immediately apply the AI automation to existing items. Defaults to true.
-  """
-  run_backfill: Boolean
-}
-
-"""
-Desired output length relative to the input text.
-"""
-enum AiColumnImproverLength {
-  same
-  shorter
-  longer
-}
-
-"""
-Target language for translation.
-"""
-enum AiColumnLanguage {
-  english
-  spanish
-  french
-  german
-  hebrew
-  chinese
-  korean
-  arabic
-  bengali
-  danish
-  dutch
-  hindi
-  indonesian
-  italian
-  japanese
-  norwegian
-  polish
-  portuguese
-  russian
-  swedish
-  thai
-  turkish
-  vietnamese
-}
-
-"""
-Approximate desired length of generated text.
-"""
-enum AiColumnOutputLength {
-  sentence
-  paragraph
-  brief
-  in_depth
-}
-
-"""
-A group of people available for AI-based assignment.
-"""
-input AiColumnPersonGroupInput {
-  """
-  Array of user IDs in this group.
-  """
-  user_ids: [Int!]!
-  """
-  Description of this group (e.g., role, team name, or assignment criteria).
-  """
-  description: String!
-}
-
-"""
-Level of text refinement to apply.
-"""
-enum AiColumnRefinementLevel {
-  minimal_changes
-  moderate_changes
-  high_creativity
-}
-
-"""
-The result of removing AI configuration from a column.
-"""
-type AiColumnRemoveResult {
-  """
-  The ID of the column that had AI removed.
-  """
-  column_id: ID!
-  """
-  Whether the AI configuration was successfully removed.
-  """
-  success: Boolean!
-}
-
-"""
-The result of configuring AI on a column.
-"""
-type AiColumnResult {
-  """
-  The ID of the column that was configured.
-  """
-  column_id: ID!
-}
-
-"""
-The data source for AI column processing.
-"""
-enum AiColumnSource {
-  item_name
-  thread
-  column
-  emails_and_activities
-}
-
-"""
-Writing tone/style for AI text generation.
-"""
-enum AiColumnTone {
-  empathic
-  promotional
-  confident
-  professional
-  natural
-  casual
-  friendly
-  same
-}
-
-"""
-Account context information.
-"""
-type AccountContext {
-  """
-  Unique account identifier.
-  """
-  id: ID
-  """
-  Account name.
-  """
-  name: String
-  """
-  Account industry. Examples: "Technology", "Healthcare", "Finance".
-  """
-  industry: String
-  """
-  Industry sector.
-  """
-  sector: String
-  """
-  Industry sub-sector.
-  """
-  sub_sector: String
-  """
-  Primary use cases for the account.
-  """
-  golden_use_cases: [String!]
-  """
-  Platform usage categories. Examples: "project_management", "crm", "marketing".
-  """
-  platform_usages: [String!]
-  """
-  Active monday.com products. Values: "core", "crm", "software", "marketing", "project_management", "service".
-  """
-  active_product_kinds: [String!]
-}
-
-"""
-A board where the user has item assignments.
-"""
-type AssignedBoard {
-  """
-  Board ID
-  """
-  board_id: ID
-  """
-  Number of items assigned to the user on this board
-  """
-  assignment_count: Int
-  """
-  Board details resolved via federation from the boards subgraph.
-  """
-  board: Board
-}
-
-"""
-Intelligence data.
-"""
-type Intelligence {
-  """
-  Top visited boards ranked by relevance (frequency + recency).
-  """
-  relevant_boards(limit: Int): [RelevantBoard!]
-  """
-  Top loaded docs ranked by relevance (frequency + recency).
-  """
-  relevant_docs(limit: Int): [RelevantDoc!]
-  """
-  Top related users ranked by relevance (multi-signal frequency + recency).
-  """
-  relevant_people(limit: Int): [RelevantPerson!]
-  """
-  User and account context information.
-  """
-  context: UserContextResponse
-  """
-  Boards where the user has item assignments.
-  """
-  assigned_boards(user_id: ID, size: Int): [AssignedBoard!]
-}
-
-"""
-A board ranked by relevance based on visit frequency and recency.
-"""
-type RelevantBoard {
-  """
-  Board ID
-  """
-  id: ID
-  """
-  Board details resolved via federation from the boards subgraph.
-  """
-  board: Board
-}
-
-"""
-A doc ranked by relevance based on load frequency and recency.
-"""
-type RelevantDoc {
-  """
-  Document ID
-  """
-  id: ID
-  """
-  Document object ID — the identifier that appears in the doc's URL.
-  """
-  object_id: ID
-  """
-  Document details resolved via federation from the docs subgraph.
-  """
-  document: Document
-}
-
-"""
-A user ranked by relevance based on interaction frequency and recency.
-"""
-type RelevantPerson {
-  """
-  User ID
-  """
-  id: ID
-  """
-  User details resolved via federation from the users subgraph.
-  """
-  user: User
-}
-
-"""
-User context information.
-"""
-type UserContext {
-  """
-  Unique user identifier.
-  """
-  id: ID
-  """
-  User display name.
-  """
-  name: String
-  """
-  User job title.
-  """
-  title: String
-  """
-  User email address.
-  """
-  email: String
-  """
-  User type. Values: null (regular), "guest", "view_only", "portal_user".
-  """
-  kind: String
-  """
-  User job role. Examples: "project_manager", "marketing_manager", "ceo".
-  """
-  job_role: String
-  """
-  User job department. Examples: "engineering", "marketing", "sales", "hr".
-  """
-  job_department: String
-  """
-  Organizational department within the workspace.
-  """
-  department: String
-  """
-  User time zone. Examples: "America/New_York", "Europe/London".
-  """
-  time_zone: String
-  """
-  User locale for date and number formatting. Examples: "en-US", "de-DE".
-  """
-  locale: String
-  """
-  Number of days since the user became active.
-  """
-  tenure_days: Int
-}
-
-"""
-Combined user and account context.
-"""
-type UserContextResponse {
-  """
-  User context.
-  """
-  user: UserContext
-  """
-  Account context.
-  """
-  account: AccountContext
-}
-
-"""
-Structured result data for a completed or partially-completed operation
-"""
-type AsyncJobResult {
-  """
-  Total items in the operation
-  """
-  total: Int
-  """
-  Successfully processed items
-  """
-  succeeded: Int
-  """
-  Items that failed
-  """
-  failed: Int
-  """
-  Operation-specific details (failed item IDs, report URLs, etc.)
-  """
-  details: JSON
-}
-
-"""
-Status information for an async job
-"""
-type AsyncJobStatus {
-  """
-  Unique job identifier
-  """
-  id: ID
-  """
-  Current job status
-  """
-  status: JobState
-  """
-  When the job was created (ISO 8601)
-  """
-  created_at: String
-  """
-  When the job was last updated (ISO 8601)
-  """
-  updated_at: String
-  """
-  Error description if the job failed
-  """
-  error: String
-  """
-  Structured result data for completed or partially-completed operations
-  """
-  result: AsyncJobResult
-}
-
-"""
-Status of an async job
-"""
-enum JobState {
-  PENDING
-  RUNNING
-  COMPLETED
-  FAILED
-  EXPIRED
-  CANCELLED
-}
-
-"""
-A monday dev sprint.
-"""
-type Sprint {
-  """
-  monday dev sprint unique identifier
-  """
-  id: ID!
-  """
-  monday dev sprint name
-  """
-  name: String
-  """
-  items associated with the monday dev sprint
-  """
-  items: [Item!]
-  """
-  date at which the monday dev sprint start action was performed, null if the sprint was never started
-  """
-  start_date: Date
-  """
-  date at which the monday dev sprint complete action was performed, null if the sprint was never completed
-  """
-  end_date: Date
-  """
-  user-editable planned timeline for the monday dev sprint, which may differ from its start and complete dates
-  """
-  timeline: SprintTimeline
-  """
-  current state of the monday dev sprint
-  """
-  state: SprintState
-  """
-  snapshots of the monday dev sprint
-  """
-  snapshots(type: [SprintSnapshotKind!]): [SprintSnapshot!]
-}
-
-"""
-A monday dev sprint snapshot.
-"""
-type SprintSnapshot {
-  """
-  monday dev sprint snapshot unique identifier
-  """
-  id: ID
-  """
-  monday dev sprint snapshot kind
-  """
-  type: SprintSnapshotKind
-  """
-  monday dev sprint snapshot items
-  """
-  items: [SprintSnapshotItem!]
-  """
-  monday dev sprint snapshot columns metadata
-  """
-  columns_metadata: [SprintSnapshotColumnMetadata!]
-  """
-  monday dev sprint unique identifier
-  """
-  sprint_id: ID
-  """
-  date and time when the object was created
-  """
-  created_at: Date
-  """
-  date and time when the object was last updated
-  """
-  updated_at: Date
-}
-
-"""
-A monday dev sprint snapshot column metadata.
-"""
-type SprintSnapshotColumnMetadata {
-  """
-  monday dev sprint snapshot column id
-  """
-  id: String!
-  """
-  monday dev sprint snapshot status column done status indexes
-  """
-  done_status_indexes: [Int!]!
-}
-
-"""
-A monday dev sprint snapshot item.
-"""
-type SprintSnapshotItem {
-  """
-  monday dev sprint item unique identifier
-  """
-  id: ID!
-  """
-  monday dev sprint item column values
-  """
-  column_values: [SprintSnapshotItemColumnValue!]
-}
-
-"""
-A monday dev sprint snapshot item column value.
-"""
-type SprintSnapshotItemColumnValue {
-  """
-  monday dev sprint snapshot item column id
-  """
-  id: String!
-  """
-  monday dev sprint snapshot item column type
-  """
-  type: String!
-  """
-  monday dev sprint snapshot item column value
-  """
-  value: JSON
-}
-
-"""
-The kind of sprint snapshot.
-"""
-enum SprintSnapshotKind {
-  START
-  COMPLETE
-}
-
-"""
-current state of the monday dev sprint.
-"""
-enum SprintState {
-  PLANNED
-  ACTIVE
-  COMPLETED
-}
-
-"""
-user-editable planned timeline for the monday dev sprint, which may differ from its start and complete dates
-"""
-type SprintTimeline {
-  """
-  user-editable start date of the monday dev sprint timeline, may be different than the sprint start date
-  """
-  from: Date
-  """
-  user-editable complete date of the monday dev sprint timeline, may be different than the sprint complete date
-  """
-  to: Date
-}
-
-"""
-Response from saving a workspace as a template
-"""
-type SaveWorkspaceAsTemplateResponse {
-  """
-  The template ID of the created template
-  """
-  template_id: Int
-}
-
-"""
-A solution
-"""
-type Solution {
-  """
-  Unique identifier for the solution
-  """
-  id: String
-  """
-  Name of the solution
-  """
-  title: String
-  """
-  Description of the solution
-  """
-  description: String
-  """
-  Creation date of the solution
-  """
-  createdAt: String
-  """
-  Last update date of the solution
-  """
-  updatedAt: String
-  """
-  Thumbnail URL of the solution
-  """
-  thumbnailUrl: String
-  """
-  appFeatureReferenceId of the solution
-  """
-  appFeatureReferenceId: String
-}
-
-"""
-The type of template that can be created
-"""
-enum TemplateType {
-  standard_template
-  managed_template
-}
-
-"""
-Aggregates data from one or more boards.
-"""
-type Dashboard {
-  """
-  Unique identifier of the dashboard.
-  """
-  id: ID
-  """
-  Dashboard title (UTF-8 chars).
-  """
-  name: String
-  """
-  ID of the workspace that owns this dashboard.
-  """
-  workspace_id: ID
-  """
-  Visibility level: `PUBLIC` (default) or `PRIVATE`.
-  """
-  kind: DashboardKind
-  """
-  Folder ID that groups elements inside the workspace (null = workspace root).
-  """
-  board_folder_id: ID
-}
-
-"""
-Dashboard visibility. `PUBLIC` dashboards are visible to all workspace members; `PRIVATE` dashboards are only visible to invited users.
-"""
-enum DashboardKind {
-  PUBLIC
-  PRIVATE
-}
-
-"""
-Widget types available for creating data visualizations and displays
-"""
-enum ExternalWidget {
-  CHART
-  NUMBER
-  BATTERY
-  CALENDAR
-  GANTT
-  APP_FEATURE
-  LISTVIEW
-}
-
-"""
-Data visualization object.
-"""
-type Widget {
-  """
-  Unique identifier of this widget.
-  """
-  id: ID
-  """
-  Parent container where the widget is placed.
-  """
-  parent: WidgetParentOutput
-  """
-  The type of widget (CHART, NUMBER, BATTERY, CALENDAR, GANTT, MAP).
-  """
-  kind: ExternalWidget
-  """
-  Widget label (UTF-8 chars).
-  """
-  name: String
-}
-
-"""
-Parent container input where the widget will be placed.
-"""
-input WidgetParentInput {
-  """
-  The type of parent container (DASHBOARD or BOARD_VIEW)
-  """
-  kind: WidgetParentKind!
-  """
-  The ID of the parent container.
-  """
-  id: ID!
-}
-
-"""
-The kind of parent container where the widget will be placed.
-"""
-enum WidgetParentKind {
-  DASHBOARD
-  BOARD_VIEW
-}
-
-"""
-Parent container information in widget responses. Indicates where the widget is placed.
-"""
-type WidgetParentOutput {
-  """
-  The type of parent container (DASHBOARD or BOARD_VIEW)
-  """
-  kind: WidgetParentKind
-  """
-  The ID of the parent container.
-  """
-  id: ID
-}
-
-"""
-Information about a widget type and its JSON schema
-"""
-type WidgetSchemaInfo {
-  """
-  The widget kind (e.g., Chart, Number, Battery)
-  """
-  widget_type: ExternalWidget
-  """
-  The JSON schema (draft 7) for this widget type
-  """
-  schema: JSON
-}
-
-type BoardMuteSettings {
-  """
-  Board ID
-  """
-  board_id: ID
-  """
-  Human-friendly mute state for the board and current user
-  """
-  mute_state: BoardMuteState
-  """
-  List of enabled customizable settings when the board is in CUSTOM_SETTINGS mute state. Null otherwise.
-  """
-  enabled: [CustomizableBoardSettings!]
-}
-
-"""
-Represents the mute state of a board for the current user.
-
-- NOT_MUTED: The board is not muted at all (default state). This state, as well as MUTE_ALL, is set by the board owner(s) and only they can change it.
-- MUTE_ALL: All notifications for all users are muted on this board. This state, as well as NOT_MUTED, is set by the board owner(s) and only they can change it.
-- MENTIONS_AND_ASSIGNS_ONLY: The current user will only be notified if mentioned or assigned on the board. 
-- CUSTOM_SETTINGS: The current user will only be notified for the enabled custom settings. configurable settings: IM_MENTIONED, IM_ASSIGNED, AUTOMATION_NOTIFY 
-- CURRENT_USER_MUTE_ALL: Only the current user has all notifications muted from this board.
-"""
-enum BoardMuteState {
-  NOT_MUTED
-  MUTE_ALL
-  MENTIONS_AND_ASSIGNS_ONLY
-  CUSTOM_SETTINGS
-  CURRENT_USER_MUTE_ALL
-}
-
-"""
-Whether this channel is editable, always enabled, or not relevant to the notification
-"""
-enum ChannelEditableStatus {
-  AllRelatedNotificationsDontHaveChannel
-  AlwaysEnabled
-  Editable
-}
-
-"""
-Available notification channel types: Monday, Email, Slack
-"""
-enum ChannelType {
-  Monday
-  Email
-  Slack
-}
-
-"""
-These settings can be customized when the board is in CUSTOM_SETTINGS mute state. Configurable settings: IM_MENTIONED, IM_ASSIGNED, AUTOMATION_NOTIFY
-"""
-enum CustomizableBoardSettings {
-  IM_MENTIONED
-  IM_ASSIGNED
-  AUTOMATION_NOTIFY
-}
-
-"""
-Represents notification settings configuration
-"""
-type NotificationSetting {
-  """
-  Notification setting kind
-  """
-  kind: String
-  """
-  Description of the notification setting
-  """
-  description: String
-  """
-  Whether this setting is only configurable by admins
-  """
-  is_for_admins_only: Boolean
-  """
-  Whether this setting is not applicable for guest users
-  """
-  is_for_non_guests_only: Boolean
-  """
-  Available notification channels for this setting
-  """
-  channels: [NotificationSettingChannel!]!
-}
-
-"""
-Represents a notification channel configuration
-"""
-type NotificationSettingChannel {
-  """
-  Notification channel destination: Monday, Email, Slack
-  """
-  name: ChannelType
-  """
-  Whether notifications are enabled for this channel
-  """
-  enabled: Boolean
-  """
-  Whether or not this channel settings is editable
-  """
-  editable_status: ChannelEditableStatus
-}
-
-"""
-A notification.
-"""
-type NotificationV2 {
-  """
-  The unique identifier of the notification.
-  """
-  id: ID!
-  """
-  The date and time the notification was created.
-  """
-  created_at: Date
-  """
-  The title of the notification.
-  """
-  title: String
-  """
-  The text content of the notification.
-  """
-  text: String
-  """
-  The users who created the notification.
-  """
-  creators: [User!]!
-  """
-  Whether the notification has been read.
-  """
-  read: Boolean!
-  """
-  The update that triggered the notification.
-  """
-  update: Update
-  """
-  The item that is associated with the notification.
-  """
-  item: Item
-  """
-  The board that is associated with the notification.
-  """
-  board: Board
-}
-
-"""
-notification settings scope types, the options are account user defaults or user private settings
-"""
-enum ScopeType {
-  User
-  AccountNewUserDefaults
-}
-
-"""
 Input for adding a tool to an already-connected integration
 """
 input AddIntegrationToolInput {
@@ -22193,6 +19800,14 @@ type VibeConnectedIntegrationDetail {
   The credentials ID for building CredentialsValues for remote options fetching
   """
   credentials_id: ID
+  """
+  The credentials slot on the instance, needed to reconnect it
+  """
+  credentials_key: String
+  """
+  The variable currently wired into that slot, so a reconnect updates it in place
+  """
+  variable_key: Int
 }
 
 """
@@ -22677,6 +20292,96 @@ type WorkspaceBoardGroup {
 }
 
 """
+Knowledge base answer generated from snippets using LLM.
+"""
+type KnowledgeBaseAnswer {
+  """
+  List of knowledge base snippets used to generate the answer.
+  """
+  raw_snippets: [SnippetSearchResult!]
+  """
+  LLM-generated answer based on the knowledge base snippets.
+  """
+  answer: String
+}
+
+"""
+A knowledge base for monday.com which returns a list of snippet search results containing document content and metadata.
+"""
+type SnippetSearchResult {
+  """
+  The unique identifier of the snippet.
+  """
+  id: ID!
+  """
+  The title of the article.
+  """
+  title: String
+  """
+  The content of the snippet.
+  """
+  text: String
+  """
+  The parent document ID.
+  """
+  parent_id: ID
+  """
+  When the snippet was created.
+  """
+  created_at: String
+  """
+  When the snippet was last updated.
+  """
+  updated_at: String
+  """
+  The vector distance score. Lower is better. value between 0 and 1.
+  """
+  distance: Float
+  """
+  The URL of the source article.
+  """
+  url: String
+}
+
+type ConnectProjectResult {
+  """
+  Indicates if the operation was successful.
+  """
+  success: Boolean
+  """
+  A message describing the result of the operation.
+  """
+  message: String
+  """
+  The ID of the created portfolio item, if successful.
+  """
+  portfolio_item_id: String
+  """
+  Unique process ID for tracking this request. Included in the callback payload when the operation completes.
+  """
+  process_id: ID
+}
+
+type CreatePortfolioResult {
+  """
+  The ID of the solution that was created
+  """
+  solution_live_version_id: String
+  """
+  Indicates if the operation was successful.
+  """
+  success: Boolean
+  """
+  A message describing the result of the operation.
+  """
+  message: String
+  """
+  Unique process ID for tracking this request. Included in the callback payload when the operation completes.
+  """
+  process_id: ID
+}
+
+"""
 Input for a single submission request in a batch create.
 """
 input BatchSubmissionRequestInput {
@@ -22698,6 +20403,2309 @@ type UnsaveAgentResult {
   The agent user id of the agent that was removed from the saved list
   """
   agent_user_id: ID
+}
+
+"""
+The privacy kind for a board
+"""
+enum BoardKindInput {
+  PUBLIC
+  PRIVATE
+  SHARE
+}
+
+type ChangeBoardKindResult {
+  id: ID!
+  board_kind: String!
+}
+
+input ColumnPropertyInput {
+  """
+  The ID of the column
+  """
+  column_id: String!
+  """
+  Whether the column is visible
+  """
+  visible: Boolean!
+}
+
+input ColumnsConfigInput {
+  """
+  Configuration for main board columns
+  """
+  column_properties: [ColumnPropertyInput!]
+  """
+  Configuration for subitems columns
+  """
+  subitems_column_properties: [ColumnPropertyInput!]
+  """
+  Number of floating columns to display
+  """
+  floating_columns_count: Int
+  """
+  Order of columns
+  """
+  column_order: [String!]
+}
+
+"""
+A single conditional formatting condition that defines when and how to highlight rows or cells
+"""
+input ConditionalFormattingConditionInput {
+  """
+  Unique identifier for the condition (client-generated GUID)
+  """
+  id: String
+  """
+  The formatting to apply when this condition matches
+  """
+  formatting: ConditionalFormattingFormattingInput
+  """
+  Rules that trigger this condition
+  """
+  rules: [ConditionalFormattingRuleBucketInput!]
+  """
+  What to highlight when the condition matches
+  """
+  target: ConditionalFormattingTargetInput
+}
+
+input ConditionalFormattingFormattingInput {
+  """
+  Color name(s) to apply as highlight (e.g. ["orange"], ["dark_red", "done-green"])
+  """
+  highlight_color: [String!]
+}
+
+input ConditionalFormattingRuleBucketInput {
+  """
+  Bucket type (e.g. RULE)
+  """
+  type: String
+  """
+  Logical operator (e.g. ANY_OF, ALL_OF)
+  """
+  operator: String
+  """
+  The rule definition
+  """
+  rule: ConditionalFormattingRuleInput
+}
+
+input ConditionalFormattingRuleContextInput {
+  """
+  ID of the column to evaluate
+  """
+  column_id: String
+  """
+  Type of the column (e.g. color, text, date)
+  """
+  column_type: String
+  """
+  Column attribute to compare against
+  """
+  compare_attribute: String
+  """
+  Board ID the column belongs to
+  """
+  board_id: ID
+}
+
+input ConditionalFormattingRuleInput {
+  """
+  Rule type (e.g. BOARD_COLUMN)
+  """
+  type: String
+  """
+  The column context for this rule
+  """
+  context: ConditionalFormattingRuleContextInput
+  """
+  Array of internal label IDs to match against (e.g. [2] for Stuck)
+  """
+  compare_value: JSON
+}
+
+input ConditionalFormattingTargetInput {
+  """
+  Column IDs to highlight
+  """
+  column_ids: [String!]
+  """
+  Whether to highlight the entire row
+  """
+  entire_row: Boolean
+}
+
+"""
+Configuration settings for group by column
+"""
+input GroupByColumnConfigInput {
+  """
+  Sort settings for the column
+  """
+  sortSettings: GroupBySortSettingsInput
+}
+
+"""
+Condition for grouping items by column
+"""
+input GroupByConditionInput {
+  """
+  ID of the column to group by
+  """
+  columnId: String!
+  """
+  Configuration for the group by column
+  """
+  config: GroupByColumnConfigInput
+}
+
+"""
+Settings for grouping board items
+"""
+input GroupBySettingsInput {
+  """
+  List of conditions for grouping items
+  """
+  conditions: [GroupByConditionInput!]!
+  """
+  Whether to hide groups with no items
+  """
+  hideEmptyGroups: Boolean
+}
+
+"""
+Sort settings for group by configuration
+"""
+input GroupBySortSettingsInput {
+  """
+  Sort direction for the group
+  """
+  direction: SortDirection!
+  """
+  Type of sorting to apply
+  """
+  type: String
+}
+
+"""
+Direction for sorting items
+"""
+enum SortDirection {
+  ASC
+  DESC
+}
+
+"""
+Settings configuration for table view display options
+"""
+input TableViewSettingsInput {
+  """
+  Column visibility configuration for the board view
+  """
+  columns: ColumnsConfigInput
+  """
+  The group by to apply to the board view
+  """
+  group_by: GroupBySettingsInput
+}
+
+"""
+Specifies the entity scope for the created view
+"""
+enum ViewContext {
+  BOARD
+}
+
+"""
+Available view types for board displays
+"""
+enum ViewKind {
+  DASHBOARD
+  TABLE
+  FORM
+  APP
+}
+
+"""
+Type of mutation operation
+"""
+enum ViewMutationKind {
+  CREATE
+  UPDATE
+}
+
+"""
+A page of live workflow automations with cursor-based pagination metadata
+"""
+type LiveWorkflowAutomationsPage {
+  """
+  List of live workflow automations in this page
+  """
+  data: [WorkflowAutomation!]
+  """
+  Cursor-based pagination metadata
+  """
+  page_info: WorkflowAutomationsPageInfo
+}
+
+"""
+A workflow and its steps
+"""
+type WorkflowAutomation {
+  """
+  Workflow entity ID
+  """
+  id: ID
+  """
+  Workflow title
+  """
+  title: String
+  """
+  Workflow description
+  """
+  description: String
+  """
+  Whether the workflow is currently active
+  """
+  active: Boolean
+  """
+  Last update timestamp
+  """
+  updated_at: String
+  """
+  Creation timestamp
+  """
+  created_at: String
+  """
+  The steps that make up this workflow
+  """
+  steps: [WorkflowStep!]
+}
+
+"""
+Cursor-based pagination metadata for live workflow automation queries
+"""
+type WorkflowAutomationsPageInfo {
+  """
+  Whether there are more results beyond the current page
+  """
+  has_next_page: Boolean
+  """
+  Cursor of the last item in this page; pass as last_id to fetch the next page
+  """
+  end_cursor: ID
+}
+
+"""
+Cursor-based pagination parameters for workflow automation queries
+"""
+input WorkflowAutomationsPaginationInput {
+  """
+  Maximum number of results to return (default 50, max 100)
+  """
+  limit: Int
+  """
+  Cursor of the last item from the previous page; pass page_info.end_cursor from the previous response
+  """
+  last_id: ID
+}
+
+"""
+Identifiers for a newly created workflow
+"""
+type WorkflowBuilderCreateResult {
+  """
+  Stable workflow entity ID
+  """
+  workflow_object_id: ID
+  """
+  Draft workflow ID
+  """
+  workflow_draft_id: ID
+}
+
+"""
+Privacy level for a workflow
+"""
+enum WorkflowBuilderPrivacyKind {
+  PUBLIC
+  PRIVATE
+  SHAREABLE
+}
+
+"""
+Identifiers for a published workflow
+"""
+type WorkflowBuilderPublishResult {
+  """
+  Stable workflow entity ID
+  """
+  workflow_object_id: ID
+  """
+  Live workflow ID after promotion
+  """
+  workflow_live_id: ID
+}
+
+"""
+A step instance within a workflow
+"""
+type WorkflowStep {
+  """
+  Unique node ID within the workflow
+  """
+  node_id: ID
+  """
+  ID of the block type this step uses
+  """
+  block_reference_id: ID
+  """
+  Display title of the step
+  """
+  title: String
+}
+
+"""
+The results of the search for benchmark.
+"""
+type SearchBenchmarkResults {
+  data: String
+}
+
+"""
+Paginated list of items with their dependency predecessor edges for a board
+"""
+type BoardDependencies {
+  """
+  List of items with their predecessor edges for the current page
+  """
+  items: [ItemDependency!]
+  """
+  Total number of items across all pages
+  """
+  total_count: Int
+}
+
+"""
+The complete graph export for a board
+"""
+type BoardGraphExport {
+  """
+  The ID of the board
+  """
+  boardId: String
+  """
+  The graph data structure
+  """
+  graphData: JSON
+  """
+  The timestamp when the graph was exported
+  """
+  exportedAt: String
+  """
+  The total number of nodes in the graph
+  """
+  nodeCount: Int
+  """
+  The total number of edges in the graph
+  """
+  edgeCount: Int
+  """
+  The attributes of the graph
+  """
+  graphAttributes: JSON
+  """
+  The cycles in the graph
+  """
+  cycles: JSON
+}
+
+"""
+Configuration record for a dependency column
+"""
+type DependencyColumnConfig {
+  """
+  The ID of the configuration record
+  """
+  id: ID
+  """
+  The account ID
+  """
+  account_id: ID
+  """
+  The board ID
+  """
+  board_id: ID
+  """
+  Configuration data containing mode and is_new_dependency
+  """
+  data: JSON
+  """
+  Creation timestamp
+  """
+  created_at: String
+  """
+  Last update timestamp
+  """
+  updated_at: String
+  """
+  The type of configuration (always "dependency")
+  """
+  config_type: String
+}
+
+"""
+Result containing dependency column configurations for a board
+"""
+type DependencyColumnConfigResult {
+  """
+  The ID of the board
+  """
+  board_id: ID
+  """
+  Array of dependency column configurations
+  """
+  dependency_columns: [DependencyColumnConfig!]
+}
+
+"""
+A dependency edge representing a predecessor relationship between two items
+"""
+type DependencyEdge {
+  """
+  The ID of the predecessor item
+  """
+  source_item_id: ID
+  """
+  The type of dependency relationship (FS, SS, FF, SF)
+  """
+  dependency_type: DependencyRelation
+  """
+  The lag in days between the predecessor and dependent item (can be negative)
+  """
+  lag: Int
+}
+
+"""
+Input type for updating a single pulse dependency value
+"""
+input DependencyPulseValueInput {
+  """
+  The ID of the pulse to update the dependency value for
+  """
+  pulseId: ID!
+  """
+  The value of the dependency pulse value to update
+  """
+  value: DependencyValueInput!
+}
+
+"""
+The type of the dependency related column
+"""
+enum DependencyRelatedColumnTypes {
+  DATE
+  TIMELINE
+}
+
+"""
+The value of the dependency related column. when updating a date column the from and to fields should have the same value
+"""
+input DependencyRelatedValueInput {
+  """
+  From value
+  """
+  from: String
+  """
+  To value
+  """
+  to: String
+}
+
+"""
+Type of dependency relationship between items
+"""
+enum DependencyRelation {
+  FS
+  SS
+  FF
+  SF
+}
+
+"""
+Input type for updating dependency column value, supporting both adding and removing dependencies
+"""
+input DependencyValueInput {
+  """
+  List of pulses to add as dependencies with their configuration
+  """
+  added_pulse: [UpdateDependencyColumnInput!]
+  """
+  List of pulses to remove from dependencies
+  """
+  removed_pulse: [UpdateDependencyColumnInput!]
+}
+
+"""
+A single event record
+"""
+type Event {
+  """
+  The unique identifier of the event
+  """
+  id: ID
+  """
+  The type of the event
+  """
+  type: String
+  """
+  The current state of the event
+  """
+  state: String
+  """
+  The ID of the board associated with this event
+  """
+  board_id: ID
+  """
+  The event data payload
+  """
+  event_data: JSON
+  """
+  The timestamp of the origin last update
+  """
+  origin_last_updated: String
+  """
+  The timestamp when the event was created
+  """
+  created_at: String
+  """
+  The timestamp when the event was last updated
+  """
+  updated_at: String
+}
+
+"""
+Paginated export of events
+"""
+type EventsExport {
+  """
+  The list of events
+  """
+  events: [Event!]
+  """
+  The total number of events matching the query
+  """
+  total: Int
+  """
+  The maximum number of events returned
+  """
+  limit: Int
+  """
+  The offset from which events are returned
+  """
+  offset: Int
+}
+
+"""
+An item and all its dependency predecessor edges
+"""
+type ItemDependency {
+  """
+  The ID of the item
+  """
+  item_id: ID
+  """
+  List of predecessor dependency edges for this item
+  """
+  predecessors: [DependencyEdge!]
+}
+
+"""
+Metadata wrapper containing payload information for dependency configuration
+"""
+input MetadataInput {
+  """
+  The dependency configuration payload containing type and lag settings
+  """
+  payload: PayloadInput
+}
+
+"""
+Input type for dependency metadata payload containing dependency type and lag configuration
+"""
+input PayloadInput {
+  """
+  Type of dependency relationship between the items
+  """
+  dependency_type: DependencyRelation
+  """
+  Number of days offset between the dependent items (can be negative)
+  """
+  lag: Int
+}
+
+"""
+Input type for timeline dates with from and to date strings
+"""
+input TimelineDateInput {
+  """
+  The ID of the successor pulse whose date should be updated
+  """
+  id: ID!
+  """
+  Start date of the timeline in ISO format
+  """
+  from: String!
+  """
+  End date of the timeline in ISO format
+  """
+  to: String!
+}
+
+"""
+Input type for updating a single dependency relationship between pulses
+"""
+input UpdateDependencyColumnInput {
+  """
+  The ID of the pulse to create or remove a dependency relationship with
+  """
+  linkedPulseId: ID!
+  """
+  Optional metadata containing dependency configuration (type and lag)
+  """
+  metadata: MetadataInput
+}
+
+type AuditEventCatalogueEntry {
+  name: String
+  description: String
+  metadata_details: JSON
+}
+
+type AuditLogEntry {
+  timestamp: String
+  account_id: String
+  user: User
+  event: String
+  slug: String
+  ip_address: String
+  user_agent: String
+  client_name: String
+  client_version: String
+  os_name: String
+  os_version: String
+  device_name: String
+  device_type: String
+  activity_metadata: JSON
+}
+
+"""
+A paginated collection of audit log entries. This object contains two properties:
+logs, the requested page of AuditLogEntry objects matching your query, and pagination, which 
+contains metadata about the current and next page (if present).
+"""
+type AuditLogPage {
+  """
+  List of audit log entries for the current page. See the audit log entry object
+    for more details on this object.
+  """
+  logs: [AuditLogEntry!]
+  """
+  Pagination metadata. See the pagination object for more details.
+  """
+  pagination: Pagination
+}
+
+"""
+Pagination metadata: indicates the current page and page size, whether there
+are more pages, and the next page number if one exists. Note that the page size reflects
+the number of items requested, not the number of items returned.
+"""
+type Pagination {
+  """
+  Current page number (1-based)
+  """
+  page: Int
+  """
+  Number of items per page
+  """
+  page_size: Int
+  """
+  Indicates if there are more pages available
+  """
+  has_more_pages: Boolean
+  """
+  Number of the next page
+  """
+  next_page_number: Int
+}
+
+"""
+Result of creating an API user.
+"""
+type CreateApiUserResult {
+  """
+  The user ID of the created API user.
+  """
+  id: ID
+}
+
+"""
+Result of creating multiple users.
+"""
+type CreateMultipleUsersResult {
+  """
+  Successfully created users.
+  """
+  created_users: [User!]
+  """
+  Users that could not be created.
+  """
+  uncreated_users: [UncreatedUser!]
+}
+
+"""
+Input for creating a single user.
+"""
+input CreateUserInput {
+  """
+  The kind of user to create.
+  """
+  kind: UserKindValue!
+  """
+  The name for the user.
+  """
+  name: String!
+  """
+  The email for the user.
+  """
+  email: String!
+  """
+  The title for the user.
+  """
+  title: String
+  """
+  The user creation flow to use.
+  """
+  user_creation_flow: UserCreationFlow!
+  """
+  The invitation method for the user.
+  """
+  invitation_method: CreateUserInvitationMethod!
+  """
+  The activation status for the user.
+  """
+  status: UserStatus = ACTIVE
+  """
+  Whether the email is confirmed.
+  """
+  confirmed_email: Boolean = true
+  """
+  Photo URL for the user (HTTPS only).
+  """
+  photo_url: String
+}
+
+"""
+The invitation method allowed when creating a user via create_multiple_users.
+"""
+enum CreateUserInvitationMethod {
+  API_USER_CREATION
+  AGENT_USER_CREATION
+  SYSTEM_CREATION
+}
+
+"""
+A user whose profile picture could not be updated, with the requested URL and failure reason.
+"""
+type FailedUserProfilePicture {
+  """
+  The ID of the user that failed to update.
+  """
+  id: ID!
+  """
+  The profile picture URL that was requested.
+  """
+  photo_url: String
+  """
+  The reason the profile picture could not be updated.
+  """
+  reason: String
+}
+
+"""
+The method by which a user was added to the account.
+"""
+enum InvitationMethod {
+  USER
+  SCIM
+  SSO
+  AUTH_DOMAIN
+  FIRST_USER
+  CONSOLIDATION
+  INTERNAL_CREATION
+  UNKNOWN
+  SERVICE_PORTAL_AUTH_DOMAIN
+  SERVICE_PORTAL_USER_INVITATION
+  API_USER_CREATION
+  AGENT_USER_CREATION
+  SYSTEM_CREATION
+}
+
+"""
+URLs for the user's profile photo in various sizes.
+"""
+type PhotoUrl {
+  """
+  The user's photo in original size.
+  """
+  original: String
+  """
+  The user's photo in small size (150x150).
+  """
+  small: String
+  """
+  The user's photo in thumbnail size (100x100).
+  """
+  thumb: String
+  """
+  The user's photo in small thumbnail size (50x50).
+  """
+  thumb_small: String
+  """
+  The user's photo in tiny size (30x30).
+  """
+  tiny: String
+}
+
+"""
+A user that could not be created, returning the original input and failure reason.
+"""
+type UncreatedUser {
+  """
+  The kind of user to create.
+  """
+  kind: String
+  """
+  The name for the user.
+  """
+  name: String
+  """
+  The email for the user.
+  """
+  email: String
+  """
+  The title for the user.
+  """
+  title: String
+  """
+  The activation status for the user.
+  """
+  status: UserStatus
+  """
+  Whether the email is confirmed.
+  """
+  confirmed_email: Boolean
+  """
+  Photo URL for the user (HTTPS only).
+  """
+  photo_url: String
+  """
+  The reason the user could not be created.
+  """
+  reason: String
+}
+
+"""
+A user that could not be updated, returning the original input and failure reason.
+"""
+type UnupdatedUser {
+  """
+  The user ID that failed to update.
+  """
+  id: ID!
+  """
+  The name that was requested.
+  """
+  name: String
+  """
+  The title that was requested.
+  """
+  title: String
+  """
+  The photo URL that was requested.
+  """
+  photo_url: String
+  """
+  The status that was requested.
+  """
+  status: UpdatableUserStatus
+  """
+  The reason the user could not be updated.
+  """
+  reason: String
+}
+
+"""
+Activation status values that can be set via mutations.
+"""
+enum UpdatableUserStatus {
+  ACTIVE
+  INACTIVE
+}
+
+"""
+Input for updating a single user.
+"""
+input UpdateUserInput {
+  """
+  The user ID to update.
+  """
+  id: ID!
+  """
+  New name for the user.
+  """
+  name: String
+  """
+  New title for the user.
+  """
+  title: String
+  """
+  New photo URL for the user (HTTPS only).
+  """
+  photo_url: String
+  """
+  New activation status (ACTIVE or INACTIVE).
+  """
+  status: UpdatableUserStatus
+}
+
+"""
+A user ID paired with the profile picture URL to set for that user.
+"""
+input UpdateUserProfilePictureInput {
+  """
+  The ID of the user whose profile picture will be updated.
+  """
+  id: ID!
+  """
+  The new profile picture URL. Must be an absolute HTTPS URL.
+  """
+  photo_url: String!
+}
+
+"""
+Result of updating the profile picture of multiple users.
+"""
+type UpdateUsersProfilePictureResult {
+  """
+  Users whose profile picture was successfully updated.
+  """
+  updated_users: [User!]
+  """
+  Users whose profile picture could not be updated.
+  """
+  failed_to_update: [FailedUserProfilePicture!]
+}
+
+"""
+Result of updating multiple users.
+"""
+type UpdateUsersResult {
+  """
+  Successfully updated users.
+  """
+  updated_users: [User!]
+  """
+  Users that could not be updated.
+  """
+  unupdated_users: [UnupdatedUser!]
+}
+
+"""
+User config of a user kind within the account.
+"""
+type UserConfig {
+  """
+  The user kind for the user config.
+  """
+  kind: String!
+  """
+  The role ID associated with this user config.
+  """
+  role_id: ID!
+  """
+  The visibility for this user config.
+  """
+  visibility: [String!]!
+  """
+  The behavior IDs that are true for this user kind.
+  """
+  behaviors: [String!]!
+  """
+  The group this user config belongs to.
+  """
+  group: String!
+}
+
+"""
+The user creation flow/context type.
+"""
+enum UserCreationFlow {
+  API_USER_CREATION
+  AGENT_USER_CREATION
+  SYSTEM_CREATION
+}
+
+"""
+Filter for user kinds, including kind groups.
+"""
+enum UserKindFilter {
+  ADMIN
+  MEMBER
+  GUEST
+  VIEW_ONLY
+  AGENT_MEMBER
+  PERSONAL_AGENT_MEMBER
+  AGENT_SIGNUP_USER
+  WORK_MANAGEMENT_AGENT_MEMBER
+  EXTERNAL_AGENT_MEMBER
+  EXTERNAL_AGENT_DETACHED_MEMBER
+  WORKSPACE_PRIMARY_AGENT_MEMBER
+  SERVICE_USER
+  VIBE_USER
+  PORTAL
+  PORTFOLIO_API_USER
+  NEXUS_API_USER
+  RESOURCE_DIRECTORY_API_USER
+  OMNICHANNEL_API_USER
+  GOALS_API_USER
+  PROJECTS_API_USER
+  SPRINT_MANAGEMENT_API_USER
+  CRM_COMMERCE_API_USER
+  CAMPAIGNS_API_USER
+  DATA_RETENTION_API_USER
+  MONDAY_SERVICE_API_USER
+  AI_PLATFORM_AGENT_API_USER
+  DEPENDENCIES_API_USER
+  HISTORICAL_TRACKING_BACKFILL_API_USER
+  ENTITY_KNOWLEDGE_API_USER
+  ORG_HUB_API_USER
+  BASIC
+}
+
+"""
+Filter users by kind. Supports individual kinds and groups (e.g. BASIC = admin, member, guest, view_only). The not_in values are removed from the expanded in set.
+"""
+input UserKindFilterInput {
+  """
+  Include users matching these kinds or kind groups.
+  """
+  in: [UserKindFilter!]
+  """
+  Exclude users matching these kinds or kind groups.
+  """
+  not_in: [UserKindFilter!]
+}
+
+"""
+A specific user kind value.
+"""
+enum UserKindValue {
+  ADMIN
+  MEMBER
+  GUEST
+  VIEW_ONLY
+  AGENT_MEMBER
+  PERSONAL_AGENT_MEMBER
+  AGENT_SIGNUP_USER
+  WORK_MANAGEMENT_AGENT_MEMBER
+  EXTERNAL_AGENT_MEMBER
+  EXTERNAL_AGENT_DETACHED_MEMBER
+  WORKSPACE_PRIMARY_AGENT_MEMBER
+  SERVICE_USER
+  VIBE_USER
+  PORTAL
+  PORTFOLIO_API_USER
+  NEXUS_API_USER
+  RESOURCE_DIRECTORY_API_USER
+  OMNICHANNEL_API_USER
+  GOALS_API_USER
+  PROJECTS_API_USER
+  SPRINT_MANAGEMENT_API_USER
+  CRM_COMMERCE_API_USER
+  CAMPAIGNS_API_USER
+  DATA_RETENTION_API_USER
+  MONDAY_SERVICE_API_USER
+  AI_PLATFORM_AGENT_API_USER
+  DEPENDENCIES_API_USER
+  HISTORICAL_TRACKING_BACKFILL_API_USER
+  ENTITY_KNOWLEDGE_API_USER
+  ORG_HUB_API_USER
+}
+
+"""
+The activation status of a user.
+"""
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  PENDING
+}
+
+"""
+The direction to sort users.
+"""
+enum UsersSortDirection {
+  ASC
+  DESC
+}
+
+"""
+The field to sort users by.
+"""
+enum UsersSortField {
+  CREATED_AT
+}
+
+"""
+Input for sorting users.
+"""
+input UsersSortInput {
+  """
+  The field to sort by.
+  """
+  field: UsersSortField!
+  """
+  The sort direction.
+  """
+  direction: UsersSortDirection!
+}
+
+"""
+A page of automations with cursor for pagination
+"""
+type AutomationsPage {
+  """
+  Opaque cursor for fetching the next page. Null if no more results.
+  """
+  cursor: String
+  """
+  The automations in this page
+  """
+  items: [BoardAutomation!]
+  """
+  Read-only automations on this board that were set up in an older way. These ARE automations on the user's board — always list and describe them together with `items`, never omit them. They cannot be activated, deactivated, edited, or deleted. Resolved only for board-scoped queries (null otherwise); best-effort, so it may carry an error marker instead of data.
+  """
+  legacy_automations: JSON
+}
+
+"""
+A board automation
+"""
+type BoardAutomation {
+  """
+  Automation ID
+  """
+  id: ID
+  """
+  Creator user ID
+  """
+  user_id: ID
+  """
+  Whether the automation is active
+  """
+  active: Boolean
+  """
+  Automation title
+  """
+  title: String
+  """
+  Automation description
+  """
+  description: String
+  """
+  Creation timestamp
+  """
+  created_at: String
+  """
+  Last update timestamp
+  """
+  updated_at: String
+  """
+  Host data (board ID and type)
+  """
+  workflow_host_data: JSON
+  """
+  Workflow block definitions
+  """
+  workflow_blocks: JSON
+  """
+  Workflow variable definitions
+  """
+  workflow_variables: JSON
+  """
+  Automation importance level
+  """
+  importance: Int
+  """
+  Notice message for the automation
+  """
+  notice_message: String
+  """
+  Template reference ID if created from template
+  """
+  template_reference_id: ID
+}
+
+"""
+Input for creating a board automation. Provide template_reference_id to create from a template, or workflow_blocks and workflow_variables for a direct creation.
+"""
+input BoardAutomationCreateInput {
+  """
+  Board ID to host the automation
+  """
+  board_id: String!
+  """
+  Automation title
+  """
+  title: String!
+  """
+  Automation description
+  """
+  description: String
+  """
+  Template reference ID (for template-based creation)
+  """
+  template_reference_id: ID
+  """
+  Automation block definitions (for direct creation)
+  """
+  workflow_blocks: JSON
+  """
+  Automation variable definitions (for direct creation)
+  """
+  workflow_variables: JSON
+  """
+  Template variable values (for template-based creation)
+  """
+  workflow_variables_values: JSON
+}
+
+"""
+Result of creating a board automation
+"""
+type BoardAutomationCreateResult {
+  """
+  The ID of the created automation
+  """
+  workflow_id: ID
+}
+
+"""
+Result of deleting a board automation
+"""
+type BoardAutomationDeleteResult {
+  """
+  Whether the deletion was successful
+  """
+  is_success: Boolean
+}
+
+"""
+Available AI model tiers.
+"""
+enum AiModel {
+  MONDAY_FAST
+  MONDAY_STANDARD
+  MONDAY_POWERFUL
+}
+
+"""
+Configuration options for the AI completion request.
+"""
+input RunPromptConfigInput {
+  """
+  The AI model to use for the completion.
+  """
+  model: AiModel
+  """
+  An optional system prompt to set context for the model.
+  """
+  system_prompt: String
+  """
+  Sampling temperature between 0 and 1.
+  """
+  temperature: Float
+  """
+  Maximum number of tokens to generate.
+  """
+  max_tokens: Int
+}
+
+"""
+The result of running a prompt against an AI model.
+"""
+type RunPromptResult {
+  """
+  The generated text content from the model.
+  """
+  content: String
+}
+
+"""
+Enum representing different usage types for board operations
+"""
+enum BoardUsage {
+  CONVERT_TO_PROJECT
+  CONNECT_TO_PORTFOLIO
+}
+
+input ColumnsMappingInput {
+  project_status: ID!
+  project_timeline: ID!
+  project_owner: ID!
+}
+
+input ConvertBoardToProjectInput {
+  board_id: ID!
+  column_mappings: ColumnsMappingInput!
+  callback_url: String
+}
+
+type ConvertBoardToProjectResult {
+  success: Boolean
+  message: String
+  projectId: ID
+  process_id: String
+}
+
+input CreateProjectInput {
+  """
+  The name of the project to create
+  """
+  name: String!
+  """
+  The project's privacy setting (public / private)
+  """
+  board_kind: BoardKind!
+  """
+  Optional template id to create the project from. Currently only supported for solution templates
+  """
+  template_id: ID
+  """
+  Optional list of companion features to enable (currently only "resource_planner")
+  """
+  companions: [String!]
+  """
+  Optional workspace ID to associate with the project
+  """
+  workspace_id: String
+  """
+  Optional folder ID to associate with the project
+  """
+  folder_id: String
+  """
+  Optional external callback URL where the project ID will be sent after async creation. The callback will receive a POST request with { is_success: boolean, process_id: string, project_id?: number }
+  """
+  callback_url: String
+}
+
+type CreateProjectResult {
+  """
+  Indicates if the project creation request was accepted
+  """
+  success: Boolean
+  """
+  Success message when project creation is initiated
+  """
+  message: String
+  """
+  Error message if project creation request failed
+  """
+  error: String
+  """
+  Unique process ID for tracking this creation request. This will be included in the callback when creation completes.
+  """
+  process_id: ID
+}
+
+"""
+Type of entity to extract from text.
+"""
+enum AiColumnEntity {
+  email_address
+  first_name
+  last_name
+  phone_number
+  company_name
+  domain_name
+  url
+  date
+  time
+  year
+  custom
+}
+
+"""
+Optional settings controlling backfill behavior when configuring an AI column.
+"""
+input AiColumnExtraSettingsInput {
+  """
+  Whether to immediately apply the AI automation to existing items. Defaults to true.
+  """
+  run_backfill: Boolean
+}
+
+"""
+Desired output length relative to the input text.
+"""
+enum AiColumnImproverLength {
+  same
+  shorter
+  longer
+}
+
+"""
+Target language for translation.
+"""
+enum AiColumnLanguage {
+  english
+  spanish
+  french
+  german
+  hebrew
+  chinese
+  korean
+  arabic
+  bengali
+  danish
+  dutch
+  hindi
+  indonesian
+  italian
+  japanese
+  norwegian
+  polish
+  portuguese
+  russian
+  swedish
+  thai
+  turkish
+  vietnamese
+}
+
+"""
+Approximate desired length of generated text.
+"""
+enum AiColumnOutputLength {
+  sentence
+  paragraph
+  brief
+  in_depth
+}
+
+"""
+A group of people available for AI-based assignment.
+"""
+input AiColumnPersonGroupInput {
+  """
+  Array of user IDs in this group.
+  """
+  user_ids: [Int!]!
+  """
+  Description of this group (e.g., role, team name, or assignment criteria).
+  """
+  description: String!
+}
+
+"""
+Level of text refinement to apply.
+"""
+enum AiColumnRefinementLevel {
+  minimal_changes
+  moderate_changes
+  high_creativity
+}
+
+"""
+The result of removing AI configuration from a column.
+"""
+type AiColumnRemoveResult {
+  """
+  The ID of the column that had AI removed.
+  """
+  column_id: ID!
+  """
+  Whether the AI configuration was successfully removed.
+  """
+  success: Boolean!
+}
+
+"""
+The result of configuring AI on a column.
+"""
+type AiColumnResult {
+  """
+  The ID of the column that was configured.
+  """
+  column_id: ID!
+}
+
+"""
+The data source for AI column processing.
+"""
+enum AiColumnSource {
+  item_name
+  thread
+  column
+  emails_and_activities
+}
+
+"""
+Writing tone/style for AI text generation.
+"""
+enum AiColumnTone {
+  empathic
+  promotional
+  confident
+  professional
+  natural
+  casual
+  friendly
+  same
+}
+
+"""
+Account context information.
+"""
+type AccountContext {
+  """
+  Unique account identifier.
+  """
+  id: ID
+  """
+  Account name.
+  """
+  name: String
+  """
+  Account industry. Examples: "Technology", "Healthcare", "Finance".
+  """
+  industry: String
+  """
+  Industry sector.
+  """
+  sector: String
+  """
+  Industry sub-sector.
+  """
+  sub_sector: String
+  """
+  Primary use cases for the account.
+  """
+  golden_use_cases: [String!]
+  """
+  Platform usage categories. Examples: "project_management", "crm", "marketing".
+  """
+  platform_usages: [String!]
+  """
+  Active monday.com products. Values: "core", "crm", "software", "marketing", "project_management", "service".
+  """
+  active_product_kinds: [String!]
+}
+
+"""
+A board where the user has item assignments.
+"""
+type AssignedBoard {
+  """
+  Board ID
+  """
+  board_id: ID
+  """
+  Number of items assigned to the user on this board
+  """
+  assignment_count: Int
+  """
+  Board details resolved via federation from the boards subgraph.
+  """
+  board: Board
+}
+
+"""
+Intelligence data.
+"""
+type Intelligence {
+  """
+  Top visited boards ranked by relevance (frequency + recency).
+  """
+  relevant_boards(limit: Int): [RelevantBoard!]
+  """
+  Top loaded docs ranked by relevance (frequency + recency).
+  """
+  relevant_docs(limit: Int): [RelevantDoc!]
+  """
+  Top related users ranked by relevance (multi-signal frequency + recency).
+  """
+  relevant_people(limit: Int): [RelevantPerson!]
+  """
+  User and account context information.
+  """
+  context: UserContextResponse
+  """
+  Boards where the user has item assignments.
+  """
+  assigned_boards(user_id: ID, size: Int): [AssignedBoard!]
+}
+
+"""
+A board ranked by relevance based on visit frequency and recency.
+"""
+type RelevantBoard {
+  """
+  Board ID
+  """
+  id: ID
+  """
+  Board details resolved via federation from the boards subgraph.
+  """
+  board: Board
+}
+
+"""
+A doc ranked by relevance based on load frequency and recency.
+"""
+type RelevantDoc {
+  """
+  Document ID
+  """
+  id: ID
+  """
+  Document object ID — the identifier that appears in the doc's URL.
+  """
+  object_id: ID
+  """
+  Document details resolved via federation from the docs subgraph.
+  """
+  document: Document
+}
+
+"""
+A user ranked by relevance based on interaction frequency and recency.
+"""
+type RelevantPerson {
+  """
+  User ID
+  """
+  id: ID
+  """
+  User details resolved via federation from the users subgraph.
+  """
+  user: User
+}
+
+"""
+User context information.
+"""
+type UserContext {
+  """
+  Unique user identifier.
+  """
+  id: ID
+  """
+  User display name.
+  """
+  name: String
+  """
+  User job title.
+  """
+  title: String
+  """
+  User email address.
+  """
+  email: String
+  """
+  User type. Values: null (regular), "guest", "view_only", "portal_user".
+  """
+  kind: String
+  """
+  User job role. Examples: "project_manager", "marketing_manager", "ceo".
+  """
+  job_role: String
+  """
+  User job department. Examples: "engineering", "marketing", "sales", "hr".
+  """
+  job_department: String
+  """
+  Organizational department within the workspace.
+  """
+  department: String
+  """
+  User time zone. Examples: "America/New_York", "Europe/London".
+  """
+  time_zone: String
+  """
+  User locale for date and number formatting. Examples: "en-US", "de-DE".
+  """
+  locale: String
+  """
+  Number of days since the user became active.
+  """
+  tenure_days: Int
+}
+
+"""
+Combined user and account context.
+"""
+type UserContextResponse {
+  """
+  User context.
+  """
+  user: UserContext
+  """
+  Account context.
+  """
+  account: AccountContext
+}
+
+"""
+Structured result data for a completed or partially-completed operation
+"""
+type AsyncJobResult {
+  """
+  Total items in the operation
+  """
+  total: Int
+  """
+  Successfully processed items
+  """
+  succeeded: Int
+  """
+  Items that failed
+  """
+  failed: Int
+  """
+  Operation-specific details (failed item IDs, report URLs, etc.)
+  """
+  details: JSON
+}
+
+"""
+Status information for an async job
+"""
+type AsyncJobStatus {
+  """
+  Unique job identifier
+  """
+  id: ID
+  """
+  Current job status
+  """
+  status: JobState
+  """
+  When the job was created (ISO 8601)
+  """
+  created_at: String
+  """
+  When the job was last updated (ISO 8601)
+  """
+  updated_at: String
+  """
+  Error description if the job failed
+  """
+  error: String
+  """
+  Structured result data for completed or partially-completed operations
+  """
+  result: AsyncJobResult
+}
+
+"""
+Status of an async job
+"""
+enum JobState {
+  PENDING
+  RUNNING
+  COMPLETED
+  FAILED
+  EXPIRED
+  CANCELLED
+}
+
+"""
+A monday dev sprint.
+"""
+type Sprint {
+  """
+  monday dev sprint unique identifier
+  """
+  id: ID!
+  """
+  monday dev sprint name
+  """
+  name: String
+  """
+  items associated with the monday dev sprint
+  """
+  items: [Item!]
+  """
+  date at which the monday dev sprint start action was performed, null if the sprint was never started
+  """
+  start_date: Date
+  """
+  date at which the monday dev sprint complete action was performed, null if the sprint was never completed
+  """
+  end_date: Date
+  """
+  user-editable planned timeline for the monday dev sprint, which may differ from its start and complete dates
+  """
+  timeline: SprintTimeline
+  """
+  current state of the monday dev sprint
+  """
+  state: SprintState
+  """
+  snapshots of the monday dev sprint
+  """
+  snapshots(type: [SprintSnapshotKind!]): [SprintSnapshot!]
+}
+
+"""
+A monday dev sprint snapshot.
+"""
+type SprintSnapshot {
+  """
+  monday dev sprint snapshot unique identifier
+  """
+  id: ID
+  """
+  monday dev sprint snapshot kind
+  """
+  type: SprintSnapshotKind
+  """
+  monday dev sprint snapshot items
+  """
+  items: [SprintSnapshotItem!]
+  """
+  monday dev sprint snapshot columns metadata
+  """
+  columns_metadata: [SprintSnapshotColumnMetadata!]
+  """
+  monday dev sprint unique identifier
+  """
+  sprint_id: ID
+  """
+  date and time when the object was created
+  """
+  created_at: Date
+  """
+  date and time when the object was last updated
+  """
+  updated_at: Date
+}
+
+"""
+A monday dev sprint snapshot column metadata.
+"""
+type SprintSnapshotColumnMetadata {
+  """
+  monday dev sprint snapshot column id
+  """
+  id: String!
+  """
+  monday dev sprint snapshot status column done status indexes
+  """
+  done_status_indexes: [Int!]!
+}
+
+"""
+A monday dev sprint snapshot item.
+"""
+type SprintSnapshotItem {
+  """
+  monday dev sprint item unique identifier
+  """
+  id: ID!
+  """
+  monday dev sprint item column values
+  """
+  column_values: [SprintSnapshotItemColumnValue!]
+}
+
+"""
+A monday dev sprint snapshot item column value.
+"""
+type SprintSnapshotItemColumnValue {
+  """
+  monday dev sprint snapshot item column id
+  """
+  id: String!
+  """
+  monday dev sprint snapshot item column type
+  """
+  type: String!
+  """
+  monday dev sprint snapshot item column value
+  """
+  value: JSON
+}
+
+"""
+The kind of sprint snapshot.
+"""
+enum SprintSnapshotKind {
+  START
+  COMPLETE
+}
+
+"""
+current state of the monday dev sprint.
+"""
+enum SprintState {
+  PLANNED
+  ACTIVE
+  COMPLETED
+}
+
+"""
+user-editable planned timeline for the monday dev sprint, which may differ from its start and complete dates
+"""
+type SprintTimeline {
+  """
+  user-editable start date of the monday dev sprint timeline, may be different than the sprint start date
+  """
+  from: Date
+  """
+  user-editable complete date of the monday dev sprint timeline, may be different than the sprint complete date
+  """
+  to: Date
+}
+
+"""
+Response from saving a workspace as a template
+"""
+type SaveWorkspaceAsTemplateResponse {
+  """
+  The template ID of the created template
+  """
+  template_id: Int
+}
+
+"""
+A solution
+"""
+type Solution {
+  """
+  Unique identifier for the solution
+  """
+  id: String
+  """
+  Name of the solution
+  """
+  title: String
+  """
+  Description of the solution
+  """
+  description: String
+  """
+  Creation date of the solution
+  """
+  createdAt: String
+  """
+  Last update date of the solution
+  """
+  updatedAt: String
+  """
+  Thumbnail URL of the solution
+  """
+  thumbnailUrl: String
+  """
+  appFeatureReferenceId of the solution
+  """
+  appFeatureReferenceId: String
+}
+
+"""
+The type of template that can be created
+"""
+enum TemplateType {
+  standard_template
+  managed_template
+}
+
+"""
+Aggregates data from one or more boards.
+"""
+type Dashboard {
+  """
+  Unique identifier of the dashboard.
+  """
+  id: ID
+  """
+  Dashboard title (UTF-8 chars).
+  """
+  name: String
+  """
+  ID of the workspace that owns this dashboard.
+  """
+  workspace_id: ID
+  """
+  Visibility level: `PUBLIC` (default) or `PRIVATE`.
+  """
+  kind: DashboardKind
+  """
+  Folder ID that groups elements inside the workspace (null = workspace root).
+  """
+  board_folder_id: ID
+}
+
+"""
+Dashboard visibility. `PUBLIC` dashboards are visible to all workspace members; `PRIVATE` dashboards are only visible to invited users.
+"""
+enum DashboardKind {
+  PUBLIC
+  PRIVATE
+}
+
+"""
+Widget types available for creating data visualizations and displays
+"""
+enum ExternalWidget {
+  CHART
+  NUMBER
+  BATTERY
+  CALENDAR
+  GANTT
+  APP_FEATURE
+  LISTVIEW
+}
+
+"""
+Data visualization object.
+"""
+type Widget {
+  """
+  Unique identifier of this widget.
+  """
+  id: ID
+  """
+  Parent container where the widget is placed.
+  """
+  parent: WidgetParentOutput
+  """
+  The type of widget (CHART, NUMBER, BATTERY, CALENDAR, GANTT, MAP).
+  """
+  kind: ExternalWidget
+  """
+  Widget label (UTF-8 chars).
+  """
+  name: String
+}
+
+"""
+Parent container input where the widget will be placed.
+"""
+input WidgetParentInput {
+  """
+  The type of parent container (DASHBOARD or BOARD_VIEW)
+  """
+  kind: WidgetParentKind!
+  """
+  The ID of the parent container.
+  """
+  id: ID!
+}
+
+"""
+The kind of parent container where the widget will be placed.
+"""
+enum WidgetParentKind {
+  DASHBOARD
+  BOARD_VIEW
+}
+
+"""
+Parent container information in widget responses. Indicates where the widget is placed.
+"""
+type WidgetParentOutput {
+  """
+  The type of parent container (DASHBOARD or BOARD_VIEW)
+  """
+  kind: WidgetParentKind
+  """
+  The ID of the parent container.
+  """
+  id: ID
+}
+
+"""
+Information about a widget type and its JSON schema
+"""
+type WidgetSchemaInfo {
+  """
+  The widget kind (e.g., Chart, Number, Battery)
+  """
+  widget_type: ExternalWidget
+  """
+  The JSON schema (draft 7) for this widget type
+  """
+  schema: JSON
+}
+
+type BoardMuteSettings {
+  """
+  Board ID
+  """
+  board_id: ID
+  """
+  Human-friendly mute state for the board and current user
+  """
+  mute_state: BoardMuteState
+  """
+  List of enabled customizable settings when the board is in CUSTOM_SETTINGS mute state. Null otherwise.
+  """
+  enabled: [CustomizableBoardSettings!]
+}
+
+"""
+Represents the mute state of a board for the current user.
+
+- NOT_MUTED: The board is not muted at all (default state). This state, as well as MUTE_ALL, is set by the board owner(s) and only they can change it.
+- MUTE_ALL: All notifications for all users are muted on this board. This state, as well as NOT_MUTED, is set by the board owner(s) and only they can change it.
+- MENTIONS_AND_ASSIGNS_ONLY: The current user will only be notified if mentioned or assigned on the board. 
+- CUSTOM_SETTINGS: The current user will only be notified for the enabled custom settings. configurable settings: IM_MENTIONED, IM_ASSIGNED, AUTOMATION_NOTIFY 
+- CURRENT_USER_MUTE_ALL: Only the current user has all notifications muted from this board.
+"""
+enum BoardMuteState {
+  NOT_MUTED
+  MUTE_ALL
+  MENTIONS_AND_ASSIGNS_ONLY
+  CUSTOM_SETTINGS
+  CURRENT_USER_MUTE_ALL
+}
+
+"""
+Whether this channel is editable, always enabled, or not relevant to the notification
+"""
+enum ChannelEditableStatus {
+  AllRelatedNotificationsDontHaveChannel
+  AlwaysEnabled
+  Editable
+}
+
+"""
+Available notification channel types: Monday, Email, Slack
+"""
+enum ChannelType {
+  Monday
+  Email
+  Slack
+}
+
+"""
+These settings can be customized when the board is in CUSTOM_SETTINGS mute state. Configurable settings: IM_MENTIONED, IM_ASSIGNED, AUTOMATION_NOTIFY
+"""
+enum CustomizableBoardSettings {
+  IM_MENTIONED
+  IM_ASSIGNED
+  AUTOMATION_NOTIFY
+}
+
+"""
+Represents notification settings configuration
+"""
+type NotificationSetting {
+  """
+  Notification setting kind
+  """
+  kind: String
+  """
+  Description of the notification setting
+  """
+  description: String
+  """
+  Whether this setting is only configurable by admins
+  """
+  is_for_admins_only: Boolean
+  """
+  Whether this setting is not applicable for guest users
+  """
+  is_for_non_guests_only: Boolean
+  """
+  Available notification channels for this setting
+  """
+  channels: [NotificationSettingChannel!]!
+}
+
+"""
+Represents a notification channel configuration
+"""
+type NotificationSettingChannel {
+  """
+  Notification channel destination: Monday, Email, Slack
+  """
+  name: ChannelType
+  """
+  Whether notifications are enabled for this channel
+  """
+  enabled: Boolean
+  """
+  Whether or not this channel settings is editable
+  """
+  editable_status: ChannelEditableStatus
+}
+
+"""
+A notification.
+"""
+type NotificationV2 {
+  """
+  The unique identifier of the notification.
+  """
+  id: ID!
+  """
+  The date and time the notification was created.
+  """
+  created_at: Date
+  """
+  The title of the notification.
+  """
+  title: String
+  """
+  The text content of the notification.
+  """
+  text: String
+  """
+  The users who created the notification.
+  """
+  creators: [User!]!
+  """
+  Whether the notification has been read.
+  """
+  read: Boolean!
+  """
+  The update that triggered the notification.
+  """
+  update: Update
+  """
+  The item that is associated with the notification.
+  """
+  item: Item
+  """
+  The board that is associated with the notification.
+  """
+  board: Board
+}
+
+"""
+notification settings scope types, the options are account user defaults or user private settings
+"""
+enum ScopeType {
+  User
+  AccountNewUserDefaults
 }
 
 """
