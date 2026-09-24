@@ -19,6 +19,8 @@ public enum LLMModelInput
 
     CLAUDEOPUS5,
 
+    CLAUDEOPUS55,
+
     GEMINI35FLASH,
 
     GEMINI36FLASH,
