@@ -75,36 +75,6 @@ public sealed partial class Query
     public List<Department>? Departments { get; init; }
 
     /// <summary>
-    /// Returns connections for the authenticated user. Supports filtering, pagination, ordering, and partial-scope options.
-    /// </summary>
-    [JsonPropertyName("connections")]
-    public List<Connection>? Connections { get; init; }
-
-    /// <summary>
-    /// Returns connections that belong to the authenticated user.
-    /// </summary>
-    [JsonPropertyName("user_connections")]
-    public List<Connection>? UserConnections { get; init; }
-
-    /// <summary>
-    /// Returns all connections for the account. Requires admin privileges.
-    /// </summary>
-    [JsonPropertyName("account_connections")]
-    public List<Connection>? AccountConnections { get; init; }
-
-    /// <summary>
-    /// Fetch a single connection by its unique ID.
-    /// </summary>
-    [JsonPropertyName("connection")]
-    public Connection? Connection { get; init; }
-
-    /// <summary>
-    /// Get board IDs that are linked to a specific connection.
-    /// </summary>
-    [JsonPropertyName("connection_board_ids")]
-    public List<string> ConnectionBoardIds { get; init; } = [];
-
-    /// <summary>
     /// Retrieves a list of available object types that can be created or queried. Each object type is uniquely identified by an 'object_type_unique_key'. This key is required for mutations like 'create_object' and for filtering in the 'objects' query. Use this query to discover what types of objects are available in the system (e.g., 'workflows', 'projects') and get their corresponding unique keys. The structure of unique key is 'app_slug::app_feature_slug'.
     /// </summary>
     [JsonPropertyName("object_types_unique_keys")]
@@ -338,6 +308,36 @@ public sealed partial class Query
     /// </summary>
     [JsonPropertyName("favorites")]
     public List<GraphqlHierarchyObjectItem>? Favorites { get; init; }
+
+    /// <summary>
+    /// Returns connections for the authenticated user. Supports filtering, pagination, ordering, and partial-scope options.
+    /// </summary>
+    [JsonPropertyName("connections")]
+    public List<Connection>? Connections { get; init; }
+
+    /// <summary>
+    /// Returns connections that belong to the authenticated user.
+    /// </summary>
+    [JsonPropertyName("user_connections")]
+    public List<Connection>? UserConnections { get; init; }
+
+    /// <summary>
+    /// Returns all connections for the account. Requires admin privileges.
+    /// </summary>
+    [JsonPropertyName("account_connections")]
+    public List<Connection>? AccountConnections { get; init; }
+
+    /// <summary>
+    /// Fetch a single connection by its unique ID.
+    /// </summary>
+    [JsonPropertyName("connection")]
+    public Connection? Connection { get; init; }
+
+    /// <summary>
+    /// Get board IDs that are linked to a specific connection.
+    /// </summary>
+    [JsonPropertyName("connection_board_ids")]
+    public List<string> ConnectionBoardIds { get; init; } = [];
 
     /// <summary>
     /// Get managed column data.
