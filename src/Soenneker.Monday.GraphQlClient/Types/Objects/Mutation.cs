@@ -987,12 +987,6 @@ public sealed partial class Mutation
     public ResponseForm? SetFormPassword { get; init; }
 
     /// <summary>
-    /// Execute an integration block with the provided field values
-    /// </summary>
-    [JsonPropertyName("execute_integration_block")]
-    public IntegrationExecutionResult? ExecuteIntegrationBlock { get; init; }
-
-    /// <summary>
     /// Connect an existing project to a portfolio. When a callback_url is provided the mutation returns immediately with a process_id, and the result is POSTed to that URL once the operation completes. The callback payload is: { is_success: boolean, process_id: string, portfolio_item_id?: string }.
     /// </summary>
     [JsonPropertyName("connect_project_to_portfolio")]
@@ -1045,6 +1039,12 @@ public sealed partial class Mutation
     /// </summary>
     [JsonPropertyName("batch_update_dependency_column")]
     public string BatchUpdateDependencyColumn { get; init; } = null!;
+
+    /// <summary>
+    /// Execute an integration block with the provided field values
+    /// </summary>
+    [JsonPropertyName("execute_integration_block")]
+    public IntegrationExecutionResult? ExecuteIntegrationBlock { get; init; }
 
     /// <summary>
     /// Convert an existing monday.com board into a project with enhanced project management capabilities. This mutation transforms a regular board by applying project-specific features and configurations through column mappings that define how existing board columns should be interpreted in the project context. The conversion process is asynchronous and returns a process_id for tracking completion. Optionally accepts a callback URL for notification when the conversion completes. Use this when you have an existing board with data that needs to be upgraded to a full project with advanced project management features like Resource Planner integration.

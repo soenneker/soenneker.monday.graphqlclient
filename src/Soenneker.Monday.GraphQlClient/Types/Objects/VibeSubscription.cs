@@ -21,4 +21,10 @@ public sealed partial class VibeSubscription
     [JsonPropertyName("maxPublishedApps")]
     public int? MaxPublishedApps { get; init; }
 
+    /// <summary>
+    /// Whether the account is on the top-tier Vibe apps package. Accounts on a Vibe trial are never top-tier
+    /// </summary>
+    [JsonPropertyName("has_top_tier_vibe_apps_package")]
+    public bool? HasTopTierVibeAppsPackage { get; init; }
+
 }

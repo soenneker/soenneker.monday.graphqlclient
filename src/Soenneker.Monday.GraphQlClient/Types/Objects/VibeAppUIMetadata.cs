@@ -16,6 +16,12 @@ public sealed partial class VibeAppUIMetadata
     public string? AppCardColor { get; init; }
 
     /// <summary>
+    /// Custom app icon CDN URL (single 60×60px PNG)
+    /// </summary>
+    [JsonPropertyName("icon_url")]
+    public string? IconUrl { get; init; }
+
+    /// <summary>
     /// The source of the app creation
     /// </summary>
     [JsonPropertyName("source")]
