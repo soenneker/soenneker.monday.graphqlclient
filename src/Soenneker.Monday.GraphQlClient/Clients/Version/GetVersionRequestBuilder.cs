@@ -23,7 +23,7 @@ public sealed partial class GetVersionRequestBuilder
     /// </summary>
     public ValueTask<GraphQlResponse<GetVersionData>> Execute(CancellationToken cancellationToken = default)
     {
-        const string gqlQuery = @"query GetVersion { version { display_name kind value } }";
+        const string gqlQuery = @"query GetVersion { version { kind value display_name } }";
         return _graphQlClient.Execute<GetVersionData>(gqlQuery, null, cancellationToken);
     }
 

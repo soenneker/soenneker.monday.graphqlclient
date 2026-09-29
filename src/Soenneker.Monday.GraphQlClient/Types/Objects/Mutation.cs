@@ -68,6 +68,150 @@ public sealed partial class Mutation
     public UpdateDirectoryResourceAttributesResponse? UpdateDirectoryResourcesAttributes { get; init; }
 
     /// <summary>
+    /// Create managed column of type dropdown mutation.
+    /// </summary>
+    [JsonPropertyName("create_dropdown_managed_column")]
+    public DropdownManagedColumn? CreateDropdownManagedColumn { get; init; }
+
+    /// <summary>
+    /// Create managed column of type status mutation.
+    /// </summary>
+    [JsonPropertyName("create_status_managed_column")]
+    public StatusManagedColumn? CreateStatusManagedColumn { get; init; }
+
+    /// <summary>
+    /// Update managed column of type dropdown mutation.
+    /// </summary>
+    [JsonPropertyName("update_dropdown_managed_column")]
+    public DropdownManagedColumn? UpdateDropdownManagedColumn { get; init; }
+
+    /// <summary>
+    /// Update managed column of type status mutation.
+    /// </summary>
+    [JsonPropertyName("update_status_managed_column")]
+    public StatusManagedColumn? UpdateStatusManagedColumn { get; init; }
+
+    /// <summary>
+    /// Activate managed column mutation.
+    /// </summary>
+    [JsonPropertyName("activate_managed_column")]
+    public ManagedColumn? ActivateManagedColumn { get; init; }
+
+    /// <summary>
+    /// Deactivate managed column mutation.
+    /// </summary>
+    [JsonPropertyName("deactivate_managed_column")]
+    public ManagedColumn? DeactivateManagedColumn { get; init; }
+
+    /// <summary>
+    /// Delete managed column mutation.
+    /// </summary>
+    [JsonPropertyName("delete_managed_column")]
+    public ManagedColumn? DeleteManagedColumn { get; init; }
+
+    /// <summary>
+    /// Updates a status column's properties including title, description, and status label settings. Status columns allow users to track item progress through customizable labels (e.g., "Working on it", "Done", "Stuck"). This mutation is specifically for status/color columns and provides type-safe updates.
+    /// </summary>
+    [JsonPropertyName("update_status_column")]
+    public Column? UpdateStatusColumn { get; init; }
+
+    /// <summary>
+    /// Updates a dropdown column's properties including title, description, and dropdown label settings. Dropdown columns allow users to select from a predefined list of options. This mutation is specifically for dropdown columns and provides type-safe updates.
+    /// </summary>
+    [JsonPropertyName("update_dropdown_column")]
+    public Column? UpdateDropdownColumn { get; init; }
+
+    /// <summary>
+    /// Generic mutation for updating any column type with validation. Supports updating column properties like title, description, and type-specific defaults/settings. The mutation validates input against the column type's schema before applying changes. Use get_column_type_schema query to understand available properties for each column type.
+    /// </summary>
+    [JsonPropertyName("update_column")]
+    public Column? UpdateColumn { get; init; }
+
+    /// <summary>
+    /// Creates a new status column with strongly typed settings. Status columns allow users to track item progress through customizable labels (e.g., "Working on it", "Done", "Stuck"). This mutation is specifically for status/color columns and provides type-safe creation with label configuration.
+    /// </summary>
+    [JsonPropertyName("create_status_column")]
+    public Column? CreateStatusColumn { get; init; }
+
+    /// <summary>
+    /// Creates a new dropdown column with strongly typed settings. Dropdown columns allow users to select from a predefined list of options. This mutation is specifically for dropdown columns and provides type-safe creation with dropdown options configuration.
+    /// </summary>
+    [JsonPropertyName("create_dropdown_column")]
+    public Column? CreateDropdownColumn { get; init; }
+
+    /// <summary>
+    /// Generic mutation for creating any column type with validation. Supports creating column with properties like title, description, and type-specific defaults/settings. The mutation validates input against the column type's schema before applying changes. Use get_column_type_schema query to understand available properties for each column type.
+    /// </summary>
+    [JsonPropertyName("create_column")]
+    public Column? CreateColumn { get; init; }
+
+    /// <summary>
+    /// Creates a new status column in a board that is linked to a managed column. The column data and settings are controlled by the managed column. Only title and description can be overridden locally.
+    /// </summary>
+    [JsonPropertyName("attach_status_managed_column")]
+    public Column? AttachStatusManagedColumn { get; init; }
+
+    /// <summary>
+    /// Creates a new dropdown column in a board that is linked to a managed column. The column data and settings are controlled by the managed column. Title, description, and dropdown-specific settings (limit_select, label_limit_count) can be overridden locally.
+    /// </summary>
+    [JsonPropertyName("attach_dropdown_managed_column")]
+    public Column? AttachDropdownManagedColumn { get; init; }
+
+    /// <summary>
+    /// Create a new account object schema.
+    /// </summary>
+    [JsonPropertyName("create_object_schema")]
+    public ObjectSchema? CreateObjectSchema { get; init; }
+
+    /// <summary>
+    /// Update an account object schema.
+    /// </summary>
+    [JsonPropertyName("update_object_schema")]
+    public ObjectSchema? UpdateObjectSchema { get; init; }
+
+    /// <summary>
+    /// Delete an account object schema. Can only delete if there are no boards attached to the object schema. Object schemas define the structure and columns of boards.
+    /// </summary>
+    [JsonPropertyName("delete_object_schema")]
+    public ObjectSchema? DeleteObjectSchema { get; init; }
+
+    /// <summary>
+    /// Connect a board to an object schema.
+    /// </summary>
+    [JsonPropertyName("connect_board_to_object_schema")]
+    public BoardConnection? ConnectBoardToObjectSchema { get; init; }
+
+    /// <summary>
+    /// Create columns on an account object schema.
+    /// </summary>
+    [JsonPropertyName("create_object_schema_columns")]
+    public ObjectSchema? CreateObjectSchemaColumns { get; init; }
+
+    /// <summary>
+    /// Deactivate or reactivate a column on an account object schema.
+    /// </summary>
+    [JsonPropertyName("set_object_schema_column_active_state")]
+    public ObjectSchema? SetObjectSchemaColumnActiveState { get; init; }
+
+    /// <summary>
+    /// Detach boards from their object schemas.
+    /// </summary>
+    [JsonPropertyName("detach_boards_from_object_schema")]
+    public List<BulkDetachBoardResult>? DetachBoardsFromObjectSchema { get; init; }
+
+    /// <summary>
+    /// Update columns on an account object schema.
+    /// </summary>
+    [JsonPropertyName("update_object_schema_columns")]
+    public ObjectSchema? UpdateObjectSchemaColumns { get; init; }
+
+    /// <summary>
+    /// Execute multiple object schema column actions in a single request. Actions are executed sequentially in the order provided. If any action fails, execution stops and an error is returned.
+    /// </summary>
+    [JsonPropertyName("bulk_object_schema_column_actions")]
+    public List<ObjectSchemaActionResult>? BulkObjectSchemaColumnActions { get; init; }
+
+    /// <summary>
     /// Creates a new team.
     /// </summary>
     [JsonPropertyName("create_team")]
@@ -152,48 +296,6 @@ public sealed partial class Mutation
     public EnrollToSequenceResult? EnrollItemsToSequence { get; init; }
 
     /// <summary>
-    /// Assigns members to a department.
-    /// </summary>
-    [JsonPropertyName("assign_department_members")]
-    public AssignDepartmentMembersResult? AssignDepartmentMembers { get; init; }
-
-    /// <summary>
-    /// Clear users department
-    /// </summary>
-    [JsonPropertyName("clear_users_department")]
-    public ClearUsersDepartmentResult? ClearUsersDepartment { get; init; }
-
-    /// <summary>
-    /// Assigns an owner to a department.
-    /// </summary>
-    [JsonPropertyName("assign_department_owner")]
-    public AssignDepartmentOwnerResult? AssignDepartmentOwner { get; init; }
-
-    /// <summary>
-    /// Unassigns owners from a department.
-    /// </summary>
-    [JsonPropertyName("unassign_department_owners")]
-    public UnassignDepartmentOwnerResult? UnassignDepartmentOwners { get; init; }
-
-    /// <summary>
-    /// Creates a new department.
-    /// </summary>
-    [JsonPropertyName("create_department")]
-    public Department? CreateDepartment { get; init; }
-
-    /// <summary>
-    /// Updates a department.
-    /// </summary>
-    [JsonPropertyName("update_department")]
-    public Department? UpdateDepartment { get; init; }
-
-    /// <summary>
-    /// Deletes a department.
-    /// </summary>
-    [JsonPropertyName("delete_department")]
-    public Department? DeleteDepartment { get; init; }
-
-    /// <summary>
     /// Creates a new object in the Monday.com Objects Platform. The type of object created is determined by the object_type_unique_key parameter. This mutation can create boards, docs, dashboards, workflows, or specialized objects like CRM, capacity manager, etc. Under the hood, this creates a board with the corresponding app_feature_id.
     /// </summary>
     [JsonPropertyName("create_object")]
@@ -248,383 +350,46 @@ public sealed partial class Mutation
     public int? DeleteObjectRelation { get; init; }
 
     /// <summary>
-    /// Add a file to a column value.
+    /// Assigns members to a department.
     /// </summary>
-    [JsonPropertyName("add_file_to_column")]
-    public Asset? AddFileToColumn { get; init; }
+    [JsonPropertyName("assign_department_members")]
+    public AssignDepartmentMembersResult? AssignDepartmentMembers { get; init; }
 
     /// <summary>
-    /// Add a file to an update.
+    /// Clear users department
     /// </summary>
-    [JsonPropertyName("add_file_to_update")]
-    public Asset? AddFileToUpdate { get; init; }
+    [JsonPropertyName("clear_users_department")]
+    public ClearUsersDepartmentResult? ClearUsersDepartment { get; init; }
 
     /// <summary>
-    /// Add subscribers to a board.
+    /// Assigns an owner to a department.
     /// </summary>
-    [JsonPropertyName("add_subscribers_to_board")]
-    public List<User>? AddSubscribersToBoard { get; init; }
+    [JsonPropertyName("assign_department_owner")]
+    public AssignDepartmentOwnerResult? AssignDepartmentOwner { get; init; }
 
     /// <summary>
-    /// Add teams subscribers to a board.
+    /// Unassigns owners from a department.
     /// </summary>
-    [JsonPropertyName("add_teams_to_board")]
-    public List<Team>? AddTeamsToBoard { get; init; }
+    [JsonPropertyName("unassign_department_owners")]
+    public UnassignDepartmentOwnerResult? UnassignDepartmentOwners { get; init; }
 
     /// <summary>
-    /// Add teams to a workspace.
+    /// Creates a new department.
     /// </summary>
-    [JsonPropertyName("add_teams_to_workspace")]
-    public List<Team>? AddTeamsToWorkspace { get; init; }
+    [JsonPropertyName("create_department")]
+    public Department? CreateDepartment { get; init; }
 
     /// <summary>
-    /// Add subscribers to a board.
+    /// Updates a department.
     /// </summary>
-    [JsonPropertyName("add_users_to_board")]
-    public List<User>? AddUsersToBoard { get; init; }
+    [JsonPropertyName("update_department")]
+    public Department? UpdateDepartment { get; init; }
 
     /// <summary>
-    /// Add users to team.
+    /// Deletes a department.
     /// </summary>
-    [JsonPropertyName("add_users_to_team")]
-    public ChangeTeamMembershipsResult? AddUsersToTeam { get; init; }
-
-    /// <summary>
-    /// Add users to a workspace.
-    /// </summary>
-    [JsonPropertyName("add_users_to_workspace")]
-    public List<User>? AddUsersToWorkspace { get; init; }
-
-    /// <summary>
-    /// Archive a board.
-    /// </summary>
-    [JsonPropertyName("archive_board")]
-    public Board? ArchiveBoard { get; init; }
-
-    /// <summary>
-    /// Archives a group in a specific board.
-    /// </summary>
-    [JsonPropertyName("archive_group")]
-    public Group? ArchiveGroup { get; init; }
-
-    /// <summary>
-    /// Archive an item.
-    /// </summary>
-    [JsonPropertyName("archive_item")]
-    public Item? ArchiveItem { get; init; }
-
-    /// <summary>
-    /// Extends trial period of an application to selected accounts
-    /// </summary>
-    [JsonPropertyName("batch_extend_trial_period")]
-    public BatchExtendTrialPeriod? BatchExtendTrialPeriod { get; init; }
-
-    /// <summary>
-    /// Change a column's properties
-    /// </summary>
-    [JsonPropertyName("change_column_metadata")]
-    public Column? ChangeColumnMetadata { get; init; }
-
-    /// <summary>
-    /// Change a column's title
-    /// </summary>
-    [JsonPropertyName("change_column_title")]
-    public Column? ChangeColumnTitle { get; init; }
-
-    /// <summary>
-    /// Change an item's column value.
-    /// </summary>
-    [JsonPropertyName("change_column_value")]
-    public Item? ChangeColumnValue { get; init; }
-
-    /// <summary>
-    /// Change an item's position.
-    /// </summary>
-    [JsonPropertyName("change_item_position")]
-    public Item? ChangeItemPosition { get; init; }
-
-    /// <summary>
-    /// Changes the column values of a specific item.
-    /// </summary>
-    [JsonPropertyName("change_multiple_column_values")]
-    public Item? ChangeMultipleColumnValues { get; init; }
-
-    /// <summary>
-    /// Change an item's column with simple value.
-    /// </summary>
-    [JsonPropertyName("change_simple_column_value")]
-    public Item? ChangeSimpleColumnValue { get; init; }
-
-    /// <summary>
-    /// Clear an item's updates.
-    /// </summary>
-    [JsonPropertyName("clear_item_updates")]
-    public Item? ClearItemUpdates { get; init; }
-
-    /// <summary>
-    /// Get the complexity data of your mutations.
-    /// </summary>
-    [JsonPropertyName("complexity")]
-    public Complexity? Complexity { get; init; }
-
-    /// <summary>
-    /// Create a new board.
-    /// </summary>
-    [JsonPropertyName("create_board")]
-    public Board? CreateBoard { get; init; }
-
-    /// <summary>
-    /// Generic mutation for creating any column type with validation. Supports creating column with properties like title, description, and type-specific defaults/settings. The mutation validates input against the column type's schema before applying changes. Use get_column_type_schema query to understand available properties for each column type.
-    /// </summary>
-    [JsonPropertyName("create_column")]
-    public Column? CreateColumn { get; init; }
-
-    /// <summary>
-    /// Create a new doc.
-    /// </summary>
-    [JsonPropertyName("create_doc")]
-    public Document? CreateDoc { get; init; }
-
-    /// <summary>
-    /// Create new document block
-    /// </summary>
-    [JsonPropertyName("create_doc_block")]
-    public DocumentBlock? CreateDocBlock { get; init; }
-
-    /// <summary>
-    /// Creates a folder in a specific workspace.
-    /// </summary>
-    [JsonPropertyName("create_folder")]
-    public Folder? CreateFolder { get; init; }
-
-    /// <summary>
-    /// Creates a new group in a specific board.
-    /// </summary>
-    [JsonPropertyName("create_group")]
-    public Group? CreateGroup { get; init; }
-
-    /// <summary>
-    /// Create a new item.
-    /// </summary>
-    [JsonPropertyName("create_item")]
-    public Item? CreateItem { get; init; }
-
-    /// <summary>
-    /// Create a new notification.
-    /// </summary>
-    [JsonPropertyName("create_notification")]
-    public Notification? CreateNotification { get; init; }
-
-    /// <summary>
-    /// Create a new tag or get it if it already exists.
-    /// </summary>
-    [JsonPropertyName("create_or_get_tag")]
-    public Tag? CreateOrGetTag { get; init; }
-
-    /// <summary>
-    /// Create subitem.
-    /// </summary>
-    [JsonPropertyName("create_subitem")]
-    public Item? CreateSubitem { get; init; }
-
-    /// <summary>
-    /// Create a new webhook.
-    /// </summary>
-    [JsonPropertyName("create_webhook")]
-    public Webhook? CreateWebhook { get; init; }
-
-    /// <summary>
-    /// Create a new workspace.
-    /// </summary>
-    [JsonPropertyName("create_workspace")]
-    public Workspace? CreateWorkspace { get; init; }
-
-    /// <summary>
-    /// Delete a board.
-    /// </summary>
-    [JsonPropertyName("delete_board")]
-    public Board? DeleteBoard { get; init; }
-
-    /// <summary>
-    /// Delete a column.
-    /// </summary>
-    [JsonPropertyName("delete_column")]
-    public Column? DeleteColumn { get; init; }
-
-    /// <summary>
-    /// Delete a document block
-    /// </summary>
-    [JsonPropertyName("delete_doc_block")]
-    public DocumentBlockIdOnly? DeleteDocBlock { get; init; }
-
-    /// <summary>
-    /// Deletes a folder in a specific workspace.
-    /// </summary>
-    [JsonPropertyName("delete_folder")]
-    public Folder? DeleteFolder { get; init; }
-
-    /// <summary>
-    /// Deletes a group in a specific board.
-    /// </summary>
-    [JsonPropertyName("delete_group")]
-    public Group? DeleteGroup { get; init; }
-
-    /// <summary>
-    /// Delete an item.
-    /// </summary>
-    [JsonPropertyName("delete_item")]
-    public Item? DeleteItem { get; init; }
-
-    /// <summary>
-    /// Remove subscribers from the board.
-    /// </summary>
-    [JsonPropertyName("delete_subscribers_from_board")]
-    public List<User>? DeleteSubscribersFromBoard { get; init; }
-
-    /// <summary>
-    /// Remove team subscribers from the board.
-    /// </summary>
-    [JsonPropertyName("delete_teams_from_board")]
-    public List<Team>? DeleteTeamsFromBoard { get; init; }
-
-    /// <summary>
-    /// Delete teams from a workspace.
-    /// </summary>
-    [JsonPropertyName("delete_teams_from_workspace")]
-    public List<Team>? DeleteTeamsFromWorkspace { get; init; }
-
-    /// <summary>
-    /// Delete users from a workspace.
-    /// </summary>
-    [JsonPropertyName("delete_users_from_workspace")]
-    public List<User>? DeleteUsersFromWorkspace { get; init; }
-
-    /// <summary>
-    /// Delete a new webhook.
-    /// </summary>
-    [JsonPropertyName("delete_webhook")]
-    public Webhook? DeleteWebhook { get; init; }
-
-    /// <summary>
-    /// Delete workspace.
-    /// </summary>
-    [JsonPropertyName("delete_workspace")]
-    public Workspace? DeleteWorkspace { get; init; }
-
-    /// <summary>
-    /// Duplicate a board.
-    /// </summary>
-    [JsonPropertyName("duplicate_board")]
-    public BoardDuplication? DuplicateBoard { get; init; }
-
-    /// <summary>
-    /// Duplicate a group.
-    /// </summary>
-    [JsonPropertyName("duplicate_group")]
-    public Group? DuplicateGroup { get; init; }
-
-    /// <summary>
-    /// Duplicate an item.
-    /// </summary>
-    [JsonPropertyName("duplicate_item")]
-    public Item? DuplicateItem { get; init; }
-
-    /// <summary>
-    /// Increase operations counter
-    /// </summary>
-    [JsonPropertyName("increase_app_subscription_operations")]
-    public AppSubscriptionOperationsCounter? IncreaseAppSubscriptionOperations { get; init; }
-
-    /// <summary>
-    /// Move an item to a different board.
-    /// </summary>
-    [JsonPropertyName("move_item_to_board")]
-    public Item? MoveItemToBoard { get; init; }
-
-    /// <summary>
-    /// Move an item to a different group.
-    /// </summary>
-    [JsonPropertyName("move_item_to_group")]
-    public Item? MoveItemToGroup { get; init; }
-
-    /// <summary>
-    /// Remove mock app subscription for the current account
-    /// </summary>
-    [JsonPropertyName("remove_mock_app_subscription")]
-    public AppSubscription? RemoveMockAppSubscription { get; init; }
-
-    /// <summary>
-    /// Remove users from team.
-    /// </summary>
-    [JsonPropertyName("remove_users_from_team")]
-    public ChangeTeamMembershipsResult? RemoveUsersFromTeam { get; init; }
-
-    /// <summary>
-    /// Set or update the board's permission to specified role. This concept is also
-    ///   known as default board role, general access or board permission set.
-    /// </summary>
-    [JsonPropertyName("set_board_permission")]
-    public SetBoardPermissionResponse? SetBoardPermission { get; init; }
-
-    /// <summary>
-    /// Set mock app subscription for the current account
-    /// </summary>
-    [JsonPropertyName("set_mock_app_subscription")]
-    public AppSubscription? SetMockAppSubscription { get; init; }
-
-    /// <summary>
-    /// Update item column value by existing assets
-    /// </summary>
-    [JsonPropertyName("update_assets_on_item")]
-    public Item? UpdateAssetsOnItem { get; init; }
-
-    /// <summary>
-    /// Update Board attribute.
-    /// </summary>
-    [JsonPropertyName("update_board")]
-    public string? UpdateBoard { get; init; }
-
-    /// <summary>
-    /// Update a board's position, workspace, or account product.
-    /// </summary>
-    [JsonPropertyName("update_board_hierarchy")]
-    public UpdateBoardHierarchyResult? UpdateBoardHierarchy { get; init; }
-
-    /// <summary>
-    /// Update a document block
-    /// </summary>
-    [JsonPropertyName("update_doc_block")]
-    public DocumentBlock? UpdateDocBlock { get; init; }
-
-    /// <summary>
-    /// Updates a folder.
-    /// </summary>
-    [JsonPropertyName("update_folder")]
-    public Folder? UpdateFolder { get; init; }
-
-    /// <summary>
-    /// Update an existing group.
-    /// </summary>
-    [JsonPropertyName("update_group")]
-    public Group? UpdateGroup { get; init; }
-
-    /// <summary>
-    /// Update the position of a dashboard.
-    /// </summary>
-    [JsonPropertyName("update_overview_hierarchy")]
-    public UpdateOverviewHierarchy? UpdateOverviewHierarchy { get; init; }
-
-    /// <summary>
-    /// Update an existing workspace.
-    /// </summary>
-    [JsonPropertyName("update_workspace")]
-    public Workspace? UpdateWorkspace { get; init; }
-
-    /// <summary>
-    /// Use a template
-    /// </summary>
-    [JsonPropertyName("use_template")]
-    public Template? UseTemplate { get; init; }
+    [JsonPropertyName("delete_department")]
+    public Department? DeleteDepartment { get; init; }
 
     /// <summary>
     /// Create a marketplace app discount
@@ -757,144 +522,6 @@ public sealed partial class Mutation
     /// </summary>
     [JsonPropertyName("update_favorite_position")]
     public UpdateFavoriteResultType? UpdateFavoritePosition { get; init; }
-
-    /// <summary>
-    /// Create managed column of type dropdown mutation.
-    /// </summary>
-    [JsonPropertyName("create_dropdown_managed_column")]
-    public DropdownManagedColumn? CreateDropdownManagedColumn { get; init; }
-
-    /// <summary>
-    /// Create managed column of type status mutation.
-    /// </summary>
-    [JsonPropertyName("create_status_managed_column")]
-    public StatusManagedColumn? CreateStatusManagedColumn { get; init; }
-
-    /// <summary>
-    /// Update managed column of type dropdown mutation.
-    /// </summary>
-    [JsonPropertyName("update_dropdown_managed_column")]
-    public DropdownManagedColumn? UpdateDropdownManagedColumn { get; init; }
-
-    /// <summary>
-    /// Update managed column of type status mutation.
-    /// </summary>
-    [JsonPropertyName("update_status_managed_column")]
-    public StatusManagedColumn? UpdateStatusManagedColumn { get; init; }
-
-    /// <summary>
-    /// Activate managed column mutation.
-    /// </summary>
-    [JsonPropertyName("activate_managed_column")]
-    public ManagedColumn? ActivateManagedColumn { get; init; }
-
-    /// <summary>
-    /// Deactivate managed column mutation.
-    /// </summary>
-    [JsonPropertyName("deactivate_managed_column")]
-    public ManagedColumn? DeactivateManagedColumn { get; init; }
-
-    /// <summary>
-    /// Delete managed column mutation.
-    /// </summary>
-    [JsonPropertyName("delete_managed_column")]
-    public ManagedColumn? DeleteManagedColumn { get; init; }
-
-    /// <summary>
-    /// Updates a status column's properties including title, description, and status label settings. Status columns allow users to track item progress through customizable labels (e.g., "Working on it", "Done", "Stuck"). This mutation is specifically for status/color columns and provides type-safe updates.
-    /// </summary>
-    [JsonPropertyName("update_status_column")]
-    public Column? UpdateStatusColumn { get; init; }
-
-    /// <summary>
-    /// Updates a dropdown column's properties including title, description, and dropdown label settings. Dropdown columns allow users to select from a predefined list of options. This mutation is specifically for dropdown columns and provides type-safe updates.
-    /// </summary>
-    [JsonPropertyName("update_dropdown_column")]
-    public Column? UpdateDropdownColumn { get; init; }
-
-    /// <summary>
-    /// Generic mutation for updating any column type with validation. Supports updating column properties like title, description, and type-specific defaults/settings. The mutation validates input against the column type's schema before applying changes. Use get_column_type_schema query to understand available properties for each column type.
-    /// </summary>
-    [JsonPropertyName("update_column")]
-    public Column? UpdateColumn { get; init; }
-
-    /// <summary>
-    /// Creates a new status column with strongly typed settings. Status columns allow users to track item progress through customizable labels (e.g., "Working on it", "Done", "Stuck"). This mutation is specifically for status/color columns and provides type-safe creation with label configuration.
-    /// </summary>
-    [JsonPropertyName("create_status_column")]
-    public Column? CreateStatusColumn { get; init; }
-
-    /// <summary>
-    /// Creates a new dropdown column with strongly typed settings. Dropdown columns allow users to select from a predefined list of options. This mutation is specifically for dropdown columns and provides type-safe creation with dropdown options configuration.
-    /// </summary>
-    [JsonPropertyName("create_dropdown_column")]
-    public Column? CreateDropdownColumn { get; init; }
-
-    /// <summary>
-    /// Creates a new status column in a board that is linked to a managed column. The column data and settings are controlled by the managed column. Only title and description can be overridden locally.
-    /// </summary>
-    [JsonPropertyName("attach_status_managed_column")]
-    public Column? AttachStatusManagedColumn { get; init; }
-
-    /// <summary>
-    /// Creates a new dropdown column in a board that is linked to a managed column. The column data and settings are controlled by the managed column. Title, description, and dropdown-specific settings (limit_select, label_limit_count) can be overridden locally.
-    /// </summary>
-    [JsonPropertyName("attach_dropdown_managed_column")]
-    public Column? AttachDropdownManagedColumn { get; init; }
-
-    /// <summary>
-    /// Create a new account object schema.
-    /// </summary>
-    [JsonPropertyName("create_object_schema")]
-    public ObjectSchema? CreateObjectSchema { get; init; }
-
-    /// <summary>
-    /// Update an account object schema.
-    /// </summary>
-    [JsonPropertyName("update_object_schema")]
-    public ObjectSchema? UpdateObjectSchema { get; init; }
-
-    /// <summary>
-    /// Delete an account object schema. Can only delete if there are no boards attached to the object schema. Object schemas define the structure and columns of boards.
-    /// </summary>
-    [JsonPropertyName("delete_object_schema")]
-    public ObjectSchema? DeleteObjectSchema { get; init; }
-
-    /// <summary>
-    /// Connect a board to an object schema.
-    /// </summary>
-    [JsonPropertyName("connect_board_to_object_schema")]
-    public BoardConnection? ConnectBoardToObjectSchema { get; init; }
-
-    /// <summary>
-    /// Create columns on an account object schema.
-    /// </summary>
-    [JsonPropertyName("create_object_schema_columns")]
-    public ObjectSchema? CreateObjectSchemaColumns { get; init; }
-
-    /// <summary>
-    /// Deactivate or reactivate a column on an account object schema.
-    /// </summary>
-    [JsonPropertyName("set_object_schema_column_active_state")]
-    public ObjectSchema? SetObjectSchemaColumnActiveState { get; init; }
-
-    /// <summary>
-    /// Detach boards from their object schemas.
-    /// </summary>
-    [JsonPropertyName("detach_boards_from_object_schema")]
-    public List<BulkDetachBoardResult>? DetachBoardsFromObjectSchema { get; init; }
-
-    /// <summary>
-    /// Update columns on an account object schema.
-    /// </summary>
-    [JsonPropertyName("update_object_schema_columns")]
-    public ObjectSchema? UpdateObjectSchemaColumns { get; init; }
-
-    /// <summary>
-    /// Execute multiple object schema column actions in a single request. Actions are executed sequentially in the order provided. If any action fails, execution stops and an error is returned.
-    /// </summary>
-    [JsonPropertyName("bulk_object_schema_column_actions")]
-    public List<ObjectSchemaActionResult>? BulkObjectSchemaColumnActions { get; init; }
 
     [JsonPropertyName("create_timeline_item")]
     public TimelineItem? CreateTimelineItem { get; init; }
@@ -1147,5 +774,378 @@ public sealed partial class Mutation
     /// </summary>
     [JsonPropertyName("uninstall_app")]
     public AppDeletionResponse? UninstallApp { get; init; }
+
+    /// <summary>
+    /// Add a file to a column value.
+    /// </summary>
+    [JsonPropertyName("add_file_to_column")]
+    public Asset? AddFileToColumn { get; init; }
+
+    /// <summary>
+    /// Add a file to an update.
+    /// </summary>
+    [JsonPropertyName("add_file_to_update")]
+    public Asset? AddFileToUpdate { get; init; }
+
+    /// <summary>
+    /// Add subscribers to a board.
+    /// </summary>
+    [JsonPropertyName("add_subscribers_to_board")]
+    public List<User>? AddSubscribersToBoard { get; init; }
+
+    /// <summary>
+    /// Add teams subscribers to a board.
+    /// </summary>
+    [JsonPropertyName("add_teams_to_board")]
+    public List<Team>? AddTeamsToBoard { get; init; }
+
+    /// <summary>
+    /// Add teams to a workspace.
+    /// </summary>
+    [JsonPropertyName("add_teams_to_workspace")]
+    public List<Team>? AddTeamsToWorkspace { get; init; }
+
+    /// <summary>
+    /// Add subscribers to a board.
+    /// </summary>
+    [JsonPropertyName("add_users_to_board")]
+    public List<User>? AddUsersToBoard { get; init; }
+
+    /// <summary>
+    /// Add users to team.
+    /// </summary>
+    [JsonPropertyName("add_users_to_team")]
+    public ChangeTeamMembershipsResult? AddUsersToTeam { get; init; }
+
+    /// <summary>
+    /// Add users to a workspace.
+    /// </summary>
+    [JsonPropertyName("add_users_to_workspace")]
+    public List<User>? AddUsersToWorkspace { get; init; }
+
+    /// <summary>
+    /// Archive a board.
+    /// </summary>
+    [JsonPropertyName("archive_board")]
+    public Board? ArchiveBoard { get; init; }
+
+    /// <summary>
+    /// Archives a group in a specific board.
+    /// </summary>
+    [JsonPropertyName("archive_group")]
+    public Group? ArchiveGroup { get; init; }
+
+    /// <summary>
+    /// Archive an item.
+    /// </summary>
+    [JsonPropertyName("archive_item")]
+    public Item? ArchiveItem { get; init; }
+
+    /// <summary>
+    /// Extends trial period of an application to selected accounts
+    /// </summary>
+    [JsonPropertyName("batch_extend_trial_period")]
+    public BatchExtendTrialPeriod? BatchExtendTrialPeriod { get; init; }
+
+    /// <summary>
+    /// Change a column's properties
+    /// </summary>
+    [JsonPropertyName("change_column_metadata")]
+    public Column? ChangeColumnMetadata { get; init; }
+
+    /// <summary>
+    /// Change a column's title
+    /// </summary>
+    [JsonPropertyName("change_column_title")]
+    public Column? ChangeColumnTitle { get; init; }
+
+    /// <summary>
+    /// Change an item's column value.
+    /// </summary>
+    [JsonPropertyName("change_column_value")]
+    public Item? ChangeColumnValue { get; init; }
+
+    /// <summary>
+    /// Change an item's position.
+    /// </summary>
+    [JsonPropertyName("change_item_position")]
+    public Item? ChangeItemPosition { get; init; }
+
+    /// <summary>
+    /// Changes the column values of a specific item.
+    /// </summary>
+    [JsonPropertyName("change_multiple_column_values")]
+    public Item? ChangeMultipleColumnValues { get; init; }
+
+    /// <summary>
+    /// Change an item's column with simple value.
+    /// </summary>
+    [JsonPropertyName("change_simple_column_value")]
+    public Item? ChangeSimpleColumnValue { get; init; }
+
+    /// <summary>
+    /// Clear an item's updates.
+    /// </summary>
+    [JsonPropertyName("clear_item_updates")]
+    public Item? ClearItemUpdates { get; init; }
+
+    /// <summary>
+    /// Get the complexity data of your mutations.
+    /// </summary>
+    [JsonPropertyName("complexity")]
+    public Complexity? Complexity { get; init; }
+
+    /// <summary>
+    /// Create a new board.
+    /// </summary>
+    [JsonPropertyName("create_board")]
+    public Board? CreateBoard { get; init; }
+
+    /// <summary>
+    /// Create a new doc.
+    /// </summary>
+    [JsonPropertyName("create_doc")]
+    public Document? CreateDoc { get; init; }
+
+    /// <summary>
+    /// Create new document block
+    /// </summary>
+    [JsonPropertyName("create_doc_block")]
+    public DocumentBlock? CreateDocBlock { get; init; }
+
+    /// <summary>
+    /// Creates a folder in a specific workspace.
+    /// </summary>
+    [JsonPropertyName("create_folder")]
+    public Folder? CreateFolder { get; init; }
+
+    /// <summary>
+    /// Creates a new group in a specific board.
+    /// </summary>
+    [JsonPropertyName("create_group")]
+    public Group? CreateGroup { get; init; }
+
+    /// <summary>
+    /// Create a new item.
+    /// </summary>
+    [JsonPropertyName("create_item")]
+    public Item? CreateItem { get; init; }
+
+    /// <summary>
+    /// Create a new notification.
+    /// </summary>
+    [JsonPropertyName("create_notification")]
+    public Notification? CreateNotification { get; init; }
+
+    /// <summary>
+    /// Create a new tag or get it if it already exists.
+    /// </summary>
+    [JsonPropertyName("create_or_get_tag")]
+    public Tag? CreateOrGetTag { get; init; }
+
+    /// <summary>
+    /// Create subitem.
+    /// </summary>
+    [JsonPropertyName("create_subitem")]
+    public Item? CreateSubitem { get; init; }
+
+    /// <summary>
+    /// Create a new webhook.
+    /// </summary>
+    [JsonPropertyName("create_webhook")]
+    public Webhook? CreateWebhook { get; init; }
+
+    /// <summary>
+    /// Create a new workspace.
+    /// </summary>
+    [JsonPropertyName("create_workspace")]
+    public Workspace? CreateWorkspace { get; init; }
+
+    /// <summary>
+    /// Delete a board.
+    /// </summary>
+    [JsonPropertyName("delete_board")]
+    public Board? DeleteBoard { get; init; }
+
+    /// <summary>
+    /// Delete a column.
+    /// </summary>
+    [JsonPropertyName("delete_column")]
+    public Column? DeleteColumn { get; init; }
+
+    /// <summary>
+    /// Delete a document block
+    /// </summary>
+    [JsonPropertyName("delete_doc_block")]
+    public DocumentBlockIdOnly? DeleteDocBlock { get; init; }
+
+    /// <summary>
+    /// Deletes a folder in a specific workspace.
+    /// </summary>
+    [JsonPropertyName("delete_folder")]
+    public Folder? DeleteFolder { get; init; }
+
+    /// <summary>
+    /// Deletes a group in a specific board.
+    /// </summary>
+    [JsonPropertyName("delete_group")]
+    public Group? DeleteGroup { get; init; }
+
+    /// <summary>
+    /// Delete an item.
+    /// </summary>
+    [JsonPropertyName("delete_item")]
+    public Item? DeleteItem { get; init; }
+
+    /// <summary>
+    /// Remove subscribers from the board.
+    /// </summary>
+    [JsonPropertyName("delete_subscribers_from_board")]
+    public List<User>? DeleteSubscribersFromBoard { get; init; }
+
+    /// <summary>
+    /// Remove team subscribers from the board.
+    /// </summary>
+    [JsonPropertyName("delete_teams_from_board")]
+    public List<Team>? DeleteTeamsFromBoard { get; init; }
+
+    /// <summary>
+    /// Delete teams from a workspace.
+    /// </summary>
+    [JsonPropertyName("delete_teams_from_workspace")]
+    public List<Team>? DeleteTeamsFromWorkspace { get; init; }
+
+    /// <summary>
+    /// Delete users from a workspace.
+    /// </summary>
+    [JsonPropertyName("delete_users_from_workspace")]
+    public List<User>? DeleteUsersFromWorkspace { get; init; }
+
+    /// <summary>
+    /// Delete a new webhook.
+    /// </summary>
+    [JsonPropertyName("delete_webhook")]
+    public Webhook? DeleteWebhook { get; init; }
+
+    /// <summary>
+    /// Delete workspace.
+    /// </summary>
+    [JsonPropertyName("delete_workspace")]
+    public Workspace? DeleteWorkspace { get; init; }
+
+    /// <summary>
+    /// Duplicate a board.
+    /// </summary>
+    [JsonPropertyName("duplicate_board")]
+    public BoardDuplication? DuplicateBoard { get; init; }
+
+    /// <summary>
+    /// Duplicate a group.
+    /// </summary>
+    [JsonPropertyName("duplicate_group")]
+    public Group? DuplicateGroup { get; init; }
+
+    /// <summary>
+    /// Duplicate an item.
+    /// </summary>
+    [JsonPropertyName("duplicate_item")]
+    public Item? DuplicateItem { get; init; }
+
+    /// <summary>
+    /// Increase operations counter
+    /// </summary>
+    [JsonPropertyName("increase_app_subscription_operations")]
+    public AppSubscriptionOperationsCounter? IncreaseAppSubscriptionOperations { get; init; }
+
+    /// <summary>
+    /// Move an item to a different board.
+    /// </summary>
+    [JsonPropertyName("move_item_to_board")]
+    public Item? MoveItemToBoard { get; init; }
+
+    /// <summary>
+    /// Move an item to a different group.
+    /// </summary>
+    [JsonPropertyName("move_item_to_group")]
+    public Item? MoveItemToGroup { get; init; }
+
+    /// <summary>
+    /// Remove mock app subscription for the current account
+    /// </summary>
+    [JsonPropertyName("remove_mock_app_subscription")]
+    public AppSubscription? RemoveMockAppSubscription { get; init; }
+
+    /// <summary>
+    /// Remove users from team.
+    /// </summary>
+    [JsonPropertyName("remove_users_from_team")]
+    public ChangeTeamMembershipsResult? RemoveUsersFromTeam { get; init; }
+
+    /// <summary>
+    /// Set or update the board's permission to specified role. This concept is also
+    ///   known as default board role, general access or board permission set.
+    /// </summary>
+    [JsonPropertyName("set_board_permission")]
+    public SetBoardPermissionResponse? SetBoardPermission { get; init; }
+
+    /// <summary>
+    /// Set mock app subscription for the current account
+    /// </summary>
+    [JsonPropertyName("set_mock_app_subscription")]
+    public AppSubscription? SetMockAppSubscription { get; init; }
+
+    /// <summary>
+    /// Update item column value by existing assets
+    /// </summary>
+    [JsonPropertyName("update_assets_on_item")]
+    public Item? UpdateAssetsOnItem { get; init; }
+
+    /// <summary>
+    /// Update Board attribute.
+    /// </summary>
+    [JsonPropertyName("update_board")]
+    public string? UpdateBoard { get; init; }
+
+    /// <summary>
+    /// Update a board's position, workspace, or account product.
+    /// </summary>
+    [JsonPropertyName("update_board_hierarchy")]
+    public UpdateBoardHierarchyResult? UpdateBoardHierarchy { get; init; }
+
+    /// <summary>
+    /// Update a document block
+    /// </summary>
+    [JsonPropertyName("update_doc_block")]
+    public DocumentBlock? UpdateDocBlock { get; init; }
+
+    /// <summary>
+    /// Updates a folder.
+    /// </summary>
+    [JsonPropertyName("update_folder")]
+    public Folder? UpdateFolder { get; init; }
+
+    /// <summary>
+    /// Update an existing group.
+    /// </summary>
+    [JsonPropertyName("update_group")]
+    public Group? UpdateGroup { get; init; }
+
+    /// <summary>
+    /// Update the position of a dashboard.
+    /// </summary>
+    [JsonPropertyName("update_overview_hierarchy")]
+    public UpdateOverviewHierarchy? UpdateOverviewHierarchy { get; init; }
+
+    /// <summary>
+    /// Update an existing workspace.
+    /// </summary>
+    [JsonPropertyName("update_workspace")]
+    public Workspace? UpdateWorkspace { get; init; }
+
+    /// <summary>
+    /// Use a template
+    /// </summary>
+    [JsonPropertyName("use_template")]
+    public Template? UseTemplate { get; init; }
 
 }

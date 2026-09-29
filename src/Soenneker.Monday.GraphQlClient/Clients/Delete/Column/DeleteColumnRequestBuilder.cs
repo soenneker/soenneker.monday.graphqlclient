@@ -22,7 +22,7 @@ public sealed partial class DeleteColumnRequestBuilder
     /// </summary>
     public ValueTask<GraphQlResponse<DeleteColumnData>> Execute(DeleteColumnVariables request, CancellationToken cancellationToken = default)
     {
-        const string gqlQuery = @"mutation DeleteColumn($board_id: ID!, $column_id: String!) { delete_column(board_id: $board_id, column_id: $column_id) { archived description id settings_str title type width settings revision capabilities { calculated { function calculated_type } visibility } } }";
+        const string gqlQuery = @"mutation DeleteColumn($board_id: ID!, $column_id: String!) { delete_column(board_id: $board_id, column_id: $column_id) { id title description type width archived settings settings_str revision capabilities { calculated { function calculated_type } visibility } } }";
         return _graphQlClient.Execute<DeleteColumnData>(gqlQuery, request, cancellationToken);
     }
 

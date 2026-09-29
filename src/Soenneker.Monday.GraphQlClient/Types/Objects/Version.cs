@@ -11,12 +11,6 @@ namespace Soenneker.Monday.GraphQlClient;
 public sealed partial class Version
 {
     /// <summary>
-    /// The display name of the API version
-    /// </summary>
-    [JsonPropertyName("display_name")]
-    public string DisplayName { get; init; } = null!;
-
-    /// <summary>
     /// The type of the API version
     /// </summary>
     [JsonPropertyName("kind")]
@@ -27,5 +21,11 @@ public sealed partial class Version
     /// </summary>
     [JsonPropertyName("value")]
     public string Value { get; init; } = null!;
+
+    /// <summary>
+    /// The display name of the API version
+    /// </summary>
+    [JsonPropertyName("display_name")]
+    public string DisplayName { get; init; } = null!;
 
 }
