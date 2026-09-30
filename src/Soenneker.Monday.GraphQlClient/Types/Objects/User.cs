@@ -84,12 +84,6 @@ public sealed partial class User
     public Department? Department { get; init; }
 
     /// <summary>
-    /// Activity log entries for the user
-    /// </summary>
-    [JsonPropertyName("activity_logs")]
-    public UserActivityLogsPage? ActivityLogs { get; init; }
-
-    /// <summary>
     /// The unique identifier of the account the user belongs to.
     /// </summary>
     [JsonPropertyName("account_id")]
@@ -172,6 +166,12 @@ public sealed partial class User
     /// </summary>
     [JsonPropertyName("created_at")]
     public string CreatedAt { get; init; } = null!;
+
+    /// <summary>
+    /// Activity log entries for the user
+    /// </summary>
+    [JsonPropertyName("activity_logs")]
+    public UserActivityLogsPage? ActivityLogs { get; init; }
 
     /// <summary>
     /// The user's account.

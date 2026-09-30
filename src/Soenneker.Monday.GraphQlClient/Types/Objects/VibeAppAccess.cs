@@ -33,4 +33,10 @@ public sealed partial class VibeAppAccess
     [JsonPropertyName("public_link")]
     public string? PublicLink { get; init; }
 
+    /// <summary>
+    /// The lifecycle state of the app. Only EXTERNAL apps are reachable from the public web.
+    /// </summary>
+    [JsonPropertyName("state")]
+    public VibeAppState? State { get; init; }
+
 }
