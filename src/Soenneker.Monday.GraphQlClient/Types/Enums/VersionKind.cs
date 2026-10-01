@@ -7,20 +7,20 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum VersionKind
 {
-    Maintenance,
-
     Current,
 
-    ReleaseCandidate,
+    Deprecated,
 
     Dev,
 
-    Deprecated,
+    Maintenance,
 
     OldMaintenance,
 
     OldPreviousMaintenance,
 
-    PreviousMaintenance
+    PreviousMaintenance,
+
+    ReleaseCandidate
 
 }

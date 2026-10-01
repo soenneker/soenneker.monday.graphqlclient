@@ -33,14 +33,6 @@ public enum LLMModelInput
 
     GEMINI38FLASH,
 
-    GPT5NANO,
-
-    GPT5,
-
-    GPT5MINI,
-
-    GPT51,
-
-    GPT52
+    GPT6SOL
 
 }

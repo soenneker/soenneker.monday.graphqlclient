@@ -47,19 +47,14 @@ public sealed partial class Board
     public BoardManualMetadata? ManualMetadata { get; init; }
 
     /// <summary>
-    /// The board's views.
-    /// </summary>
-    [JsonPropertyName("views")]
-    public List<BoardView>? Views { get; init; }
-
-    /// <summary>
     /// The user's permission level for this board (view / edit).
     /// </summary>
     [JsonPropertyName("access_level")]
     public BoardAccessLevel AccessLevel { get; init; }
 
     /// <summary>
-    /// The board log events.
+    /// The board log events. Starting from version 2027-01, this API will change: it
+    ///   will include more entities and will be capped to events from the last 90 days.
     /// </summary>
     [JsonPropertyName("activity_logs")]
     public List<ActivityLogType>? ActivityLogs { get; init; }
@@ -237,6 +232,12 @@ public sealed partial class Board
     /// </summary>
     [JsonPropertyName("url")]
     public string Url { get; init; } = null!;
+
+    /// <summary>
+    /// The board's views.
+    /// </summary>
+    [JsonPropertyName("views")]
+    public List<BoardView>? Views { get; init; }
 
     /// <summary>
     /// The workspace that contains this board (null for main workspace).
