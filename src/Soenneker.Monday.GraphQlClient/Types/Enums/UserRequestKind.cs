@@ -21,6 +21,8 @@ public enum UserRequestKind
 
     RequestToUpgradeBeforeAppsUnpublish,
 
-    RequestToPublishApp
+    RequestToPublishApp,
+
+    RequestExternalAccess
 
 }

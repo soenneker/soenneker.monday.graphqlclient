@@ -99,12 +99,6 @@ public sealed partial class Query
     public List<ObjectRelation>? ObjectRelations { get; init; }
 
     /// <summary>
-    /// Performs aggregation operations on board data
-    /// </summary>
-    [JsonPropertyName("aggregate")]
-    public AggregateQueryResult? Aggregate { get; init; }
-
-    /// <summary>
     /// Get account departments
     /// </summary>
     [JsonPropertyName("departments")]
@@ -492,6 +486,81 @@ public sealed partial class Query
     public BoardDependencies? BoardDependencies { get; init; }
 
     /// <summary>
+    /// Get board candidates based on workspace and usage type
+    /// </summary>
+    [JsonPropertyName("board_candidates")]
+    public List<Board>? BoardCandidates { get; init; }
+
+    /// <summary>
+    /// Get the status of an async job by its external ID
+    /// </summary>
+    [JsonPropertyName("job_status")]
+    public AsyncJobStatus JobStatus { get; init; } = null!;
+
+    /// <summary>
+    /// Get a collection of monday dev sprints
+    /// </summary>
+    [JsonPropertyName("sprints")]
+    public List<Sprint>? Sprints { get; init; }
+
+    /// <summary>
+    /// Returns all available widget schemas for documentation and validation purposes
+    /// </summary>
+    [JsonPropertyName("all_widgets_schema")]
+    public List<WidgetSchemaInfo>? AllWidgetsSchema { get; init; }
+
+    [JsonPropertyName("notifications")]
+    public List<NotificationV2>? Notifications { get; init; }
+
+    /// <summary>
+    /// Retrieves the current user's notification settings across all available channels.
+    /// </summary>
+    [JsonPropertyName("notifications_settings")]
+    public List<NotificationSetting>? NotificationsSettings { get; init; }
+
+    /// <summary>
+    /// Get mute board notification settings for the current user
+    /// </summary>
+    [JsonPropertyName("mute_board_settings")]
+    public List<BoardMuteSettings>? MuteBoardSettings { get; init; }
+
+    /// <summary>
+    /// Performs aggregation operations on board data
+    /// </summary>
+    [JsonPropertyName("aggregate")]
+    public AggregateQueryResult? Aggregate { get; init; }
+
+    /// <summary>
+    /// Get an app by ID or slug.
+    /// </summary>
+    [JsonPropertyName("app")]
+    public AppType? App { get; init; }
+
+    /// <summary>
+    /// Query the monday.com apps documentation using AI. Returns an AI-generated answer based on the documentation.
+    /// </summary>
+    [JsonPropertyName("ask_developer_docs")]
+    public AppDocumentationAiResponse? AskDeveloperDocs { get; init; }
+
+    /// <summary>
+    /// Get lifecycle subscriptions for all entity types in a specific app version. If version_id is not provided, resolves the active version (user testing version, live, or latest).
+    /// </summary>
+    [JsonPropertyName("get_app_lifecycle_subscriptions")]
+    public List<LifecycleSubscriptionKind>? GetAppLifecycleSubscriptions { get; init; }
+
+    /// <summary>
+    /// Platform API data.
+    /// </summary>
+    [JsonPropertyName("platform_api")]
+    public PlatformApi? PlatformApi { get; init; }
+
+    /// <summary>
+    /// Search API. Each field searches a single entity type with tailored filters.
+    /// </summary>
+    [JsonPropertyName("search")]
+    public SearchNamespace Search { get; init; } = null!;
+
+    /// <summary>
     /// Retrieve audit logs for your Monday account. You can
     ///   filter logs by event types, user ID, IP address and start and end date.
     ///   
@@ -555,74 +624,5 @@ public sealed partial class Query
     /// </summary>
     [JsonPropertyName("audit_event_catalogue")]
     public List<AuditEventCatalogueEntry>? AuditEventCatalogue { get; init; }
-
-    /// <summary>
-    /// Get board candidates based on workspace and usage type
-    /// </summary>
-    [JsonPropertyName("board_candidates")]
-    public List<Board>? BoardCandidates { get; init; }
-
-    /// <summary>
-    /// Get the status of an async job by its external ID
-    /// </summary>
-    [JsonPropertyName("job_status")]
-    public AsyncJobStatus JobStatus { get; init; } = null!;
-
-    /// <summary>
-    /// Get a collection of monday dev sprints
-    /// </summary>
-    [JsonPropertyName("sprints")]
-    public List<Sprint>? Sprints { get; init; }
-
-    /// <summary>
-    /// Returns all available widget schemas for documentation and validation purposes
-    /// </summary>
-    [JsonPropertyName("all_widgets_schema")]
-    public List<WidgetSchemaInfo>? AllWidgetsSchema { get; init; }
-
-    [JsonPropertyName("notifications")]
-    public List<NotificationV2>? Notifications { get; init; }
-
-    /// <summary>
-    /// Retrieves the current user's notification settings across all available channels.
-    /// </summary>
-    [JsonPropertyName("notifications_settings")]
-    public List<NotificationSetting>? NotificationsSettings { get; init; }
-
-    /// <summary>
-    /// Get mute board notification settings for the current user
-    /// </summary>
-    [JsonPropertyName("mute_board_settings")]
-    public List<BoardMuteSettings>? MuteBoardSettings { get; init; }
-
-    /// <summary>
-    /// Get an app by ID or slug.
-    /// </summary>
-    [JsonPropertyName("app")]
-    public AppType? App { get; init; }
-
-    /// <summary>
-    /// Query the monday.com apps documentation using AI. Returns an AI-generated answer based on the documentation.
-    /// </summary>
-    [JsonPropertyName("ask_developer_docs")]
-    public AppDocumentationAiResponse? AskDeveloperDocs { get; init; }
-
-    /// <summary>
-    /// Get lifecycle subscriptions for all entity types in a specific app version. If version_id is not provided, resolves the active version (user testing version, live, or latest).
-    /// </summary>
-    [JsonPropertyName("get_app_lifecycle_subscriptions")]
-    public List<LifecycleSubscriptionKind>? GetAppLifecycleSubscriptions { get; init; }
-
-    /// <summary>
-    /// Platform API data.
-    /// </summary>
-    [JsonPropertyName("platform_api")]
-    public PlatformApi? PlatformApi { get; init; }
-
-    /// <summary>
-    /// Search API. Each field searches a single entity type with tailored filters.
-    /// </summary>
-    [JsonPropertyName("search")]
-    public SearchNamespace Search { get; init; } = null!;
 
 }

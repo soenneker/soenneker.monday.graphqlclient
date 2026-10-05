@@ -7,6 +7,16 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum AppAuditKind
 {
-    UNPUBLISH
+    UNPUBLISH,
+
+    EXTERNALACCESSENABLED,
+
+    EXTERNALACCESSDISABLED,
+
+    EXTERNALUSERINVITED,
+
+    EXTERNALUSERREVOKED,
+
+    EXTERNALACCESSKILLEDBYADMIN
 
 }
