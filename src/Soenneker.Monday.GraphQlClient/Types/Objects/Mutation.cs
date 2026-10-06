@@ -392,6 +392,12 @@ public sealed partial class Mutation
     public Department? DeleteDepartment { get; init; }
 
     /// <summary>
+    /// Execute an integration block with the provided field values
+    /// </summary>
+    [JsonPropertyName("execute_integration_block")]
+    public IntegrationExecutionResult? ExecuteIntegrationBlock { get; init; }
+
+    /// <summary>
     /// Create a marketplace app discount
     /// </summary>
     [JsonPropertyName("create_marketplace_app_discount")]
@@ -985,12 +991,6 @@ public sealed partial class Mutation
     /// </summary>
     [JsonPropertyName("use_template")]
     public Template? UseTemplate { get; init; }
-
-    /// <summary>
-    /// Execute an integration block with the provided field values
-    /// </summary>
-    [JsonPropertyName("execute_integration_block")]
-    public IntegrationExecutionResult? ExecuteIntegrationBlock { get; init; }
 
     /// <summary>
     /// Connect an existing project to a portfolio. When a callback_url is provided the mutation returns immediately with a process_id, and the result is POSTed to that URL once the operation completes. The callback payload is: { is_success: boolean, process_id: string, portfolio_item_id?: string }.

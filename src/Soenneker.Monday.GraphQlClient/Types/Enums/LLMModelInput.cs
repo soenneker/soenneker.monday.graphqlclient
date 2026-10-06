@@ -33,6 +33,6 @@ public enum LLMModelInput
 
     GEMINI38FLASH,
 
-    GPT6SOL
+    GPT61SOL
 
 }
