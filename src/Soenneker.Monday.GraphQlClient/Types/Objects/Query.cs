@@ -33,12 +33,6 @@ public sealed partial class Query
     public JobStatus FetchJobStatus { get; init; } = null!;
 
     /// <summary>
-    /// Fetch resources information from the resource directory
-    /// </summary>
-    [JsonPropertyName("get_directory_resources")]
-    public DirectoryResourcesResponse? GetDirectoryResources { get; init; }
-
-    /// <summary>
     /// Get managed column data.
     /// </summary>
     [JsonPropertyName("managed_column")]
@@ -103,6 +97,12 @@ public sealed partial class Query
     /// </summary>
     [JsonPropertyName("departments")]
     public List<Department>? Departments { get; init; }
+
+    /// <summary>
+    /// Fetch resources information from the resource directory
+    /// </summary>
+    [JsonPropertyName("get_directory_resources")]
+    public DirectoryResourcesResponse? GetDirectoryResources { get; init; }
 
     [JsonPropertyName("marketplace_app_discounts")]
     public List<MarketplaceAppDiscount> MarketplaceAppDiscounts { get; init; } = [];

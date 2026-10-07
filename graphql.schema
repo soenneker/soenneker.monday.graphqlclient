@@ -347,10 +347,6 @@ type Mutation {
   """
   undo_action(job_id: ID!): UndoResult
   """
-  Update attributes (Job Role, Skills, or Location) for multiple resources in the directory
-  """
-  update_directory_resources_attributes(attribute: DirectoryResourceAttribute!, values: [String!]!, resource_ids: [ID!]!): UpdateDirectoryResourceAttributesResponse
-  """
   Create managed column of type dropdown mutation.
   """
   create_dropdown_managed_column(title: String!, description: String, settings: CreateDropdownColumnSettingsInput): DropdownManagedColumn
@@ -566,6 +562,10 @@ type Mutation {
   Deletes a department.
   """
   delete_department(department_id: ID!): Department
+  """
+  Update attributes (Job Role, Skills, or Location) for multiple resources in the directory
+  """
+  update_directory_resources_attributes(attribute: DirectoryResourceAttribute!, values: [String!]!, resource_ids: [ID!]!): UpdateDirectoryResourceAttributesResponse
   """
   Execute an integration block with the provided field values
   """
@@ -1085,10 +1085,6 @@ type Query {
   """
   fetch_job_status(job_id: ID!): JobStatus!
   """
-  Fetch resources information from the resource directory
-  """
-  get_directory_resources(query_params: ItemsQuery, cursor: String, limit: Int = 25): DirectoryResourcesResponse
-  """
   Get managed column data.
   """
   managed_column(id: [String!], state: [ManagedColumnState!]): [ManagedColumn!]
@@ -1132,6 +1128,10 @@ type Query {
   Get account departments
   """
   departments(ids: [ID!]): [Department!]
+  """
+  Fetch resources information from the resource directory
+  """
+  get_directory_resources(query_params: ItemsQuery, cursor: String, limit: Int = 25): DirectoryResourcesResponse
   marketplace_app_discounts(app_id: ID!): [MarketplaceAppDiscount!]!
   app_subscriptions(app_id: ID!, status: SubscriptionStatus, account_id: Int, cursor: String, limit: Int): AppSubscriptions!
   """
@@ -2292,1398 +2292,6 @@ type UploadJobInit {
   The URL where the file should be uploaded for processing
   """
   upload_url: String
-}
-
-"""
-The account-level default work schedule and time off schedule
-"""
-type AccountAvailabilityDefaults {
-  """
-  The account-level default work schedule
-  """
-  work_schedule: WorkSchedule!
-  """
-  The account-level default time off schedule
-  """
-  time_off: TimeOff!
-}
-
-"""
-Response containing per-item results for adding allocations to resources
-"""
-type AddAllocationsToResourcesResponse {
-  """
-  Per-item results for each allocation in the request
-  """
-  results: [AllocationToResourceResult!]!
-}
-
-"""
-A successfully added allocated resource
-"""
-type AddedAllocatedResource {
-  """
-  The resource ID (includes placeholder index for placeholders, e.g. "134007785_1")
-  """
-  resource_id: ID!
-  """
-  Type of resource: USER or PLACEHOLDER
-  """
-  resource_type: PlannerResourceKind!
-}
-
-"""
-A unique resource present in the planner
-"""
-type AllocatedResource {
-  """
-  The Resource id
-  """
-  resource_id: ID!
-  """
-  Type of resource
-  """
-  resource_type: PlannerResourceKind!
-  """
-  The Resource's name
-  """
-  resource_name: String!
-}
-
-"""
-A resource to add to the planner without allocations
-"""
-input AllocatedResourceInput {
-  """
-  Resource or placeholder ID
-  """
-  id: ID!
-  """
-  Type of resource: USER or PLACEHOLDER
-  """
-  resource_type: PlannerResourceKind!
-}
-
-"""
-Result of an individual resource allocation operation
-"""
-type AllocatedResourceOperationResult {
-  """
-  Whether the resource was successfully added
-  """
-  success: Boolean!
-  """
-  The successfully added resource, present when success is true
-  """
-  resource: AddedAllocatedResource
-  """
-  Error details, present when success is false
-  """
-  error: Error
-}
-
-"""
-A single allocation in the planner
-"""
-type Allocation {
-  """
-  The allocation ID
-  """
-  id: ID!
-  """
-  The resource allocated
-  """
-  resource: AllocationResource!
-  """
-  The allocation timeline
-  """
-  timeline: AllocationTimeline!
-  """
-  Effort allocation data
-  """
-  effort: AllocationEffort!
-}
-
-"""
-Effort allocation data
-"""
-type AllocationEffort {
-  """
-  Total effort of the allocation
-  """
-  total_effort: Float!
-  """
-  Calculated effort for the period
-  """
-  effort_per_period: Float
-}
-
-"""
-The resource allocated
-"""
-type AllocationResource {
-  """
-  Resource ID
-  """
-  id: ID!
-  """
-  Type of resource
-  """
-  type: PlannerResourceKind!
-  """
-  Resource Name
-  """
-  name: String!
-}
-
-"""
-A timeline with start and end dates
-"""
-type AllocationTimeline {
-  """
-  Start date
-  """
-  from: Date!
-  """
-  End date
-  """
-  to: Date!
-}
-
-"""
-An allocation to add to an existing resource on the planner
-"""
-input AllocationToResourceInput {
-  """
-  Resource ID (plain "123" for users, "456_2" for placeholder #2)
-  """
-  resource_id: ID!
-  """
-  Type of resource
-  """
-  resource_type: PlannerResourceKind!
-  """
-  Effort value (e.g., 1 FTE, 8 hours). Must be greater than 0
-  """
-  effort: Float!
-  """
-  Unit of effort: DAILY, WEEKLY, MONTHLY, FTE, or TOTAL
-  """
-  effort_type: EffortUnit!
-  """
-  Start date (ISO 8601 format: YYYY-MM-DD)
-  """
-  from: String!
-  """
-  End date (ISO 8601 format: YYYY-MM-DD)
-  """
-  to: String!
-}
-
-"""
-Result of adding a single allocation to a resource
-"""
-type AllocationToResourceResult {
-  """
-  Resource ID
-  """
-  resource_id: ID!
-  """
-  The created allocation item ID, null if creation failed
-  """
-  allocation_id: ID
-  """
-  Whether the allocation was created successfully
-  """
-  success: Boolean!
-  """
-  Error details if the allocation failed
-  """
-  error: Error
-}
-
-"""
-A single allocation update. All fields except allocation_id are optional - only provided fields will be updated.
-"""
-input AllocationUpdateInput {
-  """
-  ID of the allocation to update
-  """
-  allocation_id: ID!
-  """
-  New effort value
-  """
-  effort: Float
-  """
-  New effort unit: DAILY, WEEKLY, MONTHLY, FTE, or TOTAL
-  """
-  effort_type: EffortUnit
-  """
-  New start date (ISO 8601 format: YYYY-MM-DD)
-  """
-  from: String
-  """
-  New end date (ISO 8601 format: YYYY-MM-DD)
-  """
-  to: String
-  """
-  Reassign allocation to a different resource (must exist in the planner)
-  """
-  resource_id: ID
-}
-
-"""
-Input for assigning a time off schedule to multiple users and/or teams
-"""
-input AssignTimeOffInput {
-  """
-  IDs of the users to assign the time off schedule to; maximum 100 per call
-  """
-  user_ids: [ID!]
-  """
-  IDs of the teams to assign the time off schedule to; maximum 100 per call
-  """
-  team_ids: [ID!]
-  """
-  ID of the time off schedule to assign; pass the account default time off ID to revert the resource to the account default
-  """
-  time_off_id: ID!
-}
-
-"""
-Per-resource outcomes of a time off assignment, split by resource kind
-"""
-type AssignTimeOffResult {
-  """
-  One result per user id passed to the mutation
-  """
-  users: [AssignTimeOffUserResult!]!
-  """
-  One result per team id passed to the mutation
-  """
-  teams: [AssignTimeOffTeamResult!]!
-}
-
-"""
-Result of a time off assignment for a single team. Batch mutations return one of these per requested team, allowing partial success.
-"""
-type AssignTimeOffTeamResult {
-  """
-  ID of the team this result applies to
-  """
-  team_id: ID!
-  """
-  Whether the operation succeeded
-  """
-  success: Boolean!
-  """
-  Structured error details, null if the operation succeeded
-  """
-  error: Error
-}
-
-"""
-Result of a time off assignment for a single user. Batch mutations return one of these per requested user, allowing partial success.
-"""
-type AssignTimeOffUserResult {
-  """
-  ID of the user this result applies to
-  """
-  user_id: ID!
-  """
-  Whether the operation succeeded
-  """
-  success: Boolean!
-  """
-  Structured error details, null if the operation succeeded
-  """
-  error: Error
-}
-
-"""
-Input for assigning a work schedule to multiple users and/or teams
-"""
-input AssignWorkScheduleInput {
-  """
-  IDs of the users to assign the work schedule to; maximum 100 per call
-  """
-  user_ids: [ID!]
-  """
-  IDs of the teams to assign the work schedule to; maximum 100 per call
-  """
-  team_ids: [ID!]
-  """
-  ID of the work schedule to assign; pass the account default schedule ID to revert to the account default
-  """
-  work_schedule_id: ID!
-}
-
-"""
-Per-resource outcomes of a work schedule assignment, split by resource kind
-"""
-type AssignWorkScheduleResult {
-  """
-  One result per user id passed to the mutation
-  """
-  users: [AssignWorkScheduleUserResult!]
-  """
-  One result per team id passed to the mutation
-  """
-  teams: [AssignWorkScheduleTeamResult!]
-}
-
-"""
-Per-team outcome of a work schedule assignment
-"""
-type AssignWorkScheduleTeamResult {
-  """
-  ID of the team this result applies to
-  """
-  team_id: ID
-  """
-  Whether the operation succeeded
-  """
-  success: Boolean!
-  """
-  Structured error details, null if the operation succeeded
-  """
-  error: Error
-}
-
-"""
-Per-user outcome of a work schedule assignment
-"""
-type AssignWorkScheduleUserResult {
-  """
-  ID of the user this result applies to
-  """
-  user_id: ID
-  """
-  Whether the operation succeeded
-  """
-  success: Boolean!
-  """
-  Structured error details, null if the operation succeeded
-  """
-  error: Error
-}
-
-"""
-Represents a single attribute type option for a resource
-"""
-type Attribute {
-  """
-  Unique identifier for the attribute
-  """
-  id: ID!
-  """
-  Name of the attribute
-  """
-  name: String!
-  """
-  Whether the attribute is enabled and can be used
-  """
-  is_active: Boolean!
-}
-
-"""
-A string or number value for comparison
-"""
-scalar CompareValue
-
-"""
-Severity of a schedule conflict.
-"""
-enum ConflictSeverity {
-  PARTIAL
-  FULL
-}
-
-"""
-Input for creating a PTO entry for a user
-"""
-input CreatePtoEntryInput {
-  """
-  ID of the user to create the PTO entry for
-  """
-  user_id: ID!
-  """
-  Start date of the PTO period in YYYY-MM-DD format; must be within 1 year in the past and 20 years in the future
-  """
-  start: String!
-  """
-  End date of the PTO period in YYYY-MM-DD format; must be within 1 year in the past and 20 years in the future
-  """
-  end: String!
-}
-
-"""
-Input for adding a non-working date entry to a time off schedule
-"""
-input CreateTimeOffEntryInput {
-  """
-  ID of the time off schedule to add this entry to
-  """
-  time_off_id: ID!
-  """
-  Display name for this time off entry
-  """
-  name: String!
-  """
-  Start date of the non-working period in YYYY-MM-DD format; must be within 1 year in the past and 20 years in the future
-  """
-  start: String!
-  """
-  Type of the time off entry. Defaults to CUSTOM when omitted.
-  """
-  type: TimeOffEntryKind
-  """
-  End date of the non-working period in YYYY-MM-DD format; must be within 1 year in the past and 20 years in the future
-  """
-  end: String!
-}
-
-"""
-Input for creating a new time off schedule
-"""
-input CreateTimeOffInput {
-  """
-  Display name for the new time off schedule
-  """
-  name: String!
-  """
-  Non-working date entries to create alongside the schedule. Subsequent additions/updates use the dedicated time off entry mutations.
-  """
-  entries: [TimeOffEntryInput!]
-}
-
-"""
-Input for creating a new work schedule
-"""
-input CreateWorkScheduleInput {
-  """
-  Display name for the new work schedule
-  """
-  name: String!
-  """
-  Per-weekday working hours; if omitted, all seven days are created as inactive
-  """
-  days: [WorkScheduleDayInput!]
-}
-
-"""
-Response indicating whether the allocation deletion succeeded
-"""
-type DeleteAllocationResponse {
-  """
-  Indicates whether the allocation was successfully deleted.
-  """
-  success: Boolean!
-  """
-  The ID of the allocation that was targeted for deletion.
-  """
-  allocation_id: ID!
-}
-
-"""
-Response indicating whether the planner resource deletion succeeded
-"""
-type DeletePlannerResourceResponse {
-  """
-  Indicates whether the resource was successfully deleted.
-  """
-  success: Boolean!
-  """
-  The ID of the resource that was targeted for deletion.
-  """
-  resource_id: ID!
-  """
-  Number of allocation items that were deleted.
-  """
-  deleted_allocation_count: Int!
-}
-
-"""
-A resource from the directory
-"""
-type DirectoryResource {
-  """
-  The identifier of the directory resource.
-  """
-  id: ID!
-  """
-  The name of the directory resource.
-  """
-  name: String!
-  """
-  The email address of the directory resource.
-  """
-  email: String
-  """
-  The job role of the directory resource.
-  """
-  job_role: String
-  """
-  The skills of the directory resource.
-  """
-  skills: [String!]
-  """
-  The location of the directory resource.
-  """
-  location: String
-  """
-  The type of the resource (user, viewer, or guest).
-  """
-  resource_type: DirectoryResourceKind
-}
-
-"""
-Attributes that can be updated on a resource directory entry
-"""
-enum DirectoryResourceAttribute {
-  JOB_ROLE
-  SKILLS
-  LOCATION
-}
-
-"""
-The type of a directory resource
-"""
-enum DirectoryResourceKind {
-  USER
-  VIEWER
-  GUEST
-}
-
-"""
-Paginated response containing directory resources and cursor for next page
-"""
-type DirectoryResourcesResponse {
-  """
-  Response identifier
-  """
-  id: ID!
-  """
-  List of directory resources
-  """
-  resources: [DirectoryResource!]!
-  """
-  Cursor for fetching the next page of results
-  """
-  cursor: String
-}
-
-"""
-Unit of effort calculation
-"""
-enum EffortUnit {
-  DAILY
-  WEEKLY
-  MONTHLY
-  FTE
-  TOTAL
-}
-
-"""
-User-facing error with code and optional path
-"""
-type Error {
-  """
-  Human-readable error message
-  """
-  message: String!
-  """
-  Machine-readable error code for client handling
-  """
-  code: String!
-  """
-  Field path that caused the error (e.g., ["input", "from"])
-  """
-  path: [String!]
-}
-
-"""
-Paginated response containing allocations
-"""
-type GetAllocationsResponse {
-  """
-  List of allocations
-  """
-  allocations: [Allocation!]
-  """
-  Cursor for fetching the next page of results
-  """
-  cursor: String
-}
-
-"""
-Successful response containing available attribute options for a specific attribute type
-"""
-type GetAttributesResponse {
-  """
-  The attribute type for which attributes were fetched
-  """
-  attribute_type: String!
-  """
-  List of available attributes containing id, name, and is_active
-  """
-  attributes: [Attribute!]!
-}
-
-"""
-The direction to order the items by
-"""
-enum ItemsOrderByDirection {
-  asc
-  desc
-}
-
-input ItemsQuery {
-  """
-  A list of rules
-  """
-  rules: [ItemsQueryRule!]
-  """
-  A list of rule groups
-  """
-  groups: [ItemsQueryGroup!]
-  """
-  The operator to use for the query rules or rule groups. Default: AND
-  """
-  operator: ItemsQueryOperator = and
-  """
-  A list of item IDs to fetch. Use this to fetch a specific set of items by their IDs. Limited to 100 IDs in ItemsQuery
-  """
-  ids: [ID!]
-  """
-  Sort the results by specified columns
-  """
-  order_by: [ItemsQueryOrderBy!]
-}
-
-"""
-A group of rules or rule groups
-"""
-input ItemsQueryGroup {
-  """
-  A list of rules
-  """
-  rules: [ItemsQueryRule!]
-  """
-  A list of rule groups
-  """
-  groups: [ItemsQueryGroup!]
-  """
-  The operator to use for the query rules or rule groups. Default: AND
-  """
-  operator: ItemsQueryOperator = and
-}
-
-"""
-The condition between the query rules
-"""
-enum ItemsQueryOperator {
-  or
-  and
-}
-
-"""
-Sort the results by specified columns
-"""
-input ItemsQueryOrderBy {
-  column_id: String!
-  """
-  Sort direction (defaults to ASC)
-  """
-  direction: ItemsOrderByDirection = asc
-}
-
-"""
-A rule to filter items by a specific column
-"""
-input ItemsQueryRule {
-  column_id: ID!
-  compare_value: CompareValue!
-  compare_attribute: String
-  operator: ItemsQueryRuleOperator = any_of
-}
-
-"""
-The operator to use for the value comparison
-"""
-enum ItemsQueryRuleOperator {
-  any_of
-  not_any_of
-  is_empty
-  is_not_empty
-  within_the_last
-  within_the_next
-  greater_than
-  greater_than_or_equals
-  lower_than
-  lower_than_or_equal
-  between
-  starts_with
-  ends_with
-  contains_text
-  contains_terms
-  not_contains_text
-}
-
-"""
-Type of resource in the planner
-"""
-enum PlannerResourceKind {
-  USER
-  PLACEHOLDER
-}
-
-"""
-All schedule conflicts detected on a project.
-"""
-type ProjectScheduleConflicts {
-  """
-  Conflicts found. Empty array when no conflicts exist.
-  """
-  conflicts: [ScheduleConflict!]!
-}
-
-"""
-A personal time off entry for a user
-"""
-type PtoEntry {
-  """
-  Unique identifier of the time off entry
-  """
-  id: ID!
-  """
-  Start date of the non-working period in YYYY-MM-DD format
-  """
-  start: String!
-  """
-  End date of the non-working period in YYYY-MM-DD format
-  """
-  end: String!
-  """
-  ID of the user who created this entry
-  """
-  created_by: ID!
-  """
-  ISO 8601 timestamp when this record was created
-  """
-  created_at: Date!
-  """
-  ISO 8601 timestamp when this record was last updated
-  """
-  updated_at: Date!
-}
-
-"""
-Information about a resource directory attribute type
-"""
-type ResourceAttributeTypeInfo {
-  """
-  The attribute type enum value
-  """
-  type: ResourceAttributeTypeKey
-  """
-  Human-readable description of the attribute
-  """
-  description: String
-  """
-  User-friendly display name
-  """
-  display_name: String
-  """
-  Whether the attribute values are managed by resource managers
-  """
-  is_managed: Boolean
-  """
-  Whether the attribute can be used for filtering the directory
-  """
-  is_filterable: Boolean
-}
-
-"""
-Available attribute types that can be retrieved from the resource directory
-"""
-enum ResourceAttributeTypeKey {
-  NAME
-  EMAIL
-  TEAMS
-  BASE_ROLE
-  STATUS
-  LOCATION
-  SKILLS
-  JOB_ROLE
-  RESOURCE_MANAGER
-}
-
-"""
-Recurring weekly work-schedule mask for a resource. Does not account for time-offs or specific dates.
-"""
-type ResourceWorkWeekday {
-  """
-  Resource ID
-  """
-  resource_id: ID!
-  """
-  Sunday-first length-7 mask of active work days for the resource work schedule
-  """
-  active_weekdays: [Boolean!]!
-}
-
-"""
-Resources availability with per-resource references and top-level schedule/time-off data
-"""
-type ResourcesAvailability {
-  """
-  Per-user availability references
-  """
-  users_assigned_schedules: [UserAssignment!]!
-  """
-  Per-team availability references
-  """
-  teams_assigned_schedules: [TeamAssignment!]!
-  """
-  All work schedules referenced by users_assigned_schedules or teams_assigned_schedules entries
-  """
-  work_schedules: [WorkSchedule!]!
-  """
-  All time off schedules referenced by users_assigned_schedules or teams_assigned_schedules entries
-  """
-  company_time_offs: [TimeOff!]!
-  """
-  ID of the account-level default work schedule
-  """
-  default_work_schedule_id: ID!
-  """
-  ID of the account-level default time off schedule
-  """
-  default_company_time_off_id: ID!
-}
-
-"""
-A detected schedule conflict between a task timeline and a resource availability.
-"""
-type ScheduleConflict {
-  """
-  The task with the conflict.
-  """
-  pulse_id: ID!
-  """
-  The resource whose schedule conflicts with the task timeline.
-  """
-  resource_id: ID!
-  """
-  Whether the resource is fully or partially unavailable within the task timeline.
-  """
-  severity: ConflictSeverity
-}
-
-"""
-A team's assigned work schedule and time off schedule IDs
-"""
-type TeamAssignment {
-  """
-  ID of the team
-  """
-  team_id: ID!
-  """
-  ID of the work schedule assigned to this team
-  """
-  work_schedule_id: ID!
-  """
-  ID of the time off schedule assigned to this team
-  """
-  company_time_off_id: ID!
-}
-
-"""
-A named time off schedule with all its non-working date entries
-"""
-type TimeOff {
-  """
-  Unique identifier of the time off schedule
-  """
-  id: ID!
-  """
-  Display name of the time off schedule
-  """
-  name: String!
-  """
-  Whether this is the account-level default time off schedule
-  """
-  is_default: Boolean!
-  """
-  ID of the user who created this time off schedule, null if system-generated
-  """
-  created_by: ID
-  """
-  ISO 8601 timestamp when this record was created
-  """
-  created_at: Date!
-  """
-  ISO 8601 timestamp when this record was last updated
-  """
-  updated_at: Date!
-  """
-  All non-working date entries in this time off schedule
-  """
-  entries: [TimeOffEntry!]!
-  """
-  Whether any users are currently assigned to this time off schedule
-  """
-  has_assignments: Boolean!
-}
-
-"""
-Result of a time off schedule delete operation
-"""
-type TimeOffDeleteResult {
-  """
-  ID of the deleted time off schedule, null if the operation failed
-  """
-  id: ID
-  """
-  Whether the operation succeeded
-  """
-  success: Boolean!
-  """
-  Structured error details, null if the operation succeeded
-  """
-  error: Error
-}
-
-"""
-A non-working date entry within a time off schedule
-"""
-type TimeOffEntry {
-  """
-  Unique identifier of the time off entry
-  """
-  id: ID!
-  """
-  ID of the time off schedule this entry belongs to
-  """
-  time_off_id: ID!
-  """
-  Display name for this time off entry
-  """
-  name: String!
-  """
-  Type of the time off entry
-  """
-  type: TimeOffEntryKind
-  """
-  Start date of the non-working period in YYYY-MM-DD format
-  """
-  start: String!
-  """
-  End date of the non-working period in YYYY-MM-DD format
-  """
-  end: String!
-  """
-  ID of the user who created this entry
-  """
-  created_by: ID!
-  """
-  ISO 8601 timestamp when this record was created
-  """
-  created_at: Date!
-  """
-  ISO 8601 timestamp when this record was last updated
-  """
-  updated_at: Date!
-}
-
-"""
-Result of a time off entry delete operation
-"""
-type TimeOffEntryDeleteResult {
-  """
-  ID of the deleted time off entry, null only if an internal error prevented identification
-  """
-  id: ID
-  """
-  Whether the operation succeeded
-  """
-  success: Boolean!
-  """
-  Structured error details, null if the operation succeeded
-  """
-  error: Error
-}
-
-"""
-A non-working date entry to create inline with a time off schedule
-"""
-input TimeOffEntryInput {
-  """
-  Display name for this time off entry
-  """
-  name: String!
-  """
-  Type of the time off entry. Defaults to CUSTOM when omitted.
-  """
-  type: TimeOffEntryKind
-  """
-  Start date of the non-working period in YYYY-MM-DD format; must be within 1 year in the past and 20 years in the future
-  """
-  start: String!
-  """
-  End date of the non-working period in YYYY-MM-DD format; must be within 1 year in the past and 20 years in the future
-  """
-  end: String!
-}
-
-"""
-Type of a time off entry
-"""
-enum TimeOffEntryKind {
-  CUSTOM
-  HOLIDAY
-}
-
-"""
-Result of a time off entry create or update operation
-"""
-type TimeOffEntryResult {
-  """
-  The created or updated time off entry, null if the operation failed
-  """
-  time_off_entry: TimeOffEntry
-  """
-  Whether the operation succeeded
-  """
-  success: Boolean!
-  """
-  Structured error details, null if the operation succeeded
-  """
-  error: Error
-}
-
-"""
-Result of a time off schedule create or update operation
-"""
-type TimeOffResult {
-  """
-  The created or updated time off schedule, null if the operation failed
-  """
-  time_off: TimeOff
-  """
-  Whether the operation succeeded
-  """
-  success: Boolean!
-  """
-  Structured error details, null if the operation succeeded
-  """
-  error: Error
-}
-
-"""
-Paginated list of time off schedules, each with all their entries
-"""
-type TimesOffPage {
-  """
-  Time off schedules in this page
-  """
-  time_offs: [TimeOff!]!
-  """
-  Opaque cursor for fetching the next page, null when no more pages exist
-  """
-  cursor: String
-}
-
-"""
-Result of a single allocation update operation
-"""
-type UpdateAllocationResult {
-  """
-  Whether the operation succeeded
-  """
-  success: Boolean!
-  """
-  ID of the allocation that was updated (or attempted to update)
-  """
-  allocation_id: ID!
-  """
-  The updated allocation (null if operation failed)
-  """
-  allocation: Allocation
-  """
-  Error details if operation failed (null if succeeded)
-  """
-  error: Error
-}
-
-"""
-Response indicating whether the directory attribute update succeeded
-"""
-type UpdateDirectoryResourceAttributesResponse {
-  """
-  Indicates whether the batch update completed successfully.
-  """
-  success: Boolean!
-}
-
-"""
-Input for updating an existing PTO entry
-"""
-input UpdatePtoEntryInput {
-  """
-  ID of the PTO entry to update
-  """
-  id: ID!
-  """
-  New start date in YYYY-MM-DD format; must be within 1 year in the past and 20 years in the future
-  """
-  start: String
-  """
-  New end date in YYYY-MM-DD format; must be within 1 year in the past and 20 years in the future
-  """
-  end: String
-}
-
-"""
-Input for updating an existing time off entry
-"""
-input UpdateTimeOffEntryInput {
-  """
-  ID of the time off entry to update
-  """
-  id: ID!
-  """
-  New display name for the time off entry
-  """
-  name: String
-  """
-  New start date in YYYY-MM-DD format; must be within 1 year in the past and 20 years in the future
-  """
-  start: String
-  """
-  New end date in YYYY-MM-DD format; must be within 1 year in the past and 20 years in the future
-  """
-  end: String
-}
-
-"""
-Input for updating an existing time off schedule. Entries are managed via the dedicated time off entry mutations (create_time_off_entry, update_time_off_entry, delete_time_off_entry).
-"""
-input UpdateTimeOffInput {
-  """
-  New display name for the time off schedule
-  """
-  name: String
-}
-
-"""
-Input for updating an existing work schedule
-"""
-input UpdateWorkScheduleInput {
-  """
-  New display name for the work schedule
-  """
-  name: String
-  """
-  Updated per-weekday working hours
-  """
-  days: [WorkScheduleDayInput!]
-}
-
-"""
-A user's assigned work schedule and time off schedule IDs
-"""
-type UserAssignment {
-  """
-  ID of the user
-  """
-  user_id: ID!
-  """
-  ID of the work schedule assigned to this user
-  """
-  work_schedule_id: ID!
-  """
-  ID of the company time off schedule assigned to this user
-  """
-  company_time_off_id: ID!
-  """
-  Personal time off entries for this user
-  """
-  personal_time_offs: [PtoEntry!]!
-}
-
-"""
-A user's personal time off collection with all its active PTO entries
-"""
-type UserPto {
-  """
-  ID of the user this PTO collection belongs to
-  """
-  user_id: ID!
-  """
-  ID of the user's personal time off record; null if the user has no PTO collection yet
-  """
-  time_off_id: ID
-  """
-  All active PTO entries for this user
-  """
-  entries: [PtoEntry!]!
-}
-
-"""
-Day of the week
-"""
-enum WeekDay {
-  SUNDAY
-  MONDAY
-  TUESDAY
-  WEDNESDAY
-  THURSDAY
-  FRIDAY
-  SATURDAY
-}
-
-"""
-A named work schedule with per-weekday working hours
-"""
-type WorkSchedule {
-  """
-  Unique identifier of the work schedule
-  """
-  id: ID!
-  """
-  Display name of the work schedule
-  """
-  name: String!
-  """
-  Whether this is the account-level default work schedule
-  """
-  is_default: Boolean!
-  """
-  ID of the user who created this work schedule, null if system-generated
-  """
-  created_by: ID
-  """
-  ISO 8601 timestamp when this record was created
-  """
-  created_at: Date!
-  """
-  ISO 8601 timestamp when this record was last updated
-  """
-  updated_at: Date!
-  """
-  Per-weekday working hours for this schedule
-  """
-  days: [WorkScheduleDay!]!
-  """
-  Whether any users are currently assigned to this work schedule
-  """
-  has_assignments: Boolean!
-}
-
-"""
-Per-weekday working hours for a work schedule
-"""
-type WorkScheduleDay {
-  """
-  Day of the week this entry applies to
-  """
-  week_day: WeekDay!
-  """
-  Start of the working day in HH:MM format, null when is_active is false
-  """
-  start_time: String
-  """
-  End of the working day in HH:MM format, null when is_active is false
-  """
-  end_time: String
-  """
-  Whether this day is a working day
-  """
-  is_active: Boolean!
-}
-
-"""
-Working hours for a specific day of the week
-"""
-input WorkScheduleDayInput {
-  """
-  Day of the week this entry applies to
-  """
-  week_day: WeekDay!
-  """
-  Start of the working day in HH:MM format. Required when is_active is true; ignored otherwise.
-  """
-  start_time: String
-  """
-  End of the working day in HH:MM format. Required when is_active is true; ignored otherwise.
-  """
-  end_time: String
-  """
-  Whether this day is a working day
-  """
-  is_active: Boolean!
-}
-
-"""
-Result of a work schedule delete operation
-"""
-type WorkScheduleDeleteResult {
-  """
-  ID of the deleted work schedule, null if the operation failed
-  """
-  id: ID
-  """
-  Whether the operation succeeded
-  """
-  success: Boolean!
-  """
-  Structured error details, null if the operation succeeded
-  """
-  error: Error
-}
-
-"""
-Paginated list of work schedules
-"""
-type WorkSchedulePage {
-  """
-  Work schedules in this page
-  """
-  work_schedules: [WorkSchedule!]!
-  """
-  Opaque cursor for fetching the next page, null when no more pages exist
-  """
-  cursor: String
-}
-
-"""
-Result of a work schedule create or update operation
-"""
-type WorkScheduleResult {
-  """
-  The created or updated work schedule, null if the operation failed
-  """
-  work_schedule: WorkSchedule
-  """
-  Whether the operation succeeded
-  """
-  success: Boolean!
-  """
-  Structured error details, null if the operation succeeded
-  """
-  error: Error
-}
-
-"""
-List of work schedules
-"""
-type WorkSchedules {
-  """
-  Work schedules
-  """
-  work_schedules: [WorkSchedule!]!
 }
 
 """
@@ -6974,6 +5582,1398 @@ input UpdateDepartmentOptionsInput {
   The new number of reserved seats for the department.
   """
   reserved_seats: Int
+}
+
+"""
+The account-level default work schedule and time off schedule
+"""
+type AccountAvailabilityDefaults {
+  """
+  The account-level default work schedule
+  """
+  work_schedule: WorkSchedule!
+  """
+  The account-level default time off schedule
+  """
+  time_off: TimeOff!
+}
+
+"""
+Response containing per-item results for adding allocations to resources
+"""
+type AddAllocationsToResourcesResponse {
+  """
+  Per-item results for each allocation in the request
+  """
+  results: [AllocationToResourceResult!]!
+}
+
+"""
+A successfully added allocated resource
+"""
+type AddedAllocatedResource {
+  """
+  The resource ID (includes placeholder index for placeholders, e.g. "134007785_1")
+  """
+  resource_id: ID!
+  """
+  Type of resource: USER or PLACEHOLDER
+  """
+  resource_type: PlannerResourceKind!
+}
+
+"""
+A unique resource present in the planner
+"""
+type AllocatedResource {
+  """
+  The Resource id
+  """
+  resource_id: ID!
+  """
+  Type of resource
+  """
+  resource_type: PlannerResourceKind!
+  """
+  The Resource's name
+  """
+  resource_name: String!
+}
+
+"""
+A resource to add to the planner without allocations
+"""
+input AllocatedResourceInput {
+  """
+  Resource or placeholder ID
+  """
+  id: ID!
+  """
+  Type of resource: USER or PLACEHOLDER
+  """
+  resource_type: PlannerResourceKind!
+}
+
+"""
+Result of an individual resource allocation operation
+"""
+type AllocatedResourceOperationResult {
+  """
+  Whether the resource was successfully added
+  """
+  success: Boolean!
+  """
+  The successfully added resource, present when success is true
+  """
+  resource: AddedAllocatedResource
+  """
+  Error details, present when success is false
+  """
+  error: Error
+}
+
+"""
+A single allocation in the planner
+"""
+type Allocation {
+  """
+  The allocation ID
+  """
+  id: ID!
+  """
+  The resource allocated
+  """
+  resource: AllocationResource!
+  """
+  The allocation timeline
+  """
+  timeline: AllocationTimeline!
+  """
+  Effort allocation data
+  """
+  effort: AllocationEffort!
+}
+
+"""
+Effort allocation data
+"""
+type AllocationEffort {
+  """
+  Total effort of the allocation
+  """
+  total_effort: Float!
+  """
+  Calculated effort for the period
+  """
+  effort_per_period: Float
+}
+
+"""
+The resource allocated
+"""
+type AllocationResource {
+  """
+  Resource ID
+  """
+  id: ID!
+  """
+  Type of resource
+  """
+  type: PlannerResourceKind!
+  """
+  Resource Name
+  """
+  name: String!
+}
+
+"""
+A timeline with start and end dates
+"""
+type AllocationTimeline {
+  """
+  Start date
+  """
+  from: Date!
+  """
+  End date
+  """
+  to: Date!
+}
+
+"""
+An allocation to add to an existing resource on the planner
+"""
+input AllocationToResourceInput {
+  """
+  Resource ID (plain "123" for users, "456_2" for placeholder #2)
+  """
+  resource_id: ID!
+  """
+  Type of resource
+  """
+  resource_type: PlannerResourceKind!
+  """
+  Effort value (e.g., 1 FTE, 8 hours). Must be greater than 0
+  """
+  effort: Float!
+  """
+  Unit of effort: DAILY, WEEKLY, MONTHLY, FTE, or TOTAL
+  """
+  effort_type: EffortUnit!
+  """
+  Start date (ISO 8601 format: YYYY-MM-DD)
+  """
+  from: String!
+  """
+  End date (ISO 8601 format: YYYY-MM-DD)
+  """
+  to: String!
+}
+
+"""
+Result of adding a single allocation to a resource
+"""
+type AllocationToResourceResult {
+  """
+  Resource ID
+  """
+  resource_id: ID!
+  """
+  The created allocation item ID, null if creation failed
+  """
+  allocation_id: ID
+  """
+  Whether the allocation was created successfully
+  """
+  success: Boolean!
+  """
+  Error details if the allocation failed
+  """
+  error: Error
+}
+
+"""
+A single allocation update. All fields except allocation_id are optional - only provided fields will be updated.
+"""
+input AllocationUpdateInput {
+  """
+  ID of the allocation to update
+  """
+  allocation_id: ID!
+  """
+  New effort value
+  """
+  effort: Float
+  """
+  New effort unit: DAILY, WEEKLY, MONTHLY, FTE, or TOTAL
+  """
+  effort_type: EffortUnit
+  """
+  New start date (ISO 8601 format: YYYY-MM-DD)
+  """
+  from: String
+  """
+  New end date (ISO 8601 format: YYYY-MM-DD)
+  """
+  to: String
+  """
+  Reassign allocation to a different resource (must exist in the planner)
+  """
+  resource_id: ID
+}
+
+"""
+Input for assigning a time off schedule to multiple users and/or teams
+"""
+input AssignTimeOffInput {
+  """
+  IDs of the users to assign the time off schedule to; maximum 100 per call
+  """
+  user_ids: [ID!]
+  """
+  IDs of the teams to assign the time off schedule to; maximum 100 per call
+  """
+  team_ids: [ID!]
+  """
+  ID of the time off schedule to assign; pass the account default time off ID to revert the resource to the account default
+  """
+  time_off_id: ID!
+}
+
+"""
+Per-resource outcomes of a time off assignment, split by resource kind
+"""
+type AssignTimeOffResult {
+  """
+  One result per user id passed to the mutation
+  """
+  users: [AssignTimeOffUserResult!]!
+  """
+  One result per team id passed to the mutation
+  """
+  teams: [AssignTimeOffTeamResult!]!
+}
+
+"""
+Result of a time off assignment for a single team. Batch mutations return one of these per requested team, allowing partial success.
+"""
+type AssignTimeOffTeamResult {
+  """
+  ID of the team this result applies to
+  """
+  team_id: ID!
+  """
+  Whether the operation succeeded
+  """
+  success: Boolean!
+  """
+  Structured error details, null if the operation succeeded
+  """
+  error: Error
+}
+
+"""
+Result of a time off assignment for a single user. Batch mutations return one of these per requested user, allowing partial success.
+"""
+type AssignTimeOffUserResult {
+  """
+  ID of the user this result applies to
+  """
+  user_id: ID!
+  """
+  Whether the operation succeeded
+  """
+  success: Boolean!
+  """
+  Structured error details, null if the operation succeeded
+  """
+  error: Error
+}
+
+"""
+Input for assigning a work schedule to multiple users and/or teams
+"""
+input AssignWorkScheduleInput {
+  """
+  IDs of the users to assign the work schedule to; maximum 100 per call
+  """
+  user_ids: [ID!]
+  """
+  IDs of the teams to assign the work schedule to; maximum 100 per call
+  """
+  team_ids: [ID!]
+  """
+  ID of the work schedule to assign; pass the account default schedule ID to revert to the account default
+  """
+  work_schedule_id: ID!
+}
+
+"""
+Per-resource outcomes of a work schedule assignment, split by resource kind
+"""
+type AssignWorkScheduleResult {
+  """
+  One result per user id passed to the mutation
+  """
+  users: [AssignWorkScheduleUserResult!]
+  """
+  One result per team id passed to the mutation
+  """
+  teams: [AssignWorkScheduleTeamResult!]
+}
+
+"""
+Per-team outcome of a work schedule assignment
+"""
+type AssignWorkScheduleTeamResult {
+  """
+  ID of the team this result applies to
+  """
+  team_id: ID
+  """
+  Whether the operation succeeded
+  """
+  success: Boolean!
+  """
+  Structured error details, null if the operation succeeded
+  """
+  error: Error
+}
+
+"""
+Per-user outcome of a work schedule assignment
+"""
+type AssignWorkScheduleUserResult {
+  """
+  ID of the user this result applies to
+  """
+  user_id: ID
+  """
+  Whether the operation succeeded
+  """
+  success: Boolean!
+  """
+  Structured error details, null if the operation succeeded
+  """
+  error: Error
+}
+
+"""
+Represents a single attribute type option for a resource
+"""
+type Attribute {
+  """
+  Unique identifier for the attribute
+  """
+  id: ID!
+  """
+  Name of the attribute
+  """
+  name: String!
+  """
+  Whether the attribute is enabled and can be used
+  """
+  is_active: Boolean!
+}
+
+"""
+A string or number value for comparison
+"""
+scalar CompareValue
+
+"""
+Severity of a schedule conflict.
+"""
+enum ConflictSeverity {
+  PARTIAL
+  FULL
+}
+
+"""
+Input for creating a PTO entry for a user
+"""
+input CreatePtoEntryInput {
+  """
+  ID of the user to create the PTO entry for
+  """
+  user_id: ID!
+  """
+  Start date of the PTO period in YYYY-MM-DD format; must be within 1 year in the past and 20 years in the future
+  """
+  start: String!
+  """
+  End date of the PTO period in YYYY-MM-DD format; must be within 1 year in the past and 20 years in the future
+  """
+  end: String!
+}
+
+"""
+Input for adding a non-working date entry to a time off schedule
+"""
+input CreateTimeOffEntryInput {
+  """
+  ID of the time off schedule to add this entry to
+  """
+  time_off_id: ID!
+  """
+  Display name for this time off entry
+  """
+  name: String!
+  """
+  Start date of the non-working period in YYYY-MM-DD format; must be within 1 year in the past and 20 years in the future
+  """
+  start: String!
+  """
+  Type of the time off entry. Defaults to CUSTOM when omitted.
+  """
+  type: TimeOffEntryKind
+  """
+  End date of the non-working period in YYYY-MM-DD format; must be within 1 year in the past and 20 years in the future
+  """
+  end: String!
+}
+
+"""
+Input for creating a new time off schedule
+"""
+input CreateTimeOffInput {
+  """
+  Display name for the new time off schedule
+  """
+  name: String!
+  """
+  Non-working date entries to create alongside the schedule. Subsequent additions/updates use the dedicated time off entry mutations.
+  """
+  entries: [TimeOffEntryInput!]
+}
+
+"""
+Input for creating a new work schedule
+"""
+input CreateWorkScheduleInput {
+  """
+  Display name for the new work schedule
+  """
+  name: String!
+  """
+  Per-weekday working hours; if omitted, all seven days are created as inactive
+  """
+  days: [WorkScheduleDayInput!]
+}
+
+"""
+Response indicating whether the allocation deletion succeeded
+"""
+type DeleteAllocationResponse {
+  """
+  Indicates whether the allocation was successfully deleted.
+  """
+  success: Boolean!
+  """
+  The ID of the allocation that was targeted for deletion.
+  """
+  allocation_id: ID!
+}
+
+"""
+Response indicating whether the planner resource deletion succeeded
+"""
+type DeletePlannerResourceResponse {
+  """
+  Indicates whether the resource was successfully deleted.
+  """
+  success: Boolean!
+  """
+  The ID of the resource that was targeted for deletion.
+  """
+  resource_id: ID!
+  """
+  Number of allocation items that were deleted.
+  """
+  deleted_allocation_count: Int!
+}
+
+"""
+A resource from the directory
+"""
+type DirectoryResource {
+  """
+  The identifier of the directory resource.
+  """
+  id: ID!
+  """
+  The name of the directory resource.
+  """
+  name: String!
+  """
+  The email address of the directory resource.
+  """
+  email: String
+  """
+  The job role of the directory resource.
+  """
+  job_role: String
+  """
+  The skills of the directory resource.
+  """
+  skills: [String!]
+  """
+  The location of the directory resource.
+  """
+  location: String
+  """
+  The type of the resource (user, viewer, or guest).
+  """
+  resource_type: DirectoryResourceKind
+}
+
+"""
+Attributes that can be updated on a resource directory entry
+"""
+enum DirectoryResourceAttribute {
+  JOB_ROLE
+  SKILLS
+  LOCATION
+}
+
+"""
+The type of a directory resource
+"""
+enum DirectoryResourceKind {
+  USER
+  VIEWER
+  GUEST
+}
+
+"""
+Paginated response containing directory resources and cursor for next page
+"""
+type DirectoryResourcesResponse {
+  """
+  Response identifier
+  """
+  id: ID!
+  """
+  List of directory resources
+  """
+  resources: [DirectoryResource!]!
+  """
+  Cursor for fetching the next page of results
+  """
+  cursor: String
+}
+
+"""
+Unit of effort calculation
+"""
+enum EffortUnit {
+  DAILY
+  WEEKLY
+  MONTHLY
+  FTE
+  TOTAL
+}
+
+"""
+User-facing error with code and optional path
+"""
+type Error {
+  """
+  Human-readable error message
+  """
+  message: String!
+  """
+  Machine-readable error code for client handling
+  """
+  code: String!
+  """
+  Field path that caused the error (e.g., ["input", "from"])
+  """
+  path: [String!]
+}
+
+"""
+Paginated response containing allocations
+"""
+type GetAllocationsResponse {
+  """
+  List of allocations
+  """
+  allocations: [Allocation!]
+  """
+  Cursor for fetching the next page of results
+  """
+  cursor: String
+}
+
+"""
+Successful response containing available attribute options for a specific attribute type
+"""
+type GetAttributesResponse {
+  """
+  The attribute type for which attributes were fetched
+  """
+  attribute_type: String!
+  """
+  List of available attributes containing id, name, and is_active
+  """
+  attributes: [Attribute!]!
+}
+
+"""
+The direction to order the items by
+"""
+enum ItemsOrderByDirection {
+  asc
+  desc
+}
+
+input ItemsQuery {
+  """
+  A list of rules
+  """
+  rules: [ItemsQueryRule!]
+  """
+  A list of rule groups
+  """
+  groups: [ItemsQueryGroup!]
+  """
+  The operator to use for the query rules or rule groups. Default: AND
+  """
+  operator: ItemsQueryOperator = and
+  """
+  A list of item IDs to fetch. Use this to fetch a specific set of items by their IDs. Limited to 100 IDs in ItemsQuery
+  """
+  ids: [ID!]
+  """
+  Sort the results by specified columns
+  """
+  order_by: [ItemsQueryOrderBy!]
+}
+
+"""
+A group of rules or rule groups
+"""
+input ItemsQueryGroup {
+  """
+  A list of rules
+  """
+  rules: [ItemsQueryRule!]
+  """
+  A list of rule groups
+  """
+  groups: [ItemsQueryGroup!]
+  """
+  The operator to use for the query rules or rule groups. Default: AND
+  """
+  operator: ItemsQueryOperator = and
+}
+
+"""
+The condition between the query rules
+"""
+enum ItemsQueryOperator {
+  or
+  and
+}
+
+"""
+Sort the results by specified columns
+"""
+input ItemsQueryOrderBy {
+  column_id: String!
+  """
+  Sort direction (defaults to ASC)
+  """
+  direction: ItemsOrderByDirection = asc
+}
+
+"""
+A rule to filter items by a specific column
+"""
+input ItemsQueryRule {
+  column_id: ID!
+  compare_value: CompareValue!
+  compare_attribute: String
+  operator: ItemsQueryRuleOperator = any_of
+}
+
+"""
+The operator to use for the value comparison
+"""
+enum ItemsQueryRuleOperator {
+  any_of
+  not_any_of
+  is_empty
+  is_not_empty
+  within_the_last
+  within_the_next
+  greater_than
+  greater_than_or_equals
+  lower_than
+  lower_than_or_equal
+  between
+  starts_with
+  ends_with
+  contains_text
+  contains_terms
+  not_contains_text
+}
+
+"""
+Type of resource in the planner
+"""
+enum PlannerResourceKind {
+  USER
+  PLACEHOLDER
+}
+
+"""
+All schedule conflicts detected on a project.
+"""
+type ProjectScheduleConflicts {
+  """
+  Conflicts found. Empty array when no conflicts exist.
+  """
+  conflicts: [ScheduleConflict!]!
+}
+
+"""
+A personal time off entry for a user
+"""
+type PtoEntry {
+  """
+  Unique identifier of the time off entry
+  """
+  id: ID!
+  """
+  Start date of the non-working period in YYYY-MM-DD format
+  """
+  start: String!
+  """
+  End date of the non-working period in YYYY-MM-DD format
+  """
+  end: String!
+  """
+  ID of the user who created this entry
+  """
+  created_by: ID!
+  """
+  ISO 8601 timestamp when this record was created
+  """
+  created_at: Date!
+  """
+  ISO 8601 timestamp when this record was last updated
+  """
+  updated_at: Date!
+}
+
+"""
+Information about a resource directory attribute type
+"""
+type ResourceAttributeTypeInfo {
+  """
+  The attribute type enum value
+  """
+  type: ResourceAttributeTypeKey
+  """
+  Human-readable description of the attribute
+  """
+  description: String
+  """
+  User-friendly display name
+  """
+  display_name: String
+  """
+  Whether the attribute values are managed by resource managers
+  """
+  is_managed: Boolean
+  """
+  Whether the attribute can be used for filtering the directory
+  """
+  is_filterable: Boolean
+}
+
+"""
+Available attribute types that can be retrieved from the resource directory
+"""
+enum ResourceAttributeTypeKey {
+  NAME
+  EMAIL
+  TEAMS
+  BASE_ROLE
+  STATUS
+  LOCATION
+  SKILLS
+  JOB_ROLE
+  RESOURCE_MANAGER
+}
+
+"""
+Recurring weekly work-schedule mask for a resource. Does not account for time-offs or specific dates.
+"""
+type ResourceWorkWeekday {
+  """
+  Resource ID
+  """
+  resource_id: ID!
+  """
+  Sunday-first length-7 mask of active work days for the resource work schedule
+  """
+  active_weekdays: [Boolean!]!
+}
+
+"""
+Resources availability with per-resource references and top-level schedule/time-off data
+"""
+type ResourcesAvailability {
+  """
+  Per-user availability references
+  """
+  users_assigned_schedules: [UserAssignment!]!
+  """
+  Per-team availability references
+  """
+  teams_assigned_schedules: [TeamAssignment!]!
+  """
+  All work schedules referenced by users_assigned_schedules or teams_assigned_schedules entries
+  """
+  work_schedules: [WorkSchedule!]!
+  """
+  All time off schedules referenced by users_assigned_schedules or teams_assigned_schedules entries
+  """
+  company_time_offs: [TimeOff!]!
+  """
+  ID of the account-level default work schedule
+  """
+  default_work_schedule_id: ID!
+  """
+  ID of the account-level default time off schedule
+  """
+  default_company_time_off_id: ID!
+}
+
+"""
+A detected conflict where resource availability cannot meet the task duration within its timeline.
+"""
+type ScheduleConflict {
+  """
+  The task with the conflict.
+  """
+  pulse_id: ID!
+  """
+  The resource whose schedule conflicts with the task timeline.
+  """
+  resource_id: ID!
+  """
+  Whether the resource has no working days or too few working days to meet the task duration within the timeline.
+  """
+  severity: ConflictSeverity
+}
+
+"""
+A team's assigned work schedule and time off schedule IDs
+"""
+type TeamAssignment {
+  """
+  ID of the team
+  """
+  team_id: ID!
+  """
+  ID of the work schedule assigned to this team
+  """
+  work_schedule_id: ID!
+  """
+  ID of the time off schedule assigned to this team
+  """
+  company_time_off_id: ID!
+}
+
+"""
+A named time off schedule with all its non-working date entries
+"""
+type TimeOff {
+  """
+  Unique identifier of the time off schedule
+  """
+  id: ID!
+  """
+  Display name of the time off schedule
+  """
+  name: String!
+  """
+  Whether this is the account-level default time off schedule
+  """
+  is_default: Boolean!
+  """
+  ID of the user who created this time off schedule, null if system-generated
+  """
+  created_by: ID
+  """
+  ISO 8601 timestamp when this record was created
+  """
+  created_at: Date!
+  """
+  ISO 8601 timestamp when this record was last updated
+  """
+  updated_at: Date!
+  """
+  All non-working date entries in this time off schedule
+  """
+  entries: [TimeOffEntry!]!
+  """
+  Whether any users are currently assigned to this time off schedule
+  """
+  has_assignments: Boolean!
+}
+
+"""
+Result of a time off schedule delete operation
+"""
+type TimeOffDeleteResult {
+  """
+  ID of the deleted time off schedule, null if the operation failed
+  """
+  id: ID
+  """
+  Whether the operation succeeded
+  """
+  success: Boolean!
+  """
+  Structured error details, null if the operation succeeded
+  """
+  error: Error
+}
+
+"""
+A non-working date entry within a time off schedule
+"""
+type TimeOffEntry {
+  """
+  Unique identifier of the time off entry
+  """
+  id: ID!
+  """
+  ID of the time off schedule this entry belongs to
+  """
+  time_off_id: ID!
+  """
+  Display name for this time off entry
+  """
+  name: String!
+  """
+  Type of the time off entry
+  """
+  type: TimeOffEntryKind
+  """
+  Start date of the non-working period in YYYY-MM-DD format
+  """
+  start: String!
+  """
+  End date of the non-working period in YYYY-MM-DD format
+  """
+  end: String!
+  """
+  ID of the user who created this entry
+  """
+  created_by: ID!
+  """
+  ISO 8601 timestamp when this record was created
+  """
+  created_at: Date!
+  """
+  ISO 8601 timestamp when this record was last updated
+  """
+  updated_at: Date!
+}
+
+"""
+Result of a time off entry delete operation
+"""
+type TimeOffEntryDeleteResult {
+  """
+  ID of the deleted time off entry, null only if an internal error prevented identification
+  """
+  id: ID
+  """
+  Whether the operation succeeded
+  """
+  success: Boolean!
+  """
+  Structured error details, null if the operation succeeded
+  """
+  error: Error
+}
+
+"""
+A non-working date entry to create inline with a time off schedule
+"""
+input TimeOffEntryInput {
+  """
+  Display name for this time off entry
+  """
+  name: String!
+  """
+  Type of the time off entry. Defaults to CUSTOM when omitted.
+  """
+  type: TimeOffEntryKind
+  """
+  Start date of the non-working period in YYYY-MM-DD format; must be within 1 year in the past and 20 years in the future
+  """
+  start: String!
+  """
+  End date of the non-working period in YYYY-MM-DD format; must be within 1 year in the past and 20 years in the future
+  """
+  end: String!
+}
+
+"""
+Type of a time off entry
+"""
+enum TimeOffEntryKind {
+  CUSTOM
+  HOLIDAY
+}
+
+"""
+Result of a time off entry create or update operation
+"""
+type TimeOffEntryResult {
+  """
+  The created or updated time off entry, null if the operation failed
+  """
+  time_off_entry: TimeOffEntry
+  """
+  Whether the operation succeeded
+  """
+  success: Boolean!
+  """
+  Structured error details, null if the operation succeeded
+  """
+  error: Error
+}
+
+"""
+Result of a time off schedule create or update operation
+"""
+type TimeOffResult {
+  """
+  The created or updated time off schedule, null if the operation failed
+  """
+  time_off: TimeOff
+  """
+  Whether the operation succeeded
+  """
+  success: Boolean!
+  """
+  Structured error details, null if the operation succeeded
+  """
+  error: Error
+}
+
+"""
+Paginated list of time off schedules, each with all their entries
+"""
+type TimesOffPage {
+  """
+  Time off schedules in this page
+  """
+  time_offs: [TimeOff!]!
+  """
+  Opaque cursor for fetching the next page, null when no more pages exist
+  """
+  cursor: String
+}
+
+"""
+Result of a single allocation update operation
+"""
+type UpdateAllocationResult {
+  """
+  Whether the operation succeeded
+  """
+  success: Boolean!
+  """
+  ID of the allocation that was updated (or attempted to update)
+  """
+  allocation_id: ID!
+  """
+  The updated allocation (null if operation failed)
+  """
+  allocation: Allocation
+  """
+  Error details if operation failed (null if succeeded)
+  """
+  error: Error
+}
+
+"""
+Response indicating whether the directory attribute update succeeded
+"""
+type UpdateDirectoryResourceAttributesResponse {
+  """
+  Indicates whether the batch update completed successfully.
+  """
+  success: Boolean!
+}
+
+"""
+Input for updating an existing PTO entry
+"""
+input UpdatePtoEntryInput {
+  """
+  ID of the PTO entry to update
+  """
+  id: ID!
+  """
+  New start date in YYYY-MM-DD format; must be within 1 year in the past and 20 years in the future
+  """
+  start: String
+  """
+  New end date in YYYY-MM-DD format; must be within 1 year in the past and 20 years in the future
+  """
+  end: String
+}
+
+"""
+Input for updating an existing time off entry
+"""
+input UpdateTimeOffEntryInput {
+  """
+  ID of the time off entry to update
+  """
+  id: ID!
+  """
+  New display name for the time off entry
+  """
+  name: String
+  """
+  New start date in YYYY-MM-DD format; must be within 1 year in the past and 20 years in the future
+  """
+  start: String
+  """
+  New end date in YYYY-MM-DD format; must be within 1 year in the past and 20 years in the future
+  """
+  end: String
+}
+
+"""
+Input for updating an existing time off schedule. Entries are managed via the dedicated time off entry mutations (create_time_off_entry, update_time_off_entry, delete_time_off_entry).
+"""
+input UpdateTimeOffInput {
+  """
+  New display name for the time off schedule
+  """
+  name: String
+}
+
+"""
+Input for updating an existing work schedule
+"""
+input UpdateWorkScheduleInput {
+  """
+  New display name for the work schedule
+  """
+  name: String
+  """
+  Updated per-weekday working hours
+  """
+  days: [WorkScheduleDayInput!]
+}
+
+"""
+A user's assigned work schedule and time off schedule IDs
+"""
+type UserAssignment {
+  """
+  ID of the user
+  """
+  user_id: ID!
+  """
+  ID of the work schedule assigned to this user
+  """
+  work_schedule_id: ID!
+  """
+  ID of the company time off schedule assigned to this user
+  """
+  company_time_off_id: ID!
+  """
+  Personal time off entries for this user
+  """
+  personal_time_offs: [PtoEntry!]!
+}
+
+"""
+A user's personal time off collection with all its active PTO entries
+"""
+type UserPto {
+  """
+  ID of the user this PTO collection belongs to
+  """
+  user_id: ID!
+  """
+  ID of the user's personal time off record; null if the user has no PTO collection yet
+  """
+  time_off_id: ID
+  """
+  All active PTO entries for this user
+  """
+  entries: [PtoEntry!]!
+}
+
+"""
+Day of the week
+"""
+enum WeekDay {
+  SUNDAY
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+}
+
+"""
+A named work schedule with per-weekday working hours
+"""
+type WorkSchedule {
+  """
+  Unique identifier of the work schedule
+  """
+  id: ID!
+  """
+  Display name of the work schedule
+  """
+  name: String!
+  """
+  Whether this is the account-level default work schedule
+  """
+  is_default: Boolean!
+  """
+  ID of the user who created this work schedule, null if system-generated
+  """
+  created_by: ID
+  """
+  ISO 8601 timestamp when this record was created
+  """
+  created_at: Date!
+  """
+  ISO 8601 timestamp when this record was last updated
+  """
+  updated_at: Date!
+  """
+  Per-weekday working hours for this schedule
+  """
+  days: [WorkScheduleDay!]!
+  """
+  Whether any users are currently assigned to this work schedule
+  """
+  has_assignments: Boolean!
+}
+
+"""
+Per-weekday working hours for a work schedule
+"""
+type WorkScheduleDay {
+  """
+  Day of the week this entry applies to
+  """
+  week_day: WeekDay!
+  """
+  Start of the working day in HH:MM format, null when is_active is false
+  """
+  start_time: String
+  """
+  End of the working day in HH:MM format, null when is_active is false
+  """
+  end_time: String
+  """
+  Whether this day is a working day
+  """
+  is_active: Boolean!
+}
+
+"""
+Working hours for a specific day of the week
+"""
+input WorkScheduleDayInput {
+  """
+  Day of the week this entry applies to
+  """
+  week_day: WeekDay!
+  """
+  Start of the working day in HH:MM format. Required when is_active is true; ignored otherwise.
+  """
+  start_time: String
+  """
+  End of the working day in HH:MM format. Required when is_active is true; ignored otherwise.
+  """
+  end_time: String
+  """
+  Whether this day is a working day
+  """
+  is_active: Boolean!
+}
+
+"""
+Result of a work schedule delete operation
+"""
+type WorkScheduleDeleteResult {
+  """
+  ID of the deleted work schedule, null if the operation failed
+  """
+  id: ID
+  """
+  Whether the operation succeeded
+  """
+  success: Boolean!
+  """
+  Structured error details, null if the operation succeeded
+  """
+  error: Error
+}
+
+"""
+Paginated list of work schedules
+"""
+type WorkSchedulePage {
+  """
+  Work schedules in this page
+  """
+  work_schedules: [WorkSchedule!]!
+  """
+  Opaque cursor for fetching the next page, null when no more pages exist
+  """
+  cursor: String
+}
+
+"""
+Result of a work schedule create or update operation
+"""
+type WorkScheduleResult {
+  """
+  The created or updated work schedule, null if the operation failed
+  """
+  work_schedule: WorkSchedule
+  """
+  Whether the operation succeeded
+  """
+  success: Boolean!
+  """
+  Structured error details, null if the operation succeeded
+  """
+  error: Error
+}
+
+"""
+List of work schedules
+"""
+type WorkSchedules {
+  """
+  Work schedules
+  """
+  work_schedules: [WorkSchedule!]!
 }
 
 """

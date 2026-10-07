@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 namespace Soenneker.Monday.GraphQlClient;
 
 /// <summary>
-/// A detected schedule conflict between a task timeline and a resource availability.
+/// A detected conflict where resource availability cannot meet the task duration within its timeline.
 /// </summary>
 public sealed partial class ScheduleConflict
 {
@@ -22,7 +22,7 @@ public sealed partial class ScheduleConflict
     public string ResourceId { get; init; } = null!;
 
     /// <summary>
-    /// Whether the resource is fully or partially unavailable within the task timeline.
+    /// Whether the resource has no working days or too few working days to meet the task duration within the timeline.
     /// </summary>
     [JsonPropertyName("severity")]
     public ConflictSeverity? Severity { get; init; }

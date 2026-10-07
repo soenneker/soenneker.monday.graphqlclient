@@ -62,12 +62,6 @@ public sealed partial class Mutation
     public UndoResult? UndoAction { get; init; }
 
     /// <summary>
-    /// Update attributes (Job Role, Skills, or Location) for multiple resources in the directory
-    /// </summary>
-    [JsonPropertyName("update_directory_resources_attributes")]
-    public UpdateDirectoryResourceAttributesResponse? UpdateDirectoryResourcesAttributes { get; init; }
-
-    /// <summary>
     /// Create managed column of type dropdown mutation.
     /// </summary>
     [JsonPropertyName("create_dropdown_managed_column")]
@@ -390,6 +384,12 @@ public sealed partial class Mutation
     /// </summary>
     [JsonPropertyName("delete_department")]
     public Department? DeleteDepartment { get; init; }
+
+    /// <summary>
+    /// Update attributes (Job Role, Skills, or Location) for multiple resources in the directory
+    /// </summary>
+    [JsonPropertyName("update_directory_resources_attributes")]
+    public UpdateDirectoryResourceAttributesResponse? UpdateDirectoryResourcesAttributes { get; init; }
 
     /// <summary>
     /// Execute an integration block with the provided field values
