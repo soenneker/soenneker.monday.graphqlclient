@@ -22,7 +22,7 @@ public sealed partial class UpdateDropdownColumnRequestBuilder
     /// </summary>
     public ValueTask<GraphQlResponse<UpdateDropdownColumnData>> Execute(UpdateDropdownColumnVariables request, CancellationToken cancellationToken = default)
     {
-        const string gqlQuery = @"mutation UpdateDropdownColumn($board_id: ID!, $id: String!, $title: String, $description: String, $width: Int, $revision: String!, $settings: UpdateDropdownColumnSettingsInput) { update_dropdown_column(board_id: $board_id, id: $id, title: $title, description: $description, width: $width, revision: $revision, settings: $settings) { id title description type width archived settings settings_str revision capabilities { calculated { function calculated_type } visibility } } }";
+        const string gqlQuery = @"mutation UpdateDropdownColumn($board_id: ID!, $id: String!, $title: String, $description: String, $width: Int, $revision: String!, $settings: UpdateDropdownColumnSettingsInput) { update_dropdown_column(board_id: $board_id, id: $id, title: $title, description: $description, width: $width, revision: $revision, settings: $settings) { archived description id settings_str title type width settings revision capabilities { calculated { function calculated_type } visibility } } }";
         return _graphQlClient.Execute<UpdateDropdownColumnData>(gqlQuery, request, cancellationToken);
     }
 

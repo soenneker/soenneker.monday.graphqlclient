@@ -23,7 +23,7 @@ public sealed partial class DeleteTeamsFromBoardRequestBuilder
     /// </summary>
     public ValueTask<GraphQlResponse<DeleteTeamsFromBoardData>> Execute(DeleteTeamsFromBoardVariables request, CancellationToken cancellationToken = default)
     {
-        const string gqlQuery = @"mutation DeleteTeamsFromBoard($board_id: ID!, $team_ids: [ID!]!) { delete_teams_from_board(board_id: $board_id, team_ids: $team_ids) { id is_guest name created_at picture_url } }";
+        const string gqlQuery = @"mutation DeleteTeamsFromBoard($board_id: ID!, $team_ids: [ID!]!) { delete_teams_from_board(board_id: $board_id, team_ids: $team_ids) { id name picture_url is_guest created_at } }";
         return _graphQlClient.Execute<DeleteTeamsFromBoardData>(gqlQuery, request, cancellationToken);
     }
 

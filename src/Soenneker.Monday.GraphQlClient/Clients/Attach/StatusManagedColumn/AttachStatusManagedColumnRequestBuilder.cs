@@ -22,7 +22,7 @@ public sealed partial class AttachStatusManagedColumnRequestBuilder
     /// </summary>
     public ValueTask<GraphQlResponse<AttachStatusManagedColumnData>> Execute(AttachStatusManagedColumnVariables request, CancellationToken cancellationToken = default)
     {
-        const string gqlQuery = @"mutation AttachStatusManagedColumn($board_id: ID!, $managed_column_id: ID!, $title: String, $description: String, $after_column_id: ID) { attach_status_managed_column(board_id: $board_id, managed_column_id: $managed_column_id, title: $title, description: $description, after_column_id: $after_column_id) { id title description type width archived settings settings_str revision capabilities { calculated { function calculated_type } visibility } } }";
+        const string gqlQuery = @"mutation AttachStatusManagedColumn($board_id: ID!, $managed_column_id: ID!, $title: String, $description: String, $after_column_id: ID) { attach_status_managed_column(board_id: $board_id, managed_column_id: $managed_column_id, title: $title, description: $description, after_column_id: $after_column_id) { archived description id settings_str title type width settings revision capabilities { calculated { function calculated_type } visibility } } }";
         return _graphQlClient.Execute<AttachStatusManagedColumnData>(gqlQuery, request, cancellationToken);
     }
 

@@ -9,34 +9,34 @@ public enum ItemsQueryRuleOperator
 {
     AnyOf,
 
-    NotAnyOf,
+    Between,
 
-    IsEmpty,
+    ContainsTerms,
 
-    IsNotEmpty,
+    ContainsText,
 
-    WithinTheLast,
-
-    WithinTheNext,
+    EndsWith,
 
     GreaterThan,
 
     GreaterThanOrEquals,
 
+    IsEmpty,
+
+    IsNotEmpty,
+
     LowerThan,
 
     LowerThanOrEqual,
 
-    Between,
+    NotAnyOf,
+
+    NotContainsText,
 
     StartsWith,
 
-    EndsWith,
+    WithinTheLast,
 
-    ContainsText,
-
-    ContainsTerms,
-
-    NotContainsText
+    WithinTheNext
 
 }

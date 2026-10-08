@@ -14,19 +14,19 @@ public sealed partial class ExternalMember
     /// Membership ID
     /// </summary>
     [JsonPropertyName("id")]
-    public string? Id { get; init; }
+    public string Id { get; init; } = null!;
 
     /// <summary>
     /// ID of the external user. Pass it as `external_user_id` to `remove_external_member`.
     /// </summary>
     [JsonPropertyName("external_user_id")]
-    public string? ExternalUserId { get; init; }
+    public string ExternalUserId { get; init; } = null!;
 
     /// <summary>
     /// Email address of the external user
     /// </summary>
     [JsonPropertyName("email")]
-    public string? Email { get; init; }
+    public string Email { get; init; } = null!;
 
     /// <summary>
     /// Display name of the external user
@@ -38,18 +38,18 @@ public sealed partial class ExternalMember
     /// Current membership status
     /// </summary>
     [JsonPropertyName("status")]
-    public ExternalMembershipStatus? Status { get; init; }
+    public ExternalMembershipStatus Status { get; init; }
 
     /// <summary>
     /// When the last invitation was sent
     /// </summary>
     [JsonPropertyName("last_invitation_sent_at")]
-    public DateOnly? LastInvitationSentAt { get; init; }
+    public DateOnly LastInvitationSentAt { get; init; }
 
     /// <summary>
     /// User ID of the person who invited this external user
     /// </summary>
     [JsonPropertyName("invited_by_user_id")]
-    public string? InvitedByUserId { get; init; }
+    public string InvitedByUserId { get; init; } = null!;
 
 }

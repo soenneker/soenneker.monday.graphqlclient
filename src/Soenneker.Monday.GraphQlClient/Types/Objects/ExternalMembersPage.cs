@@ -14,7 +14,7 @@ public sealed partial class ExternalMembersPage
     /// The external members on this page
     /// </summary>
     [JsonPropertyName("items")]
-    public List<ExternalMember>? Items { get; init; }
+    public List<ExternalMember> Items { get; init; } = [];
 
     /// <summary>
     /// Pass this as `cursor` to fetch the next page. Null when there are no more results.
