@@ -33,4 +33,10 @@ public sealed partial class DataViewSourceColumn
     [JsonPropertyName("sub_type")]
     public string? SubType { get; init; }
 
+    /// <summary>
+    /// Set when the column is listed for context but cannot be mapped. Null when it can.
+    /// </summary>
+    [JsonPropertyName("unavailable")]
+    public DataViewSourceColumnUnavailable? Unavailable { get; init; }
+
 }

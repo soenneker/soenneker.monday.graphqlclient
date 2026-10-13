@@ -466,10 +466,6 @@ public sealed partial class MondayGraphQlClient
     public IngestItemsRequestBuilder IngestItems => new IngestItemsRequestBuilder(_graphQlClient);
 
     /// <summary>
-    /// Builds and executes requests for the 'install_app' mutation.</summary>
-    public InstallAppRequestBuilder InstallApp => new InstallAppRequestBuilder(_graphQlClient);
-
-    /// <summary>
     /// Builds and executes requests for the 'invite_users' mutation.</summary>
     public InviteUsersRequestBuilder InviteUsers => new InviteUsersRequestBuilder(_graphQlClient);
 
@@ -500,10 +496,6 @@ public sealed partial class MondayGraphQlClient
     /// <summary>
     /// Builds and executes requests for the 'undo_action' mutation.</summary>
     public UndoActionRequestBuilder UndoAction => new UndoActionRequestBuilder(_graphQlClient);
-
-    /// <summary>
-    /// Builds and executes requests for the 'uninstall_app' mutation.</summary>
-    public UninstallAppRequestBuilder UninstallApp => new UninstallAppRequestBuilder(_graphQlClient);
 
     /// <summary>
     /// Builds and executes requests for the 'unlike_update' mutation.</summary>
