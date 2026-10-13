@@ -5,30 +5,30 @@ using System.Text.Json.Serialization;
 namespace Soenneker.Monday.GraphQlClient;
 
 /// <summary>
-/// Date range filter applied globally across all entity types in cross-entity search.
+/// Filter: creation and last-update time window. All provided bounds must be satisfied (AND).
 /// </summary>
 public sealed partial class CrossEntityDateRangeInput
 {
     /// <summary>
-    /// Filter results created before this date.
+    /// Filter: created at or before this date-time (inclusive).
     /// </summary>
     [JsonPropertyName("created_before")]
     public string? CreatedBefore { get; init; }
 
     /// <summary>
-    /// Filter results created after this date.
+    /// Filter: created at or after this date-time (inclusive).
     /// </summary>
     [JsonPropertyName("created_after")]
     public string? CreatedAfter { get; init; }
 
     /// <summary>
-    /// Filter results updated before this date.
+    /// Filter: last updated at or before this date-time (inclusive).
     /// </summary>
     [JsonPropertyName("updated_before")]
     public string? UpdatedBefore { get; init; }
 
     /// <summary>
-    /// Filter results updated after this date.
+    /// Filter: last updated at or after this date-time (inclusive).
     /// </summary>
     [JsonPropertyName("updated_after")]
     public string? UpdatedAfter { get; init; }

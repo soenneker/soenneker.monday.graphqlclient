@@ -17,6 +17,8 @@ public enum PromptSuggestionFor
 
     SEARCHQUERY,
 
-    WIDGET
+    WIDGET,
+
+    CONTEXTSOURCE
 
 }

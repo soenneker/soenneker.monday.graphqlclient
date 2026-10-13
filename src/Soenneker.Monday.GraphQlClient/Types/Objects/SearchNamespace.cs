@@ -10,7 +10,7 @@ namespace Soenneker.Monday.GraphQlClient;
 public sealed partial class SearchNamespace
 {
     /// <summary>
-    /// Search for items.
+    /// Search for items. All provided filters must be satisfied (AND).
     /// </summary>
     [JsonPropertyName("items")]
     public SearchItemResults Items { get; init; } = null!;

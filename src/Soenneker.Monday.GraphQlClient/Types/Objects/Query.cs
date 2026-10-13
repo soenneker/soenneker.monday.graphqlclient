@@ -492,6 +492,12 @@ public sealed partial class Query
     public List<Board>? BoardCandidates { get; init; }
 
     /// <summary>
+    /// Search API. Each field searches a single entity type with tailored filters.
+    /// </summary>
+    [JsonPropertyName("search")]
+    public SearchNamespace Search { get; init; } = null!;
+
+    /// <summary>
     /// Get the status of an async job by its external ID
     /// </summary>
     [JsonPropertyName("job_status")]
@@ -553,12 +559,6 @@ public sealed partial class Query
     /// </summary>
     [JsonPropertyName("platform_api")]
     public PlatformApi? PlatformApi { get; init; }
-
-    /// <summary>
-    /// Search API. Each field searches a single entity type with tailored filters.
-    /// </summary>
-    [JsonPropertyName("search")]
-    public SearchNamespace Search { get; init; } = null!;
 
     /// <summary>
     /// Retrieve audit logs for your Monday account. You can

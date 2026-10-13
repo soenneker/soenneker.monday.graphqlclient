@@ -126,6 +126,12 @@ public sealed partial class ChatMessage
     public List<ChatMessageIntegrationBlock> IntegrationBlocks { get; init; } = [];
 
     /// <summary>
+    /// Context sources (e.g. a monday Doc) the user started the app from — metadata only
+    /// </summary>
+    [JsonPropertyName("context_sources")]
+    public List<ChatMessageContextSource> ContextSources { get; init; } = [];
+
+    /// <summary>
     /// The date and time the object was created
     /// </summary>
     [JsonPropertyName("created_at")]
