@@ -411,114 +411,6 @@ public sealed partial class Mutation
     public Template? UseTemplate { get; init; }
 
     /// <summary>
-    /// Asynchronously delete items on a board
-    /// </summary>
-    [JsonPropertyName("bulk_delete_items")]
-    public BulkDeleteInit? BulkDeleteItems { get; init; }
-
-    /// <summary>
-    /// Asynchronously archive items on a board
-    /// </summary>
-    [JsonPropertyName("bulk_archive_items")]
-    public BulkDeleteInit? BulkArchiveItems { get; init; }
-
-    /// <summary>
-    /// Initialize a backfill job for a board and group. Designed for data migrations with no side effects and a 20k row limit. Returns job ID and upload URL to begin the process.
-    /// </summary>
-    [JsonPropertyName("backfill_items")]
-    public UploadJobInit? BackfillItems { get; init; }
-
-    /// <summary>
-    /// Initialize an ingest job for a board and group. Designed for ongoing integrations with full side effects and a 10k row limit. Returns job ID and upload URL to begin the process.
-    /// </summary>
-    [JsonPropertyName("ingest_items")]
-    public UploadJobInit? IngestItems { get; init; }
-
-    /// <summary>
-    /// Undo a previously completed action, or cancel one still in flight
-    /// </summary>
-    [JsonPropertyName("undo_action")]
-    public UndoResult? UndoAction { get; init; }
-
-    /// <summary>
-    /// Creates a new team.
-    /// </summary>
-    [JsonPropertyName("create_team")]
-    public Team? CreateTeam { get; init; }
-
-    /// <summary>
-    /// Activates the specified users.
-    /// </summary>
-    [JsonPropertyName("activate_users")]
-    public ActivateUsersResult? ActivateUsers { get; init; }
-
-    /// <summary>
-    /// Deactivates the specified users.
-    /// </summary>
-    [JsonPropertyName("deactivate_users")]
-    public DeactivateUsersResult? DeactivateUsers { get; init; }
-
-    /// <summary>
-    /// Deletes the specified team.
-    /// </summary>
-    [JsonPropertyName("delete_team")]
-    public Team? DeleteTeam { get; init; }
-
-    /// <summary>
-    /// Updates the role of the specified users.
-    /// </summary>
-    [JsonPropertyName("update_users_role")]
-    public UpdateUsersRoleResult? UpdateUsersRole { get; init; }
-
-    /// <summary>
-    /// Assigns the specified users as owners of the specified team.
-    /// </summary>
-    [JsonPropertyName("assign_team_owners")]
-    public AssignTeamOwnersResult? AssignTeamOwners { get; init; }
-
-    /// <summary>
-    /// Removes the specified users as owners of the specified team.
-    /// </summary>
-    [JsonPropertyName("remove_team_owners")]
-    public RemoveTeamOwnersResult? RemoveTeamOwners { get; init; }
-
-    /// <summary>
-    /// Updates the email domain for the specified users.
-    /// </summary>
-    [JsonPropertyName("update_email_domain")]
-    public UpdateEmailDomainResult? UpdateEmailDomain { get; init; }
-
-    /// <summary>
-    /// Updates attributes for users.
-    /// </summary>
-    [JsonPropertyName("update_multiple_users")]
-    public UpdateUserAttributesResult? UpdateMultipleUsers { get; init; }
-
-    /// <summary>
-    /// Invite users to the account.
-    /// </summary>
-    [JsonPropertyName("invite_users")]
-    public InviteUsersResult? InviteUsers { get; init; }
-
-    /// <summary>
-    /// Revokes all API tokens for a service user.
-    /// </summary>
-    [JsonPropertyName("revoke_service_user_tokens")]
-    public bool? RevokeServiceUserTokens { get; init; }
-
-    /// <summary>
-    /// Revokes all existing tokens and generates a new API token for a service user.
-    /// </summary>
-    [JsonPropertyName("regenerate_service_user_token")]
-    public string? RegenerateServiceUserToken { get; init; }
-
-    /// <summary>
-    /// Creates a new service user.
-    /// </summary>
-    [JsonPropertyName("create_service_user")]
-    public CreateServiceUserResult? CreateServiceUser { get; init; }
-
-    /// <summary>
     /// Enroll multiple items to a single sequence. Maximum 50 items per request.
     /// </summary>
     [JsonPropertyName("enroll_items_to_sequence")]
@@ -741,6 +633,84 @@ public sealed partial class Mutation
     public ValidationRule? DeleteValidationRule { get; init; }
 
     /// <summary>
+    /// Creates a new team.
+    /// </summary>
+    [JsonPropertyName("create_team")]
+    public Team? CreateTeam { get; init; }
+
+    /// <summary>
+    /// Activates the specified users.
+    /// </summary>
+    [JsonPropertyName("activate_users")]
+    public ActivateUsersResult? ActivateUsers { get; init; }
+
+    /// <summary>
+    /// Deactivates the specified users.
+    /// </summary>
+    [JsonPropertyName("deactivate_users")]
+    public DeactivateUsersResult? DeactivateUsers { get; init; }
+
+    /// <summary>
+    /// Deletes the specified team.
+    /// </summary>
+    [JsonPropertyName("delete_team")]
+    public Team? DeleteTeam { get; init; }
+
+    /// <summary>
+    /// Updates the role of the specified users.
+    /// </summary>
+    [JsonPropertyName("update_users_role")]
+    public UpdateUsersRoleResult? UpdateUsersRole { get; init; }
+
+    /// <summary>
+    /// Assigns the specified users as owners of the specified team.
+    /// </summary>
+    [JsonPropertyName("assign_team_owners")]
+    public AssignTeamOwnersResult? AssignTeamOwners { get; init; }
+
+    /// <summary>
+    /// Removes the specified users as owners of the specified team.
+    /// </summary>
+    [JsonPropertyName("remove_team_owners")]
+    public RemoveTeamOwnersResult? RemoveTeamOwners { get; init; }
+
+    /// <summary>
+    /// Updates the email domain for the specified users.
+    /// </summary>
+    [JsonPropertyName("update_email_domain")]
+    public UpdateEmailDomainResult? UpdateEmailDomain { get; init; }
+
+    /// <summary>
+    /// Updates attributes for users.
+    /// </summary>
+    [JsonPropertyName("update_multiple_users")]
+    public UpdateUserAttributesResult? UpdateMultipleUsers { get; init; }
+
+    /// <summary>
+    /// Invite users to the account.
+    /// </summary>
+    [JsonPropertyName("invite_users")]
+    public InviteUsersResult? InviteUsers { get; init; }
+
+    /// <summary>
+    /// Revokes all API tokens for a service user.
+    /// </summary>
+    [JsonPropertyName("revoke_service_user_tokens")]
+    public bool? RevokeServiceUserTokens { get; init; }
+
+    /// <summary>
+    /// Revokes all existing tokens and generates a new API token for a service user.
+    /// </summary>
+    [JsonPropertyName("regenerate_service_user_token")]
+    public string? RegenerateServiceUserToken { get; init; }
+
+    /// <summary>
+    /// Creates a new service user.
+    /// </summary>
+    [JsonPropertyName("create_service_user")]
+    public CreateServiceUserResult? CreateServiceUser { get; init; }
+
+    /// <summary>
     /// Creates a new app with the specified configuration.
     /// </summary>
     [JsonPropertyName("create_app")]
@@ -939,12 +909,6 @@ public sealed partial class Mutation
     public string BatchUpdateDependencyColumn { get; init; } = null!;
 
     /// <summary>
-    /// Execute an integration block with the provided field values
-    /// </summary>
-    [JsonPropertyName("execute_integration_block")]
-    public IntegrationExecutionResult? ExecuteIntegrationBlock { get; init; }
-
-    /// <summary>
     /// Convert an existing monday.com board into a project with enhanced project management capabilities. This mutation transforms a regular board by applying project-specific features and configurations through column mappings that define how existing board columns should be interpreted in the project context. The conversion process is asynchronous and returns a process_id for tracking completion. Optionally accepts a callback URL for notification when the conversion completes. Use this when you have an existing board with data that needs to be upgraded to a full project with advanced project management features like Resource Planner integration.
     /// </summary>
     [JsonPropertyName("convert_board_to_project")]
@@ -1135,5 +1099,41 @@ public sealed partial class Mutation
     /// </summary>
     [JsonPropertyName("update_mute_board_settings")]
     public List<BoardMuteSettings>? UpdateMuteBoardSettings { get; init; }
+
+    /// <summary>
+    /// Asynchronously delete items on a board
+    /// </summary>
+    [JsonPropertyName("bulk_delete_items")]
+    public BulkDeleteInit? BulkDeleteItems { get; init; }
+
+    /// <summary>
+    /// Asynchronously archive items on a board
+    /// </summary>
+    [JsonPropertyName("bulk_archive_items")]
+    public BulkDeleteInit? BulkArchiveItems { get; init; }
+
+    /// <summary>
+    /// Initialize a backfill job for a board and group. Designed for data migrations with no side effects and a 20k row limit. Returns job ID and upload URL to begin the process.
+    /// </summary>
+    [JsonPropertyName("backfill_items")]
+    public UploadJobInit? BackfillItems { get; init; }
+
+    /// <summary>
+    /// Initialize an ingest job for a board and group. Designed for ongoing integrations with full side effects and a 10k row limit. Returns job ID and upload URL to begin the process.
+    /// </summary>
+    [JsonPropertyName("ingest_items")]
+    public UploadJobInit? IngestItems { get; init; }
+
+    /// <summary>
+    /// Undo a previously completed action, or cancel one still in flight
+    /// </summary>
+    [JsonPropertyName("undo_action")]
+    public UndoResult? UndoAction { get; init; }
+
+    /// <summary>
+    /// Execute an integration block with the provided field values
+    /// </summary>
+    [JsonPropertyName("execute_integration_block")]
+    public IntegrationExecutionResult? ExecuteIntegrationBlock { get; init; }
 
 }

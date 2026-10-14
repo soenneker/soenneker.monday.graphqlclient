@@ -153,30 +153,6 @@ public sealed partial class Query
     public NotetakerQueries? Notetaker { get; init; }
 
     /// <summary>
-    /// Get the status of a backfill or ingest job
-    /// </summary>
-    [JsonPropertyName("fetch_job_status")]
-    public JobStatus FetchJobStatus { get; init; } = null!;
-
-    /// <summary>
-    /// Get all roles for the account
-    /// </summary>
-    [JsonPropertyName("account_roles")]
-    public List<AccountRole>? AccountRoles { get; init; }
-
-    /// <summary>
-    /// Retrieves API tokens for the given service users.
-    /// </summary>
-    [JsonPropertyName("service_user_tokens")]
-    public List<ServiceUserToken>? ServiceUserTokens { get; init; }
-
-    /// <summary>
-    /// Retrieves all service users in the account with their token last activity.
-    /// </summary>
-    [JsonPropertyName("service_users")]
-    public List<ServiceUser>? ServiceUsers { get; init; }
-
-    /// <summary>
     /// Get sequences that the current user is allowed to enroll items to, that are connected to the provided board. Returns sequences owned by the user or sequences where the user has access to the sender connection.
     /// </summary>
     [JsonPropertyName("allowed_sequences_to_enroll")]
@@ -296,6 +272,24 @@ public sealed partial class Query
     /// </summary>
     [JsonPropertyName("validations")]
     public Validations? Validations { get; init; }
+
+    /// <summary>
+    /// Get all roles for the account
+    /// </summary>
+    [JsonPropertyName("account_roles")]
+    public List<AccountRole>? AccountRoles { get; init; }
+
+    /// <summary>
+    /// Retrieves API tokens for the given service users.
+    /// </summary>
+    [JsonPropertyName("service_user_tokens")]
+    public List<ServiceUserToken>? ServiceUserTokens { get; init; }
+
+    /// <summary>
+    /// Retrieves all service users in the account with their token last activity.
+    /// </summary>
+    [JsonPropertyName("service_users")]
+    public List<ServiceUser>? ServiceUsers { get; init; }
 
     /// <summary>
     /// Get an app by ID or slug.
@@ -547,6 +541,12 @@ public sealed partial class Query
     /// </summary>
     [JsonPropertyName("mute_board_settings")]
     public List<BoardMuteSettings>? MuteBoardSettings { get; init; }
+
+    /// <summary>
+    /// Get the status of a backfill or ingest job
+    /// </summary>
+    [JsonPropertyName("fetch_job_status")]
+    public JobStatus FetchJobStatus { get; init; } = null!;
 
     /// <summary>
     /// Performs aggregation operations on board data
