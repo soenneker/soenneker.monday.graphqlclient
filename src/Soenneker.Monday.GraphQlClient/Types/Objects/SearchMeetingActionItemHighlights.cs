@@ -8,7 +8,7 @@ namespace Soenneker.Monday.GraphQlClient;
 /// <summary>
 /// Matched text snippets per searchable action-item field.
 /// </summary>
-public sealed partial class SearchActionItemHighlights
+public sealed partial class SearchMeetingActionItemHighlights
 {
     /// <summary>
     /// Fragments from the action-item content. Null when the field did not match lexically, an empty list for a semantic match, otherwise the matched fragments with &lt;em&gt; tags around matched terms.

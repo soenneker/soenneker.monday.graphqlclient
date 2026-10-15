@@ -21,6 +21,12 @@ public sealed partial class Query
     public List<Reply>? Replies { get; init; }
 
     /// <summary>
+    /// Namespace for all notetaker-related queries.
+    /// </summary>
+    [JsonPropertyName("notetaker")]
+    public NotetakerQueries? Notetaker { get; init; }
+
+    /// <summary>
     /// Get the connected account's information.
     /// </summary>
     [JsonPropertyName("account")]
@@ -145,12 +151,6 @@ public sealed partial class Query
     /// </summary>
     [JsonPropertyName("workspaces")]
     public List<Workspace>? Workspaces { get; init; }
-
-    /// <summary>
-    /// Namespace for all notetaker-related queries.
-    /// </summary>
-    [JsonPropertyName("notetaker")]
-    public NotetakerQueries? Notetaker { get; init; }
 
     /// <summary>
     /// Get sequences that the current user is allowed to enroll items to, that are connected to the provided board. Returns sequences owned by the user or sequences where the user has access to the sender connection.
@@ -510,12 +510,6 @@ public sealed partial class Query
     public List<ObjectSchema>? GetObjectSchemas { get; init; }
 
     /// <summary>
-    /// Search API. Each field searches a single entity type with tailored filters.
-    /// </summary>
-    [JsonPropertyName("search")]
-    public SearchNamespace Search { get; init; } = null!;
-
-    /// <summary>
     /// Get a collection of monday dev sprints
     /// </summary>
     [JsonPropertyName("sprints")]
@@ -553,6 +547,12 @@ public sealed partial class Query
     /// </summary>
     [JsonPropertyName("aggregate")]
     public AggregateQueryResult? Aggregate { get; init; }
+
+    /// <summary>
+    /// Search API. Each field searches a single entity type with tailored filters.
+    /// </summary>
+    [JsonPropertyName("search")]
+    public SearchNamespace Search { get; init; } = null!;
 
     /// <summary>
     /// Platform API data.

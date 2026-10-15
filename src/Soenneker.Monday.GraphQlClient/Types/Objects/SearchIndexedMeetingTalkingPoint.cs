@@ -7,8 +7,26 @@ namespace Soenneker.Monday.GraphQlClient;
 /// <summary>
 /// Talking-point data stored in the search index.
 /// </summary>
-public sealed partial class SearchIndexedTalkingPoint
+public sealed partial class SearchIndexedMeetingTalkingPoint
 {
+    /// <summary>
+    /// ID of the meeting the artifact belongs to.
+    /// </summary>
+    [JsonPropertyName("meeting_id")]
+    public string MeetingId { get; init; } = null!;
+
+    /// <summary>
+    /// Title of the meeting.
+    /// </summary>
+    [JsonPropertyName("meeting_title")]
+    public string? MeetingTitle { get; init; }
+
+    /// <summary>
+    /// When the meeting started.
+    /// </summary>
+    [JsonPropertyName("meeting_start_time")]
+    public string? MeetingStartTime { get; init; }
+
     /// <summary>
     /// Title of the topic the talking point belongs to.
     /// </summary>
@@ -18,8 +36,8 @@ public sealed partial class SearchIndexedTalkingPoint
     /// <summary>
     /// The talking point.
     /// </summary>
-    [JsonPropertyName("text")]
-    public string Text { get; init; } = null!;
+    [JsonPropertyName("content")]
+    public string Content { get; init; } = null!;
 
     /// <summary>
     /// Where in the meeting the talking point was raised, as the notetaker reports it.
@@ -31,6 +49,6 @@ public sealed partial class SearchIndexedTalkingPoint
     /// Matched text snippets. Null when the talking point was returned by filters alone.
     /// </summary>
     [JsonPropertyName("highlights")]
-    public SearchTalkingPointHighlights? Highlights { get; init; }
+    public SearchMeetingTalkingPointHighlights? Highlights { get; init; }
 
 }

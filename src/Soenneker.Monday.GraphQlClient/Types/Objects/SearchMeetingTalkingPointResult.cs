@@ -16,27 +16,9 @@ public sealed partial class SearchMeetingTalkingPointResult
     public string Id { get; init; } = null!;
 
     /// <summary>
-    /// ID of the meeting the talking point belongs to.
-    /// </summary>
-    [JsonPropertyName("meeting_id")]
-    public string MeetingId { get; init; } = null!;
-
-    /// <summary>
-    /// Title of the meeting.
-    /// </summary>
-    [JsonPropertyName("meeting_title")]
-    public string? MeetingTitle { get; init; }
-
-    /// <summary>
-    /// ISO timestamp when the meeting started.
-    /// </summary>
-    [JsonPropertyName("meeting_start_time")]
-    public string? MeetingStartTime { get; init; }
-
-    /// <summary>
     /// The talking point data from the search index.
     /// </summary>
     [JsonPropertyName("indexed_data")]
-    public SearchIndexedTalkingPoint IndexedData { get; init; } = null!;
+    public SearchIndexedMeetingTalkingPoint IndexedData { get; init; } = null!;
 
 }

@@ -1069,6 +1069,10 @@ type Query {
   """
   replies(limit: Int = 25, page: Int = 1, board_ids: [ID!]!, created_at_from: String, created_at_to: String): [Reply!]
   """
+  Namespace for all notetaker-related queries.
+  """
+  notetaker: NotetakerQueries
+  """
   Get the connected account's information.
   """
   account: Account
@@ -1152,10 +1156,6 @@ type Query {
   Get a collection of workspaces.
   """
   workspaces(ids: [ID!], kind: WorkspaceKind, limit: Int = 25, membership_kind: WorkspaceMembershipKind = all, order_by: WorkspacesOrderBy, page: Int = 1, query_params: WorkspacesQueryInput, state: State = active): [Workspace]
-  """
-  Namespace for all notetaker-related queries.
-  """
-  notetaker: NotetakerQueries
   """
   Get sequences that the current user is allowed to enroll items to, that are connected to the provided board. Returns sequences owned by the user or sequences where the user has access to the sender connection.
   """
@@ -1392,10 +1392,6 @@ type Query {
   """
   get_object_schemas(ids: [ID!], names: [String!], limit: Int, page: Int, exclude_created_by_monday: Boolean): [ObjectSchema!]
   """
-  Search API. Each field searches a single entity type with tailored filters.
-  """
-  search: SearchNamespace!
-  """
   Get a collection of monday dev sprints
   """
   sprints(ids: [ID!]!): [Sprint!]
@@ -1420,6 +1416,10 @@ type Query {
   Performs aggregation operations on board data
   """
   aggregate(query: AggregateQueryInput!): AggregateQueryResult
+  """
+  Search API. Each field searches a single entity type with tailored filters.
+  """
+  search: SearchNamespace!
   """
   Platform API data.
   """
@@ -1822,6 +1822,229 @@ type Watcher {
   user_id: ID!
   medium: String!
   user: User
+}
+
+"""
+An action item from a meeting.
+"""
+type ActionItem {
+  """
+  The unique identifier of the action item.
+  """
+  id: ID!
+  """
+  The text content of the action item.
+  """
+  content: String!
+  """
+  Whether the action item has been completed.
+  """
+  is_completed: Boolean!
+  """
+  The owner assigned to the action item.
+  """
+  owner: String
+  """
+  The due date of the action item.
+  """
+  due_date: Date
+}
+
+"""
+A recorded meeting with its metadata, transcript, and insights.
+"""
+type Meeting {
+  """
+  The unique identifier of the meeting.
+  """
+  id: ID!
+  """
+  The title of the meeting.
+  """
+  title: String!
+  """
+  The start time of the meeting.
+  """
+  start_time: Date!
+  """
+  The end time of the meeting.
+  """
+  end_time: Date!
+  """
+  The duration of the recording in seconds.
+  """
+  recording_duration: Int
+  """
+  The type of access the current user has to this meeting.
+  """
+  access_type: MeetingAccess!
+  """
+  The URL to view the meeting in the notetaker.
+  """
+  meeting_link: String!
+  """
+  The list of participants in the meeting.
+  """
+  participants: [Participant!]!
+  """
+  A concise AI-generated gist of the meeting.
+  """
+  gist: String
+  """
+  The AI-generated summary of the meeting.
+  """
+  summary: String
+  """
+  The topics discussed during the meeting.
+  """
+  topics: [Topic!]
+  """
+  The action items from the meeting.
+  """
+  action_items: [ActionItem!]
+  """
+  The transcript entries for the meeting.
+  """
+  transcript: [TranscriptEntry!]
+}
+
+"""
+The type of access the current user has to a meeting.
+"""
+enum MeetingAccess {
+  OWN
+  SHARED_WITH_ME
+  SHARED_WITH_ACCOUNT
+}
+
+"""
+Filter for the access level of meetings in the query.
+"""
+enum MeetingAccessFilter {
+  OWN
+  SHARED_WITH_ME
+  SHARED_WITH_ACCOUNT
+  ALL
+}
+
+"""
+Filters for the meetings query.
+"""
+input MeetingsFilterInput {
+  """
+  Filter meetings by specific IDs.
+  """
+  ids: [ID!]
+  """
+  Search meetings by title, participant name, or email.
+  """
+  search: String
+  """
+  Filter meetings by access level. Defaults to OWN, returning only meetings the user owns.
+  """
+  access: MeetingAccessFilter = OWN
+}
+
+"""
+A paginated response containing meetings.
+"""
+type MeetingsResponse {
+  """
+  The list of meetings in the current page.
+  """
+  meetings: [Meeting!]
+  """
+  Pagination metadata for fetching additional pages.
+  """
+  page_info: PageInfo
+}
+
+"""
+Namespace for all notetaker-related queries.
+"""
+type NotetakerQueries {
+  """
+  Retrieve a paginated list of meetings with completed recordings that the current user has view permissions for.
+  """
+  meetings(limit: Int = 10, cursor: String, filters: MeetingsFilterInput): MeetingsResponse
+}
+
+"""
+Pagination metadata for cursor-based pagination.
+"""
+type PageInfo {
+  """
+  Whether there are more results available after this page.
+  """
+  has_next_page: Boolean
+  """
+  Cursor to use as the "after" argument to fetch the next page.
+  """
+  cursor: String
+}
+
+"""
+A meeting participant.
+"""
+type Participant {
+  """
+  The email address of the participant.
+  """
+  email: String
+}
+
+"""
+A talking point within a meeting topic.
+"""
+type TalkingPoint {
+  """
+  The text content of the talking point.
+  """
+  content: String!
+  """
+  The timestamp of the talking point in seconds.
+  """
+  timestamp: Float!
+}
+
+"""
+A topic discussed during a meeting.
+"""
+type Topic {
+  """
+  The title of the topic.
+  """
+  title: String!
+  """
+  The talking points discussed under this topic.
+  """
+  talking_points: [TalkingPoint!]!
+}
+
+"""
+A single entry in a meeting transcript.
+"""
+type TranscriptEntry {
+  """
+  The transcribed text content.
+  """
+  text: String!
+  """
+  The start time of the transcript entry in seconds.
+  """
+  start_time: Float!
+  """
+  The end time of the transcript entry in seconds.
+  """
+  end_time: Float!
+  """
+  The name of the speaker.
+  """
+  speaker: String!
+  """
+  The language of the transcript entry.
+  """
+  language: String!
 }
 
 """
@@ -4288,229 +4511,6 @@ input WorkspacesQueryInput {
     project_management / service / forms / whiteboard)
   """
   account_product_kind: WorkspacesQueryAccountProductKind
-}
-
-"""
-An action item from a meeting.
-"""
-type ActionItem {
-  """
-  The unique identifier of the action item.
-  """
-  id: ID!
-  """
-  The text content of the action item.
-  """
-  content: String!
-  """
-  Whether the action item has been completed.
-  """
-  is_completed: Boolean!
-  """
-  The owner assigned to the action item.
-  """
-  owner: String
-  """
-  The due date of the action item.
-  """
-  due_date: Date
-}
-
-"""
-A recorded meeting with its metadata, transcript, and insights.
-"""
-type Meeting {
-  """
-  The unique identifier of the meeting.
-  """
-  id: ID!
-  """
-  The title of the meeting.
-  """
-  title: String!
-  """
-  The start time of the meeting.
-  """
-  start_time: Date!
-  """
-  The end time of the meeting.
-  """
-  end_time: Date!
-  """
-  The duration of the recording in seconds.
-  """
-  recording_duration: Int
-  """
-  The type of access the current user has to this meeting.
-  """
-  access_type: MeetingAccess!
-  """
-  The URL to view the meeting in the notetaker.
-  """
-  meeting_link: String!
-  """
-  The list of participants in the meeting.
-  """
-  participants: [Participant!]!
-  """
-  A concise AI-generated gist of the meeting.
-  """
-  gist: String
-  """
-  The AI-generated summary of the meeting.
-  """
-  summary: String
-  """
-  The topics discussed during the meeting.
-  """
-  topics: [Topic!]
-  """
-  The action items from the meeting.
-  """
-  action_items: [ActionItem!]
-  """
-  The transcript entries for the meeting.
-  """
-  transcript: [TranscriptEntry!]
-}
-
-"""
-The type of access the current user has to a meeting.
-"""
-enum MeetingAccess {
-  OWN
-  SHARED_WITH_ME
-  SHARED_WITH_ACCOUNT
-}
-
-"""
-Filter for the access level of meetings in the query.
-"""
-enum MeetingAccessFilter {
-  OWN
-  SHARED_WITH_ME
-  SHARED_WITH_ACCOUNT
-  ALL
-}
-
-"""
-Filters for the meetings query.
-"""
-input MeetingsFilterInput {
-  """
-  Filter meetings by specific IDs.
-  """
-  ids: [ID!]
-  """
-  Search meetings by title, participant name, or email.
-  """
-  search: String
-  """
-  Filter meetings by access level. Defaults to OWN, returning only meetings the user owns.
-  """
-  access: MeetingAccessFilter = OWN
-}
-
-"""
-A paginated response containing meetings.
-"""
-type MeetingsResponse {
-  """
-  The list of meetings in the current page.
-  """
-  meetings: [Meeting!]
-  """
-  Pagination metadata for fetching additional pages.
-  """
-  page_info: PageInfo
-}
-
-"""
-Namespace for all notetaker-related queries.
-"""
-type NotetakerQueries {
-  """
-  Retrieve a paginated list of meetings with completed recordings that the current user has view permissions for.
-  """
-  meetings(limit: Int = 10, cursor: String, filters: MeetingsFilterInput): MeetingsResponse
-}
-
-"""
-Pagination metadata for cursor-based pagination.
-"""
-type PageInfo {
-  """
-  Whether there are more results available after this page.
-  """
-  has_next_page: Boolean
-  """
-  Cursor to use as the "after" argument to fetch the next page.
-  """
-  cursor: String
-}
-
-"""
-A meeting participant.
-"""
-type Participant {
-  """
-  The email address of the participant.
-  """
-  email: String
-}
-
-"""
-A talking point within a meeting topic.
-"""
-type TalkingPoint {
-  """
-  The text content of the talking point.
-  """
-  content: String!
-  """
-  The timestamp of the talking point in seconds.
-  """
-  timestamp: Float!
-}
-
-"""
-A topic discussed during a meeting.
-"""
-type Topic {
-  """
-  The title of the topic.
-  """
-  title: String!
-  """
-  The talking points discussed under this topic.
-  """
-  talking_points: [TalkingPoint!]!
-}
-
-"""
-A single entry in a meeting transcript.
-"""
-type TranscriptEntry {
-  """
-  The transcribed text content.
-  """
-  text: String!
-  """
-  The start time of the transcript entry in seconds.
-  """
-  start_time: Float!
-  """
-  The end time of the transcript entry in seconds.
-  """
-  end_time: Float!
-  """
-  The name of the speaker.
-  """
-  speaker: String!
-  """
-  The language of the transcript entry.
-  """
-  language: String!
 }
 
 """
@@ -19369,981 +19369,6 @@ enum AiColumnTone {
 }
 
 """
-A board-scope permission that can be required in addition to regular board read access.
-"""
-enum BoardPermission {
-  BOARD_REPORTABILITY
-}
-
-"""
-Boost configuration for search results. Key-value pairs where key is strategy type and value is boost weight.
-"""
-input BoostConfigurationInput {
-  """
-  Boost strategies as key-value pairs (strategy: weight). Empty object {} disables all boosts.
-  """
-  boosts: JSON
-}
-
-"""
-Filter: creation and last-update time window. All provided bounds must be satisfied (AND).
-"""
-input CrossEntityDateRangeInput {
-  """
-  Filter: created at or before this date-time (inclusive).
-  """
-  created_before: ISO8601DateTime
-  """
-  Filter: created at or after this date-time (inclusive).
-  """
-  created_after: ISO8601DateTime
-  """
-  Filter: last updated at or before this date-time (inclusive).
-  """
-  updated_before: ISO8601DateTime
-  """
-  Filter: last updated at or after this date-time (inclusive).
-  """
-  updated_after: ISO8601DateTime
-}
-
-"""
-Lookup namespace. Each field looks up a single entity type by name.
-"""
-type LookupNamespace {
-  """
-  Lookup boards by name.
-  """
-  boards(query: String!, limit: Int = 10, workspace_ids: [ID!]): SearchBoardResults!
-}
-
-"""
-Filter action items by due date.
-"""
-input MeetingActionItemDueDateFilterInput {
-  """
-  Return action items due on or after this date.
-  """
-  from: ISO8601DateTime
-  """
-  Return action items due on or before this date.
-  """
-  to: ISO8601DateTime
-  """
-  When true, return only action items that have a due date; when false, only those without one. When false, `from` and `to` are ignored.
-  """
-  exists: Boolean
-}
-
-"""
-Controls which meetings are returned based on ownership and sharing scope.
-"""
-enum MeetingSearchAccess {
-  OWN
-  SHARED_WITH_ME
-  SHARED_WITH_ACCOUNT
-  ALL
-}
-
-"""
-Specifies which indexed meeting fields to include in the search. Set a field to true to search it. If the entire object is omitted, all fields are searched.
-"""
-input MeetingSearchFieldsInput {
-  """
-  Meeting title.
-  """
-  title: Boolean
-  """
-  AI-generated meeting gist/summary.
-  """
-  gist: Boolean
-  """
-  Meeting summary text.
-  """
-  summary: Boolean
-  """
-  Meeting talking points and topics.
-  """
-  talking_points: Boolean
-  """
-  Action items from the meeting.
-  """
-  action_points: Boolean
-  """
-  Names of meeting participants.
-  """
-  attendee_names: Boolean
-}
-
-"""
-Date range filter for meetings based on start time.
-"""
-input MeetingsDateRangeInput {
-  """
-  Return meetings that start on or after this date.
-  """
-  from: ISO8601DateTime
-  """
-  Return meetings that start on or before this date.
-  """
-  to: ISO8601DateTime
-}
-
-"""
-Persons filter for search queries
-"""
-input PersonsInput {
-  """
-  List of person IDs to filter by
-  """
-  person_ids: [ID!]
-  """
-  List of team IDs to filter by
-  """
-  team_ids: [ID!]
-  """
-  List of person names to filter by (searches in multiple-person columns)
-  """
-  person_names: [String!]
-}
-
-"""
-Algorithms for reranking results.
-"""
-enum RerankingStrategy {
-  CROSS_ENCODER
-}
-
-"""
-Available search modes.
-"""
-enum Search {
-  LEXICAL
-  SEMANTIC
-  HYBRID
-}
-
-"""
-Matched text snippets per searchable action-item field.
-"""
-type SearchActionItemHighlights {
-  """
-  Fragments from the action-item content. Null when the field did not match lexically, an empty list for a semantic match, otherwise the matched fragments with <em> tags around matched terms.
-  """
-  content: [String!]
-}
-
-"""
-A single board search result with indexed and live data.
-"""
-type SearchBoardResult {
-  """
-  Unique identifier of the board.
-  """
-  id: ID!
-  """
-  Board data from the search index.
-  """
-  indexed_data: SearchIndexedBoard!
-  """
-  Live board data via federation. Null when the referenced board cannot be resolved by the owning subgraph (e.g. deleted, not accessible to the caller, or indexing lag).
-  """
-  live_data: Board
-}
-
-"""
-Wrapper for a list of board search results.
-"""
-type SearchBoardResults {
-  """
-  List of board search results.
-  """
-  results: [SearchBoardResult!]!
-}
-
-"""
-Date range filter for search queries
-"""
-input SearchDateRangeInput {
-  """
-  Filter items created before this date
-  """
-  created_before: ISO8601DateTime
-  """
-  Filter items created after this date
-  """
-  created_after: ISO8601DateTime
-  """
-  Filter items updated before this date
-  """
-  updated_before: ISO8601DateTime
-  """
-  Filter items updated after this date
-  """
-  updated_after: ISO8601DateTime
-  """
-  Filter items with a date column having a value before this date
-  """
-  column_value_before: ISO8601DateTime
-  """
-  Filter items with a date column having a value after this date
-  """
-  column_value_after: ISO8601DateTime
-}
-
-"""
-Date range filter for search queries
-"""
-input SearchDateRangeLegacyInput {
-  """
-  Filter items created before this date
-  """
-  createdBefore: ISO8601DateTime
-  """
-  Filter items created after this date
-  """
-  createdAfter: ISO8601DateTime
-  """
-  Filter items updated before this date
-  """
-  updatedBefore: ISO8601DateTime
-  """
-  Filter items updated after this date
-  """
-  updatedAfter: ISO8601DateTime
-}
-
-"""
-Matched text snippets per searchable document field.
-"""
-type SearchDocHighlights {
-  """
-  Highlighted fragments from the document name with <em> tags around matched terms. Non-empty only for lexical matches.
-  """
-  name: [String!]
-  """
-  Highlighted fragments from the document content with <em> tags around matched terms. Non-empty only for lexical matches.
-  """
-  content: [String!]
-}
-
-"""
-A single doc search result with indexed and live data.
-"""
-type SearchDocResult {
-  """
-  Unique identifier of the doc.
-  """
-  id: ID!
-  """
-  Doc data from the search index.
-  """
-  indexed_data: SearchIndexedDoc!
-  """
-  Live doc data via federation. Null when the referenced doc cannot be resolved by the owning subgraph (e.g. deleted, not accessible to the caller, or indexing lag).
-  """
-  live_data: Document
-}
-
-"""
-Wrapper for a list of doc search results.
-"""
-type SearchDocResults {
-  """
-  List of doc search results.
-  """
-  results: [SearchDocResult!]!
-}
-
-"""
-Action-item data stored in the search index.
-"""
-type SearchIndexedActionItem {
-  """
-  The action item.
-  """
-  content: String!
-  """
-  Owner of the action item as the notetaker names them — free text, not a monday user id.
-  """
-  owner: String
-  """
-  When the action item is due.
-  """
-  due_date: ISO8601DateTime
-  """
-  Matched text snippets. Null when the action item was returned by filters alone.
-  """
-  highlights: SearchActionItemHighlights
-}
-
-"""
-Board data stored in the search index.
-"""
-type SearchIndexedBoard {
-  """
-  Board ID.
-  """
-  id: ID!
-  """
-  Board name.
-  """
-  name: String!
-  """
-  Board description.
-  """
-  description: String
-  """
-  ID of the workspace containing this board.
-  """
-  workspace_id: ID
-  """
-  ID of the user who created this board.
-  """
-  creator_id: ID
-  """
-  URL to view this board.
-  """
-  url: String!
-}
-
-"""
-Document data stored in the search index.
-"""
-type SearchIndexedDoc {
-  """
-  Document ID.
-  """
-  id: ID!
-  """
-  Document name.
-  """
-  name: String!
-  """
-  ID of the workspace containing this document.
-  """
-  workspace_id: ID
-}
-
-"""
-Item data stored in the search index.
-"""
-type SearchIndexedItem {
-  """
-  Item ID.
-  """
-  id: ID!
-  """
-  Item name.
-  """
-  name: String!
-  """
-  URL to view this item.
-  """
-  url: String!
-  """
-  ID of the board containing this item.
-  """
-  board_id: ID
-  """
-  ID of the workspace containing this item.
-  """
-  workspace_id: ID
-}
-
-"""
-Meeting data stored in the search index.
-"""
-type SearchIndexedMeeting {
-  """
-  Meeting ID (UUID).
-  """
-  id: ID!
-  """
-  Meeting title.
-  """
-  title: String
-  """
-  Calendar provider (e.g. google_calendar, outlook_calendar).
-  """
-  meeting_provider: String
-  """
-  ISO timestamp when the meeting started.
-  """
-  start_time: String
-  """
-  ISO timestamp when the meeting ended.
-  """
-  end_time: String
-  """
-  Email addresses of meeting participants.
-  """
-  attendee_emails: [String!]
-  """
-  Names of meeting participants.
-  """
-  attendee_names: [String!]
-  """
-  AI-generated meeting gist.
-  """
-  gist: String
-  """
-  AI-generated meeting summary.
-  """
-  summary: String
-  """
-  Meeting talking points and topics.
-  """
-  talking_points: String
-  """
-  Action items from the meeting.
-  """
-  action_points: String
-  """
-  Matched text snippets per field. Keys are field names, values are arrays of highlighted text fragments with <em> tags around matched terms.
-  """
-  highlights: JSON
-}
-
-"""
-Overview (dashboard) data stored in the search index.
-"""
-type SearchIndexedOverview {
-  """
-  Overview ID.
-  """
-  id: ID!
-  """
-  Overview name.
-  """
-  name: String!
-  """
-  Overview kind (public or private).
-  """
-  kind: String!
-  """
-  Overview state (active, archived, or deleted).
-  """
-  state: String!
-  """
-  Workspace ID this overview belongs to.
-  """
-  workspace_id: ID
-  """
-  ID of the user who created the overview.
-  """
-  created_by: ID
-  """
-  Creation timestamp.
-  """
-  created_at: String
-  """
-  Last update timestamp.
-  """
-  updated_at: String
-}
-
-"""
-Talking-point data stored in the search index.
-"""
-type SearchIndexedTalkingPoint {
-  """
-  Title of the topic the talking point belongs to.
-  """
-  topic_title: String
-  """
-  The talking point.
-  """
-  text: String!
-  """
-  Where in the meeting the talking point was raised, as the notetaker reports it.
-  """
-  timestamp_seconds: Float
-  """
-  Matched text snippets. Null when the talking point was returned by filters alone.
-  """
-  highlights: SearchTalkingPointHighlights
-}
-
-"""
-Timeline item data stored in the search index.
-"""
-type SearchIndexedTimelineItem {
-  """
-  Timeline item ID.
-  """
-  id: ID!
-  """
-  ID of the account owning this timeline item.
-  """
-  account_id: ID!
-  """
-  ID of the item this timeline item belongs to.
-  """
-  item_id: ID!
-  """
-  ID of the board containing this timeline item.
-  """
-  board_id: ID
-  """
-  Timeline item type (e.g. email, googleCalendar).
-  """
-  type: String!
-  """
-  Product kind the timeline item originates from (e.g. service, crm).
-  """
-  product_kind: String!
-  """
-  Timeline item title.
-  """
-  title: String!
-  """
-  Timeline item summary.
-  """
-  summary: String!
-  """
-  Timeline item full content body.
-  """
-  content: String!
-  """
-  ISO timestamp when the timeline item was created.
-  """
-  created_at: ISO8601DateTime!
-  """
-  ISO timestamp when the timeline item was last modified.
-  """
-  updated_at: ISO8601DateTime!
-}
-
-"""
-Update data stored in the search index.
-"""
-type SearchIndexedUpdate {
-  """
-  Update ID.
-  """
-  id: ID!
-  """
-  Update content (HTML formatted).
-  """
-  body: String!
-  """
-  ID of the user who created the update.
-  """
-  creator_id: ID!
-  """
-  ID of the item this update belongs to.
-  """
-  item_id: ID!
-  """
-  ID of the board containing this update.
-  """
-  board_id: ID!
-  """
-  ISO timestamp when the update was created.
-  """
-  created_at: String!
-  """
-  ISO timestamp when the update was last modified.
-  """
-  updated_at: String!
-}
-
-"""
-User data stored in the search index.
-"""
-type SearchIndexedUser {
-  """
-  User ID.
-  """
-  id: ID!
-  """
-  The user's full name.
-  """
-  name: String!
-  """
-  The user's email address.
-  """
-  email: String!
-}
-
-"""
-Workspace data stored in the search index.
-"""
-type SearchIndexedWorkspace {
-  """
-  Workspace ID.
-  """
-  id: ID!
-  """
-  Workspace name.
-  """
-  name: String!
-  """
-  Workspace kind (open or closed).
-  """
-  kind: String!
-  """
-  Workspace description.
-  """
-  description: String
-  """
-  Workspace state (active, archived, or deleted).
-  """
-  state: String!
-}
-
-"""
-A single item search result with indexed and live data.
-"""
-type SearchItemResult {
-  """
-  Unique identifier of the item.
-  """
-  id: ID!
-  """
-  Item data from the search index.
-  """
-  indexed_data: SearchIndexedItem!
-  """
-  Live item data via federation. Null when the referenced item cannot be resolved by the owning subgraph (e.g. deleted, not accessible to the caller, or indexing lag).
-  """
-  live_data: Item
-}
-
-"""
-Wrapper for a list of item search results.
-"""
-type SearchItemResults {
-  """
-  List of item search results.
-  """
-  results: [SearchItemResult!]!
-}
-
-"""
-A single action item search result, citable without fetching its meeting.
-"""
-type SearchMeetingActionItemResult {
-  """
-  Unique identifier of the action item. Opaque — do not parse.
-  """
-  id: ID!
-  """
-  ID of the meeting the action item belongs to.
-  """
-  meeting_id: ID!
-  """
-  Title of the meeting.
-  """
-  meeting_title: String
-  """
-  ISO timestamp when the meeting started.
-  """
-  meeting_start_time: String
-  """
-  The action item data from the search index.
-  """
-  indexed_data: SearchIndexedActionItem!
-}
-
-"""
-Wrapper for a list of action item search results.
-"""
-type SearchMeetingActionItemResults {
-  """
-  List of action item search results.
-  """
-  results: [SearchMeetingActionItemResult!]!
-}
-
-"""
-A single meeting search result with indexed and live data.
-"""
-type SearchMeetingResult {
-  """
-  Unique identifier of the meeting.
-  """
-  id: ID!
-  """
-  Meeting data from the search index.
-  """
-  indexed_data: SearchIndexedMeeting!
-}
-
-"""
-Wrapper for a list of meeting search results.
-"""
-type SearchMeetingResults {
-  """
-  List of meeting search results.
-  """
-  results: [SearchMeetingResult!]!
-  """
-  Total number of matching meetings in the index (before limit is applied).
-  """
-  total_count: Int
-}
-
-"""
-A single talking point search result, citable without fetching its meeting.
-"""
-type SearchMeetingTalkingPointResult {
-  """
-  Unique identifier of the talking point. Opaque — do not parse.
-  """
-  id: ID!
-  """
-  ID of the meeting the talking point belongs to.
-  """
-  meeting_id: ID!
-  """
-  Title of the meeting.
-  """
-  meeting_title: String
-  """
-  ISO timestamp when the meeting started.
-  """
-  meeting_start_time: String
-  """
-  The talking point data from the search index.
-  """
-  indexed_data: SearchIndexedTalkingPoint!
-}
-
-"""
-Wrapper for a list of talking point search results.
-"""
-type SearchMeetingTalkingPointResults {
-  """
-  List of talking point search results.
-  """
-  results: [SearchMeetingTalkingPointResult!]!
-}
-
-"""
-Per-entity search namespace. Each field searches a single entity type.
-"""
-type SearchNamespace {
-  """
-  Search for items. All provided filters must be satisfied (AND).
-  """
-  items(query: String!, limit: Int = 10, date_range: CrossEntityDateRangeInput, strategy: SearchStrategy, board_ids: [ID!], workspace_ids: [ID!]): SearchItemResults!
-  """
-  Search for boards.
-  """
-  boards(query: String!, limit: Int = 10, date_range: CrossEntityDateRangeInput, strategy: SearchStrategy, board_ids: [ID!], workspace_ids: [ID!]): SearchBoardResults!
-  """
-  Search for documents.
-  """
-  docs(query: String!, limit: Int = 10, date_range: CrossEntityDateRangeInput, strategy: SearchStrategy, workspace_ids: [ID!]): SearchDocResults!
-  """
-  Search for workspaces.
-  """
-  workspaces(query: String!, limit: Int = 10, date_range: CrossEntityDateRangeInput, strategy: SearchStrategy, workspace_ids: [ID!], kind: String): SearchWorkspaceResults!
-}
-
-"""
-A single overview search result with indexed and live data.
-"""
-type SearchOverviewResult {
-  """
-  Unique identifier of the overview.
-  """
-  id: ID!
-  """
-  Overview data from the search index.
-  """
-  indexed_data: SearchIndexedOverview!
-  """
-  Live overview data via federation. Null when the referenced overview cannot be resolved by the owning subgraph (e.g. deleted, not accessible to the caller, or indexing lag).
-  """
-  live_data: Overview
-}
-
-"""
-Wrapper for a list of overview search results.
-"""
-type SearchOverviewResults {
-  """
-  List of overview search results.
-  """
-  results: [SearchOverviewResult!]!
-}
-
-"""
-Controls the trade-off between search quality and response time.
-"""
-enum SearchStrategy {
-  SPEED
-  BALANCED
-  QUALITY
-}
-
-"""
-Matched text snippets per searchable talking-point field.
-"""
-type SearchTalkingPointHighlights {
-  """
-  Fragments from the topic title. Null when the field did not match lexically, an empty list for a semantic match, otherwise the matched fragments with <em> tags around matched terms.
-  """
-  topic_title: [String!]
-  """
-  Fragments from the talking-point text. Null when the field did not match lexically, an empty list for a semantic match, otherwise the matched fragments with <em> tags around matched terms.
-  """
-  text: [String!]
-}
-
-"""
-A single timelineitem search result with indexed and live data.
-"""
-type SearchTimelineItemResult {
-  """
-  Unique identifier of the timelineitem.
-  """
-  id: ID!
-  """
-  TimelineItem data from the search index.
-  """
-  indexed_data: SearchIndexedTimelineItem!
-  """
-  Live timelineitem data via federation. Null when the referenced timelineitem cannot be resolved by the owning subgraph (e.g. deleted, not accessible to the caller, or indexing lag).
-  """
-  live_data: TimelineItem
-}
-
-"""
-Wrapper for a list of timelineitem search results.
-"""
-type SearchTimelineItemResults {
-  """
-  List of timelineitem search results.
-  """
-  results: [SearchTimelineItemResult!]!
-}
-
-"""
-A single update search result with indexed and live data.
-"""
-type SearchUpdateResult {
-  """
-  Unique identifier of the update.
-  """
-  id: ID!
-  """
-  Update data from the search index.
-  """
-  indexed_data: SearchIndexedUpdate!
-  """
-  Live update data via federation. Null when the referenced update cannot be resolved by the owning subgraph (e.g. deleted, not accessible to the caller, or indexing lag).
-  """
-  live_data: Update
-}
-
-"""
-Wrapper for a list of update search results.
-"""
-type SearchUpdateResults {
-  """
-  List of update search results.
-  """
-  results: [SearchUpdateResult!]!
-}
-
-"""
-A single user search result with indexed and live data.
-"""
-type SearchUserResult {
-  """
-  Unique identifier of the user.
-  """
-  id: ID!
-  """
-  User data from the search index.
-  """
-  indexed_data: SearchIndexedUser!
-  """
-  Live user data via federation. Null when the referenced user cannot be resolved by the owning subgraph (e.g. deleted, not accessible to the caller, or indexing lag).
-  """
-  live_data: User
-}
-
-"""
-Wrapper for a list of user search results.
-"""
-type SearchUserResults {
-  """
-  List of user search results.
-  """
-  results: [SearchUserResult!]!
-}
-
-"""
-A single workspace search result.
-"""
-type SearchWorkspaceResult {
-  """
-  Unique identifier of the workspace.
-  """
-  id: ID!
-  """
-  Workspace data from the search index.
-  """
-  indexed_data: SearchIndexedWorkspace!
-  """
-  Live workspace data via federation. Null when the referenced workspace cannot be resolved by the owning subgraph (e.g. deleted, not accessible to the caller, or indexing lag).
-  """
-  live_data: Workspace
-}
-
-"""
-Wrapper for a list of workspace search results.
-"""
-type SearchWorkspaceResults {
-  """
-  List of workspace search results.
-  """
-  results: [SearchWorkspaceResult!]!
-}
-
-"""
-Kind of timeline item.
-"""
-enum TimelineItemKind {
-  email
-  googleCalendar
-  outlookCalendar
-  zoom
-  activity
-  custom
-  note
-  videoMeeting
-  phoneCall
-  meeting
-  aiAssistant
-  aiReply
-  portal
-  demoEmail
-  aiSummary
-  form
-  portfolio_status
-  sequencesEmail
-  outreachExpertPhoneCall
-  outreachExpertPhoneCallV2
-  mergedTickets
-  customInternalApp
-  campaigns
-}
-
-"""
-Product kind that owns the timeline item.
-"""
-enum TimelineItemProductKind {
-  service
-  crm
-}
-
-"""
 A monday dev sprint.
 """
 type Sprint {
@@ -24815,6 +23840,963 @@ type WorkspaceBoardGroup {
   The reasoning for grouping these boards together
   """
   reasoning: String
+}
+
+"""
+A board-scope permission that can be required in addition to regular board read access.
+"""
+enum BoardPermission {
+  BOARD_REPORTABILITY
+}
+
+"""
+Boost configuration for search results. Key-value pairs where key is strategy type and value is boost weight.
+"""
+input BoostConfigurationInput {
+  """
+  Boost strategies as key-value pairs (strategy: weight). Empty object {} disables all boosts.
+  """
+  boosts: JSON
+}
+
+"""
+Filter: creation and last-update time window. All provided bounds must be satisfied (AND).
+"""
+input CrossEntityDateRangeInput {
+  """
+  Filter: created at or before this date-time (inclusive).
+  """
+  created_before: ISO8601DateTime
+  """
+  Filter: created at or after this date-time (inclusive).
+  """
+  created_after: ISO8601DateTime
+  """
+  Filter: last updated at or before this date-time (inclusive).
+  """
+  updated_before: ISO8601DateTime
+  """
+  Filter: last updated at or after this date-time (inclusive).
+  """
+  updated_after: ISO8601DateTime
+}
+
+"""
+Lookup namespace. Each field looks up a single entity type by name.
+"""
+type LookupNamespace {
+  """
+  Lookup boards by name.
+  """
+  boards(query: String!, limit: Int = 10, workspace_ids: [ID!]): SearchBoardResults!
+}
+
+"""
+Controls which meetings are returned based on ownership and sharing scope.
+"""
+enum MeetingSearchAccess {
+  OWN
+  SHARED_WITH_ME
+  SHARED_WITH_ACCOUNT
+  ALL
+}
+
+"""
+Specifies which indexed meeting fields to include in the search. Set a field to true to search it. If the entire object is omitted, all fields are searched.
+"""
+input MeetingSearchFieldsInput {
+  """
+  Meeting title.
+  """
+  title: Boolean
+  """
+  AI-generated meeting gist/summary.
+  """
+  gist: Boolean
+  """
+  Meeting summary text.
+  """
+  summary: Boolean
+  """
+  Meeting talking points and topics.
+  """
+  talking_points: Boolean
+  """
+  Action items from the meeting.
+  """
+  action_points: Boolean
+  """
+  Names of meeting participants.
+  """
+  attendee_names: Boolean
+}
+
+"""
+Date range filter for meetings based on start time.
+"""
+input MeetingsDateRangeInput {
+  """
+  Return meetings that start on or after this date.
+  """
+  from: ISO8601DateTime
+  """
+  Return meetings that start on or before this date.
+  """
+  to: ISO8601DateTime
+}
+
+"""
+Persons filter for search queries
+"""
+input PersonsInput {
+  """
+  List of person IDs to filter by
+  """
+  person_ids: [ID!]
+  """
+  List of team IDs to filter by
+  """
+  team_ids: [ID!]
+  """
+  List of person names to filter by (searches in multiple-person columns)
+  """
+  person_names: [String!]
+}
+
+"""
+Algorithms for reranking results.
+"""
+enum RerankingStrategy {
+  CROSS_ENCODER
+}
+
+"""
+Available search modes.
+"""
+enum Search {
+  LEXICAL
+  SEMANTIC
+  HYBRID
+}
+
+"""
+A single board search result with indexed and live data.
+"""
+type SearchBoardResult {
+  """
+  Unique identifier of the board.
+  """
+  id: ID!
+  """
+  Board data from the search index.
+  """
+  indexed_data: SearchIndexedBoard!
+  """
+  Live board data via federation. Null when the referenced board cannot be resolved by the owning subgraph (e.g. deleted, not accessible to the caller, or indexing lag).
+  """
+  live_data: Board
+}
+
+"""
+Wrapper for a list of board search results.
+"""
+type SearchBoardResults {
+  """
+  List of board search results.
+  """
+  results: [SearchBoardResult!]!
+}
+
+"""
+Date range filter for search queries
+"""
+input SearchDateRangeInput {
+  """
+  Filter items created before this date
+  """
+  created_before: ISO8601DateTime
+  """
+  Filter items created after this date
+  """
+  created_after: ISO8601DateTime
+  """
+  Filter items updated before this date
+  """
+  updated_before: ISO8601DateTime
+  """
+  Filter items updated after this date
+  """
+  updated_after: ISO8601DateTime
+  """
+  Filter items with a date column having a value before this date
+  """
+  column_value_before: ISO8601DateTime
+  """
+  Filter items with a date column having a value after this date
+  """
+  column_value_after: ISO8601DateTime
+}
+
+"""
+Date range filter for search queries
+"""
+input SearchDateRangeLegacyInput {
+  """
+  Filter items created before this date
+  """
+  createdBefore: ISO8601DateTime
+  """
+  Filter items created after this date
+  """
+  createdAfter: ISO8601DateTime
+  """
+  Filter items updated before this date
+  """
+  updatedBefore: ISO8601DateTime
+  """
+  Filter items updated after this date
+  """
+  updatedAfter: ISO8601DateTime
+}
+
+"""
+Matched text snippets per searchable document field.
+"""
+type SearchDocHighlights {
+  """
+  Highlighted fragments from the document name with <em> tags around matched terms. Non-empty only for lexical matches.
+  """
+  name: [String!]
+  """
+  Highlighted fragments from the document content with <em> tags around matched terms. Non-empty only for lexical matches.
+  """
+  content: [String!]
+}
+
+"""
+A single doc search result with indexed and live data.
+"""
+type SearchDocResult {
+  """
+  Unique identifier of the doc.
+  """
+  id: ID!
+  """
+  Doc data from the search index.
+  """
+  indexed_data: SearchIndexedDoc!
+  """
+  Live doc data via federation. Null when the referenced doc cannot be resolved by the owning subgraph (e.g. deleted, not accessible to the caller, or indexing lag).
+  """
+  live_data: Document
+}
+
+"""
+Wrapper for a list of doc search results.
+"""
+type SearchDocResults {
+  """
+  List of doc search results.
+  """
+  results: [SearchDocResult!]!
+}
+
+"""
+Board data stored in the search index.
+"""
+type SearchIndexedBoard {
+  """
+  Board ID.
+  """
+  id: ID!
+  """
+  Board name.
+  """
+  name: String!
+  """
+  Board description.
+  """
+  description: String
+  """
+  ID of the workspace containing this board.
+  """
+  workspace_id: ID
+  """
+  ID of the user who created this board.
+  """
+  creator_id: ID
+  """
+  URL to view this board.
+  """
+  url: String!
+}
+
+"""
+Document data stored in the search index.
+"""
+type SearchIndexedDoc {
+  """
+  Document ID.
+  """
+  id: ID!
+  """
+  Document name.
+  """
+  name: String!
+  """
+  ID of the workspace containing this document.
+  """
+  workspace_id: ID
+}
+
+"""
+Item data stored in the search index.
+"""
+type SearchIndexedItem {
+  """
+  Item ID.
+  """
+  id: ID!
+  """
+  Item name.
+  """
+  name: String!
+  """
+  URL to view this item.
+  """
+  url: String!
+  """
+  ID of the board containing this item.
+  """
+  board_id: ID
+  """
+  ID of the workspace containing this item.
+  """
+  workspace_id: ID
+}
+
+"""
+Meeting data stored in the search index.
+"""
+type SearchIndexedMeeting {
+  """
+  Meeting ID (UUID).
+  """
+  id: ID!
+  """
+  Meeting title.
+  """
+  title: String
+  """
+  Calendar provider (e.g. google_calendar, outlook_calendar).
+  """
+  meeting_provider: String
+  """
+  ISO timestamp when the meeting started.
+  """
+  start_time: String
+  """
+  ISO timestamp when the meeting ended.
+  """
+  end_time: String
+  """
+  Email addresses of meeting participants.
+  """
+  attendee_emails: [String!]
+  """
+  Names of meeting participants.
+  """
+  attendee_names: [String!]
+  """
+  AI-generated meeting gist.
+  """
+  gist: String
+  """
+  AI-generated meeting summary.
+  """
+  summary: String
+  """
+  Meeting talking points and topics.
+  """
+  talking_points: String
+  """
+  Action items from the meeting.
+  """
+  action_points: String
+  """
+  Matched text snippets per field. Keys are field names, values are arrays of highlighted text fragments with <em> tags around matched terms.
+  """
+  highlights: JSON
+}
+
+"""
+Action-item data stored in the search index.
+"""
+type SearchIndexedMeetingActionItem {
+  """
+  ID of the meeting the artifact belongs to.
+  """
+  meeting_id: ID!
+  """
+  Title of the meeting.
+  """
+  meeting_title: String
+  """
+  When the meeting started.
+  """
+  meeting_start_time: ISO8601DateTime
+  """
+  The action item.
+  """
+  content: String!
+  """
+  Owner of the action item as the notetaker names them — free text, not a monday user ID.
+  """
+  owner_name: String
+  """
+  When the action item is due.
+  """
+  due_date: ISO8601DateTime
+  """
+  Matched text snippets. Null when the action item was returned by filters alone.
+  """
+  highlights: SearchMeetingActionItemHighlights
+}
+
+"""
+Talking-point data stored in the search index.
+"""
+type SearchIndexedMeetingTalkingPoint {
+  """
+  ID of the meeting the artifact belongs to.
+  """
+  meeting_id: ID!
+  """
+  Title of the meeting.
+  """
+  meeting_title: String
+  """
+  When the meeting started.
+  """
+  meeting_start_time: ISO8601DateTime
+  """
+  Title of the topic the talking point belongs to.
+  """
+  topic_title: String
+  """
+  The talking point.
+  """
+  content: String!
+  """
+  Where in the meeting the talking point was raised, as the notetaker reports it.
+  """
+  timestamp_seconds: Float
+  """
+  Matched text snippets. Null when the talking point was returned by filters alone.
+  """
+  highlights: SearchMeetingTalkingPointHighlights
+}
+
+"""
+Overview (dashboard) data stored in the search index.
+"""
+type SearchIndexedOverview {
+  """
+  Overview ID.
+  """
+  id: ID!
+  """
+  Overview name.
+  """
+  name: String!
+  """
+  Overview kind (public or private).
+  """
+  kind: String!
+  """
+  Overview state (active, archived, or deleted).
+  """
+  state: String!
+  """
+  Workspace ID this overview belongs to.
+  """
+  workspace_id: ID
+  """
+  ID of the user who created the overview.
+  """
+  created_by: ID
+  """
+  Creation timestamp.
+  """
+  created_at: String
+  """
+  Last update timestamp.
+  """
+  updated_at: String
+}
+
+"""
+Timeline item data stored in the search index.
+"""
+type SearchIndexedTimelineItem {
+  """
+  Timeline item ID.
+  """
+  id: ID!
+  """
+  ID of the account owning this timeline item.
+  """
+  account_id: ID!
+  """
+  ID of the item this timeline item belongs to.
+  """
+  item_id: ID!
+  """
+  ID of the board containing this timeline item.
+  """
+  board_id: ID
+  """
+  Timeline item type (e.g. email, googleCalendar).
+  """
+  type: String!
+  """
+  Product kind the timeline item originates from (e.g. service, crm).
+  """
+  product_kind: String!
+  """
+  Timeline item title.
+  """
+  title: String!
+  """
+  Timeline item summary.
+  """
+  summary: String!
+  """
+  Timeline item full content body.
+  """
+  content: String!
+  """
+  ISO timestamp when the timeline item was created.
+  """
+  created_at: ISO8601DateTime!
+  """
+  ISO timestamp when the timeline item was last modified.
+  """
+  updated_at: ISO8601DateTime!
+}
+
+"""
+Update data stored in the search index.
+"""
+type SearchIndexedUpdate {
+  """
+  Update ID.
+  """
+  id: ID!
+  """
+  Update content (HTML formatted).
+  """
+  body: String!
+  """
+  ID of the user who created the update.
+  """
+  creator_id: ID!
+  """
+  ID of the item this update belongs to.
+  """
+  item_id: ID!
+  """
+  ID of the board containing this update.
+  """
+  board_id: ID!
+  """
+  ISO timestamp when the update was created.
+  """
+  created_at: String!
+  """
+  ISO timestamp when the update was last modified.
+  """
+  updated_at: String!
+}
+
+"""
+User data stored in the search index.
+"""
+type SearchIndexedUser {
+  """
+  User ID.
+  """
+  id: ID!
+  """
+  The user's full name.
+  """
+  name: String!
+  """
+  The user's email address.
+  """
+  email: String!
+}
+
+"""
+Workspace data stored in the search index.
+"""
+type SearchIndexedWorkspace {
+  """
+  Workspace ID.
+  """
+  id: ID!
+  """
+  Workspace name.
+  """
+  name: String!
+  """
+  Workspace kind (open or closed).
+  """
+  kind: String!
+  """
+  Workspace description.
+  """
+  description: String
+  """
+  Workspace state (active, archived, or deleted).
+  """
+  state: String!
+}
+
+"""
+A single item search result with indexed and live data.
+"""
+type SearchItemResult {
+  """
+  Unique identifier of the item.
+  """
+  id: ID!
+  """
+  Item data from the search index.
+  """
+  indexed_data: SearchIndexedItem!
+  """
+  Live item data via federation. Null when the referenced item cannot be resolved by the owning subgraph (e.g. deleted, not accessible to the caller, or indexing lag).
+  """
+  live_data: Item
+}
+
+"""
+Wrapper for a list of item search results.
+"""
+type SearchItemResults {
+  """
+  List of item search results.
+  """
+  results: [SearchItemResult!]!
+}
+
+"""
+Matched text snippets per searchable action-item field.
+"""
+type SearchMeetingActionItemHighlights {
+  """
+  Fragments from the action-item content. Null when the field did not match lexically, an empty list for a semantic match, otherwise the matched fragments with <em> tags around matched terms.
+  """
+  content: [String!]
+}
+
+"""
+A single action item search result, citable without fetching its meeting.
+"""
+type SearchMeetingActionItemResult {
+  """
+  Unique identifier of the action item. Opaque — do not parse.
+  """
+  id: ID!
+  """
+  The action item data from the search index.
+  """
+  indexed_data: SearchIndexedMeetingActionItem!
+}
+
+"""
+Wrapper for a list of action item search results.
+"""
+type SearchMeetingActionItemResults {
+  """
+  List of action item search results.
+  """
+  results: [SearchMeetingActionItemResult!]!
+}
+
+"""
+A single meeting search result with indexed and live data.
+"""
+type SearchMeetingResult {
+  """
+  Unique identifier of the meeting.
+  """
+  id: ID!
+  """
+  Meeting data from the search index.
+  """
+  indexed_data: SearchIndexedMeeting!
+}
+
+"""
+Wrapper for a list of meeting search results.
+"""
+type SearchMeetingResults {
+  """
+  List of meeting search results.
+  """
+  results: [SearchMeetingResult!]!
+  """
+  Total number of matching meetings in the index (before limit is applied).
+  """
+  total_count: Int
+}
+
+"""
+Matched text snippets per searchable talking-point field.
+"""
+type SearchMeetingTalkingPointHighlights {
+  """
+  Fragments from the topic title. Null when the field did not match lexically, an empty list for a semantic match, otherwise the matched fragments with <em> tags around matched terms.
+  """
+  topic_title: [String!]
+  """
+  Fragments from the talking-point content. Null when the field did not match lexically, an empty list for a semantic match, otherwise the matched fragments with <em> tags around matched terms.
+  """
+  content: [String!]
+}
+
+"""
+A single talking point search result, citable without fetching its meeting.
+"""
+type SearchMeetingTalkingPointResult {
+  """
+  Unique identifier of the talking point. Opaque — do not parse.
+  """
+  id: ID!
+  """
+  The talking point data from the search index.
+  """
+  indexed_data: SearchIndexedMeetingTalkingPoint!
+}
+
+"""
+Wrapper for a list of talking point search results.
+"""
+type SearchMeetingTalkingPointResults {
+  """
+  List of talking point search results.
+  """
+  results: [SearchMeetingTalkingPointResult!]!
+}
+
+"""
+Per-entity search namespace. Each field searches a single entity type.
+"""
+type SearchNamespace {
+  """
+  Search for items. All provided filters must be satisfied (AND).
+  """
+  items(query: String!, limit: Int = 10, date_range: CrossEntityDateRangeInput, strategy: SearchStrategy, board_ids: [ID!], workspace_ids: [ID!]): SearchItemResults!
+  """
+  Search for boards.
+  """
+  boards(query: String!, limit: Int = 10, date_range: CrossEntityDateRangeInput, strategy: SearchStrategy, board_ids: [ID!], workspace_ids: [ID!]): SearchBoardResults!
+  """
+  Search for documents.
+  """
+  docs(query: String!, limit: Int = 10, date_range: CrossEntityDateRangeInput, strategy: SearchStrategy, workspace_ids: [ID!]): SearchDocResults!
+  """
+  Search for workspaces.
+  """
+  workspaces(query: String!, limit: Int = 10, date_range: CrossEntityDateRangeInput, strategy: SearchStrategy, workspace_ids: [ID!], kind: String): SearchWorkspaceResults!
+}
+
+"""
+A single overview search result with indexed and live data.
+"""
+type SearchOverviewResult {
+  """
+  Unique identifier of the overview.
+  """
+  id: ID!
+  """
+  Overview data from the search index.
+  """
+  indexed_data: SearchIndexedOverview!
+  """
+  Live overview data via federation. Null when the referenced overview cannot be resolved by the owning subgraph (e.g. deleted, not accessible to the caller, or indexing lag).
+  """
+  live_data: Overview
+}
+
+"""
+Wrapper for a list of overview search results.
+"""
+type SearchOverviewResults {
+  """
+  List of overview search results.
+  """
+  results: [SearchOverviewResult!]!
+}
+
+"""
+Controls the trade-off between search quality and response time.
+"""
+enum SearchStrategy {
+  SPEED
+  BALANCED
+  QUALITY
+}
+
+"""
+A single timelineitem search result with indexed and live data.
+"""
+type SearchTimelineItemResult {
+  """
+  Unique identifier of the timelineitem.
+  """
+  id: ID!
+  """
+  TimelineItem data from the search index.
+  """
+  indexed_data: SearchIndexedTimelineItem!
+  """
+  Live timelineitem data via federation. Null when the referenced timelineitem cannot be resolved by the owning subgraph (e.g. deleted, not accessible to the caller, or indexing lag).
+  """
+  live_data: TimelineItem
+}
+
+"""
+Wrapper for a list of timelineitem search results.
+"""
+type SearchTimelineItemResults {
+  """
+  List of timelineitem search results.
+  """
+  results: [SearchTimelineItemResult!]!
+}
+
+"""
+A single update search result with indexed and live data.
+"""
+type SearchUpdateResult {
+  """
+  Unique identifier of the update.
+  """
+  id: ID!
+  """
+  Update data from the search index.
+  """
+  indexed_data: SearchIndexedUpdate!
+  """
+  Live update data via federation. Null when the referenced update cannot be resolved by the owning subgraph (e.g. deleted, not accessible to the caller, or indexing lag).
+  """
+  live_data: Update
+}
+
+"""
+Wrapper for a list of update search results.
+"""
+type SearchUpdateResults {
+  """
+  List of update search results.
+  """
+  results: [SearchUpdateResult!]!
+}
+
+"""
+A single user search result with indexed and live data.
+"""
+type SearchUserResult {
+  """
+  Unique identifier of the user.
+  """
+  id: ID!
+  """
+  User data from the search index.
+  """
+  indexed_data: SearchIndexedUser!
+  """
+  Live user data via federation. Null when the referenced user cannot be resolved by the owning subgraph (e.g. deleted, not accessible to the caller, or indexing lag).
+  """
+  live_data: User
+}
+
+"""
+Wrapper for a list of user search results.
+"""
+type SearchUserResults {
+  """
+  List of user search results.
+  """
+  results: [SearchUserResult!]!
+}
+
+"""
+A single workspace search result.
+"""
+type SearchWorkspaceResult {
+  """
+  Unique identifier of the workspace.
+  """
+  id: ID!
+  """
+  Workspace data from the search index.
+  """
+  indexed_data: SearchIndexedWorkspace!
+  """
+  Live workspace data via federation. Null when the referenced workspace cannot be resolved by the owning subgraph (e.g. deleted, not accessible to the caller, or indexing lag).
+  """
+  live_data: Workspace
+}
+
+"""
+Wrapper for a list of workspace search results.
+"""
+type SearchWorkspaceResults {
+  """
+  List of workspace search results.
+  """
+  results: [SearchWorkspaceResult!]!
+}
+
+"""
+Kind of timeline item.
+"""
+enum TimelineItemKind {
+  email
+  googleCalendar
+  outlookCalendar
+  zoom
+  activity
+  custom
+  note
+  videoMeeting
+  phoneCall
+  meeting
+  aiAssistant
+  aiReply
+  portal
+  demoEmail
+  aiSummary
+  form
+  portfolio_status
+  sequencesEmail
+  outreachExpertPhoneCall
+  outreachExpertPhoneCallV2
+  mergedTickets
+  customInternalApp
+  campaigns
+}
+
+"""
+Product kind that owns the timeline item.
+"""
+enum TimelineItemProductKind {
+  service
+  crm
 }
 
 """

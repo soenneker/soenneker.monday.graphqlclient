@@ -8,7 +8,7 @@ namespace Soenneker.Monday.GraphQlClient;
 /// <summary>
 /// Matched text snippets per searchable talking-point field.
 /// </summary>
-public sealed partial class SearchTalkingPointHighlights
+public sealed partial class SearchMeetingTalkingPointHighlights
 {
     /// <summary>
     /// Fragments from the topic title. Null when the field did not match lexically, an empty list for a semantic match, otherwise the matched fragments with &lt;em&gt; tags around matched terms.
@@ -17,9 +17,9 @@ public sealed partial class SearchTalkingPointHighlights
     public List<string>? TopicTitle { get; init; }
 
     /// <summary>
-    /// Fragments from the talking-point text. Null when the field did not match lexically, an empty list for a semantic match, otherwise the matched fragments with &lt;em&gt; tags around matched terms.
+    /// Fragments from the talking-point content. Null when the field did not match lexically, an empty list for a semantic match, otherwise the matched fragments with &lt;em&gt; tags around matched terms.
     /// </summary>
-    [JsonPropertyName("text")]
-    public List<string>? Text { get; init; }
+    [JsonPropertyName("content")]
+    public List<string>? Content { get; init; }
 
 }

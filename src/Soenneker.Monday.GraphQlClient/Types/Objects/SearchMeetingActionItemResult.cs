@@ -16,27 +16,9 @@ public sealed partial class SearchMeetingActionItemResult
     public string Id { get; init; } = null!;
 
     /// <summary>
-    /// ID of the meeting the action item belongs to.
-    /// </summary>
-    [JsonPropertyName("meeting_id")]
-    public string MeetingId { get; init; } = null!;
-
-    /// <summary>
-    /// Title of the meeting.
-    /// </summary>
-    [JsonPropertyName("meeting_title")]
-    public string? MeetingTitle { get; init; }
-
-    /// <summary>
-    /// ISO timestamp when the meeting started.
-    /// </summary>
-    [JsonPropertyName("meeting_start_time")]
-    public string? MeetingStartTime { get; init; }
-
-    /// <summary>
     /// The action item data from the search index.
     /// </summary>
     [JsonPropertyName("indexed_data")]
-    public SearchIndexedActionItem IndexedData { get; init; } = null!;
+    public SearchIndexedMeetingActionItem IndexedData { get; init; } = null!;
 
 }
