@@ -188,12 +188,6 @@ public sealed partial class Query
     [JsonPropertyName("get_directory_resources")]
     public DirectoryResourcesResponse? GetDirectoryResources { get; init; }
 
-    [JsonPropertyName("marketplace_app_discounts")]
-    public List<MarketplaceAppDiscount> MarketplaceAppDiscounts { get; init; } = [];
-
-    [JsonPropertyName("app_subscriptions")]
-    public AppSubscriptions AppSubscriptions { get; init; } = null!;
-
     /// <summary>
     /// Retrieves blocks for the published version of a specific article if the requesting user has permission to access it. Returns paginated blocks in their position order. Will return an error if the user lacks the required permissions.
     /// </summary>
@@ -223,6 +217,12 @@ public sealed partial class Query
     /// </summary>
     [JsonPropertyName("export_markdown_from_doc")]
     public ExportMarkdownResult? ExportMarkdownFromDoc { get; init; }
+
+    [JsonPropertyName("marketplace_app_discounts")]
+    public List<MarketplaceAppDiscount> MarketplaceAppDiscounts { get; init; } = [];
+
+    [JsonPropertyName("app_subscriptions")]
+    public AppSubscriptions AppSubscriptions { get; init; } = null!;
 
     /// <summary>
     /// Placeholder query field for automations-test microservice.

@@ -519,18 +519,6 @@ public sealed partial class Mutation
     public UpdateDirectoryResourceAttributesResponse? UpdateDirectoryResourcesAttributes { get; init; }
 
     /// <summary>
-    /// Create a marketplace app discount
-    /// </summary>
-    [JsonPropertyName("create_marketplace_app_discount")]
-    public CreateMarketplaceAppDiscountResult CreateMarketplaceAppDiscount { get; init; } = null!;
-
-    [JsonPropertyName("delete_marketplace_app_discount")]
-    public DeleteMarketplaceAppDiscountResult DeleteMarketplaceAppDiscount { get; init; } = null!;
-
-    [JsonPropertyName("grant_marketplace_app_discount")]
-    public GrantMarketplaceAppDiscountResult GrantMarketplaceAppDiscount { get; init; } = null!;
-
-    /// <summary>
     /// Adds markdown content to an existing document by converting it into document blocks. Use this to append content to the end of a document or insert content after a specific block. The markdown will be parsed and converted into the appropriate document block types (text, headers, lists, etc.). Returns the IDs of the newly created blocks on success.
     /// </summary>
     [JsonPropertyName("add_content_to_doc_from_markdown")]
@@ -601,6 +589,18 @@ public sealed partial class Mutation
     /// </summary>
     [JsonPropertyName("set_item_description_content")]
     public DocBlocksFromMarkdownResult? SetItemDescriptionContent { get; init; }
+
+    /// <summary>
+    /// Create a marketplace app discount
+    /// </summary>
+    [JsonPropertyName("create_marketplace_app_discount")]
+    public CreateMarketplaceAppDiscountResult CreateMarketplaceAppDiscount { get; init; } = null!;
+
+    [JsonPropertyName("delete_marketplace_app_discount")]
+    public DeleteMarketplaceAppDiscountResult DeleteMarketplaceAppDiscount { get; init; } = null!;
+
+    [JsonPropertyName("grant_marketplace_app_discount")]
+    public GrantMarketplaceAppDiscountResult GrantMarketplaceAppDiscount { get; init; } = null!;
 
     /// <summary>
     /// Add a required column to a board

@@ -652,12 +652,6 @@ type Mutation {
   """
   update_directory_resources_attributes(attribute: DirectoryResourceAttribute!, values: [String!]!, resource_ids: [ID!]!): UpdateDirectoryResourceAttributesResponse
   """
-  Create a marketplace app discount
-  """
-  create_marketplace_app_discount(app_id: ID!, account_slug: String!, discount_data: CreateMarketplaceAppDiscountInput!): CreateMarketplaceAppDiscountResult!
-  delete_marketplace_app_discount(app_id: ID!, account_slug: String!): DeleteMarketplaceAppDiscountResult!
-  grant_marketplace_app_discount(app_id: ID!, account_slug: String!, data: GrantMarketplaceAppDiscountData!): GrantMarketplaceAppDiscountResult!
-  """
   Adds markdown content to an existing document by converting it into document blocks. Use this to append content to the end of a document or insert content after a specific block. The markdown will be parsed and converted into the appropriate document block types (text, headers, lists, etc.). Returns the IDs of the newly created blocks on success.
   """
   add_content_to_doc_from_markdown(docId: ID!, markdown: String!, afterBlockId: String): DocBlocksFromMarkdownResult
@@ -705,6 +699,12 @@ type Mutation {
   Sets an item description document's content with new markdown data. This mutation converts the provided markdown into document blocks and replaces the existing content of the item's description. Returns the IDs of the newly created blocks on success. Note: Markdown does not support text colors or background highlights. Any existing colored or highlighted text will be lost after replacement.
   """
   set_item_description_content(item_id: ID!, markdown: String!): DocBlocksFromMarkdownResult
+  """
+  Create a marketplace app discount
+  """
+  create_marketplace_app_discount(app_id: ID!, account_slug: String!, discount_data: CreateMarketplaceAppDiscountInput!): CreateMarketplaceAppDiscountResult!
+  delete_marketplace_app_discount(app_id: ID!, account_slug: String!): DeleteMarketplaceAppDiscountResult!
+  grant_marketplace_app_discount(app_id: ID!, account_slug: String!, data: GrantMarketplaceAppDiscountData!): GrantMarketplaceAppDiscountResult!
   """
   Add a required column to a board
   """
@@ -1180,8 +1180,6 @@ type Query {
   Fetch resources information from the resource directory
   """
   get_directory_resources(query_params: ItemsQuery, cursor: String, limit: Int = 25): DirectoryResourcesResponse
-  marketplace_app_discounts(app_id: ID!): [MarketplaceAppDiscount!]!
-  app_subscriptions(app_id: ID!, status: SubscriptionStatus, account_id: Int, cursor: String, limit: Int): AppSubscriptions!
   """
   Retrieves blocks for the published version of a specific article if the requesting user has permission to access it. Returns paginated blocks in their position order. Will return an error if the user lacks the required permissions.
   """
@@ -1202,6 +1200,8 @@ type Query {
   Converts document content into standard markdown format for external use, backup, or processing. Exports the entire document by default, or specific blocks if block IDs are provided. Use this to extract content for integration with other systems, create backups, generate reports, or process document content with external tools. The output is clean, portable markdown that preserves formatting and structure.
   """
   export_markdown_from_doc(docId: ID!, blockIds: [String!]): ExportMarkdownResult
+  marketplace_app_discounts(app_id: ID!): [MarketplaceAppDiscount!]!
+  app_subscriptions(app_id: ID!, status: SubscriptionStatus, account_id: Int, cursor: String, limit: Int): AppSubscriptions!
   """
   Placeholder query field for automations-test microservice.
     This can be replaced with actual queries as the service evolves.
@@ -7213,275 +7213,6 @@ type UpdateCustomAgentPayload {
 }
 
 """
-Subscription object
-"""
-type AppSubscriptionDetails {
-  """
-  The ID of an account
-  """
-  account_id: Int!
-  """
-  The ID of a pricing plan
-  """
-  plan_id: String!
-  """
-  The ID of a pricing version
-  """
-  pricing_version_id: Int!
-  """
-  The monthly price of the product purchased in the given currency, after applying discounts
-  """
-  monthly_price: Float!
-  """
-  The currency, in which the product was purchased
-  """
-  currency: String!
-  period_type: SubscriptionPeriodType!
-  """
-  The date the active subscription is set to renew. Equals to null for inactive subscriptions
-  """
-  renewal_date: String
-  """
-  The date the the inactive subscription ended. Equals to null for active subscriptions
-  """
-  end_date: String
-  status: SubscriptionStatus!
-  discounts: [SubscriptionDiscount!]!
-  """
-  The number of days left until the subscription ends
-  """
-  days_left: Int!
-  """
-  The subscribed unit quantity. Null for feature-based plans
-  """
-  max_units: Int
-}
-
-type AppSubscriptions {
-  subscriptions: [AppSubscriptionDetails!]!
-  """
-  Total number of subscriptions matching the given parameters
-  """
-  total_count: Int!
-  """
-  The value, which identifies the exact point to continue fetching the subscriptions from
-  """
-  cursor: String
-}
-
-"""
-A granted marketplace app discount offer
-"""
-type CreateMarketplaceAppDiscount {
-  """
-  Number of days a discount will be valid
-  """
-  days_valid: Int!
-  """
-  Percentage value of a discount
-  """
-  discount: Int!
-  """
-  Is discount recurring
-  """
-  is_recurring: Boolean!
-  """
-  The period of a discount
-  """
-  period: DiscountPeriod
-  """
-  List of app plan ids
-  """
-  app_plan_ids: [ID!]
-  """
-  The id of an app
-  """
-  app_id: ID!
-}
-
-"""
-Input data for creating a marketplace app discount
-"""
-input CreateMarketplaceAppDiscountInput {
-  """
-  Number of days a discount will be valid
-  """
-  days_valid: Int!
-  """
-  Percentage value of a discount
-  """
-  discount: Int!
-  """
-  The period of a discount
-  """
-  period: DiscountPeriod
-  """
-  List of app plan ids
-  """
-  app_plan_ids: [ID!]!
-}
-
-"""
-Result of granting a marketplace app discount offer
-"""
-type CreateMarketplaceAppDiscountResult {
-  """
-  The granted discount offer
-  """
-  granted_discount: CreateMarketplaceAppDiscount!
-}
-
-type DeleteMarketplaceAppDiscount {
-  """
-  Slug of an account
-  """
-  account_slug: String!
-  """
-  The id of an app
-  """
-  app_id: ID!
-}
-
-type DeleteMarketplaceAppDiscountResult {
-  deleted_discount: DeleteMarketplaceAppDiscount!
-}
-
-"""
-The period of a discount
-"""
-enum DiscountPeriod {
-  MONTHLY
-  YEARLY
-}
-
-type GrantMarketplaceAppDiscount {
-  """
-  Number of days a discount will be valid
-  """
-  days_valid: Int!
-  """
-  Percentage value of a discount
-  """
-  discount: Int!
-  """
-  Is discount recurring
-  """
-  is_recurring: Boolean!
-  period: DiscountPeriod
-  """
-  List of app plan ids
-  """
-  app_plan_ids: [String!]!
-  """
-  The id of an app
-  """
-  app_id: ID!
-}
-
-input GrantMarketplaceAppDiscountData {
-  """
-  Number of days a discount will be valid
-  """
-  days_valid: Int!
-  """
-  Percentage value of a discount
-  """
-  discount: Int!
-  """
-  Is discount recurring
-  """
-  is_recurring: Boolean!
-  """
-  The period of a discount
-  """
-  period: DiscountPeriod
-  """
-  List of app plan ids
-  """
-  app_plan_ids: [String!]!
-}
-
-type GrantMarketplaceAppDiscountResult {
-  granted_discount: GrantMarketplaceAppDiscount!
-}
-
-type MarketplaceAppDiscount {
-  """
-  Slug of an account
-  """
-  account_slug: String!
-  """
-  The ID of an account
-  """
-  account_id: ID!
-  """
-  Percentage value of a discount
-  """
-  discount: Int!
-  """
-  Is discount recurring
-  """
-  is_recurring: Boolean!
-  """
-  List of app plan ids
-  """
-  app_plan_ids: [String!]!
-  period: DiscountPeriod
-  """
-  Date until a discount is valid
-  """
-  valid_until: String!
-  """
-  Date when a discount was created
-  """
-  created_at: String!
-}
-
-"""
-The discounts granted to the subscription
-"""
-type SubscriptionDiscount {
-  """
-  The value of the discount in percentage (e.g. the value 80 refers to 80%)
-  """
-  value: Int!
-  discount_model_type: SubscriptionDiscountModelType!
-  discount_type: SubscriptionDiscountType!
-}
-
-"""
-The information whether the discount is percentage or nominal
-"""
-enum SubscriptionDiscountModelType {
-  percent
-  nominal
-}
-
-"""
-The information whether the discount has been granted one time or recurring
-"""
-enum SubscriptionDiscountType {
-  recurring
-  one_time
-}
-
-"""
-The billing period of the subscription. Possible values: monthly, yearly
-"""
-enum SubscriptionPeriodType {
-  monthly
-  yearly
-}
-
-"""
-The status of the subscription. Possible values: active, inactive.
-"""
-enum SubscriptionStatus {
-  active
-  inactive
-}
-
-"""
 The Article is the main object type of monday.com Knowledge product. A collaborative article that can contain rich text, media, and structured content. Articles have both draft and published versions, and are organized within workspaces and folders, with configurable privacy settings and access controls. They support features like version history, real-time collaboration, and can be shared with specific users or teams. Articles are commonly used for documentation, knowledge sharing, and team collaboration.
 """
 type Article {
@@ -8622,6 +8353,275 @@ enum ArtifactState {
   ACTIVE
   DELETED
   ARCHIVE
+}
+
+"""
+Subscription object
+"""
+type AppSubscriptionDetails {
+  """
+  The ID of an account
+  """
+  account_id: Int!
+  """
+  The ID of a pricing plan
+  """
+  plan_id: String!
+  """
+  The ID of a pricing version
+  """
+  pricing_version_id: Int!
+  """
+  The monthly price of the product purchased in the given currency, after applying discounts
+  """
+  monthly_price: Float!
+  """
+  The currency, in which the product was purchased
+  """
+  currency: String!
+  period_type: SubscriptionPeriodType!
+  """
+  The date the active subscription is set to renew. Equals to null for inactive subscriptions
+  """
+  renewal_date: String
+  """
+  The date the the inactive subscription ended. Equals to null for active subscriptions
+  """
+  end_date: String
+  status: SubscriptionStatus!
+  discounts: [SubscriptionDiscount!]!
+  """
+  The number of days left until the subscription ends
+  """
+  days_left: Int!
+  """
+  The subscribed unit quantity. Null for feature-based plans
+  """
+  max_units: Int
+}
+
+type AppSubscriptions {
+  subscriptions: [AppSubscriptionDetails!]!
+  """
+  Total number of subscriptions matching the given parameters
+  """
+  total_count: Int!
+  """
+  The value, which identifies the exact point to continue fetching the subscriptions from
+  """
+  cursor: String
+}
+
+"""
+A granted marketplace app discount offer
+"""
+type CreateMarketplaceAppDiscount {
+  """
+  Number of days a discount will be valid
+  """
+  days_valid: Int!
+  """
+  Percentage value of a discount
+  """
+  discount: Int!
+  """
+  Is discount recurring
+  """
+  is_recurring: Boolean!
+  """
+  The period of a discount
+  """
+  period: DiscountPeriod
+  """
+  List of app plan ids
+  """
+  app_plan_ids: [ID!]
+  """
+  The id of an app
+  """
+  app_id: ID!
+}
+
+"""
+Input data for creating a marketplace app discount
+"""
+input CreateMarketplaceAppDiscountInput {
+  """
+  Number of days a discount will be valid
+  """
+  days_valid: Int!
+  """
+  Percentage value of a discount
+  """
+  discount: Int!
+  """
+  The period of a discount
+  """
+  period: DiscountPeriod
+  """
+  List of app plan ids
+  """
+  app_plan_ids: [ID!]!
+}
+
+"""
+Result of granting a marketplace app discount offer
+"""
+type CreateMarketplaceAppDiscountResult {
+  """
+  The granted discount offer
+  """
+  granted_discount: CreateMarketplaceAppDiscount!
+}
+
+type DeleteMarketplaceAppDiscount {
+  """
+  Slug of an account
+  """
+  account_slug: String!
+  """
+  The id of an app
+  """
+  app_id: ID!
+}
+
+type DeleteMarketplaceAppDiscountResult {
+  deleted_discount: DeleteMarketplaceAppDiscount!
+}
+
+"""
+The period of a discount
+"""
+enum DiscountPeriod {
+  MONTHLY
+  YEARLY
+}
+
+type GrantMarketplaceAppDiscount {
+  """
+  Number of days a discount will be valid
+  """
+  days_valid: Int!
+  """
+  Percentage value of a discount
+  """
+  discount: Int!
+  """
+  Is discount recurring
+  """
+  is_recurring: Boolean!
+  period: DiscountPeriod
+  """
+  List of app plan ids
+  """
+  app_plan_ids: [String!]!
+  """
+  The id of an app
+  """
+  app_id: ID!
+}
+
+input GrantMarketplaceAppDiscountData {
+  """
+  Number of days a discount will be valid
+  """
+  days_valid: Int!
+  """
+  Percentage value of a discount
+  """
+  discount: Int!
+  """
+  Is discount recurring
+  """
+  is_recurring: Boolean!
+  """
+  The period of a discount
+  """
+  period: DiscountPeriod
+  """
+  List of app plan ids
+  """
+  app_plan_ids: [String!]!
+}
+
+type GrantMarketplaceAppDiscountResult {
+  granted_discount: GrantMarketplaceAppDiscount!
+}
+
+type MarketplaceAppDiscount {
+  """
+  Slug of an account
+  """
+  account_slug: String!
+  """
+  The ID of an account
+  """
+  account_id: ID!
+  """
+  Percentage value of a discount
+  """
+  discount: Int!
+  """
+  Is discount recurring
+  """
+  is_recurring: Boolean!
+  """
+  List of app plan ids
+  """
+  app_plan_ids: [String!]!
+  period: DiscountPeriod
+  """
+  Date until a discount is valid
+  """
+  valid_until: String!
+  """
+  Date when a discount was created
+  """
+  created_at: String!
+}
+
+"""
+The discounts granted to the subscription
+"""
+type SubscriptionDiscount {
+  """
+  The value of the discount in percentage (e.g. the value 80 refers to 80%)
+  """
+  value: Int!
+  discount_model_type: SubscriptionDiscountModelType!
+  discount_type: SubscriptionDiscountType!
+}
+
+"""
+The information whether the discount is percentage or nominal
+"""
+enum SubscriptionDiscountModelType {
+  percent
+  nominal
+}
+
+"""
+The information whether the discount has been granted one time or recurring
+"""
+enum SubscriptionDiscountType {
+  recurring
+  one_time
+}
+
+"""
+The billing period of the subscription. Possible values: monthly, yearly
+"""
+enum SubscriptionPeriodType {
+  monthly
+  yearly
+}
+
+"""
+The status of the subscription. Possible values: active, inactive.
+"""
+enum SubscriptionStatus {
+  active
+  inactive
 }
 
 """
