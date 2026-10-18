@@ -21,4 +21,10 @@ public sealed partial class ObjectSchemaConnectedBoard
     [JsonPropertyName("object_schema_id")]
     public string? ObjectSchemaId { get; init; }
 
+    /// <summary>
+    /// True for the template's own board (and its subitems board), which clients exclude from instance lists and may link to as "the template".
+    /// </summary>
+    [JsonPropertyName("is_template_editor")]
+    public bool? IsTemplateEditor { get; init; }
+
 }

@@ -28,10 +28,10 @@ public sealed partial class DataViewColumnInput
     public string? Type { get; init; }
 
     /// <summary>
-    /// For mirror/lookup columns, the type of the column being displayed.
+    /// For mirror/lookup columns, the type of the column being displayed; `resource` for a resource connect-boards column.
     /// </summary>
     [JsonPropertyName("sub_type")]
-    public ColumnType? SubType { get; init; }
+    public DataViewColumnSubType? SubType { get; init; }
 
     /// <summary>
     /// The column settings.
