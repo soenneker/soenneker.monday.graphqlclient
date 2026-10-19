@@ -896,6 +896,12 @@ public sealed partial class Mutation
     [JsonPropertyName("bulk_object_schema_column_actions")]
     public List<ObjectSchemaActionResult>? BulkObjectSchemaColumnActions { get; init; }
 
+    /// <summary>
+    /// Execute an integration block with the provided field values
+    /// </summary>
+    [JsonPropertyName("execute_integration_block")]
+    public IntegrationExecutionResult? ExecuteIntegrationBlock { get; init; }
+
     [JsonPropertyName("create_timeline_item")]
     public TimelineItem? CreateTimelineItem { get; init; }
 
@@ -1129,11 +1135,5 @@ public sealed partial class Mutation
     /// </summary>
     [JsonPropertyName("update_directory_resources_attributes")]
     public UpdateDirectoryResourceAttributesResponse? UpdateDirectoryResourcesAttributes { get; init; }
-
-    /// <summary>
-    /// Execute an integration block with the provided field values
-    /// </summary>
-    [JsonPropertyName("execute_integration_block")]
-    public IntegrationExecutionResult? ExecuteIntegrationBlock { get; init; }
 
 }
