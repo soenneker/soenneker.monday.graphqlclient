@@ -18,6 +18,12 @@ public sealed partial class User
     public string Id { get; init; } = null!;
 
     /// <summary>
+    /// The department the user is a member of (if any)
+    /// </summary>
+    [JsonPropertyName("department")]
+    public Department? Department { get; init; }
+
+    /// <summary>
     /// The user's account.
     /// </summary>
     [JsonPropertyName("account")]
@@ -142,12 +148,6 @@ public sealed partial class User
     /// </summary>
     [JsonPropertyName("teams")]
     public List<Team>? Teams { get; init; }
-
-    /// <summary>
-    /// The department the user is a member of (if any)
-    /// </summary>
-    [JsonPropertyName("department")]
-    public Department? Department { get; init; }
 
     /// <summary>
     /// The user's title.

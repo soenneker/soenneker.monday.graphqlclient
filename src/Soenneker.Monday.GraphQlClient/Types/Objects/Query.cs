@@ -27,6 +27,115 @@ public sealed partial class Query
     public NotetakerQueries? Notetaker { get; init; }
 
     /// <summary>
+    /// Get sequences that the current user is allowed to enroll items to, that are connected to the provided board. Returns sequences owned by the user or sequences where the user has access to the sender connection.
+    /// </summary>
+    [JsonPropertyName("allowed_sequences_to_enroll")]
+    public List<Sequence>? AllowedSequencesToEnroll { get; init; }
+
+    /// <summary>
+    /// Retrieves a list of available object types that can be created or queried. Each object type is uniquely identified by an 'object_type_unique_key'. This key is required for mutations like 'create_object' and for filtering in the 'objects' query. Use this query to discover what types of objects are available in the system (e.g., 'workflows', 'projects') and get their corresponding unique keys. The structure of unique key is 'app_slug::app_feature_slug'.
+    /// </summary>
+    [JsonPropertyName("object_types_unique_keys")]
+    public List<ObjectTypeUniqueKey>? ObjectTypesUniqueKeys { get; init; }
+
+    /// <summary>
+    /// Retrieves a list of objects from the Monday.com Objects Platform based on specified filters. This query can return any type of object (board, doc, dashboard, workflow, etc.) depending on the filter criteria. Use object_type_unique_keys to filter for specific object types.
+    /// </summary>
+    [JsonPropertyName("objects")]
+    public List<Object>? Objects { get; init; }
+
+    /// <summary>
+    /// Fetch relations for a specific object
+    /// </summary>
+    [JsonPropertyName("object_relations")]
+    public List<ObjectRelation>? ObjectRelations { get; init; }
+
+    /// <summary>
+    /// Get account departments
+    /// </summary>
+    [JsonPropertyName("departments")]
+    public List<Department>? Departments { get; init; }
+
+    /// <summary>
+    /// Retrieves blocks for the published version of a specific article if the requesting user has permission to access it. Returns paginated blocks in their position order. Will return an error if the user lacks the required permissions.
+    /// </summary>
+    [JsonPropertyName("article_blocks")]
+    public List<ArticleBlock> ArticleBlocks { get; init; } = [];
+
+    /// <summary>
+    /// Retrieves a list of published articles with their metadata and content blocks that the requesting user has permission to access. Articles without proper permissions will be filtered out. By default, returns the first 25 blocks per article. To retrieve more blocks, use the article_blocks query.
+    /// </summary>
+    [JsonPropertyName("articles")]
+    public List<Article> Articles { get; init; } = [];
+
+    /// <summary>
+    /// Retrieves the content diff between two versions of a document. Pass two restoring point dates (from doc_version_history) to see what blocks were added, deleted, or changed. Only blocks with changes are returned.
+    /// </summary>
+    [JsonPropertyName("doc_version_diff")]
+    public DocVersionDiff? DocVersionDiff { get; init; }
+
+    /// <summary>
+    /// Retrieves the version history of a document. Returns a list of restoring points (snapshots) with timestamps and the users who made changes. Snapshots are grouped in 5-minute intervals. Use the since and until arguments to filter the time range.
+    /// </summary>
+    [JsonPropertyName("doc_version_history")]
+    public DocVersionHistory? DocVersionHistory { get; init; }
+
+    /// <summary>
+    /// Converts document content into standard markdown format for external use, backup, or processing. Exports the entire document by default, or specific blocks if block IDs are provided. Use this to extract content for integration with other systems, create backups, generate reports, or process document content with external tools. The output is clean, portable markdown that preserves formatting and structure.
+    /// </summary>
+    [JsonPropertyName("export_markdown_from_doc")]
+    public ExportMarkdownResult? ExportMarkdownFromDoc { get; init; }
+
+    [JsonPropertyName("marketplace_app_discounts")]
+    public List<MarketplaceAppDiscount> MarketplaceAppDiscounts { get; init; } = [];
+
+    [JsonPropertyName("app_subscriptions")]
+    public AppSubscriptions AppSubscriptions { get; init; } = null!;
+
+    /// <summary>
+    /// Placeholder query field for automations-test microservice.
+    ///   This can be replaced with actual queries as the service evolves.
+    /// </summary>
+    [JsonPropertyName("empty")]
+    public string? Empty { get; init; }
+
+    /// <summary>
+    /// List trigger events with optional filters
+    /// </summary>
+    [JsonPropertyName("trigger_events")]
+    public TriggerEventsPage? TriggerEvents { get; init; }
+
+    /// <summary>
+    /// Fetch a single trigger event by UUID
+    /// </summary>
+    [JsonPropertyName("trigger_event")]
+    public TriggerEvent? TriggerEvent { get; init; }
+
+    /// <summary>
+    /// List block events for a given trigger UUID
+    /// </summary>
+    [JsonPropertyName("block_events")]
+    public BlockEventsPage? BlockEvents { get; init; }
+
+    /// <summary>
+    /// List tool events for a given trigger UUID
+    /// </summary>
+    [JsonPropertyName("tool_events")]
+    public ToolEventsPage? ToolEvents { get; init; }
+
+    /// <summary>
+    /// Get aggregated automation runs statistics in the account
+    /// </summary>
+    [JsonPropertyName("account_trigger_statistics")]
+    public AccountTriggerStatistics? AccountTriggerStatistics { get; init; }
+
+    /// <summary>
+    /// Get aggregated automation runs statistics grouped by entity Ids
+    /// </summary>
+    [JsonPropertyName("account_triggers_statistics_by_entity_id")]
+    public AccountTriggersByEntityId? AccountTriggersStatisticsByEntityId { get; init; }
+
+    /// <summary>
     /// Get the connected account's information.
     /// </summary>
     [JsonPropertyName("account")]
@@ -151,115 +260,6 @@ public sealed partial class Query
     /// </summary>
     [JsonPropertyName("workspaces")]
     public List<Workspace>? Workspaces { get; init; }
-
-    /// <summary>
-    /// Get sequences that the current user is allowed to enroll items to, that are connected to the provided board. Returns sequences owned by the user or sequences where the user has access to the sender connection.
-    /// </summary>
-    [JsonPropertyName("allowed_sequences_to_enroll")]
-    public List<Sequence>? AllowedSequencesToEnroll { get; init; }
-
-    /// <summary>
-    /// Retrieves a list of available object types that can be created or queried. Each object type is uniquely identified by an 'object_type_unique_key'. This key is required for mutations like 'create_object' and for filtering in the 'objects' query. Use this query to discover what types of objects are available in the system (e.g., 'workflows', 'projects') and get their corresponding unique keys. The structure of unique key is 'app_slug::app_feature_slug'.
-    /// </summary>
-    [JsonPropertyName("object_types_unique_keys")]
-    public List<ObjectTypeUniqueKey>? ObjectTypesUniqueKeys { get; init; }
-
-    /// <summary>
-    /// Retrieves a list of objects from the Monday.com Objects Platform based on specified filters. This query can return any type of object (board, doc, dashboard, workflow, etc.) depending on the filter criteria. Use object_type_unique_keys to filter for specific object types.
-    /// </summary>
-    [JsonPropertyName("objects")]
-    public List<Object>? Objects { get; init; }
-
-    /// <summary>
-    /// Fetch relations for a specific object
-    /// </summary>
-    [JsonPropertyName("object_relations")]
-    public List<ObjectRelation>? ObjectRelations { get; init; }
-
-    /// <summary>
-    /// Get account departments
-    /// </summary>
-    [JsonPropertyName("departments")]
-    public List<Department>? Departments { get; init; }
-
-    /// <summary>
-    /// Retrieves blocks for the published version of a specific article if the requesting user has permission to access it. Returns paginated blocks in their position order. Will return an error if the user lacks the required permissions.
-    /// </summary>
-    [JsonPropertyName("article_blocks")]
-    public List<ArticleBlock> ArticleBlocks { get; init; } = [];
-
-    /// <summary>
-    /// Retrieves a list of published articles with their metadata and content blocks that the requesting user has permission to access. Articles without proper permissions will be filtered out. By default, returns the first 25 blocks per article. To retrieve more blocks, use the article_blocks query.
-    /// </summary>
-    [JsonPropertyName("articles")]
-    public List<Article> Articles { get; init; } = [];
-
-    /// <summary>
-    /// Retrieves the content diff between two versions of a document. Pass two restoring point dates (from doc_version_history) to see what blocks were added, deleted, or changed. Only blocks with changes are returned.
-    /// </summary>
-    [JsonPropertyName("doc_version_diff")]
-    public DocVersionDiff? DocVersionDiff { get; init; }
-
-    /// <summary>
-    /// Retrieves the version history of a document. Returns a list of restoring points (snapshots) with timestamps and the users who made changes. Snapshots are grouped in 5-minute intervals. Use the since and until arguments to filter the time range.
-    /// </summary>
-    [JsonPropertyName("doc_version_history")]
-    public DocVersionHistory? DocVersionHistory { get; init; }
-
-    /// <summary>
-    /// Converts document content into standard markdown format for external use, backup, or processing. Exports the entire document by default, or specific blocks if block IDs are provided. Use this to extract content for integration with other systems, create backups, generate reports, or process document content with external tools. The output is clean, portable markdown that preserves formatting and structure.
-    /// </summary>
-    [JsonPropertyName("export_markdown_from_doc")]
-    public ExportMarkdownResult? ExportMarkdownFromDoc { get; init; }
-
-    [JsonPropertyName("marketplace_app_discounts")]
-    public List<MarketplaceAppDiscount> MarketplaceAppDiscounts { get; init; } = [];
-
-    [JsonPropertyName("app_subscriptions")]
-    public AppSubscriptions AppSubscriptions { get; init; } = null!;
-
-    /// <summary>
-    /// Placeholder query field for automations-test microservice.
-    ///   This can be replaced with actual queries as the service evolves.
-    /// </summary>
-    [JsonPropertyName("empty")]
-    public string? Empty { get; init; }
-
-    /// <summary>
-    /// List trigger events with optional filters
-    /// </summary>
-    [JsonPropertyName("trigger_events")]
-    public TriggerEventsPage? TriggerEvents { get; init; }
-
-    /// <summary>
-    /// Fetch a single trigger event by UUID
-    /// </summary>
-    [JsonPropertyName("trigger_event")]
-    public TriggerEvent? TriggerEvent { get; init; }
-
-    /// <summary>
-    /// List block events for a given trigger UUID
-    /// </summary>
-    [JsonPropertyName("block_events")]
-    public BlockEventsPage? BlockEvents { get; init; }
-
-    /// <summary>
-    /// List tool events for a given trigger UUID
-    /// </summary>
-    [JsonPropertyName("tool_events")]
-    public ToolEventsPage? ToolEvents { get; init; }
-
-    /// <summary>
-    /// Get aggregated automation runs statistics in the account
-    /// </summary>
-    [JsonPropertyName("account_trigger_statistics")]
-    public AccountTriggerStatistics? AccountTriggerStatistics { get; init; }
-
-    /// <summary>
-    /// Get aggregated automation runs statistics grouped by entity Ids
-    /// </summary>
-    [JsonPropertyName("account_triggers_statistics_by_entity_id")]
-    public AccountTriggersByEntityId? AccountTriggersStatisticsByEntityId { get; init; }
 
     /// <summary>
     /// Get validations configuration for a board

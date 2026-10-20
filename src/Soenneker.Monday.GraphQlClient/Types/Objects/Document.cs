@@ -16,6 +16,23 @@ namespace Soenneker.Monday.GraphQlClient;
 public sealed partial class Document
 {
     /// <summary>
+    /// Identifier that appears in the doc's URL.
+    ///   Returned on creation, but DO NOT use it in API routes that expect a document ID.
+    /// </summary>
+    [JsonPropertyName("object_id")]
+    public string ObjectId { get; init; } = null!;
+
+    /// <summary>
+    /// Unique document ID returned when the doc is created.
+    ///   Use this ID in every API call that references the doc.
+    ///   How to find it:
+    ///   • Call the docs() GraphQL query with object_ids to map object_id → id
+    ///   • Enable 'Developer Mode' in monday.labs to display it inside the doc.
+    /// </summary>
+    [JsonPropertyName("id")]
+    public string Id { get; init; } = null!;
+
+    /// <summary>
     /// The document's content blocks
     /// </summary>
     [JsonPropertyName("blocks")]
@@ -46,27 +63,10 @@ public sealed partial class Document
     public BoardKind DocKind { get; init; }
 
     /// <summary>
-    /// Unique document ID returned when the doc is created.
-    ///   Use this ID in every API call that references the doc.
-    ///   How to find it:
-    ///   • Call the docs() GraphQL query with object_ids to map object_id → id
-    ///   • Enable 'Developer Mode' in monday.labs to display it inside the doc.
-    /// </summary>
-    [JsonPropertyName("id")]
-    public string Id { get; init; } = null!;
-
-    /// <summary>
     /// The document's name.
     /// </summary>
     [JsonPropertyName("name")]
     public string Name { get; init; } = null!;
-
-    /// <summary>
-    /// Identifier that appears in the doc's URL.
-    ///   Returned on creation, but DO NOT use it in API routes that expect a document ID.
-    /// </summary>
-    [JsonPropertyName("object_id")]
-    public string ObjectId { get; init; } = null!;
 
     /// <summary>
     /// The document's relative url

@@ -327,6 +327,128 @@ type Mutation {
   unpin_from_top(id: ID!, item_id: ID): Update!
   create_update(body: String!, original_creation_date: String, mentions_list: [UpdateMention], item_id: ID, parent_id: ID, use_app_info: Boolean): Update
   """
+  Enroll multiple items to a single sequence. Maximum 50 items per request.
+  """
+  enroll_items_to_sequence(input: EnrollToSequenceInput!): EnrollToSequenceResult
+  """
+  Creates a new object in the Monday.com Objects Platform. The type of object created is determined by the object_type_unique_key parameter. This mutation can create boards, docs, dashboards, workflows, or specialized objects like CRM, capacity manager, etc. Under the hood, this creates a board with the corresponding app_feature_id.
+  """
+  create_object(name: String!, privacy_kind: PrivacyKind!, workspace_id: ID, description: String, folder_id: ID, owner_ids: [ID!], owner_team_ids: [ID!], subscriber_ids: [ID!], subscriber_teams_ids: [ID!], object_type_unique_key: String!, payload: JSON, relations: [ObjectRelationInput!]): Object
+  """
+  Permanently deletes an object from the Monday.com Objects Platform. Unlike archiving, deletion is only reversible for 30 days and removes all associated data. This operation works for any object type including boards, docs, dashboards, workflows, and specialized objects (CRM, capacity manager, etc.). WARNING: This operation cannot be undone after 30 days.
+  """
+  delete_object(id: ID!): Object
+  """
+  Archives an object in the Monday.com Objects Platform, changing its state to "archived" while preserving all data. Archived objects remain in the system but are hidden from regular views. This operation works for any object type including boards, docs, dashboards, workflows, and specialized objects (CRM, capacity manager, etc.). Under the hood, this archives the board that represents this object.
+  """
+  archive_object(id: ID!): Object
+  """
+  Adds users to an existing object as either subscribers or owners. Subscribers receive notifications about object changes, while owners have full control permissions. Works with any object type including boards, docs, dashboards, workflows, and specialized objects (CRM, capacity manager, etc.). Equivalent to the add_users_to_board mutation in the boards API.
+  """
+  add_subscribers_to_object(id: ID!, user_ids: [ID!]!, kind: SubscriberKind = SUBSCRIBER): Object
+  """
+  Updates an object.
+  """
+  update_object(id: String!, input: UpdateObjectInput!): Object
+  """
+  Publishes object out of draft state. Returns {success: true} on success, {success: false} on failure.
+  """
+  publish_object(id: ID!): ObjectOperationResponse
+  """
+  Unpublishes object from public state back to draft state. Returns {success: true} on success, {success: false} on failure.
+  """
+  unpublish_object(id: ID!): ObjectOperationResponse
+  """
+  Create relations for an object
+  """
+  create_object_relations(source_object_id: ID!, relations: [ObjectRelationInput!]!): [ObjectRelation!]
+  """
+  Delete a specific object relation or all relations for an object. Returns the number of relations deleted.
+  """
+  delete_object_relation(source_object_id: ID!, relation_id: ID): Int
+  """
+  Assigns members to a department.
+  """
+  assign_department_members(department_id: ID!, user_ids: [ID!]!): AssignDepartmentMembersResult
+  """
+  Clear users department
+  """
+  clear_users_department(user_ids: [ID!]!): ClearUsersDepartmentResult
+  """
+  Assigns an owner to a department.
+  """
+  assign_department_owner(department_id: ID!, user_id: ID!): AssignDepartmentOwnerResult
+  """
+  Unassigns owners from a department.
+  """
+  unassign_department_owners(department_id: ID!, user_ids: [ID!]!): UnassignDepartmentOwnerResult
+  """
+  Creates a new department.
+  """
+  create_department(data: CreateDepartmentDataInput!): Department
+  """
+  Updates a department.
+  """
+  update_department(department_id: ID!, data: UpdateDepartmentOptionsInput): Department
+  """
+  Deletes a department.
+  """
+  delete_department(department_id: ID!): Department
+  """
+  Adds markdown content to an existing document by converting it into document blocks. Use this to append content to the end of a document or insert content after a specific block. The markdown will be parsed and converted into the appropriate document block types (text, headers, lists, etc.). Returns the IDs of the newly created blocks on success.
+  """
+  add_content_to_doc_from_markdown(docId: ID!, markdown: String!, afterBlockId: String): DocBlocksFromMarkdownResult
+  """
+  Creates a new article in the specified workspace. Optionally accepts a name and folder ID. Returns the created article metadata.
+  """
+  create_article(name: String, workspace_id: ID!, folder_id: ID): ArticleMetadata
+  """
+  Creates multiple document blocks in a single operation for efficient content creation. Use this when adding substantial content like importing documents, creating structured content (articles, reports, guides), or building complex document sections. Supports all block types including text paragraphs, headers, bullet/numbered lists, images, tables, code blocks, and more. Much faster than creating blocks individually. Perfect for content migration, template creation, or generating documents from external data. Maximum 25 blocks per request.
+  """
+  create_doc_blocks(docId: ID!, afterBlockId: String, blocksInput: [CreateBlockInput!]!): [DocumentBlockV2!]
+  """
+  Deletes an article with the specified object ID
+  """
+  delete_article(object_id: ID!): ArticleMetadata
+  """
+  Permanently deletes a document and all its content from the system. This action cannot be undone. The document will be removed from all user views and workspaces. Use with caution - ensure the document is no longer needed before deletion. Returns success status and the deleted document ID.
+  """
+  delete_doc(docId: ID!): JSON
+  """
+  Deletes multiple document blocks in a single operation. Maximum 100 blocks per request.
+  """
+  delete_doc_blocks(block_ids: [ID!]!): [DeletedDocBlock!]
+  """
+  Creates an exact copy of an existing document, including all content, structure, and formatting. Use this to create templates, backup documents before major changes, or create variations of existing documents. The duplicated document will have a new unique ID and can be modified independently. Returns the new document's ID on success.
+  """
+  duplicate_doc(docId: ID!, duplicateType: DuplicateType): JSON
+  """
+  Imports HTML content as a new document by converting it into document blocks. The HTML will be parsed and converted into the appropriate document block types (text, headers, lists, etc.). Returns the ID of the newly created document on success.
+  """
+  import_doc_from_html(html: String!, workspaceId: ID!, kind: DocKind, folderId: ID, title: String): ImportDocFromHtmlResult
+  """
+  Publishes an article with the specified object ID. Allows setting privacy level, target folder, and managing subscribers (users and teams). Returns the updated article metadata.
+  """
+  publish_article(object_id: ID!, privacy_kind: PrivacyKind!, folder_id: ID, add_subscriber_ids: [ID!], add_subscriber_team_ids: [ID!], remove_subscriber_ids: [ID!], remove_subscriber_team_ids: [ID!]): ArticleMetadata
+  """
+  Updates the content of a specific article block. The block must belong to a draft article that the user has permission to edit. Cannot update blocks of published articles.
+  """
+  update_article_block(block_id: String!, content: JSON!): ArticleBlock
+  """
+  Update a document's name/title. Changes are applied immediately and visible to all users with access to the document.
+  """
+  update_doc_name(docId: ID!, name: String!): JSON
+  """
+  Sets an item description document's content with new markdown data. This mutation converts the provided markdown into document blocks and replaces the existing content of the item's description. Returns the IDs of the newly created blocks on success. Note: Markdown does not support text colors or background highlights. Any existing colored or highlighted text will be lost after replacement.
+  """
+  set_item_description_content(item_id: ID!, markdown: String!): DocBlocksFromMarkdownResult
+  """
+  Create a marketplace app discount
+  """
+  create_marketplace_app_discount(app_id: ID!, account_slug: String!, discount_data: CreateMarketplaceAppDiscountInput!): CreateMarketplaceAppDiscountResult!
+  delete_marketplace_app_discount(app_id: ID!, account_slug: String!): DeleteMarketplaceAppDiscountResult!
+  grant_marketplace_app_discount(app_id: ID!, account_slug: String!, data: GrantMarketplaceAppDiscountData!): GrantMarketplaceAppDiscountResult!
+  """
   Add a file to a column value.
   """
   add_file_to_column(column_id: String!, file: File!, item_id: ID!): Asset
@@ -579,128 +701,6 @@ type Mutation {
   Use a template
   """
   use_template(board_kind: BoardKind, board_owner_ids: [Int], board_owner_team_ids: [Int], board_subscriber_ids: [Int], board_subscriber_teams_ids: [Int], callback_url_on_complete: String, destination_folder_id: Int, destination_folder_name: String, destination_name: String, destination_workspace_id: Int, skip_target_folder_creation: Boolean, solution_extra_options: JSON, template_id: Int!): Template
-  """
-  Enroll multiple items to a single sequence. Maximum 50 items per request.
-  """
-  enroll_items_to_sequence(input: EnrollToSequenceInput!): EnrollToSequenceResult
-  """
-  Creates a new object in the Monday.com Objects Platform. The type of object created is determined by the object_type_unique_key parameter. This mutation can create boards, docs, dashboards, workflows, or specialized objects like CRM, capacity manager, etc. Under the hood, this creates a board with the corresponding app_feature_id.
-  """
-  create_object(name: String!, privacy_kind: PrivacyKind!, workspace_id: ID, description: String, folder_id: ID, owner_ids: [ID!], owner_team_ids: [ID!], subscriber_ids: [ID!], subscriber_teams_ids: [ID!], object_type_unique_key: String!, payload: JSON, relations: [ObjectRelationInput!]): Object
-  """
-  Permanently deletes an object from the Monday.com Objects Platform. Unlike archiving, deletion is only reversible for 30 days and removes all associated data. This operation works for any object type including boards, docs, dashboards, workflows, and specialized objects (CRM, capacity manager, etc.). WARNING: This operation cannot be undone after 30 days.
-  """
-  delete_object(id: ID!): Object
-  """
-  Archives an object in the Monday.com Objects Platform, changing its state to "archived" while preserving all data. Archived objects remain in the system but are hidden from regular views. This operation works for any object type including boards, docs, dashboards, workflows, and specialized objects (CRM, capacity manager, etc.). Under the hood, this archives the board that represents this object.
-  """
-  archive_object(id: ID!): Object
-  """
-  Adds users to an existing object as either subscribers or owners. Subscribers receive notifications about object changes, while owners have full control permissions. Works with any object type including boards, docs, dashboards, workflows, and specialized objects (CRM, capacity manager, etc.). Equivalent to the add_users_to_board mutation in the boards API.
-  """
-  add_subscribers_to_object(id: ID!, user_ids: [ID!]!, kind: SubscriberKind = SUBSCRIBER): Object
-  """
-  Updates an object.
-  """
-  update_object(id: String!, input: UpdateObjectInput!): Object
-  """
-  Publishes object out of draft state. Returns {success: true} on success, {success: false} on failure.
-  """
-  publish_object(id: ID!): ObjectOperationResponse
-  """
-  Unpublishes object from public state back to draft state. Returns {success: true} on success, {success: false} on failure.
-  """
-  unpublish_object(id: ID!): ObjectOperationResponse
-  """
-  Create relations for an object
-  """
-  create_object_relations(source_object_id: ID!, relations: [ObjectRelationInput!]!): [ObjectRelation!]
-  """
-  Delete a specific object relation or all relations for an object. Returns the number of relations deleted.
-  """
-  delete_object_relation(source_object_id: ID!, relation_id: ID): Int
-  """
-  Assigns members to a department.
-  """
-  assign_department_members(department_id: ID!, user_ids: [ID!]!): AssignDepartmentMembersResult
-  """
-  Clear users department
-  """
-  clear_users_department(user_ids: [ID!]!): ClearUsersDepartmentResult
-  """
-  Assigns an owner to a department.
-  """
-  assign_department_owner(department_id: ID!, user_id: ID!): AssignDepartmentOwnerResult
-  """
-  Unassigns owners from a department.
-  """
-  unassign_department_owners(department_id: ID!, user_ids: [ID!]!): UnassignDepartmentOwnerResult
-  """
-  Creates a new department.
-  """
-  create_department(data: CreateDepartmentDataInput!): Department
-  """
-  Updates a department.
-  """
-  update_department(department_id: ID!, data: UpdateDepartmentOptionsInput): Department
-  """
-  Deletes a department.
-  """
-  delete_department(department_id: ID!): Department
-  """
-  Adds markdown content to an existing document by converting it into document blocks. Use this to append content to the end of a document or insert content after a specific block. The markdown will be parsed and converted into the appropriate document block types (text, headers, lists, etc.). Returns the IDs of the newly created blocks on success.
-  """
-  add_content_to_doc_from_markdown(docId: ID!, markdown: String!, afterBlockId: String): DocBlocksFromMarkdownResult
-  """
-  Creates a new article in the specified workspace. Optionally accepts a name and folder ID. Returns the created article metadata.
-  """
-  create_article(name: String, workspace_id: ID!, folder_id: ID): ArticleMetadata
-  """
-  Creates multiple document blocks in a single operation for efficient content creation. Use this when adding substantial content like importing documents, creating structured content (articles, reports, guides), or building complex document sections. Supports all block types including text paragraphs, headers, bullet/numbered lists, images, tables, code blocks, and more. Much faster than creating blocks individually. Perfect for content migration, template creation, or generating documents from external data. Maximum 25 blocks per request.
-  """
-  create_doc_blocks(docId: ID!, afterBlockId: String, blocksInput: [CreateBlockInput!]!): [DocumentBlockV2!]
-  """
-  Deletes an article with the specified object ID
-  """
-  delete_article(object_id: ID!): ArticleMetadata
-  """
-  Permanently deletes a document and all its content from the system. This action cannot be undone. The document will be removed from all user views and workspaces. Use with caution - ensure the document is no longer needed before deletion. Returns success status and the deleted document ID.
-  """
-  delete_doc(docId: ID!): JSON
-  """
-  Deletes multiple document blocks in a single operation. Maximum 100 blocks per request.
-  """
-  delete_doc_blocks(block_ids: [ID!]!): [DeletedDocBlock!]
-  """
-  Creates an exact copy of an existing document, including all content, structure, and formatting. Use this to create templates, backup documents before major changes, or create variations of existing documents. The duplicated document will have a new unique ID and can be modified independently. Returns the new document's ID on success.
-  """
-  duplicate_doc(docId: ID!, duplicateType: DuplicateType): JSON
-  """
-  Imports HTML content as a new document by converting it into document blocks. The HTML will be parsed and converted into the appropriate document block types (text, headers, lists, etc.). Returns the ID of the newly created document on success.
-  """
-  import_doc_from_html(html: String!, workspaceId: ID!, kind: DocKind, folderId: ID, title: String): ImportDocFromHtmlResult
-  """
-  Publishes an article with the specified object ID. Allows setting privacy level, target folder, and managing subscribers (users and teams). Returns the updated article metadata.
-  """
-  publish_article(object_id: ID!, privacy_kind: PrivacyKind!, folder_id: ID, add_subscriber_ids: [ID!], add_subscriber_team_ids: [ID!], remove_subscriber_ids: [ID!], remove_subscriber_team_ids: [ID!]): ArticleMetadata
-  """
-  Updates the content of a specific article block. The block must belong to a draft article that the user has permission to edit. Cannot update blocks of published articles.
-  """
-  update_article_block(block_id: String!, content: JSON!): ArticleBlock
-  """
-  Update a document's name/title. Changes are applied immediately and visible to all users with access to the document.
-  """
-  update_doc_name(docId: ID!, name: String!): JSON
-  """
-  Sets an item description document's content with new markdown data. This mutation converts the provided markdown into document blocks and replaces the existing content of the item's description. Returns the IDs of the newly created blocks on success. Note: Markdown does not support text colors or background highlights. Any existing colored or highlighted text will be lost after replacement.
-  """
-  set_item_description_content(item_id: ID!, markdown: String!): DocBlocksFromMarkdownResult
-  """
-  Create a marketplace app discount
-  """
-  create_marketplace_app_discount(app_id: ID!, account_slug: String!, discount_data: CreateMarketplaceAppDiscountInput!): CreateMarketplaceAppDiscountResult!
-  delete_marketplace_app_discount(app_id: ID!, account_slug: String!): DeleteMarketplaceAppDiscountResult!
-  grant_marketplace_app_discount(app_id: ID!, account_slug: String!, data: GrantMarketplaceAppDiscountData!): GrantMarketplaceAppDiscountResult!
   """
   Add a required column to a board
   """
@@ -1073,6 +1073,77 @@ type Query {
   """
   notetaker: NotetakerQueries
   """
+  Get sequences that the current user is allowed to enroll items to, that are connected to the provided board. Returns sequences owned by the user or sequences where the user has access to the sender connection.
+  """
+  allowed_sequences_to_enroll(board_id: ID!): [Sequence!]
+  """
+  Retrieves a list of available object types that can be created or queried. Each object type is uniquely identified by an 'object_type_unique_key'. This key is required for mutations like 'create_object' and for filtering in the 'objects' query. Use this query to discover what types of objects are available in the system (e.g., 'workflows', 'projects') and get their corresponding unique keys. The structure of unique key is 'app_slug::app_feature_slug'.
+  """
+  object_types_unique_keys: [ObjectTypeUniqueKey!]
+  """
+  Retrieves a list of objects from the Monday.com Objects Platform based on specified filters. This query can return any type of object (board, doc, dashboard, workflow, etc.) depending on the filter criteria. Use object_type_unique_keys to filter for specific object types.
+  """
+  objects(object_type_unique_keys: [String!], ids: [ID!], limit: Int, order_by: OrderBy, state: ObjectState, privacy_kind: PrivacyKind, workspace_ids: [ID!]): [Object!]
+  """
+  Fetch relations for a specific object
+  """
+  object_relations(object_id: ID!, kind: RelationKind, direction: RelationDirection = OUTGOING): [ObjectRelation!]
+  """
+  Get account departments
+  """
+  departments(ids: [ID!]): [Department!]
+  """
+  Retrieves blocks for the published version of a specific article if the requesting user has permission to access it. Returns paginated blocks in their position order. Will return an error if the user lacks the required permissions.
+  """
+  article_blocks(object_id: ID!, limit: Int = 25, page: Int = 1): [ArticleBlock]!
+  """
+  Retrieves a list of published articles with their metadata and content blocks that the requesting user has permission to access. Articles without proper permissions will be filtered out. By default, returns the first 25 blocks per article. To retrieve more blocks, use the article_blocks query.
+  """
+  articles(object_ids: [ID!]!, workspace_ids: [ID!], limit: Int = 25, page: Int = 1): [Article]!
+  """
+  Retrieves the content diff between two versions of a document. Pass two restoring point dates (from doc_version_history) to see what blocks were added, deleted, or changed. Only blocks with changes are returned.
+  """
+  doc_version_diff(doc_id: ID!, date: String!, prev_date: String!): DocVersionDiff
+  """
+  Retrieves the version history of a document. Returns a list of restoring points (snapshots) with timestamps and the users who made changes. Snapshots are grouped in 5-minute intervals. Use the since and until arguments to filter the time range.
+  """
+  doc_version_history(doc_id: ID!, since: String, until: String): DocVersionHistory
+  """
+  Converts document content into standard markdown format for external use, backup, or processing. Exports the entire document by default, or specific blocks if block IDs are provided. Use this to extract content for integration with other systems, create backups, generate reports, or process document content with external tools. The output is clean, portable markdown that preserves formatting and structure.
+  """
+  export_markdown_from_doc(docId: ID!, blockIds: [String!]): ExportMarkdownResult
+  marketplace_app_discounts(app_id: ID!): [MarketplaceAppDiscount!]!
+  app_subscriptions(app_id: ID!, status: SubscriptionStatus, account_id: Int, cursor: String, limit: Int): AppSubscriptions!
+  """
+  Placeholder query field for automations-test microservice.
+    This can be replaced with actual queries as the service evolves.
+  """
+  empty: String
+  """
+  List trigger events with optional filters
+  """
+  trigger_events(nextPageOffset: Int = 0, filters: TriggerEventsFiltersInput): TriggerEventsPage
+  """
+  Fetch a single trigger event by UUID
+  """
+  trigger_event(triggerUuid: String!): TriggerEvent
+  """
+  List block events for a given trigger UUID
+  """
+  block_events(triggerUuid: String!, nextPageOffset: Int = 0): BlockEventsPage
+  """
+  List tool events for a given trigger UUID
+  """
+  tool_events(trigger_uuid: String!, next_page_offset: Int = 0): ToolEventsPage
+  """
+  Get aggregated automation runs statistics in the account
+  """
+  account_trigger_statistics(filters: AccountTriggerStatisticsFiltersInput): AccountTriggerStatistics
+  """
+  Get aggregated automation runs statistics grouped by entity Ids
+  """
+  account_triggers_statistics_by_entity_id(run_status: TriggerEventState!, filters: AccountTriggersByEntityIdFiltersInput): AccountTriggersByEntityId
+  """
   Get the connected account's information.
   """
   account: Account
@@ -1156,77 +1227,6 @@ type Query {
   Get a collection of workspaces.
   """
   workspaces(ids: [ID!], kind: WorkspaceKind, limit: Int = 25, membership_kind: WorkspaceMembershipKind = all, order_by: WorkspacesOrderBy, page: Int = 1, query_params: WorkspacesQueryInput, state: State = active): [Workspace]
-  """
-  Get sequences that the current user is allowed to enroll items to, that are connected to the provided board. Returns sequences owned by the user or sequences where the user has access to the sender connection.
-  """
-  allowed_sequences_to_enroll(board_id: ID!): [Sequence!]
-  """
-  Retrieves a list of available object types that can be created or queried. Each object type is uniquely identified by an 'object_type_unique_key'. This key is required for mutations like 'create_object' and for filtering in the 'objects' query. Use this query to discover what types of objects are available in the system (e.g., 'workflows', 'projects') and get their corresponding unique keys. The structure of unique key is 'app_slug::app_feature_slug'.
-  """
-  object_types_unique_keys: [ObjectTypeUniqueKey!]
-  """
-  Retrieves a list of objects from the Monday.com Objects Platform based on specified filters. This query can return any type of object (board, doc, dashboard, workflow, etc.) depending on the filter criteria. Use object_type_unique_keys to filter for specific object types.
-  """
-  objects(object_type_unique_keys: [String!], ids: [ID!], limit: Int, order_by: OrderBy, state: ObjectState, privacy_kind: PrivacyKind, workspace_ids: [ID!]): [Object!]
-  """
-  Fetch relations for a specific object
-  """
-  object_relations(object_id: ID!, kind: RelationKind, direction: RelationDirection = OUTGOING): [ObjectRelation!]
-  """
-  Get account departments
-  """
-  departments(ids: [ID!]): [Department!]
-  """
-  Retrieves blocks for the published version of a specific article if the requesting user has permission to access it. Returns paginated blocks in their position order. Will return an error if the user lacks the required permissions.
-  """
-  article_blocks(object_id: ID!, limit: Int = 25, page: Int = 1): [ArticleBlock]!
-  """
-  Retrieves a list of published articles with their metadata and content blocks that the requesting user has permission to access. Articles without proper permissions will be filtered out. By default, returns the first 25 blocks per article. To retrieve more blocks, use the article_blocks query.
-  """
-  articles(object_ids: [ID!]!, workspace_ids: [ID!], limit: Int = 25, page: Int = 1): [Article]!
-  """
-  Retrieves the content diff between two versions of a document. Pass two restoring point dates (from doc_version_history) to see what blocks were added, deleted, or changed. Only blocks with changes are returned.
-  """
-  doc_version_diff(doc_id: ID!, date: String!, prev_date: String!): DocVersionDiff
-  """
-  Retrieves the version history of a document. Returns a list of restoring points (snapshots) with timestamps and the users who made changes. Snapshots are grouped in 5-minute intervals. Use the since and until arguments to filter the time range.
-  """
-  doc_version_history(doc_id: ID!, since: String, until: String): DocVersionHistory
-  """
-  Converts document content into standard markdown format for external use, backup, or processing. Exports the entire document by default, or specific blocks if block IDs are provided. Use this to extract content for integration with other systems, create backups, generate reports, or process document content with external tools. The output is clean, portable markdown that preserves formatting and structure.
-  """
-  export_markdown_from_doc(docId: ID!, blockIds: [String!]): ExportMarkdownResult
-  marketplace_app_discounts(app_id: ID!): [MarketplaceAppDiscount!]!
-  app_subscriptions(app_id: ID!, status: SubscriptionStatus, account_id: Int, cursor: String, limit: Int): AppSubscriptions!
-  """
-  Placeholder query field for automations-test microservice.
-    This can be replaced with actual queries as the service evolves.
-  """
-  empty: String
-  """
-  List trigger events with optional filters
-  """
-  trigger_events(nextPageOffset: Int = 0, filters: TriggerEventsFiltersInput): TriggerEventsPage
-  """
-  Fetch a single trigger event by UUID
-  """
-  trigger_event(triggerUuid: String!): TriggerEvent
-  """
-  List block events for a given trigger UUID
-  """
-  block_events(triggerUuid: String!, nextPageOffset: Int = 0): BlockEventsPage
-  """
-  List tool events for a given trigger UUID
-  """
-  tool_events(trigger_uuid: String!, next_page_offset: Int = 0): ToolEventsPage
-  """
-  Get aggregated automation runs statistics in the account
-  """
-  account_trigger_statistics(filters: AccountTriggerStatisticsFiltersInput): AccountTriggerStatistics
-  """
-  Get aggregated automation runs statistics grouped by entity Ids
-  """
-  account_triggers_statistics_by_entity_id(run_status: TriggerEventState!, filters: AccountTriggersByEntityIdFiltersInput): AccountTriggersByEntityId
   """
   Get validations configuration for a board
   """
@@ -1626,6 +1626,10 @@ type User {
   """
   id: ID!
   """
+  The department the user is a member of (if any)
+  """
+  department: Department
+  """
   The user's account.
   """
   account: Account!
@@ -1709,10 +1713,6 @@ type User {
   The teams the user is a member in.
   """
   teams(ids: [ID!]): [Team]
-  """
-  The department the user is a member of (if any)
-  """
-  department: Department
   """
   The user's title.
   """
@@ -2045,2472 +2045,6 @@ type TranscriptEntry {
   The language of the transcript entry.
   """
   language: String!
-}
-
-"""
-Your monday.com account
-"""
-type Account {
-  """
-  The number of active member users in the account
-  """
-  active_members_count: Int
-  """
-  The account's country two-letter code in ISO3166 format
-  """
-  country_code: String
-  """
-  The account's creation date.
-  """
-  created_at: Date
-  """
-  The first day of the week for the account (sunday / monday)
-  """
-  first_day_of_the_week: FirstDayOfTheWeek!
-  """
-  The account's unique identifier.
-  """
-  id: ID!
-  """
-  The account's logo.
-  """
-  logo: String
-  """
-  The account's name.
-  """
-  name: String!
-  """
-  The account's payment plan.
-  """
-  plan: Plan
-  """
-  The account's active products
-  """
-  products: [AccountProduct]
-  """
-  Show weekends in timeline
-  """
-  show_timeline_weekends: Boolean!
-  """
-  The product the account signed up to first.
-  """
-  sign_up_product_kind: String
-  """
-  The account's slug.
-  """
-  slug: String!
-  """
-  The account's tier.
-  """
-  tier: String
-  """
-  Is the account during the free trial period
-  """
-  is_during_trial: Boolean
-  """
-  Is the account's trial expired
-  """
-  is_trial_expired: Boolean
-}
-
-"""
-The product a workspace is used in.
-"""
-type AccountProduct {
-  """
-  The account product default workspace id
-  """
-  default_workspace_id: ID
-  """
-  The account product id
-  """
-  id: ID
-  """
-  The account product kind (core / marketing / crm / software /
-    projectManagement / project_management / service / forms / whiteboard).
-  """
-  kind: String
-  """
-  The account product tier.
-  """
-  tier: String
-}
-
-"""
-An activity log event
-"""
-type ActivityLogType {
-  account_id: String!
-  created_at: String!
-  """
-  The item's column values in string form.
-  """
-  data: String!
-  entity: String!
-  event: String!
-  id: String!
-  user_id: String!
-}
-
-"""
-An app install details.
-"""
-type AppInstall {
-  """
-  The app's unique identifier.
-  """
-  app_id: ID!
-  """
-  An app installer's account details.
-  """
-  app_install_account: AppInstallAccount!
-  """
-  An app installer's user details
-  """
-  app_install_user: AppInstallUser!
-  """
-  The app's version details
-  """
-  app_version: AppVersion
-  """
-  The required and approved scopes for an app install.
-  """
-  permissions: AppInstallPermissions
-  """
-  Installation date
-  """
-  timestamp: String
-}
-
-"""
-An app installer's account details
-"""
-type AppInstallAccount {
-  """
-  The app's installer account id.
-  """
-  id: ID!
-}
-
-"""
-The required and approved scopes for an app install.
-"""
-type AppInstallPermissions {
-  """
-  The scopes approved by the account admin
-  """
-  approved_scopes: [String!]!
-  """
-  The scopes required by the latest live version
-  """
-  required_scopes: [String!]!
-}
-
-"""
-An app installer's user details
-"""
-type AppInstallUser {
-  """
-  The app's installer user id.
-  """
-  id: ID
-}
-
-"""
-The app monetization status for the current account
-"""
-type AppMonetizationStatus {
-  """
-  Is apps monetization is supported for the account
-  """
-  is_supported: Boolean!
-}
-
-"""
-The account subscription details for the app.
-"""
-type AppSubscription {
-  """
-  The type of the billing period [monthly/yearly].
-  """
-  billing_period: String
-  """
-  The number of days left until the subscription ends.
-  """
-  days_left: Int
-  """
-  Is the subscription a trial
-  """
-  is_trial: Boolean
-  """
-  Maximum number of units for current subscription plan.
-  """
-  max_units: Int
-  """
-  The subscription plan id (on the app's side).
-  """
-  plan_id: String!
-  """
-  The pricing version of subscription plan.
-  """
-  pricing_version: Int
-  """
-  The subscription renewal date.
-  """
-  renewal_date: Date!
-}
-
-"""
-The Operations counter response for the app action.
-"""
-type AppSubscriptionOperationsCounter {
-  """
-  The account subscription details for the app.
-  """
-  app_subscription: AppSubscription
-  """
-  The new counter value.
-  """
-  counter_value: Int
-  """
-  Operations name.
-  """
-  kind: String!
-  """
-  Window key.
-  """
-  period_key: String
-}
-
-"""
-An app's version details.
-"""
-type AppVersion {
-  """
-  The app's major version.
-  """
-  major: Int!
-  """
-  The app's minor version.
-  """
-  minor: Int!
-  """
-  The app's patch version.
-  """
-  patch: Int!
-  """
-  The app's version text
-  """
-  text: String!
-  """
-  The app's version type.
-  """
-  type: String
-}
-
-"""
-The app monetization information for the current account
-"""
-type AppsMonetizationInfo {
-  """
-  The number of seats in the account, across all products, used to match the
-    app’s subscription among apps that utilize the seats-based monetization method
-  """
-  seats_count: Int
-}
-
-"""
-A file uploaded to monday.com
-"""
-type Asset {
-  """
-  The file's creation date.
-  """
-  created_at: Date
-  """
-  The file's extension.
-  """
-  file_extension: String!
-  """
-  The file's size in bytes.
-  """
-  file_size: Int!
-  """
-  The file's unique identifier.
-  """
-  id: ID!
-  """
-  The file's name.
-  """
-  name: String!
-  """
-  original geometry of the asset.
-  """
-  original_geometry: String
-  """
-  public url to the asset, valid for 1 hour.
-  """
-  public_url: String!
-  """
-  The user who uploaded the file.
-  """
-  uploaded_by: User!
-  """
-  url to view the asset.
-  """
-  url: String!
-  """
-  url to view the asset in thumbnail mode. Only available for images.
-  """
-  url_thumbnail: String
-}
-
-"""
-The source of the asset
-"""
-enum AssetsSource {
-  all
-  columns
-  gallery
-}
-
-"""
-Result of an batch operation
-"""
-type BatchExtendTrialPeriod {
-  """
-  Details of operations
-  """
-  details: [ExtendTrialPeriod!]
-  """
-  Reason of an error
-  """
-  reason: String
-  """
-  Result of a batch operation
-  """
-  success: Boolean!
-}
-
-"""
-The result of a batch undo operation.
-"""
-type BatchUndoResult {
-  """
-  Whether the undo operation completed successfully.
-  """
-  success: Boolean!
-}
-
-"""
-A battery value item representing a status count
-"""
-type BatteryValueItem {
-  """
-  The count for this status
-  """
-  count: Int!
-  """
-  The status index key
-  """
-  key: ID!
-}
-
-"""
-The board access level of the user
-"""
-enum BoardAccessLevel {
-  edit
-  view
-}
-
-"""
-The board attributes available.
-"""
-enum BoardAttributes {
-  communication
-  description
-  item_nickname
-  name
-}
-
-"""
-Basic role names for board permissions. Each role grants different levels of access to the board.
-"""
-enum BoardBasicRoleName {
-  assigned_contributor
-  contributor
-  editor
-  viewer
-}
-
-"""
-A board duplication
-"""
-type BoardDuplication {
-  """
-  The new board created by the duplication
-  """
-  board: Board!
-  """
-  Was the board duplication performed asynchronously
-  """
-  is_async: Boolean!
-}
-
-"""
-Edit permissions level for boards.
-"""
-enum BoardEditPermissions {
-  assignee
-  collaborators
-  everyone
-  owners
-}
-
-"""
-The board hierarchy type
-"""
-enum BoardHierarchy {
-  classic
-  multi_level
-}
-
-"""
-Maps a source board ID to the newly created board ID produced by a template installation.
-"""
-type BoardIdMapping {
-  """
-  The newly created board ID.
-  """
-  created_board_id: ID!
-  """
-  The source (template) board ID.
-  """
-  source_board_id: ID!
-}
-
-"""
-The board kinds available.
-"""
-enum BoardKind {
-  private
-  public
-  share
-}
-
-"""
-The board object types.
-"""
-enum BoardObjectType {
-  board
-  custom_object
-  document
-  sub_items_board
-}
-
-"""
-The board subscriber kind.
-"""
-enum BoardSubscriberKind {
-  owner
-  subscriber
-}
-
-"""
-A board's view.
-"""
-type BoardView {
-  """
-  The user's permission level for this view (view / edit).
-  """
-  access_level: BoardViewAccessLevel!
-  """
-  The view's unique identifier.
-  """
-  id: ID!
-  """
-  The view's name.
-  """
-  name: String!
-  """
-  The view's settings in a string form.
-  """
-  settings_str: String!
-  """
-  The view's template id if it was duplicated from other view
-  """
-  source_view_id: ID
-  """
-  The view's type.
-  """
-  type: String
-  """
-  Specific board view data (supported only for forms)
-  """
-  view_specific_data_str: String!
-  """
-  The view's settings, the structure varies by view type
-  """
-  settings: JSON
-  """
-  The view's sort
-  """
-  sort: JSON
-  """
-  The view's filter user id
-  """
-  filter_user_id: Int
-  """
-  The view's filter team id
-  """
-  filter_team_id: Int
-  """
-  The view's tags
-  """
-  tags: [String!]
-  """
-  The view's filter
-  """
-  filter: JSON
-}
-
-"""
-The board view access level of the user
-"""
-enum BoardViewAccessLevel {
-  edit
-  view
-}
-
-"""
-View permissions level for boards.
-"""
-enum BoardViewPermissions {
-  any_assignee_column
-}
-
-"""
-The available board view types.
-"""
-enum BoardViewTypeValues {
-  CalendarBoardView
-  DocBoardView
-  EmptyBoardView
-  FormBoardView
-  TableBoardView
-}
-
-"""
-Options to order by.
-"""
-enum BoardsOrderBy {
-  created_at
-  used_at
-}
-
-"""
-Input for configuring calculated capability settings on a column
-"""
-input CalculatedCapabilityInput {
-  """
-  Function to calculate the values. If not provided, will use the default function for the column type.
-  """
-  function: CalculatedFunction!
-}
-
-"""
-Available functions for calculating values in column capabilities
-"""
-enum CalculatedFunction {
-  COUNT_KEYS
-  MAX
-  MIN
-  MIN_MAX
-  NONE
-  SUM
-}
-
-"""
-The result of adding users to / removing users from a team.
-"""
-type ChangeTeamMembershipsResult {
-  """
-  The users that team membership update failed for
-  """
-  failed_users: [User!]
-  """
-  The users that team membership update succeeded for
-  """
-  successful_users: [User!]
-}
-
-type Column {
-  """
-  Is the column archived or not.
-  """
-  archived: Boolean!
-  """
-  The column's description.
-  """
-  description: String
-  """
-  The unique identifier of the column.
-  """
-  id: ID!
-  """
-  The column's settings in a string form.
-  """
-  settings_str: String! @deprecated(reason: "From version 2025-10, use settings instead. Will be removed in a future version.")
-  """
-  The column's title.
-  """
-  title: String!
-  """
-  The column's type.
-  """
-  type: ColumnType!
-  """
-  The column's width.
-  """
-  width: Int
-  """
-  The column's settings in a JSON form.
-  """
-  settings: JSON
-  """
-  The revision of the column (fetch to get latest revision). Used for optimistic concurrency control.
-  """
-  revision: String!
-  """
-  Capabilities available for this column
-  """
-  capabilities: ColumnCapabilities!
-}
-
-"""
-Input for configuring column capabilities during creation
-"""
-input ColumnCapabilitiesInput {
-  """
-  Calculated capability settings. If provided, enables calculated functionality for the column.
-  """
-  calculated: CalculatedCapabilityInput
-}
-
-"""
-Capabilities supported by the API
-"""
-enum ColumnCapability {
-  CALCULATED
-  VISIBILITY
-}
-
-"""
-An object defining a mapping of column between source board and destination board
-"""
-input ColumnMappingInput {
-  """
-  The source column's unique identifier.
-  """
-  source: ID!
-  """
-  The target column's unique identifier.
-  """
-  target: ID
-}
-
-"""
-The property name of the column to be changed.
-"""
-enum ColumnProperty {
-  description
-  title
-}
-
-"""
-Types of columns supported by the API
-"""
-enum ColumnType {
-  auto_number
-  board_relation
-  button
-  checkbox
-  color_picker
-  country
-  creation_log
-  date
-  dependency
-  direct_doc
-  doc
-  dropdown
-  email
-  file
-  formula
-  group
-  hour
-  integration
-  item_assignees
-  item_id
-  last_updated
-  link
-  location
-  long_text
-  mirror
-  name
-  numbers
-  people
-  person
-  phone
-  progress
-  rating
-  status
-  subtasks
-  tags
-  team
-  text
-  time_tracking
-  timeline
-  unsupported
-  vote
-  week
-  world_clock
-}
-
-interface ColumnValue {
-  """
-  The column that this value belongs to.
-  """
-  column: Column!
-  """
-  The column's unique identifier.
-  """
-  id: ID!
-  """
-  Whether this item is a leaf (has no subitems).
-  """
-  is_leaf: Boolean!
-  """
-  Text representation of the column value. Note: Not all columns support textual value
-  """
-  text: String
-  """
-  The column's type.
-  """
-  type: ColumnType!
-  """
-  The column's raw value in JSON format.
-  """
-  value: JSON
-}
-
-"""
-A string or number value for comparison
-"""
-scalar CompareValue
-
-"""
-Complexity data.
-"""
-type Complexity {
-  """
-  The remainder of complexity after the query's execution.
-  """
-  after: Int!
-  """
-  The remainder of complexity before the query's execution.
-  """
-  before: Int!
-  """
-  The specific query's complexity.
-  """
-  query: Int!
-  """
-  How long in seconds before the complexity budget is reset
-  """
-  reset_in_x_seconds: Int!
-}
-
-type Country {
-  """
-  The country's two-letter code.
-  """
-  code: String!
-  """
-  The country's name.
-  """
-  name: String!
-}
-
-input CreateDocBoardInput {
-  """
-  Column id
-  """
-  column_id: String!
-  """
-  Item id
-  """
-  item_id: ID!
-}
-
-input CreateDocInput {
-  board: CreateDocBoardInput
-  workspace: CreateDocWorkspaceInput
-}
-
-input CreateDocWorkspaceInput {
-  """
-  Optional board folder id
-  """
-  folder_id: ID
-  """
-  The doc's kind (public / private / share)
-  """
-  kind: BoardKind
-  """
-  The doc's name
-  """
-  name: String!
-  """
-  Workspace id
-  """
-  workspace_id: ID!
-}
-
-"""
-The custom fields meta data for user profile.
-"""
-type CustomFieldMetas {
-  """
-  The custom field meta's description.
-  """
-  description: String
-  """
-  Is the custom field meta editable or not.
-  """
-  editable: Boolean
-  """
-  The custom field meta's type.
-  """
-  field_type: String
-  """
-  Is the custom field meta flagged or not.
-  """
-  flagged: Boolean
-  """
-  The custom field meta's icon.
-  """
-  icon: String
-  """
-  The custom field meta's unique identifier.
-  """
-  id: String
-  """
-  The custom field meta's position in the user profile page.
-  """
-  position: String
-  """
-  The custom field meta's title.
-  """
-  title: String
-}
-
-"""
-A custom field value for user profile.
-"""
-type CustomFieldValue {
-  """
-  The custom field value's meta unique identifier.
-  """
-  custom_field_meta_id: String
-  """
-  The custom field value.
-  """
-  value: String
-}
-
-"""
-Represents a dependency link between two items, including the relationship type and lag.
-"""
-type DependencyLink {
-  """
-  The dependency relationship type (0=FS, 1=SS, 2=FF, 3=SF).
-  """
-  dependency_type: Int
-  """
-  The lag in days between the dependent items.
-  """
-  lag: Int
-  """
-  The ID of the linked dependent item.
-  """
-  linked_item_id: ID!
-}
-
-"""
-Various documents blocks types, such as text.
-"""
-enum DocBlockContentType {
-  bulleted_list
-  check_list
-  code
-  divider
-  image
-  large_title
-  layout
-  medium_title
-  normal_text
-  notice_box
-  numbered_list
-  page_break
-  quote
-  small_title
-  table
-  video
-}
-
-"""
-Options to order by.
-"""
-enum DocsOrderBy {
-  created_at
-  used_at
-}
-
-"""
-Represents a monday.com doc - a rich-text page built from editable blocks (text, files, embeds, etc.).
-A doc can belong to:
-(1) a workspace (left-pane doc),
-(2) an item (doc on column),
-(3) a board view (doc as a board view).
-"""
-type Document {
-  """
-  The document's content blocks
-  """
-  blocks(limit: Int = 25, page: Int = 1): [DocumentBlock]
-  """
-  The document's creation date.
-  """
-  created_at: Date
-  """
-  The document's creator
-  """
-  created_by: User
-  """
-  The document's folder unique identifier (null for first level).
-  """
-  doc_folder_id: ID
-  """
-  The document's kind (public / private / share).
-  """
-  doc_kind: BoardKind!
-  """
-  Unique document ID returned when the doc is created.
-    Use this ID in every API call that references the doc.
-    How to find it:
-    • Call the docs() GraphQL query with object_ids to map object_id → id
-    • Enable 'Developer Mode' in monday.labs to display it inside the doc.
-  """
-  id: ID!
-  """
-  The document's name.
-  """
-  name: String!
-  """
-  Identifier that appears in the doc's URL.
-    Returned on creation, but DO NOT use it in API routes that expect a document ID.
-  """
-  object_id: ID!
-  """
-  The document's relative url
-  """
-  relative_url: String
-  """
-  The document's settings.
-  """
-  settings: JSON
-  """
-  The document's last updated date.
-  """
-  updated_at: Date
-  """
-  The document's direct url
-  """
-  url: String
-  """
-  The workspace that contains this document (null for main workspace).
-  """
-  workspace: Workspace
-  """
-  The document's workspace unique identifier (null for main workspace).
-  """
-  workspace_id: ID
-}
-
-"""
-A monday.com document block.
-"""
-type DocumentBlock {
-  """
-  The block's content.
-  """
-  content: JSON
-  """
-  The block's creation date.
-  """
-  created_at: Date
-  """
-  The block's creator
-  """
-  created_by: User
-  """
-  The block's document unique identifier.
-  """
-  doc_id: ID
-  """
-  The block's unique identifier.
-  """
-  id: String!
-  """
-  The block's parent block unique identifier.
-  """
-  parent_block_id: String
-  """
-  The block's position on the document.
-  """
-  position: Float
-  """
-  The block content type.
-  """
-  type: String
-  """
-  The block's last updated date.
-  """
-  updated_at: Date
-}
-
-"""
-A monday.com doc block.
-"""
-type DocumentBlockIdOnly {
-  """
-  The block's unique identifier.
-  """
-  id: String!
-}
-
-type DropdownValueOption {
-  """
-  The dropdown item's unique identifier.
-  """
-  id: ID!
-  """
-  The dropdown item's label.
-  """
-  label: String!
-}
-
-"""
-The board duplicate types available.
-"""
-enum DuplicateBoardType {
-  duplicate_board_with_pulses
-  duplicate_board_with_pulses_and_updates
-  duplicate_board_with_structure
-}
-
-input DynamicPosition {
-  """
-  A boolean flag indicating the desired position of the target item: set to true
-    to place the item after the reference object, or false to place it before.
-  """
-  is_after: Boolean = true
-  """
-  The unique identifier of the reference object relative to which the target item will be positioned.
-  """
-  object_id: String!
-  """
-  The type or category of the reference object, used to determine how the target
-    item should be positioned in relation to it.
-  """
-  object_type: ObjectType!
-}
-
-"""
-Result of a single operation
-"""
-type ExtendTrialPeriod {
-  """
-  Account slug
-  """
-  account_slug: String!
-  """
-  Reason of an error
-  """
-  reason: String
-  """
-  Result of a single operation
-  """
-  success: Boolean!
-}
-
-"""
-Information about a failed team board role update, including the team ID and the error encountered.
-"""
-type FailedTeamBoardRoleUpdate {
-  """
-  The error message describing why the role update failed.
-  """
-  error: String!
-  """
-  The ID of the team whose board role update failed.
-  """
-  team_id: ID!
-}
-
-"""
-Information about a failed user board role update, including the user ID and the error encountered.
-"""
-type FailedUserBoardRoleUpdate {
-  """
-  The error message describing why the role update failed.
-  """
-  error: String!
-  """
-  The ID of the user whose board role update failed.
-  """
-  user_id: ID!
-}
-
-"""
-A file with an invalid or missing asset.
-"""
-type FileAssetInvalidValue {
-  """
-  The asset's id.
-  """
-  asset_id: ID!
-  """
-  The file's creation date.
-  """
-  created_at: Date!
-  """
-  The user who created the file.
-  """
-  creator: User
-  """
-  The ID of user who created the file.
-  """
-  creator_id: ID
-  """
-  The error message.
-  """
-  error: String!
-  """
-  The file's name.
-  """
-  name: String
-}
-
-type FileAssetValue {
-  """
-  The asset associated with the file.
-  """
-  asset: Asset!
-  """
-  The asset's id.
-  """
-  asset_id: ID!
-  """
-  The file's creation date.
-  """
-  created_at: Date!
-  """
-  The user who created the file.
-  """
-  creator: User
-  """
-  The ID of user who created the file.
-  """
-  creator_id: ID
-  """
-  Whether the file is an image.
-  """
-  is_image: Boolean!
-  """
-  The file's name.
-  """
-  name: String!
-}
-
-"""
-The type of a link value stored inside a file column
-"""
-enum FileColumnValue {
-  asset
-  box
-  doc
-  dropbox
-  google_drive
-  link
-  onedrive
-}
-
-type FileDocValue {
-  """
-  The file's creation date.
-  """
-  created_at: Date!
-  """
-  The user who created the file.
-  """
-  creator: User
-  """
-  The ID of user who created the file.
-  """
-  creator_id: ID
-  """
-  The doc associated with the file.
-  """
-  doc: Document!
-  """
-  The file's unique identifier.
-  """
-  file_id: ID!
-  """
-  The associated board or object's unique identifier.
-  """
-  object_id: ID!
-  """
-  The file's url.
-  """
-  url: String
-}
-
-input FileInput {
-  """
-  The asset's id.
-  """
-  assetId: ID
-  """
-  File kind
-  """
-  fileType: FileColumnValue!
-  """
-  File link
-  """
-  linkToFile: String
-  """
-  File display name
-  """
-  name: String!
-  """
-  The doc's id
-  """
-  objectId: ID
-}
-
-type FileLinkValue {
-  """
-  The file's creation date.
-  """
-  created_at: Date!
-  """
-  The user who created the file.
-  """
-  creator: User
-  """
-  The ID of user who created the file.
-  """
-  creator_id: ID
-  """
-  The file's id.
-  """
-  file_id: ID!
-  """
-  The file's kind.
-  """
-  kind: FileLinkValueKind!
-  """
-  The file's name.
-  """
-  name: String!
-  """
-  The file's url.
-  """
-  url: String
-}
-
-"""
-The type of a link value stored inside a file column
-"""
-enum FileLinkValueKind {
-  box
-  dropbox
-  google_drive
-  link
-  onedrive
-}
-
-"""
-A single file in a column.
-"""
-union FileValueItem = FileAssetInvalidValue | FileAssetValue | FileDocValue | FileLinkValue
-
-"""
-The first day of work week
-"""
-enum FirstDayOfTheWeek {
-  monday
-  sunday
-}
-
-"""
-A workspace folder containing boards, docs, sub folders, etc.
-"""
-type Folder {
-  """
-  The folder's app feature slug (folders 2.0)
-  """
-  app_feature_slug: String
-  """
-  The various items in the folder, not including sub-folders and dashboards.
-  """
-  children: [Board]!
-  """
-  The folder's color.
-  """
-  color: FolderColor
-  """
-  The folder's creation date.
-  """
-  created_at: Date!
-  """
-  The folder's custom icon.
-  """
-  custom_icon: FolderCustomIcon
-  """
-  The folder's font weight.
-  """
-  font_weight: FolderFontWeight
-  """
-  The folder's unique identifier.
-  """
-  id: ID!
-  """
-  The folder's name.
-  """
-  name: String!
-  """
-  The folder's user owner unique identifier.
-  """
-  owner_id: ID
-  """
-  The folder's parent folder.
-  """
-  parent: Folder
-  """
-  Sub-folders inside this folder.
-  """
-  sub_folders: [Folder]!
-  """
-  The workspace that contains this folder (null id for main workspace).
-  """
-  workspace: Workspace!
-}
-
-"""
-One value out of a list of valid folder colors
-"""
-enum FolderColor {
-  AQUAMARINE
-  BRIGHT_BLUE
-  BRIGHT_GREEN
-  CHILI_BLUE
-  DARK_ORANGE
-  DARK_PURPLE
-  DARK_RED
-  DONE_GREEN
-  INDIGO
-  LIPSTICK
-  NULL
-  PURPLE
-  SOFIA_PINK
-  STUCK_RED
-  SUNSET
-  WORKING_ORANGE
-}
-
-"""
-One value out of a list of valid folder custom icons
-"""
-enum FolderCustomIcon {
-  FOLDER
-  MOREBELOW
-  MOREBELOWFILLED
-  NULL
-  WORK
-}
-
-"""
-One value out of a list of valid folder font weights
-"""
-enum FolderFontWeight {
-  FONT_WEIGHT_BOLD
-  FONT_WEIGHT_LIGHT
-  FONT_WEIGHT_NORMAL
-  FONT_WEIGHT_VERY_LIGHT
-  NULL
-}
-
-"""
-A group of items in a board.
-"""
-type Group {
-  """
-  Is the group archived or not.
-  """
-  archived: Boolean
-  """
-  The group's color.
-  """
-  color: String!
-  """
-  Is the group deleted or not.
-  """
-  deleted: Boolean
-  """
-  The group's unique identifier.
-  """
-  id: ID!
-  """
-  The items in the group.
-  """
-  items_page(cursor: String, hierarchy_scope_config: String, limit: Int! = 25, query_params: ItemsQuery): ItemsResponse!
-  """
-  The group's position in the board.
-  """
-  position: String!
-  """
-  The group's title.
-  """
-  title: String!
-}
-
-"""
-The group attributes available.
-"""
-enum GroupAttributes {
-  color
-  position
-  relative_position_after
-  relative_position_before
-  title
-}
-
-"""
-An item description.
-"""
-type ItemDescription {
-  """
-  The item's content blocks
-  """
-  blocks(limit: Int = 25, page: Int = 1): [DocumentBlock]
-  """
-  The item's unique identifier.
-  """
-  id: ID
-}
-
-"""
-Input type for item nickname configuration
-"""
-input ItemNicknameInput {
-  """
-  The plural form of the item nickname
-  """
-  plural: String
-  """
-  The preset type for item nickname
-  """
-  preset_type: String
-  """
-  The singular form of the item nickname
-  """
-  singular: String
-}
-
-"""
-The direction to order the items by
-"""
-enum ItemsOrderByDirection {
-  asc
-  desc
-}
-
-input ItemsPageByColumnValuesQuery {
-  """
-  The column's unique identifier.
-  """
-  column_id: String!
-  """
-  The column values to search items by.
-  """
-  column_values: [String]!
-}
-
-input ItemsQuery {
-  """
-  A list of rule groups
-  """
-  groups: [ItemsQueryGroup!]
-  """
-  A list of item IDs to fetch. Use this to fetch a specific set of items by their IDs. Limited to 100 IDs in ItemsQuery
-  """
-  ids: [ID!]
-  """
-  The operator to use for the query rules or rule groups. Default: AND
-  """
-  operator: ItemsQueryOperator = and
-  """
-  Sort the results by specified columns
-  """
-  order_by: [ItemsQueryOrderBy!]
-  """
-  A list of rules
-  """
-  rules: [ItemsQueryRule!]
-}
-
-"""
-A group of rules or rule groups
-"""
-input ItemsQueryGroup {
-  """
-  A list of rule groups
-  """
-  groups: [ItemsQueryGroup!]
-  """
-  The operator to use for the query rules or rule groups. Default: AND
-  """
-  operator: ItemsQueryOperator = and
-  """
-  A list of rules
-  """
-  rules: [ItemsQueryRule!]
-}
-
-"""
-The condition between the query rules
-"""
-enum ItemsQueryOperator {
-  and
-  or
-}
-
-"""
-Sort the results by specified columns
-"""
-input ItemsQueryOrderBy {
-  column_id: String!
-  """
-  Sort direction (defaults to ASC)
-  """
-  direction: ItemsOrderByDirection = asc
-}
-
-"""
-A rule to filter items by a specific column
-"""
-input ItemsQueryRule {
-  column_id: ID!
-  compare_attribute: String
-  compare_value: CompareValue!
-  operator: ItemsQueryRuleOperator = any_of
-}
-
-"""
-The operator to use for the value comparison
-"""
-enum ItemsQueryRuleOperator {
-  any_of
-  between
-  contains_terms
-  contains_text
-  ends_with
-  greater_than
-  greater_than_or_equals
-  is_empty
-  is_not_empty
-  lower_than
-  lower_than_or_equal
-  not_any_of
-  not_contains_text
-  starts_with
-  within_the_last
-  within_the_next
-}
-
-type ItemsResponse {
-  """
-  An opaque cursor that represents the position in the list after the last
-    returned item. Use this cursor for pagination to fetch the next set of items.
-    If the cursor is null, there are no more items to fetch.
-  """
-  cursor: String
-  """
-  The items associated with the cursor.
-  """
-  items: [Item!]!
-}
-
-"""
-Kind of assignee
-"""
-enum Kind {
-  agent
-  person
-  team
-}
-
-type MirroredItem {
-  """
-  The linked board.
-  """
-  linked_board: Board!
-  """
-  The linked board's unique identifier.
-  """
-  linked_board_id: ID!
-  """
-  The linked item.
-  """
-  linked_item: Item!
-  """
-  The mirrored values.
-  """
-  mirrored_value: MirroredValue
-}
-
-"""
-Represents a mirrored value (column value, group, or board).
-"""
-union MirroredValue = BatteryValue | Board | BoardRelationValue | ButtonValue | CheckboxValue | ColorPickerValue | CountryValue | CreationLogValue | DateValue | DependencyValue | DirectDocValue | DocValue | DropdownValue | EmailValue | FileValue | FormulaValue | Group | GroupValue | HourValue | IntegrationValue | ItemIdValue | LastUpdatedValue | LinkValue | LocationValue | LongTextValue | MirrorValue | NumbersValue | PeopleValue | PersonValue | PhoneValue | ProgressValue | RatingValue | StatusValue | SubtasksValue | TagsValue | TeamValue | TextValue | TimeTrackingValue | TimelineValue | UnsupportedValue | VoteValue | WeekValue | WorldClockValue
-
-"""
-A notification.
-"""
-type Notification {
-  """
-  The notification's unique identifier.
-  """
-  id: ID!
-  """
-  The notification text.
-  """
-  text: String
-}
-
-"""
-The notification's target type.
-"""
-enum NotificationTargetType {
-  Post
-  Project
-}
-
-"""
-Indicates where the unit symbol should be placed in a number value
-"""
-enum NumberValueUnitDirection {
-  left
-  right
-}
-
-"""
-Represents a monday object.
-"""
-enum ObjectType {
-  Board
-  Folder
-  Overview
-}
-
-"""
-The working status of a user.
-"""
-type OutOfOffice {
-  """
-  Is the status active?
-  """
-  active: Boolean
-  """
-  Are notification disabled?
-  """
-  disable_notifications: Boolean
-  """
-  The status end date.
-  """
-  end_date: Date
-  """
-  The status start date.
-  """
-  start_date: Date
-  """
-  Out of office type.
-  """
-  type: String
-}
-
-"""
-A monday.com overview.
-"""
-type Overview {
-  """
-  The time the overview was created at.
-  """
-  created_at: ISO8601DateTime
-  """
-  The creator of the overview.
-  """
-  creator: User!
-  """
-  The overview's folder unique identifier.
-  """
-  folder_id: ID
-  """
-  The unique identifier of the overview.
-  """
-  id: ID!
-  """
-  The overview's kind (public/private).
-  """
-  kind: String
-  """
-  The overview's name.
-  """
-  name: String!
-  """
-  The overview's state.
-  """
-  state: String!
-  """
-  The last time the overview was updated at.
-  """
-  updated_at: ISO8601DateTime
-  """
-  The overview's workspace unique identifier.
-  """
-  workspace_id: ID
-}
-
-type PeopleEntity {
-  """
-  Id of the entity: a person or a team
-  """
-  id: ID!
-  """
-  Type of entity
-  """
-  kind: Kind
-}
-
-"""
-A payment plan.
-"""
-type Plan {
-  """
-  The maximum users allowed in the plan.
-  """
-  max_users: Int!
-  """
-  The plan's time period.
-  """
-  period: String
-  """
-  The plan's tier.
-  """
-  tier: String
-  """
-  The plan's version.
-  """
-  version: Int!
-}
-
-"""
-The position relative method.
-"""
-enum PositionRelative {
-  after_at
-  before_at
-}
-
-"""
-Response type for detailed board permissions. Contains information about the permissions that were set.
-"""
-type SetBoardPermissionResponse {
-  """
-  Whether the board allows cross-product collaboration.
-  """
-  cross_product_collaborative: Boolean
-  """
-  The technical board write permissions value that was set (e.g., 'everyone', 'collaborators', 'owners').
-  """
-  edit_permissions: BoardEditPermissions!
-  """
-  List of any actions that failed during the permission update process.
-  """
-  failed_actions: [String!]
-}
-
-"""
-The possible states for a board or item.
-"""
-enum State {
-  active
-  all
-  archived
-  deleted
-}
-
-"""
-A status label style.
-"""
-type StatusLabelStyle {
-  """
-  The label's border color in hex format.
-  """
-  border: String!
-  """
-  The label's color in hex format.
-  """
-  color: String!
-}
-
-"""
-A tag
-"""
-type Tag {
-  """
-  The tag's color.
-  """
-  color: String!
-  """
-  The tag's unique identifier.
-  """
-  id: ID!
-  """
-  The tag's name.
-  """
-  name: String!
-}
-
-"""
-A team of users.
-"""
-type Team {
-  """
-  The team's unique identifier.
-  """
-  id: ID!
-  """
-  The team's name.
-  """
-  name: String!
-  """
-  The users who are the owners of the team.
-  """
-  owners(ids: [ID!]): [User!]!
-  """
-  The team's picture url.
-  """
-  picture_url: String
-  """
-  The users in the team.
-  """
-  users(emails: [String], ids: [ID!], kind: UserKind, limit: Int, name: String, newest_first: Boolean, non_active: Boolean, page: Int): [User]
-  """
-  Whether the team is a guest team
-  """
-  is_guest: Boolean
-  """
-  The team's creation date as an ISO 8601 string.
-  """
-  created_at: String
-}
-
-"""
-A monday.com template.
-"""
-type Template {
-  """
-  The template process unique identifier for async operations.
-  """
-  process_id: String
-}
-
-"""
-Lifecycle status of a template installation async operation.
-"""
-enum TemplateInstallationStatus {
-  COMPLETE
-  FAILED
-  IN_PROGRESS
-  PENDING
-}
-
-"""
-Status of a template installation async operation.
-"""
-type TemplateInstallationStatusResult {
-  """
-  Board IDs are populated incrementally during the metadata phase as each board
-    is created, and complete by the time per-board content jobs start. Boards
-    exist as empty shells (no items, broken mirror columns, no automations) until
-    status is COMPLETE. Safe to store these IDs early, but do not read or write
-    board content until COMPLETE.
-  """
-  board_ids: [ID!]!
-  """
-  Mapping of each source (template) board ID to the newly created board ID.
-  """
-  board_ids_map: [BoardIdMapping!]!
-  """
-  True iff status is COMPLETE.
-  """
-  is_complete: Boolean!
-  """
-  True iff status is FAILED.
-  """
-  is_failed: Boolean!
-  """
-  The process_id returned by use_template.
-  """
-  process_id: ID!
-  """
-  Lifecycle status (PENDING / IN_PROGRESS / COMPLETE / FAILED).
-  """
-  status: TemplateInstallationStatus!
-}
-
-type TimeTrackingHistoryItem {
-  """
-  When the session was added to the cell
-  """
-  created_at: Date!
-  """
-  Only applicable if the session has ended
-  """
-  ended_at: Date
-  """
-  The identifier of an user which ended the tracking
-  """
-  ended_user_id: ID
-  """
-  A unique session identifier
-  """
-  id: ID!
-  """
-  Is true if the session end date was manually entered
-  """
-  manually_entered_end_date: Boolean!
-  """
-  Is true if the session end time was manually entered
-  """
-  manually_entered_end_time: Boolean!
-  """
-  Is true if the session start date was manually entered
-  """
-  manually_entered_start_date: Boolean!
-  """
-  Is true if the session start time was manually entered
-  """
-  manually_entered_start_time: Boolean!
-  """
-  Only applicable if the session was added by pressing the play button or via automation
-  """
-  started_at: Date
-  """
-  The identifier of an user which started the tracking
-  """
-  started_user_id: ID
-  """
-  The status of the session
-  """
-  status: String!
-  """
-  When the session was updated
-  """
-  updated_at: Date
-}
-
-"""
-Attributes for updating a board's position and location
-"""
-input UpdateBoardHierarchyAttributesInput {
-  """
-  The ID of the account product where the board should be placed
-  """
-  account_product_id: ID
-  """
-  The ID of the folder where the board should be placed
-  """
-  folder_id: ID
-  """
-  The position of the board in the left pane
-  """
-  position: DynamicPosition
-  """
-  The ID of the workspace where the board should be placed
-  """
-  workspace_id: ID
-}
-
-"""
-Result of updating a board's position
-"""
-type UpdateBoardHierarchyResult {
-  """
-  The updated board
-  """
-  board: Board
-  """
-  A message about the operation result
-  """
-  message: String
-  """
-  Whether the operation was successful
-  """
-  success: Boolean!
-}
-
-"""
-Result type for updating an overview's hierarchy
-"""
-type UpdateOverviewHierarchy {
-  """
-  Message about the operation result
-  """
-  message: String!
-  """
-  The updated overview
-  """
-  overview: Overview
-  """
-  Whether the operation was successful
-  """
-  success: Boolean!
-}
-
-"""
-Attributes for updating an overview's hierarchy and location
-"""
-input UpdateOverviewHierarchyAttributesInput {
-  """
-  The ID of the account product where the overview should be placed
-  """
-  account_product_id: ID
-  """
-  The ID of the folder where the overview should be placed
-  """
-  folder_id: ID
-  """
-  The position of the overview in the left pane
-  """
-  position: DynamicPosition
-  """
-  The ID of the workspace where the overview should be placed
-  """
-  workspace_id: ID
-}
-
-"""
-Response type for updating multiple teams' board roles. Contains information
-about which teams were successfully updated and which failed.
-"""
-type UpdateTeamsBoardRoleResponse {
-  """
-  List of failed team updates with error details.
-  """
-  failed_teams: [FailedTeamBoardRoleUpdate!]!
-  """
-  List of IDs of teams whose board roles were successfully updated.
-  """
-  successful_team_ids: [ID!]!
-}
-
-"""
-Response type for updating multiple users' board roles. Contains information
-about which users were successfully updated and which failed.
-"""
-type UpdateUsersBoardRoleResponse {
-  """
-  List of failed user updates with error details.
-  """
-  failed_users: [FailedUserBoardRoleUpdate!]!
-  """
-  List of IDs of users whose board roles were successfully updated.
-  """
-  successful_user_ids: [ID!]!
-}
-
-"""
-Attributes of a workspace to update
-"""
-input UpdateWorkspaceAttributesInput {
-  """
-  The target account product's ID to move the workspace to
-  """
-  account_product_id: ID
-  """
-  The description of the workspace to update
-  """
-  description: String
-  """
-  The kind of the workspace to update (open / closed / template)
-  """
-  kind: WorkspaceKind
-  """
-  The name of the workspace to update
-  """
-  name: String
-}
-
-"""
-@deprecated Use UserKindFilter with the user_kind arg instead. The kind to search users by.
-"""
-enum UserKind {
-  all
-  guests
-  non_guests
-  non_pending
-}
-
-"""
-A single user permit/action with its permission status
-"""
-type UserPermit {
-  """
-  The name/identifier of the permit/action
-  """
-  name: String!
-  """
-  Whether the user has permission for this action
-  """
-  permitted: Boolean!
-  """
-  Contextual information about the permit reason
-  """
-  reason_context: UserPermitReasonContext
-  """
-  Technical reason code for the permission status
-  """
-  technical_reason: Int
-}
-
-"""
-Contextual information about the permit reason
-"""
-type UserPermitReasonContext {
-  """
-  Name of the permission that determined this permit decision
-  """
-  permission: String
-  """
-  Name of the policy that determined this permit decision
-  """
-  policy: String
-  """
-  Name of the role that determined this permit decision
-  """
-  role: String
-  """
-  The type of scope (account, workspace, board, etc.)
-  """
-  scope_type: UserPermitScopeKind
-}
-
-"""
-A scope for checking user permits
-"""
-input UserPermitScopeInput {
-  """
-  The scope resource ID
-  """
-  id: ID!
-  """
-  The scope type
-  """
-  type: UserPermitScopeKind!
-}
-
-"""
-The kind of scope for user permits checks
-"""
-enum UserPermitScopeKind {
-  ACCOUNT
-  ACCOUNT_PRODUCT
-  BOARD
-  WORKSPACE
-}
-
-"""
-User permits grouped by scope type
-"""
-type UserPermits {
-  """
-  Account scope permits as a list of scope ID and permits pairs
-  """
-  account: [UserPermitsScope!]
-  """
-  Account product scope permits as a list of scope ID and permits pairs
-  """
-  account_product: [UserPermitsScope!]
-  """
-  Board scope permits as a list of scope ID and permits pairs
-  """
-  board: [UserPermitsScope!]
-  """
-  Workspace scope permits as a list of scope ID and permits pairs
-  """
-  workspace: [UserPermitsScope!]
-}
-
-"""
-A scope ID and its associated permits
-"""
-type UserPermitsScope {
-  """
-  List of permits/actions available in this scope
-  """
-  permits: [UserPermit!]!
-  """
-  The ID of the scope (account ID, workspace ID, board ID, etc.)
-  """
-  scope_id: ID!
-}
-
-"""
-An object containing the API version details
-"""
-type Version {
-  """
-  The display name of the API version
-  """
-  display_name: String!
-  """
-  The type of the API version
-  """
-  kind: VersionKind!
-  """
-  Version string that can be used in API-Version header
-  """
-  value: String!
-}
-
-"""
-All possible API version types
-"""
-enum VersionKind {
-  current
-  deprecated
-  dev
-  maintenance
-  old__maintenance
-  old_previous_maintenance
-  previous_maintenance
-  release_candidate
-}
-
-"""
-Monday webhooks
-"""
-type Webhook {
-  """
-  The webhooks's board id.
-  """
-  board_id: ID!
-  """
-  The webhooks's config.
-  """
-  config: String
-  """
-  The event webhook will listen to
-  """
-  event: WebhookEventType!
-  """
-  The webhooks's unique identifier.
-  """
-  id: ID!
-}
-
-"""
-The webhook's target type.
-"""
-enum WebhookEventType {
-  change_column_value
-  change_name
-  change_specific_column_value
-  change_status_column_value
-  change_subitem_column_value
-  change_subitem_name
-  create_column
-  create_item
-  create_subitem
-  create_subitem_update
-  create_update
-  delete_update
-  edit_update
-  item_archived
-  item_deleted
-  item_moved_to_any_group
-  item_moved_to_specific_group
-  item_restored
-  move_subitem
-  subitem_archived
-  subitem_deleted
-}
-
-"""
-A monday.com workspace.
-"""
-type Workspace {
-  """
-  The account product that contains workspace.
-  """
-  account_product: AccountProduct
-  """
-  The workspace's creation date.
-  """
-  created_at: Date
-  """
-  The workspace's description.
-  """
-  description: String
-  """
-  The workspace's unique identifier.
-  """
-  id: ID
-  """
-  Returns true if it is the default workspace of the product or account
-  """
-  is_default_workspace: Boolean
-  """
-  The workspace's kind (open / closed / template).
-  """
-  kind: WorkspaceKind
-  """
-  The workspace's name.
-  """
-  name: String!
-  """
-  The workspace's user owners.
-  """
-  owners_subscribers(limit: Int = 25, page: Int = 1): [User]
-  """
-  The workspace's settings.
-  """
-  settings: WorkspaceSettings
-  """
-  The workspace's state (all / active / archived / deleted).
-  """
-  state: State
-  """
-  The workspace's team owners.
-  """
-  team_owners_subscribers(limit: Int = 25, page: Int = 1): [Team!]
-  """
-  The teams subscribed to the workspace.
-  """
-  teams_subscribers(limit: Int = 25, page: Int = 1): [Team]
-  """
-  The users subscribed to the workspace
-  """
-  users_subscribers(limit: Int = 25, page: Int = 1): [User]
-}
-
-"""
-The workspace's icon.
-"""
-type WorkspaceIcon {
-  """
-  The icon color in hex value. Used as a background for the image.
-  """
-  color: String
-  """
-  The public image URL, which is temporary in the case of a file that was
-    uploaded by the user, so you'll need to pull a new version at least once an hour.
-    In case it is null, you can use the first letter of the workspace name.
-  """
-  image: String
-}
-
-"""
-The workspace kinds available.
-"""
-enum WorkspaceKind {
-  closed
-  open
-  template
-}
-
-"""
-The membership kind of the user in the workspace.
-"""
-enum WorkspaceMembershipKind {
-  all
-  member
-}
-
-"""
-The workspace's settings.
-"""
-type WorkspaceSettings {
-  """
-  The workspace icon.
-  """
-  icon: WorkspaceIcon
-}
-
-"""
-The workspace subscriber kind.
-"""
-enum WorkspaceSubscriberKind {
-  owner
-  subscriber
-}
-
-"""
-Options to order by.
-"""
-enum WorkspacesOrderBy {
-  created_at
-}
-
-"""
-The account product kinds available for workspaces query.
-"""
-enum WorkspacesQueryAccountProductKind {
-  core
-  crm
-  forms
-  marketing
-  project_management
-  service
-  software
-  whiteboard
-}
-
-"""
-Parameters to filter workspaces
-"""
-input WorkspacesQueryInput {
-  """
-  Filter workspaces by account product kind (core / marketing / crm / software /
-    project_management / service / forms / whiteboard)
-  """
-  account_product_kind: WorkspacesQueryAccountProductKind
 }
 
 """
@@ -6315,6 +3849,77 @@ enum DocsMention {
 }
 
 """
+Represents a monday.com doc - a rich-text page built from editable blocks (text, files, embeds, etc.).
+A doc can belong to:
+(1) a workspace (left-pane doc),
+(2) an item (doc on column),
+(3) a board view (doc as a board view).
+"""
+type Document {
+  """
+  Identifier that appears in the doc's URL.
+    Returned on creation, but DO NOT use it in API routes that expect a document ID.
+  """
+  object_id: ID!
+  """
+  Unique document ID returned when the doc is created.
+    Use this ID in every API call that references the doc.
+    How to find it:
+    • Call the docs() GraphQL query with object_ids to map object_id → id
+    • Enable 'Developer Mode' in monday.labs to display it inside the doc.
+  """
+  id: ID!
+  """
+  The document's content blocks
+  """
+  blocks(limit: Int = 25, page: Int = 1): [DocumentBlock]
+  """
+  The document's creation date.
+  """
+  created_at: Date
+  """
+  The document's creator
+  """
+  created_by: User
+  """
+  The document's folder unique identifier (null for first level).
+  """
+  doc_folder_id: ID
+  """
+  The document's kind (public / private / share).
+  """
+  doc_kind: BoardKind!
+  """
+  The document's name.
+  """
+  name: String!
+  """
+  The document's relative url
+  """
+  relative_url: String
+  """
+  The document's settings.
+  """
+  settings: JSON
+  """
+  The document's last updated date.
+  """
+  updated_at: Date
+  """
+  The document's direct url
+  """
+  url: String
+  """
+  The workspace that contains this document (null for main workspace).
+  """
+  workspace: Workspace
+  """
+  The document's workspace unique identifier (null for main workspace).
+  """
+  workspace_id: ID
+}
+
+"""
 Represents a content block — the fundamental building unit of a monday.com document. Each block encapsulates its structured content, hierarchical relationships, and associated metadata.
 """
 type DocumentBlockV2 {
@@ -7619,120 +5224,2398 @@ type TriggerEventsPage {
 }
 
 """
-A monday.com agent.
+Your monday.com account
 """
-type Agent {
+type Account {
   """
-  The ID of the agent.
+  The number of active member users in the account
+  """
+  active_members_count: Int
+  """
+  The account's country two-letter code in ISO3166 format
+  """
+  country_code: String
+  """
+  The account's creation date.
+  """
+  created_at: Date
+  """
+  The first day of the week for the account (sunday / monday)
+  """
+  first_day_of_the_week: FirstDayOfTheWeek!
+  """
+  The account's unique identifier.
+  """
+  id: ID!
+  """
+  The account's logo.
+  """
+  logo: String
+  """
+  The account's name.
+  """
+  name: String!
+  """
+  The account's payment plan.
+  """
+  plan: Plan
+  """
+  The account's active products
+  """
+  products: [AccountProduct]
+  """
+  Show weekends in timeline
+  """
+  show_timeline_weekends: Boolean!
+  """
+  The product the account signed up to first.
+  """
+  sign_up_product_kind: String
+  """
+  The account's slug.
+  """
+  slug: String!
+  """
+  The account's tier.
+  """
+  tier: String
+  """
+  Is the account during the free trial period
+  """
+  is_during_trial: Boolean
+  """
+  Is the account's trial expired
+  """
+  is_trial_expired: Boolean
+}
+
+"""
+The product a workspace is used in.
+"""
+type AccountProduct {
+  """
+  The account product default workspace id
+  """
+  default_workspace_id: ID
+  """
+  The account product id
+  """
+  id: ID
+  """
+  The account product kind (core / marketing / crm / software /
+    projectManagement / project_management / service / forms / whiteboard).
+  """
+  kind: String
+  """
+  The account product tier.
+  """
+  tier: String
+}
+
+"""
+An activity log event
+"""
+type ActivityLogType {
+  account_id: String!
+  created_at: String!
+  """
+  The item's column values in string form.
+  """
+  data: String!
+  entity: String!
+  event: String!
+  id: String!
+  user_id: String!
+}
+
+"""
+An app install details.
+"""
+type AppInstall {
+  """
+  The app's unique identifier.
+  """
+  app_id: ID!
+  """
+  An app installer's account details.
+  """
+  app_install_account: AppInstallAccount!
+  """
+  An app installer's user details
+  """
+  app_install_user: AppInstallUser!
+  """
+  The app's version details
+  """
+  app_version: AppVersion
+  """
+  The required and approved scopes for an app install.
+  """
+  permissions: AppInstallPermissions
+  """
+  Installation date
+  """
+  timestamp: String
+}
+
+"""
+An app installer's account details
+"""
+type AppInstallAccount {
+  """
+  The app's installer account id.
+  """
+  id: ID!
+}
+
+"""
+The required and approved scopes for an app install.
+"""
+type AppInstallPermissions {
+  """
+  The scopes approved by the account admin
+  """
+  approved_scopes: [String!]!
+  """
+  The scopes required by the latest live version
+  """
+  required_scopes: [String!]!
+}
+
+"""
+An app installer's user details
+"""
+type AppInstallUser {
+  """
+  The app's installer user id.
   """
   id: ID
 }
 
 """
-A single execution of an agent.
+The app monetization status for the current account
 """
-type AgentActivityRun {
+type AppMonetizationStatus {
   """
-  Unique identifier for the run.
+  Is apps monetization is supported for the account
+  """
+  is_supported: Boolean!
+}
+
+"""
+The account subscription details for the app.
+"""
+type AppSubscription {
+  """
+  The type of the billing period [monthly/yearly].
+  """
+  billing_period: String
+  """
+  The number of days left until the subscription ends.
+  """
+  days_left: Int
+  """
+  Is the subscription a trial
+  """
+  is_trial: Boolean
+  """
+  Maximum number of units for current subscription plan.
+  """
+  max_units: Int
+  """
+  The subscription plan id (on the app's side).
+  """
+  plan_id: String!
+  """
+  The pricing version of subscription plan.
+  """
+  pricing_version: Int
+  """
+  The subscription renewal date.
+  """
+  renewal_date: Date!
+}
+
+"""
+The Operations counter response for the app action.
+"""
+type AppSubscriptionOperationsCounter {
+  """
+  The account subscription details for the app.
+  """
+  app_subscription: AppSubscription
+  """
+  The new counter value.
+  """
+  counter_value: Int
+  """
+  Operations name.
+  """
+  kind: String!
+  """
+  Window key.
+  """
+  period_key: String
+}
+
+"""
+An app's version details.
+"""
+type AppVersion {
+  """
+  The app's major version.
+  """
+  major: Int!
+  """
+  The app's minor version.
+  """
+  minor: Int!
+  """
+  The app's patch version.
+  """
+  patch: Int!
+  """
+  The app's version text
+  """
+  text: String!
+  """
+  The app's version type.
+  """
+  type: String
+}
+
+"""
+The app monetization information for the current account
+"""
+type AppsMonetizationInfo {
+  """
+  The number of seats in the account, across all products, used to match the
+    app’s subscription among apps that utilize the seats-based monetization method
+  """
+  seats_count: Int
+}
+
+"""
+A file uploaded to monday.com
+"""
+type Asset {
+  """
+  The file's creation date.
+  """
+  created_at: Date
+  """
+  The file's extension.
+  """
+  file_extension: String!
+  """
+  The file's size in bytes.
+  """
+  file_size: Int!
+  """
+  The file's unique identifier.
   """
   id: ID!
   """
-  The current or final status of the run.
+  The file's name.
   """
-  status: AgentActivityRunStatus!
+  name: String!
   """
-  What triggered this run (raw value as reported by the agent SDK, e.g. api, assign, chat).
+  original geometry of the asset.
   """
-  trigger: String
+  original_geometry: String
   """
-  ID of the user who triggered the run, if applicable.
+  public url to the asset, valid for 1 hour.
   """
-  triggering_user_id: ID
+  public_url: String!
   """
-  Number of credits consumed by this run.
+  The user who uploaded the file.
   """
-  credits_used: Int
+  uploaded_by: User!
   """
-  List of tool names used during this run.
+  url to view the asset.
   """
-  tools: [String!]
+  url: String!
   """
-  Human-readable description of what the run did.
+  url to view the asset in thumbnail mode. Only available for images.
+  """
+  url_thumbnail: String
+}
+
+"""
+The source of the asset
+"""
+enum AssetsSource {
+  all
+  columns
+  gallery
+}
+
+"""
+Result of an batch operation
+"""
+type BatchExtendTrialPeriod {
+  """
+  Details of operations
+  """
+  details: [ExtendTrialPeriod!]
+  """
+  Reason of an error
+  """
+  reason: String
+  """
+  Result of a batch operation
+  """
+  success: Boolean!
+}
+
+"""
+The result of a batch undo operation.
+"""
+type BatchUndoResult {
+  """
+  Whether the undo operation completed successfully.
+  """
+  success: Boolean!
+}
+
+"""
+A battery value item representing a status count
+"""
+type BatteryValueItem {
+  """
+  The count for this status
+  """
+  count: Int!
+  """
+  The status index key
+  """
+  key: ID!
+}
+
+"""
+The board access level of the user
+"""
+enum BoardAccessLevel {
+  edit
+  view
+}
+
+"""
+The board attributes available.
+"""
+enum BoardAttributes {
+  communication
+  description
+  item_nickname
+  name
+}
+
+"""
+Basic role names for board permissions. Each role grants different levels of access to the board.
+"""
+enum BoardBasicRoleName {
+  assigned_contributor
+  contributor
+  editor
+  viewer
+}
+
+"""
+A board duplication
+"""
+type BoardDuplication {
+  """
+  The new board created by the duplication
+  """
+  board: Board!
+  """
+  Was the board duplication performed asynchronously
+  """
+  is_async: Boolean!
+}
+
+"""
+Edit permissions level for boards.
+"""
+enum BoardEditPermissions {
+  assignee
+  collaborators
+  everyone
+  owners
+}
+
+"""
+The board hierarchy type
+"""
+enum BoardHierarchy {
+  classic
+  multi_level
+}
+
+"""
+Maps a source board ID to the newly created board ID produced by a template installation.
+"""
+type BoardIdMapping {
+  """
+  The newly created board ID.
+  """
+  created_board_id: ID!
+  """
+  The source (template) board ID.
+  """
+  source_board_id: ID!
+}
+
+"""
+The board kinds available.
+"""
+enum BoardKind {
+  private
+  public
+  share
+}
+
+"""
+The board object types.
+"""
+enum BoardObjectType {
+  board
+  custom_object
+  document
+  sub_items_board
+}
+
+"""
+The board subscriber kind.
+"""
+enum BoardSubscriberKind {
+  owner
+  subscriber
+}
+
+"""
+A board's view.
+"""
+type BoardView {
+  """
+  The user's permission level for this view (view / edit).
+  """
+  access_level: BoardViewAccessLevel!
+  """
+  The view's unique identifier.
+  """
+  id: ID!
+  """
+  The view's name.
+  """
+  name: String!
+  """
+  The view's settings in a string form.
+  """
+  settings_str: String!
+  """
+  The view's template id if it was duplicated from other view
+  """
+  source_view_id: ID
+  """
+  The view's type.
+  """
+  type: String
+  """
+  Specific board view data (supported only for forms)
+  """
+  view_specific_data_str: String!
+  """
+  The view's settings, the structure varies by view type
+  """
+  settings: JSON
+  """
+  The view's sort
+  """
+  sort: JSON
+  """
+  The view's filter user id
+  """
+  filter_user_id: Int
+  """
+  The view's filter team id
+  """
+  filter_team_id: Int
+  """
+  The view's tags
+  """
+  tags: [String!]
+  """
+  The view's filter
+  """
+  filter: JSON
+}
+
+"""
+The board view access level of the user
+"""
+enum BoardViewAccessLevel {
+  edit
+  view
+}
+
+"""
+View permissions level for boards.
+"""
+enum BoardViewPermissions {
+  any_assignee_column
+}
+
+"""
+The available board view types.
+"""
+enum BoardViewTypeValues {
+  CalendarBoardView
+  DocBoardView
+  EmptyBoardView
+  FormBoardView
+  TableBoardView
+}
+
+"""
+Options to order by.
+"""
+enum BoardsOrderBy {
+  created_at
+  used_at
+}
+
+"""
+Input for configuring calculated capability settings on a column
+"""
+input CalculatedCapabilityInput {
+  """
+  Function to calculate the values. If not provided, will use the default function for the column type.
+  """
+  function: CalculatedFunction!
+}
+
+"""
+Available functions for calculating values in column capabilities
+"""
+enum CalculatedFunction {
+  COUNT_KEYS
+  MAX
+  MIN
+  MIN_MAX
+  NONE
+  SUM
+}
+
+"""
+The result of adding users to / removing users from a team.
+"""
+type ChangeTeamMembershipsResult {
+  """
+  The users that team membership update failed for
+  """
+  failed_users: [User!]
+  """
+  The users that team membership update succeeded for
+  """
+  successful_users: [User!]
+}
+
+type Column {
+  """
+  Is the column archived or not.
+  """
+  archived: Boolean!
+  """
+  The column's description.
   """
   description: String
   """
-  ISO 8601 timestamp when the run started.
+  The unique identifier of the column.
   """
-  started_at: String!
+  id: ID!
   """
-  ISO 8601 timestamp when the run ended.
+  The column's settings in a string form.
   """
-  ended_at: String
+  settings_str: String! @deprecated(reason: "From version 2025-10, use settings instead. Will be removed in a future version.")
   """
-  The individual steps performed during this run.
+  The column's title.
   """
-  steps: [AgentActivityStep!]!
+  title: String!
+  """
+  The column's type.
+  """
+  type: ColumnType!
+  """
+  The column's width.
+  """
+  width: Int
+  """
+  The column's settings in a JSON form.
+  """
+  settings: JSON
+  """
+  The revision of the column (fetch to get latest revision). Used for optimistic concurrency control.
+  """
+  revision: String!
+  """
+  Capabilities available for this column
+  """
+  capabilities: ColumnCapabilities!
 }
 
 """
-The current or final status of an agent activity run.
+Input for configuring column capabilities during creation
 """
-enum AgentActivityRunStatus {
-  RUNNING
-  SUCCESS
-  FAILED
-  CANCELLED
+input ColumnCapabilitiesInput {
+  """
+  Calculated capability settings. If provided, enables calculated functionality for the column.
+  """
+  calculated: CalculatedCapabilityInput
 }
 
 """
-A paginated list of agent activity runs.
+Capabilities supported by the API
 """
-type AgentActivityRunsConnection {
+enum ColumnCapability {
+  CALCULATED
+  VISIBILITY
+}
+
+"""
+An object defining a mapping of column between source board and destination board
+"""
+input ColumnMappingInput {
   """
-  The agent activity runs on this page.
+  The source column's unique identifier.
   """
-  nodes: [AgentActivityRun]!
+  source: ID!
   """
-  Cursor for fetching the next page.
+  The target column's unique identifier.
+  """
+  target: ID
+}
+
+"""
+The property name of the column to be changed.
+"""
+enum ColumnProperty {
+  description
+  title
+}
+
+"""
+Types of columns supported by the API
+"""
+enum ColumnType {
+  auto_number
+  board_relation
+  button
+  checkbox
+  color_picker
+  country
+  creation_log
+  date
+  dependency
+  direct_doc
+  doc
+  dropdown
+  email
+  file
+  formula
+  group
+  hour
+  integration
+  item_assignees
+  item_id
+  last_updated
+  link
+  location
+  long_text
+  mirror
+  name
+  numbers
+  people
+  person
+  phone
+  progress
+  rating
+  status
+  subtasks
+  tags
+  team
+  text
+  time_tracking
+  timeline
+  unsupported
+  vote
+  week
+  world_clock
+}
+
+interface ColumnValue {
+  """
+  The column that this value belongs to.
+  """
+  column: Column!
+  """
+  The column's unique identifier.
+  """
+  id: ID!
+  """
+  Whether this item is a leaf (has no subitems).
+  """
+  is_leaf: Boolean!
+  """
+  Text representation of the column value. Note: Not all columns support textual value
+  """
+  text: String
+  """
+  The column's type.
+  """
+  type: ColumnType!
+  """
+  The column's raw value in JSON format.
+  """
+  value: JSON
+}
+
+"""
+A string or number value for comparison
+"""
+scalar CompareValue
+
+"""
+Complexity data.
+"""
+type Complexity {
+  """
+  The remainder of complexity after the query's execution.
+  """
+  after: Int!
+  """
+  The remainder of complexity before the query's execution.
+  """
+  before: Int!
+  """
+  The specific query's complexity.
+  """
+  query: Int!
+  """
+  How long in seconds before the complexity budget is reset
+  """
+  reset_in_x_seconds: Int!
+}
+
+type Country {
+  """
+  The country's two-letter code.
+  """
+  code: String!
+  """
+  The country's name.
+  """
+  name: String!
+}
+
+input CreateDocBoardInput {
+  """
+  Column id
+  """
+  column_id: String!
+  """
+  Item id
+  """
+  item_id: ID!
+}
+
+input CreateDocInput {
+  board: CreateDocBoardInput
+  workspace: CreateDocWorkspaceInput
+}
+
+input CreateDocWorkspaceInput {
+  """
+  Optional board folder id
+  """
+  folder_id: ID
+  """
+  The doc's kind (public / private / share)
+  """
+  kind: BoardKind
+  """
+  The doc's name
+  """
+  name: String!
+  """
+  Workspace id
+  """
+  workspace_id: ID!
+}
+
+"""
+The custom fields meta data for user profile.
+"""
+type CustomFieldMetas {
+  """
+  The custom field meta's description.
+  """
+  description: String
+  """
+  Is the custom field meta editable or not.
+  """
+  editable: Boolean
+  """
+  The custom field meta's type.
+  """
+  field_type: String
+  """
+  Is the custom field meta flagged or not.
+  """
+  flagged: Boolean
+  """
+  The custom field meta's icon.
+  """
+  icon: String
+  """
+  The custom field meta's unique identifier.
+  """
+  id: String
+  """
+  The custom field meta's position in the user profile page.
+  """
+  position: String
+  """
+  The custom field meta's title.
+  """
+  title: String
+}
+
+"""
+A custom field value for user profile.
+"""
+type CustomFieldValue {
+  """
+  The custom field value's meta unique identifier.
+  """
+  custom_field_meta_id: String
+  """
+  The custom field value.
+  """
+  value: String
+}
+
+"""
+Represents a dependency link between two items, including the relationship type and lag.
+"""
+type DependencyLink {
+  """
+  The dependency relationship type (0=FS, 1=SS, 2=FF, 3=SF).
+  """
+  dependency_type: Int
+  """
+  The lag in days between the dependent items.
+  """
+  lag: Int
+  """
+  The ID of the linked dependent item.
+  """
+  linked_item_id: ID!
+}
+
+"""
+Various documents blocks types, such as text.
+"""
+enum DocBlockContentType {
+  bulleted_list
+  check_list
+  code
+  divider
+  image
+  large_title
+  layout
+  medium_title
+  normal_text
+  notice_box
+  numbered_list
+  page_break
+  quote
+  small_title
+  table
+  video
+}
+
+"""
+Options to order by.
+"""
+enum DocsOrderBy {
+  created_at
+  used_at
+}
+
+"""
+A monday.com document block.
+"""
+type DocumentBlock {
+  """
+  The block's content.
+  """
+  content: JSON
+  """
+  The block's creation date.
+  """
+  created_at: Date
+  """
+  The block's creator
+  """
+  created_by: User
+  """
+  The block's document unique identifier.
+  """
+  doc_id: ID
+  """
+  The block's unique identifier.
+  """
+  id: String!
+  """
+  The block's parent block unique identifier.
+  """
+  parent_block_id: String
+  """
+  The block's position on the document.
+  """
+  position: Float
+  """
+  The block content type.
+  """
+  type: String
+  """
+  The block's last updated date.
+  """
+  updated_at: Date
+}
+
+"""
+A monday.com doc block.
+"""
+type DocumentBlockIdOnly {
+  """
+  The block's unique identifier.
+  """
+  id: String!
+}
+
+type DropdownValueOption {
+  """
+  The dropdown item's unique identifier.
+  """
+  id: ID!
+  """
+  The dropdown item's label.
+  """
+  label: String!
+}
+
+"""
+The board duplicate types available.
+"""
+enum DuplicateBoardType {
+  duplicate_board_with_pulses
+  duplicate_board_with_pulses_and_updates
+  duplicate_board_with_structure
+}
+
+input DynamicPosition {
+  """
+  A boolean flag indicating the desired position of the target item: set to true
+    to place the item after the reference object, or false to place it before.
+  """
+  is_after: Boolean = true
+  """
+  The unique identifier of the reference object relative to which the target item will be positioned.
+  """
+  object_id: String!
+  """
+  The type or category of the reference object, used to determine how the target
+    item should be positioned in relation to it.
+  """
+  object_type: ObjectType!
+}
+
+"""
+Result of a single operation
+"""
+type ExtendTrialPeriod {
+  """
+  Account slug
+  """
+  account_slug: String!
+  """
+  Reason of an error
+  """
+  reason: String
+  """
+  Result of a single operation
+  """
+  success: Boolean!
+}
+
+"""
+Information about a failed team board role update, including the team ID and the error encountered.
+"""
+type FailedTeamBoardRoleUpdate {
+  """
+  The error message describing why the role update failed.
+  """
+  error: String!
+  """
+  The ID of the team whose board role update failed.
+  """
+  team_id: ID!
+}
+
+"""
+Information about a failed user board role update, including the user ID and the error encountered.
+"""
+type FailedUserBoardRoleUpdate {
+  """
+  The error message describing why the role update failed.
+  """
+  error: String!
+  """
+  The ID of the user whose board role update failed.
+  """
+  user_id: ID!
+}
+
+"""
+A file with an invalid or missing asset.
+"""
+type FileAssetInvalidValue {
+  """
+  The asset's id.
+  """
+  asset_id: ID!
+  """
+  The file's creation date.
+  """
+  created_at: Date!
+  """
+  The user who created the file.
+  """
+  creator: User
+  """
+  The ID of user who created the file.
+  """
+  creator_id: ID
+  """
+  The error message.
+  """
+  error: String!
+  """
+  The file's name.
+  """
+  name: String
+}
+
+type FileAssetValue {
+  """
+  The asset associated with the file.
+  """
+  asset: Asset!
+  """
+  The asset's id.
+  """
+  asset_id: ID!
+  """
+  The file's creation date.
+  """
+  created_at: Date!
+  """
+  The user who created the file.
+  """
+  creator: User
+  """
+  The ID of user who created the file.
+  """
+  creator_id: ID
+  """
+  Whether the file is an image.
+  """
+  is_image: Boolean!
+  """
+  The file's name.
+  """
+  name: String!
+}
+
+"""
+The type of a link value stored inside a file column
+"""
+enum FileColumnValue {
+  asset
+  box
+  doc
+  dropbox
+  google_drive
+  link
+  onedrive
+}
+
+type FileDocValue {
+  """
+  The file's creation date.
+  """
+  created_at: Date!
+  """
+  The user who created the file.
+  """
+  creator: User
+  """
+  The ID of user who created the file.
+  """
+  creator_id: ID
+  """
+  The doc associated with the file.
+  """
+  doc: Document!
+  """
+  The file's unique identifier.
+  """
+  file_id: ID!
+  """
+  The associated board or object's unique identifier.
+  """
+  object_id: ID!
+  """
+  The file's url.
+  """
+  url: String
+}
+
+input FileInput {
+  """
+  The asset's id.
+  """
+  assetId: ID
+  """
+  File kind
+  """
+  fileType: FileColumnValue!
+  """
+  File link
+  """
+  linkToFile: String
+  """
+  File display name
+  """
+  name: String!
+  """
+  The doc's id
+  """
+  objectId: ID
+}
+
+type FileLinkValue {
+  """
+  The file's creation date.
+  """
+  created_at: Date!
+  """
+  The user who created the file.
+  """
+  creator: User
+  """
+  The ID of user who created the file.
+  """
+  creator_id: ID
+  """
+  The file's id.
+  """
+  file_id: ID!
+  """
+  The file's kind.
+  """
+  kind: FileLinkValueKind!
+  """
+  The file's name.
+  """
+  name: String!
+  """
+  The file's url.
+  """
+  url: String
+}
+
+"""
+The type of a link value stored inside a file column
+"""
+enum FileLinkValueKind {
+  box
+  dropbox
+  google_drive
+  link
+  onedrive
+}
+
+"""
+A single file in a column.
+"""
+union FileValueItem = FileAssetInvalidValue | FileAssetValue | FileDocValue | FileLinkValue
+
+"""
+The first day of work week
+"""
+enum FirstDayOfTheWeek {
+  monday
+  sunday
+}
+
+"""
+A workspace folder containing boards, docs, sub folders, etc.
+"""
+type Folder {
+  """
+  The folder's app feature slug (folders 2.0)
+  """
+  app_feature_slug: String
+  """
+  The various items in the folder, not including sub-folders and dashboards.
+  """
+  children: [Board]!
+  """
+  The folder's color.
+  """
+  color: FolderColor
+  """
+  The folder's creation date.
+  """
+  created_at: Date!
+  """
+  The folder's custom icon.
+  """
+  custom_icon: FolderCustomIcon
+  """
+  The folder's font weight.
+  """
+  font_weight: FolderFontWeight
+  """
+  The folder's unique identifier.
+  """
+  id: ID!
+  """
+  The folder's name.
+  """
+  name: String!
+  """
+  The folder's user owner unique identifier.
+  """
+  owner_id: ID
+  """
+  The folder's parent folder.
+  """
+  parent: Folder
+  """
+  Sub-folders inside this folder.
+  """
+  sub_folders: [Folder]!
+  """
+  The workspace that contains this folder (null id for main workspace).
+  """
+  workspace: Workspace!
+}
+
+"""
+One value out of a list of valid folder colors
+"""
+enum FolderColor {
+  AQUAMARINE
+  BRIGHT_BLUE
+  BRIGHT_GREEN
+  CHILI_BLUE
+  DARK_ORANGE
+  DARK_PURPLE
+  DARK_RED
+  DONE_GREEN
+  INDIGO
+  LIPSTICK
+  NULL
+  PURPLE
+  SOFIA_PINK
+  STUCK_RED
+  SUNSET
+  WORKING_ORANGE
+}
+
+"""
+One value out of a list of valid folder custom icons
+"""
+enum FolderCustomIcon {
+  FOLDER
+  MOREBELOW
+  MOREBELOWFILLED
+  NULL
+  WORK
+}
+
+"""
+One value out of a list of valid folder font weights
+"""
+enum FolderFontWeight {
+  FONT_WEIGHT_BOLD
+  FONT_WEIGHT_LIGHT
+  FONT_WEIGHT_NORMAL
+  FONT_WEIGHT_VERY_LIGHT
+  NULL
+}
+
+"""
+A group of items in a board.
+"""
+type Group {
+  """
+  Is the group archived or not.
+  """
+  archived: Boolean
+  """
+  The group's color.
+  """
+  color: String!
+  """
+  Is the group deleted or not.
+  """
+  deleted: Boolean
+  """
+  The group's unique identifier.
+  """
+  id: ID!
+  """
+  The items in the group.
+  """
+  items_page(cursor: String, hierarchy_scope_config: String, limit: Int! = 25, query_params: ItemsQuery): ItemsResponse!
+  """
+  The group's position in the board.
+  """
+  position: String!
+  """
+  The group's title.
+  """
+  title: String!
+}
+
+"""
+The group attributes available.
+"""
+enum GroupAttributes {
+  color
+  position
+  relative_position_after
+  relative_position_before
+  title
+}
+
+"""
+An item description.
+"""
+type ItemDescription {
+  """
+  The item's content blocks
+  """
+  blocks(limit: Int = 25, page: Int = 1): [DocumentBlock]
+  """
+  The item's unique identifier.
+  """
+  id: ID
+}
+
+"""
+Input type for item nickname configuration
+"""
+input ItemNicknameInput {
+  """
+  The plural form of the item nickname
+  """
+  plural: String
+  """
+  The preset type for item nickname
+  """
+  preset_type: String
+  """
+  The singular form of the item nickname
+  """
+  singular: String
+}
+
+"""
+The direction to order the items by
+"""
+enum ItemsOrderByDirection {
+  asc
+  desc
+}
+
+input ItemsPageByColumnValuesQuery {
+  """
+  The column's unique identifier.
+  """
+  column_id: String!
+  """
+  The column values to search items by.
+  """
+  column_values: [String]!
+}
+
+input ItemsQuery {
+  """
+  A list of rule groups
+  """
+  groups: [ItemsQueryGroup!]
+  """
+  A list of item IDs to fetch. Use this to fetch a specific set of items by their IDs. Limited to 100 IDs in ItemsQuery
+  """
+  ids: [ID!]
+  """
+  The operator to use for the query rules or rule groups. Default: AND
+  """
+  operator: ItemsQueryOperator = and
+  """
+  Sort the results by specified columns
+  """
+  order_by: [ItemsQueryOrderBy!]
+  """
+  A list of rules
+  """
+  rules: [ItemsQueryRule!]
+}
+
+"""
+A group of rules or rule groups
+"""
+input ItemsQueryGroup {
+  """
+  A list of rule groups
+  """
+  groups: [ItemsQueryGroup!]
+  """
+  The operator to use for the query rules or rule groups. Default: AND
+  """
+  operator: ItemsQueryOperator = and
+  """
+  A list of rules
+  """
+  rules: [ItemsQueryRule!]
+}
+
+"""
+The condition between the query rules
+"""
+enum ItemsQueryOperator {
+  and
+  or
+}
+
+"""
+Sort the results by specified columns
+"""
+input ItemsQueryOrderBy {
+  column_id: String!
+  """
+  Sort direction (defaults to ASC)
+  """
+  direction: ItemsOrderByDirection = asc
+}
+
+"""
+A rule to filter items by a specific column
+"""
+input ItemsQueryRule {
+  column_id: ID!
+  compare_attribute: String
+  compare_value: CompareValue!
+  operator: ItemsQueryRuleOperator = any_of
+}
+
+"""
+The operator to use for the value comparison
+"""
+enum ItemsQueryRuleOperator {
+  any_of
+  between
+  contains_terms
+  contains_text
+  ends_with
+  greater_than
+  greater_than_or_equals
+  is_empty
+  is_not_empty
+  lower_than
+  lower_than_or_equal
+  not_any_of
+  not_contains_text
+  starts_with
+  within_the_last
+  within_the_next
+}
+
+type ItemsResponse {
+  """
+  An opaque cursor that represents the position in the list after the last
+    returned item. Use this cursor for pagination to fetch the next set of items.
+    If the cursor is null, there are no more items to fetch.
   """
   cursor: String
+  """
+  The items associated with the cursor.
+  """
+  items: [Item!]!
 }
 
 """
-A single step within an agent activity run.
+Kind of assignee
 """
-type AgentActivityStep {
+enum Kind {
+  agent
+  person
+  team
+}
+
+type MirroredItem {
   """
-  A description of what this step did.
+  The linked board.
+  """
+  linked_board: Board!
+  """
+  The linked board's unique identifier.
+  """
+  linked_board_id: ID!
+  """
+  The linked item.
+  """
+  linked_item: Item!
+  """
+  The mirrored values.
+  """
+  mirrored_value: MirroredValue
+}
+
+"""
+Represents a mirrored value (column value, group, or board).
+"""
+union MirroredValue = BatteryValue | Board | BoardRelationValue | ButtonValue | CheckboxValue | ColorPickerValue | CountryValue | CreationLogValue | DateValue | DependencyValue | DirectDocValue | DocValue | DropdownValue | EmailValue | FileValue | FormulaValue | Group | GroupValue | HourValue | IntegrationValue | ItemIdValue | LastUpdatedValue | LinkValue | LocationValue | LongTextValue | MirrorValue | NumbersValue | PeopleValue | PersonValue | PhoneValue | ProgressValue | RatingValue | StatusValue | SubtasksValue | TagsValue | TeamValue | TextValue | TimeTrackingValue | TimelineValue | UnsupportedValue | VoteValue | WeekValue | WorldClockValue
+
+"""
+A notification.
+"""
+type Notification {
+  """
+  The notification's unique identifier.
+  """
+  id: ID!
+  """
+  The notification text.
+  """
+  text: String
+}
+
+"""
+The notification's target type.
+"""
+enum NotificationTargetType {
+  Post
+  Project
+}
+
+"""
+Indicates where the unit symbol should be placed in a number value
+"""
+enum NumberValueUnitDirection {
+  left
+  right
+}
+
+"""
+Represents a monday object.
+"""
+enum ObjectType {
+  Board
+  Folder
+  Overview
+}
+
+"""
+The working status of a user.
+"""
+type OutOfOffice {
+  """
+  Is the status active?
+  """
+  active: Boolean
+  """
+  Are notification disabled?
+  """
+  disable_notifications: Boolean
+  """
+  The status end date.
+  """
+  end_date: Date
+  """
+  The status start date.
+  """
+  start_date: Date
+  """
+  Out of office type.
+  """
+  type: String
+}
+
+"""
+A monday.com overview.
+"""
+type Overview {
+  """
+  The time the overview was created at.
+  """
+  created_at: ISO8601DateTime
+  """
+  The creator of the overview.
+  """
+  creator: User!
+  """
+  The overview's folder unique identifier.
+  """
+  folder_id: ID
+  """
+  The unique identifier of the overview.
+  """
+  id: ID!
+  """
+  The overview's kind (public/private).
+  """
+  kind: String
+  """
+  The overview's name.
+  """
+  name: String!
+  """
+  The overview's state.
+  """
+  state: String!
+  """
+  The last time the overview was updated at.
+  """
+  updated_at: ISO8601DateTime
+  """
+  The overview's workspace unique identifier.
+  """
+  workspace_id: ID
+}
+
+type PeopleEntity {
+  """
+  Id of the entity: a person or a team
+  """
+  id: ID!
+  """
+  Type of entity
+  """
+  kind: Kind
+}
+
+"""
+A payment plan.
+"""
+type Plan {
+  """
+  The maximum users allowed in the plan.
+  """
+  max_users: Int!
+  """
+  The plan's time period.
+  """
+  period: String
+  """
+  The plan's tier.
+  """
+  tier: String
+  """
+  The plan's version.
+  """
+  version: Int!
+}
+
+"""
+The position relative method.
+"""
+enum PositionRelative {
+  after_at
+  before_at
+}
+
+"""
+Response type for detailed board permissions. Contains information about the permissions that were set.
+"""
+type SetBoardPermissionResponse {
+  """
+  Whether the board allows cross-product collaboration.
+  """
+  cross_product_collaborative: Boolean
+  """
+  The technical board write permissions value that was set (e.g., 'everyone', 'collaborators', 'owners').
+  """
+  edit_permissions: BoardEditPermissions!
+  """
+  List of any actions that failed during the permission update process.
+  """
+  failed_actions: [String!]
+}
+
+"""
+The possible states for a board or item.
+"""
+enum State {
+  active
+  all
+  archived
+  deleted
+}
+
+"""
+A status label style.
+"""
+type StatusLabelStyle {
+  """
+  The label's border color in hex format.
+  """
+  border: String!
+  """
+  The label's color in hex format.
+  """
+  color: String!
+}
+
+"""
+A tag
+"""
+type Tag {
+  """
+  The tag's color.
+  """
+  color: String!
+  """
+  The tag's unique identifier.
+  """
+  id: ID!
+  """
+  The tag's name.
+  """
+  name: String!
+}
+
+"""
+A team of users.
+"""
+type Team {
+  """
+  The team's unique identifier.
+  """
+  id: ID!
+  """
+  The team's name.
+  """
+  name: String!
+  """
+  The users who are the owners of the team.
+  """
+  owners(ids: [ID!]): [User!]!
+  """
+  The team's picture url.
+  """
+  picture_url: String
+  """
+  The users in the team.
+  """
+  users(emails: [String], ids: [ID!], kind: UserKind, limit: Int, name: String, newest_first: Boolean, non_active: Boolean, page: Int): [User]
+  """
+  Whether the team is a guest team
+  """
+  is_guest: Boolean
+  """
+  The team's creation date as an ISO 8601 string.
+  """
+  created_at: String
+}
+
+"""
+A monday.com template.
+"""
+type Template {
+  """
+  The template process unique identifier for async operations.
+  """
+  process_id: String
+}
+
+"""
+Lifecycle status of a template installation async operation.
+"""
+enum TemplateInstallationStatus {
+  COMPLETE
+  FAILED
+  IN_PROGRESS
+  PENDING
+}
+
+"""
+Status of a template installation async operation.
+"""
+type TemplateInstallationStatusResult {
+  """
+  Board IDs are populated incrementally during the metadata phase as each board
+    is created, and complete by the time per-board content jobs start. Boards
+    exist as empty shells (no items, broken mirror columns, no automations) until
+    status is COMPLETE. Safe to store these IDs early, but do not read or write
+    board content until COMPLETE.
+  """
+  board_ids: [ID!]!
+  """
+  Mapping of each source (template) board ID to the newly created board ID.
+  """
+  board_ids_map: [BoardIdMapping!]!
+  """
+  True iff status is COMPLETE.
+  """
+  is_complete: Boolean!
+  """
+  True iff status is FAILED.
+  """
+  is_failed: Boolean!
+  """
+  The process_id returned by use_template.
+  """
+  process_id: ID!
+  """
+  Lifecycle status (PENDING / IN_PROGRESS / COMPLETE / FAILED).
+  """
+  status: TemplateInstallationStatus!
+}
+
+type TimeTrackingHistoryItem {
+  """
+  When the session was added to the cell
+  """
+  created_at: Date!
+  """
+  Only applicable if the session has ended
+  """
+  ended_at: Date
+  """
+  The identifier of an user which ended the tracking
+  """
+  ended_user_id: ID
+  """
+  A unique session identifier
+  """
+  id: ID!
+  """
+  Is true if the session end date was manually entered
+  """
+  manually_entered_end_date: Boolean!
+  """
+  Is true if the session end time was manually entered
+  """
+  manually_entered_end_time: Boolean!
+  """
+  Is true if the session start date was manually entered
+  """
+  manually_entered_start_date: Boolean!
+  """
+  Is true if the session start time was manually entered
+  """
+  manually_entered_start_time: Boolean!
+  """
+  Only applicable if the session was added by pressing the play button or via automation
+  """
+  started_at: Date
+  """
+  The identifier of an user which started the tracking
+  """
+  started_user_id: ID
+  """
+  The status of the session
+  """
+  status: String!
+  """
+  When the session was updated
+  """
+  updated_at: Date
+}
+
+"""
+Attributes for updating a board's position and location
+"""
+input UpdateBoardHierarchyAttributesInput {
+  """
+  The ID of the account product where the board should be placed
+  """
+  account_product_id: ID
+  """
+  The ID of the folder where the board should be placed
+  """
+  folder_id: ID
+  """
+  The position of the board in the left pane
+  """
+  position: DynamicPosition
+  """
+  The ID of the workspace where the board should be placed
+  """
+  workspace_id: ID
+}
+
+"""
+Result of updating a board's position
+"""
+type UpdateBoardHierarchyResult {
+  """
+  The updated board
+  """
+  board: Board
+  """
+  A message about the operation result
+  """
+  message: String
+  """
+  Whether the operation was successful
+  """
+  success: Boolean!
+}
+
+"""
+Result type for updating an overview's hierarchy
+"""
+type UpdateOverviewHierarchy {
+  """
+  Message about the operation result
+  """
+  message: String!
+  """
+  The updated overview
+  """
+  overview: Overview
+  """
+  Whether the operation was successful
+  """
+  success: Boolean!
+}
+
+"""
+Attributes for updating an overview's hierarchy and location
+"""
+input UpdateOverviewHierarchyAttributesInput {
+  """
+  The ID of the account product where the overview should be placed
+  """
+  account_product_id: ID
+  """
+  The ID of the folder where the overview should be placed
+  """
+  folder_id: ID
+  """
+  The position of the overview in the left pane
+  """
+  position: DynamicPosition
+  """
+  The ID of the workspace where the overview should be placed
+  """
+  workspace_id: ID
+}
+
+"""
+Response type for updating multiple teams' board roles. Contains information
+about which teams were successfully updated and which failed.
+"""
+type UpdateTeamsBoardRoleResponse {
+  """
+  List of failed team updates with error details.
+  """
+  failed_teams: [FailedTeamBoardRoleUpdate!]!
+  """
+  List of IDs of teams whose board roles were successfully updated.
+  """
+  successful_team_ids: [ID!]!
+}
+
+"""
+Response type for updating multiple users' board roles. Contains information
+about which users were successfully updated and which failed.
+"""
+type UpdateUsersBoardRoleResponse {
+  """
+  List of failed user updates with error details.
+  """
+  failed_users: [FailedUserBoardRoleUpdate!]!
+  """
+  List of IDs of users whose board roles were successfully updated.
+  """
+  successful_user_ids: [ID!]!
+}
+
+"""
+Attributes of a workspace to update
+"""
+input UpdateWorkspaceAttributesInput {
+  """
+  The target account product's ID to move the workspace to
+  """
+  account_product_id: ID
+  """
+  The description of the workspace to update
   """
   description: String
   """
-  ISO 8601 timestamp when this step occurred.
+  The kind of the workspace to update (open / closed / template)
   """
-  created_at: String!
+  kind: WorkspaceKind
+  """
+  The name of the workspace to update
+  """
+  name: String
 }
 
 """
-The governance risk level of an agent.
+@deprecated Use UserKindFilter with the user_kind arg instead. The kind to search users by.
 """
-enum GovernanceRisk {
-  High
-  Medium
-  Low
+enum UserKind {
+  all
+  guests
+  non_guests
+  non_pending
 }
 
 """
-The computed governance risk classification for an agent.
+A single user permit/action with its permission status
 """
-type Risk {
+type UserPermit {
   """
-  The risk level: high, medium, or low.
+  The name/identifier of the permit/action
   """
-  risk_level: GovernanceRisk
+  name: String!
   """
-  The combined weighted score used to determine the risk level (0–1).
+  Whether the user has permission for this action
   """
-  risk_score: Float
+  permitted: Boolean!
+  """
+  Contextual information about the permit reason
+  """
+  reason_context: UserPermitReasonContext
+  """
+  Technical reason code for the permission status
+  """
+  technical_reason: Int
+}
+
+"""
+Contextual information about the permit reason
+"""
+type UserPermitReasonContext {
+  """
+  Name of the permission that determined this permit decision
+  """
+  permission: String
+  """
+  Name of the policy that determined this permit decision
+  """
+  policy: String
+  """
+  Name of the role that determined this permit decision
+  """
+  role: String
+  """
+  The type of scope (account, workspace, board, etc.)
+  """
+  scope_type: UserPermitScopeKind
+}
+
+"""
+A scope for checking user permits
+"""
+input UserPermitScopeInput {
+  """
+  The scope resource ID
+  """
+  id: ID!
+  """
+  The scope type
+  """
+  type: UserPermitScopeKind!
+}
+
+"""
+The kind of scope for user permits checks
+"""
+enum UserPermitScopeKind {
+  ACCOUNT
+  ACCOUNT_PRODUCT
+  BOARD
+  WORKSPACE
+}
+
+"""
+User permits grouped by scope type
+"""
+type UserPermits {
+  """
+  Account scope permits as a list of scope ID and permits pairs
+  """
+  account: [UserPermitsScope!]
+  """
+  Account product scope permits as a list of scope ID and permits pairs
+  """
+  account_product: [UserPermitsScope!]
+  """
+  Board scope permits as a list of scope ID and permits pairs
+  """
+  board: [UserPermitsScope!]
+  """
+  Workspace scope permits as a list of scope ID and permits pairs
+  """
+  workspace: [UserPermitsScope!]
+}
+
+"""
+A scope ID and its associated permits
+"""
+type UserPermitsScope {
+  """
+  List of permits/actions available in this scope
+  """
+  permits: [UserPermit!]!
+  """
+  The ID of the scope (account ID, workspace ID, board ID, etc.)
+  """
+  scope_id: ID!
+}
+
+"""
+An object containing the API version details
+"""
+type Version {
+  """
+  The display name of the API version
+  """
+  display_name: String!
+  """
+  The type of the API version
+  """
+  kind: VersionKind!
+  """
+  Version string that can be used in API-Version header
+  """
+  value: String!
+}
+
+"""
+All possible API version types
+"""
+enum VersionKind {
+  current
+  deprecated
+  dev
+  maintenance
+  old__maintenance
+  old_previous_maintenance
+  previous_maintenance
+  release_candidate
+}
+
+"""
+Monday webhooks
+"""
+type Webhook {
+  """
+  The webhooks's board id.
+  """
+  board_id: ID!
+  """
+  The webhooks's config.
+  """
+  config: String
+  """
+  The event webhook will listen to
+  """
+  event: WebhookEventType!
+  """
+  The webhooks's unique identifier.
+  """
+  id: ID!
+}
+
+"""
+The webhook's target type.
+"""
+enum WebhookEventType {
+  change_column_value
+  change_name
+  change_specific_column_value
+  change_status_column_value
+  change_subitem_column_value
+  change_subitem_name
+  create_column
+  create_item
+  create_subitem
+  create_subitem_update
+  create_update
+  delete_update
+  edit_update
+  item_archived
+  item_deleted
+  item_moved_to_any_group
+  item_moved_to_specific_group
+  item_restored
+  move_subitem
+  subitem_archived
+  subitem_deleted
+}
+
+"""
+A monday.com workspace.
+"""
+type Workspace {
+  """
+  The account product that contains workspace.
+  """
+  account_product: AccountProduct
+  """
+  The workspace's creation date.
+  """
+  created_at: Date
+  """
+  The workspace's description.
+  """
+  description: String
+  """
+  The workspace's unique identifier.
+  """
+  id: ID
+  """
+  Returns true if it is the default workspace of the product or account
+  """
+  is_default_workspace: Boolean
+  """
+  The workspace's kind (open / closed / template).
+  """
+  kind: WorkspaceKind
+  """
+  The workspace's name.
+  """
+  name: String!
+  """
+  The workspace's user owners.
+  """
+  owners_subscribers(limit: Int = 25, page: Int = 1): [User]
+  """
+  The workspace's settings.
+  """
+  settings: WorkspaceSettings
+  """
+  The workspace's state (all / active / archived / deleted).
+  """
+  state: State
+  """
+  The workspace's team owners.
+  """
+  team_owners_subscribers(limit: Int = 25, page: Int = 1): [Team!]
+  """
+  The teams subscribed to the workspace.
+  """
+  teams_subscribers(limit: Int = 25, page: Int = 1): [Team]
+  """
+  The users subscribed to the workspace
+  """
+  users_subscribers(limit: Int = 25, page: Int = 1): [User]
+}
+
+"""
+The workspace's icon.
+"""
+type WorkspaceIcon {
+  """
+  The icon color in hex value. Used as a background for the image.
+  """
+  color: String
+  """
+  The public image URL, which is temporary in the case of a file that was
+    uploaded by the user, so you'll need to pull a new version at least once an hour.
+    In case it is null, you can use the first letter of the workspace name.
+  """
+  image: String
+}
+
+"""
+The workspace kinds available.
+"""
+enum WorkspaceKind {
+  closed
+  open
+  template
+}
+
+"""
+The membership kind of the user in the workspace.
+"""
+enum WorkspaceMembershipKind {
+  all
+  member
+}
+
+"""
+The workspace's settings.
+"""
+type WorkspaceSettings {
+  """
+  The workspace icon.
+  """
+  icon: WorkspaceIcon
+}
+
+"""
+The workspace subscriber kind.
+"""
+enum WorkspaceSubscriberKind {
+  owner
+  subscriber
+}
+
+"""
+Options to order by.
+"""
+enum WorkspacesOrderBy {
+  created_at
+}
+
+"""
+The account product kinds available for workspaces query.
+"""
+enum WorkspacesQueryAccountProductKind {
+  core
+  crm
+  forms
+  marketing
+  project_management
+  service
+  software
+  whiteboard
+}
+
+"""
+Parameters to filter workspaces
+"""
+input WorkspacesQueryInput {
+  """
+  Filter workspaces by account product kind (core / marketing / crm / software /
+    project_management / service / forms / whiteboard)
+  """
+  account_product_kind: WorkspacesQueryAccountProductKind
 }
 
 """
@@ -7915,6 +7798,16 @@ type ActivateUsersResult {
   Errors that occurred during activation.
   """
   errors: [ActivateUsersError!]
+}
+
+"""
+A monday.com agent.
+"""
+type Agent {
+  """
+  The ID of the agent.
+  """
+  id: ID
 }
 
 """
@@ -20289,6 +20182,113 @@ type UnsaveAgentResult {
 }
 
 """
+A single execution of an agent.
+"""
+type AgentActivityRun {
+  """
+  Unique identifier for the run.
+  """
+  id: ID!
+  """
+  The current or final status of the run.
+  """
+  status: AgentActivityRunStatus!
+  """
+  What triggered this run (raw value as reported by the agent SDK, e.g. api, assign, chat).
+  """
+  trigger: String
+  """
+  ID of the user who triggered the run, if applicable.
+  """
+  triggering_user_id: ID
+  """
+  Number of credits consumed by this run.
+  """
+  credits_used: Int
+  """
+  List of tool names used during this run.
+  """
+  tools: [String!]
+  """
+  Human-readable description of what the run did.
+  """
+  description: String
+  """
+  ISO 8601 timestamp when the run started.
+  """
+  started_at: String!
+  """
+  ISO 8601 timestamp when the run ended.
+  """
+  ended_at: String
+  """
+  The individual steps performed during this run.
+  """
+  steps: [AgentActivityStep!]!
+}
+
+"""
+The current or final status of an agent activity run.
+"""
+enum AgentActivityRunStatus {
+  RUNNING
+  SUCCESS
+  FAILED
+  CANCELLED
+}
+
+"""
+A paginated list of agent activity runs.
+"""
+type AgentActivityRunsConnection {
+  """
+  The agent activity runs on this page.
+  """
+  nodes: [AgentActivityRun]!
+  """
+  Cursor for fetching the next page.
+  """
+  cursor: String
+}
+
+"""
+A single step within an agent activity run.
+"""
+type AgentActivityStep {
+  """
+  A description of what this step did.
+  """
+  description: String
+  """
+  ISO 8601 timestamp when this step occurred.
+  """
+  created_at: String!
+}
+
+"""
+The governance risk level of an agent.
+"""
+enum GovernanceRisk {
+  High
+  Medium
+  Low
+}
+
+"""
+The computed governance risk classification for an agent.
+"""
+type Risk {
+  """
+  The risk level: high, medium, or low.
+  """
+  risk_level: GovernanceRisk
+  """
+  The combined weighted score used to determine the risk level (0–1).
+  """
+  risk_score: Float
+}
+
+"""
 The privacy kind for a board
 """
 enum BoardKindInput {
@@ -25505,6 +25505,184 @@ type Pagination {
 }
 
 """
+Content for a divider block
+"""
+type DividerContent implements DocBaseBlockContent {
+  """
+  The alignment of the block content
+  """
+  alignment: BlockAlignment
+  """
+  The text direction of the block content
+  """
+  direction: BlockDirection
+}
+
+"""
+Content for an image block
+"""
+type ImageContent implements DocBaseBlockContent {
+  """
+  The alignment of the block content
+  """
+  alignment: BlockAlignment
+  """
+  The text direction of the block content
+  """
+  direction: BlockDirection
+  """
+  The public URL of the image
+  """
+  public_url: String!
+  """
+  The width of the image
+  """
+  width: Int
+}
+
+"""
+Content for a layout block
+"""
+type LayoutContent implements DocBaseBlockContent {
+  """
+  The alignment of the block content
+  """
+  alignment: BlockAlignment
+  """
+  The text direction of the block content
+  """
+  direction: BlockDirection
+  """
+  The column style configuration
+  """
+  column_style: [ColumnStyle!]
+  """
+  1-D array of cells (columns). Each cell carries a blockId reference.
+  """
+  cells: [Cell!]
+}
+
+"""
+Content for a list block (bulleted, numbered, todo)
+"""
+type ListBlockContent implements DocBaseBlockContent {
+  """
+  The alignment of the block content
+  """
+  alignment: BlockAlignment
+  """
+  The text direction of the block content
+  """
+  direction: BlockDirection
+  """
+  The text content in delta format - array of operations with insert content and optional attributes
+  """
+  delta_format: [Operation!]!
+  """
+  The indentation level of the list item
+  """
+  indentation: Int
+}
+
+"""
+Content for a notice box block
+"""
+type NoticeBoxContent implements DocBaseBlockContent {
+  """
+  The alignment of the block content
+  """
+  alignment: BlockAlignment
+  """
+  The text direction of the block content
+  """
+  direction: BlockDirection
+  """
+  The theme of the notice box
+  """
+  theme: NoticeBoxTheme!
+}
+
+"""
+Content for a page break block
+"""
+type PageBreakContent implements DocBaseBlockContent {
+  """
+  The alignment of the block content
+  """
+  alignment: BlockAlignment
+  """
+  The text direction of the block content
+  """
+  direction: BlockDirection
+}
+
+"""
+Content for a table block
+"""
+type TableContent implements DocBaseBlockContent {
+  """
+  The alignment of the block content
+  """
+  alignment: BlockAlignment
+  """
+  The text direction of the block content
+  """
+  direction: BlockDirection
+  """
+  The width of the table
+  """
+  width: Int
+  """
+  The column style configuration
+  """
+  column_style: [ColumnStyle!]
+  """
+  2-D array of cells (rows × columns). Each cell contains a blockId reference that represents the parent block for all content blocks within that cell.
+  """
+  cells: [TableRow!]
+}
+
+"""
+Content for a text block
+"""
+type TextBlockContent implements DocBaseBlockContent {
+  """
+  The alignment of the block content
+  """
+  alignment: BlockAlignment
+  """
+  The text direction of the block content
+  """
+  direction: BlockDirection
+  """
+  The text content in delta format - array of operations with insert content and optional attributes
+  """
+  delta_format: [Operation!]!
+}
+
+"""
+Content for a video block
+"""
+type VideoContent implements DocBaseBlockContent {
+  """
+  The alignment of the block content
+  """
+  alignment: BlockAlignment
+  """
+  The text direction of the block content
+  """
+  direction: BlockDirection
+  """
+  The raw URL of the video
+  """
+  url: String!
+  """
+  The width of the video
+  """
+  width: Int
+}
+
+"""
 A value showing status distribution counts
 """
 type BatteryValue implements ColumnValue {
@@ -26961,184 +27139,6 @@ type WorldClockValue implements ColumnValue {
   The column's raw value in JSON format.
   """
   value: JSON
-}
-
-"""
-Content for a divider block
-"""
-type DividerContent implements DocBaseBlockContent {
-  """
-  The alignment of the block content
-  """
-  alignment: BlockAlignment
-  """
-  The text direction of the block content
-  """
-  direction: BlockDirection
-}
-
-"""
-Content for an image block
-"""
-type ImageContent implements DocBaseBlockContent {
-  """
-  The alignment of the block content
-  """
-  alignment: BlockAlignment
-  """
-  The text direction of the block content
-  """
-  direction: BlockDirection
-  """
-  The public URL of the image
-  """
-  public_url: String!
-  """
-  The width of the image
-  """
-  width: Int
-}
-
-"""
-Content for a layout block
-"""
-type LayoutContent implements DocBaseBlockContent {
-  """
-  The alignment of the block content
-  """
-  alignment: BlockAlignment
-  """
-  The text direction of the block content
-  """
-  direction: BlockDirection
-  """
-  The column style configuration
-  """
-  column_style: [ColumnStyle!]
-  """
-  1-D array of cells (columns). Each cell carries a blockId reference.
-  """
-  cells: [Cell!]
-}
-
-"""
-Content for a list block (bulleted, numbered, todo)
-"""
-type ListBlockContent implements DocBaseBlockContent {
-  """
-  The alignment of the block content
-  """
-  alignment: BlockAlignment
-  """
-  The text direction of the block content
-  """
-  direction: BlockDirection
-  """
-  The text content in delta format - array of operations with insert content and optional attributes
-  """
-  delta_format: [Operation!]!
-  """
-  The indentation level of the list item
-  """
-  indentation: Int
-}
-
-"""
-Content for a notice box block
-"""
-type NoticeBoxContent implements DocBaseBlockContent {
-  """
-  The alignment of the block content
-  """
-  alignment: BlockAlignment
-  """
-  The text direction of the block content
-  """
-  direction: BlockDirection
-  """
-  The theme of the notice box
-  """
-  theme: NoticeBoxTheme!
-}
-
-"""
-Content for a page break block
-"""
-type PageBreakContent implements DocBaseBlockContent {
-  """
-  The alignment of the block content
-  """
-  alignment: BlockAlignment
-  """
-  The text direction of the block content
-  """
-  direction: BlockDirection
-}
-
-"""
-Content for a table block
-"""
-type TableContent implements DocBaseBlockContent {
-  """
-  The alignment of the block content
-  """
-  alignment: BlockAlignment
-  """
-  The text direction of the block content
-  """
-  direction: BlockDirection
-  """
-  The width of the table
-  """
-  width: Int
-  """
-  The column style configuration
-  """
-  column_style: [ColumnStyle!]
-  """
-  2-D array of cells (rows × columns). Each cell contains a blockId reference that represents the parent block for all content blocks within that cell.
-  """
-  cells: [TableRow!]
-}
-
-"""
-Content for a text block
-"""
-type TextBlockContent implements DocBaseBlockContent {
-  """
-  The alignment of the block content
-  """
-  alignment: BlockAlignment
-  """
-  The text direction of the block content
-  """
-  direction: BlockDirection
-  """
-  The text content in delta format - array of operations with insert content and optional attributes
-  """
-  delta_format: [Operation!]!
-}
-
-"""
-Content for a video block
-"""
-type VideoContent implements DocBaseBlockContent {
-  """
-  The alignment of the block content
-  """
-  alignment: BlockAlignment
-  """
-  The text direction of the block content
-  """
-  direction: BlockDirection
-  """
-  The raw URL of the video
-  """
-  url: String!
-  """
-  The width of the video
-  """
-  width: Int
 }
 
 """
