@@ -78,19 +78,19 @@ public sealed partial class ChatMessage
     public int? CreditsUsed { get; init; }
 
     /// <summary>
-    /// LangSmith trace id for the turn that produced this message. Exposed only to users with the trace-exposure flag enabled; populated only in environments where tracing is on. Clients build the trace URL from this id.
+    /// Internal trace identifier for the turn that produced this message; not available to all accounts.
     /// </summary>
     [JsonPropertyName("langsmith_trace_id")]
     public string? LangsmithTraceId { get; init; }
 
     /// <summary>
-    /// Temporal workflow run id for the turn that produced this message. Gated behind the same trace-exposure flag as langsmith_trace_id. The workflow id is the vibe app id; clients build the Temporal UI URL from the run id, namespace, app id, env and region.
+    /// Internal run identifier for the turn that produced this message; not available to all accounts.
     /// </summary>
     [JsonPropertyName("temporal_run_id")]
     public string? TemporalRunId { get; init; }
 
     /// <summary>
-    /// Temporal namespace for the turn that produced this message (`vibe`, or `default` under monday-mirror). Gated behind the same trace-exposure flag as langsmith_trace_id.
+    /// Internal namespace for the turn that produced this message; not available to all accounts.
     /// </summary>
     [JsonPropertyName("temporal_namespace")]
     public string? TemporalNamespace { get; init; }
