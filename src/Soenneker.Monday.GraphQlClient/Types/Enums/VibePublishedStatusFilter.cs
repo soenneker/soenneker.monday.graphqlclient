@@ -7,10 +7,19 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum VibePublishedStatusFilter
 {
+    /// <summary>
+    /// Return all apps regardless of published status
+    /// </summary>
     ALL,
 
+    /// <summary>
+    /// Return only published apps
+    /// </summary>
     PUBLISHED,
 
+    /// <summary>
+    /// Return only non-published apps
+    /// </summary>
     NOTPUBLISHED
 
 }

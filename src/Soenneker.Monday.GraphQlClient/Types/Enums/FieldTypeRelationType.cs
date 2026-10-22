@@ -7,10 +7,19 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum FieldTypeRelationType
 {
+    /// <summary>
+    /// The field type is a primitive type (string, number, boolean, etc.)
+    /// </summary>
     PRIMITIVE,
 
+    /// <summary>
+    /// The field type is an interface type
+    /// </summary>
     INTERFACE,
 
+    /// <summary>
+    /// The field type is a custom type
+    /// </summary>
     CUSTOM
 
 }

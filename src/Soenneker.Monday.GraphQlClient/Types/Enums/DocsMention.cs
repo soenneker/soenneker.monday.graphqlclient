@@ -7,10 +7,19 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum DocsMention
 {
+    /// <summary>
+    /// Mention of a user
+    /// </summary>
     USER,
 
+    /// <summary>
+    /// Mention of a document
+    /// </summary>
     DOC,
 
+    /// <summary>
+    /// Mention of a board
+    /// </summary>
     BOARD
 
 }

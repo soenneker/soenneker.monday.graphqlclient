@@ -7,64 +7,154 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum UserKindValue
 {
+    /// <summary>
+    /// A admin user.
+    /// </summary>
     ADMIN,
 
+    /// <summary>
+    /// A member user.
+    /// </summary>
     MEMBER,
 
+    /// <summary>
+    /// A guest user.
+    /// </summary>
     GUEST,
 
+    /// <summary>
+    /// A view only user.
+    /// </summary>
     VIEWONLY,
 
+    /// <summary>
+    /// A agent member user.
+    /// </summary>
     AGENTMEMBER,
 
+    /// <summary>
+    /// A personal agent member user.
+    /// </summary>
     PERSONALAGENTMEMBER,
 
+    /// <summary>
+    /// A agent signup user user.
+    /// </summary>
     AGENTSIGNUPUSER,
 
+    /// <summary>
+    /// A work management agent member user.
+    /// </summary>
     WORKMANAGEMENTAGENTMEMBER,
 
+    /// <summary>
+    /// A external agent member user.
+    /// </summary>
     EXTERNALAGENTMEMBER,
 
+    /// <summary>
+    /// A external agent detached member user.
+    /// </summary>
     EXTERNALAGENTDETACHEDMEMBER,
 
+    /// <summary>
+    /// A workspace primary agent member user.
+    /// </summary>
     WORKSPACEPRIMARYAGENTMEMBER,
 
+    /// <summary>
+    /// A service user user.
+    /// </summary>
     SERVICEUSER,
 
+    /// <summary>
+    /// A vibe user user.
+    /// </summary>
     VIBEUSER,
 
+    /// <summary>
+    /// A portal user.
+    /// </summary>
     PORTAL,
 
+    /// <summary>
+    /// A portfolio api user user.
+    /// </summary>
     PORTFOLIOAPIUSER,
 
+    /// <summary>
+    /// A nexus api user user.
+    /// </summary>
     NEXUSAPIUSER,
 
+    /// <summary>
+    /// A resource directory api user user.
+    /// </summary>
     RESOURCEDIRECTORYAPIUSER,
 
+    /// <summary>
+    /// A omnichannel api user user.
+    /// </summary>
     OMNICHANNELAPIUSER,
 
+    /// <summary>
+    /// A goals api user user.
+    /// </summary>
     GOALSAPIUSER,
 
+    /// <summary>
+    /// A projects api user user.
+    /// </summary>
     PROJECTSAPIUSER,
 
+    /// <summary>
+    /// A sprint management api user user.
+    /// </summary>
     SPRINTMANAGEMENTAPIUSER,
 
+    /// <summary>
+    /// A crm commerce api user user.
+    /// </summary>
     CRMCOMMERCEAPIUSER,
 
+    /// <summary>
+    /// A campaigns api user user.
+    /// </summary>
     CAMPAIGNSAPIUSER,
 
+    /// <summary>
+    /// A data retention api user user.
+    /// </summary>
     DATARETENTIONAPIUSER,
 
+    /// <summary>
+    /// A monday service api user user.
+    /// </summary>
     MONDAYSERVICEAPIUSER,
 
+    /// <summary>
+    /// A ai platform agent api user user.
+    /// </summary>
     AIPLATFORMAGENTAPIUSER,
 
+    /// <summary>
+    /// A dependencies api user user.
+    /// </summary>
     DEPENDENCIESAPIUSER,
 
+    /// <summary>
+    /// A historical tracking backfill api user user.
+    /// </summary>
     HISTORICALTRACKINGBACKFILLAPIUSER,
 
+    /// <summary>
+    /// A entity knowledge api user user.
+    /// </summary>
     ENTITYKNOWLEDGEAPIUSER,
 
+    /// <summary>
+    /// A org hub api user user.
+    /// </summary>
     ORGHUBAPIUSER
 
 }

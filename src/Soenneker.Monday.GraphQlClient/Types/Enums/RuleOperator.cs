@@ -7,32 +7,74 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum RuleOperator
 {
+    /// <summary>
+    /// Value matches any of the specified values
+    /// </summary>
     ANYOF,
 
+    /// <summary>
+    /// Value does not match any of the specified values
+    /// </summary>
     NOTANYOF,
 
+    /// <summary>
+    /// Value equals the specified value
+    /// </summary>
     EQUALS,
 
+    /// <summary>
+    /// Value does not equal the specified value
+    /// </summary>
     NOTEQUALS,
 
+    /// <summary>
+    /// Value is empty or not set
+    /// </summary>
     ISEMPTY,
 
+    /// <summary>
+    /// Value is not empty
+    /// </summary>
     ISNOTEMPTY,
 
+    /// <summary>
+    /// Value is greater than the specified value
+    /// </summary>
     GREATERTHAN,
 
+    /// <summary>
+    /// Value is greater than or equal to the specified value
+    /// </summary>
     GREATERTHANOREQUALS,
 
+    /// <summary>
+    /// Value is lower than the specified value
+    /// </summary>
     LOWERTHAN,
 
+    /// <summary>
+    /// Value is lower than or equal to the specified value
+    /// </summary>
     LOWERTHANOREQUAL,
 
+    /// <summary>
+    /// Value contains the specified text
+    /// </summary>
     CONTAINSTEXT,
 
+    /// <summary>
+    /// Value does not contain the specified text
+    /// </summary>
     NOTCONTAINSTEXT,
 
+    /// <summary>
+    /// Value starts with the specified text
+    /// </summary>
     STARTSWITHTEXT,
 
+    /// <summary>
+    /// Value is between two specified values
+    /// </summary>
     BETWEEN
 
 }

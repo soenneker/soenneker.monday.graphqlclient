@@ -7,10 +7,19 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum MeetingAccess
 {
+    /// <summary>
+    /// The user was a participant in the meeting or invited the bot.
+    /// </summary>
     OWN,
 
+    /// <summary>
+    /// The meeting was shared directly with the user or their team.
+    /// </summary>
     SHAREDWITHME,
 
+    /// <summary>
+    /// The meeting was shared with the account.
+    /// </summary>
     SHAREDWITHACCOUNT
 
 }

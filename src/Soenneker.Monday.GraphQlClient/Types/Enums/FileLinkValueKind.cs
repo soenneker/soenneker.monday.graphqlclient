@@ -7,14 +7,29 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum FileLinkValueKind
 {
+    /// <summary>
+    /// Box file
+    /// </summary>
     Box,
 
+    /// <summary>
+    /// Dropbox file
+    /// </summary>
     Dropbox,
 
+    /// <summary>
+    /// Google Drive file
+    /// </summary>
     GoogleDrive,
 
+    /// <summary>
+    /// Generic link file
+    /// </summary>
     Link,
 
+    /// <summary>
+    /// OneDrive file
+    /// </summary>
     Onedrive
 
 }

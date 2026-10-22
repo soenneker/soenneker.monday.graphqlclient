@@ -7,18 +7,39 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum FileColumnValue
 {
+    /// <summary>
+    /// Asset file
+    /// </summary>
     Asset,
 
+    /// <summary>
+    /// Box file
+    /// </summary>
     Box,
 
+    /// <summary>
+    /// Doc file
+    /// </summary>
     Doc,
 
+    /// <summary>
+    /// Dropbox file
+    /// </summary>
     Dropbox,
 
+    /// <summary>
+    /// Google Drive file
+    /// </summary>
     GoogleDrive,
 
+    /// <summary>
+    /// Generic link file
+    /// </summary>
     Link,
 
+    /// <summary>
+    /// OneDrive file
+    /// </summary>
     Onedrive
 
 }

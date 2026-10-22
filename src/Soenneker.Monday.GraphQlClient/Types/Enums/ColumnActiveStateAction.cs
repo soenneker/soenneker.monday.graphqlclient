@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum ColumnActiveStateAction
 {
+    /// <summary>
+    /// Deprecate the column, preventing it from being used on new boards.
+    /// </summary>
     DEACTIVATE,
 
+    /// <summary>
+    /// Reactivate a deprecated column.
+    /// </summary>
     REACTIVATE
 
 }

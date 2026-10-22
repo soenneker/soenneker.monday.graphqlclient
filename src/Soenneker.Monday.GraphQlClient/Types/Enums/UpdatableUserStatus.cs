@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum UpdatableUserStatus
 {
+    /// <summary>
+    /// The user is active.
+    /// </summary>
     ACTIVE,
 
+    /// <summary>
+    /// The user is deactivated.
+    /// </summary>
     INACTIVE
 
 }

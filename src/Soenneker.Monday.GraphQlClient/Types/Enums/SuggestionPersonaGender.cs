@@ -7,10 +7,19 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum SuggestionPersonaGender
 {
+    /// <summary>
+    /// The persona is male
+    /// </summary>
     MALE,
 
+    /// <summary>
+    /// The persona is female
+    /// </summary>
     FEMALE,
 
+    /// <summary>
+    /// The persona is gender-neutral
+    /// </summary>
     NEUTRAL
 
 }

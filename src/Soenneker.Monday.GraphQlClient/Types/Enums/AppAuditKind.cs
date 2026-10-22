@@ -7,16 +7,34 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum AppAuditKind
 {
+    /// <summary>
+    /// App was unpublished
+    /// </summary>
     UNPUBLISH,
 
+    /// <summary>
+    /// External guest access was enabled for an app
+    /// </summary>
     EXTERNALACCESSENABLED,
 
+    /// <summary>
+    /// External guest access was disabled for an app
+    /// </summary>
     EXTERNALACCESSDISABLED,
 
+    /// <summary>
+    /// An external user was invited to an app
+    /// </summary>
     EXTERNALUSERINVITED,
 
+    /// <summary>
+    /// An external user was revoked from an app
+    /// </summary>
     EXTERNALUSERREVOKED,
 
+    /// <summary>
+    /// External access was killed by an admin
+    /// </summary>
     EXTERNALACCESSKILLEDBYADMIN
 
 }

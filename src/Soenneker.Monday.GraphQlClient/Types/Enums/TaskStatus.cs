@@ -7,18 +7,39 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum TaskStatus
 {
+    /// <summary>
+    /// Task is pending triage
+    /// </summary>
     PENDING,
 
+    /// <summary>
+    /// Task is queued to be worked on
+    /// </summary>
     TODO,
 
+    /// <summary>
+    /// Task is being worked on
+    /// </summary>
     INPROGRESS,
 
+    /// <summary>
+    /// Task is deferred
+    /// </summary>
     NOTNOW,
 
+    /// <summary>
+    /// Task is completed
+    /// </summary>
     DONE,
 
+    /// <summary>
+    /// Task is no longer relevant and should be archived
+    /// </summary>
     NOLONGERRELEVANT,
 
+    /// <summary>
+    /// Item was incorrectly classified as a task
+    /// </summary>
     NOTATASK
 
 }

@@ -7,52 +7,124 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum FormQuestionType
 {
+    /// <summary>
+    /// A yes/no checkbox question.
+    /// </summary>
     Boolean,
 
+    /// <summary>
+    /// A question that links to items on a connected board. Board configuration must be done through the column settings.
+    /// </summary>
     ConnectedBoards,
 
+    /// <summary>
+    /// A country selection question with a searchable dropdown.
+    /// </summary>
     Country,
 
+    /// <summary>
+    /// A date picker question with optional time selection.
+    /// </summary>
     Date,
 
+    /// <summary>
+    /// A date range question allowing start and end date selection.
+    /// </summary>
     DateRange,
 
+    /// <summary>
+    /// An email address input question with format validation.
+    /// </summary>
     Email,
 
+    /// <summary>
+    /// A file upload question for attachments.
+    /// </summary>
     File,
 
+    /// <summary>
+    /// A time input question for selecting an hour and minute.
+    /// </summary>
     HOUR,
 
+    /// <summary>
+    /// A URL/link input question with optional format validation.
+    /// </summary>
     Link,
 
+    /// <summary>
+    /// A location/address input question with optional geolocation autofill.
+    /// </summary>
     Location,
 
+    /// <summary>
+    /// A multi-line text input question for longer responses.
+    /// </summary>
     LongText,
 
+    /// <summary>
+    /// A multiple-choice question allowing several selections.
+    /// </summary>
     MultiSelect,
 
+    /// <summary>
+    /// A name input question mapped to the item name column on the board.
+    /// </summary>
     Name,
 
+    /// <summary>
+    /// A numeric input question.
+    /// </summary>
     Number,
 
+    /// <summary>
+    /// A people picker question for selecting monday.com users.
+    /// </summary>
     People,
 
+    /// <summary>
+    /// A phone number input question with optional country prefix.
+    /// </summary>
     Phone,
 
+    /// <summary>
+    /// A rating question with a configurable scale.
+    /// </summary>
     Rating,
 
+    /// <summary>
+    /// A single-line text input question.
+    /// </summary>
     ShortText,
 
+    /// <summary>
+    /// A signature capture question for collecting drawn or uploaded signatures.
+    /// </summary>
     Signature,
 
+    /// <summary>
+    /// A single-choice question allowing one selection.
+    /// </summary>
     SingleSelect,
 
+    /// <summary>
+    /// A subitems question that creates sub-items on the board. Sub-items columns must be configured through the board.
+    /// </summary>
     Subitems,
 
+    /// <summary>
+    /// An updates/comments question mapped to the item updates feed.
+    /// </summary>
     Updates,
 
+    /// <summary>
+    /// A text-only display block for adding instructions or context to a form.
+    /// </summary>
     DISPLAYTEXT,
 
+    /// <summary>
+    /// A page block that groups questions into a single page.
+    /// </summary>
     PAGEBLOCK
 
 }

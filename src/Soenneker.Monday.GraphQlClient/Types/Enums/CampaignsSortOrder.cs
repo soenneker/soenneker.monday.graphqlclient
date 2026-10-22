@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum CampaignsSortOrder
 {
+    /// <summary>
+    /// Ascending order
+    /// </summary>
     ASC,
 
+    /// <summary>
+    /// Descending order
+    /// </summary>
     DESC
 
 }

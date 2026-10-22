@@ -7,12 +7,24 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum BoardObjectType
 {
+    /// <summary>
+    /// Parent Board.
+    /// </summary>
     Board,
 
+    /// <summary>
+    /// Custom Object.
+    /// </summary>
     CustomObject,
 
+    /// <summary>
+    /// Document.
+    /// </summary>
     Document,
 
+    /// <summary>
+    /// Sub Items Board.
+    /// </summary>
     SubItemsBoard
 
 }

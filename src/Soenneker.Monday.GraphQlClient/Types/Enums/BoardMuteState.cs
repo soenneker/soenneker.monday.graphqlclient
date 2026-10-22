@@ -13,14 +13,29 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum BoardMuteState
 {
+    /// <summary>
+    /// The board is not muted at all (default state). This state is set by the board owner(s) and only they can change it.
+    /// </summary>
     NOTMUTED,
 
+    /// <summary>
+    /// All notifications for all users are muted on this board. This state is set by the board owner(s) and only they can change it.
+    /// </summary>
     MUTEALL,
 
+    /// <summary>
+    /// The current user will only be notified if mentioned or assigned on the board
+    /// </summary>
     MENTIONSANDASSIGNSONLY,
 
+    /// <summary>
+    /// The current user will only be notified for the enabled custom settings. configurable settings: IM_MENTIONED, IM_ASSIGNED, AUTOMATION_NOTIFY
+    /// </summary>
     CUSTOMSETTINGS,
 
+    /// <summary>
+    /// Only the current user has all notifications muted from this board
+    /// </summary>
     CURRENTUSERMUTEALL
 
 }

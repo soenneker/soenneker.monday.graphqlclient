@@ -7,10 +7,19 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum Kind
 {
+    /// <summary>
+    /// Represents an AI agent
+    /// </summary>
     Agent,
 
+    /// <summary>
+    /// Represents a person
+    /// </summary>
     Person,
 
+    /// <summary>
+    /// Represents a team
+    /// </summary>
     Team
 
 }

@@ -7,12 +7,24 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum AiColumnOutputLength
 {
+    /// <summary>
+    /// Output approximately one sentence.
+    /// </summary>
     Sentence,
 
+    /// <summary>
+    /// Output approximately one paragraph.
+    /// </summary>
     Paragraph,
 
+    /// <summary>
+    /// Output a brief, concise response.
+    /// </summary>
     Brief,
 
+    /// <summary>
+    /// Output a detailed, in-depth response.
+    /// </summary>
     InDepth
 
 }

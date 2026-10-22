@@ -7,12 +7,24 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum MessageTypeInput
 {
+    /// <summary>
+    /// A text message (triggers code generation)
+    /// </summary>
     TEXT,
 
+    /// <summary>
+    /// A question message (ask mode - no code generation, just answers)
+    /// </summary>
     ASK,
 
+    /// <summary>
+    /// An error message with a list of errors
+    /// </summary>
     ERROR,
 
+    /// <summary>
+    /// A plan mode message (planning phase before code generation)
+    /// </summary>
     PLAN
 
 }

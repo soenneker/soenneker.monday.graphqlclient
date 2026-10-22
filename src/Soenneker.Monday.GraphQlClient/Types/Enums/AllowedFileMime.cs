@@ -7,36 +7,84 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum AllowedFileMime
 {
+    /// <summary>
+    /// PNG image
+    /// </summary>
     IMAGEPNG,
 
+    /// <summary>
+    /// JPEG image
+    /// </summary>
     IMAGEJPEG,
 
+    /// <summary>
+    /// GIF image
+    /// </summary>
     IMAGEGIF,
 
+    /// <summary>
+    /// WebP image
+    /// </summary>
     IMAGEWEBP,
 
+    /// <summary>
+    /// AVIF image
+    /// </summary>
     IMAGEAVIF,
 
+    /// <summary>
+    /// HEIC image (iPhone/mobile)
+    /// </summary>
     IMAGEHEIC,
 
+    /// <summary>
+    /// SVG vector image
+    /// </summary>
     IMAGESVG,
 
+    /// <summary>
+    /// MP4 video
+    /// </summary>
     VIDEOMP4,
 
+    /// <summary>
+    /// WebM video
+    /// </summary>
     VIDEOWEBM,
 
+    /// <summary>
+    /// QuickTime video
+    /// </summary>
     VIDEOQUICKTIME,
 
+    /// <summary>
+    /// Ogg video
+    /// </summary>
     VIDEOOGG,
 
+    /// <summary>
+    /// PDF document
+    /// </summary>
     APPLICATIONPDF,
 
+    /// <summary>
+    /// CSV spreadsheet
+    /// </summary>
     TEXTCSV,
 
+    /// <summary>
+    /// Excel spreadsheet
+    /// </summary>
     APPLICATIONXLSX,
 
+    /// <summary>
+    /// Markdown document
+    /// </summary>
     TEXTMARKDOWN,
 
+    /// <summary>
+    /// Plain text document
+    /// </summary>
     TEXTPLAIN
 
 }

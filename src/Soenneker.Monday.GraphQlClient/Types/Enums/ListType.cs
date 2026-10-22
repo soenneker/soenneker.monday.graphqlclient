@@ -7,10 +7,19 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum ListType
 {
+    /// <summary>
+    /// A personal list owned by a user
+    /// </summary>
     PersonalList,
 
+    /// <summary>
+    /// A workspace-level list
+    /// </summary>
     Workspace,
 
+    /// <summary>
+    /// A customized list with specific settings
+    /// </summary>
     CustomizedList
 
 }

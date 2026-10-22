@@ -7,10 +7,19 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum ArtifactGenerationStatus
 {
+    /// <summary>
+    /// No generation activity in flight
+    /// </summary>
     IDLE,
 
+    /// <summary>
+    /// The artifact is being generated (create/update in flight)
+    /// </summary>
     INPROGRESS,
 
+    /// <summary>
+    /// The agent run producing this artifact has completed
+    /// </summary>
     FINALIZED
 
 }

@@ -7,10 +7,19 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum LLMThinkingEffort
 {
+    /// <summary>
+    /// Least reasoning; fastest responses
+    /// </summary>
     LOW,
 
+    /// <summary>
+    /// Balanced reasoning and speed
+    /// </summary>
     MEDIUM,
 
+    /// <summary>
+    /// Most reasoning; slowest responses
+    /// </summary>
     HIGH
 
 }

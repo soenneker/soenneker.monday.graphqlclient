@@ -7,12 +7,26 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum BoardBasicRoleName
 {
+    /// <summary>
+    /// Assigned Contributor role - Can edit content (items) only, and only for items
+    ///   where they are assigned in the specified assignee columns (Coming soon - not
+    ///   yet supported, please use the UI instead)
+    /// </summary>
     AssignedContributor,
 
+    /// <summary>
+    /// Contributor role - Can edit content (items) only, but not the structure (columns, groups) of the board
+    /// </summary>
     Contributor,
 
+    /// <summary>
+    /// Editor role - Can edit both the structure (columns, groups) and content (items) of the board
+    /// </summary>
     Editor,
 
+    /// <summary>
+    /// Viewer role - Read-only access to the board, cannot edit structure or content
+    /// </summary>
     Viewer
 
 }

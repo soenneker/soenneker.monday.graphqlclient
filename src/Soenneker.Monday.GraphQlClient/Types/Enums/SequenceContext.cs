@@ -7,6 +7,9 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum SequenceContext
 {
+    /// <summary>
+    /// Sequence is associated with a board
+    /// </summary>
     BOARD
 
 }

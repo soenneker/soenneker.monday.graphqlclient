@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum MirrorSum
 {
+    /// <summary>
+    /// Include only items whose status is considered "Done".
+    /// </summary>
     DONEONLY,
 
+    /// <summary>
+    /// Include items from all statuses.
+    /// </summary>
     ALLSTATUSES
 
 }

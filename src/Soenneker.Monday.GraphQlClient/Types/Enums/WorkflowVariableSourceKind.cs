@@ -4,14 +4,29 @@ namespace Soenneker.Monday.GraphQlClient;
 
 public enum WorkflowVariableSourceKind
 {
+    /// <summary>
+    /// A value defined by the user
+    /// </summary>
     UserConfig,
 
+    /// <summary>
+    /// A value from a previous node output
+    /// </summary>
     NodeResults,
 
+    /// <summary>
+    /// A value from a reference to another workflow variable
+    /// </summary>
     Reference,
 
+    /// <summary>
+    /// Points to the host ID value where the workflow is hosted (board ID, object ID, account ID, etc.). It's auto calculated during when the workflow runs
+    /// </summary>
     HostMetadata,
 
+    /// <summary>
+    /// A value fetched from an external context provider
+    /// </summary>
     ExternalContextProvider
 
 }

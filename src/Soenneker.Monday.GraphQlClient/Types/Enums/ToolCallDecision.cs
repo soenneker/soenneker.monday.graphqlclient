@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum ToolCallDecision
 {
+    /// <summary>
+    /// The tool call is approved for execution
+    /// </summary>
     APPROVED,
 
+    /// <summary>
+    /// The tool call is rejected and will not execute
+    /// </summary>
     REJECTED
 
 }

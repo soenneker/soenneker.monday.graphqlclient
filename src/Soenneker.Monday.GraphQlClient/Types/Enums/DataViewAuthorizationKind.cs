@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum DataViewAuthorizationKind
 {
+    /// <summary>
+    /// A monday.com board.
+    /// </summary>
     BOARD,
 
+    /// <summary>
+    /// A monday.com overview.
+    /// </summary>
     OVERVIEW,
 
     VIBEAPP

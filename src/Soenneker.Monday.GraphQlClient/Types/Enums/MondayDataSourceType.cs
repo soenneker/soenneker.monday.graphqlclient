@@ -7,10 +7,19 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum MondayDataSourceType
 {
+    /// <summary>
+    /// A Monday.com board as data source
+    /// </summary>
     BOARD,
 
+    /// <summary>
+    /// A Monday.com item as data source
+    /// </summary>
     ITEM,
 
+    /// <summary>
+    /// A Monday.com object as data source
+    /// </summary>
     OBJECT
 
 }

@@ -7,12 +7,24 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum UserPermitScopeKind
 {
+    /// <summary>
+    /// Account scope
+    /// </summary>
     ACCOUNT,
 
+    /// <summary>
+    /// Account product scope
+    /// </summary>
     ACCOUNTPRODUCT,
 
+    /// <summary>
+    /// Board scope
+    /// </summary>
     BOARD,
 
+    /// <summary>
+    /// Workspace scope
+    /// </summary>
     WORKSPACE
 
 }

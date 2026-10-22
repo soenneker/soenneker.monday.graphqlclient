@@ -7,12 +7,24 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum FormLogoSize
 {
+    /// <summary>
+    /// Small logo size for compact form branding, height of 32px, width will be scaled to maintain aspect ratio
+    /// </summary>
     Small,
 
+    /// <summary>
+    /// Medium logo size for standard form branding, height of 40px, width will be scaled to maintain aspect ratio
+    /// </summary>
     Medium,
 
+    /// <summary>
+    /// Large logo size for prominent form branding, height of 72px, width will be scaled to maintain aspect ratio
+    /// </summary>
     Large,
 
+    /// <summary>
+    /// Extra large logo size for maximum form branding impact, height of 96px, width will be scaled to maintain aspect ratio
+    /// </summary>
     ExtraLarge
 
 }

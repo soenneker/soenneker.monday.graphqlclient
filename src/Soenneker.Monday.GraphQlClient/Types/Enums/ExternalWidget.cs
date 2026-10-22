@@ -7,18 +7,39 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum ExternalWidget
 {
+    /// <summary>
+    /// Chart widgets for visual data representation including pie charts, bar charts, line graphs, and column charts. Used to display trends, comparisons, distributions, and relationships between data points over time or categories.
+    /// </summary>
     CHART,
 
+    /// <summary>
+    /// Number widgets for displaying numeric metrics such as accumulated sums, averages, counts, totals, percentages. Ideal for showing single-value metrics, counters, calculated aggregations, and key performance indicators in a prominent numeric format.
+    /// </summary>
     NUMBER,
 
+    /// <summary>
+    /// Battery widgets for progress tracking and completion status visualization. Displays progress bars, completion percentages, status indicators, and goal achievement metrics. Perfect for showing project completion, task progress, capacity utilization, and milestone tracking.
+    /// </summary>
     BATTERY,
 
+    /// <summary>
+    /// Calendar widgets for timeline and schedule visualization. Displays date and timeline column data in a traditional calendar format, supporting time slots, color-coded events by board/group/status, and multi-board aggregation. Ideal for project scheduling, deadline tracking, event planning, and time-based workflow visualization.
+    /// </summary>
     CALENDAR,
 
+    /// <summary>
+    /// A Gantt chart visualization of board timelines with dependencies, grouping, and coloring capabilities.
+    /// </summary>
     GANTT,
 
+    /// <summary>
+    /// App feature widgets for displaying custom application features. Used to embed and render app-specific functionality within dashboards and views.
+    /// </summary>
     APPFEATURE,
 
+    /// <summary>
+    /// ListView widgets for displaying cross-board items in a tabular list format with filtering and sorting.
+    /// </summary>
     LISTVIEW
 
 }

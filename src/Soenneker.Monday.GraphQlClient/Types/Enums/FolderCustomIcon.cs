@@ -7,14 +7,29 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum FolderCustomIcon
 {
+    /// <summary>
+    /// Folder
+    /// </summary>
     FOLDER,
 
+    /// <summary>
+    /// MoreBelow
+    /// </summary>
     MOREBELOW,
 
+    /// <summary>
+    /// MoreBelowFilled
+    /// </summary>
     MOREBELOWFILLED,
 
+    /// <summary>
+    /// No custom icon
+    /// </summary>
     NULL,
 
+    /// <summary>
+    /// Work
+    /// </summary>
     WORK
 
 }

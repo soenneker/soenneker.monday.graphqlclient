@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum BoardViewAccessLevel
 {
-    Edit,
+    /// <summary>
+    /// View
+    /// </summary>
+    View,
 
-    View
+    /// <summary>
+    /// Edit
+    /// </summary>
+    Edit
 
 }

@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum AppFeatureRelationKind
 {
+    /// <summary>
+    /// Dependency relation between app features.
+    /// </summary>
     DEPENDENCY,
 
+    /// <summary>
+    /// Hosting relation between app features.
+    /// </summary>
     HOSTING
 
 }

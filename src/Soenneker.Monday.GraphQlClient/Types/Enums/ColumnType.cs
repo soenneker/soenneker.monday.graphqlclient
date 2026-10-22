@@ -7,90 +7,216 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum ColumnType
 {
+    /// <summary>
+    /// Number items according to their order in the group/board
+    /// </summary>
     AutoNumber,
 
+    /// <summary>
+    /// Connect data from other boards
+    /// </summary>
     BoardRelation,
 
+    /// <summary>
+    /// Perform actions on items by clicking a button
+    /// </summary>
     Button,
 
+    /// <summary>
+    /// Check off items and see what's done at a glance
+    /// </summary>
     Checkbox,
 
+    /// <summary>
+    /// Manage a design system using a color palette
+    /// </summary>
     ColorPicker,
 
+    /// <summary>
+    /// Choose a country
+    /// </summary>
     Country,
 
+    /// <summary>
+    /// Add the item's creator and creation date automatically
+    /// </summary>
     CreationLog,
 
+    /// <summary>
+    /// Add dates like deadlines to ensure you never drop the ball
+    /// </summary>
     Date,
 
+    /// <summary>
+    /// Set up dependencies between items in the board
+    /// </summary>
     Dependency,
 
-    DirectDoc,
-
+    /// <summary>
+    /// Document your work and increase collaboration
+    /// </summary>
     Doc,
 
+    /// <summary>
+    /// Create a dropdown list of options
+    /// </summary>
     Dropdown,
 
+    /// <summary>
+    /// Email team members and clients directly from your board
+    /// </summary>
     Email,
 
+    /// <summary>
+    /// Add files &amp; docs to your item
+    /// </summary>
     File,
 
+    /// <summary>
+    /// Use functions to manipulate data across multiple columns
+    /// </summary>
     Formula,
 
     Group,
 
+    /// <summary>
+    /// Add times to manage and schedule tasks, shifts and more
+    /// </summary>
     Hour,
 
+    /// <summary>
+    /// Integration is really cool...
+    /// </summary>
     Integration,
 
+    /// <summary>
+    /// Show all item's assignees
+    /// </summary>
     ItemAssignees,
 
+    /// <summary>
+    /// Show a unique ID for each item
+    /// </summary>
     ItemId,
 
+    /// <summary>
+    /// Add the person that last updated the item and the date
+    /// </summary>
     LastUpdated,
 
+    /// <summary>
+    /// Simply hyperlink to any website
+    /// </summary>
     Link,
 
+    /// <summary>
+    /// Place multiple locations on a geographic map
+    /// </summary>
     Location,
 
+    /// <summary>
+    /// Add large amounts of text without changing column width
+    /// </summary>
     LongText,
 
+    /// <summary>
+    /// Show and edit columns' data from connected boards
+    /// </summary>
     Mirror,
 
-    Name,
-
+    /// <summary>
+    /// Add revenue, costs, time estimations and more
+    /// </summary>
     Numbers,
 
+    /// <summary>
+    /// Assign people to improve team work
+    /// </summary>
     People,
 
-    Person,
-
+    /// <summary>
+    /// Call your contacts directly from monday.com
+    /// </summary>
     Phone,
 
+    /// <summary>
+    /// Show progress by combining status columns in a battery
+    /// </summary>
     Progress,
 
+    /// <summary>
+    /// Rate or rank anything visually
+    /// </summary>
     Rating,
 
+    /// <summary>
+    /// Get an instant overview of where things stand
+    /// </summary>
     Status,
 
-    Subtasks,
-
+    /// <summary>
+    /// Add tags to categorize items across multiple boards
+    /// </summary>
     Tags,
 
+    /// <summary>
+    /// Assign a full team to an item
+    /// </summary>
     Team,
 
+    /// <summary>
+    /// Add textual information e.g. addresses, names or keywords
+    /// </summary>
     Text,
 
-    TimeTracking,
-
+    /// <summary>
+    /// Visualize your item’s duration, with a start and end date
+    /// </summary>
     Timeline,
 
-    Unsupported,
+    /// <summary>
+    /// Easily track time spent on each item, group, and board
+    /// </summary>
+    TimeTracking,
 
+    /// <summary>
+    /// Vote on an item e.g. pick a new feature or a favorite lunch place
+    /// </summary>
     Vote,
 
+    /// <summary>
+    /// Select the week on which each item should be completed
+    /// </summary>
     Week,
 
-    WorldClock
+    /// <summary>
+    /// Keep track of the time anywhere in the world
+    /// </summary>
+    WorldClock,
+
+    /// <summary>
+    /// Unsupported column type
+    /// </summary>
+    Unsupported,
+
+    /// <summary>
+    /// Name is really cool...
+    /// </summary>
+    Name,
+
+    /// <summary>
+    /// Assign a person to increase ownership and accountability (deprecated)
+    /// </summary>
+    Person,
+
+    /// <summary>
+    /// Document your work and increase collaboration
+    /// </summary>
+    DirectDoc,
+
+    /// <summary>
+    /// Use the subtasks column to create another level of tasks
+    /// </summary>
+    Subtasks
 
 }

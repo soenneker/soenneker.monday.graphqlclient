@@ -7,6 +7,9 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum WorkflowBlockKind
 {
+    /// <summary>
+    /// A wait block
+    /// </summary>
     WAIT
 
 }

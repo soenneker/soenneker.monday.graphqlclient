@@ -7,12 +7,24 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum BoardEditPermissions
 {
+    /// <summary>
+    /// Assignee
+    /// </summary>
     Assignee,
 
+    /// <summary>
+    /// Collaborators
+    /// </summary>
     Collaborators,
 
+    /// <summary>
+    /// Everyone
+    /// </summary>
     Everyone,
 
+    /// <summary>
+    /// Owners
+    /// </summary>
     Owners
 
 }

@@ -7,10 +7,19 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum CreateUserInvitationMethod
 {
+    /// <summary>
+    /// Created as an API user.
+    /// </summary>
     APIUSERCREATION,
 
+    /// <summary>
+    /// Created as an agent user.
+    /// </summary>
     AGENTUSERCREATION,
 
+    /// <summary>
+    /// Created via system creation flow.
+    /// </summary>
     SYSTEMCREATION
 
 }

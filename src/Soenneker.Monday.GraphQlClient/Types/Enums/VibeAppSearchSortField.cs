@@ -7,12 +7,24 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum VibeAppSearchSortField
 {
+    /// <summary>
+    /// Sort by last updated date
+    /// </summary>
     UPDATEDAT,
 
+    /// <summary>
+    /// Sort by creation date
+    /// </summary>
     CREATEDAT,
 
+    /// <summary>
+    /// Sort alphabetically by app name
+    /// </summary>
     NAME,
 
+    /// <summary>
+    /// Sort by distinct viewers over the last 30 days. Ignored (falls back to UPDATED_AT) when search_term is set.
+    /// </summary>
     VIEWCOUNT
 
 }

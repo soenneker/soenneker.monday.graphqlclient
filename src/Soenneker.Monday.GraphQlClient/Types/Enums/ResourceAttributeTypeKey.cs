@@ -7,22 +7,49 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum ResourceAttributeTypeKey
 {
+    /// <summary>
+    /// Resource name
+    /// </summary>
     NAME,
 
+    /// <summary>
+    /// Resource email address
+    /// </summary>
     EMAIL,
 
+    /// <summary>
+    /// Teams resource is a member of
+    /// </summary>
     TEAMS,
 
+    /// <summary>
+    /// Base role of the resource
+    /// </summary>
     BASEROLE,
 
+    /// <summary>
+    /// Resource status
+    /// </summary>
     STATUS,
 
+    /// <summary>
+    /// Resource location
+    /// </summary>
     LOCATION,
 
+    /// <summary>
+    /// Resource skills
+    /// </summary>
     SKILLS,
 
+    /// <summary>
+    /// Resource job role
+    /// </summary>
     JOBROLE,
 
+    /// <summary>
+    /// Resource managers of the resource
+    /// </summary>
     RESOURCEMANAGER
 
 }

@@ -7,16 +7,34 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum JobState
 {
+    /// <summary>
+    /// Job is queued but not yet started
+    /// </summary>
     PENDING,
 
+    /// <summary>
+    /// Job is actively executing
+    /// </summary>
     RUNNING,
 
+    /// <summary>
+    /// Job completed successfully
+    /// </summary>
     COMPLETED,
 
+    /// <summary>
+    /// Job failed
+    /// </summary>
     FAILED,
 
+    /// <summary>
+    /// Job expired before completion
+    /// </summary>
     EXPIRED,
 
+    /// <summary>
+    /// Job was cancelled
+    /// </summary>
     CANCELLED
 
 }

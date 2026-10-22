@@ -7,6 +7,9 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum ContextSourceType
 {
+    /// <summary>
+    /// A monday Doc, identified by the id in its URL
+    /// </summary>
     DOC
 
 }

@@ -7,12 +7,24 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum UserKind
 {
+    /// <summary>
+    /// All users in account.
+    /// </summary>
     All,
 
-    Guests,
-
+    /// <summary>
+    /// Only company members.
+    /// </summary>
     NonGuests,
 
+    /// <summary>
+    /// Only guests.
+    /// </summary>
+    Guests,
+
+    /// <summary>
+    /// All non pending members.
+    /// </summary>
     NonPending
 
 }

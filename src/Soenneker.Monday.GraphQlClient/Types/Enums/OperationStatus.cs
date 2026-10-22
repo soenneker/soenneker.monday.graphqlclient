@@ -7,14 +7,29 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum OperationStatus
 {
+    /// <summary>
+    /// The operation is queued and waiting to be processed.
+    /// </summary>
     QUEUED,
 
+    /// <summary>
+    /// The operation is currently being processed.
+    /// </summary>
     PROCESSING,
 
+    /// <summary>
+    /// The operation has completed successfully.
+    /// </summary>
     COMPLETED,
 
+    /// <summary>
+    /// The operation has failed.
+    /// </summary>
     FAILED,
 
+    /// <summary>
+    /// Waiting for the session to be created.
+    /// </summary>
     SESSIONPENDING
 
 }

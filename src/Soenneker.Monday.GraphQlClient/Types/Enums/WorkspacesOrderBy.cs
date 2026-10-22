@@ -7,6 +7,9 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum WorkspacesOrderBy
 {
+    /// <summary>
+    /// The rank order of the workspace creation time (desc).
+    /// </summary>
     CreatedAt
 
 }

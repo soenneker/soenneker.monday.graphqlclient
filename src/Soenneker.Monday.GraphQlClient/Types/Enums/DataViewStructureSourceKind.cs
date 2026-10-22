@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum DataViewStructureSourceKind
 {
+    /// <summary>
+    /// An entity, with its implementing boards listed in managed_board_ids.
+    /// </summary>
     ENTITY,
 
+    /// <summary>
+    /// A board attached directly to the data view.
+    /// </summary>
     STANDALONEBOARD
 
 }

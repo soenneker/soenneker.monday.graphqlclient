@@ -7,6 +7,9 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum WorkflowTemplateContext
 {
+    /// <summary>
+    /// Using this context will make the template accessible in the Lite Builder
+    /// </summary>
     LITEBUILDER
 
 }

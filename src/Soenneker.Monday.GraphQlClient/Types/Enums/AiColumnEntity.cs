@@ -7,26 +7,59 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum AiColumnEntity
 {
+    /// <summary>
+    /// Extract email addresses.
+    /// </summary>
     EmailAddress,
 
+    /// <summary>
+    /// Extract first names.
+    /// </summary>
     FirstName,
 
+    /// <summary>
+    /// Extract last names.
+    /// </summary>
     LastName,
 
+    /// <summary>
+    /// Extract phone numbers.
+    /// </summary>
     PhoneNumber,
 
+    /// <summary>
+    /// Extract company names.
+    /// </summary>
     CompanyName,
 
+    /// <summary>
+    /// Extract domain names.
+    /// </summary>
     DomainName,
 
+    /// <summary>
+    /// Extract URLs.
+    /// </summary>
     Url,
 
+    /// <summary>
+    /// Extract dates.
+    /// </summary>
     Date,
 
+    /// <summary>
+    /// Extract times.
+    /// </summary>
     Time,
 
+    /// <summary>
+    /// Extract years.
+    /// </summary>
     Year,
 
+    /// <summary>
+    /// Extract a custom entity defined by custom_instructions.
+    /// </summary>
     Custom
 
 }

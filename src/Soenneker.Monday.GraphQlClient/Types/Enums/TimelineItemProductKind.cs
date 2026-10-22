@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum TimelineItemProductKind
 {
+    /// <summary>
+    /// Service product
+    /// </summary>
     Service,
 
+    /// <summary>
+    /// CRM product
+    /// </summary>
     Crm
 
 }

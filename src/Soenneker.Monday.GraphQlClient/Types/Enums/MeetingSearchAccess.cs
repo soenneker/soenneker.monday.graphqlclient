@@ -7,12 +7,24 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum MeetingSearchAccess
 {
+    /// <summary>
+    /// Only meetings owned by the caller.
+    /// </summary>
     OWN,
 
+    /// <summary>
+    /// Meetings shared directly with the caller.
+    /// </summary>
     SHAREDWITHME,
 
+    /// <summary>
+    /// Meetings shared with the caller's account.
+    /// </summary>
     SHAREDWITHACCOUNT,
 
+    /// <summary>
+    /// All accessible meetings (default).
+    /// </summary>
     ALL
 
 }

@@ -7,14 +7,29 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum WorkflowCutoffNode
 {
+    /// <summary>
+    /// Do not run any workflow steps synchronously. Enqueues the job and returns immediately.
+    /// </summary>
     IMMEDIATELY,
 
+    /// <summary>
+    /// Stop after discovery node. Returns after discovery Q&amp;A, before planning.
+    /// </summary>
     DISCOVERY,
 
+    /// <summary>
+    /// Stop after planning node. Returns plan only, no entities are created.
+    /// </summary>
     PLANNING,
 
+    /// <summary>
+    /// Stop after init-entities node. Returns structure preview with board/dashboard IDs.
+    /// </summary>
     STRUCTURECREATION,
 
+    /// <summary>
+    /// Stop after join node. Returns after all content (items, automations, widgets) is created.
+    /// </summary>
     CONTENTCREATION
 
 }

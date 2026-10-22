@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum FirstDayOfTheWeek
 {
+    /// <summary>
+    /// Monday
+    /// </summary>
     Monday,
 
+    /// <summary>
+    /// Sunday
+    /// </summary>
     Sunday
 
 }

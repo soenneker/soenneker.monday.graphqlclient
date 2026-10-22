@@ -7,10 +7,19 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum DirectoryResourceKind
 {
+    /// <summary>
+    /// A member or admin user
+    /// </summary>
     USER,
 
+    /// <summary>
+    /// A view-only user
+    /// </summary>
     VIEWER,
 
+    /// <summary>
+    /// A guest user
+    /// </summary>
     GUEST
 
 }

@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum ActivityGroupBy
 {
+    /// <summary>
+    /// Group counts by board ID
+    /// </summary>
     BOARD,
 
+    /// <summary>
+    /// Group counts by user ID
+    /// </summary>
     USER
 
 }

@@ -7,10 +7,19 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum AppFeatureReleaseKind
 {
+    /// <summary>
+    /// Server-side application hosted on monday code infrastructure
+    /// </summary>
     SERVERSIDECODE,
 
+    /// <summary>
+    /// Client-side application deployed via monday.com CLI
+    /// </summary>
     CLIENTSIDECODE,
 
+    /// <summary>
+    /// Externally hosted application loaded via iframe
+    /// </summary>
     EXTERNALHOSTING
 
 }

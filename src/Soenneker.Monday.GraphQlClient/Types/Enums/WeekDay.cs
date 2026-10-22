@@ -7,18 +7,39 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum WeekDay
 {
+    /// <summary>
+    /// Sunday
+    /// </summary>
     SUNDAY,
 
+    /// <summary>
+    /// Monday
+    /// </summary>
     MONDAY,
 
+    /// <summary>
+    /// Tuesday
+    /// </summary>
     TUESDAY,
 
+    /// <summary>
+    /// Wednesday
+    /// </summary>
     WEDNESDAY,
 
+    /// <summary>
+    /// Thursday
+    /// </summary>
     THURSDAY,
 
+    /// <summary>
+    /// Friday
+    /// </summary>
     FRIDAY,
 
+    /// <summary>
+    /// Saturday
+    /// </summary>
     SATURDAY
 
 }

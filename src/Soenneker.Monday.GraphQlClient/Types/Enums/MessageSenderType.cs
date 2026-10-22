@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum MessageSenderType
 {
+    /// <summary>
+    /// A human user.
+    /// </summary>
     USER,
 
+    /// <summary>
+    /// An AI agent.
+    /// </summary>
     AGENT
 
 }

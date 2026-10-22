@@ -7,10 +7,19 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum NonImportableColumns
 {
+    /// <summary>
+    /// Include non-importable columns using the existing export strategy output.
+    /// </summary>
     INCLUDE,
 
+    /// <summary>
+    /// Omit non-importable columns from the CSV entirely.
+    /// </summary>
     SKIP,
 
+    /// <summary>
+    /// Fail the export if any non-importable column would be included.
+    /// </summary>
     ERROR
 
 }

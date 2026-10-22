@@ -7,18 +7,39 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum DataViewSourceColumnUnavailableCode
 {
+    /// <summary>
+    /// The column was deleted from the board.
+    /// </summary>
     COLUMNDELETED,
 
+    /// <summary>
+    /// The formula is not valid.
+    /// </summary>
     FORMULAINVALID,
 
+    /// <summary>
+    /// The formula references a column that does not exist.
+    /// </summary>
     FORMULAMISSINGCOLUMN,
 
+    /// <summary>
+    /// The formula uses a function that cannot be materialized.
+    /// </summary>
     FORMULAUNSUPPORTEDFUNCTION,
 
+    /// <summary>
+    /// The formula reads a column type that cannot be materialized.
+    /// </summary>
     FORMULAUNSUPPORTEDCOLUMNTYPE,
 
+    /// <summary>
+    /// The formula depends on columns nested deeper than is supported.
+    /// </summary>
     FORMULAMAXDEPTHEXCEEDED,
 
+    /// <summary>
+    /// The formula reads a column in a way that cannot be materialized.
+    /// </summary>
     FORMULAUNSUPPORTEDREFERENCE
 
 }

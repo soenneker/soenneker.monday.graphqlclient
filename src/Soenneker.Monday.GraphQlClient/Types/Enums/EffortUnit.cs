@@ -7,14 +7,29 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum EffortUnit
 {
+    /// <summary>
+    /// Effort per day (hours)
+    /// </summary>
     DAILY,
 
+    /// <summary>
+    /// Effort per week (hours)
+    /// </summary>
     WEEKLY,
 
+    /// <summary>
+    /// Effort per month (hours)
+    /// </summary>
     MONTHLY,
 
+    /// <summary>
+    /// Full-time equivalent (0-1 ratio)
+    /// </summary>
     FTE,
 
+    /// <summary>
+    /// Total effort for the allocation period
+    /// </summary>
     TOTAL
 
 }

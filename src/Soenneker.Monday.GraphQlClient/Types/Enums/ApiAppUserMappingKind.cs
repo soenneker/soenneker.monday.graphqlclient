@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum ApiAppUserMappingKind
 {
+    /// <summary>
+    /// An AI user acting on behalf of an API app.
+    /// </summary>
     AGENTMEMBER,
 
+    /// <summary>
+    /// A Vibe-backed user acting on behalf of an API app.
+    /// </summary>
     VIBEUSER
 
 }

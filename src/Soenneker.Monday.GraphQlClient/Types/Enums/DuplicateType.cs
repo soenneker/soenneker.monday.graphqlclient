@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum DuplicateType
 {
+    /// <summary>
+    /// Creates a clean copy with only the document structure and content blocks. Best for creating templates or fresh copies.
+    /// </summary>
     DuplicateDocWithContent,
 
+    /// <summary>
+    /// Creates a complete copy including document structure, content blocks, and all comments/update history. Use for full backups.
+    /// </summary>
     DuplicateDocWithContentAndUpdates
 
 }

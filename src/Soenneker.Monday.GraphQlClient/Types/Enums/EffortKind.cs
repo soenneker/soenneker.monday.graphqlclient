@@ -7,12 +7,24 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum EffortKind
 {
+    /// <summary>
+    /// Allocated effort hours.
+    /// </summary>
     ALLOCATED,
 
+    /// <summary>
+    /// Planned effort hours.
+    /// </summary>
     PLANNED,
 
+    /// <summary>
+    /// Spent effort hours.
+    /// </summary>
     SPENT,
 
+    /// <summary>
+    /// Available capacity hours.
+    /// </summary>
     AVAILABLE
 
 }

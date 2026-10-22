@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum BoardHierarchy
 {
+    /// <summary>
+    /// classic
+    /// </summary>
     Classic,
 
+    /// <summary>
+    /// multilevel of items
+    /// </summary>
     MultiLevel
 
 }

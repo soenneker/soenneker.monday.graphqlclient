@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum DependencyRelatedColumnTypes
 {
+    /// <summary>
+    /// Date column
+    /// </summary>
     DATE,
 
+    /// <summary>
+    /// Timeline column
+    /// </summary>
     TIMELINE
 
 }

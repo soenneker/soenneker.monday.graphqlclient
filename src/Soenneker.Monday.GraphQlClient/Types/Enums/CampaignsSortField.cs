@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum CampaignsSortField
 {
+    /// <summary>
+    /// Sort by campaign name
+    /// </summary>
     NAME,
 
+    /// <summary>
+    /// Sort by creation date
+    /// </summary>
     CREATEDAT
 
 }

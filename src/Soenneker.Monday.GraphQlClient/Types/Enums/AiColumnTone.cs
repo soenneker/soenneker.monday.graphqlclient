@@ -7,20 +7,44 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum AiColumnTone
 {
+    /// <summary>
+    /// Warm, understanding, and emotionally aware tone.
+    /// </summary>
     Empathic,
 
+    /// <summary>
+    /// Persuasive, marketing-oriented tone.
+    /// </summary>
     Promotional,
 
+    /// <summary>
+    /// Assertive and authoritative tone.
+    /// </summary>
     Confident,
 
+    /// <summary>
+    /// Formal, business-appropriate tone.
+    /// </summary>
     Professional,
 
+    /// <summary>
+    /// Conversational, everyday tone.
+    /// </summary>
     Natural,
 
+    /// <summary>
+    /// Relaxed, informal tone.
+    /// </summary>
     Casual,
 
+    /// <summary>
+    /// Approachable, personable tone.
+    /// </summary>
     Friendly,
 
+    /// <summary>
+    /// Preserve the same tone as the input text.
+    /// </summary>
     Same
 
 }

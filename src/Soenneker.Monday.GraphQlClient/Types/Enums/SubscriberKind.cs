@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum SubscriberKind
 {
+    /// <summary>
+    /// User will be added as an owner of the object, granting them full control permissions.
+    /// </summary>
     OWNER,
 
+    /// <summary>
+    /// User will be added as a subscriber to the object, receiving notifications about changes.
+    /// </summary>
     SUBSCRIBER
 
 }

@@ -7,12 +7,24 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum ViewKind
 {
+    /// <summary>
+    /// Dashboard view for displaying dashboard view
+    /// </summary>
     DASHBOARD,
 
+    /// <summary>
+    /// Table view for displaying items in a structured table format
+    /// </summary>
     TABLE,
 
+    /// <summary>
+    /// Form view for input and data entry
+    /// </summary>
     FORM,
 
+    /// <summary>
+    /// App view for feature-specific display
+    /// </summary>
     APP
 
 }

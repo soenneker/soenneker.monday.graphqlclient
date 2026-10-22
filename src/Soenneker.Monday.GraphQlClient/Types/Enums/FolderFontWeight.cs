@@ -7,14 +7,29 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum FolderFontWeight
 {
+    /// <summary>
+    /// font-weight-bold
+    /// </summary>
     FONTWEIGHTBOLD,
 
+    /// <summary>
+    /// font-weight-light
+    /// </summary>
     FONTWEIGHTLIGHT,
 
+    /// <summary>
+    /// font-weight-normal
+    /// </summary>
     FONTWEIGHTNORMAL,
 
+    /// <summary>
+    /// font-weight-very-light
+    /// </summary>
     FONTWEIGHTVERYLIGHT,
 
+    /// <summary>
+    /// No font weight
+    /// </summary>
     NULL
 
 }

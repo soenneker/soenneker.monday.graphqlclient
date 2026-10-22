@@ -7,50 +7,119 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum TimelineItemKind
 {
+    /// <summary>
+    /// Email communication
+    /// </summary>
     Email,
 
+    /// <summary>
+    /// Google Calendar event
+    /// </summary>
     GoogleCalendar,
 
+    /// <summary>
+    /// Outlook Calendar event
+    /// </summary>
     OutlookCalendar,
 
+    /// <summary>
+    /// Zoom meeting
+    /// </summary>
     Zoom,
 
+    /// <summary>
+    /// General activity
+    /// </summary>
     Activity,
 
+    /// <summary>
+    /// Custom activity
+    /// </summary>
     Custom,
 
+    /// <summary>
+    /// Note
+    /// </summary>
     Note,
 
+    /// <summary>
+    /// Video meeting
+    /// </summary>
     VideoMeeting,
 
+    /// <summary>
+    /// Phone call
+    /// </summary>
     PhoneCall,
 
+    /// <summary>
+    /// Meeting
+    /// </summary>
     Meeting,
 
+    /// <summary>
+    /// AI assistant interaction
+    /// </summary>
     AiAssistant,
 
+    /// <summary>
+    /// AI-generated reply
+    /// </summary>
     AiReply,
 
+    /// <summary>
+    /// Portal interaction
+    /// </summary>
     Portal,
 
+    /// <summary>
+    /// Demo email
+    /// </summary>
     DemoEmail,
 
+    /// <summary>
+    /// AI-generated summary
+    /// </summary>
     AiSummary,
 
+    /// <summary>
+    /// Form submission
+    /// </summary>
     Form,
 
+    /// <summary>
+    /// Portfolio status update
+    /// </summary>
     PortfolioStatus,
 
+    /// <summary>
+    /// Sequences email
+    /// </summary>
     SequencesEmail,
 
+    /// <summary>
+    /// Outreach expert phone call
+    /// </summary>
     OutreachExpertPhoneCall,
 
+    /// <summary>
+    /// outreachExpertPhoneCallV2
+    /// </summary>
     OutreachExpertPhoneCallV2,
 
+    /// <summary>
+    /// Merged tickets
+    /// </summary>
     MergedTickets,
 
+    /// <summary>
+    /// Custom internal app interaction
+    /// </summary>
     CustomInternalApp,
 
+    /// <summary>
+    /// Campaign event
+    /// </summary>
     Campaigns
 
 }

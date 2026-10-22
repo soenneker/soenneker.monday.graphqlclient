@@ -7,10 +7,19 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum DocKind
 {
+    /// <summary>
+    /// Private document
+    /// </summary>
     @Private,
 
+    /// <summary>
+    /// Public document
+    /// </summary>
     @Public,
 
+    /// <summary>
+    /// Shareable document
+    /// </summary>
     Share
 
 }

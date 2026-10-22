@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum PrivacyKind
 {
+    /// <summary>
+    /// Private objects are only visible to specific users who are members of the object.
+    /// </summary>
     PRIVATE,
 
+    /// <summary>
+    /// Public objects are visible to all users within the account, unless their access is blocked on a higher level in the hierarchy, or by specific object permission.
+    /// </summary>
     PUBLIC
 
 }

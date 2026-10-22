@@ -7,24 +7,54 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum CampaignsAnalyticsEventKind
 {
+    /// <summary>
+    /// Email was bounced back
+    /// </summary>
     EMAILBOUNCED,
 
+    /// <summary>
+    /// Email was successfully delivered
+    /// </summary>
     EMAILDELIVERED,
 
+    /// <summary>
+    /// Email was sent
+    /// </summary>
     EMAILSENT,
 
+    /// <summary>
+    /// Recipient marked email as spam
+    /// </summary>
     EMAILRECIPIENTCOMPLAINT,
 
+    /// <summary>
+    /// Recipient unsubscribed
+    /// </summary>
     EMAILRECIPIENTUNSUBSCRIBED,
 
+    /// <summary>
+    /// email_recipient_group_unsubscribed
+    /// </summary>
     EMAILRECIPIENTGROUPUNSUBSCRIBED,
 
+    /// <summary>
+    /// email_recipient_group_resubscribed
+    /// </summary>
     EMAILRECIPIENTGROUPRESUBSCRIBED,
 
+    /// <summary>
+    /// Email was dropped before sending
+    /// </summary>
     EMAILDROPPED,
 
+    /// <summary>
+    /// Email was opened by recipient
+    /// </summary>
     EMAILOPENED,
 
+    /// <summary>
+    /// Link in email was clicked by recipient
+    /// </summary>
     EMAILCLICKED
 
 }

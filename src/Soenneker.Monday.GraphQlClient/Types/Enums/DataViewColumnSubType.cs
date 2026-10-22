@@ -93,6 +93,9 @@ public enum DataViewColumnSubType
 
     Subtasks,
 
+    /// <summary>
+    /// A resource connect-boards column.
+    /// </summary>
     Resource
 
 }

@@ -7,12 +7,24 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum AppVersionStatus
 {
+    /// <summary>
+    /// Version is in development and not yet live
+    /// </summary>
     DRAFT,
 
+    /// <summary>
+    /// Version is live and available to users
+    /// </summary>
     LIVE,
 
+    /// <summary>
+    /// Version has been superseded by a newer version
+    /// </summary>
     DEPRECATED,
 
+    /// <summary>
+    /// Version is in the process of being promoted
+    /// </summary>
     PROMOTING
 
 }

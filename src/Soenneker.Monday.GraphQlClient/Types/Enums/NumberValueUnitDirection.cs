@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum NumberValueUnitDirection
 {
+    /// <summary>
+    /// The symbol is placed on the left of the number
+    /// </summary>
     Left,
 
+    /// <summary>
+    /// The symbol is placed on the right of the number
+    /// </summary>
     Right
 
 }

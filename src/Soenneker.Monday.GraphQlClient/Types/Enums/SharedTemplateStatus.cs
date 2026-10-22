@@ -7,16 +7,34 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum SharedTemplateStatus
 {
+    /// <summary>
+    /// Template is a draft and not visible publicly
+    /// </summary>
     DRAFT,
 
+    /// <summary>
+    /// Template is awaiting review
+    /// </summary>
     PENDINGREVIEW,
 
+    /// <summary>
+    /// Template is published and publicly visible
+    /// </summary>
     PUBLISHED,
 
+    /// <summary>
+    /// Template was rejected during review
+    /// </summary>
     REJECTED,
 
+    /// <summary>
+    /// Template is unlisted and not discoverable
+    /// </summary>
     UNLISTED,
 
+    /// <summary>
+    /// Template has been archived
+    /// </summary>
     ARCHIVED
 
 }

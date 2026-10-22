@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum GroupOperator
 {
+    /// <summary>
+    /// All conditions in the group must be met
+    /// </summary>
     AND,
 
+    /// <summary>
+    /// At least one condition in the group must be met
+    /// </summary>
     OR
 
 }

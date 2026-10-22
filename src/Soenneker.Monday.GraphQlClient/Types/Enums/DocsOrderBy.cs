@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum DocsOrderBy
 {
+    /// <summary>
+    /// The rank order of the document creation time (desc).
+    /// </summary>
     CreatedAt,
 
+    /// <summary>
+    /// The last time the user making the request viewd the document (desc).
+    /// </summary>
     UsedAt
 
 }

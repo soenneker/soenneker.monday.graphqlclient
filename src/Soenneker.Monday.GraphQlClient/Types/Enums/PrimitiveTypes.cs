@@ -7,16 +7,34 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum PrimitiveTypes
 {
+    /// <summary>
+    /// String type for text values
+    /// </summary>
     STRING,
 
+    /// <summary>
+    /// Number type for integer values
+    /// </summary>
     NUMBER,
 
+    /// <summary>
+    /// Float type for decimal values
+    /// </summary>
     FLOAT,
 
+    /// <summary>
+    /// Boolean type for true/false values
+    /// </summary>
     BOOLEAN,
 
+    /// <summary>
+    /// Date type for date values
+    /// </summary>
     DATE,
 
+    /// <summary>
+    /// Hour type for hour values
+    /// </summary>
     HOUR
 
 }

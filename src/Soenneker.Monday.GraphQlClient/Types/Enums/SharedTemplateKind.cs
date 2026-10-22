@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum SharedTemplateKind
 {
+    /// <summary>
+    /// A remix template
+    /// </summary>
     REMIX,
 
+    /// <summary>
+    /// A marketplace template
+    /// </summary>
     MARKETPLACE
 
 }

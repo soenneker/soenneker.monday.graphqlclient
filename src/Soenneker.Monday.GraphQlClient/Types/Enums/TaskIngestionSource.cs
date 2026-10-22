@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum TaskIngestionSource
 {
+    /// <summary>
+    /// Event from an update mention
+    /// </summary>
     UPDATEMENTION,
 
+    /// <summary>
+    /// Event from a person/creator column change (user assigned to item)
+    /// </summary>
     USERASSIGNED
 
 }

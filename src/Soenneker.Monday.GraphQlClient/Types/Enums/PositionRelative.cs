@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum PositionRelative
 {
+    /// <summary>
+    /// position after at the given entity.
+    /// </summary>
     AfterAt,
 
+    /// <summary>
+    /// position before at the given entity.
+    /// </summary>
     BeforeAt
 
 }

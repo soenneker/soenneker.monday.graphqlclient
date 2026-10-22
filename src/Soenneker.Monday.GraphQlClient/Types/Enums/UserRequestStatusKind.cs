@@ -7,10 +7,19 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum UserRequestStatusKind
 {
+    /// <summary>
+    /// The request is pending admin action
+    /// </summary>
     Pending,
 
+    /// <summary>
+    /// The request has been approved
+    /// </summary>
     Approved,
 
+    /// <summary>
+    /// The request has been declined
+    /// </summary>
     Declined
 
 }

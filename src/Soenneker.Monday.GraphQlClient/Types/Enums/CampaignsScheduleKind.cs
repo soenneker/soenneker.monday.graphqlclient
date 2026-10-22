@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum CampaignsScheduleKind
 {
+    /// <summary>
+    /// Send immediately
+    /// </summary>
     NOW,
 
+    /// <summary>
+    /// Send at scheduled time
+    /// </summary>
     LATER
 
 }

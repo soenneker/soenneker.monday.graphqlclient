@@ -7,10 +7,19 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum VibeAppSearchScope
 {
+    /// <summary>
+    /// Apps the caller owns or was invited to, plus account-published apps they do not own
+    /// </summary>
     ALL,
 
+    /// <summary>
+    /// Apps the caller owns or was invited to, any publish state
+    /// </summary>
     MY,
 
+    /// <summary>
+    /// Account-published apps the caller does not own
+    /// </summary>
     ACCOUNT
 
 }

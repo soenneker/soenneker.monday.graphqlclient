@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum FilterMode
 {
+    /// <summary>
+    /// Only create the specified building block types.
+    /// </summary>
     ALLOWONLY,
 
+    /// <summary>
+    /// Create all building block types except those specified.
+    /// </summary>
     EXCLUDE
 
 }

@@ -7,6 +7,9 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum UsersSortField
 {
+    /// <summary>
+    /// Sort by the date the user was created.
+    /// </summary>
     CREATEDAT
 
 }

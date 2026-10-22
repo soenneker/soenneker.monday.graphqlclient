@@ -7,12 +7,24 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum BoardAttributes
 {
+    /// <summary>
+    /// Object that contains available Video conferences on the board.
+    /// </summary>
     Communication,
 
+    /// <summary>
+    /// Board description.
+    /// </summary>
     Description,
 
+    /// <summary>
+    /// The nickname of items on the board (item terminology).
+    /// </summary>
     ItemNickname,
 
+    /// <summary>
+    /// Board name.
+    /// </summary>
     Name
 
 }

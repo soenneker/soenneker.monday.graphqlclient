@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum AppStatus
 {
+    /// <summary>
+    /// App is in draft state and not yet published
+    /// </summary>
     DRAFT,
 
+    /// <summary>
+    /// App has a live published version
+    /// </summary>
     LIVE
 
 }

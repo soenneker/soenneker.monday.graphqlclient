@@ -7,10 +7,19 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum Search
 {
+    /// <summary>
+    /// Keyword-based search using text matching.
+    /// </summary>
     LEXICAL,
 
+    /// <summary>
+    /// Vector-based search using semantic similarity.
+    /// </summary>
     SEMANTIC,
 
+    /// <summary>
+    /// Combined lexical and semantic search with reranking.
+    /// </summary>
     HYBRID
 
 }

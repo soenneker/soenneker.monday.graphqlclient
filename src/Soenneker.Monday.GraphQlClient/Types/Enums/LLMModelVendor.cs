@@ -7,12 +7,24 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum LLMModelVendor
 {
+    /// <summary>
+    /// Anthropic Claude models
+    /// </summary>
     ANTHROPIC,
 
+    /// <summary>
+    /// Google Gemini models
+    /// </summary>
     GOOGLE,
 
+    /// <summary>
+    /// OpenAI GPT models
+    /// </summary>
     OPENAI,
 
+    /// <summary>
+    /// Open-source models served by the AI Gateway
+    /// </summary>
     OPENSOURCE
 
 }

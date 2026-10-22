@@ -7,22 +7,49 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum UserRequestKind
 {
+    /// <summary>
+    /// Request to upgrade plan
+    /// </summary>
     RequestToUpgradePlan,
 
+    /// <summary>
+    /// Notification that plan is close to limit
+    /// </summary>
     NotifyPlanCloseToLimit,
 
+    /// <summary>
+    /// Request to admins to update account permissions so users can make their vibe apps public
+    /// </summary>
     RequestToMakeAppPublic,
 
+    /// <summary>
+    /// Request to admins to upgrade the plan to increase the board connection limit for a Vibe app
+    /// </summary>
     RequestToUpgradeBoardConnection,
 
+    /// <summary>
+    /// Request to admins to upgrade the account package
+    /// </summary>
     RequestToUpgradeVibePackage,
 
+    /// <summary>
+    /// Request to admins to upgrade to the 25-app vibe package so the requester can view published apps
+    /// </summary>
     RequestToUpgradeVibePackageForAppPreviews,
 
+    /// <summary>
+    /// Request to admins to upgrade before the account's free published apps are unpublished / moved to draft
+    /// </summary>
     RequestToUpgradeBeforeAppsUnpublish,
 
+    /// <summary>
+    /// Request to admins to publish a vibe app on behalf of a member without publish permission
+    /// </summary>
     RequestToPublishApp,
 
+    /// <summary>
+    /// Request to enable external guest access for a vibe app
+    /// </summary>
     RequestExternalAccess
 
 }

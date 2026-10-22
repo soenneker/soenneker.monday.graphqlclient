@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum ColumnCapability
 {
+    /// <summary>
+    /// Capability to show column's calculated value
+    /// </summary>
     CALCULATED,
 
+    /// <summary>
+    /// Capability to mark column as hidden
+    /// </summary>
     VISIBILITY
 
 }

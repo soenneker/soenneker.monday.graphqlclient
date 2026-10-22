@@ -7,12 +7,24 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum VibeAppVersionStatus
 {
+    /// <summary>
+    /// Version is in draft state
+    /// </summary>
     DRAFT,
 
+    /// <summary>
+    /// Version is currently live/deployed
+    /// </summary>
     LIVE,
 
+    /// <summary>
+    /// Version has been retired
+    /// </summary>
     RETIRED,
 
+    /// <summary>
+    /// Version deploy was interrupted/cancelled before completion
+    /// </summary>
     INTERRUPTED
 
 }

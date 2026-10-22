@@ -7,14 +7,29 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum GroupAttributes
 {
+    /// <summary>
+    /// Group color (one of the supported colors, check the API documentation).
+    /// </summary>
     Color,
 
+    /// <summary>
+    /// The group's position in the board. Deprecated! - replaced with relative position
+    /// </summary>
     Position,
 
+    /// <summary>
+    /// The group's relative position after another group in the board.
+    /// </summary>
     RelativePositionAfter,
 
+    /// <summary>
+    /// The group's relative position before another group in the board.
+    /// </summary>
     RelativePositionBefore,
 
+    /// <summary>
+    /// Group title.
+    /// </summary>
     Title
 
 }

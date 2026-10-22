@@ -7,10 +7,19 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum SearchStrategy
 {
+    /// <summary>
+    /// Faster results with lower search quality.
+    /// </summary>
     SPEED,
 
+    /// <summary>
+    /// Good search quality with reasonable response time. Default.
+    /// </summary>
     BALANCED,
 
+    /// <summary>
+    /// Best search quality with higher response time.
+    /// </summary>
     QUALITY
 
 }

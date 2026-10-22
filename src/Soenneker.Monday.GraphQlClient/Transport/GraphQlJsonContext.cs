@@ -132,6 +132,8 @@ namespace Soenneker.Monday.GraphQlClient;
 [JsonSerializable(typeof(GraphQlResponse<AgentSubscriber>))]
 [JsonSerializable(typeof(AgentSubscriberKind))]
 [JsonSerializable(typeof(GraphQlResponse<AgentSubscriberKind>))]
+[JsonSerializable(typeof(AgentUserStatus))]
+[JsonSerializable(typeof(GraphQlResponse<AgentUserStatus>))]
 [JsonSerializable(typeof(AggregateBasicAggregationResult))]
 [JsonSerializable(typeof(GraphQlResponse<AggregateBasicAggregationResult>))]
 [JsonSerializable(typeof(AggregateFromElementType))]

@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum BoardSubscriberKind
 {
+    /// <summary>
+    /// Board owner.
+    /// </summary>
     Owner,
 
+    /// <summary>
+    /// Board subscriber.
+    /// </summary>
     Subscriber
 
 }

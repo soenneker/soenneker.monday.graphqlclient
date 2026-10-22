@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum WidgetParentKind
 {
+    /// <summary>
+    /// Widget placed in a dashboard
+    /// </summary>
     DASHBOARD,
 
+    /// <summary>
+    /// Widget placed in a specific board view
+    /// </summary>
     BOARDVIEW
 
 }

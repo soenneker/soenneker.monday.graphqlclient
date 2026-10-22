@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum VibeAppVisitKind
 {
+    /// <summary>
+    /// Consumer surfaces — object, item view, board view, share link
+    /// </summary>
     VIEW,
 
+    /// <summary>
+    /// Builder/editor — ChatPage or BoardChatPage
+    /// </summary>
     BUILD
 
 }

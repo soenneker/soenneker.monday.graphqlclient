@@ -7,10 +7,19 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum DirectoryResourceAttribute
 {
+    /// <summary>
+    /// Represents the resource directory job role attribute.
+    /// </summary>
     JOBROLE,
 
+    /// <summary>
+    /// Represents the resource directory skills attribute.
+    /// </summary>
     SKILLS,
 
+    /// <summary>
+    /// Represents the resource directory location attribute.
+    /// </summary>
     LOCATION
 
 }

@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum CrudAccessLevel
 {
+    /// <summary>
+    /// Only the creator can modify the workflow (default for account-level workflows)
+    /// </summary>
     USER,
 
+    /// <summary>
+    /// Anyone in the account can modify the workflow
+    /// </summary>
     ACCOUNT
 
 }

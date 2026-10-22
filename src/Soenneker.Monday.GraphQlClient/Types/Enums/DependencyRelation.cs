@@ -7,12 +7,24 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum DependencyRelation
 {
+    /// <summary>
+    /// Finish to Start - The dependent item can start only after the predecessor finishes
+    /// </summary>
     FS,
 
+    /// <summary>
+    /// Start to Finish - The dependent item can finish only after the predecessor starts
+    /// </summary>
     SS,
 
+    /// <summary>
+    /// Finish to Finish - The dependent item can finish only after the predecessor finishes
+    /// </summary>
     FF,
 
+    /// <summary>
+    /// Start to Start - The dependent item can start only after the predecessor starts
+    /// </summary>
     SF
 
 }

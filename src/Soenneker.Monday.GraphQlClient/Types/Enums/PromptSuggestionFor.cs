@@ -7,18 +7,39 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum PromptSuggestionFor
 {
+    /// <summary>
+    /// Generate suggestions based on user context
+    /// </summary>
     USER,
 
+    /// <summary>
+    /// Generate suggestions based on board context
+    /// </summary>
     BOARD,
 
+    /// <summary>
+    /// Generate suggestions based on item context
+    /// </summary>
     ITEM,
 
+    /// <summary>
+    /// Generate suggestions based on several boards context
+    /// </summary>
     OBJECT,
 
+    /// <summary>
+    /// Generate suggestions based on search query
+    /// </summary>
     SEARCHQUERY,
 
+    /// <summary>
+    /// Generate suggestions based on widget context
+    /// </summary>
     WIDGET,
 
+    /// <summary>
+    /// Generate suggestions based on a context source (e.g. a monday Doc), given in context_source
+    /// </summary>
     CONTEXTSOURCE
 
 }

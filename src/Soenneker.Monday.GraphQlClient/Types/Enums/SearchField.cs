@@ -7,46 +7,109 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum SearchField
 {
+    /// <summary>
+    /// The item name / title
+    /// </summary>
     ITEMNAME,
 
+    /// <summary>
+    /// ID of the board that contains the item
+    /// </summary>
     BOARDID,
 
+    /// <summary>
+    /// Timestamp of the item's last update
+    /// </summary>
     UPDATEDAT,
 
+    /// <summary>
+    /// Flattened free text of all the item's column values
+    /// </summary>
     ITEMFREETEXT,
 
+    /// <summary>
+    /// The item's status column labels
+    /// </summary>
     ITEMSTATUSES,
 
+    /// <summary>
+    /// Name of the board that contains the item
+    /// </summary>
     BOARDNAME,
 
+    /// <summary>
+    /// The item's numeric column values (indexed as text — match with term, not range)
+    /// </summary>
     ITEMSNUMERICS,
 
+    /// <summary>
+    /// The item's date column values (indexed as text — for a real date range use UPDATED_AT)
+    /// </summary>
     ITEMSDATES,
 
+    /// <summary>
+    /// ID of the workspace containing the item's board
+    /// </summary>
     WORKSPACEID,
 
+    /// <summary>
+    /// Kind of board (e.g. public, private, share). Raw single-token field — match it with term or terms_any, not phrase or fuzzy.
+    /// </summary>
     BOARDKIND,
 
+    /// <summary>
+    /// People assigned to the item (people column values)
+    /// </summary>
     PERSONS,
 
+    /// <summary>
+    /// User ID of the item's creator
+    /// </summary>
     CREATEDBY,
 
+    /// <summary>
+    /// User ID of the last person to update the item
+    /// </summary>
     LASTUPDATEDBY,
 
+    /// <summary>
+    /// User ID of the board owner
+    /// </summary>
     BOARDOWNERID,
 
+    /// <summary>
+    /// Board / pulse-view permission signal used for authorization filtering
+    /// </summary>
     BOARDWITHPULSEVIEWPERMISSIONS,
 
+    /// <summary>
+    /// ID of the group (board section) that contains the item. Raw single-token field — match it with term or terms_any, not phrase or fuzzy.
+    /// </summary>
     GROUPID,
 
+    /// <summary>
+    /// Name of the group (board section) that contains the item. Best-effort: an item whose group name the ingestor could not resolve is indexed without one, so it will not match this field.
+    /// </summary>
     GROUPNAME,
 
+    /// <summary>
+    /// Label tokens from the item's dropdown column values
+    /// </summary>
     ITEMLABELS,
 
+    /// <summary>
+    /// Email addresses found in the item's email column values
+    /// </summary>
     ITEMREFERENCEDEMAILS,
 
+    /// <summary>
+    /// Tag names from the item's tag column values (names, not IDs)
+    /// </summary>
     ITEMTAGS,
 
+    /// <summary>
+    /// The item's monday item_id — the same value returned as SearchItem.id, so it is the way to re-fetch an item seen in an earlier result. Raw single-token field: match it with term, or terms_any for up to 100 ids at once; phrase, phrase_prefix, fuzzy and range are rejected. An item has exactly one id, so terms_all with more than one value matches nothing. Prefer adding board_ids when you know the board — an ITEM_ID-only query carries no scope and fans out across the tenant.
+    /// </summary>
     ITEMID
 
 }

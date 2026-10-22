@@ -7,6 +7,9 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum AttributionEntity
 {
+    /// <summary>
+    /// An AI agent
+    /// </summary>
     AGENT
 
 }

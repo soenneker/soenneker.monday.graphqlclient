@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum ItemMetadataField
 {
+    /// <summary>
+    /// The item's `created_at`.
+    /// </summary>
     CREATEDAT,
 
+    /// <summary>
+    /// The item's `updated_at`. Equal to `created_at` until the item is first edited.
+    /// </summary>
     LASTUPDATEDAT
 
 }

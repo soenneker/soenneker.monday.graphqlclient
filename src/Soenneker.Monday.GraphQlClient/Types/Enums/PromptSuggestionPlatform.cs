@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum PromptSuggestionPlatform
 {
+    /// <summary>
+    /// Suggestions optimized for web/desktop experience
+    /// </summary>
     WEB,
 
+    /// <summary>
+    /// Suggestions optimized for mobile experience
+    /// </summary>
     MOBILE
 
 }

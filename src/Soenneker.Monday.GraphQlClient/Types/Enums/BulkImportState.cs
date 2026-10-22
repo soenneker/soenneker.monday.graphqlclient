@@ -7,14 +7,29 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum BulkImportState
 {
+    /// <summary>
+    /// The upload is pending.
+    /// </summary>
     UPLOADPENDING,
 
+    /// <summary>
+    /// The import is rejected.
+    /// </summary>
     REJECTED,
 
+    /// <summary>
+    /// The import is processing.
+    /// </summary>
     PROCESSING,
 
+    /// <summary>
+    /// The import is completed.
+    /// </summary>
     COMPLETED,
 
+    /// <summary>
+    /// The import is failed.
+    /// </summary>
     FAILED
 
 }

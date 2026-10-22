@@ -7,16 +7,34 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum TransformationType
 {
+    /// <summary>
+    /// Will use the value as is
+    /// </summary>
     DIRECT,
 
+    /// <summary>
+    /// Applies to string values with placeholders. On runtime will resolve the placeholder's values to create a new string
+    /// </summary>
     DYNAMICTEXT,
 
+    /// <summary>
+    /// Applies to numeric values with arithmetic operations. On runtime will calcualte the expression to a numeric value
+    /// </summary>
     DYNAMICNUMBER,
 
+    /// <summary>
+    /// Applies to array of values. On runtime will resolve placeholder values to create a new array
+    /// </summary>
     ARRAY,
 
+    /// <summary>
+    /// Converts a string to date
+    /// </summary>
     DATE,
 
+    /// <summary>
+    /// Converts a string to a date including the hour
+    /// </summary>
     HOUR
 
 }

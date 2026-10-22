@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum ConnectedItemColumnFormat
 {
+    /// <summary>
+    /// Use the linked items' display names (e.g. "Task A, Task B"). This is the default.
+    /// </summary>
     NAME,
 
+    /// <summary>
+    /// Use the linked items' IDs (e.g. "111, 222") instead of their names.
+    /// </summary>
     ID
 
 }

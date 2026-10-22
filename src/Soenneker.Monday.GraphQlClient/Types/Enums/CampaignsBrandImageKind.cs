@@ -7,10 +7,19 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum CampaignsBrandImageKind
 {
+    /// <summary>
+    /// Primary brand logo
+    /// </summary>
     PRIMARYLOGO,
 
+    /// <summary>
+    /// Secondary brand logo
+    /// </summary>
     SECONDARYLOGO,
 
+    /// <summary>
+    /// Image attachment
+    /// </summary>
     ATTACHMENT
 
 }

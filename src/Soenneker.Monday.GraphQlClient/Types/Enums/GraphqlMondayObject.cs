@@ -7,12 +7,24 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum GraphqlMondayObject
 {
+    /// <summary>
+    /// A monday.com board
+    /// </summary>
     Board,
 
+    /// <summary>
+    /// A monday.com folder
+    /// </summary>
     Folder,
 
+    /// <summary>
+    /// Aggregates data from one or more boards.
+    /// </summary>
     Dashboard,
 
+    /// <summary>
+    /// A monday.com workspace
+    /// </summary>
     Workspace
 
 }

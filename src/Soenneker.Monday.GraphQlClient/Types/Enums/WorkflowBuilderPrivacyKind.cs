@@ -7,10 +7,19 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum WorkflowBuilderPrivacyKind
 {
+    /// <summary>
+    /// Workflow is publicly accessible (Main)
+    /// </summary>
     PUBLIC,
 
+    /// <summary>
+    /// Workflow is private and restricted
+    /// </summary>
     PRIVATE,
 
+    /// <summary>
+    /// Workflow is shareable with guests outside the account
+    /// </summary>
     SHAREABLE
 
 }

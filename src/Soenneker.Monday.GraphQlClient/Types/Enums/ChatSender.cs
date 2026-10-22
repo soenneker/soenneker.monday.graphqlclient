@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum ChatSender
 {
+    /// <summary>
+    /// Message is from a user
+    /// </summary>
     USER,
 
+    /// <summary>
+    /// Message is from a Vibe AI agent
+    /// </summary>
     VIBE
 
 }

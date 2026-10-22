@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum TargetObject
 {
+    /// <summary>
+    /// Board object type
+    /// </summary>
     BOARD,
 
+    /// <summary>
+    /// Dashboard object type
+    /// </summary>
     DASHBOARD
 
 }

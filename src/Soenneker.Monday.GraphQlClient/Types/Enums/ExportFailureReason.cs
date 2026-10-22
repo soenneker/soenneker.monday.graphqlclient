@@ -7,16 +7,34 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum ExportFailureReason
 {
+    /// <summary>
+    /// The board is deleted or archived.
+    /// </summary>
     BOARDUNAVAILABLE,
 
+    /// <summary>
+    /// The caller lost permission to read the board.
+    /// </summary>
     BOARDINACCESSIBLE,
 
+    /// <summary>
+    /// The board has more items than the export limit allows.
+    /// </summary>
     ITEMLIMITEXCEEDED,
 
+    /// <summary>
+    /// The request was rejected during validation (e.g. unsupported CSV options).
+    /// </summary>
     INVALIDREQUEST,
 
+    /// <summary>
+    /// The board or a referenced resource could not be found.
+    /// </summary>
     NOTFOUND,
 
+    /// <summary>
+    /// An unexpected internal error occurred. Retry the mutation.
+    /// </summary>
     INTERNALERROR
 
 }

@@ -7,12 +7,24 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum WorkspacePermissionsSyncReason
 {
+    /// <summary>
+    /// The permitted workspaces were replaced with the current ones
+    /// </summary>
     SYNCED,
 
+    /// <summary>
+    /// The app is not published
+    /// </summary>
     UNPUBLISHED,
 
+    /// <summary>
+    /// The app has no platform app to update
+    /// </summary>
     NOPLATFORMAPP,
 
+    /// <summary>
+    /// No workspaces could be resolved, so the permitted workspaces were left unchanged
+    /// </summary>
     NOWORKSPACES
 
 }

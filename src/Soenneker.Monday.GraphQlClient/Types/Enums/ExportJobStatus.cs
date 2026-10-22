@@ -7,12 +7,24 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum ExportJobStatus
 {
+    /// <summary>
+    /// The export is in progress.
+    /// </summary>
     RUNNING,
 
+    /// <summary>
+    /// The export finished successfully. download_url will be populated.
+    /// </summary>
     COMPLETED,
 
+    /// <summary>
+    /// The export failed. failure_reason and (when available) failure_message will be populated.
+    /// </summary>
     FAILED,
 
+    /// <summary>
+    /// The export was cancelled.
+    /// </summary>
     CANCELLED
 
 }

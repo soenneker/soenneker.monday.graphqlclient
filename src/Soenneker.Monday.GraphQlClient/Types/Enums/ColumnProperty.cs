@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum ColumnProperty
 {
+    /// <summary>
+    /// the column description.
+    /// </summary>
     Description,
 
+    /// <summary>
+    /// the column title.
+    /// </summary>
     Title
 
 }

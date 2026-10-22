@@ -7,10 +7,19 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum CreateAppModeInput
 {
+    /// <summary>
+    /// Build mode - generates code based on the prompt
+    /// </summary>
     BUILD,
 
+    /// <summary>
+    /// Ask mode - creates empty app for Q&amp;A about what to build
+    /// </summary>
     ASK,
 
+    /// <summary>
+    /// Plan mode - starts the agent in planning mode
+    /// </summary>
     PLAN
 
 }

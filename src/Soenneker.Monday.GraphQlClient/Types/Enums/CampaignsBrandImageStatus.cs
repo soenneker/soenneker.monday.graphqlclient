@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum CampaignsBrandImageStatus
 {
+    /// <summary>
+    /// Image pending confirmation
+    /// </summary>
     PENDING,
 
+    /// <summary>
+    /// Image confirmed
+    /// </summary>
     CONFIRMED
 
 }

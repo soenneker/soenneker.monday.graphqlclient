@@ -7,10 +7,19 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum ObjectType
 {
+    /// <summary>
+    /// Represents a board object type.
+    /// </summary>
     Board,
 
+    /// <summary>
+    /// Represents a folder object type.
+    /// </summary>
     Folder,
 
+    /// <summary>
+    /// Represents an overview object type.
+    /// </summary>
     Overview
 
 }

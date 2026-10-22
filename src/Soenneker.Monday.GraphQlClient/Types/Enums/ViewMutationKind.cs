@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum ViewMutationKind
 {
+    /// <summary>
+    /// Create operation
+    /// </summary>
     CREATE,
 
+    /// <summary>
+    /// Update operation
+    /// </summary>
     UPDATE
 
 }

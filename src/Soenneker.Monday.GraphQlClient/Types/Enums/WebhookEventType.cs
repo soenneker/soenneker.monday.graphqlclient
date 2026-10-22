@@ -7,46 +7,109 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum WebhookEventType
 {
+    /// <summary>
+    /// Column value changed on board
+    /// </summary>
     ChangeColumnValue,
 
+    /// <summary>
+    /// An item name changed on board
+    /// </summary>
     ChangeName,
 
+    /// <summary>
+    /// Specific Column value changed on board
+    /// </summary>
     ChangeSpecificColumnValue,
 
+    /// <summary>
+    /// Status column value changed on board
+    /// </summary>
     ChangeStatusColumnValue,
 
+    /// <summary>
+    /// Column value changed on board subitem
+    /// </summary>
     ChangeSubitemColumnValue,
 
+    /// <summary>
+    /// An subitem name changed on board
+    /// </summary>
     ChangeSubitemName,
 
+    /// <summary>
+    /// Column created on a board
+    /// </summary>
     CreateColumn,
 
+    /// <summary>
+    /// An item was created on board
+    /// </summary>
     CreateItem,
 
+    /// <summary>
+    /// A subitem was created on a board
+    /// </summary>
     CreateSubitem,
 
+    /// <summary>
+    /// An update was posted on board subitem
+    /// </summary>
     CreateSubitemUpdate,
 
+    /// <summary>
+    /// An update was posted on board item
+    /// </summary>
     CreateUpdate,
 
+    /// <summary>
+    /// An update was deleted from board item
+    /// </summary>
     DeleteUpdate,
 
+    /// <summary>
+    /// An update was edited on board item
+    /// </summary>
     EditUpdate,
 
+    /// <summary>
+    /// An item was archived on a board
+    /// </summary>
     ItemArchived,
 
+    /// <summary>
+    /// An item was deleted from a board
+    /// </summary>
     ItemDeleted,
 
+    /// <summary>
+    /// An item is moved to any group
+    /// </summary>
     ItemMovedToAnyGroup,
 
+    /// <summary>
+    /// An item is moved to a specific group
+    /// </summary>
     ItemMovedToSpecificGroup,
 
+    /// <summary>
+    /// An item restored back to board
+    /// </summary>
     ItemRestored,
 
+    /// <summary>
+    /// A subitem is moved from one parent to another
+    /// </summary>
     MoveSubitem,
 
+    /// <summary>
+    /// A subitem was archived on a board
+    /// </summary>
     SubitemArchived,
 
+    /// <summary>
+    /// A subitem was deleted from a board
+    /// </summary>
     SubitemDeleted
 
 }

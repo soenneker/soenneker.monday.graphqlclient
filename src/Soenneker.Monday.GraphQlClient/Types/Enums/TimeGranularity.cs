@@ -7,14 +7,29 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum TimeGranularity
 {
+    /// <summary>
+    /// Day-level buckets.
+    /// </summary>
     DAYS,
 
+    /// <summary>
+    /// Week-level buckets.
+    /// </summary>
     WEEKS,
 
+    /// <summary>
+    /// Month-level buckets.
+    /// </summary>
     MONTHS,
 
+    /// <summary>
+    /// Quarter-level buckets.
+    /// </summary>
     QUARTERS,
 
+    /// <summary>
+    /// Year-level buckets.
+    /// </summary>
     YEARS
 
 }

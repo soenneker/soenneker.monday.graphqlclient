@@ -7,6 +7,9 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum BoardPermission
 {
+    /// <summary>
+    /// Permission to use the board in reporting.
+    /// </summary>
     BOARDREPORTABILITY
 
 }

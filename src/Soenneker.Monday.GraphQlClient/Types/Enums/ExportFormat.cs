@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum ExportFormat
 {
+    /// <summary>
+    /// Excel spreadsheet format (.xlsx).
+    /// </summary>
     XLSX,
 
+    /// <summary>
+    /// CSV formatted for round-trip import into mdb-data (cells encoded via @mondaydotcomorg/data-board-columns codecs).
+    /// </summary>
     CSV
 
 }

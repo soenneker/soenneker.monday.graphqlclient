@@ -7,10 +7,19 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum AiColumnImproverLength
 {
+    /// <summary>
+    /// Keep approximately the same length as input.
+    /// </summary>
     Same,
 
+    /// <summary>
+    /// Make the output shorter than the input.
+    /// </summary>
     Shorter,
 
+    /// <summary>
+    /// Make the output longer than the input.
+    /// </summary>
     Longer
 
 }

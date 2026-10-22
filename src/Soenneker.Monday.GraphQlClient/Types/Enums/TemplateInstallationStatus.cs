@@ -7,12 +7,24 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum TemplateInstallationStatus
 {
+    /// <summary>
+    /// All boards fully ready.
+    /// </summary>
     COMPLETE,
 
+    /// <summary>
+    /// Duplication failed. Any partial boards were rolled back.
+    /// </summary>
     FAILED,
 
+    /// <summary>
+    /// Boards being created.
+    /// </summary>
     INPROGRESS,
 
+    /// <summary>
+    /// Job queued, not yet started.
+    /// </summary>
     PENDING
 
 }

@@ -7,36 +7,84 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum FolderColor
 {
+    /// <summary>
+    /// aquamarine
+    /// </summary>
     AQUAMARINE,
 
+    /// <summary>
+    /// bright-blue
+    /// </summary>
     BRIGHTBLUE,
 
+    /// <summary>
+    /// bright-green
+    /// </summary>
     BRIGHTGREEN,
 
+    /// <summary>
+    /// chili-blue
+    /// </summary>
     CHILIBLUE,
 
+    /// <summary>
+    /// dark-orange
+    /// </summary>
     DARKORANGE,
 
+    /// <summary>
+    /// dark_purple
+    /// </summary>
     DARKPURPLE,
 
+    /// <summary>
+    /// dark-red
+    /// </summary>
     DARKRED,
 
+    /// <summary>
+    /// done-green
+    /// </summary>
     DONEGREEN,
 
+    /// <summary>
+    /// indigo
+    /// </summary>
     INDIGO,
 
+    /// <summary>
+    /// lipstick
+    /// </summary>
     LIPSTICK,
 
+    /// <summary>
+    /// No color
+    /// </summary>
     NULL,
 
+    /// <summary>
+    /// purple
+    /// </summary>
     PURPLE,
 
+    /// <summary>
+    /// sofia_pink
+    /// </summary>
     SOFIAPINK,
 
+    /// <summary>
+    /// stuck-red
+    /// </summary>
     STUCKRED,
 
+    /// <summary>
+    /// sunset
+    /// </summary>
     SUNSET,
 
+    /// <summary>
+    /// working_orange
+    /// </summary>
     WORKINGORANGE
 
 }

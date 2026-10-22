@@ -7,14 +7,29 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum GroupByResourceAttribute
 {
+    /// <summary>
+    /// Teams.
+    /// </summary>
     TEAMS,
 
+    /// <summary>
+    /// Location.
+    /// </summary>
     LOCATION,
 
+    /// <summary>
+    /// Skills.
+    /// </summary>
     SKILLS,
 
+    /// <summary>
+    /// Job role.
+    /// </summary>
     JOBROLE,
 
+    /// <summary>
+    /// Resource manager.
+    /// </summary>
     RESOURCEMANAGER
 
 }

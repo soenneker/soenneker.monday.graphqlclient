@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum DataViewSourceKind
 {
+    /// <summary>
+    /// A monday.com board.
+    /// </summary>
     BOARD,
 
+    /// <summary>
+    /// A data entity (schema-type source).
+    /// </summary>
     DATAENTITY
 
 }

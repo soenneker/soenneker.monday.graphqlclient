@@ -7,46 +7,109 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum AppPermission
 {
+    /// <summary>
+    /// Permission scope: me:read
+    /// </summary>
     MEREAD,
 
+    /// <summary>
+    /// Permission scope: boards:read
+    /// </summary>
     BOARDSREAD,
 
+    /// <summary>
+    /// Permission scope: boards:write
+    /// </summary>
     BOARDSWRITE,
 
+    /// <summary>
+    /// Permission scope: workspaces:read
+    /// </summary>
     WORKSPACESREAD,
 
+    /// <summary>
+    /// Permission scope: workspaces:write
+    /// </summary>
     WORKSPACESWRITE,
 
+    /// <summary>
+    /// Permission scope: users:read
+    /// </summary>
     USERSREAD,
 
+    /// <summary>
+    /// Permission scope: users:write
+    /// </summary>
     USERSWRITE,
 
+    /// <summary>
+    /// Permission scope: account:read
+    /// </summary>
     ACCOUNTREAD,
 
+    /// <summary>
+    /// Permission scope: updates:read
+    /// </summary>
     UPDATESREAD,
 
+    /// <summary>
+    /// Permission scope: updates:write
+    /// </summary>
     UPDATESWRITE,
 
+    /// <summary>
+    /// Permission scope: tags:read
+    /// </summary>
     TAGSREAD,
 
+    /// <summary>
+    /// Permission scope: assets:read
+    /// </summary>
     ASSETSREAD,
 
+    /// <summary>
+    /// Permission scope: teams:read
+    /// </summary>
     TEAMSREAD,
 
+    /// <summary>
+    /// Permission scope: teams:write
+    /// </summary>
     TEAMSWRITE,
 
+    /// <summary>
+    /// Permission scope: departments:read
+    /// </summary>
     DEPARTMENTSREAD,
 
+    /// <summary>
+    /// Permission scope: departments:write
+    /// </summary>
     DEPARTMENTSWRITE,
 
+    /// <summary>
+    /// Permission scope: notifications:write
+    /// </summary>
     NOTIFICATIONSWRITE,
 
+    /// <summary>
+    /// Permission scope: webhooks:write
+    /// </summary>
     WEBHOOKSWRITE,
 
+    /// <summary>
+    /// Permission scope: webhooks:read
+    /// </summary>
     WEBHOOKSREAD,
 
+    /// <summary>
+    /// Permission scope: docs:read
+    /// </summary>
     DOCSREAD,
 
+    /// <summary>
+    /// Permission scope: docs:write
+    /// </summary>
     DOCSWRITE
 
 }

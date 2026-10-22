@@ -7,10 +7,19 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum AssetsSource
 {
+    /// <summary>
+    /// Assets from file columns and item's files gallery. From version 2026-04, also includes assets from updates
+    /// </summary>
     All,
 
+    /// <summary>
+    /// Assets only from file columns
+    /// </summary>
     Columns,
 
+    /// <summary>
+    /// Assets only from item's files gallery
+    /// </summary>
     Gallery
 
 }

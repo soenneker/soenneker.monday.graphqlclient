@@ -7,12 +7,24 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum CreateTaskStatus
 {
+    /// <summary>
+    /// Task is pending triage
+    /// </summary>
     PENDING,
 
+    /// <summary>
+    /// Task is queued to be worked on
+    /// </summary>
     TODO,
 
+    /// <summary>
+    /// Task is being worked on
+    /// </summary>
     INPROGRESS,
 
+    /// <summary>
+    /// Task is deferred
+    /// </summary>
     NOTNOW
 
 }

@@ -7,10 +7,19 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum UtilizationDenominator
 {
+    /// <summary>
+    /// Use available hours as denominator.
+    /// </summary>
     AVAILABLE,
 
+    /// <summary>
+    /// Use allocated hours as denominator.
+    /// </summary>
     ALLOCATED,
 
+    /// <summary>
+    /// Use spent hours as denominator.
+    /// </summary>
     SPENT
 
 }

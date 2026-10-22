@@ -7,10 +7,19 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum ExternalProvider
 {
+    /// <summary>
+    /// A Claude-managed agent hosted on Anthropic infrastructure
+    /// </summary>
     CLAUDEMANAGEDAGENT,
 
+    /// <summary>
+    /// A custom agent with a user-provided callback URL
+    /// </summary>
     CUSTOMAGENT,
 
+    /// <summary>
+    /// An OpenAI assistant
+    /// </summary>
     OPENAI
 
 }

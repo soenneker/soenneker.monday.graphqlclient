@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum DataViewSourceRelationType
 {
+    /// <summary>
+    /// The main/items relation.
+    /// </summary>
     MAIN,
 
+    /// <summary>
+    /// The subitems relation.
+    /// </summary>
     SUBITEM
 
 }

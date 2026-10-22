@@ -7,84 +7,204 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum AggregateSelectFunctionName
 {
+    /// <summary>
+    /// No function applied
+    /// </summary>
     NONE,
 
+    /// <summary>
+    /// Count the number of items
+    /// </summary>
     COUNTITEMS,
 
+    /// <summary>
+    /// Count the number of subitems
+    /// </summary>
     COUNTSUBITEMS,
 
+    /// <summary>
+    /// Count the number of values
+    /// </summary>
     COUNT,
 
+    /// <summary>
+    /// Count the number of distinct values of the items
+    /// </summary>
     COUNTDISTINCT,
 
+    /// <summary>
+    /// Count the number of keys in the object
+    /// </summary>
     COUNTKEYS,
 
+    /// <summary>
+    /// Sum the values of the items
+    /// </summary>
     SUM,
 
+    /// <summary>
+    /// Average the values of the items
+    /// </summary>
     AVERAGE,
 
+    /// <summary>
+    /// Get the median of the values of the items
+    /// </summary>
     MEDIAN,
 
+    /// <summary>
+    /// Get the minimum value of the items
+    /// </summary>
     MIN,
 
+    /// <summary>
+    /// Get the maximum value of the items
+    /// </summary>
     MAX,
 
+    /// <summary>
+    /// Get the minimum and maximum values of the items
+    /// </summary>
     MINMAX,
 
+    /// <summary>
+    /// Check if the value is between two values
+    /// </summary>
     BETWEEN,
 
+    /// <summary>
+    /// Get the running duration of the items
+    /// </summary>
     DURATIONRUNNING,
 
+    /// <summary>
+    /// Convert text to uppercase
+    /// </summary>
     UPPER,
 
+    /// <summary>
+    /// Convert text to lowercase
+    /// </summary>
     LOWER,
 
+    /// <summary>
+    /// Remove whitespace from text
+    /// </summary>
     TRIM,
 
+    /// <summary>
+    /// Get the length of the value
+    /// </summary>
     LENGTH,
 
+    /// <summary>
+    /// Get the first value
+    /// </summary>
     FIRST,
 
+    /// <summary>
+    /// Get the leftmost characters
+    /// </summary>
     LEFT,
 
+    /// <summary>
+    /// Flatten nested values
+    /// </summary>
     FLATTEN,
 
+    /// <summary>
+    /// Conditional case statement
+    /// </summary>
     CASE,
 
+    /// <summary>
+    /// Check if values are equal
+    /// </summary>
     EQUALS,
 
+    /// <summary>
+    /// Truncate date to day precision
+    /// </summary>
     DATETRUNCDAY,
 
+    /// <summary>
+    /// Truncate date to week precision
+    /// </summary>
     DATETRUNCWEEK,
 
+    /// <summary>
+    /// Truncate date to month precision
+    /// </summary>
     DATETRUNCMONTH,
 
+    /// <summary>
+    /// Truncate date to quarter precision
+    /// </summary>
     DATETRUNCQUARTER,
 
+    /// <summary>
+    /// Truncate date to year precision
+    /// </summary>
     DATETRUNCYEAR,
 
+    /// <summary>
+    /// Extract date component
+    /// </summary>
     DATE,
 
+    /// <summary>
+    /// Get start date from date range
+    /// </summary>
     STARTDATE,
 
+    /// <summary>
+    /// Get end date from date range
+    /// </summary>
     ENDDATE,
 
+    /// <summary>
+    /// Extract hour from datetime
+    /// </summary>
     HOUR,
 
+    /// <summary>
+    /// Extract person information
+    /// </summary>
     PERSON,
 
+    /// <summary>
+    /// Extract ID value
+    /// </summary>
     ID,
 
+    /// <summary>
+    /// Extract label text
+    /// </summary>
     LABEL,
 
+    /// <summary>
+    /// Extract color value
+    /// </summary>
     COLOR,
 
+    /// <summary>
+    /// Extract order value
+    /// </summary>
     ORDER,
 
+    /// <summary>
+    /// Get raw value without formatting
+    /// </summary>
     RAW,
 
+    /// <summary>
+    /// Check if status is done
+    /// </summary>
     ISDONE,
 
+    /// <summary>
+    /// Extract phone country short name
+    /// </summary>
     PHONECOUNTRYSHORTNAME
 
 }

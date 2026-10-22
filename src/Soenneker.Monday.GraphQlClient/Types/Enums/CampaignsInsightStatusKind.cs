@@ -7,10 +7,19 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum CampaignsInsightStatusKind
 {
+    /// <summary>
+    /// active
+    /// </summary>
     ACTIVE,
 
+    /// <summary>
+    /// consumed
+    /// </summary>
     CONSUMED,
 
+    /// <summary>
+    /// dismissed
+    /// </summary>
     DISMISSED
 
 }

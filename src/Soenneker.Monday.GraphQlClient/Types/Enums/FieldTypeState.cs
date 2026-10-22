@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum FieldTypeState
 {
+    /// <summary>
+    /// The field type is active and can be used
+    /// </summary>
     ACTIVE,
 
+    /// <summary>
+    /// The field type has been deleted and cannot be used
+    /// </summary>
     DELETED
 
 }

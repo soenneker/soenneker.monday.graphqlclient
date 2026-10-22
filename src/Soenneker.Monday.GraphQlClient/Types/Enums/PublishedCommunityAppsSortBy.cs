@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum PublishedCommunityAppsSortBy
 {
+    /// <summary>
+    /// Sort by total download count
+    /// </summary>
     DOWNLOADS,
 
+    /// <summary>
+    /// Sort by last updated date
+    /// </summary>
     UPDATEDAT
 
 }

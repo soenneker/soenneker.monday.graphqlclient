@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum PlannerResourceKind
 {
+    /// <summary>
+    /// User resource from the directory
+    /// </summary>
     USER,
 
+    /// <summary>
+    /// Placeholder resource
+    /// </summary>
     PLACEHOLDER
 
 }

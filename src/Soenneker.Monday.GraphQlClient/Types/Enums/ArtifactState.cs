@@ -7,10 +7,19 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum ArtifactState
 {
+    /// <summary>
+    /// Artifact is active
+    /// </summary>
     ACTIVE,
 
+    /// <summary>
+    /// Artifact has been soft-deleted
+    /// </summary>
     DELETED,
 
+    /// <summary>
+    /// Artifact has been archived
+    /// </summary>
     ARCHIVE
 
 }

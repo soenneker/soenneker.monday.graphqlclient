@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum FeedbackSentiment
 {
+    /// <summary>
+    /// Positive feedback indicating satisfaction
+    /// </summary>
     POSITIVE,
 
+    /// <summary>
+    /// Negative feedback indicating dissatisfaction
+    /// </summary>
     NEGATIVE
 
 }

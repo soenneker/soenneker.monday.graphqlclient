@@ -17,16 +17,28 @@ public sealed partial class Board
     public string Id { get; init; } = null!;
 
     /// <summary>
-    /// The board's updates with cursor-based pagination.
+    /// Inferred metadata associated with this board
     /// </summary>
-    [JsonPropertyName("updates_page")]
-    public UpdatesPage? UpdatesPage { get; init; }
+    [JsonPropertyName("inferred_metadata")]
+    public BoardInferredMetadata? InferredMetadata { get; init; }
 
     /// <summary>
-    /// The board's updates.
+    /// Manually set metadata associated with this board
     /// </summary>
-    [JsonPropertyName("updates")]
-    public List<Update>? Updates { get; init; }
+    [JsonPropertyName("manual_metadata")]
+    public BoardManualMetadata? ManualMetadata { get; init; }
+
+    /// <summary>
+    /// The board's visible columns.
+    /// </summary>
+    [JsonPropertyName("columns")]
+    public List<Column>? Columns { get; init; }
+
+    /// <summary>
+    /// The board's views.
+    /// </summary>
+    [JsonPropertyName("views")]
+    public List<BoardView>? Views { get; init; }
 
     /// <summary>
     /// The user's permission level for this board (view / edit).
@@ -216,12 +228,6 @@ public sealed partial class Board
     public string Url { get; init; } = null!;
 
     /// <summary>
-    /// The board's views.
-    /// </summary>
-    [JsonPropertyName("views")]
-    public List<BoardView>? Views { get; init; }
-
-    /// <summary>
     /// The workspace that contains this board (null for main workspace).
     /// </summary>
     [JsonPropertyName("workspace")]
@@ -234,21 +240,15 @@ public sealed partial class Board
     public string? WorkspaceId { get; init; }
 
     /// <summary>
-    /// Inferred metadata associated with this board
+    /// The board's updates with cursor-based pagination.
     /// </summary>
-    [JsonPropertyName("inferred_metadata")]
-    public BoardInferredMetadata? InferredMetadata { get; init; }
+    [JsonPropertyName("updates_page")]
+    public UpdatesPage? UpdatesPage { get; init; }
 
     /// <summary>
-    /// Manually set metadata associated with this board
+    /// The board's updates.
     /// </summary>
-    [JsonPropertyName("manual_metadata")]
-    public BoardManualMetadata? ManualMetadata { get; init; }
-
-    /// <summary>
-    /// The board's visible columns.
-    /// </summary>
-    [JsonPropertyName("columns")]
-    public List<Column>? Columns { get; init; }
+    [JsonPropertyName("updates")]
+    public List<Update>? Updates { get; init; }
 
 }

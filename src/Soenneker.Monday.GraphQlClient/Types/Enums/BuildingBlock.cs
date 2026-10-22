@@ -7,20 +7,44 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum BuildingBlock
 {
+    /// <summary>
+    /// Folder, a logical grouping or domain area within the solution.
+    /// </summary>
     DOMAIN,
 
+    /// <summary>
+    /// A Monday.com board with columns and items.
+    /// </summary>
     BOARD,
 
+    /// <summary>
+    /// A dashboard with widgets for data visualization.
+    /// </summary>
     DASHBOARD,
 
+    /// <summary>
+    /// A form linked to a board for data collection.
+    /// </summary>
     FORM,
 
+    /// <summary>
+    /// Items (rows) within a Monday.com board containing actual data entries.
+    /// </summary>
     ITEMS,
 
+    /// <summary>
+    /// Workflow automations that trigger actions based on board events.
+    /// </summary>
     AUTOMATIONS,
 
+    /// <summary>
+    /// A Vibe app — an AI-generated frontend application embedded in the solution.
+    /// </summary>
     VIBE,
 
+    /// <summary>
+    /// A personal AI agent attached to the solution. 1-3 agents are auto-created and scoped to subsets of boards. Defaults ON; pass an explicit allow-list omitting AGENT (or exclude it) to opt out.
+    /// </summary>
     AGENT
 
 }

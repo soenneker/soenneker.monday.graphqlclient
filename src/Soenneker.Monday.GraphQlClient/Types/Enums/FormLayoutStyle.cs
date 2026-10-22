@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum FormLayoutStyle
 {
+    /// <summary>
+    /// Card layout renders the form inside a bordered card with rounded corners and shadow, where content scrolls within the card.
+    /// </summary>
     CARD,
 
+    /// <summary>
+    /// Flat layout renders the form edge-to-edge across the full viewport, where the entire page scrolls.
+    /// </summary>
     FLAT
 
 }

@@ -7,10 +7,19 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum ChatModeKind
 {
+    /// <summary>
+    /// Build mode - message related to code generation
+    /// </summary>
     BUILD,
 
+    /// <summary>
+    /// Ask mode - message for Q&amp;A without code generation
+    /// </summary>
     ASK,
 
+    /// <summary>
+    /// Plan mode - message for planning phase before code generation
+    /// </summary>
     PLAN
 
 }

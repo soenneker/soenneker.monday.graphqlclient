@@ -7,10 +7,19 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum ObjectState
 {
+    /// <summary>
+    /// The object is active.
+    /// </summary>
     ACTIVE,
 
+    /// <summary>
+    /// The object is archived.
+    /// </summary>
     ARCHIVED,
 
+    /// <summary>
+    /// The object is deleted.
+    /// </summary>
     DELETED
 
 }

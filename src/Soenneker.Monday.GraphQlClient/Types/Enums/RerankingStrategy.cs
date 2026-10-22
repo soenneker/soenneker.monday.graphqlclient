@@ -7,6 +7,9 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum RerankingStrategy
 {
+    /// <summary>
+    /// Use cross-encoder model for reranking results.
+    /// </summary>
     CROSSENCODER
 
 }

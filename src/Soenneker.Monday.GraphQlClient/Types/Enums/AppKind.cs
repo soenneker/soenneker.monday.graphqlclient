@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum AppKind
 {
+    /// <summary>
+    /// App is private and only visible to the account that created it
+    /// </summary>
     PRIVATE,
 
+    /// <summary>
+    /// App is public and can be shared and installed by other accounts
+    /// </summary>
     PUBLIC
 
 }

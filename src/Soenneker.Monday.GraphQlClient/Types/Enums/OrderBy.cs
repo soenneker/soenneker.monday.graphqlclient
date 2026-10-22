@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum OrderBy
 {
+    /// <summary>
+    /// Sort objects by their creation date, from newest to oldest.
+    /// </summary>
     CREATEDAT,
 
+    /// <summary>
+    /// Sort objects by when they were last used, from most recent to least recent.
+    /// </summary>
     USEDAT
 
 }

@@ -7,12 +7,24 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum AssetCaptionStatus
 {
+    /// <summary>
+    /// Captioning has not been requested
+    /// </summary>
     NONE,
 
+    /// <summary>
+    /// Captioning is in progress
+    /// </summary>
     PENDING,
 
+    /// <summary>
+    /// Captioning completed successfully
+    /// </summary>
     COMPLETED,
 
+    /// <summary>
+    /// Captioning failed; asset is still usable
+    /// </summary>
     FAILED
 
 }

@@ -7,14 +7,29 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum VibeAggregateFn
 {
+    /// <summary>
+    /// Count of matching documents.
+    /// </summary>
     COUNT,
 
+    /// <summary>
+    /// Sum of the numeric field.
+    /// </summary>
     SUM,
 
+    /// <summary>
+    /// Average of the numeric field.
+    /// </summary>
     AVG,
 
+    /// <summary>
+    /// Minimum of the field.
+    /// </summary>
     MIN,
 
+    /// <summary>
+    /// Maximum of the field.
+    /// </summary>
     MAX
 
 }

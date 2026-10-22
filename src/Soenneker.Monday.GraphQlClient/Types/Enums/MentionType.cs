@@ -7,14 +7,29 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum MentionType
 {
+    /// <summary>
+    /// Mention a user
+    /// </summary>
     User,
 
+    /// <summary>
+    /// Mention a team
+    /// </summary>
     Team,
 
+    /// <summary>
+    /// Mention a project
+    /// </summary>
     Project,
 
+    /// <summary>
+    /// Mention a board
+    /// </summary>
     Board,
 
+    /// <summary>
+    /// Mention an AI agent
+    /// </summary>
     Agent
 
 }

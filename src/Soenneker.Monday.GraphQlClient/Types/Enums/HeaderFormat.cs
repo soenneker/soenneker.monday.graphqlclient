@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum HeaderFormat
 {
+    /// <summary>
+    /// Use column titles as headers (human-readable).
+    /// </summary>
     TITLE,
 
+    /// <summary>
+    /// Use column IDs as headers (round-trippable with mdb-data import).
+    /// </summary>
     COLUMNID
 
 }

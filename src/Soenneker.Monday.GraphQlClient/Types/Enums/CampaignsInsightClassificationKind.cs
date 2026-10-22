@@ -7,20 +7,44 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum CampaignsInsightClassificationKind
 {
+    /// <summary>
+    /// Competitor move insight
+    /// </summary>
     COMPETITORMOVE,
 
+    /// <summary>
+    /// Market trend insight
+    /// </summary>
     MARKETTREND,
 
+    /// <summary>
+    /// Customer behavior insight
+    /// </summary>
     CUSTOMERBEHAVIOR,
 
+    /// <summary>
+    /// Emerging technology insight
+    /// </summary>
     EMERGINGTECHNOLOGY,
 
+    /// <summary>
+    /// Regulatory change insight
+    /// </summary>
     REGULATORYCHANGE,
 
+    /// <summary>
+    /// Product launch insight
+    /// </summary>
     PRODUCTLAUNCH,
 
+    /// <summary>
+    /// Crisis or event insight
+    /// </summary>
     CRISISEVENT,
 
+    /// <summary>
+    /// Other type of insight
+    /// </summary>
     OTHER
 
 }

@@ -7,10 +7,19 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum SprintState
 {
+    /// <summary>
+    /// sprint is planned and not yet started.
+    /// </summary>
     PLANNED,
 
+    /// <summary>
+    /// sprint is active and in progress.
+    /// </summary>
     ACTIVE,
 
+    /// <summary>
+    /// sprint is completed.
+    /// </summary>
     COMPLETED
 
 }

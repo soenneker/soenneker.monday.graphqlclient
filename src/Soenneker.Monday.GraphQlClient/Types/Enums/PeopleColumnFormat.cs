@@ -7,6 +7,9 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum PeopleColumnFormat
 {
+    /// <summary>
+    /// Use display names (e.g. "Jordan Lee, Marketing Team") instead of IDs.
+    /// </summary>
     NAME
 
 }

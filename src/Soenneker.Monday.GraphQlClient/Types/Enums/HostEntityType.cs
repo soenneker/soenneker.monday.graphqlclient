@@ -7,14 +7,29 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum HostEntityType
 {
+    /// <summary>
+    /// A monday.com board hosting the app instance
+    /// </summary>
     BOARD,
 
+    /// <summary>
+    /// A monday.com item hosting the app instance
+    /// </summary>
     ITEM,
 
+    /// <summary>
+    /// A monday.com workspace hosting the app instance
+    /// </summary>
     WORKSPACE,
 
+    /// <summary>
+    /// A monday.com dashboard hosting the app instance
+    /// </summary>
     DASHBOARD,
 
+    /// <summary>
+    /// A monday.com board view hosting the app instance
+    /// </summary>
     BOARDVIEW
 
 }

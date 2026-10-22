@@ -7,114 +7,279 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum AppFeatureTypeE
 {
+    /// <summary>
+    /// OAUTH
+    /// </summary>
     OAUTH,
 
+    /// <summary>
+    /// BOARD_VIEW
+    /// </summary>
     BOARDVIEW,
 
+    /// <summary>
+    /// INTEGRATION
+    /// </summary>
     INTEGRATION,
 
+    /// <summary>
+    /// SOLUTION
+    /// </summary>
     SOLUTION,
 
+    /// <summary>
+    /// ITEM_VIEW
+    /// </summary>
     ITEMVIEW,
 
+    /// <summary>
+    /// DASHBOARD_WIDGET
+    /// </summary>
     DASHBOARDWIDGET,
 
+    /// <summary>
+    /// ACCOUNT_SETTINGS_VIEW
+    /// </summary>
     ACCOUNTSETTINGSVIEW,
 
+    /// <summary>
+    /// DOC_ACTIONS
+    /// </summary>
     DOCACTIONS,
 
+    /// <summary>
+    /// OBJECT
+    /// </summary>
     OBJECT,
 
+    /// <summary>
+    /// WORKSPACE_VIEW
+    /// </summary>
     WORKSPACEVIEW,
 
+    /// <summary>
+    /// AI
+    /// </summary>
     AI,
 
+    /// <summary>
+    /// AI_BOARD_MAIN_MENU_HEADER
+    /// </summary>
     AIBOARDMAINMENUHEADER,
 
+    /// <summary>
+    /// AI_ITEM_UPDATE_ACTIONS
+    /// </summary>
     AIITEMUPDATEACTIONS,
 
+    /// <summary>
+    /// AI_DOC_SLASH_COMMAND
+    /// </summary>
     AIDOCSLASHCOMMAND,
 
+    /// <summary>
+    /// AI_DOC_CONTEXTUAL_MENU
+    /// </summary>
     AIDOCCONTEXTUALMENU,
 
+    /// <summary>
+    /// AI_DOC_QUICK_START
+    /// </summary>
     AIDOCQUICKSTART,
 
+    /// <summary>
+    /// AI_DOC_TOP_BAR
+    /// </summary>
     AIDOCTOPBAR,
 
+    /// <summary>
+    /// COLUMN_TEMPLATE
+    /// </summary>
     COLUMNTEMPLATE,
 
+    /// <summary>
+    /// AI_IC_ASSISTANT_HELP_CENTER
+    /// </summary>
     AIICASSISTANTHELPCENTER,
 
+    /// <summary>
+    /// APP_WIZARD
+    /// </summary>
     APPWIZARD,
 
+    /// <summary>
+    /// GROUP_MENU_ACTION
+    /// </summary>
     GROUPMENUACTION,
 
+    /// <summary>
+    /// ITEM_MENU_ACTION
+    /// </summary>
     ITEMMENUACTION,
 
+    /// <summary>
+    /// NOTIFICATION_KIND
+    /// </summary>
     NOTIFICATIONKIND,
 
+    /// <summary>
+    /// NOTIFICATION_SETTING_KIND
+    /// </summary>
     NOTIFICATIONSETTINGKIND,
 
+    /// <summary>
+    /// BLOCK
+    /// </summary>
     BLOCK,
 
+    /// <summary>
+    /// ITEM_BATCH_ACTION
+    /// </summary>
     ITEMBATCHACTION,
 
+    /// <summary>
+    /// AI_FORMULA
+    /// </summary>
     AIFORMULA,
 
+    /// <summary>
+    /// AI_ITEM_EMAILS_AND_ACTIVITIES_ACTIONS
+    /// </summary>
     AIITEMEMAILSANDACTIVITIESACTIONS,
 
+    /// <summary>
+    /// AI_EMAILS_AND_ACTIVITIES_HEADER_ACTIONS
+    /// </summary>
     AIEMAILSANDACTIVITIESHEADERACTIONS,
 
+    /// <summary>
+    /// FIELD_TYPE
+    /// </summary>
     FIELDTYPE,
 
+    /// <summary>
+    /// PRODUCT
+    /// </summary>
     PRODUCT,
 
+    /// <summary>
+    /// PRODUCT_VIEW
+    /// </summary>
     PRODUCTVIEW,
 
+    /// <summary>
+    /// BOARD_COLUMN_ACTION
+    /// </summary>
     BOARDCOLUMNACTION,
 
+    /// <summary>
+    /// BOARD_COLUMN_EXTENSION
+    /// </summary>
     BOARDCOLUMNEXTENSION,
 
+    /// <summary>
+    /// PACKAGED_BLOCK
+    /// </summary>
     PACKAGEDBLOCK,
 
+    /// <summary>
+    /// CREDENTIALS
+    /// </summary>
     CREDENTIALS,
 
+    /// <summary>
+    /// TOPBAR
+    /// </summary>
     TOPBAR,
 
+    /// <summary>
+    /// WORKFLOW_TEMPLATE
+    /// </summary>
     WORKFLOWTEMPLATE,
 
+    /// <summary>
+    /// COLUMN
+    /// </summary>
     COLUMN,
 
+    /// <summary>
+    /// SUB_WORKFLOW
+    /// </summary>
     SUBWORKFLOW,
 
+    /// <summary>
+    /// BOARD_HEADER_ACTION
+    /// </summary>
     BOARDHEADERACTION,
 
+    /// <summary>
+    /// DIALOG
+    /// </summary>
     DIALOG,
 
+    /// <summary>
+    /// DATA_ENTITY
+    /// </summary>
     DATAENTITY,
 
+    /// <summary>
+    /// SYNCABLE_RESOURCE
+    /// </summary>
     SYNCABLERESOURCE,
 
+    /// <summary>
+    /// AI_AGENT
+    /// </summary>
     AIAGENT,
 
+    /// <summary>
+    /// SURFACE_VIEW
+    /// </summary>
     SURFACEVIEW,
 
+    /// <summary>
+    /// GROWTH_CONFIG
+    /// </summary>
     GROWTHCONFIG,
 
+    /// <summary>
+    /// MODAL
+    /// </summary>
     MODAL,
 
+    /// <summary>
+    /// ADMIN_VIEW
+    /// </summary>
     ADMINVIEW,
 
+    /// <summary>
+    /// DIGITAL_WORKER
+    /// </summary>
     DIGITALWORKER,
 
+    /// <summary>
+    /// AI_AGENT_SKILL
+    /// </summary>
     AIAGENTSKILL,
 
+    /// <summary>
+    /// SKILL
+    /// </summary>
     SKILL,
 
+    /// <summary>
+    /// VIBE_OBJECT
+    /// </summary>
     VIBEOBJECT,
 
+    /// <summary>
+    /// VIBE_ITEM_VIEW
+    /// </summary>
     VIBEITEMVIEW,
 
+    /// <summary>
+    /// AI_PLATFORM_AGENT
+    /// </summary>
     AIPLATFORMAGENT
 
 }

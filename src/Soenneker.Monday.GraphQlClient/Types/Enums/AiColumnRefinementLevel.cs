@@ -7,10 +7,19 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum AiColumnRefinementLevel
 {
+    /// <summary>
+    /// Apply only minor corrections and improvements.
+    /// </summary>
     MinimalChanges,
 
+    /// <summary>
+    /// Restructure and improve while preserving intent.
+    /// </summary>
     ModerateChanges,
 
+    /// <summary>
+    /// Substantially rewrite with creative freedom.
+    /// </summary>
     HighCreativity
 
 }

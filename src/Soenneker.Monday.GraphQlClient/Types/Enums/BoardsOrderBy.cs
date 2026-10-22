@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum BoardsOrderBy
 {
+    /// <summary>
+    /// The rank order of the board creation time (desc).
+    /// </summary>
     CreatedAt,
 
+    /// <summary>
+    /// The last time the user making the request used the board (desc).
+    /// </summary>
     UsedAt
 
 }

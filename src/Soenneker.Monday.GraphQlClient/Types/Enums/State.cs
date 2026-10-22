@@ -7,12 +7,24 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum State
 {
+    /// <summary>
+    /// Active only (Default).
+    /// </summary>
     Active,
 
+    /// <summary>
+    /// Active, Archived and Deleted.
+    /// </summary>
     All,
 
+    /// <summary>
+    /// Archived only.
+    /// </summary>
     Archived,
 
+    /// <summary>
+    /// Deleted only.
+    /// </summary>
     Deleted
 
 }

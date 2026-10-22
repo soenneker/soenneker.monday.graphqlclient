@@ -7,26 +7,59 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum CampaignsStatusKind
 {
+    /// <summary>
+    /// Campaign is being generated
+    /// </summary>
     GENERATING,
 
+    /// <summary>
+    /// Campaign is in draft state
+    /// </summary>
     DRAFT,
 
+    /// <summary>
+    /// Campaign is ready to send
+    /// </summary>
     READYTOSEND,
 
+    /// <summary>
+    /// Campaign is currently sending
+    /// </summary>
     SENDING,
 
+    /// <summary>
+    /// Campaign is scheduled for later
+    /// </summary>
     SCHEDULED,
 
+    /// <summary>
+    /// Campaign has been sent
+    /// </summary>
     SENT,
 
+    /// <summary>
+    /// Campaign is ongoing
+    /// </summary>
     ONGOING,
 
+    /// <summary>
+    /// Campaign failed
+    /// </summary>
     FAILED,
 
+    /// <summary>
+    /// Campaign is on hold
+    /// </summary>
     ONHOLD,
 
+    /// <summary>
+    /// Campaign is blocked
+    /// </summary>
     BLOCKED,
 
+    /// <summary>
+    /// Campaign is processing
+    /// </summary>
     PROCESSING
 
 }

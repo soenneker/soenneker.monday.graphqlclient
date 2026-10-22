@@ -7,34 +7,79 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum LLMModelInput
 {
+    /// <summary>
+    /// Anthropic Claude 4.5 Sonnet
+    /// </summary>
     CLAUDE45SONNET,
 
+    /// <summary>
+    /// Anthropic Claude 4.6 Sonnet
+    /// </summary>
     CLAUDE46SONNET,
 
+    /// <summary>
+    /// Anthropic Claude Sonnet 5
+    /// </summary>
     CLAUDE5SONNET,
 
+    /// <summary>
+    /// Anthropic Claude Haiku 4.5
+    /// </summary>
     CLAUDEHAIKU45,
 
+    /// <summary>
+    /// Anthropic Claude Opus 4.6
+    /// </summary>
     CLAUDEOPUS46,
 
+    /// <summary>
+    /// Anthropic Claude Opus 5
+    /// </summary>
     CLAUDEOPUS5,
 
+    /// <summary>
+    /// Anthropic Claude Opus 5.5
+    /// </summary>
     CLAUDEOPUS55,
 
+    /// <summary>
+    /// Google Gemini 3.5 Flash
+    /// </summary>
     GEMINI35FLASH,
 
+    /// <summary>
+    /// Google Gemini 3.6 Flash
+    /// </summary>
     GEMINI36FLASH,
 
+    /// <summary>
+    /// Google Gemini 3.1 Flash Lite
+    /// </summary>
     GEMINI31FLASHLITE,
 
+    /// <summary>
+    /// Google Gemini 3.5 Flash Lite
+    /// </summary>
     GEMINI35FLASHLITE,
 
+    /// <summary>
+    /// Google Gemini 3.7 Flash
+    /// </summary>
     GEMINI37FLASH,
 
+    /// <summary>
+    /// Google Gemini 3.8 Flash
+    /// </summary>
     GEMINI38FLASH,
 
+    /// <summary>
+    /// Google Gemini 4 Argon
+    /// </summary>
     GEMINI4ARGON,
 
+    /// <summary>
+    /// OpenAI GPT-6.1 Sol
+    /// </summary>
     GPT61SOL
 
 }

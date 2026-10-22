@@ -7,10 +7,19 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum GovernanceRisk
 {
+    /// <summary>
+    /// High risk — sensitive data access combined with high-reach tools.
+    /// </summary>
     High,
 
+    /// <summary>
+    /// Medium risk — moderate combined score.
+    /// </summary>
     Medium,
 
+    /// <summary>
+    /// Low risk — no sensitive data access and low-reach tools.
+    /// </summary>
     Low
 
 }

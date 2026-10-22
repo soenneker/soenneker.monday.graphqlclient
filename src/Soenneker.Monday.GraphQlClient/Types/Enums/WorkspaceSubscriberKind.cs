@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum WorkspaceSubscriberKind
 {
+    /// <summary>
+    /// Workspace owner.
+    /// </summary>
     Owner,
 
+    /// <summary>
+    /// Workspace subscriber.
+    /// </summary>
     Subscriber
 
 }

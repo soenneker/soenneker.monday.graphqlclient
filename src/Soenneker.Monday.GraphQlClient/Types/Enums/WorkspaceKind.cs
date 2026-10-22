@@ -7,10 +7,19 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum WorkspaceKind
 {
+    /// <summary>
+    /// Closed workspace, available to enterprise only.
+    /// </summary>
     Closed,
 
+    /// <summary>
+    /// Open workspace.
+    /// </summary>
     Open,
 
+    /// <summary>
+    /// Template workspace.
+    /// </summary>
     Template
 
 }

@@ -7,16 +7,34 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum TextBlock
 {
+    /// <summary>
+    /// Regular paragraph text
+    /// </summary>
     NORMALTEXT,
 
+    /// <summary>
+    /// Main document title (H1 equivalent)
+    /// </summary>
     LARGETITLE,
 
+    /// <summary>
+    /// Section heading (H2 equivalent)
+    /// </summary>
     MEDIUMTITLE,
 
+    /// <summary>
+    /// Subsection heading (H3 equivalent)
+    /// </summary>
     SMALLTITLE,
 
+    /// <summary>
+    /// Code styling
+    /// </summary>
     CODE,
 
+    /// <summary>
+    /// Indented quote/blockquote styling
+    /// </summary>
     QUOTE
 
 }

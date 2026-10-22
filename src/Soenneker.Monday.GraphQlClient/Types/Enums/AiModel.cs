@@ -7,10 +7,19 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum AiModel
 {
+    /// <summary>
+    /// The Monday Fast model.
+    /// </summary>
     MONDAYFAST,
 
+    /// <summary>
+    /// The Monday Standard model.
+    /// </summary>
     MONDAYSTANDARD,
 
+    /// <summary>
+    /// The Monday Powerful model.
+    /// </summary>
     MONDAYPOWERFUL
 
 }

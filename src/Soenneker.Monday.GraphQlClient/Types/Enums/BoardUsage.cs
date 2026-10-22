@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum BoardUsage
 {
+    /// <summary>
+    /// Board can be converted to a project
+    /// </summary>
     CONVERTTOPROJECT,
 
+    /// <summary>
+    /// Board can be connected to a portfolio
+    /// </summary>
     CONNECTTOPORTFOLIO
 
 }

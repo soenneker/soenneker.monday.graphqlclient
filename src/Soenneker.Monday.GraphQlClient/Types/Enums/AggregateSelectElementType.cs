@@ -4,8 +4,14 @@ namespace Soenneker.Monday.GraphQlClient;
 
 public enum AggregateSelectElementType
 {
+    /// <summary>
+    /// A column to select
+    /// </summary>
     COLUMN,
 
+    /// <summary>
+    /// A function to select
+    /// </summary>
     FUNCTION
 
 }

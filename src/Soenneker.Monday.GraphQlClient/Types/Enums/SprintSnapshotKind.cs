@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum SprintSnapshotKind
 {
+    /// <summary>
+    /// Sprint start snapshot kind.
+    /// </summary>
     START,
 
+    /// <summary>
+    /// Sprint complete snapshot kind.
+    /// </summary>
     COMPLETE
 
 }

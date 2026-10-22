@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum DataViewRestoreDroppedReason
 {
+    /// <summary>
+    /// The caller passed include_source_ids and this source was not among them.
+    /// </summary>
     NOTINCLUDED,
 
+    /// <summary>
+    /// The board or entity behind the source no longer exists.
+    /// </summary>
     PROJECTDELETED
 
 }

@@ -7,14 +7,29 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum VibeAppStatus
 {
+    /// <summary>
+    /// App has been created but generation has not started
+    /// </summary>
     CREATED,
 
+    /// <summary>
+    /// App is currently being generated
+    /// </summary>
     GENERATING,
 
+    /// <summary>
+    /// App is currently processing a message
+    /// </summary>
     PROCESSINGMESSAGE,
 
+    /// <summary>
+    /// App is currently being deployed
+    /// </summary>
     DEPLOYING,
 
+    /// <summary>
+    /// App has been successfully generated and is ready to use
+    /// </summary>
     READY
 
 }

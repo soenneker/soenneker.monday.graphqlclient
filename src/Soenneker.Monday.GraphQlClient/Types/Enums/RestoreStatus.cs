@@ -7,14 +7,29 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum RestoreStatus
 {
+    /// <summary>
+    /// The restore is pending and has not started yet.
+    /// </summary>
     Pending,
 
+    /// <summary>
+    /// The restore is currently being processed.
+    /// </summary>
     Processing,
 
+    /// <summary>
+    /// The restore completed successfully.
+    /// </summary>
     Success,
 
+    /// <summary>
+    /// The restore failed to complete.
+    /// </summary>
     Failed,
 
+    /// <summary>
+    /// The restore has been rolled back.
+    /// </summary>
     Rollback
 
 }

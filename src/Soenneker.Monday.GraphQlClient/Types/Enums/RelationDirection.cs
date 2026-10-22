@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum RelationDirection
 {
+    /// <summary>
+    /// Relations where the object is the source
+    /// </summary>
     OUTGOING,
 
+    /// <summary>
+    /// Relations where the object is the target
+    /// </summary>
     INCOMING
 
 }

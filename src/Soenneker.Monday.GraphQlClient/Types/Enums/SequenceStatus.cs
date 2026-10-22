@@ -7,12 +7,24 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum SequenceStatus
 {
+    /// <summary>
+    /// Sequence is active
+    /// </summary>
     ACTIVE,
 
+    /// <summary>
+    /// Sequence is inactive
+    /// </summary>
     INACTIVE,
 
+    /// <summary>
+    /// Sequence is missing required configuration
+    /// </summary>
     MISSINGCONFIG,
 
+    /// <summary>
+    /// Sequence has been deleted
+    /// </summary>
     DELETED
 
 }

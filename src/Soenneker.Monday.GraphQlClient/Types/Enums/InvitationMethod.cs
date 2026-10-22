@@ -7,30 +7,69 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum InvitationMethod
 {
+    /// <summary>
+    /// Invited by another user.
+    /// </summary>
     USER,
 
+    /// <summary>
+    /// Provisioned via SCIM.
+    /// </summary>
     SCIM,
 
+    /// <summary>
+    /// Added via single sign-on.
+    /// </summary>
     SSO,
 
+    /// <summary>
+    /// Added via authorized domain.
+    /// </summary>
     AUTHDOMAIN,
 
+    /// <summary>
+    /// First user who created the account.
+    /// </summary>
     FIRSTUSER,
 
+    /// <summary>
+    /// Added via account consolidation.
+    /// </summary>
     CONSOLIDATION,
 
+    /// <summary>
+    /// Created by internal flow.
+    /// </summary>
     INTERNALCREATION,
 
+    /// <summary>
+    /// Unknown invitation method.
+    /// </summary>
     UNKNOWN,
 
+    /// <summary>
+    /// Added via service portal authorized domain.
+    /// </summary>
     SERVICEPORTALAUTHDOMAIN,
 
+    /// <summary>
+    /// Invited to monday service portal by another user.
+    /// </summary>
     SERVICEPORTALUSERINVITATION,
 
+    /// <summary>
+    /// Created as an API user.
+    /// </summary>
     APIUSERCREATION,
 
+    /// <summary>
+    /// Created as an agent user.
+    /// </summary>
     AGENTUSERCREATION,
 
+    /// <summary>
+    /// Created via system creation flow.
+    /// </summary>
     SYSTEMCREATION
 
 }

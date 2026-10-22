@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum TaskAction
 {
+    /// <summary>
+    /// A new task was created
+    /// </summary>
     CREATE,
 
+    /// <summary>
+    /// An existing task was updated
+    /// </summary>
     UPDATE
 
 }

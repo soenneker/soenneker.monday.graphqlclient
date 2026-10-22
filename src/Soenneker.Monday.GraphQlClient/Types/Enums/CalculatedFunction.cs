@@ -7,16 +7,34 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum CalculatedFunction
 {
-    COUNTKEYS,
-
-    MAX,
-
+    /// <summary>
+    /// Calculate the minimum value
+    /// </summary>
     MIN,
 
+    /// <summary>
+    /// Calculate the maximum value
+    /// </summary>
+    MAX,
+
+    /// <summary>
+    /// Calculate the sum of all values
+    /// </summary>
+    SUM,
+
+    /// <summary>
+    /// Calculate both minimum and maximum values for time ranges
+    /// </summary>
     MINMAX,
 
+    /// <summary>
+    /// No calculation
+    /// </summary>
     NONE,
 
-    SUM
+    /// <summary>
+    /// Count the number of labels
+    /// </summary>
+    COUNTKEYS
 
 }

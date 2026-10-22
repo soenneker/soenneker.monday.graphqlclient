@@ -7,10 +7,19 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum BoardKind
 {
+    /// <summary>
+    /// Private boards.
+    /// </summary>
     @Private,
 
+    /// <summary>
+    /// Public boards.
+    /// </summary>
     @Public,
 
+    /// <summary>
+    /// Shareable boards.
+    /// </summary>
     Share
 
 }

@@ -7,10 +7,19 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum ObjectSchemaAction
 {
+    /// <summary>
+    /// Create columns on an object schema
+    /// </summary>
     CREATEOBJECTSCHEMACOLUMNS,
 
+    /// <summary>
+    /// Update columns on an object schema
+    /// </summary>
     UPDATEOBJECTSCHEMACOLUMNS,
 
+    /// <summary>
+    /// Delete columns from an object schema
+    /// </summary>
     DELETEOBJECTSCHEMACOLUMNS
 
 }

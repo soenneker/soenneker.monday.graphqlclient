@@ -7,20 +7,44 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum WorkspacesQueryAccountProductKind
 {
+    /// <summary>
+    /// monday work management
+    /// </summary>
     Core,
 
+    /// <summary>
+    /// monday CRM
+    /// </summary>
     Crm,
 
+    /// <summary>
+    /// workforms
+    /// </summary>
     Forms,
 
+    /// <summary>
+    /// monday marketer
+    /// </summary>
     Marketing,
 
+    /// <summary>
+    /// monday projects
+    /// </summary>
     ProjectManagement,
 
+    /// <summary>
+    /// monday service
+    /// </summary>
     Service,
 
+    /// <summary>
+    /// monday dev
+    /// </summary>
     Software,
 
+    /// <summary>
+    /// canvas
+    /// </summary>
     Whiteboard
 
 }

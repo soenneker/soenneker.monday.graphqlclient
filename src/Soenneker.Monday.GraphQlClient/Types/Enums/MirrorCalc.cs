@@ -7,10 +7,19 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum MirrorCalc
 {
+    /// <summary>
+    /// Aggregate values from the earliest date through the latest date.
+    /// </summary>
     EARLIESTTOLATEST,
 
+    /// <summary>
+    /// Use only the earliest value/date found.
+    /// </summary>
     EARLIEST,
 
+    /// <summary>
+    /// Use only the latest value/date found.
+    /// </summary>
     LATEST
 
 }

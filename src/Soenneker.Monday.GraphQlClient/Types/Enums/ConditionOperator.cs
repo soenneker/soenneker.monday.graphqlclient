@@ -7,6 +7,9 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum ConditionOperator
 {
+    /// <summary>
+    /// Logical OR — any condition being met is sufficient.
+    /// </summary>
     OR
 
 }

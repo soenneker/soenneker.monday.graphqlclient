@@ -7,14 +7,29 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum VibeVariant
 {
+    /// <summary>
+    /// Full-page app within a monday.com board
+    /// </summary>
     BOARDVIEW,
 
+    /// <summary>
+    /// Item-level app variant
+    /// </summary>
     ITEMVIEW,
 
+    /// <summary>
+    /// Item-level app variant
+    /// </summary>
     VIBEITEMVIEW,
 
+    /// <summary>
+    /// Object-based app variant
+    /// </summary>
     OBJECT,
 
+    /// <summary>
+    /// Fullstack object-based app with server-side code generation
+    /// </summary>
     OBJECTFULLSTACK
 
 }

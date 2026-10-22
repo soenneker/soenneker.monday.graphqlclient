@@ -7,10 +7,19 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum TriggerEventState
 {
+    /// <summary>
+    /// Automation run completed successfully
+    /// </summary>
     Success,
 
+    /// <summary>
+    /// Automation run failed
+    /// </summary>
     Failure,
 
+    /// <summary>
+    /// Automation run exhausted all retry attempts
+    /// </summary>
     Exhausted
 
 }

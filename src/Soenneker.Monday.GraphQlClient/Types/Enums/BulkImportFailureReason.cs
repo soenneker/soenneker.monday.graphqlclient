@@ -7,18 +7,39 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum BulkImportFailureReason
 {
+    /// <summary>
+    /// The upload is invalid.
+    /// </summary>
     INVALIDUPLOAD,
 
+    /// <summary>
+    /// The authorization failed.
+    /// </summary>
     AUTHORIZATIONFAILED,
 
+    /// <summary>
+    /// The permission was denied.
+    /// </summary>
     PERMISSIONDENIED,
 
+    /// <summary>
+    /// The board capacity exceeded.
+    /// </summary>
     BOARDCAPACITYEXCEEDED,
 
+    /// <summary>
+    /// The account item capacity was exceeded.
+    /// </summary>
     ACCOUNTCAPACITYEXCEEDED,
 
+    /// <summary>
+    /// The uploaded file exceeded the 150 MB maximum.
+    /// </summary>
     FILETOOLARGE,
 
+    /// <summary>
+    /// An internal error occurred.
+    /// </summary>
     INTERNALERROR
 
 }

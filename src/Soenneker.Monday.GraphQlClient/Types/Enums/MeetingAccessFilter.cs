@@ -7,12 +7,24 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum MeetingAccessFilter
 {
+    /// <summary>
+    /// The user was a participant in the meeting or invited the bot.
+    /// </summary>
     OWN,
 
+    /// <summary>
+    /// The meeting was shared directly with the user or their team.
+    /// </summary>
     SHAREDWITHME,
 
+    /// <summary>
+    /// The meeting was shared with the account.
+    /// </summary>
     SHAREDWITHACCOUNT,
 
+    /// <summary>
+    /// All meetings the user has access to (own, shared with user, and shared with account).
+    /// </summary>
     ALL
 
 }

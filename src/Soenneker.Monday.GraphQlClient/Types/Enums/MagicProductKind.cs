@@ -7,14 +7,29 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum MagicProductKind
 {
+    /// <summary>
+    /// Core work management product (default).
+    /// </summary>
     CORE,
 
+    /// <summary>
+    /// Marketing product.
+    /// </summary>
     MARKETING,
 
+    /// <summary>
+    /// CRM product.
+    /// </summary>
     CRM,
 
+    /// <summary>
+    /// Dev product.
+    /// </summary>
     SOFTWARE,
 
+    /// <summary>
+    /// Service product.
+    /// </summary>
     SERVICE
 
 }

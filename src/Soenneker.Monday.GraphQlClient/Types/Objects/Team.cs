@@ -17,10 +17,22 @@ public sealed partial class Team
     public string Id { get; init; } = null!;
 
     /// <summary>
+    /// Whether the team is a guest team
+    /// </summary>
+    [JsonPropertyName("is_guest")]
+    public bool? IsGuest { get; init; }
+
+    /// <summary>
     /// The team's name.
     /// </summary>
     [JsonPropertyName("name")]
     public string Name { get; init; } = null!;
+
+    /// <summary>
+    /// The team's creation date as an ISO 8601 string.
+    /// </summary>
+    [JsonPropertyName("created_at")]
+    public string? CreatedAt { get; init; }
 
     /// <summary>
     /// The users who are the owners of the team.
@@ -39,17 +51,5 @@ public sealed partial class Team
     /// </summary>
     [JsonPropertyName("users")]
     public List<User>? Users { get; init; }
-
-    /// <summary>
-    /// Whether the team is a guest team
-    /// </summary>
-    [JsonPropertyName("is_guest")]
-    public bool? IsGuest { get; init; }
-
-    /// <summary>
-    /// The team's creation date as an ISO 8601 string.
-    /// </summary>
-    [JsonPropertyName("created_at")]
-    public string? CreatedAt { get; init; }
 
 }

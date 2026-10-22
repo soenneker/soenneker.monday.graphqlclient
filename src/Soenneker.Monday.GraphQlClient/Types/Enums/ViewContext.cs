@@ -7,6 +7,9 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum ViewContext
 {
+    /// <summary>
+    /// Associate the view with the board
+    /// </summary>
     BOARD
 
 }

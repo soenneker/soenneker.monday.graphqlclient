@@ -7,50 +7,119 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum AiColumnLanguage
 {
+    /// <summary>
+    /// English.
+    /// </summary>
     English,
 
+    /// <summary>
+    /// Spanish.
+    /// </summary>
     Spanish,
 
+    /// <summary>
+    /// French.
+    /// </summary>
     French,
 
+    /// <summary>
+    /// German.
+    /// </summary>
     German,
 
+    /// <summary>
+    /// Hebrew.
+    /// </summary>
     Hebrew,
 
+    /// <summary>
+    /// Chinese.
+    /// </summary>
     Chinese,
 
+    /// <summary>
+    /// Korean.
+    /// </summary>
     Korean,
 
+    /// <summary>
+    /// Arabic.
+    /// </summary>
     Arabic,
 
+    /// <summary>
+    /// Bengali.
+    /// </summary>
     Bengali,
 
+    /// <summary>
+    /// Danish.
+    /// </summary>
     Danish,
 
+    /// <summary>
+    /// Dutch.
+    /// </summary>
     Dutch,
 
+    /// <summary>
+    /// Hindi.
+    /// </summary>
     Hindi,
 
+    /// <summary>
+    /// Indonesian.
+    /// </summary>
     Indonesian,
 
+    /// <summary>
+    /// Italian.
+    /// </summary>
     Italian,
 
+    /// <summary>
+    /// Japanese.
+    /// </summary>
     Japanese,
 
+    /// <summary>
+    /// Norwegian.
+    /// </summary>
     Norwegian,
 
+    /// <summary>
+    /// Polish.
+    /// </summary>
     Polish,
 
+    /// <summary>
+    /// Portuguese.
+    /// </summary>
     Portuguese,
 
+    /// <summary>
+    /// Russian.
+    /// </summary>
     Russian,
 
+    /// <summary>
+    /// Swedish.
+    /// </summary>
     Swedish,
 
+    /// <summary>
+    /// Thai.
+    /// </summary>
     Thai,
 
+    /// <summary>
+    /// Turkish.
+    /// </summary>
     Turkish,
 
+    /// <summary>
+    /// Vietnamese.
+    /// </summary>
     Vietnamese
 
 }

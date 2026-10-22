@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum AgentSubscriberKind
 {
+    /// <summary>
+    /// A user.
+    /// </summary>
     USER,
 
+    /// <summary>
+    /// A team.
+    /// </summary>
     TEAM
 
 }

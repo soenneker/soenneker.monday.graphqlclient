@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum OnMatchBehaviour
 {
+    /// <summary>
+    /// Update if a matching item exists, otherwise create a new item
+    /// </summary>
     UPSERT,
 
+    /// <summary>
+    /// Skip if a matching item exists
+    /// </summary>
     SKIP
 
 }

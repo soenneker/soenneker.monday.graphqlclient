@@ -7,18 +7,39 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum VibeAppState
 {
+    /// <summary>
+    /// App is private to the creator
+    /// </summary>
     PRIVATE,
 
+    /// <summary>
+    /// App is published within the account
+    /// </summary>
     INTERNAL,
 
+    /// <summary>
+    /// App is publicly accessible
+    /// </summary>
     EXTERNAL,
 
+    /// <summary>
+    /// Legacy private app (pre-state migration)
+    /// </summary>
     OLDPRIVATE,
 
+    /// <summary>
+    /// Legacy published app (pre-state migration)
+    /// </summary>
     OLDINTERNAL,
 
+    /// <summary>
+    /// App was disabled by monday and cannot be published
+    /// </summary>
     DISABLED,
 
+    /// <summary>
+    /// Legacy app disabled by monday (pre-state migration)
+    /// </summary>
     OLDDISABLED
 
 }

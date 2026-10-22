@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum TimeOffEntryKind
 {
+    /// <summary>
+    /// A custom non-working date entry
+    /// </summary>
     CUSTOM,
 
+    /// <summary>
+    /// A public holiday
+    /// </summary>
     HOLIDAY
 
 }

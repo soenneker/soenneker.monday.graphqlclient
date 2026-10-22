@@ -7,10 +7,19 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum CustomizableBoardSettings
 {
+    /// <summary>
+    /// Notify me when I am mentioned on this board
+    /// </summary>
     IMMENTIONED,
 
+    /// <summary>
+    /// Notify me when I am assigned on this board
+    /// </summary>
     IMASSIGNED,
 
+    /// <summary>
+    /// Notify me on automation notify step on this board
+    /// </summary>
     AUTOMATIONNOTIFY
 
 }

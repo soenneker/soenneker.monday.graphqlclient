@@ -7,36 +7,84 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum DocBlockContentType
 {
+    /// <summary>
+    /// Bulleted list block
+    /// </summary>
     BulletedList,
 
+    /// <summary>
+    /// Check list block
+    /// </summary>
     CheckList,
 
+    /// <summary>
+    /// Code block
+    /// </summary>
     Code,
 
+    /// <summary>
+    /// Divider block
+    /// </summary>
     Divider,
 
+    /// <summary>
+    /// Image block
+    /// </summary>
     Image,
 
+    /// <summary>
+    /// Large title block
+    /// </summary>
     LargeTitle,
 
+    /// <summary>
+    /// Layout block
+    /// </summary>
     Layout,
 
+    /// <summary>
+    /// Medium title block
+    /// </summary>
     MediumTitle,
 
+    /// <summary>
+    /// Simple text block
+    /// </summary>
     NormalText,
 
+    /// <summary>
+    /// Notice block
+    /// </summary>
     NoticeBox,
 
+    /// <summary>
+    /// Numbered list block
+    /// </summary>
     NumberedList,
 
+    /// <summary>
+    /// Page break block
+    /// </summary>
     PageBreak,
 
+    /// <summary>
+    /// Quote text block
+    /// </summary>
     Quote,
 
+    /// <summary>
+    /// Small title block
+    /// </summary>
     SmallTitle,
 
+    /// <summary>
+    /// Table block
+    /// </summary>
     Table,
 
+    /// <summary>
+    /// Video block
+    /// </summary>
     Video
 
 }

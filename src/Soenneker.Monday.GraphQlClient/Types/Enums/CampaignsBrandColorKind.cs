@@ -7,14 +7,29 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum CampaignsBrandColorKind
 {
+    /// <summary>
+    /// Primary brand color
+    /// </summary>
     PRIMARY,
 
+    /// <summary>
+    /// Secondary brand color
+    /// </summary>
     SECONDARY,
 
+    /// <summary>
+    /// Accent brand color
+    /// </summary>
     ACCENT,
 
+    /// <summary>
+    /// Text color
+    /// </summary>
     TEXT,
 
+    /// <summary>
+    /// Other brand color
+    /// </summary>
     OTHER
 
 }

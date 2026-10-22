@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum UsersSortDirection
 {
+    /// <summary>
+    /// Sort in ascending order.
+    /// </summary>
     ASC,
 
+    /// <summary>
+    /// Sort in descending order.
+    /// </summary>
     DESC
 
 }

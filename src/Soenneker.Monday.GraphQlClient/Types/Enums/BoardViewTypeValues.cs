@@ -7,14 +7,29 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum BoardViewTypeValues
 {
+    /// <summary>
+    /// Calendar board view.
+    /// </summary>
     CalendarBoardView,
 
+    /// <summary>
+    /// Doc board view.
+    /// </summary>
     DocBoardView,
 
+    /// <summary>
+    /// Empty board view.
+    /// </summary>
     EmptyBoardView,
 
+    /// <summary>
+    /// Form board view.
+    /// </summary>
     FormBoardView,
 
+    /// <summary>
+    /// Table board view.
+    /// </summary>
     TableBoardView
 
 }

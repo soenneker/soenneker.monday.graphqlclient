@@ -7,10 +7,19 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum DuplicateBoardType
 {
+    /// <summary>
+    /// Duplicate board with structure and items.
+    /// </summary>
     DuplicateBoardWithPulses,
 
+    /// <summary>
+    /// Duplicate board with structure, items and updates.
+    /// </summary>
     DuplicateBoardWithPulsesAndUpdates,
 
+    /// <summary>
+    /// Duplicate board with structure.
+    /// </summary>
     DuplicateBoardWithStructure
 
 }

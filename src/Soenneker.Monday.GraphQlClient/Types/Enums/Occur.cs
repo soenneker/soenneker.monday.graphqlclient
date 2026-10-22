@@ -7,10 +7,19 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum Occur
 {
+    /// <summary>
+    /// Clause must match
+    /// </summary>
     MUST,
 
+    /// <summary>
+    /// Clause should match
+    /// </summary>
     SHOULD,
 
+    /// <summary>
+    /// Clause must not match
+    /// </summary>
     MUSTNOT
 
 }

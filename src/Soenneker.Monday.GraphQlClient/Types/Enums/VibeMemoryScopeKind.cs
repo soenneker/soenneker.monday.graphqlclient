@@ -7,10 +7,19 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum VibeMemoryScopeKind
 {
+    /// <summary>
+    /// Memory scoped to one vibe app
+    /// </summary>
     APP,
 
+    /// <summary>
+    /// The current user's personal memory
+    /// </summary>
     USER,
 
+    /// <summary>
+    /// Account-wide (team) memory
+    /// </summary>
     ACCOUNT
 
 }

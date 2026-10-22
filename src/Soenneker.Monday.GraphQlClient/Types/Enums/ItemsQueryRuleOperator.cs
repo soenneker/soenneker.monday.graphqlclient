@@ -7,36 +7,84 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum ItemsQueryRuleOperator
 {
+    /// <summary>
+    /// Any of the values
+    /// </summary>
     AnyOf,
 
-    Between,
-
-    ContainsTerms,
-
-    ContainsText,
-
-    EndsWith,
-
-    GreaterThan,
-
-    GreaterThanOrEquals,
-
-    IsEmpty,
-
-    IsNotEmpty,
-
-    LowerThan,
-
-    LowerThanOrEqual,
-
+    /// <summary>
+    /// None of the values
+    /// </summary>
     NotAnyOf,
 
+    /// <summary>
+    /// Empty value
+    /// </summary>
+    IsEmpty,
+
+    /// <summary>
+    /// Not empty value
+    /// </summary>
+    IsNotEmpty,
+
+    /// <summary>
+    /// Greater than the value
+    /// </summary>
+    GreaterThan,
+
+    /// <summary>
+    /// Greater than or equal to the value
+    /// </summary>
+    GreaterThanOrEquals,
+
+    /// <summary>
+    /// Lower than the value
+    /// </summary>
+    LowerThan,
+
+    /// <summary>
+    /// Lower than or equal to the value
+    /// </summary>
+    LowerThanOrEqual,
+
+    /// <summary>
+    /// Between the two values
+    /// </summary>
+    Between,
+
+    /// <summary>
+    /// Does not contain the text
+    /// </summary>
     NotContainsText,
 
+    /// <summary>
+    /// Contains the text
+    /// </summary>
+    ContainsText,
+
+    /// <summary>
+    /// Contains all the terms
+    /// </summary>
+    ContainsTerms,
+
+    /// <summary>
+    /// Starts with the value
+    /// </summary>
     StartsWith,
 
-    WithinTheLast,
+    /// <summary>
+    /// Ends with the value
+    /// </summary>
+    EndsWith,
 
-    WithinTheNext
+    /// <summary>
+    /// Within the next
+    /// </summary>
+    WithinTheNext,
+
+    /// <summary>
+    /// Within the last
+    /// </summary>
+    WithinTheLast
 
 }

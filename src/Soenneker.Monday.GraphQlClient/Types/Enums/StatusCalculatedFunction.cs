@@ -7,6 +7,9 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum StatusCalculatedFunction
 {
+    /// <summary>
+    /// Count the number of labels
+    /// </summary>
     COUNTKEYS
 
 }

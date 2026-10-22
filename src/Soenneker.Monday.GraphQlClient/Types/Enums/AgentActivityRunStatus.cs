@@ -7,12 +7,24 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum AgentActivityRunStatus
 {
+    /// <summary>
+    /// The run is currently in progress.
+    /// </summary>
     RUNNING,
 
+    /// <summary>
+    /// The run completed successfully.
+    /// </summary>
     SUCCESS,
 
+    /// <summary>
+    /// The run failed.
+    /// </summary>
     FAILED,
 
+    /// <summary>
+    /// The run was cancelled.
+    /// </summary>
     CANCELLED
 
 }

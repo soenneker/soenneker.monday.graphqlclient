@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum RunOnceSource
 {
+    /// <summary>
+    /// Execute based on the current live (active) workflow version. This is the default for GraphQL-created workflows.
+    /// </summary>
     LIVE,
 
+    /// <summary>
+    /// Execute based on the draft version. Only available for workflows that have a draft revision (i.e., workflows created or edited through the Workflow Builder UI).
+    /// </summary>
     DRAFT
 
 }

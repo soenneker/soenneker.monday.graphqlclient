@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum WidgetStatus
 {
+    /// <summary>
+    /// Widget data was loaded successfully.
+    /// </summary>
     OK,
 
+    /// <summary>
+    /// Widget failed to load; see error field for details.
+    /// </summary>
     ERROR
 
 }

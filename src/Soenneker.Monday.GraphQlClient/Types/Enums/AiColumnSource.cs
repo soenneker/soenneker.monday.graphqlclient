@@ -7,12 +7,24 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum AiColumnSource
 {
+    /// <summary>
+    /// Use the item name as the AI input source.
+    /// </summary>
     ItemName,
 
+    /// <summary>
+    /// Use the item update thread as the AI input source.
+    /// </summary>
     Thread,
 
+    /// <summary>
+    /// Use a specific column value as the AI input source.
+    /// </summary>
     Column,
 
+    /// <summary>
+    /// Use emails and activities associated with the item as the AI input source.
+    /// </summary>
     EmailsAndActivities
 
 }

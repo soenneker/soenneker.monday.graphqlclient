@@ -7,20 +7,44 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum VibeFilterOp
 {
+    /// <summary>
+    /// Equals.
+    /// </summary>
     EQ,
 
+    /// <summary>
+    /// Not equals.
+    /// </summary>
     NEQ,
 
+    /// <summary>
+    /// Less than.
+    /// </summary>
     LT,
 
+    /// <summary>
+    /// Less than or equal to.
+    /// </summary>
     LTE,
 
+    /// <summary>
+    /// Greater than.
+    /// </summary>
     GT,
 
+    /// <summary>
+    /// Greater than or equal to.
+    /// </summary>
     GTE,
 
+    /// <summary>
+    /// Field value is in the provided array.
+    /// </summary>
     IN,
 
+    /// <summary>
+    /// Array field contains the provided value.
+    /// </summary>
     ARRAYCONTAINS
 
 }

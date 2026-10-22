@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum ConflictSeverity
 {
+    /// <summary>
+    /// The resource has some working days within the task timeline, but fewer than the task duration requires.
+    /// </summary>
     PARTIAL,
 
+    /// <summary>
+    /// The resource has no working days within the task timeline.
+    /// </summary>
     FULL
 
 }

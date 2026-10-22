@@ -4,10 +4,19 @@ namespace Soenneker.Monday.GraphQlClient;
 
 public enum HostType
 {
+    /// <summary>
+    /// Workflow hosted under an app feature object
+    /// </summary>
     APPFEATUREOBJECT,
 
+    /// <summary>
+    /// Workflow hosted in a board
+    /// </summary>
     BOARD,
 
+    /// <summary>
+    /// Workflow hosted in the account
+    /// </summary>
     ACCOUNTLEVEL
 
 }

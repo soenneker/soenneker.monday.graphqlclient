@@ -7,10 +7,19 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum CanOverrideField
 {
+    /// <summary>
+    /// Allow overriding column settings
+    /// </summary>
     Settings,
 
+    /// <summary>
+    /// Allow overriding column title
+    /// </summary>
     Title,
 
+    /// <summary>
+    /// Allow overriding column description
+    /// </summary>
     Description
 
 }

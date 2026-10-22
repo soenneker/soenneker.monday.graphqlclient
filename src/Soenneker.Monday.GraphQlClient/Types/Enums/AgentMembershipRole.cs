@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum AgentMembershipRole
 {
+    /// <summary>
+    /// Owner-level access to the agent.
+    /// </summary>
     OWNER,
 
+    /// <summary>
+    /// Member-level access to the agent.
+    /// </summary>
     MEMBER
 
 }

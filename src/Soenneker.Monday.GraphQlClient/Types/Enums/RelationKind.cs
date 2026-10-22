@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum RelationKind
 {
+    /// <summary>
+    /// Alias relation type
+    /// </summary>
     ALIAS,
 
+    /// <summary>
+    /// Dependency relation type
+    /// </summary>
     DEPENDENCY
 
 }

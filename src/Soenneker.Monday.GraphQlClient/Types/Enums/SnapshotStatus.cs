@@ -7,14 +7,29 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum SnapshotStatus
 {
+    /// <summary>
+    /// The snapshot is pending and has not started yet.
+    /// </summary>
     Pending,
 
+    /// <summary>
+    /// The snapshot is currently being processed.
+    /// </summary>
     Processing,
 
+    /// <summary>
+    /// The snapshot completed successfully.
+    /// </summary>
     Success,
 
+    /// <summary>
+    /// The snapshot failed to complete.
+    /// </summary>
     Failed,
 
+    /// <summary>
+    /// The snapshot has been rolled back and can be recreated.
+    /// </summary>
     Rollback
 
 }

@@ -7,16 +7,34 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum VibeAppSortField
 {
+    /// <summary>
+    /// Updated at
+    /// </summary>
     UPDATEDAT,
 
+    /// <summary>
+    /// Created at
+    /// </summary>
     CREATEDAT,
 
+    /// <summary>
+    /// Published status
+    /// </summary>
     ISPUBLISHED,
 
+    /// <summary>
+    /// Published at date
+    /// </summary>
     PUBLISHEDAT,
 
+    /// <summary>
+    /// App name
+    /// </summary>
     NAME,
 
+    /// <summary>
+    /// App lifecycle state
+    /// </summary>
     STATE
 
 }

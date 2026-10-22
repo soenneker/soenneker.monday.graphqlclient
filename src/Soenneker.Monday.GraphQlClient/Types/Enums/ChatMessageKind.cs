@@ -7,26 +7,59 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum ChatMessageKind
 {
+    /// <summary>
+    /// A processing message
+    /// </summary>
     PROCESSING,
 
+    /// <summary>
+    /// A text message
+    /// </summary>
     TEXT,
 
+    /// <summary>
+    /// A message containing the LLM's reasoning
+    /// </summary>
     REASONING,
 
+    /// <summary>
+    /// An error message with a list of errors
+    /// </summary>
     ERROR,
 
+    /// <summary>
+    /// An indication message
+    /// </summary>
     INDICATION,
 
+    /// <summary>
+    /// A call-to-action message
+    /// </summary>
     CTA,
 
+    /// <summary>
+    /// A tool call message
+    /// </summary>
     TOOLCALL,
 
+    /// <summary>
+    /// A board connected notification message
+    /// </summary>
     BOARDCONNECTED,
 
+    /// <summary>
+    /// A board disconnected notification message
+    /// </summary>
     BOARDDISCONNECTED,
 
+    /// <summary>
+    /// List of chips to be presented to the user
+    /// </summary>
     CHIPS,
 
+    /// <summary>
+    /// One pipeline step (lint, build, deploy) with its status — copy is owned by the client
+    /// </summary>
     PROCESS
 
 }

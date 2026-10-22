@@ -7,8 +7,14 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum MessageType
 {
+    /// <summary>
+    /// A regular chat message.
+    /// </summary>
     STANDARD,
 
+    /// <summary>
+    /// A system notification recorded when an agent fails to respond.
+    /// </summary>
     AGENTERROR
 
 }

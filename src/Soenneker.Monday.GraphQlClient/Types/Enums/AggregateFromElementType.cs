@@ -4,6 +4,9 @@ namespace Soenneker.Monday.GraphQlClient;
 
 public enum AggregateFromElementType
 {
+    /// <summary>
+    /// A single table to select from
+    /// </summary>
     TABLE
 
 }
