@@ -555,12 +555,6 @@ public sealed partial class Query
     public SearchNamespace Search { get; init; } = null!;
 
     /// <summary>
-    /// Platform API data.
-    /// </summary>
-    [JsonPropertyName("platform_api")]
-    public PlatformApi? PlatformApi { get; init; }
-
-    /// <summary>
     /// Retrieve audit logs for your Monday account. You can
     ///   filter logs by event types, user ID, IP address and start and end date.
     ///   
@@ -624,5 +618,11 @@ public sealed partial class Query
     /// </summary>
     [JsonPropertyName("audit_event_catalogue")]
     public List<AuditEventCatalogueEntry>? AuditEventCatalogue { get; init; }
+
+    /// <summary>
+    /// Platform API data.
+    /// </summary>
+    [JsonPropertyName("platform_api")]
+    public PlatformApi? PlatformApi { get; init; }
 
 }

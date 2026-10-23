@@ -10,6 +10,11 @@ public enum ContextSourceType
     /// <summary>
     /// A monday Doc, identified by the id in its URL
     /// </summary>
-    DOC
+    DOC,
+
+    /// <summary>
+    /// A monday form, identified by its board view id; parent_id is the id of its board
+    /// </summary>
+    FORM
 
 }

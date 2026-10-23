@@ -16,9 +16,15 @@ public sealed partial class ContextSourceInput
     public ContextSourceType Type { get; init; }
 
     /// <summary>
-    /// The entity id (for DOC: the id in the doc URL)
+    /// The entity id (for DOC: the id in the doc URL; for FORM: the form board view id)
     /// </summary>
     [JsonPropertyName("id")]
     public string Id { get; init; } = null!;
+
+    /// <summary>
+    /// The id of the entity that contains the source. Required for FORM (the board id); not allowed for DOC
+    /// </summary>
+    [JsonPropertyName("parent_id")]
+    public string? ParentId { get; init; }
 
 }

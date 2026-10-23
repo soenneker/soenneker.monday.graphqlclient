@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 namespace Soenneker.Monday.GraphQlClient;
 
 /// <summary>
-/// A context source (e.g. a monday Doc) the user started the app from. Metadata only, never the content
+/// A context source (e.g. a monday Doc or form) the user started the app from. Metadata only, never the content
 /// </summary>
 public sealed partial class ChatMessageContextSource
 {
@@ -16,10 +16,16 @@ public sealed partial class ChatMessageContextSource
     public ContextSourceType? Type { get; init; }
 
     /// <summary>
-    /// The entity id (for DOC: the id in the doc URL)
+    /// The entity id (for DOC: the id in the doc URL; for FORM: the form board view id)
     /// </summary>
     [JsonPropertyName("id")]
     public string? Id { get; init; }
+
+    /// <summary>
+    /// The id of the entity that contains the source (for FORM: the board id). Null for DOC
+    /// </summary>
+    [JsonPropertyName("parent_id")]
+    public string? ParentId { get; init; }
 
     /// <summary>
     /// Display name shown in the message chip
