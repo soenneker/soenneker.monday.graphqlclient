@@ -22,7 +22,7 @@ public sealed partial class AttachDropdownManagedColumnRequestBuilder
     /// </summary>
     public ValueTask<GraphQlResponse<AttachDropdownManagedColumnData>> Execute(AttachDropdownManagedColumnVariables request, CancellationToken cancellationToken = default)
     {
-        const string gqlQuery = @"mutation AttachDropdownManagedColumn($board_id: ID!, $managed_column_id: ID!, $title: String, $description: String, $after_column_id: ID, $settings: DropdownSettingsOverridesInput) { attach_dropdown_managed_column(board_id: $board_id, managed_column_id: $managed_column_id, title: $title, description: $description, after_column_id: $after_column_id, settings: $settings) { id title description type width archived settings settings_str revision capabilities { calculated { function calculated_type } visibility } } }";
+        const string gqlQuery = @"mutation AttachDropdownManagedColumn($board_id: ID!, $managed_column_id: ID!, $title: String, $description: String, $after_column_id: ID, $settings: DropdownSettingsOverridesInput) { attach_dropdown_managed_column(board_id: $board_id, managed_column_id: $managed_column_id, title: $title, description: $description, after_column_id: $after_column_id, settings: $settings) { archived description id settings_str title type width settings revision capabilities { calculated { function calculated_type } visibility } } }";
         return _graphQlClient.Execute<AttachDropdownManagedColumnData>(gqlQuery, request, cancellationToken);
     }
 

@@ -22,7 +22,7 @@ public sealed partial class CreateColumnRequestBuilder
     /// </summary>
     public ValueTask<GraphQlResponse<CreateColumnData>> Execute(CreateColumnVariables request, CancellationToken cancellationToken = default)
     {
-        const string gqlQuery = @"mutation CreateColumn($board_id: ID!, $id: String, $title: String!, $description: String, $after_column_id: ID, $capabilities: ColumnCapabilitiesInput, $defaults: JSON, $column_type: ColumnType!) { create_column(board_id: $board_id, id: $id, title: $title, description: $description, after_column_id: $after_column_id, capabilities: $capabilities, defaults: $defaults, column_type: $column_type) { id title description type width archived settings settings_str revision capabilities { calculated { function calculated_type } visibility } } }";
+        const string gqlQuery = @"mutation CreateColumn($after_column_id: ID, $board_id: ID!, $capabilities: ColumnCapabilitiesInput, $column_type: ColumnType!, $defaults: JSON, $description: String, $id: String, $title: String!) { create_column(after_column_id: $after_column_id, board_id: $board_id, capabilities: $capabilities, column_type: $column_type, defaults: $defaults, description: $description, id: $id, title: $title) { archived description id settings_str title type width settings revision capabilities { calculated { function calculated_type } visibility } } }";
         return _graphQlClient.Execute<CreateColumnData>(gqlQuery, request, cancellationToken);
     }
 

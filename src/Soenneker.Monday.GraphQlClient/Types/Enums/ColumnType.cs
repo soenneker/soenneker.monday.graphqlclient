@@ -55,6 +55,11 @@ public enum ColumnType
     /// <summary>
     /// Document your work and increase collaboration
     /// </summary>
+    DirectDoc,
+
+    /// <summary>
+    /// Document your work and increase collaboration
+    /// </summary>
     Doc,
 
     /// <summary>
@@ -125,6 +130,11 @@ public enum ColumnType
     Mirror,
 
     /// <summary>
+    /// Name is really cool...
+    /// </summary>
+    Name,
+
+    /// <summary>
     /// Add revenue, costs, time estimations and more
     /// </summary>
     Numbers,
@@ -133,6 +143,11 @@ public enum ColumnType
     /// Assign people to improve team work
     /// </summary>
     People,
+
+    /// <summary>
+    /// Assign a person to increase ownership and accountability (deprecated)
+    /// </summary>
+    Person,
 
     /// <summary>
     /// Call your contacts directly from monday.com
@@ -155,6 +170,11 @@ public enum ColumnType
     Status,
 
     /// <summary>
+    /// Use the subtasks column to create another level of tasks
+    /// </summary>
+    Subtasks,
+
+    /// <summary>
     /// Add tags to categorize items across multiple boards
     /// </summary>
     Tags,
@@ -170,14 +190,19 @@ public enum ColumnType
     Text,
 
     /// <summary>
+    /// Easily track time spent on each item, group, and board
+    /// </summary>
+    TimeTracking,
+
+    /// <summary>
     /// Visualize your item’s duration, with a start and end date
     /// </summary>
     Timeline,
 
     /// <summary>
-    /// Easily track time spent on each item, group, and board
+    /// Unsupported column type
     /// </summary>
-    TimeTracking,
+    Unsupported,
 
     /// <summary>
     /// Vote on an item e.g. pick a new feature or a favorite lunch place
@@ -192,31 +217,6 @@ public enum ColumnType
     /// <summary>
     /// Keep track of the time anywhere in the world
     /// </summary>
-    WorldClock,
-
-    /// <summary>
-    /// Unsupported column type
-    /// </summary>
-    Unsupported,
-
-    /// <summary>
-    /// Name is really cool...
-    /// </summary>
-    Name,
-
-    /// <summary>
-    /// Assign a person to increase ownership and accountability (deprecated)
-    /// </summary>
-    Person,
-
-    /// <summary>
-    /// Document your work and increase collaboration
-    /// </summary>
-    DirectDoc,
-
-    /// <summary>
-    /// Use the subtasks column to create another level of tasks
-    /// </summary>
-    Subtasks
+    WorldClock
 
 }
