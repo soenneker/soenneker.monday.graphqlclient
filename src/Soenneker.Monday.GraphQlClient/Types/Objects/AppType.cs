@@ -54,6 +54,12 @@ public sealed partial class AppType
     public AppKind? Kind { get; init; }
 
     /// <summary>
+    /// All versions of this app with their current status. Use this to poll promotion progress.
+    /// </summary>
+    [JsonPropertyName("versions")]
+    public List<DeveloperAppVersion>? Versions { get; init; }
+
+    /// <summary>
     /// The app status (i.e. is live?)
     /// </summary>
     [JsonPropertyName("status")]

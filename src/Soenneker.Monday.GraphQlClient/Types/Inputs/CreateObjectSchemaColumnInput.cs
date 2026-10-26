@@ -16,6 +16,12 @@ public sealed partial class CreateObjectSchemaColumnInput
     public ColumnType Type { get; init; }
 
     /// <summary>
+    /// For mirror/lookup columns only: the column type this mirror displays. May be any column type except another mirror/lookup (mirror-to-mirror is not supported).
+    /// </summary>
+    [JsonPropertyName("sub_type")]
+    public ColumnType? SubType { get; init; }
+
+    /// <summary>
     /// The column title
     /// </summary>
     [JsonPropertyName("title")]

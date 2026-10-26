@@ -19,6 +19,10 @@ public sealed partial class DeleteBuilder
     public DeleteTeamsFromBuilder TeamsFrom => new DeleteTeamsFromBuilder(_graphQlClient);
 
     /// <summary>
+    /// Builds and executes grouped requests for the 'deleteTime' resource.</summary>
+    public DeleteTimeBuilder Time => new DeleteTimeBuilder(_graphQlClient);
+
+    /// <summary>
     /// Builds and executes requests for the 'delete_app_lifecycle_subscription' mutation.</summary>
     public DeleteAppLifecycleSubscriptionRequestBuilder AppLifecycleSubscription => new DeleteAppLifecycleSubscriptionRequestBuilder(_graphQlClient);
 
@@ -29,6 +33,10 @@ public sealed partial class DeleteBuilder
     /// <summary>
     /// Builds and executes requests for the 'delete_board' mutation.</summary>
     public DeleteBoardRequestBuilder Board => new DeleteBoardRequestBuilder(_graphQlClient);
+
+    /// <summary>
+    /// Builds and executes requests for the 'delete_board_automation' mutation.</summary>
+    public DeleteBoardAutomationRequestBuilder BoardAutomation => new DeleteBoardAutomationRequestBuilder(_graphQlClient);
 
     /// <summary>
     /// Builds and executes requests for the 'delete_column' mutation.</summary>
@@ -99,6 +107,10 @@ public sealed partial class DeleteBuilder
     public DeleteObjectSchemaRequestBuilder ObjectSchema => new DeleteObjectSchemaRequestBuilder(_graphQlClient);
 
     /// <summary>
+    /// Builds and executes requests for the 'delete_pto_entry' mutation.</summary>
+    public DeletePtoEntryRequestBuilder PtoEntry => new DeletePtoEntryRequestBuilder(_graphQlClient);
+
+    /// <summary>
     /// Builds and executes requests for the 'delete_question' mutation.</summary>
     public DeleteQuestionRequestBuilder Question => new DeleteQuestionRequestBuilder(_graphQlClient);
 
@@ -137,6 +149,10 @@ public sealed partial class DeleteBuilder
     /// <summary>
     /// Builds and executes requests for the 'delete_widget' mutation.</summary>
     public DeleteWidgetRequestBuilder Widget => new DeleteWidgetRequestBuilder(_graphQlClient);
+
+    /// <summary>
+    /// Builds and executes requests for the 'delete_work_schedule' mutation.</summary>
+    public DeleteWorkScheduleRequestBuilder WorkSchedule => new DeleteWorkScheduleRequestBuilder(_graphQlClient);
 
     /// <summary>
     /// Builds and executes requests for the 'delete_workspace' mutation.</summary>

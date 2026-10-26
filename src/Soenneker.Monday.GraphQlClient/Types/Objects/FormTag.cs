@@ -19,12 +19,6 @@ public sealed partial class FormTag
     public string Name { get; init; } = null!;
 
     /// <summary>
-    /// The value of the tag
-    /// </summary>
-    [JsonPropertyName("value")]
-    public string? Value { get; init; }
-
-    /// <summary>
     /// The ID of the column this tag is associated with
     /// </summary>
     [JsonPropertyName("columnId")]

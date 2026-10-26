@@ -27,6 +27,14 @@ public sealed partial class UpdateBuilder
     public UpdateStatusBuilder Status => new UpdateStatusBuilder(_graphQlClient);
 
     /// <summary>
+    /// Builds and executes grouped requests for the 'updateTime' resource.</summary>
+    public UpdateTimeBuilder Time => new UpdateTimeBuilder(_graphQlClient);
+
+    /// <summary>
+    /// Builds and executes grouped requests for the 'updateUsers' resource.</summary>
+    public UpdateUsersBuilder Users => new UpdateUsersBuilder(_graphQlClient);
+
+    /// <summary>
     /// Builds and executes requests for the 'update_app' mutation.</summary>
     public UpdateAppRequestBuilder App => new UpdateAppRequestBuilder(_graphQlClient);
 
@@ -99,10 +107,6 @@ public sealed partial class UpdateBuilder
     public UpdateFormSettingsRequestBuilder FormSettings => new UpdateFormSettingsRequestBuilder(_graphQlClient);
 
     /// <summary>
-    /// Builds and executes requests for the 'update_form_tag' mutation.</summary>
-    public UpdateFormTagRequestBuilder FormTag => new UpdateFormTagRequestBuilder(_graphQlClient);
-
-    /// <summary>
     /// Builds and executes requests for the 'update_group' mutation.</summary>
     public UpdateGroupRequestBuilder Group => new UpdateGroupRequestBuilder(_graphQlClient);
 
@@ -135,8 +139,12 @@ public sealed partial class UpdateBuilder
     public UpdateOverviewHierarchyRequestBuilder OverviewHierarchy => new UpdateOverviewHierarchyRequestBuilder(_graphQlClient);
 
     /// <summary>
-    /// Builds and executes requests for the 'update_users_role' mutation.</summary>
-    public UpdateUsersRoleRequestBuilder UsersRole => new UpdateUsersRoleRequestBuilder(_graphQlClient);
+    /// Builds and executes requests for the 'update_pto_entry' mutation.</summary>
+    public UpdatePtoEntryRequestBuilder PtoEntry => new UpdatePtoEntryRequestBuilder(_graphQlClient);
+
+    /// <summary>
+    /// Builds and executes requests for the 'update_teams_board_role' mutation.</summary>
+    public UpdateTeamsBoardRoleRequestBuilder TeamsBoardRole => new UpdateTeamsBoardRoleRequestBuilder(_graphQlClient);
 
     /// <summary>
     /// Builds and executes requests for the 'update_validation_rule' mutation.</summary>
@@ -149,6 +157,10 @@ public sealed partial class UpdateBuilder
     /// <summary>
     /// Builds and executes requests for the 'update_view_table' mutation.</summary>
     public UpdateViewTableRequestBuilder ViewTable => new UpdateViewTableRequestBuilder(_graphQlClient);
+
+    /// <summary>
+    /// Builds and executes requests for the 'update_work_schedule' mutation.</summary>
+    public UpdateWorkScheduleRequestBuilder WorkSchedule => new UpdateWorkScheduleRequestBuilder(_graphQlClient);
 
     /// <summary>
     /// Builds and executes requests for the 'update_workspace' mutation.</summary>

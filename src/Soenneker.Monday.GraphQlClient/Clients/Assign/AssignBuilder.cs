@@ -22,4 +22,12 @@ public sealed partial class AssignBuilder
     /// Builds and executes requests for the 'assign_team_owners' mutation.</summary>
     public AssignTeamOwnersRequestBuilder TeamOwners => new AssignTeamOwnersRequestBuilder(_graphQlClient);
 
+    /// <summary>
+    /// Builds and executes requests for the 'assign_time_off' mutation.</summary>
+    public AssignTimeOffRequestBuilder TimeOff => new AssignTimeOffRequestBuilder(_graphQlClient);
+
+    /// <summary>
+    /// Builds and executes requests for the 'assign_work_schedule' mutation.</summary>
+    public AssignWorkScheduleRequestBuilder WorkSchedule => new AssignWorkScheduleRequestBuilder(_graphQlClient);
+
 }

@@ -22,7 +22,7 @@ public sealed partial class CreateObjectSchemaRequestBuilder
     /// </summary>
     public ValueTask<GraphQlResponse<CreateObjectSchemaData>> Execute(CreateObjectSchemaVariables request, CancellationToken cancellationToken = default)
     {
-        const string gqlQuery = @"mutation CreateObjectSchema($name: String!, $parent_id: ID, $description: String) { create_object_schema(name: $name, parent_id: $parent_id, description: $description) { id account_id created_by revision created_at updated_at columns { id title type description settings policy { can_override cannot_delete read_only messages } tags { deprecated opt_in_by_default inherited } } parent_id name description connected_boards_count } }";
+        const string gqlQuery = @"mutation CreateObjectSchema($name: String!, $parent_id: ID, $description: String) { create_object_schema(name: $name, parent_id: $parent_id, description: $description) { id account_id created_by revision created_at updated_at columns { id title type sub_type description settings policy { can_override cannot_delete read_only messages } tags { deprecated opt_in_by_default inherited } } parent_id name description connected_boards_count } }";
         return _graphQlClient.Execute<CreateObjectSchemaData>(gqlQuery, request, cancellationToken);
     }
 

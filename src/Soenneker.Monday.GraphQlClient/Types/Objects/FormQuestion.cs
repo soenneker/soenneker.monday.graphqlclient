@@ -52,7 +52,7 @@ public sealed partial class FormQuestion
     /// <summary>
     /// Conditional logic rules that control when this question is displayed based on other question answers.
     /// </summary>
-    [JsonPropertyName("showIfRules")]
+    [JsonPropertyName("show_if_rules")]
     public string? ShowIfRules { get; init; }
 
     /// <summary>

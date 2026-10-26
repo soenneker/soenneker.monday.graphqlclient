@@ -28,6 +28,12 @@ public sealed partial class UpdateObjectSchemaColumnInput
     public string? Description { get; init; }
 
     /// <summary>
+    /// For mirror/lookup columns only: the column type this mirror displays. May be any column type except another mirror/lookup (mirror-to-mirror is not supported).
+    /// </summary>
+    [JsonPropertyName("sub_type")]
+    public ColumnType? SubType { get; init; }
+
+    /// <summary>
     /// Type-specific configuration object containing column defaults and settings. Use get_column_type_schema query to see available properties and validation rules. Examples: status column labels, dropdown options, number formatting rules, date display preferences.
     /// </summary>
     [JsonPropertyName("defaults")]

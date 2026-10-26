@@ -23,7 +23,7 @@ public sealed partial class GetGetObjectSchemasRequestBuilder
     /// </summary>
     public ValueTask<GraphQlResponse<GetGetObjectSchemasData>> Execute(GetGetObjectSchemasVariables request, CancellationToken cancellationToken = default)
     {
-        const string gqlQuery = @"query GetGetObjectSchemas($ids: [ID!], $names: [String!], $limit: Int, $page: Int, $exclude_created_by_monday: Boolean) { get_object_schemas(ids: $ids, names: $names, limit: $limit, page: $page, exclude_created_by_monday: $exclude_created_by_monday) { id account_id created_by revision created_at updated_at columns { id title type description settings policy { can_override cannot_delete read_only messages } tags { deprecated opt_in_by_default inherited } } parent_id name description connected_boards_count } }";
+        const string gqlQuery = @"query GetGetObjectSchemas($ids: [ID!], $names: [String!], $limit: Int, $page: Int, $exclude_created_by_monday: Boolean) { get_object_schemas(ids: $ids, names: $names, limit: $limit, page: $page, exclude_created_by_monday: $exclude_created_by_monday) { id account_id created_by revision created_at updated_at columns { id title type sub_type description settings policy { can_override cannot_delete read_only messages } tags { deprecated opt_in_by_default inherited } } parent_id name description connected_boards_count } }";
         return _graphQlClient.Execute<GetGetObjectSchemasData>(gqlQuery, request, cancellationToken);
     }
 

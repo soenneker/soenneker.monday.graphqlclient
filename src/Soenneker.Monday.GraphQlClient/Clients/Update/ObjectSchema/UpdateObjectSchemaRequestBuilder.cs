@@ -22,7 +22,7 @@ public sealed partial class UpdateObjectSchemaRequestBuilder
     /// </summary>
     public ValueTask<GraphQlResponse<UpdateObjectSchemaData>> Execute(UpdateObjectSchemaVariables request, CancellationToken cancellationToken = default)
     {
-        const string gqlQuery = @"mutation UpdateObjectSchema($id: ID!, $revision: Int!, $parent_id: ID, $description: String) { update_object_schema(id: $id, revision: $revision, parent_id: $parent_id, description: $description) { id account_id created_by revision created_at updated_at columns { id title type description settings policy { can_override cannot_delete read_only messages } tags { deprecated opt_in_by_default inherited } } parent_id name description connected_boards_count } }";
+        const string gqlQuery = @"mutation UpdateObjectSchema($id: ID!, $revision: Int!, $parent_id: ID, $description: String) { update_object_schema(id: $id, revision: $revision, parent_id: $parent_id, description: $description) { id account_id created_by revision created_at updated_at columns { id title type sub_type description settings policy { can_override cannot_delete read_only messages } tags { deprecated opt_in_by_default inherited } } parent_id name description connected_boards_count } }";
         return _graphQlClient.Execute<UpdateObjectSchemaData>(gqlQuery, request, cancellationToken);
     }
 

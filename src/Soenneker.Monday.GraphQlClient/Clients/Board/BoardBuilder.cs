@@ -15,6 +15,10 @@ public sealed partial class BoardBuilder
     }
 
     /// <summary>
+    /// Builds and executes requests for the 'board_automations' query.</summary>
+    public GetBoardAutomationsRequestBuilder Automations => new GetBoardAutomationsRequestBuilder(_graphQlClient);
+
+    /// <summary>
     /// Builds and executes requests for the 'board_candidates' query.</summary>
     public GetBoardCandidatesRequestBuilder Candidates => new GetBoardCandidatesRequestBuilder(_graphQlClient);
 

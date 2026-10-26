@@ -19,6 +19,9 @@ public sealed class CreateViewVariables
     [JsonPropertyName("name")]
     public string? Name { get; init; }
 
+    [JsonPropertyName("context")]
+    public ViewContext? Context { get; init; }
+
     [JsonPropertyName("filter_user_id")]
     public string? FilterUserId { get; init; }
 
@@ -33,6 +36,9 @@ public sealed class CreateViewVariables
 
     [JsonPropertyName("tags")]
     public List<string>? Tags { get; init; }
+
+    [JsonPropertyName("conditional_formatting_settings")]
+    public List<ConditionalFormattingConditionInput>? ConditionalFormattingSettings { get; init; }
 
     [JsonPropertyName("settings")]
     public string? Settings { get; init; }

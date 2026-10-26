@@ -19,6 +19,10 @@ public sealed partial class ChangeBuilder
     public ChangeColumnBuilder Column => new ChangeColumnBuilder(_graphQlClient);
 
     /// <summary>
+    /// Builds and executes requests for the 'change_board_kind' mutation.</summary>
+    public ChangeBoardKindRequestBuilder BoardKind => new ChangeBoardKindRequestBuilder(_graphQlClient);
+
+    /// <summary>
     /// Builds and executes requests for the 'change_item_position' mutation.</summary>
     public ChangeItemPositionRequestBuilder ItemPosition => new ChangeItemPositionRequestBuilder(_graphQlClient);
 

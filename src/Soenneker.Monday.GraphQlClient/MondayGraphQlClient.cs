@@ -66,6 +66,10 @@ public sealed partial class MondayGraphQlClient
     public ClearBuilder Clear => new ClearBuilder(_graphQlClient);
 
     /// <summary>
+    /// Builds and executes grouped requests for the 'configure' resource.</summary>
+    public ConfigureBuilder Configure => new ConfigureBuilder(_graphQlClient);
+
+    /// <summary>
     /// Builds and executes grouped requests for the 'connect' resource.</summary>
     public ConnectBuilder Connect => new ConnectBuilder(_graphQlClient);
 
@@ -126,6 +130,10 @@ public sealed partial class MondayGraphQlClient
     public TriggerBuilder Trigger => new TriggerBuilder(_graphQlClient);
 
     /// <summary>
+    /// Builds and executes grouped requests for the 'unassign' resource.</summary>
+    public UnassignBuilder Unassign => new UnassignBuilder(_graphQlClient);
+
+    /// <summary>
     /// Builds and executes grouped requests for the 'update' resource.</summary>
     public UpdateBuilder Update => new UpdateBuilder(_graphQlClient);
 
@@ -136,6 +144,10 @@ public sealed partial class MondayGraphQlClient
     /// <summary>
     /// Builds and executes requests for the 'account' query.</summary>
     public GetAccountRequestBuilder GetAccount => new GetAccountRequestBuilder(_graphQlClient);
+
+    /// <summary>
+    /// Builds and executes requests for the 'account_availability_defaults' query.</summary>
+    public GetAccountAvailabilityDefaultsRequestBuilder GetAccountAvailabilityDefaults => new GetAccountAvailabilityDefaultsRequestBuilder(_graphQlClient);
 
     /// <summary>
     /// Builds and executes requests for the 'account_connections' query.</summary>
@@ -156,6 +168,10 @@ public sealed partial class MondayGraphQlClient
     /// <summary>
     /// Builds and executes requests for the 'aggregate' query.</summary>
     public GetAggregateRequestBuilder GetAggregate => new GetAggregateRequestBuilder(_graphQlClient);
+
+    /// <summary>
+    /// Builds and executes requests for the 'aggregate_history' query.</summary>
+    public GetAggregateHistoryRequestBuilder GetAggregateHistory => new GetAggregateHistoryRequestBuilder(_graphQlClient);
 
     /// <summary>
     /// Builds and executes requests for the 'all_widgets_schema' query.</summary>
@@ -294,6 +310,10 @@ public sealed partial class MondayGraphQlClient
     public GetItemsRequestBuilder GetItems => new GetItemsRequestBuilder(_graphQlClient);
 
     /// <summary>
+    /// Builds and executes requests for the 'items_history' query.</summary>
+    public GetItemsHistoryRequestBuilder GetItemsHistory => new GetItemsHistoryRequestBuilder(_graphQlClient);
+
+    /// <summary>
     /// Builds and executes requests for the 'items_page_by_column_values' query.</summary>
     public GetItemsPageByColumnValuesRequestBuilder GetItemsPageByColumnValues => new GetItemsPageByColumnValuesRequestBuilder(_graphQlClient);
 
@@ -350,6 +370,10 @@ public sealed partial class MondayGraphQlClient
     public GetRepliesRequestBuilder GetReplies => new GetRepliesRequestBuilder(_graphQlClient);
 
     /// <summary>
+    /// Builds and executes requests for the 'resources_availability' query.</summary>
+    public GetResourcesAvailabilityRequestBuilder GetResourcesAvailability => new GetResourcesAvailabilityRequestBuilder(_graphQlClient);
+
+    /// <summary>
     /// Builds and executes requests for the 'search' query.</summary>
     public GetSearchRequestBuilder GetSearch => new GetSearchRequestBuilder(_graphQlClient);
 
@@ -376,6 +400,14 @@ public sealed partial class MondayGraphQlClient
     /// <summary>
     /// Builds and executes requests for the 'teams' query.</summary>
     public GetTeamsRequestBuilder GetTeams => new GetTeamsRequestBuilder(_graphQlClient);
+
+    /// <summary>
+    /// Builds and executes requests for the 'template_installation_status' query.</summary>
+    public GetTemplateInstallationStatusRequestBuilder GetTemplateInstallationStatus => new GetTemplateInstallationStatusRequestBuilder(_graphQlClient);
+
+    /// <summary>
+    /// Builds and executes requests for the 'time_offs' query.</summary>
+    public GetTimeOffsRequestBuilder GetTimeOffs => new GetTimeOffsRequestBuilder(_graphQlClient);
 
     /// <summary>
     /// Builds and executes requests for the 'timeline' query.</summary>
@@ -418,8 +450,16 @@ public sealed partial class MondayGraphQlClient
     public GetWebhooksRequestBuilder GetWebhooks => new GetWebhooksRequestBuilder(_graphQlClient);
 
     /// <summary>
+    /// Builds and executes requests for the 'work_schedules' query.</summary>
+    public GetWorkSchedulesRequestBuilder GetWorkSchedules => new GetWorkSchedulesRequestBuilder(_graphQlClient);
+
+    /// <summary>
     /// Builds and executes requests for the 'workspaces' query.</summary>
     public GetWorkspacesRequestBuilder GetWorkspaces => new GetWorkspacesRequestBuilder(_graphQlClient);
+
+    /// <summary>
+    /// Builds and executes requests for the 'would_create_mls_rollup_cycle' query.</summary>
+    public GetWouldCreateMlsRollupCycleRequestBuilder GetWouldCreateMlsRollupCycle => new GetWouldCreateMlsRollupCycleRequestBuilder(_graphQlClient);
 
     /// <summary>
     /// Builds and executes requests for the 'backfill_items' mutation.</summary>
@@ -478,20 +518,32 @@ public sealed partial class MondayGraphQlClient
     public PinToTopRequestBuilder PinToTop => new PinToTopRequestBuilder(_graphQlClient);
 
     /// <summary>
+    /// Builds and executes requests for the 'promote_app' mutation.</summary>
+    public PromoteAppRequestBuilder PromoteApp => new PromoteAppRequestBuilder(_graphQlClient);
+
+    /// <summary>
     /// Builds and executes requests for the 'regenerate_service_user_token' mutation.</summary>
     public RegenerateServiceUserTokenRequestBuilder RegenerateServiceUserToken => new RegenerateServiceUserTokenRequestBuilder(_graphQlClient);
+
+    /// <summary>
+    /// Builds and executes requests for the 'restore_view' mutation.</summary>
+    public RestoreViewRequestBuilder RestoreView => new RestoreViewRequestBuilder(_graphQlClient);
 
     /// <summary>
     /// Builds and executes requests for the 'revoke_service_user_tokens' mutation.</summary>
     public RevokeServiceUserTokensRequestBuilder RevokeServiceUserTokens => new RevokeServiceUserTokensRequestBuilder(_graphQlClient);
 
     /// <summary>
+    /// Builds and executes requests for the 'run_prompt' mutation.</summary>
+    public RunPromptRequestBuilder RunPrompt => new RunPromptRequestBuilder(_graphQlClient);
+
+    /// <summary>
     /// Builds and executes requests for the 'shorten_form_url' mutation.</summary>
     public ShortenFormUrlRequestBuilder ShortenFormUrl => new ShortenFormUrlRequestBuilder(_graphQlClient);
 
     /// <summary>
-    /// Builds and executes requests for the 'unassign_department_owners' mutation.</summary>
-    public UnassignDepartmentOwnersRequestBuilder UnassignDepartmentOwners => new UnassignDepartmentOwnersRequestBuilder(_graphQlClient);
+    /// Builds and executes requests for the 'submit_api_feedback' mutation.</summary>
+    public SubmitApiFeedbackRequestBuilder SubmitApiFeedback => new SubmitApiFeedbackRequestBuilder(_graphQlClient);
 
     /// <summary>
     /// Builds and executes requests for the 'undo_action' mutation.</summary>

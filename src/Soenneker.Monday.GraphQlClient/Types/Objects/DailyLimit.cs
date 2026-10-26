@@ -22,6 +22,12 @@ public sealed partial class DailyLimit
     public int? Total { get; init; }
 
     /// <summary>
+    /// Consumed daily limit.
+    /// </summary>
+    [JsonPropertyName("consumption")]
+    public int? Consumption { get; init; }
+
+    /// <summary>
     /// Daily-limit add-on details for the account.
     /// </summary>
     [JsonPropertyName("addon")]

@@ -22,7 +22,7 @@ public sealed partial class SetObjectSchemaColumnActiveStateRequestBuilder
     /// </summary>
     public ValueTask<GraphQlResponse<SetObjectSchemaColumnActiveStateData>> Execute(SetObjectSchemaColumnActiveStateVariables request, CancellationToken cancellationToken = default)
     {
-        const string gqlQuery = @"mutation SetObjectSchemaColumnActiveState($object_schema_id: ID, $object_schema_name: String, $column_id: ID!, $action: ColumnActiveStateAction!) { set_object_schema_column_active_state(object_schema_id: $object_schema_id, object_schema_name: $object_schema_name, column_id: $column_id, action: $action) { id account_id created_by revision created_at updated_at columns { id title type description settings policy { can_override cannot_delete read_only messages } tags { deprecated opt_in_by_default inherited } } parent_id name description connected_boards_count } }";
+        const string gqlQuery = @"mutation SetObjectSchemaColumnActiveState($object_schema_id: ID, $object_schema_name: String, $column_id: ID!, $action: ColumnActiveStateAction!) { set_object_schema_column_active_state(object_schema_id: $object_schema_id, object_schema_name: $object_schema_name, column_id: $column_id, action: $action) { id account_id created_by revision created_at updated_at columns { id title type sub_type description settings policy { can_override cannot_delete read_only messages } tags { deprecated opt_in_by_default inherited } } parent_id name description connected_boards_count } }";
         return _graphQlClient.Execute<SetObjectSchemaColumnActiveStateData>(gqlQuery, request, cancellationToken);
     }
 

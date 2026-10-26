@@ -48,6 +48,18 @@ public sealed partial class NotificationV2
     public bool Read { get; init; }
 
     /// <summary>
+    /// The legacy numeric kind of the notification. New-flow notifications without a migrated legacy kind use a sentinel value; prefer kind_name to classify them.
+    /// </summary>
+    [JsonPropertyName("kind")]
+    public int? Kind { get; init; }
+
+    /// <summary>
+    /// The kind name (app-feature slug) of the notification, e.g. "new_post_im_member".
+    /// </summary>
+    [JsonPropertyName("kind_name")]
+    public string? KindName { get; init; }
+
+    /// <summary>
     /// The update that triggered the notification.
     /// </summary>
     [JsonPropertyName("update")]

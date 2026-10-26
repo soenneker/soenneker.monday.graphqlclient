@@ -28,6 +28,12 @@ public sealed partial class ObjectSchemaColumn
     public ColumnType? Type { get; init; }
 
     /// <summary>
+    /// For mirror/lookup columns: the column type this mirror displays. Null when not set.
+    /// </summary>
+    [JsonPropertyName("sub_type")]
+    public ColumnType? SubType { get; init; }
+
+    /// <summary>
     /// The column's description.
     /// </summary>
     [JsonPropertyName("description")]

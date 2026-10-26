@@ -30,4 +30,8 @@ public sealed partial class DuplicateBuilder
     /// Builds and executes requests for the 'duplicate_item' mutation.</summary>
     public DuplicateItemRequestBuilder Item => new DuplicateItemRequestBuilder(_graphQlClient);
 
+    /// <summary>
+    /// Builds and executes requests for the 'duplicate_view' mutation.</summary>
+    public DuplicateViewRequestBuilder View => new DuplicateViewRequestBuilder(_graphQlClient);
+
 }

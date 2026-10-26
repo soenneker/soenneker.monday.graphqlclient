@@ -22,7 +22,7 @@ public sealed partial class CreateFormTagRequestBuilder
     /// </summary>
     public ValueTask<GraphQlResponse<CreateFormTagData>> Execute(CreateFormTagVariables request, CancellationToken cancellationToken = default)
     {
-        const string gqlQuery = @"mutation CreateFormTag($formToken: String!, $tag: CreateFormTagInput!) { create_form_tag(formToken: $formToken, tag: $tag) { id name value columnId } }";
+        const string gqlQuery = @"mutation CreateFormTag($formToken: String!, $tag: CreateFormTagInput!) { create_form_tag(formToken: $formToken, tag: $tag) { id name columnId } }";
         return _graphQlClient.Execute<CreateFormTagData>(gqlQuery, request, cancellationToken);
     }
 

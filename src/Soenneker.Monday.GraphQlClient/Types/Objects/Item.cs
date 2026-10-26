@@ -12,12 +12,6 @@ namespace Soenneker.Monday.GraphQlClient;
 public sealed partial class Item
 {
     /// <summary>
-    /// The item's unique identifier.
-    /// </summary>
-    [JsonPropertyName("id")]
-    public string Id { get; init; } = null!;
-
-    /// <summary>
     /// The item's assets/files.
     /// </summary>
     [JsonPropertyName("assets")]
@@ -70,6 +64,12 @@ public sealed partial class Item
     /// </summary>
     [JsonPropertyName("group")]
     public Group? Group { get; init; }
+
+    /// <summary>
+    /// The item's unique identifier.
+    /// </summary>
+    [JsonPropertyName("id")]
+    public string Id { get; init; } = null!;
 
     /// <summary>
     /// The item's linked items

@@ -10,12 +10,6 @@ namespace Soenneker.Monday.GraphQlClient;
 public sealed partial class FormLayout
 {
     /// <summary>
-    /// String specifying the form display format. Can be a step by step form or a classic one page form.
-    /// </summary>
-    [JsonPropertyName("format")]
-    public FormFormat? Format { get; init; }
-
-    /// <summary>
     /// The layout style of the form (Card or Flat).
     /// </summary>
     [JsonPropertyName("type")]
