@@ -23,6 +23,10 @@ public sealed partial class CreateBuilder
     public CreateStatusBuilder Status => new CreateStatusBuilder(_graphQlClient);
 
     /// <summary>
+    /// Builds and executes grouped requests for the 'createTime' resource.</summary>
+    public CreateTimeBuilder Time => new CreateTimeBuilder(_graphQlClient);
+
+    /// <summary>
     /// Builds and executes requests for the 'create_app' mutation.</summary>
     public CreateAppRequestBuilder App => new CreateAppRequestBuilder(_graphQlClient);
 
@@ -37,6 +41,10 @@ public sealed partial class CreateBuilder
     /// <summary>
     /// Builds and executes requests for the 'create_board' mutation.</summary>
     public CreateBoardRequestBuilder Board => new CreateBoardRequestBuilder(_graphQlClient);
+
+    /// <summary>
+    /// Builds and executes requests for the 'create_board_export' mutation.</summary>
+    public CreateBoardExportRequestBuilder BoardExport => new CreateBoardExportRequestBuilder(_graphQlClient);
 
     /// <summary>
     /// Builds and executes requests for the 'create_column' mutation.</summary>
@@ -131,6 +139,10 @@ public sealed partial class CreateBuilder
     public CreateProjectRequestBuilder Project => new CreateProjectRequestBuilder(_graphQlClient);
 
     /// <summary>
+    /// Builds and executes requests for the 'create_pto_entry' mutation.</summary>
+    public CreatePtoEntryRequestBuilder PtoEntry => new CreatePtoEntryRequestBuilder(_graphQlClient);
+
+    /// <summary>
     /// Builds and executes requests for the 'create_service_user' mutation.</summary>
     public CreateServiceUserRequestBuilder ServiceUser => new CreateServiceUserRequestBuilder(_graphQlClient);
 
@@ -169,6 +181,10 @@ public sealed partial class CreateBuilder
     /// <summary>
     /// Builds and executes requests for the 'create_widget' mutation.</summary>
     public CreateWidgetRequestBuilder Widget => new CreateWidgetRequestBuilder(_graphQlClient);
+
+    /// <summary>
+    /// Builds and executes requests for the 'create_work_schedule' mutation.</summary>
+    public CreateWorkScheduleRequestBuilder WorkSchedule => new CreateWorkScheduleRequestBuilder(_graphQlClient);
 
     /// <summary>
     /// Builds and executes requests for the 'create_workspace' mutation.</summary>

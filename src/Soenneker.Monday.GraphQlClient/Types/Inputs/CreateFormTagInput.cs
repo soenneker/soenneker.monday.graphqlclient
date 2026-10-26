@@ -12,10 +12,4 @@ public sealed partial class CreateFormTagInput
     [JsonPropertyName("name")]
     public string Name { get; init; } = null!;
 
-    /// <summary>
-    /// The value of the tag
-    /// </summary>
-    [JsonPropertyName("value")]
-    public string? Value { get; init; }
-
 }

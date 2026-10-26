@@ -22,7 +22,7 @@ public sealed partial class GetPlatformApiRequestBuilder
     /// </summary>
     public ValueTask<GraphQlResponse<GetPlatformApiData>> Execute(CancellationToken cancellationToken = default)
     {
-        const string gqlQuery = @"query GetPlatformApi { platform_api { daily_limit { base total addon { is_active quantity } } daily_analytics { last_updated by_day { day usage } by_app { usage api_app_id } by_user { usage } } } }";
+        const string gqlQuery = @"query GetPlatformApi { platform_api { daily_limit { base total consumption addon { is_active quantity } } daily_analytics { last_updated by_day { day usage } by_app { usage api_app_id } by_user { usage } } } }";
         return _graphQlClient.Execute<GetPlatformApiData>(gqlQuery, null, cancellationToken);
     }
 

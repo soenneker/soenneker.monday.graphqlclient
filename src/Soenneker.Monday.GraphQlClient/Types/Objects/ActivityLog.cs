@@ -51,4 +51,22 @@ public sealed partial class ActivityLog
     [JsonPropertyName("created_at")]
     public string? CreatedAt { get; init; }
 
+    /// <summary>
+    /// Groups all activity log entries belonging to the same logical session (e.g. agent conversation)
+    /// </summary>
+    [JsonPropertyName("correlation_id")]
+    public string? CorrelationId { get; init; }
+
+    /// <summary>
+    /// The ID of the triggering flow (e.g. agent run UUID)
+    /// </summary>
+    [JsonPropertyName("triggering_flow_id")]
+    public string? TriggeringFlowId { get; init; }
+
+    /// <summary>
+    /// The type of triggering flow (e.g. 'agent_run')
+    /// </summary>
+    [JsonPropertyName("triggering_flow_type")]
+    public string? TriggeringFlowType { get; init; }
+
 }

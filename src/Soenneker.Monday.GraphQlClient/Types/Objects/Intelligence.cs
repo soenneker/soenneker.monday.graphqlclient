@@ -29,6 +29,12 @@ public sealed partial class Intelligence
     public List<RelevantPerson>? RelevantPeople { get; init; }
 
     /// <summary>
+    /// Top workspaces ranked by relevance (activity on their boards and docs, plus favorites).
+    /// </summary>
+    [JsonPropertyName("relevant_workspaces")]
+    public List<RelevantWorkspace>? RelevantWorkspaces { get; init; }
+
+    /// <summary>
     /// User and account context information.
     /// </summary>
     [JsonPropertyName("context")]

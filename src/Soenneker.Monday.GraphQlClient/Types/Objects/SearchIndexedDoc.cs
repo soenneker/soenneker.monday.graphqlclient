@@ -27,4 +27,10 @@ public sealed partial class SearchIndexedDoc
     [JsonPropertyName("workspace_id")]
     public string? WorkspaceId { get; init; }
 
+    /// <summary>
+    /// Matched text snippets per searchable field. Null for non-lexical results.
+    /// </summary>
+    [JsonPropertyName("highlights")]
+    public SearchDocHighlights? Highlights { get; init; }
+
 }

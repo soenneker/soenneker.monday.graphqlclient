@@ -12,4 +12,7 @@ public sealed class GetAskDeveloperDocsVariables
     [JsonPropertyName("query")]
     public string Query { get; init; } = null!;
 
+    [JsonPropertyName("retrieval_only")]
+    public bool? RetrievalOnly { get; init; }
+
 }

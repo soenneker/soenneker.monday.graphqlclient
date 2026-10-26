@@ -22,7 +22,7 @@ public sealed partial class GetAskDeveloperDocsRequestBuilder
     /// </summary>
     public ValueTask<GraphQlResponse<GetAskDeveloperDocsData>> Execute(GetAskDeveloperDocsVariables request, CancellationToken cancellationToken = default)
     {
-        const string gqlQuery = @"query GetAskDeveloperDocs($query: String!) { ask_developer_docs(query: $query) { id question answer conversation_id } }";
+        const string gqlQuery = @"query GetAskDeveloperDocs($query: String!, $retrieval_only: Boolean) { ask_developer_docs(query: $query, retrieval_only: $retrieval_only) { id question answer conversation_id } }";
         return _graphQlClient.Execute<GetAskDeveloperDocsData>(gqlQuery, request, cancellationToken);
     }
 

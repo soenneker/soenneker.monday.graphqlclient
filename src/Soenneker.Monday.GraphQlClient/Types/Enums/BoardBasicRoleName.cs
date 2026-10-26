@@ -25,6 +25,11 @@ public enum BoardBasicRoleName
     Editor,
 
     /// <summary>
+    /// Member role - Default board role access. Can only be used for agent users.
+    /// </summary>
+    Member,
+
+    /// <summary>
     /// Viewer role - Read-only access to the board, cannot edit structure or content
     /// </summary>
     Viewer

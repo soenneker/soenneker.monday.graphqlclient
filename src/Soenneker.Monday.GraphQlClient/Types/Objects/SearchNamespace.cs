@@ -28,9 +28,33 @@ public sealed partial class SearchNamespace
     public SearchDocResults Docs { get; init; } = null!;
 
     /// <summary>
+    /// Search for overviews (dashboards).
+    /// </summary>
+    [JsonPropertyName("overviews")]
+    public SearchOverviewResults Overviews { get; init; } = null!;
+
+    /// <summary>
+    /// Search for updates.
+    /// </summary>
+    [JsonPropertyName("updates")]
+    public SearchUpdateResults Updates { get; init; } = null!;
+
+    /// <summary>
+    /// Search for users.
+    /// </summary>
+    [JsonPropertyName("users")]
+    public SearchUserResults Users { get; init; } = null!;
+
+    /// <summary>
     /// Search for workspaces.
     /// </summary>
     [JsonPropertyName("workspaces")]
     public SearchWorkspaceResults Workspaces { get; init; } = null!;
+
+    /// <summary>
+    /// Search for timeline items.
+    /// </summary>
+    [JsonPropertyName("timeline_items")]
+    public SearchTimelineItemResults TimelineItems { get; init; } = null!;
 
 }

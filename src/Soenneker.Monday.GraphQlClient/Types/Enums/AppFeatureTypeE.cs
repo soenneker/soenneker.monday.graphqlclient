@@ -268,6 +268,11 @@ public enum AppFeatureTypeE
     SKILL,
 
     /// <summary>
+    /// MCP_SERVER
+    /// </summary>
+    MCPSERVER,
+
+    /// <summary>
     /// VIBE_OBJECT
     /// </summary>
     VIBEOBJECT,

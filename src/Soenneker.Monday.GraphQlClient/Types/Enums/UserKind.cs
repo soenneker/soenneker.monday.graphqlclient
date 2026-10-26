@@ -13,14 +13,14 @@ public enum UserKind
     All,
 
     /// <summary>
-    /// Only company members.
-    /// </summary>
-    NonGuests,
-
-    /// <summary>
     /// Only guests.
     /// </summary>
     Guests,
+
+    /// <summary>
+    /// Only company members.
+    /// </summary>
+    NonGuests,
 
     /// <summary>
     /// All non pending members.

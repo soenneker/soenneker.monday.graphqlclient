@@ -22,4 +22,8 @@ public sealed partial class UserBuilder
     /// Builds and executes requests for the 'user_connections' query.</summary>
     public GetUserConnectionsRequestBuilder Connections => new GetUserConnectionsRequestBuilder(_graphQlClient);
 
+    /// <summary>
+    /// Builds and executes requests for the 'user_pto' query.</summary>
+    public GetUserPtoRequestBuilder Pto => new GetUserPtoRequestBuilder(_graphQlClient);
+
 }

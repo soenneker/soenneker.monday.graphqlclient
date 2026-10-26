@@ -46,6 +46,12 @@ public sealed class CreateBoardVariables
     [JsonPropertyName("template_id")]
     public string? TemplateId { get; init; }
 
+    [JsonPropertyName("use_dataset_template")]
+    public bool? UseDatasetTemplate { get; init; }
+
+    [JsonPropertyName("use_mls_template")]
+    public bool? UseMlsTemplate { get; init; }
+
     [JsonPropertyName("workspace_id")]
     public string? WorkspaceId { get; init; }
 

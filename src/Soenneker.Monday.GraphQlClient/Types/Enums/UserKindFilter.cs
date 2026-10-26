@@ -48,6 +48,11 @@ public enum UserKindFilter
     WORKMANAGEMENTAGENTMEMBER,
 
     /// <summary>
+    /// A service ai agent member user.
+    /// </summary>
+    SERVICEAIAGENTMEMBER,
+
+    /// <summary>
     /// A external agent member user.
     /// </summary>
     EXTERNALAGENTMEMBER,
@@ -61,6 +66,11 @@ public enum UserKindFilter
     /// A workspace primary agent member user.
     /// </summary>
     WORKSPACEPRIMARYAGENTMEMBER,
+
+    /// <summary>
+    /// A crm user agent member user.
+    /// </summary>
+    CRMUSERAGENTMEMBER,
 
     /// <summary>
     /// A service user user.

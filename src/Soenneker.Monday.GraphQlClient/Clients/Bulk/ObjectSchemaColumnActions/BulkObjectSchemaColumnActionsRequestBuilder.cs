@@ -23,7 +23,7 @@ public sealed partial class BulkObjectSchemaColumnActionsRequestBuilder
     /// </summary>
     public ValueTask<GraphQlResponse<BulkObjectSchemaColumnActionsData>> Execute(BulkObjectSchemaColumnActionsVariables request, CancellationToken cancellationToken = default)
     {
-        const string gqlQuery = @"mutation BulkObjectSchemaColumnActions($object_schema_id: ID, $object_schema_name: String, $actions: [ObjectSchemaActionInput!]!) { bulk_object_schema_column_actions(object_schema_id: $object_schema_id, object_schema_name: $object_schema_name, actions: $actions) { action object_schema { id account_id created_by revision created_at updated_at columns { id title type description settings } parent_id name description connected_boards_count } } }";
+        const string gqlQuery = @"mutation BulkObjectSchemaColumnActions($object_schema_id: ID, $object_schema_name: String, $actions: [ObjectSchemaActionInput!]!) { bulk_object_schema_column_actions(object_schema_id: $object_schema_id, object_schema_name: $object_schema_name, actions: $actions) { action object_schema { id account_id created_by revision created_at updated_at columns { id title type sub_type description settings } parent_id name description connected_boards_count } } }";
         return _graphQlClient.Execute<BulkObjectSchemaColumnActionsData>(gqlQuery, request, cancellationToken);
     }
 

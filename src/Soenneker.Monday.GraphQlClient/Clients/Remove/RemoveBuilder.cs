@@ -15,6 +15,10 @@ public sealed partial class RemoveBuilder
     }
 
     /// <summary>
+    /// Builds and executes requests for the 'remove_ai_from_column' mutation.</summary>
+    public RemoveAiFromColumnRequestBuilder AiFromColumn => new RemoveAiFromColumnRequestBuilder(_graphQlClient);
+
+    /// <summary>
     /// Builds and executes requests for the 'remove_mock_app_subscription' mutation.</summary>
     public RemoveMockAppSubscriptionRequestBuilder MockAppSubscription => new RemoveMockAppSubscriptionRequestBuilder(_graphQlClient);
 

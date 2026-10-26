@@ -23,6 +23,10 @@ public sealed partial class ExportBuilder
     public GetExportGraphRequestBuilder Graph => new GetExportGraphRequestBuilder(_graphQlClient);
 
     /// <summary>
+    /// Builds and executes requests for the 'export_job_status' query.</summary>
+    public GetExportJobStatusRequestBuilder JobStatus => new GetExportJobStatusRequestBuilder(_graphQlClient);
+
+    /// <summary>
     /// Builds and executes requests for the 'export_markdown_from_doc' query.</summary>
     public GetExportMarkdownFromDocRequestBuilder MarkdownFromDoc => new GetExportMarkdownFromDocRequestBuilder(_graphQlClient);
 

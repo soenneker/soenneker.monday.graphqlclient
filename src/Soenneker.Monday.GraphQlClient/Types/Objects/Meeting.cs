@@ -66,6 +66,18 @@ public sealed partial class Meeting
     public string? Gist { get; init; }
 
     /// <summary>
+    /// The search relevance score. Set for meeting (gist) search; null for content search and the list path.
+    /// </summary>
+    [JsonPropertyName("relevance")]
+    public double? Relevance { get; init; }
+
+    /// <summary>
+    /// The matched content slices. Populated only for content search (when search_in is provided).
+    /// </summary>
+    [JsonPropertyName("matches")]
+    public List<MeetingMatch> Matches { get; init; } = [];
+
+    /// <summary>
     /// The AI-generated summary of the meeting.
     /// </summary>
     [JsonPropertyName("summary")]

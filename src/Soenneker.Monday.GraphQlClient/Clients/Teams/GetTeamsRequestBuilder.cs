@@ -23,7 +23,7 @@ public sealed partial class GetTeamsRequestBuilder
     /// </summary>
     public ValueTask<GraphQlResponse<GetTeamsData>> Execute(GetTeamsVariables request, CancellationToken cancellationToken = default)
     {
-        const string gqlQuery = @"query GetTeams($ids: [ID!]) { teams(ids: $ids) { id is_guest name created_at picture_url } }";
+        const string gqlQuery = @"query GetTeams($ids: [ID!]) { teams(ids: $ids) { id name picture_url is_guest created_at } }";
         return _graphQlClient.Execute<GetTeamsData>(gqlQuery, request, cancellationToken);
     }
 

@@ -12,339 +12,6 @@ namespace Soenneker.Monday.GraphQlClient;
 public sealed partial class Query
 {
     /// <summary>
-    /// Retrieves blocks for the published version of a specific article if the requesting user has permission to access it. Returns paginated blocks in their position order. Will return an error if the user lacks the required permissions.
-    /// </summary>
-    [JsonPropertyName("article_blocks")]
-    public List<ArticleBlock> ArticleBlocks { get; init; } = [];
-
-    /// <summary>
-    /// Retrieves a list of published articles with their metadata and content blocks that the requesting user has permission to access. Articles without proper permissions will be filtered out. By default, returns the first 25 blocks per article. To retrieve more blocks, use the article_blocks query.
-    /// </summary>
-    [JsonPropertyName("articles")]
-    public List<Article> Articles { get; init; } = [];
-
-    /// <summary>
-    /// Retrieves the content diff between two versions of a document. Pass two restoring point dates (from doc_version_history) to see what blocks were added, deleted, or changed. Only blocks with changes are returned.
-    /// </summary>
-    [JsonPropertyName("doc_version_diff")]
-    public DocVersionDiff? DocVersionDiff { get; init; }
-
-    /// <summary>
-    /// Retrieves the version history of a document. Returns a list of restoring points (snapshots) with timestamps and the users who made changes. Snapshots are grouped in 5-minute intervals. Use the since and until arguments to filter the time range.
-    /// </summary>
-    [JsonPropertyName("doc_version_history")]
-    public DocVersionHistory? DocVersionHistory { get; init; }
-
-    /// <summary>
-    /// Converts document content into standard markdown format for external use, backup, or processing. Exports the entire document by default, or specific blocks if block IDs are provided. Use this to extract content for integration with other systems, create backups, generate reports, or process document content with external tools. The output is clean, portable markdown that preserves formatting and structure.
-    /// </summary>
-    [JsonPropertyName("export_markdown_from_doc")]
-    public ExportMarkdownResult? ExportMarkdownFromDoc { get; init; }
-
-    /// <summary>
-    /// Namespace for all notetaker-related queries.
-    /// </summary>
-    [JsonPropertyName("notetaker")]
-    public NotetakerQueries? Notetaker { get; init; }
-
-    /// <summary>
-    /// Get sequences that the current user is allowed to enroll items to, that are connected to the provided board. Returns sequences owned by the user or sequences where the user has access to the sender connection.
-    /// </summary>
-    [JsonPropertyName("allowed_sequences_to_enroll")]
-    public List<Sequence>? AllowedSequencesToEnroll { get; init; }
-
-    /// <summary>
-    /// Retrieves a list of available object types that can be created or queried. Each object type is uniquely identified by an 'object_type_unique_key'. This key is required for mutations like 'create_object' and for filtering in the 'objects' query. Use this query to discover what types of objects are available in the system (e.g., 'workflows', 'projects') and get their corresponding unique keys. The structure of unique key is 'app_slug::app_feature_slug'.
-    /// </summary>
-    [JsonPropertyName("object_types_unique_keys")]
-    public List<ObjectTypeUniqueKey>? ObjectTypesUniqueKeys { get; init; }
-
-    /// <summary>
-    /// Retrieves a list of objects from the Monday.com Objects Platform based on specified filters. This query can return any type of object (board, doc, dashboard, workflow, etc.) depending on the filter criteria. Use object_type_unique_keys to filter for specific object types.
-    /// </summary>
-    [JsonPropertyName("objects")]
-    public List<Object>? Objects { get; init; }
-
-    /// <summary>
-    /// Fetch relations for a specific object
-    /// </summary>
-    [JsonPropertyName("object_relations")]
-    public List<ObjectRelation>? ObjectRelations { get; init; }
-
-    /// <summary>
-    /// Get account departments
-    /// </summary>
-    [JsonPropertyName("departments")]
-    public List<Department>? Departments { get; init; }
-
-    [JsonPropertyName("marketplace_app_discounts")]
-    public List<MarketplaceAppDiscount> MarketplaceAppDiscounts { get; init; } = [];
-
-    [JsonPropertyName("app_subscriptions")]
-    public AppSubscriptions AppSubscriptions { get; init; } = null!;
-
-    /// <summary>
-    /// Placeholder query field for automations-test microservice.
-    ///   This can be replaced with actual queries as the service evolves.
-    /// </summary>
-    [JsonPropertyName("empty")]
-    public string? Empty { get; init; }
-
-    /// <summary>
-    /// List trigger events with optional filters
-    /// </summary>
-    [JsonPropertyName("trigger_events")]
-    public TriggerEventsPage? TriggerEvents { get; init; }
-
-    /// <summary>
-    /// Fetch a single trigger event by UUID
-    /// </summary>
-    [JsonPropertyName("trigger_event")]
-    public TriggerEvent? TriggerEvent { get; init; }
-
-    /// <summary>
-    /// List block events for a given trigger UUID
-    /// </summary>
-    [JsonPropertyName("block_events")]
-    public BlockEventsPage? BlockEvents { get; init; }
-
-    /// <summary>
-    /// List tool events for a given trigger UUID
-    /// </summary>
-    [JsonPropertyName("tool_events")]
-    public ToolEventsPage? ToolEvents { get; init; }
-
-    /// <summary>
-    /// Get aggregated automation runs statistics in the account
-    /// </summary>
-    [JsonPropertyName("account_trigger_statistics")]
-    public AccountTriggerStatistics? AccountTriggerStatistics { get; init; }
-
-    /// <summary>
-    /// Get aggregated automation runs statistics grouped by entity Ids
-    /// </summary>
-    [JsonPropertyName("account_triggers_statistics_by_entity_id")]
-    public AccountTriggersByEntityId? AccountTriggersStatisticsByEntityId { get; init; }
-
-    /// <summary>
-    /// Get validations configuration for a board
-    /// </summary>
-    [JsonPropertyName("validations")]
-    public Validations? Validations { get; init; }
-
-    /// <summary>
-    /// Get an app by ID or slug.
-    /// </summary>
-    [JsonPropertyName("app")]
-    public AppType? App { get; init; }
-
-    /// <summary>
-    /// Query the monday.com apps documentation using AI. Returns an AI-generated answer based on the documentation.
-    /// </summary>
-    [JsonPropertyName("ask_developer_docs")]
-    public AppDocumentationAiResponse? AskDeveloperDocs { get; init; }
-
-    /// <summary>
-    /// Get lifecycle subscriptions for all entity types in a specific app version. If version_id is not provided, resolves the active version (user testing version, live, or latest).
-    /// </summary>
-    [JsonPropertyName("get_app_lifecycle_subscriptions")]
-    public List<LifecycleSubscriptionKind>? GetAppLifecycleSubscriptions { get; init; }
-
-    /// <summary>
-    /// Get all user configs for the account.
-    /// </summary>
-    [JsonPropertyName("user_configs")]
-    public List<UserConfig>? UserConfigs { get; init; }
-
-    /// <summary>
-    /// Get users.
-    /// </summary>
-    [JsonPropertyName("users")]
-    public List<User>? Users { get; init; }
-
-    /// <summary>
-    /// Get all personal list items by list ID
-    /// </summary>
-    [JsonPropertyName("favorites")]
-    public List<GraphqlHierarchyObjectItem>? Favorites { get; init; }
-
-    /// <summary>
-    /// Returns connections for the authenticated user. Supports filtering, pagination, ordering, and partial-scope options.
-    /// </summary>
-    [JsonPropertyName("connections")]
-    public List<Connection>? Connections { get; init; }
-
-    /// <summary>
-    /// Returns connections that belong to the authenticated user.
-    /// </summary>
-    [JsonPropertyName("user_connections")]
-    public List<Connection>? UserConnections { get; init; }
-
-    /// <summary>
-    /// Returns all connections for the account. Requires admin privileges.
-    /// </summary>
-    [JsonPropertyName("account_connections")]
-    public List<Connection>? AccountConnections { get; init; }
-
-    /// <summary>
-    /// Fetch a single connection by its unique ID.
-    /// </summary>
-    [JsonPropertyName("connection")]
-    public Connection? Connection { get; init; }
-
-    /// <summary>
-    /// Get board IDs that are linked to a specific connection.
-    /// </summary>
-    [JsonPropertyName("connection_board_ids")]
-    public List<string> ConnectionBoardIds { get; init; } = [];
-
-    /// <summary>
-    /// Get the status of an async job by its external ID
-    /// </summary>
-    [JsonPropertyName("job_status")]
-    public AsyncJobStatus JobStatus { get; init; } = null!;
-
-    [JsonPropertyName("custom_activity")]
-    public List<CustomActivity>? CustomActivity { get; init; }
-
-    [JsonPropertyName("timeline_item")]
-    public TimelineItem? TimelineItem { get; init; }
-
-    /// <summary>
-    /// Fetches timeline items for a given item
-    /// </summary>
-    [JsonPropertyName("timeline")]
-    public TimelineResponse? Timeline { get; init; }
-
-    /// <summary>
-    /// Search analytics events by identifier
-    /// </summary>
-    [JsonPropertyName("analytics_events")]
-    public CampaignsAnalyticsEventsResponse? AnalyticsEvents { get; init; }
-
-    /// <summary>
-    /// List email campaigns for the current account with optional filtering and sorting
-    /// </summary>
-    [JsonPropertyName("campaigns")]
-    public List<CampaignsEmailCampaign>? Campaigns { get; init; }
-
-    /// <summary>
-    /// Get a single email campaign by ID
-    /// </summary>
-    [JsonPropertyName("campaign")]
-    public CampaignsEmailCampaign? Campaign { get; init; }
-
-    /// <summary>
-    /// Get the brand kit for the current account
-    /// </summary>
-    [JsonPropertyName("brand_kit")]
-    public CampaignsBrandKit? BrandKit { get; init; }
-
-    /// <summary>
-    /// List market insights for the current account
-    /// </summary>
-    [JsonPropertyName("insights")]
-    public List<CampaignsInsight>? Insights { get; init; }
-
-    /// <summary>
-    /// Get a single market insight by ID
-    /// </summary>
-    [JsonPropertyName("insight")]
-    public CampaignsInsight? Insight { get; init; }
-
-    /// <summary>
-    /// List audience segments for the current account
-    /// </summary>
-    [JsonPropertyName("segments")]
-    public List<CampaignsSegment>? Segments { get; init; }
-
-    /// <summary>
-    /// Get a single audience segment by ID
-    /// </summary>
-    [JsonPropertyName("segment")]
-    public CampaignsSegment? Segment { get; init; }
-
-    /// <summary>
-    /// Get marketing channels settings for the current account
-    /// </summary>
-    [JsonPropertyName("settings")]
-    public CampaignsSettings? Settings { get; init; }
-
-    /// <summary>
-    /// Usage metrics for the current account
-    /// </summary>
-    [JsonPropertyName("usage")]
-    public CampaignsUsage? Usage { get; init; }
-
-    /// <summary>
-    /// Fetch a form by its token. The returned form includes all the details of the form such as its settings, questions, title, etc. Use this endpoint when you need to retrieve complete form data for display or processing. Requires that the requesting user has read access to the associated board.
-    /// </summary>
-    [JsonPropertyName("form")]
-    public ResponseForm? Form { get; init; }
-
-    /// <summary>
-    /// Search knowledge base snippets.
-    /// </summary>
-    [JsonPropertyName("knowledge_base_search")]
-    public KnowledgeBaseAnswer? KnowledgeBaseSearch { get; init; }
-
-    /// <summary>
-    /// Retrieves the JSON schema definition for a specific create view type. 
-    ///   Use this query before calling create_view mutation to understand the structure and validation rules for the settings parameter. 
-    ///   The schema defines what properties are available when creating views of a specific type.
-    /// </summary>
-    [JsonPropertyName("get_view_schema_by_type")]
-    public string? GetViewSchemaByType { get; init; }
-
-    /// <summary>
-    /// Export the dependency graph for a specific board
-    /// </summary>
-    [JsonPropertyName("export_graph")]
-    public BoardGraphExport? ExportGraph { get; init; }
-
-    /// <summary>
-    /// Fetch dependency column configuration for a board
-    /// </summary>
-    [JsonPropertyName("dependency_column_config")]
-    public DependencyColumnConfigResult? DependencyColumnConfig { get; init; }
-
-    /// <summary>
-    /// Export events for a board within a date range. Requires a valid X-Tool-Execution-Secret header.
-    /// </summary>
-    [JsonPropertyName("export_events")]
-    public EventsExport? ExportEvents { get; init; }
-
-    /// <summary>
-    /// Get all dependency predecessors for a specific item, including dependency type and lag per edge
-    /// </summary>
-    [JsonPropertyName("item_dependency")]
-    public ItemDependency? ItemDependency { get; init; }
-
-    /// <summary>
-    /// Get all dependency predecessors for every item on a board, paginated. Each item includes its predecessor edges with dependency type and lag.
-    /// </summary>
-    [JsonPropertyName("board_dependencies")]
-    public BoardDependencies? BoardDependencies { get; init; }
-
-    /// <summary>
-    /// Get all roles for the account
-    /// </summary>
-    [JsonPropertyName("account_roles")]
-    public List<AccountRole>? AccountRoles { get; init; }
-
-    /// <summary>
-    /// Retrieves API tokens for the given service users.
-    /// </summary>
-    [JsonPropertyName("service_user_tokens")]
-    public List<ServiceUserToken>? ServiceUserTokens { get; init; }
-
-    /// <summary>
-    /// Retrieves all service users in the account with their token last activity.
-    /// </summary>
-    [JsonPropertyName("service_users")]
-    public List<ServiceUser>? ServiceUsers { get; init; }
-
-    /// <summary>
     /// Get the connected account's information.
     /// </summary>
     [JsonPropertyName("account")]
@@ -447,6 +114,12 @@ public sealed partial class Query
     public List<Team>? Teams { get; init; }
 
     /// <summary>
+    /// Get the status of a use_template async operation. Returns null if the process_id is invalid, expired, or unauthorized.
+    /// </summary>
+    [JsonPropertyName("template_installation_status")]
+    public TemplateInstallationStatusResult? TemplateInstallationStatus { get; init; }
+
+    /// <summary>
     /// Get the API version in use
     /// </summary>
     [JsonPropertyName("version")]
@@ -471,61 +144,70 @@ public sealed partial class Query
     public List<Workspace>? Workspaces { get; init; }
 
     /// <summary>
-    /// Get board candidates based on workspace and usage type
+    /// Export the dependency graph for a specific board
     /// </summary>
-    [JsonPropertyName("board_candidates")]
-    public List<Board>? BoardCandidates { get; init; }
+    [JsonPropertyName("export_graph")]
+    public BoardGraphExport? ExportGraph { get; init; }
 
     /// <summary>
-    /// Get a collection of monday dev sprints
+    /// Fetch dependency column configuration for a board
     /// </summary>
-    [JsonPropertyName("sprints")]
-    public List<Sprint>? Sprints { get; init; }
+    [JsonPropertyName("dependency_column_config")]
+    public DependencyColumnConfigResult? DependencyColumnConfig { get; init; }
 
     /// <summary>
-    /// Get managed column data.
+    /// Export events for a board within a date range. Requires a valid X-Tool-Execution-Secret header.
     /// </summary>
-    [JsonPropertyName("managed_column")]
-    public List<ManagedColumn>? ManagedColumn { get; init; }
+    [JsonPropertyName("export_events")]
+    public EventsExport? ExportEvents { get; init; }
 
     /// <summary>
-    /// Retrieves the JSON schema definition for a specific column type. Use this query before calling update_column mutation to understand the structure and validation rules for the defaults parameter. The schema defines what properties are available when updating columns of a specific type.
+    /// Get all dependency predecessors for a specific item, including dependency type and lag per edge
     /// </summary>
-    [JsonPropertyName("get_column_type_schema")]
-    public string? GetColumnTypeSchema { get; init; }
+    [JsonPropertyName("item_dependency")]
+    public ItemDependency? ItemDependency { get; init; }
 
     /// <summary>
-    /// Retrieve active account object schemas by their IDs or names. Only returns account-level object schemas (not global). Object schemas define the structure and columns of boards. If no parameters are provided, all account object schemas are returned. Pass exclude_created_by_monday: true to omit the schemas seeded by monday.com and return only schemas created by users in this account. Results are paginated using page and limit parameters.
+    /// Get all dependency predecessors for every item on a board, paginated. Each item includes its predecessor edges with dependency type and lag.
     /// </summary>
-    [JsonPropertyName("get_object_schemas")]
-    public List<ObjectSchema>? GetObjectSchemas { get; init; }
+    [JsonPropertyName("board_dependencies")]
+    public BoardDependencies? BoardDependencies { get; init; }
 
     /// <summary>
-    /// Returns all available widget schemas for documentation and validation purposes
+    /// Returns true if connecting source_item_id -&gt; target_item_id would create an MLS rollup cycle
     /// </summary>
-    [JsonPropertyName("all_widgets_schema")]
-    public List<WidgetSchemaInfo>? AllWidgetsSchema { get; init; }
-
-    [JsonPropertyName("notifications")]
-    public List<NotificationV2>? Notifications { get; init; }
+    [JsonPropertyName("would_create_mls_rollup_cycle")]
+    public bool WouldCreateMlsRollupCycle { get; init; }
 
     /// <summary>
-    /// Retrieves the current user's notification settings across all available channels.
+    /// Get board automations. Filter by ids (specific automation IDs) or board_ids (up to 1 board). Omit all filters to get all account automations.
     /// </summary>
-    [JsonPropertyName("notifications_settings")]
-    public List<NotificationSetting>? NotificationsSettings { get; init; }
+    [JsonPropertyName("board_automations")]
+    public AutomationsPage BoardAutomations { get; init; } = null!;
 
     /// <summary>
-    /// Get mute board notification settings for the current user
+    /// Get an app by ID or slug.
     /// </summary>
-    [JsonPropertyName("mute_board_settings")]
-    public List<BoardMuteSettings>? MuteBoardSettings { get; init; }
+    [JsonPropertyName("app")]
+    public AppType? App { get; init; }
 
     /// <summary>
-    /// Get the status of a backfill or ingest job
+    /// Query the monday.com apps documentation using AI. Returns an AI-generated answer based on the documentation.
     /// </summary>
-    [JsonPropertyName("fetch_job_status")]
-    public JobStatus FetchJobStatus { get; init; } = null!;
+    [JsonPropertyName("ask_developer_docs")]
+    public AppDocumentationAiResponse? AskDeveloperDocs { get; init; }
+
+    /// <summary>
+    /// Get lifecycle subscriptions for all entity types in a specific app version. If version_id is not provided, resolves the active version (user testing version, live, or latest).
+    /// </summary>
+    [JsonPropertyName("get_app_lifecycle_subscriptions")]
+    public List<LifecycleSubscriptionKind>? GetAppLifecycleSubscriptions { get; init; }
+
+    /// <summary>
+    /// Performs aggregation operations on board data
+    /// </summary>
+    [JsonPropertyName("aggregate")]
+    public AggregateQueryResult? Aggregate { get; init; }
 
     [JsonPropertyName("updates")]
     public List<Update>? Updates { get; init; }
@@ -537,22 +219,114 @@ public sealed partial class Query
     public List<Reply>? Replies { get; init; }
 
     /// <summary>
-    /// Fetch resources information from the resource directory
+    /// Get validations configuration for a board
     /// </summary>
-    [JsonPropertyName("get_directory_resources")]
-    public DirectoryResourcesResponse? GetDirectoryResources { get; init; }
+    [JsonPropertyName("validations")]
+    public Validations? Validations { get; init; }
+
+    [JsonPropertyName("marketplace_app_discounts")]
+    public List<MarketplaceAppDiscount> MarketplaceAppDiscounts { get; init; } = [];
+
+    [JsonPropertyName("app_subscriptions")]
+    public AppSubscriptions AppSubscriptions { get; init; } = null!;
+
+    [JsonPropertyName("custom_activity")]
+    public List<CustomActivity>? CustomActivity { get; init; }
+
+    [JsonPropertyName("timeline_item")]
+    public TimelineItem? TimelineItem { get; init; }
 
     /// <summary>
-    /// Performs aggregation operations on board data
+    /// Fetches timeline items for a given item
     /// </summary>
-    [JsonPropertyName("aggregate")]
-    public AggregateQueryResult? Aggregate { get; init; }
+    [JsonPropertyName("timeline")]
+    public TimelineResponse? Timeline { get; init; }
 
     /// <summary>
-    /// Search API. Each field searches a single entity type with tailored filters.
+    /// Retrieves the JSON schema definition for a specific create view type. 
+    ///   Use this query before calling create_view mutation to understand the structure and validation rules for the settings parameter. 
+    ///   The schema defines what properties are available when creating views of a specific type.
     /// </summary>
-    [JsonPropertyName("search")]
-    public SearchNamespace Search { get; init; } = null!;
+    [JsonPropertyName("get_view_schema_by_type")]
+    public string? GetViewSchemaByType { get; init; }
+
+    /// <summary>
+    /// Retrieves a list of available object types that can be created or queried. Each object type is uniquely identified by an 'object_type_unique_key'. This key is required for mutations like 'create_object' and for filtering in the 'objects' query. Use this query to discover what types of objects are available in the system (e.g., 'workflows', 'projects') and get their corresponding unique keys. The structure of unique key is 'app_slug::app_feature_slug'.
+    /// </summary>
+    [JsonPropertyName("object_types_unique_keys")]
+    public List<ObjectTypeUniqueKey>? ObjectTypesUniqueKeys { get; init; }
+
+    /// <summary>
+    /// Retrieves a list of objects from the Monday.com Objects Platform based on specified filters. This query can return any type of object (board, doc, dashboard, workflow, etc.) depending on the filter criteria. Use object_type_unique_keys to filter for specific object types.
+    /// </summary>
+    [JsonPropertyName("objects")]
+    public List<Object>? Objects { get; init; }
+
+    /// <summary>
+    /// Fetch relations for a specific object
+    /// </summary>
+    [JsonPropertyName("object_relations")]
+    public List<ObjectRelation>? ObjectRelations { get; init; }
+
+    /// <summary>
+    /// Get sequences that the current user is allowed to enroll items to, that are connected to the provided board. Returns sequences owned by the user or sequences where the user has access to the sender connection.
+    /// </summary>
+    [JsonPropertyName("allowed_sequences_to_enroll")]
+    public List<Sequence>? AllowedSequencesToEnroll { get; init; }
+
+    /// <summary>
+    /// Retrieves blocks for the published version of a specific article if the requesting user has permission to access it. Returns paginated blocks in their position order. Will return an error if the user lacks the required permissions.
+    /// </summary>
+    [JsonPropertyName("article_blocks")]
+    public List<ArticleBlock> ArticleBlocks { get; init; } = [];
+
+    /// <summary>
+    /// Retrieves a list of published articles with their metadata and content blocks that the requesting user has permission to access. Articles without proper permissions will be filtered out. By default, returns the first 25 blocks per article. To retrieve more blocks, use the article_blocks query.
+    /// </summary>
+    [JsonPropertyName("articles")]
+    public List<Article> Articles { get; init; } = [];
+
+    /// <summary>
+    /// Retrieves the content diff between two versions of a document. Pass two restoring point dates (from doc_version_history) to see what blocks were added, deleted, or changed. Only blocks with changes are returned.
+    /// </summary>
+    [JsonPropertyName("doc_version_diff")]
+    public DocVersionDiff? DocVersionDiff { get; init; }
+
+    /// <summary>
+    /// Retrieves the version history of a document. Returns a list of restoring points (snapshots) with timestamps and the users who made changes. Snapshots are grouped in 5-minute intervals. Use the since and until arguments to filter the time range.
+    /// </summary>
+    [JsonPropertyName("doc_version_history")]
+    public DocVersionHistory? DocVersionHistory { get; init; }
+
+    /// <summary>
+    /// Converts document content into standard markdown format for external use, backup, or processing. Exports the entire document by default, or specific blocks if block IDs are provided. Use this to extract content for integration with other systems, create backups, generate reports, or process document content with external tools. The output is clean, portable markdown that preserves formatting and structure.
+    /// </summary>
+    [JsonPropertyName("export_markdown_from_doc")]
+    public ExportMarkdownResult? ExportMarkdownFromDoc { get; init; }
+
+    /// <summary>
+    /// Get the status of a backfill or ingest job
+    /// </summary>
+    [JsonPropertyName("fetch_job_status")]
+    public JobStatus FetchJobStatus { get; init; } = null!;
+
+    /// <summary>
+    /// Get the status of an async job by its external ID
+    /// </summary>
+    [JsonPropertyName("job_status")]
+    public AsyncJobStatus JobStatus { get; init; } = null!;
+
+    /// <summary>
+    /// Retrieve aggregated board data at specific historical dates for point-in-time analysis. When the query references a date column, results are only available from when date column history began for that board; earlier timestamps are rejected.
+    /// </summary>
+    [JsonPropertyName("aggregate_history")]
+    public AggregateHistoryResultSet? AggregateHistory { get; init; }
+
+    /// <summary>
+    /// Retrieve historical item data from a board at a specific point in time. When the query references a date column, results are only available from when date column history began for that board; earlier timestamps are rejected.
+    /// </summary>
+    [JsonPropertyName("items_history")]
+    public ItemsHistoryResultSet? ItemsHistory { get; init; }
 
     /// <summary>
     /// Retrieve audit logs for your Monday account. You can
@@ -619,10 +393,302 @@ public sealed partial class Query
     [JsonPropertyName("audit_event_catalogue")]
     public List<AuditEventCatalogueEntry>? AuditEventCatalogue { get; init; }
 
+    [JsonPropertyName("notifications")]
+    public List<NotificationV2>? Notifications { get; init; }
+
+    /// <summary>
+    /// Retrieves the current user's notification settings across all available channels.
+    /// </summary>
+    [JsonPropertyName("notifications_settings")]
+    public List<NotificationSetting>? NotificationsSettings { get; init; }
+
+    /// <summary>
+    /// Get mute board notification settings for the current user
+    /// </summary>
+    [JsonPropertyName("mute_board_settings")]
+    public List<BoardMuteSettings>? MuteBoardSettings { get; init; }
+
+    /// <summary>
+    /// Search API. Each field searches a single entity type with tailored filters.
+    /// </summary>
+    [JsonPropertyName("search")]
+    public SearchNamespace Search { get; init; } = null!;
+
+    /// <summary>
+    /// Fetch resources information from the resource directory
+    /// </summary>
+    [JsonPropertyName("get_directory_resources")]
+    public DirectoryResourcesResponse? GetDirectoryResources { get; init; }
+
+    /// <summary>
+    /// Returns active work schedules for the caller's account
+    /// </summary>
+    [JsonPropertyName("work_schedules")]
+    public WorkSchedulePage? WorkSchedules { get; init; }
+
+    /// <summary>
+    /// Returns active time off schedules for the caller's account
+    /// </summary>
+    [JsonPropertyName("time_offs")]
+    public TimesOffPage? TimeOffs { get; init; }
+
+    /// <summary>
+    /// Returns resources availability: work schedule and time offs schedule for users and teams
+    /// </summary>
+    [JsonPropertyName("resources_availability")]
+    public ResourcesAvailability? ResourcesAvailability { get; init; }
+
+    /// <summary>
+    /// Returns the account-level default work schedule and time off schedule
+    /// </summary>
+    [JsonPropertyName("account_availability_defaults")]
+    public AccountAvailabilityDefaults? AccountAvailabilityDefaults { get; init; }
+
+    /// <summary>
+    /// Returns personal PTO collections for the requested users; maximum 100 user IDs per call
+    /// </summary>
+    [JsonPropertyName("user_pto")]
+    public List<UserPto>? UserPto { get; init; }
+
+    /// <summary>
+    /// Get all personal list items by list ID
+    /// </summary>
+    [JsonPropertyName("favorites")]
+    public List<GraphqlHierarchyObjectItem>? Favorites { get; init; }
+
+    /// <summary>
+    /// Fetch the status of an async board export job. Returns null for unknown or cross-account job IDs (a foreign-account job is indistinguishable from a missing one). Poll until status is COMPLETED (use download_url), FAILED (read failure_reason), or CANCELLED. Available to enterprise accounts only; other accounts receive FORBIDDEN_EXCEPTION.
+    /// </summary>
+    [JsonPropertyName("export_job_status")]
+    public ExportJobStatusInfo? ExportJobStatus { get; init; }
+
+    /// <summary>
+    /// Get a collection of monday dev sprints
+    /// </summary>
+    [JsonPropertyName("sprints")]
+    public List<Sprint>? Sprints { get; init; }
+
+    /// <summary>
+    /// Get all roles for the account
+    /// </summary>
+    [JsonPropertyName("account_roles")]
+    public List<AccountRole>? AccountRoles { get; init; }
+
+    /// <summary>
+    /// Retrieves API tokens for the given service users.
+    /// </summary>
+    [JsonPropertyName("service_user_tokens")]
+    public List<ServiceUserToken>? ServiceUserTokens { get; init; }
+
+    /// <summary>
+    /// Retrieves all service users in the account with their token last activity.
+    /// </summary>
+    [JsonPropertyName("service_users")]
+    public List<ServiceUser>? ServiceUsers { get; init; }
+
+    /// <summary>
+    /// Namespace for all notetaker-related queries.
+    /// </summary>
+    [JsonPropertyName("notetaker")]
+    public NotetakerQueries? Notetaker { get; init; }
+
+    /// <summary>
+    /// List trigger events with optional filters
+    /// </summary>
+    [JsonPropertyName("trigger_events")]
+    public TriggerEventsPage? TriggerEvents { get; init; }
+
+    /// <summary>
+    /// Fetch a single trigger event by UUID
+    /// </summary>
+    [JsonPropertyName("trigger_event")]
+    public TriggerEvent? TriggerEvent { get; init; }
+
+    /// <summary>
+    /// List block events for a given trigger UUID
+    /// </summary>
+    [JsonPropertyName("block_events")]
+    public BlockEventsPage? BlockEvents { get; init; }
+
+    /// <summary>
+    /// List tool events for a given trigger UUID
+    /// </summary>
+    [JsonPropertyName("tool_events")]
+    public ToolEventsPage? ToolEvents { get; init; }
+
+    /// <summary>
+    /// Get aggregated automation runs statistics in the account
+    /// </summary>
+    [JsonPropertyName("account_trigger_statistics")]
+    public AccountTriggerStatistics? AccountTriggerStatistics { get; init; }
+
+    /// <summary>
+    /// Get aggregated automation runs statistics grouped by entity Ids
+    /// </summary>
+    [JsonPropertyName("account_triggers_statistics_by_entity_id")]
+    public AccountTriggersByEntityId? AccountTriggersStatisticsByEntityId { get; init; }
+
+    /// <summary>
+    /// Returns all available widget schemas for documentation and validation purposes
+    /// </summary>
+    [JsonPropertyName("all_widgets_schema")]
+    public List<WidgetSchemaInfo>? AllWidgetsSchema { get; init; }
+
+    /// <summary>
+    /// Search analytics events by identifier
+    /// </summary>
+    [JsonPropertyName("analytics_events")]
+    public CampaignsAnalyticsEventsResponse? AnalyticsEvents { get; init; }
+
+    /// <summary>
+    /// List email campaigns for the current account with optional filtering and sorting
+    /// </summary>
+    [JsonPropertyName("campaigns")]
+    public List<CampaignsEmailCampaign>? Campaigns { get; init; }
+
+    /// <summary>
+    /// Get a single email campaign by ID
+    /// </summary>
+    [JsonPropertyName("campaign")]
+    public CampaignsEmailCampaign? Campaign { get; init; }
+
+    /// <summary>
+    /// Get the brand kit for the current account
+    /// </summary>
+    [JsonPropertyName("brand_kit")]
+    public CampaignsBrandKit? BrandKit { get; init; }
+
+    /// <summary>
+    /// List market insights for the current account
+    /// </summary>
+    [JsonPropertyName("insights")]
+    public List<CampaignsInsight>? Insights { get; init; }
+
+    /// <summary>
+    /// Get a single market insight by ID
+    /// </summary>
+    [JsonPropertyName("insight")]
+    public CampaignsInsight? Insight { get; init; }
+
+    /// <summary>
+    /// List audience segments for the current account
+    /// </summary>
+    [JsonPropertyName("segments")]
+    public List<CampaignsSegment>? Segments { get; init; }
+
+    /// <summary>
+    /// Get a single audience segment by ID
+    /// </summary>
+    [JsonPropertyName("segment")]
+    public CampaignsSegment? Segment { get; init; }
+
+    /// <summary>
+    /// Get marketing channels settings for the current account
+    /// </summary>
+    [JsonPropertyName("settings")]
+    public CampaignsSettings? Settings { get; init; }
+
+    /// <summary>
+    /// Usage metrics for the current account
+    /// </summary>
+    [JsonPropertyName("usage")]
+    public CampaignsUsage? Usage { get; init; }
+
+    /// <summary>
+    /// Returns connections for the authenticated user. Supports filtering, pagination, ordering, and partial-scope options.
+    /// </summary>
+    [JsonPropertyName("connections")]
+    public List<Connection>? Connections { get; init; }
+
+    /// <summary>
+    /// Returns connections that belong to the authenticated user.
+    /// </summary>
+    [JsonPropertyName("user_connections")]
+    public List<Connection>? UserConnections { get; init; }
+
+    /// <summary>
+    /// Returns all connections for the account. Requires admin privileges.
+    /// </summary>
+    [JsonPropertyName("account_connections")]
+    public List<Connection>? AccountConnections { get; init; }
+
+    /// <summary>
+    /// Fetch a single connection by its unique ID.
+    /// </summary>
+    [JsonPropertyName("connection")]
+    public Connection? Connection { get; init; }
+
+    /// <summary>
+    /// Get board IDs that are linked to a specific connection.
+    /// </summary>
+    [JsonPropertyName("connection_board_ids")]
+    public List<string> ConnectionBoardIds { get; init; } = [];
+
+    /// <summary>
+    /// Fetch a form by its token. The returned form includes all the details of the form such as its settings, questions, title, etc. Use this endpoint when you need to retrieve complete form data for display or processing. Requires that the requesting user has read access to the associated board.
+    /// </summary>
+    [JsonPropertyName("form")]
+    public ResponseForm? Form { get; init; }
+
+    /// <summary>
+    /// Search knowledge base snippets.
+    /// </summary>
+    [JsonPropertyName("knowledge_base_search")]
+    public KnowledgeBaseAnswer? KnowledgeBaseSearch { get; init; }
+
+    /// <summary>
+    /// Get managed column data.
+    /// </summary>
+    [JsonPropertyName("managed_column")]
+    public List<ManagedColumn>? ManagedColumn { get; init; }
+
+    /// <summary>
+    /// Retrieves the JSON schema definition for a specific column type. Use this query before calling update_column mutation to understand the structure and validation rules for the defaults parameter. The schema defines what properties are available when updating columns of a specific type.
+    /// </summary>
+    [JsonPropertyName("get_column_type_schema")]
+    public string? GetColumnTypeSchema { get; init; }
+
+    /// <summary>
+    /// Retrieve active account object schemas by their IDs or names. Only returns account-level object schemas (not global). Object schemas define the structure and columns of boards. If no parameters are provided, all account object schemas are returned. Pass exclude_created_by_monday: true to omit the schemas seeded by monday.com and return only schemas created by users in this account. Results are paginated using page and limit parameters.
+    /// </summary>
+    [JsonPropertyName("get_object_schemas")]
+    public List<ObjectSchema>? GetObjectSchemas { get; init; }
+
+    /// <summary>
+    /// Get account departments
+    /// </summary>
+    [JsonPropertyName("departments")]
+    public List<Department>? Departments { get; init; }
+
+    /// <summary>
+    /// Get board candidates based on workspace and usage type
+    /// </summary>
+    [JsonPropertyName("board_candidates")]
+    public List<Board>? BoardCandidates { get; init; }
+
+    /// <summary>
+    /// Get all user configs for the account.
+    /// </summary>
+    [JsonPropertyName("user_configs")]
+    public List<UserConfig>? UserConfigs { get; init; }
+
+    /// <summary>
+    /// Get users.
+    /// </summary>
+    [JsonPropertyName("users")]
+    public List<User>? Users { get; init; }
+
     /// <summary>
     /// Platform API data.
     /// </summary>
     [JsonPropertyName("platform_api")]
     public PlatformApi? PlatformApi { get; init; }
+
+    /// <summary>
+    /// Placeholder query field for automations-test microservice.
+    ///   This can be replaced with actual queries as the service evolves.
+    /// </summary>
+    [JsonPropertyName("empty")]
+    public string? Empty { get; init; }
 
 }

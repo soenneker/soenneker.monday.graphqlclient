@@ -22,7 +22,7 @@ public sealed partial class CreateFormQuestionRequestBuilder
     /// </summary>
     public ValueTask<GraphQlResponse<CreateFormQuestionData>> Execute(CreateFormQuestionVariables request, CancellationToken cancellationToken = default)
     {
-        const string gqlQuery = @"mutation CreateFormQuestion($formToken: String!, $question: CreateQuestionInput!) { create_form_question(formToken: $formToken, question: $question) { id type visible title description required settings { prefill { enabled source lookup } prefixAutofilled prefixPredefined { enabled prefix } checkedByDefault defaultCurrentDate includeTime display optionsOrder locationAutofilled limit skipValidation label_limit_count label_limit_count_enabled default_answer } options { label value position visible active } showIfRules page_block_id } }";
+        const string gqlQuery = @"mutation CreateFormQuestion($formToken: String!, $question: CreateQuestionInput!) { create_form_question(formToken: $formToken, question: $question) { id type visible title description required settings { prefill { enabled source lookup } prefixAutofilled prefixPredefined { enabled prefix } checkedByDefault defaultCurrentDate includeTime display optionsOrder locationAutofilled limit skipValidation label_limit_count label_limit_count_enabled default_answer } options { label value position visible active } show_if_rules page_block_id } }";
         return _graphQlClient.Execute<CreateFormQuestionData>(gqlQuery, request, cancellationToken);
     }
 
