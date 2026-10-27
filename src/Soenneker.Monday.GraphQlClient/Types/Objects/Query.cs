@@ -12,6 +12,12 @@ namespace Soenneker.Monday.GraphQlClient;
 public sealed partial class Query
 {
     /// <summary>
+    /// Structured full-text search over monday.com items. Provide at least one of: text (phrase-prefix on item name), where (typed DSL clause), board_ids, or workspace_ids.
+    /// </summary>
+    [JsonPropertyName("ai_search")]
+    public SearchResult? AiSearch { get; init; }
+
+    /// <summary>
     /// Get the connected account's information.
     /// </summary>
     [JsonPropertyName("account")]
