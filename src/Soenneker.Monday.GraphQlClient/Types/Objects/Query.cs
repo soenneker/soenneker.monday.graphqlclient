@@ -12,12 +12,6 @@ namespace Soenneker.Monday.GraphQlClient;
 public sealed partial class Query
 {
     /// <summary>
-    /// Structured full-text search over monday.com items. Provide at least one of: text (phrase-prefix on item name), where (typed DSL clause), board_ids, or workspace_ids.
-    /// </summary>
-    [JsonPropertyName("ai_search")]
-    public SearchResult? AiSearch { get; init; }
-
-    /// <summary>
     /// Get the connected account's information.
     /// </summary>
     [JsonPropertyName("account")]
@@ -275,6 +269,24 @@ public sealed partial class Query
     public List<ObjectRelation>? ObjectRelations { get; init; }
 
     /// <summary>
+    /// Get managed column data.
+    /// </summary>
+    [JsonPropertyName("managed_column")]
+    public List<ManagedColumn>? ManagedColumn { get; init; }
+
+    /// <summary>
+    /// Retrieves the JSON schema definition for a specific column type. Use this query before calling update_column mutation to understand the structure and validation rules for the defaults parameter. The schema defines what properties are available when updating columns of a specific type.
+    /// </summary>
+    [JsonPropertyName("get_column_type_schema")]
+    public string? GetColumnTypeSchema { get; init; }
+
+    /// <summary>
+    /// Retrieve active account object schemas by their IDs or names. Only returns account-level object schemas (not global). Object schemas define the structure and columns of boards. If no parameters are provided, all account object schemas are returned. Pass exclude_created_by_monday: true to omit the schemas seeded by monday.com and return only schemas created by users in this account. Results are paginated using page and limit parameters.
+    /// </summary>
+    [JsonPropertyName("get_object_schemas")]
+    public List<ObjectSchema>? GetObjectSchemas { get; init; }
+
+    /// <summary>
     /// Get sequences that the current user is allowed to enroll items to, that are connected to the provided board. Returns sequences owned by the user or sequences where the user has access to the sender connection.
     /// </summary>
     [JsonPropertyName("allowed_sequences_to_enroll")]
@@ -413,12 +425,6 @@ public sealed partial class Query
     /// </summary>
     [JsonPropertyName("mute_board_settings")]
     public List<BoardMuteSettings>? MuteBoardSettings { get; init; }
-
-    /// <summary>
-    /// Search API. Each field searches a single entity type with tailored filters.
-    /// </summary>
-    [JsonPropertyName("search")]
-    public SearchNamespace Search { get; init; } = null!;
 
     /// <summary>
     /// Fetch resources information from the resource directory
@@ -643,22 +649,10 @@ public sealed partial class Query
     public KnowledgeBaseAnswer? KnowledgeBaseSearch { get; init; }
 
     /// <summary>
-    /// Get managed column data.
+    /// Search API. Each field searches a single entity type with tailored filters.
     /// </summary>
-    [JsonPropertyName("managed_column")]
-    public List<ManagedColumn>? ManagedColumn { get; init; }
-
-    /// <summary>
-    /// Retrieves the JSON schema definition for a specific column type. Use this query before calling update_column mutation to understand the structure and validation rules for the defaults parameter. The schema defines what properties are available when updating columns of a specific type.
-    /// </summary>
-    [JsonPropertyName("get_column_type_schema")]
-    public string? GetColumnTypeSchema { get; init; }
-
-    /// <summary>
-    /// Retrieve active account object schemas by their IDs or names. Only returns account-level object schemas (not global). Object schemas define the structure and columns of boards. If no parameters are provided, all account object schemas are returned. Pass exclude_created_by_monday: true to omit the schemas seeded by monday.com and return only schemas created by users in this account. Results are paginated using page and limit parameters.
-    /// </summary>
-    [JsonPropertyName("get_object_schemas")]
-    public List<ObjectSchema>? GetObjectSchemas { get; init; }
+    [JsonPropertyName("search")]
+    public SearchNamespace Search { get; init; } = null!;
 
     /// <summary>
     /// Get account departments

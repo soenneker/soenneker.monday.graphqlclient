@@ -4,842 +4,6 @@ Directs the executor to defer this fragment when the if argument is true or unde
 directive @defer(label: String, if: Boolean! = true) on FRAGMENT_SPREAD | INLINE_FRAGMENT
 
 """
-Boolean compound query with must/should/must_not clauses
-"""
-input BoolInput {
-  """
-  Minimum number of SHOULD clauses that must match
-  """
-  min_should_match: Int
-  """
-  Child clauses
-  """
-  clauses: [ClauseInput!]!
-}
-
-"""
-A single search clause. Exactly one leaf or compound field must be set. occur and boost are optional modifiers used when this clause is a child of a bool or dis_max.
-"""
-input ClauseInput {
-  """
-  How this clause affects the parent score
-  """
-  occur: Occur
-  """
-  Score multiplier for this clause
-  """
-  boost: Float
-  """
-  Exact-term match on a field
-  """
-  term: FieldTextInput
-  """
-  Exact phrase match on a field
-  """
-  phrase: FieldTextInput
-  """
-  Phrase-prefix (autocomplete) match
-  """
-  phrase_prefix: FieldTextInput
-  """
-  Term-prefix match on a field
-  """
-  term_prefix: FieldTextInput
-  """
-  Wildcard pattern match (* and ?)
-  """
-  wildcard: FieldTextInput
-  """
-  Regular-expression match on a field
-  """
-  regex: FieldTextInput
-  """
-  Matches if the field equals ANY of the given values
-  """
-  terms_any: FieldTextListInput
-  """
-  Matches if the field equals ALL of the given values
-  """
-  terms_all: FieldTextListInput
-  """
-  Range match over a numeric or date field
-  """
-  range: RangeInput
-  """
-  Typo-tolerant fuzzy term match (Levenshtein)
-  """
-  fuzzy: FuzzyInput
-  """
-  Matches documents where the field has any indexed value
-  """
-  exists: FieldInput
-  """
-  When true, matches every document (equivalent to a match-all query)
-  """
-  all: Boolean
-  """
-  Boolean compound of sub-clauses (must / should / must_not)
-  """
-  bool: BoolInput
-  """
-  Disjunction-max compound — scores by the best-matching sub-clause
-  """
-  dis_max: DisMaxInput
-}
-
-"""
-A date.
-"""
-scalar Date
-
-"""
-Disjunction-max query — scores by the best-matching child clause
-"""
-input DisMaxInput {
-  """
-  Boost factor for non-best-matching clauses (0–1)
-  """
-  tie_breaker: Float
-  """
-  Child clauses
-  """
-  clauses: [ClauseInput!]!
-}
-
-"""
-Checks that a field has at least one indexed value (exists query)
-"""
-input FieldInput {
-  """
-  The indexed field that must have a value
-  """
-  field: SearchField!
-}
-
-"""
-A field+value pair for term/phrase/regex style leaf queries
-"""
-input FieldTextInput {
-  """
-  The indexed field to match against
-  """
-  field: SearchField!
-  """
-  The value to match
-  """
-  value: String!
-}
-
-"""
-A field+values pair for terms_any / terms_all leaf queries
-"""
-input FieldTextListInput {
-  """
-  The indexed field to match against
-  """
-  field: SearchField!
-  """
-  The list of values to match
-  """
-  values: [String!]!
-}
-
-"""
-A multipart file
-"""
-scalar File
-
-"""
-Fuzzy term query with edit-distance tolerance
-"""
-input FuzzyInput {
-  """
-  The indexed field to match against
-  """
-  field: SearchField!
-  """
-  The value to fuzzily match
-  """
-  value: String!
-  """
-  Maximum edit distance (Levenshtein)
-  """
-  distance: Int!
-  """
-  Length of the common prefix that is not fuzzified
-  """
-  prefix_len: Int
-  """
-  Count transpositions as a single edit
-  """
-  transpositions: Boolean
-}
-
-"""
-An ISO 8601-encoded datetime (e.g., 2024-04-09T13:45:30Z)
-"""
-scalar ISO8601DateTime
-
-"""
-A JSON formatted string.
-"""
-scalar JSON
-
-"""
-Boolean occurrence modifier for a clause inside a bool query
-"""
-enum Occur {
-  """
-  Clause must match
-  """
-  MUST
-  """
-  Clause should match
-  """
-  SHOULD
-  """
-  Clause must not match
-  """
-  MUST_NOT
-}
-
-"""
-Root query type for the Dependencies service
-"""
-type Query {
-  """
-  Structured full-text search over monday.com items. Provide at least one of: text (phrase-prefix on item name), where (typed DSL clause), board_ids, or workspace_ids.
-  """
-  ai_search(text: String, where: ClauseInput, board_ids: [ID!], workspace_ids: [ID!], top_k: Int, cursor: String, include_engine_stored_data: Boolean, hydration_enabled: Boolean): SearchResult
-  """
-  Get the connected account's information.
-  """
-  account: Account
-  """
-  Get a collection of installs of an app.
-  """
-  app_installs(account_id: ID, app_id: ID!, limit: Int = 25, page: Int = 1): [AppInstall]
-  """
-  Get the current app subscription. Note: This query does not work in the playground
-  """
-  app_subscription: [AppSubscription]
-  """
-  Get operations counter current value
-  """
-  app_subscription_operations(kind: String = "global"): AppSubscriptionOperationsCounter
-  """
-  Get apps monetization information for an account
-  """
-  apps_monetization_info: AppsMonetizationInfo
-  """
-  Get apps monetization status for an account
-  """
-  apps_monetization_status: AppMonetizationStatus
-  """
-  Get a collection of assets by ids.
-  """
-  assets(ids: [ID!]!): [Asset]
-  """
-  Get a collection of boards.
-  """
-  boards(board_kind: BoardKind, hierarchy_types: [BoardHierarchy!], ids: [ID!], latest: Boolean, limit: Int = 25, order_by: BoardsOrderBy, page: Int = 1, state: State = active, workspace_ids: [ID]): [Board]
-  """
-  Get the complexity data of your queries.
-  """
-  complexity: Complexity
-  """
-  Get a collection of docs.
-  """
-  docs(ids: [ID!], limit: Int = 25, object_ids: [ID!], order_by: DocsOrderBy, page: Int = 1, workspace_ids: [ID]): [Document]
-  """
-  Get a collection of folders. Note: This query won't return folders from closed workspaces to which you are not subscribed
-  """
-  folders(ids: [ID!], limit: Int = 25, page: Int = 1, workspace_ids: [ID]): [Folder]
-  """
-  Get a collection of items.
-  """
-  items(exclude_nonactive: Boolean, ids: [ID!], limit: Int = 25, newest_first: Boolean, page: Int = 1): [Item]
-  """
-  Search items by multiple columns and values.
-  """
-  items_page_by_column_values(board_id: ID!, columns: [ItemsPageByColumnValuesQuery!], cursor: String, hierarchy_scope_config: String, limit: Int! = 25): ItemsResponse!
-  """
-  Get the connected user's information.
-  """
-  me: User
-  """
-  Get next pages of board's items (rows) by cursor.
-  """
-  next_items_page(cursor: String!, limit: Int! = 25): ItemsResponse!
-  """
-  Get a collection of tags.
-  """
-  tags(ids: [ID!]): [Tag]
-  """
-  Get a collection of teams.
-  """
-  teams(ids: [ID!]): [Team]
-  """
-  Get the status of a use_template async operation. Returns null if the process_id is invalid, expired, or unauthorized.
-  """
-  template_installation_status(process_id: ID!): TemplateInstallationStatusResult
-  """
-  Get the API version in use
-  """
-  version: Version!
-  """
-  Get a list containing the versions of the API
-  """
-  versions: [Version!]
-  """
-  Get a collection of webhooks for the board
-  """
-  webhooks(app_webhooks_only: Boolean, board_id: ID!): [Webhook]
-  """
-  Get a collection of workspaces.
-  """
-  workspaces(ids: [ID!], kind: WorkspaceKind, limit: Int = 25, membership_kind: WorkspaceMembershipKind = all, order_by: WorkspacesOrderBy, page: Int = 1, query_params: WorkspacesQueryInput, state: State = active): [Workspace]
-  """
-  Export the dependency graph for a specific board
-  """
-  export_graph(boardId: String!): BoardGraphExport
-  """
-  Fetch dependency column configuration for a board
-  """
-  dependency_column_config(board_id: ID!, account_id: ID!, user_id: ID!): DependencyColumnConfigResult
-  """
-  Export events for a board within a date range. Requires a valid X-Tool-Execution-Secret header.
-  """
-  export_events(board_id: ID, start_date: String, end_date: String, state: [String!], type: [String!], limit: Int, offset: Int, order_by: String, order_direction: String): EventsExport
-  """
-  Get all dependency predecessors for a specific item, including dependency type and lag per edge
-  """
-  item_dependency(board_id: ID!, item_id: ID!): ItemDependency
-  """
-  Get all dependency predecessors for every item on a board, paginated. Each item includes its predecessor edges with dependency type and lag.
-  """
-  board_dependencies(board_id: ID!, limit: Int = 25, page: Int = 1, include_items_without_predecessors: Boolean = true): BoardDependencies
-  """
-  Returns true if connecting source_item_id -> target_item_id would create an MLS rollup cycle
-  """
-  would_create_mls_rollup_cycle(board_id: ID!, source_item_id: ID!, target_item_id: ID!): Boolean!
-  """
-  Get board automations. Filter by ids (specific automation IDs) or board_ids (up to 1 board). Omit all filters to get all account automations.
-  """
-  board_automations(ids: [ID!], board_ids: [ID!], limit: Int, cursor: String): AutomationsPage!
-  """
-  Get an app by ID or slug.
-  """
-  app(id: ID!): AppType
-  """
-  Query the monday.com apps documentation using AI. Returns an AI-generated answer based on the documentation.
-  """
-  ask_developer_docs(query: String!, retrieval_only: Boolean = false): AppDocumentationAiResponse
-  """
-  Get lifecycle subscriptions for all entity types in a specific app version. If version_id is not provided, resolves the active version (user testing version, live, or latest).
-  """
-  get_app_lifecycle_subscriptions(app_id: ID!, version_id: ID): [LifecycleSubscriptionKind!]
-  """
-  Performs aggregation operations on board data
-  """
-  aggregate(query: AggregateQueryInput!): AggregateQueryResult
-  updates(limit: Int = 25, page: Int = 1, ids: [ID!], from_date: String, to_date: String): [Update!]
-  """
-  Get a collection of replies filtered by board IDs and date range.
-  """
-  replies(limit: Int = 25, page: Int = 1, board_ids: [ID!]!, created_at_from: String, created_at_to: String): [Reply!]
-  """
-  Get validations configuration for a board
-  """
-  validations(id: ID!, type: ValidationsEntityType = board): Validations
-  marketplace_app_discounts(app_id: ID!): [MarketplaceAppDiscount!]!
-  app_subscriptions(app_id: ID!, status: SubscriptionStatus, account_id: Int, cursor: String, limit: Int): AppSubscriptions!
-  custom_activity(ids: [String!], name: String, icon_id: CustomActivityIcon, color: CustomActivityColor): [CustomActivity!]
-  timeline_item(id: ID!): TimelineItem
-  """
-  Fetches timeline items for a given item
-  """
-  timeline(id: ID!, skipConnectedItems: Boolean): TimelineResponse
-  """
-  Retrieves the JSON schema definition for a specific create view type. 
-    Use this query before calling create_view mutation to understand the structure and validation rules for the settings parameter. 
-    The schema defines what properties are available when creating views of a specific type.
-  """
-  get_view_schema_by_type(type: ViewKind!, mutationType: ViewMutationKind!): JSON
-  """
-  Retrieves a list of available object types that can be created or queried. Each object type is uniquely identified by an 'object_type_unique_key'. This key is required for mutations like 'create_object' and for filtering in the 'objects' query. Use this query to discover what types of objects are available in the system (e.g., 'workflows', 'projects') and get their corresponding unique keys. The structure of unique key is 'app_slug::app_feature_slug'.
-  """
-  object_types_unique_keys: [ObjectTypeUniqueKey!]
-  """
-  Retrieves a list of objects from the Monday.com Objects Platform based on specified filters. This query can return any type of object (board, doc, dashboard, workflow, etc.) depending on the filter criteria. Use object_type_unique_keys to filter for specific object types.
-  """
-  objects(object_type_unique_keys: [String!], ids: [ID!], limit: Int, order_by: OrderBy, state: ObjectState, privacy_kind: PrivacyKind, workspace_ids: [ID!]): [Object!]
-  """
-  Fetch relations for a specific object
-  """
-  object_relations(object_id: ID!, kind: RelationKind, direction: RelationDirection = OUTGOING): [ObjectRelation!]
-  """
-  Get sequences that the current user is allowed to enroll items to, that are connected to the provided board. Returns sequences owned by the user or sequences where the user has access to the sender connection.
-  """
-  allowed_sequences_to_enroll(board_id: ID!): [Sequence!]
-  """
-  Retrieves blocks for the published version of a specific article if the requesting user has permission to access it. Returns paginated blocks in their position order. Will return an error if the user lacks the required permissions.
-  """
-  article_blocks(object_id: ID!, limit: Int = 25, page: Int = 1): [ArticleBlock]!
-  """
-  Retrieves a list of published articles with their metadata and content blocks that the requesting user has permission to access. Articles without proper permissions will be filtered out. By default, returns the first 25 blocks per article. To retrieve more blocks, use the article_blocks query.
-  """
-  articles(object_ids: [ID!]!, workspace_ids: [ID!], limit: Int = 25, page: Int = 1): [Article]!
-  """
-  Retrieves the content diff between two versions of a document. Pass two restoring point dates (from doc_version_history) to see what blocks were added, deleted, or changed. Only blocks with changes are returned.
-  """
-  doc_version_diff(doc_id: ID!, date: String!, prev_date: String!): DocVersionDiff
-  """
-  Retrieves the version history of a document. Returns a list of restoring points (snapshots) with timestamps and the users who made changes. Snapshots are grouped in 5-minute intervals. Use the since and until arguments to filter the time range.
-  """
-  doc_version_history(doc_id: ID!, since: String, until: String): DocVersionHistory
-  """
-  Converts document content into standard markdown format for external use, backup, or processing. Exports the entire document by default, or specific blocks if block IDs are provided. Use this to extract content for integration with other systems, create backups, generate reports, or process document content with external tools. The output is clean, portable markdown that preserves formatting and structure.
-  """
-  export_markdown_from_doc(docId: ID!, blockIds: [String!]): ExportMarkdownResult
-  """
-  Get the status of a backfill or ingest job
-  """
-  fetch_job_status(job_id: ID!): JobStatus!
-  """
-  Get the status of an async job by its external ID
-  """
-  job_status(job_id: ID!): AsyncJobStatus!
-  """
-  Retrieve aggregated board data at specific historical dates for point-in-time analysis. When the query references a date column, results are only available from when date column history began for that board; earlier timestamps are rejected.
-  """
-  aggregate_history(query: AggregateHistoryQueryInput!): AggregateHistoryResultSet
-  """
-  Retrieve historical item data from a board at a specific point in time. When the query references a date column, results are only available from when date column history began for that board; earlier timestamps are rejected.
-  """
-  items_history(query: ItemsHistoryQueryInput!): ItemsHistoryResultSet
-  """
-  Retrieve audit logs for your Monday account. You can
-    filter logs by event types, user ID, IP address and start and end date.
-    
-    Here is an example audit log query:
-    
-    query {
-    audit_logs(
-    user_id: "1234567890"
-    events: ["login", "logout"]
-    ip_address: "123.123.123.123"
-    start_time: "2021-01-01T00:00:00Z"
-    end_time: "2021-01-01T23:59:59Z"
-    limit: 100
-    page: 1
-    ) {
-    logs {
-    timestamp
-    event
-    ip_address
-    user {
-    id
-    name
-    email
-    }
-    activity_metadata
-    }
-    pagination {
-    page
-    page_size
-    has_more_pages
-    next_page_number
-    }
-    }
-    }
-    
-    To get the list of all possible event types, you should use the audit_event_catalogue query like this:
-    
-    query {
-    audit_event_catalogue {
-    name
-    description
-    metadata_details
-    }
-    }
-  """
-  audit_logs(limit: Int = 25, page: Int = 1, user_id: ID, events: [String!], ip_address: String, start_time: ISO8601DateTime, end_time: ISO8601DateTime): AuditLogPage
-  """
-  Lists all the audit event types that can be logged and information about them.
-    
-    Example query:
-    
-    query {
-    audit_event_catalogue {
-    name
-    description
-    metadata_details
-    }
-    }
-  """
-  audit_event_catalogue: [AuditEventCatalogueEntry!]
-  notifications(cursor: ID, limit: Int = 25, filter_read: Boolean, since: ISO8601DateTime, kind_names: [String!]): [NotificationV2!]
-  """
-  Retrieves the current user's notification settings across all available channels.
-  """
-  notifications_settings(scope_type: ScopeType!, scope_id: Int, setting_kinds: [String!], channels: [ChannelType!]): [NotificationSetting!]
-  """
-  Get mute board notification settings for the current user
-  """
-  mute_board_settings(board_ids: [ID!]!): [BoardMuteSettings!]
-  """
-  Search API. Each field searches a single entity type with tailored filters.
-  """
-  search: SearchNamespace!
-  """
-  Fetch resources information from the resource directory
-  """
-  get_directory_resources(query_params: ItemsQuery, cursor: String, limit: Int = 25): DirectoryResourcesResponse
-  """
-  Returns active work schedules for the caller's account
-  """
-  work_schedules(ids: [ID!], limit: Int, name: String, cursor: String): WorkSchedulePage
-  """
-  Returns active time off schedules for the caller's account
-  """
-  time_offs(ids: [ID!], limit: Int, name: String, cursor: String): TimesOffPage
-  """
-  Returns resources availability: work schedule and time offs schedule for users and teams
-  """
-  resources_availability(user_ids: [ID!], team_ids: [ID!]): ResourcesAvailability
-  """
-  Returns the account-level default work schedule and time off schedule
-  """
-  account_availability_defaults: AccountAvailabilityDefaults
-  """
-  Returns personal PTO collections for the requested users; maximum 100 user IDs per call
-  """
-  user_pto(user_ids: [ID!]!): [UserPto!]
-  """
-  Get all personal list items by list ID
-  """
-  favorites: [GraphqlHierarchyObjectItem!]
-  """
-  Fetch the status of an async board export job. Returns null for unknown or cross-account job IDs (a foreign-account job is indistinguishable from a missing one). Poll until status is COMPLETED (use download_url), FAILED (read failure_reason), or CANCELLED. Available to enterprise accounts only; other accounts receive FORBIDDEN_EXCEPTION.
-  """
-  export_job_status(job_id: ID!): ExportJobStatusInfo
-  """
-  Get a collection of monday dev sprints
-  """
-  sprints(ids: [ID!]!): [Sprint!]
-  """
-  Get all roles for the account
-  """
-  account_roles: [AccountRole!]
-  """
-  Retrieves API tokens for the given service users.
-  """
-  service_user_tokens(service_user_ids: [ID!]!): [ServiceUserToken!]
-  """
-  Retrieves all service users in the account with their token last activity.
-  """
-  service_users: [ServiceUser!]
-  """
-  Namespace for all notetaker-related queries.
-  """
-  notetaker: NotetakerQueries
-  """
-  List trigger events with optional filters
-  """
-  trigger_events(nextPageOffset: Int = 0, filters: TriggerEventsFiltersInput): TriggerEventsPage
-  """
-  Fetch a single trigger event by UUID
-  """
-  trigger_event(triggerUuid: String!): TriggerEvent
-  """
-  List block events for a given trigger UUID
-  """
-  block_events(triggerUuid: String!, nextPageOffset: Int = 0): BlockEventsPage
-  """
-  List tool events for a given trigger UUID
-  """
-  tool_events(trigger_uuid: String!, next_page_offset: Int = 0): ToolEventsPage
-  """
-  Get aggregated automation runs statistics in the account
-  """
-  account_trigger_statistics(filters: AccountTriggerStatisticsFiltersInput): AccountTriggerStatistics
-  """
-  Get aggregated automation runs statistics grouped by entity Ids
-  """
-  account_triggers_statistics_by_entity_id(run_status: TriggerEventState!, filters: AccountTriggersByEntityIdFiltersInput): AccountTriggersByEntityId
-  """
-  Returns all available widget schemas for documentation and validation purposes
-  """
-  all_widgets_schema: [WidgetSchemaInfo!]
-  """
-  Search analytics events by identifier
-  """
-  analytics_events(identifier: String!, campaign_id: ID, event_type: CampaignsAnalyticsEventKind, limit: Int!, next_token: String): CampaignsAnalyticsEventsResponse
-  """
-  List email campaigns for the current account with optional filtering and sorting
-  """
-  campaigns(limit: Int, status: [CampaignsStatusKind!], name: String, sent_after: Date, sent_before: Date, sort_field: CampaignsSortField, sort_order: CampaignsSortOrder): [CampaignsEmailCampaign!]
-  """
-  Get a single email campaign by ID
-  """
-  campaign(id: ID!): CampaignsEmailCampaign
-  """
-  Get the brand kit for the current account
-  """
-  brand_kit: CampaignsBrandKit
-  """
-  List market insights for the current account
-  """
-  insights(limit: Int): [CampaignsInsight!]
-  """
-  Get a single market insight by ID
-  """
-  insight(id: ID!): CampaignsInsight
-  """
-  List audience segments for the current account
-  """
-  segments(limit: Int): [CampaignsSegment!]
-  """
-  Get a single audience segment by ID
-  """
-  segment(id: ID!): CampaignsSegment
-  """
-  Get marketing channels settings for the current account
-  """
-  settings: CampaignsSettings
-  """
-  Usage metrics for the current account
-  """
-  usage: CampaignsUsage
-  """
-  Returns connections for the authenticated user. Supports filtering, pagination, ordering, and partial-scope options.
-  """
-  connections(withAutomations: Boolean, connectionState: String, withStateValidation: Boolean, page: Int, pageSize: Int, order: String, withPartialScopes: Boolean, pagination: PaginationInput): [Connection!]
-  """
-  Returns connections that belong to the authenticated user.
-  """
-  user_connections(withAutomations: Boolean, withStateValidation: Boolean, page: Int, pageSize: Int, order: String, pagination: PaginationInput): [Connection!]
-  """
-  Returns all connections for the account. Requires admin privileges.
-  """
-  account_connections(withAutomations: Boolean, withStateValidation: Boolean, page: Int, pageSize: Int, order: String, pagination: PaginationInput): [Connection!]
-  """
-  Fetch a single connection by its unique ID.
-  """
-  connection(id: Int!): Connection
-  """
-  Get board IDs that are linked to a specific connection.
-  """
-  connection_board_ids(connection_id: ID!): [ID!]!
-  """
-  Fetch a form by its token. The returned form includes all the details of the form such as its settings, questions, title, etc. Use this endpoint when you need to retrieve complete form data for display or processing. Requires that the requesting user has read access to the associated board.
-  """
-  form(formToken: String!): ResponseForm
-  """
-  Search knowledge base snippets.
-  """
-  knowledge_base_search(query: String!, limit: Int = 5): KnowledgeBaseAnswer
-  """
-  Get managed column data.
-  """
-  managed_column(id: [String!], state: [ManagedColumnState!]): [ManagedColumn!]
-  """
-  Retrieves the JSON schema definition for a specific column type. Use this query before calling update_column mutation to understand the structure and validation rules for the defaults parameter. The schema defines what properties are available when updating columns of a specific type.
-  """
-  get_column_type_schema(type: ColumnType!): JSON
-  """
-  Retrieve active account object schemas by their IDs or names. Only returns account-level object schemas (not global). Object schemas define the structure and columns of boards. If no parameters are provided, all account object schemas are returned. Pass exclude_created_by_monday: true to omit the schemas seeded by monday.com and return only schemas created by users in this account. Results are paginated using page and limit parameters.
-  """
-  get_object_schemas(ids: [ID!], names: [String!], limit: Int, page: Int, exclude_created_by_monday: Boolean): [ObjectSchema!]
-  """
-  Get account departments
-  """
-  departments(ids: [ID!]): [Department!]
-  """
-  Get board candidates based on workspace and usage type
-  """
-  board_candidates(workspaceId: String!, usageType: BoardUsage!): [Board!]
-  """
-  Get all user configs for the account.
-  """
-  user_configs(kinds: [String!], visibility: String, behaviors: [String!]): [UserConfig!]
-  """
-  Get users.
-  """
-  users(ids: [ID!], name: String, emails: [String!], user_kind: UserKindFilterInput, sort: [UsersSortInput!], visibility: String, status: [UserStatus!], limit: Int = 200, page: Int = 1, kind: UserKind @deprecated(reason: "Use user_kind instead."), non_active: Boolean @deprecated(reason: "Use status instead."), newest_first: Boolean @deprecated(reason: "Use sort instead.")): [User!]
-  """
-  Platform API data.
-  """
-  platform_api: PlatformApi
-  """
-  Placeholder query field for automations-test microservice.
-    This can be replaced with actual queries as the service evolves.
-  """
-  empty: String
-}
-
-"""
-Range query over a numeric or date field
-"""
-input RangeInput {
-  """
-  The numeric or date field to range over
-  """
-  field: SearchField!
-  """
-  Lower bound (inclusive when include_min is true)
-  """
-  min: String
-  """
-  Upper bound (inclusive when include_max is true)
-  """
-  max: String
-  """
-  Whether the lower bound is inclusive (default false)
-  """
-  include_min: Boolean
-  """
-  Whether the upper bound is inclusive (default false)
-  """
-  include_max: Boolean
-}
-
-"""
-Indexed fields available for structured search queries
-"""
-enum SearchField {
-  """
-  The item name / title
-  """
-  ITEM_NAME
-  """
-  ID of the board that contains the item
-  """
-  BOARD_ID
-  """
-  Timestamp of the item's last update
-  """
-  UPDATED_AT
-  """
-  Flattened free text of all the item's column values
-  """
-  ITEM_FREE_TEXT
-  """
-  The item's status column labels
-  """
-  ITEM_STATUSES
-  """
-  Name of the board that contains the item
-  """
-  BOARD_NAME
-  """
-  The item's numeric column values (indexed as text — match with term, not range)
-  """
-  ITEMS_NUMERICS
-  """
-  The item's date column values (indexed as text — for a real date range use UPDATED_AT)
-  """
-  ITEMS_DATES
-  """
-  ID of the workspace containing the item's board
-  """
-  WORKSPACE_ID
-  """
-  Kind of board (e.g. public, private, share). Raw single-token field — match it with term or terms_any, not phrase or fuzzy.
-  """
-  BOARD_KIND
-  """
-  People assigned to the item (people column values)
-  """
-  PERSONS
-  """
-  User ID of the item's creator
-  """
-  CREATED_BY
-  """
-  User ID of the last person to update the item
-  """
-  LAST_UPDATED_BY
-  """
-  User ID of the board owner
-  """
-  BOARD_OWNER_ID
-  """
-  Board / pulse-view permission signal used for authorization filtering
-  """
-  BOARD_WITH_PULSE_VIEW_PERMISSIONS
-  """
-  ID of the group (board section) that contains the item. Raw single-token field — match it with term or terms_any, not phrase or fuzzy.
-  """
-  GROUP_ID
-  """
-  Name of the group (board section) that contains the item. Best-effort: an item whose group name the ingestor could not resolve is indexed without one, so it will not match this field.
-  """
-  GROUP_NAME
-  """
-  Label tokens from the item's dropdown column values
-  """
-  ITEM_LABELS
-  """
-  Email addresses found in the item's email column values
-  """
-  ITEM_REFERENCED_EMAILS
-  """
-  Tag names from the item's tag column values (names, not IDs)
-  """
-  ITEM_TAGS
-  """
-  The item's monday item_id — the same value returned as SearchItem.id, so it is the way to re-fetch an item seen in an earlier result. Raw single-token field: match it with term, or terms_any for up to 100 ids at once; phrase, phrase_prefix, fuzzy and range are rejected. An item has exactly one id, so terms_all with more than one value matches nothing. Prefer adding board_ids when you know the board — an ITEM_ID-only query carries no scope and fans out across the tenant.
-  """
-  ITEM_ID
-}
-
-"""
-A single item returned from the AI search index
-"""
-type SearchItem {
-  """
-  Unique item identifier
-  """
-  id: ID!
-  """
-  Search relevance score (BM25, higher is better)
-  """
-  score: Float
-  """
-  Board that contains this item
-  """
-  board_id: ID
-  """
-  Item name
-  """
-  name: String
-  """
-  The query-engine stored document (indexed fields). Only present when include_engine_stored_data is true and available to the account.
-  """
-  stored: JSON
-  """
-  Live monday column values hydrated from query-ms. Only present when hydration_enabled is true.
-  """
-  column_values: JSON
-}
-
-"""
-Paginated search results from the AI search index
-"""
-type SearchResult {
-  """
-  Matched items for the current page
-  """
-  items: [SearchItem!]
-  """
-  Cursor for fetching the next page of results
-  """
-  next_cursor: String
-}
-
-"""
 Your monday.com account
 """
 type Account {
@@ -1371,6 +535,10 @@ type Board {
   """
   updates(limit: Int = 25, page: Int = 1, ids: [ID!], board_updates_only: Boolean, from_date: ISO8601DateTime, to_date: ISO8601DateTime): [Update!]
   """
+  The board's visible columns.
+  """
+  columns(ids: [String], types: [ColumnType!], capabilities: [ColumnCapability]): [Column]
+  """
   Inferred metadata associated with this board
   """
   inferred_metadata: BoardInferredMetadata
@@ -1378,10 +546,6 @@ type Board {
   Manually set metadata associated with this board
   """
   manual_metadata: BoardManualMetadata
-  """
-  The board's visible columns.
-  """
-  columns(ids: [String], types: [ColumnType!], capabilities: [ColumnCapability]): [Column]
 }
 
 """
@@ -2162,6 +1326,11 @@ type CustomFieldValue {
 }
 
 """
+A date.
+"""
+scalar Date
+
+"""
 Represents a dependency link between two items, including the relationship type and lag.
 """
 type DependencyLink {
@@ -2477,6 +1646,11 @@ type FailedUserBoardRoleUpdate {
   """
   user_id: ID!
 }
+
+"""
+A multipart file
+"""
+scalar File
 
 """
 A file with an invalid or missing asset.
@@ -2940,6 +2114,11 @@ enum GroupAttributes {
 }
 
 """
+An ISO 8601-encoded datetime (e.g., 2024-04-09T13:45:30Z)
+"""
+scalar ISO8601DateTime
+
+"""
 An item (table row).
 """
 type Item {
@@ -3244,6 +2423,11 @@ type ItemsResponse {
   """
   items: [Item!]!
 }
+
+"""
+A JSON formatted string.
+"""
+scalar JSON
 
 """
 Kind of assignee
@@ -3734,6 +2918,98 @@ type Mutation {
   """
   delete_object_relation(source_object_id: ID!, relation_id: ID): Int
   """
+  Create managed column of type dropdown mutation.
+  """
+  create_dropdown_managed_column(title: String!, description: String, settings: CreateDropdownColumnSettingsInput): DropdownManagedColumn
+  """
+  Create managed column of type status mutation.
+  """
+  create_status_managed_column(title: String!, description: String, settings: CreateStatusColumnSettingsInput): StatusManagedColumn
+  """
+  Update managed column of type dropdown mutation.
+  """
+  update_dropdown_managed_column(id: String!, title: String, description: String, settings: UpdateDropdownColumnSettingsInput, revision: Int!): DropdownManagedColumn
+  """
+  Update managed column of type status mutation.
+  """
+  update_status_managed_column(id: String!, title: String, description: String, settings: UpdateStatusColumnSettingsInput, revision: Int!): StatusManagedColumn
+  """
+  Activate managed column mutation.
+  """
+  activate_managed_column(id: String!): ManagedColumn
+  """
+  Deactivate managed column mutation.
+  """
+  deactivate_managed_column(id: String!): ManagedColumn
+  """
+  Delete managed column mutation.
+  """
+  delete_managed_column(id: String!): ManagedColumn
+  """
+  Updates a status column's properties including title, description, and status label settings. Status columns allow users to track item progress through customizable labels (e.g., "Working on it", "Done", "Stuck"). This mutation is specifically for status/color columns and provides type-safe updates.
+  """
+  update_status_column(board_id: ID!, id: String!, title: String, description: String, width: Int, revision: String!, capabilities: StatusColumnCapabilitiesInput, settings: UpdateStatusColumnSettingsInput): Column
+  """
+  Updates a dropdown column's properties including title, description, and dropdown label settings. Dropdown columns allow users to select from a predefined list of options. This mutation is specifically for dropdown columns and provides type-safe updates.
+  """
+  update_dropdown_column(board_id: ID!, id: String!, title: String, description: String, width: Int, revision: String!, settings: UpdateDropdownColumnSettingsInput): Column
+  """
+  Generic mutation for updating any column type with validation. Supports updating column properties like title, description, and type-specific defaults/settings. The mutation validates input against the column type's schema before applying changes. Use get_column_type_schema query to understand available properties for each column type.
+  """
+  update_column(board_id: ID!, id: String!, title: String, description: String, width: Int, revision: String!, capabilities: ColumnCapabilitiesInput, settings: JSON, column_type: ColumnType!): Column
+  """
+  Creates a new status column with strongly typed settings. Status columns allow users to track item progress through customizable labels (e.g., "Working on it", "Done", "Stuck"). This mutation is specifically for status/color columns and provides type-safe creation with label configuration.
+  """
+  create_status_column(board_id: ID!, id: String, title: String!, description: String, after_column_id: ID, capabilities: StatusColumnCapabilitiesInput, defaults: CreateStatusColumnSettingsInput): Column
+  """
+  Creates a new dropdown column with strongly typed settings. Dropdown columns allow users to select from a predefined list of options. This mutation is specifically for dropdown columns and provides type-safe creation with dropdown options configuration.
+  """
+  create_dropdown_column(board_id: ID!, id: String, title: String!, description: String, after_column_id: ID, defaults: CreateDropdownColumnSettingsInput): Column
+  """
+  Creates a new status column in a board that is linked to a managed column. The column data and settings are controlled by the managed column. Only title and description can be overridden locally.
+  """
+  attach_status_managed_column(board_id: ID!, managed_column_id: ID!, title: String, description: String, after_column_id: ID): Column
+  """
+  Creates a new dropdown column in a board that is linked to a managed column. The column data and settings are controlled by the managed column. Title, description, and dropdown-specific settings (limit_select, label_limit_count) can be overridden locally.
+  """
+  attach_dropdown_managed_column(board_id: ID!, managed_column_id: ID!, title: String, description: String, after_column_id: ID, settings: DropdownSettingsOverridesInput): Column
+  """
+  Create a new account object schema.
+  """
+  create_object_schema(name: String!, parent_id: ID, description: String): ObjectSchema
+  """
+  Update an account object schema.
+  """
+  update_object_schema(id: ID!, revision: Int!, parent_id: ID, description: String): ObjectSchema
+  """
+  Delete an account object schema. Can only delete if there are no boards attached to the object schema. Object schemas define the structure and columns of boards.
+  """
+  delete_object_schema(id: ID, name: String): ObjectSchema
+  """
+  Connect a board to an object schema.
+  """
+  connect_board_to_object_schema(board_id: ID!, object_schema_id: ID, object_schema_name: String): BoardConnection
+  """
+  Create columns on an account object schema.
+  """
+  create_object_schema_columns(object_schema_id: ID, object_schema_name: String, columns: [CreateObjectSchemaColumnInput!]!): ObjectSchema
+  """
+  Deactivate or reactivate a column on an account object schema.
+  """
+  set_object_schema_column_active_state(object_schema_id: ID, object_schema_name: String, column_id: ID!, action: ColumnActiveStateAction!): ObjectSchema
+  """
+  Detach boards from their object schemas.
+  """
+  detach_boards_from_object_schema(board_ids: [ID!]!): [BulkDetachBoardResult!]
+  """
+  Update columns on an account object schema.
+  """
+  update_object_schema_columns(object_schema_id: ID, object_schema_name: String, columns: [UpdateObjectSchemaColumnInput!]!): ObjectSchema
+  """
+  Execute multiple object schema column actions in a single request. Actions are executed sequentially in the order provided. If any action fails, execution stops and an error is returned.
+  """
+  bulk_object_schema_column_actions(object_schema_id: ID, object_schema_name: String, actions: [ObjectSchemaActionInput!]!): [ObjectSchemaActionResult!]
+  """
   Enroll multiple items to a single sequence. Maximum 50 items per request.
   """
   enroll_items_to_sequence(input: EnrollToSequenceInput!): EnrollToSequenceResult
@@ -4034,98 +3310,6 @@ type Mutation {
   """
   set_form_password(formToken: String!, input: SetFormPasswordInput!): ResponseForm
   """
-  Create managed column of type dropdown mutation.
-  """
-  create_dropdown_managed_column(title: String!, description: String, settings: CreateDropdownColumnSettingsInput): DropdownManagedColumn
-  """
-  Create managed column of type status mutation.
-  """
-  create_status_managed_column(title: String!, description: String, settings: CreateStatusColumnSettingsInput): StatusManagedColumn
-  """
-  Update managed column of type dropdown mutation.
-  """
-  update_dropdown_managed_column(id: String!, title: String, description: String, settings: UpdateDropdownColumnSettingsInput, revision: Int!): DropdownManagedColumn
-  """
-  Update managed column of type status mutation.
-  """
-  update_status_managed_column(id: String!, title: String, description: String, settings: UpdateStatusColumnSettingsInput, revision: Int!): StatusManagedColumn
-  """
-  Activate managed column mutation.
-  """
-  activate_managed_column(id: String!): ManagedColumn
-  """
-  Deactivate managed column mutation.
-  """
-  deactivate_managed_column(id: String!): ManagedColumn
-  """
-  Delete managed column mutation.
-  """
-  delete_managed_column(id: String!): ManagedColumn
-  """
-  Updates a status column's properties including title, description, and status label settings. Status columns allow users to track item progress through customizable labels (e.g., "Working on it", "Done", "Stuck"). This mutation is specifically for status/color columns and provides type-safe updates.
-  """
-  update_status_column(board_id: ID!, id: String!, title: String, description: String, width: Int, revision: String!, capabilities: StatusColumnCapabilitiesInput, settings: UpdateStatusColumnSettingsInput): Column
-  """
-  Updates a dropdown column's properties including title, description, and dropdown label settings. Dropdown columns allow users to select from a predefined list of options. This mutation is specifically for dropdown columns and provides type-safe updates.
-  """
-  update_dropdown_column(board_id: ID!, id: String!, title: String, description: String, width: Int, revision: String!, settings: UpdateDropdownColumnSettingsInput): Column
-  """
-  Generic mutation for updating any column type with validation. Supports updating column properties like title, description, and type-specific defaults/settings. The mutation validates input against the column type's schema before applying changes. Use get_column_type_schema query to understand available properties for each column type.
-  """
-  update_column(board_id: ID!, id: String!, title: String, description: String, width: Int, revision: String!, capabilities: ColumnCapabilitiesInput, settings: JSON, column_type: ColumnType!): Column
-  """
-  Creates a new status column with strongly typed settings. Status columns allow users to track item progress through customizable labels (e.g., "Working on it", "Done", "Stuck"). This mutation is specifically for status/color columns and provides type-safe creation with label configuration.
-  """
-  create_status_column(board_id: ID!, id: String, title: String!, description: String, after_column_id: ID, capabilities: StatusColumnCapabilitiesInput, defaults: CreateStatusColumnSettingsInput): Column
-  """
-  Creates a new dropdown column with strongly typed settings. Dropdown columns allow users to select from a predefined list of options. This mutation is specifically for dropdown columns and provides type-safe creation with dropdown options configuration.
-  """
-  create_dropdown_column(board_id: ID!, id: String, title: String!, description: String, after_column_id: ID, defaults: CreateDropdownColumnSettingsInput): Column
-  """
-  Creates a new status column in a board that is linked to a managed column. The column data and settings are controlled by the managed column. Only title and description can be overridden locally.
-  """
-  attach_status_managed_column(board_id: ID!, managed_column_id: ID!, title: String, description: String, after_column_id: ID): Column
-  """
-  Creates a new dropdown column in a board that is linked to a managed column. The column data and settings are controlled by the managed column. Title, description, and dropdown-specific settings (limit_select, label_limit_count) can be overridden locally.
-  """
-  attach_dropdown_managed_column(board_id: ID!, managed_column_id: ID!, title: String, description: String, after_column_id: ID, settings: DropdownSettingsOverridesInput): Column
-  """
-  Create a new account object schema.
-  """
-  create_object_schema(name: String!, parent_id: ID, description: String): ObjectSchema
-  """
-  Update an account object schema.
-  """
-  update_object_schema(id: ID!, revision: Int!, parent_id: ID, description: String): ObjectSchema
-  """
-  Delete an account object schema. Can only delete if there are no boards attached to the object schema. Object schemas define the structure and columns of boards.
-  """
-  delete_object_schema(id: ID, name: String): ObjectSchema
-  """
-  Connect a board to an object schema.
-  """
-  connect_board_to_object_schema(board_id: ID!, object_schema_id: ID, object_schema_name: String): BoardConnection
-  """
-  Create columns on an account object schema.
-  """
-  create_object_schema_columns(object_schema_id: ID, object_schema_name: String, columns: [CreateObjectSchemaColumnInput!]!): ObjectSchema
-  """
-  Deactivate or reactivate a column on an account object schema.
-  """
-  set_object_schema_column_active_state(object_schema_id: ID, object_schema_name: String, column_id: ID!, action: ColumnActiveStateAction!): ObjectSchema
-  """
-  Detach boards from their object schemas.
-  """
-  detach_boards_from_object_schema(board_ids: [ID!]!): [BulkDetachBoardResult!]
-  """
-  Update columns on an account object schema.
-  """
-  update_object_schema_columns(object_schema_id: ID, object_schema_name: String, columns: [UpdateObjectSchemaColumnInput!]!): ObjectSchema
-  """
-  Execute multiple object schema column actions in a single request. Actions are executed sequentially in the order provided. If any action fails, execution stops and an error is returned.
-  """
-  bulk_object_schema_column_actions(object_schema_id: ID, object_schema_name: String, actions: [ObjectSchemaActionInput!]!): [ObjectSchemaActionResult!]
-  """
   Assigns members to a department.
   """
   assign_department_members(department_id: ID!, user_ids: [ID!]!): AssignDepartmentMembersResult
@@ -4340,6 +3524,478 @@ enum PositionRelative {
   position before at the given entity.
   """
   before_at
+}
+
+"""
+Root query type for the Dependencies service
+"""
+type Query {
+  """
+  Get the connected account's information.
+  """
+  account: Account
+  """
+  Get a collection of installs of an app.
+  """
+  app_installs(account_id: ID, app_id: ID!, limit: Int = 25, page: Int = 1): [AppInstall]
+  """
+  Get the current app subscription. Note: This query does not work in the playground
+  """
+  app_subscription: [AppSubscription]
+  """
+  Get operations counter current value
+  """
+  app_subscription_operations(kind: String = "global"): AppSubscriptionOperationsCounter
+  """
+  Get apps monetization information for an account
+  """
+  apps_monetization_info: AppsMonetizationInfo
+  """
+  Get apps monetization status for an account
+  """
+  apps_monetization_status: AppMonetizationStatus
+  """
+  Get a collection of assets by ids.
+  """
+  assets(ids: [ID!]!): [Asset]
+  """
+  Get a collection of boards.
+  """
+  boards(board_kind: BoardKind, hierarchy_types: [BoardHierarchy!], ids: [ID!], latest: Boolean, limit: Int = 25, order_by: BoardsOrderBy, page: Int = 1, state: State = active, workspace_ids: [ID]): [Board]
+  """
+  Get the complexity data of your queries.
+  """
+  complexity: Complexity
+  """
+  Get a collection of docs.
+  """
+  docs(ids: [ID!], limit: Int = 25, object_ids: [ID!], order_by: DocsOrderBy, page: Int = 1, workspace_ids: [ID]): [Document]
+  """
+  Get a collection of folders. Note: This query won't return folders from closed workspaces to which you are not subscribed
+  """
+  folders(ids: [ID!], limit: Int = 25, page: Int = 1, workspace_ids: [ID]): [Folder]
+  """
+  Get a collection of items.
+  """
+  items(exclude_nonactive: Boolean, ids: [ID!], limit: Int = 25, newest_first: Boolean, page: Int = 1): [Item]
+  """
+  Search items by multiple columns and values.
+  """
+  items_page_by_column_values(board_id: ID!, columns: [ItemsPageByColumnValuesQuery!], cursor: String, hierarchy_scope_config: String, limit: Int! = 25): ItemsResponse!
+  """
+  Get the connected user's information.
+  """
+  me: User
+  """
+  Get next pages of board's items (rows) by cursor.
+  """
+  next_items_page(cursor: String!, limit: Int! = 25): ItemsResponse!
+  """
+  Get a collection of tags.
+  """
+  tags(ids: [ID!]): [Tag]
+  """
+  Get a collection of teams.
+  """
+  teams(ids: [ID!]): [Team]
+  """
+  Get the status of a use_template async operation. Returns null if the process_id is invalid, expired, or unauthorized.
+  """
+  template_installation_status(process_id: ID!): TemplateInstallationStatusResult
+  """
+  Get the API version in use
+  """
+  version: Version!
+  """
+  Get a list containing the versions of the API
+  """
+  versions: [Version!]
+  """
+  Get a collection of webhooks for the board
+  """
+  webhooks(app_webhooks_only: Boolean, board_id: ID!): [Webhook]
+  """
+  Get a collection of workspaces.
+  """
+  workspaces(ids: [ID!], kind: WorkspaceKind, limit: Int = 25, membership_kind: WorkspaceMembershipKind = all, order_by: WorkspacesOrderBy, page: Int = 1, query_params: WorkspacesQueryInput, state: State = active): [Workspace]
+  """
+  Export the dependency graph for a specific board
+  """
+  export_graph(boardId: String!): BoardGraphExport
+  """
+  Fetch dependency column configuration for a board
+  """
+  dependency_column_config(board_id: ID!, account_id: ID!, user_id: ID!): DependencyColumnConfigResult
+  """
+  Export events for a board within a date range. Requires a valid X-Tool-Execution-Secret header.
+  """
+  export_events(board_id: ID, start_date: String, end_date: String, state: [String!], type: [String!], limit: Int, offset: Int, order_by: String, order_direction: String): EventsExport
+  """
+  Get all dependency predecessors for a specific item, including dependency type and lag per edge
+  """
+  item_dependency(board_id: ID!, item_id: ID!): ItemDependency
+  """
+  Get all dependency predecessors for every item on a board, paginated. Each item includes its predecessor edges with dependency type and lag.
+  """
+  board_dependencies(board_id: ID!, limit: Int = 25, page: Int = 1, include_items_without_predecessors: Boolean = true): BoardDependencies
+  """
+  Returns true if connecting source_item_id -> target_item_id would create an MLS rollup cycle
+  """
+  would_create_mls_rollup_cycle(board_id: ID!, source_item_id: ID!, target_item_id: ID!): Boolean!
+  """
+  Get board automations. Filter by ids (specific automation IDs) or board_ids (up to 1 board). Omit all filters to get all account automations.
+  """
+  board_automations(ids: [ID!], board_ids: [ID!], limit: Int, cursor: String): AutomationsPage!
+  """
+  Get an app by ID or slug.
+  """
+  app(id: ID!): AppType
+  """
+  Query the monday.com apps documentation using AI. Returns an AI-generated answer based on the documentation.
+  """
+  ask_developer_docs(query: String!, retrieval_only: Boolean = false): AppDocumentationAiResponse
+  """
+  Get lifecycle subscriptions for all entity types in a specific app version. If version_id is not provided, resolves the active version (user testing version, live, or latest).
+  """
+  get_app_lifecycle_subscriptions(app_id: ID!, version_id: ID): [LifecycleSubscriptionKind!]
+  """
+  Performs aggregation operations on board data
+  """
+  aggregate(query: AggregateQueryInput!): AggregateQueryResult
+  updates(limit: Int = 25, page: Int = 1, ids: [ID!], from_date: String, to_date: String): [Update!]
+  """
+  Get a collection of replies filtered by board IDs and date range.
+  """
+  replies(limit: Int = 25, page: Int = 1, board_ids: [ID!]!, created_at_from: String, created_at_to: String): [Reply!]
+  """
+  Get validations configuration for a board
+  """
+  validations(id: ID!, type: ValidationsEntityType = board): Validations
+  marketplace_app_discounts(app_id: ID!): [MarketplaceAppDiscount!]!
+  app_subscriptions(app_id: ID!, status: SubscriptionStatus, account_id: Int, cursor: String, limit: Int): AppSubscriptions!
+  custom_activity(ids: [String!], name: String, icon_id: CustomActivityIcon, color: CustomActivityColor): [CustomActivity!]
+  timeline_item(id: ID!): TimelineItem
+  """
+  Fetches timeline items for a given item
+  """
+  timeline(id: ID!, skipConnectedItems: Boolean): TimelineResponse
+  """
+  Retrieves the JSON schema definition for a specific create view type. 
+    Use this query before calling create_view mutation to understand the structure and validation rules for the settings parameter. 
+    The schema defines what properties are available when creating views of a specific type.
+  """
+  get_view_schema_by_type(type: ViewKind!, mutationType: ViewMutationKind!): JSON
+  """
+  Retrieves a list of available object types that can be created or queried. Each object type is uniquely identified by an 'object_type_unique_key'. This key is required for mutations like 'create_object' and for filtering in the 'objects' query. Use this query to discover what types of objects are available in the system (e.g., 'workflows', 'projects') and get their corresponding unique keys. The structure of unique key is 'app_slug::app_feature_slug'.
+  """
+  object_types_unique_keys: [ObjectTypeUniqueKey!]
+  """
+  Retrieves a list of objects from the Monday.com Objects Platform based on specified filters. This query can return any type of object (board, doc, dashboard, workflow, etc.) depending on the filter criteria. Use object_type_unique_keys to filter for specific object types.
+  """
+  objects(object_type_unique_keys: [String!], ids: [ID!], limit: Int, order_by: OrderBy, state: ObjectState, privacy_kind: PrivacyKind, workspace_ids: [ID!]): [Object!]
+  """
+  Fetch relations for a specific object
+  """
+  object_relations(object_id: ID!, kind: RelationKind, direction: RelationDirection = OUTGOING): [ObjectRelation!]
+  """
+  Get managed column data.
+  """
+  managed_column(id: [String!], state: [ManagedColumnState!]): [ManagedColumn!]
+  """
+  Retrieves the JSON schema definition for a specific column type. Use this query before calling update_column mutation to understand the structure and validation rules for the defaults parameter. The schema defines what properties are available when updating columns of a specific type.
+  """
+  get_column_type_schema(type: ColumnType!): JSON
+  """
+  Retrieve active account object schemas by their IDs or names. Only returns account-level object schemas (not global). Object schemas define the structure and columns of boards. If no parameters are provided, all account object schemas are returned. Pass exclude_created_by_monday: true to omit the schemas seeded by monday.com and return only schemas created by users in this account. Results are paginated using page and limit parameters.
+  """
+  get_object_schemas(ids: [ID!], names: [String!], limit: Int, page: Int, exclude_created_by_monday: Boolean): [ObjectSchema!]
+  """
+  Get sequences that the current user is allowed to enroll items to, that are connected to the provided board. Returns sequences owned by the user or sequences where the user has access to the sender connection.
+  """
+  allowed_sequences_to_enroll(board_id: ID!): [Sequence!]
+  """
+  Retrieves blocks for the published version of a specific article if the requesting user has permission to access it. Returns paginated blocks in their position order. Will return an error if the user lacks the required permissions.
+  """
+  article_blocks(object_id: ID!, limit: Int = 25, page: Int = 1): [ArticleBlock]!
+  """
+  Retrieves a list of published articles with their metadata and content blocks that the requesting user has permission to access. Articles without proper permissions will be filtered out. By default, returns the first 25 blocks per article. To retrieve more blocks, use the article_blocks query.
+  """
+  articles(object_ids: [ID!]!, workspace_ids: [ID!], limit: Int = 25, page: Int = 1): [Article]!
+  """
+  Retrieves the content diff between two versions of a document. Pass two restoring point dates (from doc_version_history) to see what blocks were added, deleted, or changed. Only blocks with changes are returned.
+  """
+  doc_version_diff(doc_id: ID!, date: String!, prev_date: String!): DocVersionDiff
+  """
+  Retrieves the version history of a document. Returns a list of restoring points (snapshots) with timestamps and the users who made changes. Snapshots are grouped in 5-minute intervals. Use the since and until arguments to filter the time range.
+  """
+  doc_version_history(doc_id: ID!, since: String, until: String): DocVersionHistory
+  """
+  Converts document content into standard markdown format for external use, backup, or processing. Exports the entire document by default, or specific blocks if block IDs are provided. Use this to extract content for integration with other systems, create backups, generate reports, or process document content with external tools. The output is clean, portable markdown that preserves formatting and structure.
+  """
+  export_markdown_from_doc(docId: ID!, blockIds: [String!]): ExportMarkdownResult
+  """
+  Get the status of a backfill or ingest job
+  """
+  fetch_job_status(job_id: ID!): JobStatus!
+  """
+  Get the status of an async job by its external ID
+  """
+  job_status(job_id: ID!): AsyncJobStatus!
+  """
+  Retrieve aggregated board data at specific historical dates for point-in-time analysis. When the query references a date column, results are only available from when date column history began for that board; earlier timestamps are rejected.
+  """
+  aggregate_history(query: AggregateHistoryQueryInput!): AggregateHistoryResultSet
+  """
+  Retrieve historical item data from a board at a specific point in time. When the query references a date column, results are only available from when date column history began for that board; earlier timestamps are rejected.
+  """
+  items_history(query: ItemsHistoryQueryInput!): ItemsHistoryResultSet
+  """
+  Retrieve audit logs for your Monday account. You can
+    filter logs by event types, user ID, IP address and start and end date.
+    
+    Here is an example audit log query:
+    
+    query {
+    audit_logs(
+    user_id: "1234567890"
+    events: ["login", "logout"]
+    ip_address: "123.123.123.123"
+    start_time: "2021-01-01T00:00:00Z"
+    end_time: "2021-01-01T23:59:59Z"
+    limit: 100
+    page: 1
+    ) {
+    logs {
+    timestamp
+    event
+    ip_address
+    user {
+    id
+    name
+    email
+    }
+    activity_metadata
+    }
+    pagination {
+    page
+    page_size
+    has_more_pages
+    next_page_number
+    }
+    }
+    }
+    
+    To get the list of all possible event types, you should use the audit_event_catalogue query like this:
+    
+    query {
+    audit_event_catalogue {
+    name
+    description
+    metadata_details
+    }
+    }
+  """
+  audit_logs(limit: Int = 25, page: Int = 1, user_id: ID, events: [String!], ip_address: String, start_time: ISO8601DateTime, end_time: ISO8601DateTime): AuditLogPage
+  """
+  Lists all the audit event types that can be logged and information about them.
+    
+    Example query:
+    
+    query {
+    audit_event_catalogue {
+    name
+    description
+    metadata_details
+    }
+    }
+  """
+  audit_event_catalogue: [AuditEventCatalogueEntry!]
+  notifications(cursor: ID, limit: Int = 25, filter_read: Boolean, since: ISO8601DateTime, kind_names: [String!]): [NotificationV2!]
+  """
+  Retrieves the current user's notification settings across all available channels.
+  """
+  notifications_settings(scope_type: ScopeType!, scope_id: Int, setting_kinds: [String!], channels: [ChannelType!]): [NotificationSetting!]
+  """
+  Get mute board notification settings for the current user
+  """
+  mute_board_settings(board_ids: [ID!]!): [BoardMuteSettings!]
+  """
+  Fetch resources information from the resource directory
+  """
+  get_directory_resources(query_params: ItemsQuery, cursor: String, limit: Int = 25): DirectoryResourcesResponse
+  """
+  Returns active work schedules for the caller's account
+  """
+  work_schedules(ids: [ID!], limit: Int, name: String, cursor: String): WorkSchedulePage
+  """
+  Returns active time off schedules for the caller's account
+  """
+  time_offs(ids: [ID!], limit: Int, name: String, cursor: String): TimesOffPage
+  """
+  Returns resources availability: work schedule and time offs schedule for users and teams
+  """
+  resources_availability(user_ids: [ID!], team_ids: [ID!]): ResourcesAvailability
+  """
+  Returns the account-level default work schedule and time off schedule
+  """
+  account_availability_defaults: AccountAvailabilityDefaults
+  """
+  Returns personal PTO collections for the requested users; maximum 100 user IDs per call
+  """
+  user_pto(user_ids: [ID!]!): [UserPto!]
+  """
+  Get all personal list items by list ID
+  """
+  favorites: [GraphqlHierarchyObjectItem!]
+  """
+  Fetch the status of an async board export job. Returns null for unknown or cross-account job IDs (a foreign-account job is indistinguishable from a missing one). Poll until status is COMPLETED (use download_url), FAILED (read failure_reason), or CANCELLED. Available to enterprise accounts only; other accounts receive FORBIDDEN_EXCEPTION.
+  """
+  export_job_status(job_id: ID!): ExportJobStatusInfo
+  """
+  Get a collection of monday dev sprints
+  """
+  sprints(ids: [ID!]!): [Sprint!]
+  """
+  Get all roles for the account
+  """
+  account_roles: [AccountRole!]
+  """
+  Retrieves API tokens for the given service users.
+  """
+  service_user_tokens(service_user_ids: [ID!]!): [ServiceUserToken!]
+  """
+  Retrieves all service users in the account with their token last activity.
+  """
+  service_users: [ServiceUser!]
+  """
+  Namespace for all notetaker-related queries.
+  """
+  notetaker: NotetakerQueries
+  """
+  List trigger events with optional filters
+  """
+  trigger_events(nextPageOffset: Int = 0, filters: TriggerEventsFiltersInput): TriggerEventsPage
+  """
+  Fetch a single trigger event by UUID
+  """
+  trigger_event(triggerUuid: String!): TriggerEvent
+  """
+  List block events for a given trigger UUID
+  """
+  block_events(triggerUuid: String!, nextPageOffset: Int = 0): BlockEventsPage
+  """
+  List tool events for a given trigger UUID
+  """
+  tool_events(trigger_uuid: String!, next_page_offset: Int = 0): ToolEventsPage
+  """
+  Get aggregated automation runs statistics in the account
+  """
+  account_trigger_statistics(filters: AccountTriggerStatisticsFiltersInput): AccountTriggerStatistics
+  """
+  Get aggregated automation runs statistics grouped by entity Ids
+  """
+  account_triggers_statistics_by_entity_id(run_status: TriggerEventState!, filters: AccountTriggersByEntityIdFiltersInput): AccountTriggersByEntityId
+  """
+  Returns all available widget schemas for documentation and validation purposes
+  """
+  all_widgets_schema: [WidgetSchemaInfo!]
+  """
+  Search analytics events by identifier
+  """
+  analytics_events(identifier: String!, campaign_id: ID, event_type: CampaignsAnalyticsEventKind, limit: Int!, next_token: String): CampaignsAnalyticsEventsResponse
+  """
+  List email campaigns for the current account with optional filtering and sorting
+  """
+  campaigns(limit: Int, status: [CampaignsStatusKind!], name: String, sent_after: Date, sent_before: Date, sort_field: CampaignsSortField, sort_order: CampaignsSortOrder): [CampaignsEmailCampaign!]
+  """
+  Get a single email campaign by ID
+  """
+  campaign(id: ID!): CampaignsEmailCampaign
+  """
+  Get the brand kit for the current account
+  """
+  brand_kit: CampaignsBrandKit
+  """
+  List market insights for the current account
+  """
+  insights(limit: Int): [CampaignsInsight!]
+  """
+  Get a single market insight by ID
+  """
+  insight(id: ID!): CampaignsInsight
+  """
+  List audience segments for the current account
+  """
+  segments(limit: Int): [CampaignsSegment!]
+  """
+  Get a single audience segment by ID
+  """
+  segment(id: ID!): CampaignsSegment
+  """
+  Get marketing channels settings for the current account
+  """
+  settings: CampaignsSettings
+  """
+  Usage metrics for the current account
+  """
+  usage: CampaignsUsage
+  """
+  Returns connections for the authenticated user. Supports filtering, pagination, ordering, and partial-scope options.
+  """
+  connections(withAutomations: Boolean, connectionState: String, withStateValidation: Boolean, page: Int, pageSize: Int, order: String, withPartialScopes: Boolean, pagination: PaginationInput): [Connection!]
+  """
+  Returns connections that belong to the authenticated user.
+  """
+  user_connections(withAutomations: Boolean, withStateValidation: Boolean, page: Int, pageSize: Int, order: String, pagination: PaginationInput): [Connection!]
+  """
+  Returns all connections for the account. Requires admin privileges.
+  """
+  account_connections(withAutomations: Boolean, withStateValidation: Boolean, page: Int, pageSize: Int, order: String, pagination: PaginationInput): [Connection!]
+  """
+  Fetch a single connection by its unique ID.
+  """
+  connection(id: Int!): Connection
+  """
+  Get board IDs that are linked to a specific connection.
+  """
+  connection_board_ids(connection_id: ID!): [ID!]!
+  """
+  Fetch a form by its token. The returned form includes all the details of the form such as its settings, questions, title, etc. Use this endpoint when you need to retrieve complete form data for display or processing. Requires that the requesting user has read access to the associated board.
+  """
+  form(formToken: String!): ResponseForm
+  """
+  Search knowledge base snippets.
+  """
+  knowledge_base_search(query: String!, limit: Int = 5): KnowledgeBaseAnswer
+  """
+  Search API. Each field searches a single entity type with tailored filters.
+  """
+  search: SearchNamespace!
+  """
+  Get account departments
+  """
+  departments(ids: [ID!]): [Department!]
+  """
+  Get board candidates based on workspace and usage type
+  """
+  board_candidates(workspaceId: String!, usageType: BoardUsage!): [Board!]
+  """
+  Get all user configs for the account.
+  """
+  user_configs(kinds: [String!], visibility: String, behaviors: [String!]): [UserConfig!]
+  """
+  Get users.
+  """
+  users(ids: [ID!], name: String, emails: [String!], user_kind: UserKindFilterInput, sort: [UsersSortInput!], visibility: String, status: [UserStatus!], limit: Int = 200, page: Int = 1, kind: UserKind @deprecated(reason: "Use user_kind instead."), non_active: Boolean @deprecated(reason: "Use status instead."), newest_first: Boolean @deprecated(reason: "Use sort instead.")): [User!]
+  """
+  Platform API data.
+  """
+  platform_api: PlatformApi
+  """
+  Placeholder query field for automations-test microservice.
+    This can be replaced with actual queries as the service evolves.
+  """
+  empty: String
 }
 
 """
@@ -9475,6 +9131,1748 @@ input UpdateObjectInput {
 }
 
 """
+The outcome of attaching one board within a bulk attach request. Boards are independent, so a request can return a mix of successes and failures and the successes are not undone.
+"""
+type AttachBoardToObjectSchemaResult {
+  """
+  The board this result describes.
+  """
+  board_id: ID
+  """
+  Whether this board (and its classic subitems board, if any) now follows the object schema.
+  """
+  success: Boolean
+  """
+  Human readable reason the board was not attached. For display fallback and logs, not branching.
+  """
+  error: String
+  """
+  Stable code for the refusal, for example templateTopologyMismatch or templateBoardAlreadyAttached. This is what clients should classify on to pick a message.
+  """
+  error_code: String
+}
+
+"""
+Represents a board and its connection to an object schema.
+"""
+type BoardConnection {
+  """
+  The unique identifier of the board.
+  """
+  id: ID
+  """
+  The object schema ID that this board is connected to.
+  """
+  object_schema_id: ID
+}
+
+"""
+Result of a single board detach operation within a bulk detach request.
+"""
+type BulkDetachBoardResult {
+  """
+  The board ID that was detached.
+  """
+  board_id: ID
+  """
+  Whether the detach operation succeeded.
+  """
+  success: Boolean
+  """
+  Error message if the detach failed.
+  """
+  error: String
+}
+
+"""
+Calculated capability settings for a column
+"""
+type CalculatedCapability {
+  """
+  Function to calculate the parent values
+  """
+  function: CalculatedFunction!
+  """
+  Type of the calculated value
+  """
+  calculated_type: ColumnType
+}
+
+"""
+Fields that can be overridden in a column policy
+"""
+enum CanOverrideField {
+  """
+  Allow overriding column settings
+  """
+  settings
+  """
+  Allow overriding column title
+  """
+  title
+  """
+  Allow overriding column description
+  """
+  description
+}
+
+"""
+A board-type data view source that is a child of a schema source.
+"""
+type ChildBoardDataViewSource {
+  """
+  The source identifier.
+  """
+  source_id: DataViewSourceId
+  """
+  Whether this source has the main (items) or subitem relation type.
+  """
+  relation_type: DataViewSourceRelationType
+  """
+  The parent schema source identifier.
+  """
+  parent_source_id: DataViewSourceId
+}
+
+"""
+Action to perform on an object schema column to change its active state. A column can be reactivated if it was previously deactivated.
+"""
+enum ColumnActiveStateAction {
+  """
+  Deprecate the column, preventing it from being used on new boards.
+  """
+  DEACTIVATE
+  """
+  Reactivate a deprecated column.
+  """
+  REACTIVATE
+}
+
+"""
+Capabilities available for a column
+"""
+type ColumnCapabilities {
+  """
+  Calculated capability settings
+  """
+  calculated: CalculatedCapability
+  """
+  Visibility capability settings
+  """
+  visibility: String
+}
+
+"""
+Policy rules that control what actions can be performed on a column
+"""
+input ColumnPolicyInput {
+  """
+  User-facing messages explaining why certain actions are disabled
+  """
+  messages: PolicyMessagesInput
+  """
+  List of fields that can be overridden
+  """
+  can_override: [CanOverrideField!]!
+  """
+  Whether the column cannot be deleted
+  """
+  cannot_delete: Boolean!
+}
+
+union ColumnSettings = StatusColumnSettings | DropdownColumnSettings
+
+input CreateDropdownColumnSettingsInput {
+  labels: [CreateDropdownLabelInput!]!
+  """
+  Whether to limit the number of labels that can be selected
+  """
+  limit_select: Boolean
+  """
+  Maximum number of labels that can be selected when limit_select is enabled
+  """
+  label_limit_count: Int
+}
+
+input CreateDropdownLabelInput {
+  label: String!
+}
+
+"""
+Input for creating a new column on an object schema
+"""
+input CreateObjectSchemaColumnInput {
+  """
+  The column type (e.g., "status", "dropdown", "text", "date")
+  """
+  type: ColumnType!
+  """
+  For mirror/lookup columns only: the column type this mirror displays. May be any column type except another mirror/lookup (mirror-to-mirror is not supported).
+  """
+  sub_type: ColumnType
+  """
+  The column title
+  """
+  title: String!
+  """
+  Optional column description
+  """
+  description: String
+  """
+  Type-specific configuration object containing column defaults and settings. Use get_column_type_schema query to see available properties and validation rules. Examples: status column labels, dropdown options, number formatting rules, date display preferences.
+  """
+  defaults: JSON
+  """
+  Whether this column should be opted-out by default on boards. If false or not provided, the column will be automatically included on all boards using this object schema (opt-in by default).
+  """
+  opt_out_by_default: Boolean
+  """
+  Policy rules controlling what can be done with the column
+  """
+  policy: ColumnPolicyInput!
+}
+
+"""
+Input for the create_object_schema_columns action.
+"""
+input CreateObjectSchemaColumnsActionInput {
+  """
+  Array of columns to create.
+  """
+  columns: [CreateObjectSchemaColumnInput!]!
+}
+
+"""
+Input for creating an account object schema from a board.
+"""
+input CreateObjectSchemaFromBoardInput {
+  """
+  The board whose columns seed the schema. It is attached to the result.
+  """
+  board_id: ID!
+  """
+  A unique object schema name.
+  """
+  name: String!
+  """
+  An optional description.
+  """
+  description: String
+}
+
+input CreateStatusColumnSettingsInput {
+  labels: [CreateStatusLabelInput!]!
+}
+
+input CreateStatusLabelInput {
+  label: String!
+  color: StatusColumnColors!
+  index: Int!
+  description: String
+  is_done: Boolean
+}
+
+"""
+The added target column plus the per-source mappings that were auto-created for it.
+"""
+type DataViewAddTargetColumnResult {
+  """
+  The column that was added to the target.
+  """
+  column: DataViewColumn
+  """
+  One entry per standalone source that the new column could be auto-mapped to. Sources with no matching column are omitted.
+  """
+  sources: [DataViewAddTargetColumnSourceMapping!]
+}
+
+"""
+A mapping auto-created for one source when the target column was added.
+"""
+type DataViewAddTargetColumnSourceMapping {
+  """
+  The source the mapping was created for.
+  """
+  source_id: DataViewSourceId
+  """
+  The mapping created between the source column and the new target column.
+  """
+  mapping: DataViewColumnMapping
+}
+
+"""
+The kind of object that authorizes access to a data view.
+"""
+enum DataViewAuthorizationKind {
+  """
+  A monday.com board.
+  """
+  BOARD
+  """
+  A monday.com overview.
+  """
+  OVERVIEW
+  VIBE_APP
+}
+
+"""
+The authorization object associated with a data view.
+"""
+type DataViewAuthorizationObject {
+  """
+  The identifier of the authorization object.
+  """
+  id: ID
+  """
+  The type of the authorization object.
+  """
+  type: String
+}
+
+"""
+The authorization object that gates access to the data view.
+"""
+input DataViewAuthorizationObjectInput {
+  """
+  The identifier of the authorization object.
+  """
+  id: ID!
+  """
+  The type of the authorization object.
+  """
+  type: DataViewAuthorizationKind!
+}
+
+"""
+The result of calculating a data view target schema and per-source column mappings.
+"""
+type DataViewAutomapping {
+  """
+  The calculated (or provided) target schema.
+  """
+  target: DataViewTarget
+  """
+  The calculated sources with their mappings and errors.
+  """
+  sources: DataViewAutomappingSources
+}
+
+"""
+The calculated sources of a data view automapping, each with its computed mappings and errors.
+"""
+type DataViewAutomappingSources {
+  """
+  The calculated sources.
+  """
+  items: [DataViewSource!]
+}
+
+"""
+A column definition within a data view target.
+"""
+type DataViewColumn {
+  """
+  The unique identifier of the column.
+  """
+  id: ID
+  """
+  The display title of the column.
+  """
+  title: String
+  """
+  The column type.
+  """
+  type: String
+  """
+  For mirror/lookup columns, the type of the column being displayed.
+  """
+  sub_type: String
+  """
+  The column settings.
+  """
+  settings: JSON
+  """
+  The column labels.
+  """
+  labels: JSON
+  """
+  The column label positions.
+  """
+  labels_positions_v2: JSON
+  """
+  Whether the column is archived.
+  """
+  archived: Boolean
+  """
+  The column description.
+  """
+  description: String
+  """
+  The column model identifier.
+  """
+  column_model_id: ID
+  """
+  The column model strategy.
+  """
+  column_model_strategy: String
+  """
+  The global column identifier.
+  """
+  global_column_id: ID
+  """
+  The numeric column unit settings.
+  """
+  unit: JSON
+}
+
+"""
+A column definition within a data view target.
+"""
+input DataViewColumnInput {
+  """
+  The unique identifier of the column.
+  """
+  id: ID!
+  """
+  The display title of the column.
+  """
+  title: String
+  """
+  The column type.
+  """
+  type: String
+  """
+  For mirror/lookup columns, the type of the column being displayed; `resource` for a resource connect-boards column.
+  """
+  sub_type: DataViewColumnSubType
+  """
+  The column settings.
+  """
+  settings: JSON
+  """
+  The column labels.
+  """
+  labels: JSON
+  """
+  The column label positions.
+  """
+  labels_positions_v2: JSON
+  """
+  Whether the column is archived.
+  """
+  archived: Boolean
+  """
+  The column description.
+  """
+  description: String
+  """
+  The column model identifier.
+  """
+  column_model_id: ID
+  """
+  The column model strategy.
+  """
+  column_model_strategy: String
+  """
+  The global column identifier.
+  """
+  global_column_id: ID
+  """
+  The numeric column unit settings.
+  """
+  unit: JSON
+}
+
+"""
+A column-level error indicating an issue with a specific column in the source.
+"""
+type DataViewColumnLevelError {
+  """
+  The error type discriminator.
+  """
+  type: String
+  """
+  The error code.
+  """
+  error: String
+  """
+  The identifier of the column with the error.
+  """
+  column_id: ID
+}
+
+"""
+A mapping between a source column and a target column.
+"""
+type DataViewColumnMapping {
+  """
+  The source column identifier.
+  """
+  source_column_id: ID
+  """
+  The target column identifier.
+  """
+  target_column_id: ID
+}
+
+"""
+A mapping between a source column and a target column.
+"""
+input DataViewColumnMappingInput {
+  """
+  The source column identifier.
+  """
+  source_column_id: ID!
+  """
+  The target column identifier.
+  """
+  target_column_id: ID!
+}
+
+"""
+The sub type of a data view column: for mirror/lookup columns, the type of the column being displayed; `resource` for a resource connect-boards column.
+"""
+enum DataViewColumnSubType {
+  auto_number
+  board_relation
+  button
+  checkbox
+  color_picker
+  country
+  creation_log
+  date
+  dependency
+  doc
+  dropdown
+  email
+  file
+  formula
+  group
+  hour
+  integration
+  item_assignees
+  item_id
+  last_updated
+  link
+  location
+  long_text
+  mirror
+  numbers
+  people
+  phone
+  progress
+  rating
+  status
+  tags
+  team
+  text
+  timeline
+  time_tracking
+  vote
+  week
+  world_clock
+  unsupported
+  name
+  person
+  direct_doc
+  subtasks
+  """
+  A resource connect-boards column.
+  """
+  resource
+}
+
+"""
+A column to add to a data view target. Unlike DataViewColumnInput, `id` is optional: when omitted the server generates one from the column type.
+"""
+input DataViewNewTargetColumnInput {
+  """
+  The column identifier. Generated by the server when omitted.
+  """
+  id: ID
+  """
+  The display title of the column.
+  """
+  title: String
+  """
+  The column type.
+  """
+  type: String
+  """
+  For mirror/lookup columns, the type of the column being displayed; `resource` for a resource connect-boards column.
+  """
+  sub_type: DataViewColumnSubType
+  """
+  The column settings.
+  """
+  settings: JSON
+  """
+  The column labels.
+  """
+  labels: JSON
+  """
+  The column label positions.
+  """
+  labels_positions_v2: JSON
+  """
+  Whether the column is archived.
+  """
+  archived: Boolean
+  """
+  The column description.
+  """
+  description: String
+  """
+  The column model identifier.
+  """
+  column_model_id: ID
+  """
+  The column model strategy.
+  """
+  column_model_strategy: String
+  """
+  The global column identifier.
+  """
+  global_column_id: ID
+  """
+  The numeric column unit settings.
+  """
+  unit: JSON
+}
+
+"""
+A paginated list of data view sources.
+"""
+type DataViewPaginatedSources {
+  """
+  The data view sources for the current page.
+  """
+  items: [DataViewSource!]
+  """
+  The pagination metadata.
+  """
+  pagination: DataViewPaginationMetadata
+}
+
+"""
+Pagination metadata for data view sources.
+"""
+type DataViewPaginationMetadata {
+  """
+  The current page number.
+  """
+  page: Int
+  """
+  The number of items per page.
+  """
+  page_size: Int
+  """
+  The total number of items.
+  """
+  total_count: Int
+  """
+  The total number of pages.
+  """
+  total_pages: Int
+}
+
+"""
+Why a source was not restored with its data view.
+"""
+enum DataViewRestoreDroppedReason {
+  """
+  The caller passed include_source_ids and this source was not among them.
+  """
+  NOT_INCLUDED
+  """
+  The board or entity behind the source no longer exists.
+  """
+  PROJECT_DELETED
+}
+
+"""
+A source that was on the deleted data view but was not restored with it.
+"""
+type DataViewRestoreDroppedSource {
+  """
+  The identifier of the source that was dropped.
+  """
+  source_id: DataViewSourceId
+  """
+  Why the source was dropped.
+  """
+  reason: DataViewRestoreDroppedReason
+}
+
+"""
+A mapping that could not be re-established on restore.
+"""
+type DataViewRestoreMappingError {
+  """
+  The source whose mapping could not be restored.
+  """
+  source_id: DataViewSourceId
+  """
+  The target column the mapping pointed at.
+  """
+  column_id: ID
+}
+
+"""
+The outcome of restoring a deleted data view.
+"""
+type DataViewRestoreResult {
+  """
+  The restored data view.
+  """
+  data_view: DataView
+  """
+  The sources that were not restored, and why. Empty when everything was restored.
+  """
+  dropped: [DataViewRestoreDroppedSource!]
+  """
+  The mappings that could not be re-established. Empty when every mapping was restored.
+  """
+  mapping_errors: [DataViewRestoreMappingError!]
+}
+
+"""
+A union of possible data view source types.
+"""
+union DataViewSource = StandaloneBoardDataViewSource | ChildBoardDataViewSource | EntityDataViewSource
+
+"""
+A column of a data view source, used to render source column options.
+"""
+type DataViewSourceColumn {
+  """
+  The column identifier.
+  """
+  id: ID
+  """
+  The column title.
+  """
+  title: String
+  """
+  The column type.
+  """
+  type: String
+  """
+  For a mirror column, the column type it displays (e.g. color, numeric, date, timerange, multiple-person). Null for every other column type.
+  """
+  sub_type: String
+  """
+  Set when the column is listed for context but cannot be mapped. Null when it can.
+  """
+  unavailable: DataViewSourceColumnUnavailable
+}
+
+"""
+Why a source column is listed but cannot be chosen for mapping.
+"""
+type DataViewSourceColumnUnavailable {
+  """
+  Why the column cannot be chosen. Clients should key off this, not the reason.
+  """
+  code: DataViewSourceColumnUnavailableCode
+  """
+  A human-readable detail of why. Not localized; clients should key off the code.
+  """
+  reason: String
+}
+
+"""
+Why a source column is listed but cannot be chosen for mapping.
+"""
+enum DataViewSourceColumnUnavailableCode {
+  """
+  The column was deleted from the board.
+  """
+  COLUMN_DELETED
+  """
+  The formula is not valid.
+  """
+  FORMULA_INVALID
+  """
+  The formula references a column that does not exist.
+  """
+  FORMULA_MISSING_COLUMN
+  """
+  The formula uses a function that cannot be materialized.
+  """
+  FORMULA_UNSUPPORTED_FUNCTION
+  """
+  The formula reads a column type that cannot be materialized.
+  """
+  FORMULA_UNSUPPORTED_COLUMN_TYPE
+  """
+  The formula depends on columns nested deeper than is supported.
+  """
+  FORMULA_MAX_DEPTH_EXCEEDED
+  """
+  The formula reads a column in a way that cannot be materialized.
+  """
+  FORMULA_UNSUPPORTED_REFERENCE
+  """
+  The formula uses a value that is not a column, such as the board or group name, which cannot be materialized.
+  """
+  FORMULA_UNSUPPORTED_STATIC_REFERENCE
+}
+
+"""
+A union of possible source errors.
+"""
+union DataViewSourceError = DataViewColumnLevelError
+
+"""
+The identifier of a data view source, consisting of an id and type that uniquely identify the source
+"""
+type DataViewSourceId {
+  """
+  The object identifier.
+  """
+  object_id: ID
+  """
+  The object type.
+  """
+  object_type: String
+}
+
+"""
+The identifier of a data view source, consisting of an id and type that uniquely identify the source.
+"""
+input DataViewSourceIdInput {
+  """
+  The object identifier.
+  """
+  object_id: ID!
+  """
+  The object type.
+  """
+  object_type: DataViewSourceKind!
+}
+
+"""
+A source to include in a data view.
+"""
+input DataViewSourceInput {
+  """
+  The source identifier.
+  """
+  source_id: DataViewSourceIdInput!
+  """
+  main (default) or subitem — the source relation type.
+  """
+  relation_type: DataViewSourceRelationType
+  """
+  The column mappings for this source. If omitted, mappings are auto-calculated by the server.
+  """
+  mappings: [DataViewColumnMappingInput!]
+}
+
+"""
+The kind of object backing a data view source.
+"""
+enum DataViewSourceKind {
+  """
+  A monday.com board.
+  """
+  BOARD
+  """
+  A data entity (schema-type source).
+  """
+  DATA_ENTITY
+}
+
+"""
+The relation type of a data view source.
+"""
+enum DataViewSourceRelationType {
+  """
+  The main/items relation.
+  """
+  MAIN
+  """
+  The subitems relation.
+  """
+  SUBITEM
+}
+
+"""
+A source already attached to a data view, whose column mappings are being replaced. Unlike DataViewSourceInput, mappings are required: omitting them would leave the stored mappings untouched, making the update a no-op.
+"""
+input DataViewSourceUpdateInput {
+  """
+  The source identifier. Must already be attached to the data view.
+  """
+  source_id: DataViewSourceIdInput!
+  """
+  The full set of column mappings for this source. Replaces the stored mappings entirely.
+  """
+  mappings: [DataViewColumnMappingInput!]!
+}
+
+"""
+The structure of a data view: per source, the mapped columns and — for entities — the boards behind it. Deleted and archived boards are omitted.
+"""
+type DataViewStructure {
+  """
+  The sources of the data view, in the data view’s own order.
+  """
+  sources: [DataViewStructureSource!]
+}
+
+"""
+The resolved structure of a single data view source.
+"""
+type DataViewStructureSource {
+  """
+  The source identifier.
+  """
+  source_id: DataViewSourceId
+  """
+  How this source is grouped.
+  """
+  source_kind: DataViewStructureSourceKind
+  """
+  The boards implementing this entity. Present only when source_kind is ENTITY.
+  """
+  managed_board_ids: [ID!]
+  """
+  Only the source columns that are mapped into the target. Fields the structure lookup does not resolve — such as archived, description and the column model fields — are always null here.
+  """
+  columns: [DataViewColumn!]
+  """
+  The column mappings for this source.
+  """
+  mappings: [DataViewColumnMapping!]
+}
+
+"""
+How the structure endpoint groups a data view source.
+"""
+enum DataViewStructureSourceKind {
+  """
+  An entity, with its implementing boards listed in managed_board_ids.
+  """
+  ENTITY
+  """
+  A board attached directly to the data view.
+  """
+  STANDALONE_BOARD
+}
+
+"""
+The target schema of a data view, defining the unified column structure.
+"""
+type DataViewTarget {
+  """
+  The columns in the target schema.
+  """
+  columns: [DataViewColumn!]
+  """
+  The column configurations for the target.
+  """
+  column_configurations: JSON
+}
+
+"""
+The editable properties of an existing data view target column.
+"""
+input DataViewTargetColumnChangesInput {
+  """
+  The new display title.
+  """
+  title: String
+  """
+  The new description. Pass null to clear it.
+  """
+  description: String
+}
+
+"""
+The target schema of a data view, defining the unified column structure.
+"""
+input DataViewTargetInput {
+  """
+  The columns in the target schema.
+  """
+  columns: [DataViewColumnInput!]!
+  """
+  The column configurations for the target, keyed by column id.
+  """
+  column_configurations: JSON
+}
+
+"""
+Details of why a validation check did not pass.
+"""
+type DataViewValidationFailure {
+  """
+  The input field the failure relates to.
+  """
+  field: String
+  """
+  A human readable explanation of the failure.
+  """
+  reason: String
+  """
+  Present only when the failure is a sources limit breach.
+  """
+  limit_details: DataViewValidationLimitDetails
+}
+
+"""
+The counts behind a sources limit failure.
+"""
+type DataViewValidationLimitDetails {
+  """
+  The maximum number of sources allowed for this account.
+  """
+  limit: Int
+  """
+  The number of sources already on the data view.
+  """
+  current: Int
+  """
+  The number of sources the caller asked to add.
+  """
+  requested: Int
+}
+
+"""
+The outcome of a data view validation check.
+"""
+type DataViewValidationResult {
+  """
+  Whether the validation passed.
+  """
+  valid: Boolean
+  """
+  Present only when `valid` is false.
+  """
+  invalid_result: DataViewValidationFailure
+}
+
+"""
+Input for the delete_object_schema_columns action.
+"""
+input DeleteObjectSchemaColumnsActionInput {
+  """
+  The IDs of the columns to delete.
+  """
+  column_ids: [ID!]!
+}
+
+"""
+Reasons why specific actions are disabled on a column
+"""
+input DisabledReasonInput {
+  """
+  Reason why the column cannot be deleted
+  """
+  delete: String
+  """
+  Reason why the column title cannot be edited
+  """
+  edit_title: String
+  """
+  Reason why the column labels cannot be edited
+  """
+  edit_labels: String
+  """
+  Reason why the column settings cannot be edited
+  """
+  edit_settings: String
+  """
+  Reason why the column description cannot be edited
+  """
+  edit_description: String
+  """
+  Reason why the column label positions cannot be edited
+  """
+  edit_labels_positions_v2: String
+}
+
+input DiscardObjectSchemaBoardChangesInput {
+  """
+  The template's board.
+  """
+  editor_board_id: ID!
+  """
+  The object schema the board follows.
+  """
+  object_schema_id: ID!
+}
+
+type DropdownColumnSettings {
+  type: ManagedColumnTypes
+  labels: [DropdownLabel!]
+}
+
+type DropdownLabel {
+  id: Int
+  label: String
+  is_deactivated: Boolean
+}
+
+type DropdownManagedColumn {
+  id: String
+  title: String
+  description: String
+  settings_json: JSON
+  created_by: ID
+  updated_by: ID
+  revision: Int
+  state: ManagedColumnState
+  """
+  The date and time of creation.
+  """
+  created_at: Date
+  """
+  The date and time of the last update.
+  """
+  updated_at: Date
+  settings: DropdownColumnSettings
+}
+
+"""
+Overridable settings for dropdown columns attached to a managed column.
+"""
+input DropdownSettingsOverridesInput {
+  """
+  Whether to limit the number of selectable labels.
+  """
+  limit_select: Boolean
+  """
+  Maximum number of labels that can be selected when limit_select is enabled.
+  """
+  label_limit_count: Int
+}
+
+"""
+A schema-type data view source.
+"""
+type EntityDataViewSource {
+  """
+  The source identifier.
+  """
+  source_id: DataViewSourceId
+  """
+  Whether this source has the main (items) or subitem relation type.
+  """
+  relation_type: DataViewSourceRelationType
+  """
+  The column mappings for this source.
+  """
+  mappings: [DataViewColumnMapping!]
+  """
+  The errors associated with this source.
+  """
+  errors: [DataViewSourceError!]
+  """
+  The live columns of this source. Populated by the automapping query.
+  """
+  columns: [DataViewSourceColumn!]
+  """
+  Number of child board sources under this schema.
+  """
+  children_count: Int
+}
+
+type ManagedColumn {
+  id: String
+  title: String
+  description: String
+  settings_json: JSON
+  created_by: ID
+  updated_by: ID
+  revision: Int
+  state: ManagedColumnState
+  """
+  The date and time of creation.
+  """
+  created_at: Date
+  """
+  The date and time of the last update.
+  """
+  updated_at: Date
+  settings: ColumnSettings
+}
+
+enum ManagedColumnState {
+  active
+  deleted
+  inactive
+}
+
+enum ManagedColumnTypes {
+  status
+  dropdown
+}
+
+"""
+Represents an account-level object schema that can be customized per account.
+"""
+type ObjectSchema {
+  """
+  The unique identifier of the object schema.
+  """
+  id: ID!
+  """
+  The account ID this object schema belongs to.
+  """
+  account_id: ID!
+  """
+  The user ID who created this object schema.
+  """
+  created_by: ID!
+  """
+  The revision number for optimistic locking.
+  """
+  revision: Int!
+  """
+  The date and time of creation.
+  """
+  created_at: Date
+  """
+  The date and time of the last update.
+  """
+  updated_at: Date
+  """
+  The columns defined in this object schema.
+  """
+  columns: [ObjectSchemaColumn!]!
+  """
+  The ID of the parent object schema (typically a global object schema).
+  """
+  parent_id: ID
+  """
+  The name of this object schema.
+  """
+  name: String
+  """
+  The description for this object schema.
+  """
+  description: String
+  """
+  The number of boards connected to this object schema.
+  """
+  connected_boards_count: Int!
+}
+
+"""
+The type of column action to perform in a bulk object schema mutation.
+"""
+enum ObjectSchemaAction {
+  """
+  Create columns on an object schema
+  """
+  CREATE_OBJECT_SCHEMA_COLUMNS
+  """
+  Update columns on an object schema
+  """
+  UPDATE_OBJECT_SCHEMA_COLUMNS
+  """
+  Delete columns from an object schema
+  """
+  DELETE_OBJECT_SCHEMA_COLUMNS
+}
+
+"""
+A single action in a bulk object schema mutation. Provide the action type and the corresponding input field.
+"""
+input ObjectSchemaActionInput {
+  """
+  The type of action to perform.
+  """
+  action: ObjectSchemaAction!
+  """
+  Input for create_object_schema_columns action. Required when action is create_object_schema_columns.
+  """
+  create_object_schema_columns: CreateObjectSchemaColumnsActionInput
+  """
+  Input for update_object_schema_columns action. Required when action is update_object_schema_columns.
+  """
+  update_object_schema_columns: UpdateObjectSchemaColumnsActionInput
+  """
+  Input for delete_object_schema_columns action. Required when action is delete_object_schema_columns.
+  """
+  delete_object_schema_columns: DeleteObjectSchemaColumnsActionInput
+}
+
+"""
+Result of a single action within a bulk object schema mutation.
+"""
+type ObjectSchemaActionResult {
+  """
+  The type of action that was performed.
+  """
+  action: ObjectSchemaAction
+  """
+  The resulting object schema after the action.
+  """
+  object_schema: ObjectSchema
+}
+
+"""
+A board's pending column changes against the object schema it follows, per surface.
+"""
+type ObjectSchemaBoardChangesPreview {
+  """
+  Whether any surface has a publishable change.
+  """
+  has_changes: Boolean!
+  surfaces: [ObjectSchemaSurfacePreview!]!
+  """
+  True when the board has a classic subitems board that follows no schema. Publish covers the root only; create_object_schema_companion completes the setup.
+  """
+  subitems_surface_unavailable: Boolean!
+}
+
+"""
+A column definition within an object schema.
+"""
+type ObjectSchemaColumn {
+  """
+  The unique identifier of the column.
+  """
+  id: ID
+  """
+  The column's title.
+  """
+  title: String!
+  """
+  The column's type.
+  """
+  type: ColumnType
+  """
+  For mirror/lookup columns: the column type this mirror displays. Null when not set.
+  """
+  sub_type: ColumnType
+  """
+  The column's description.
+  """
+  description: String
+  """
+  The column's settings in a JSON form.
+  """
+  settings: JSON
+  """
+  Policy rules for this column.
+  """
+  policy: ObjectSchemaColumnPolicy
+  """
+  Tags indicating column status (deprecated, inherited, etc.).
+  """
+  tags: ObjectSchemaColumnTags
+}
+
+"""
+A column-level difference between the board and the schema.
+"""
+type ObjectSchemaColumnChange {
+  """
+  The operation Publish will apply, or MISSING_FROM_BOARD for a schema column the board lacks.
+  """
+  change_type: ObjectSchemaColumnChangeType!
+  """
+  The affected column ID.
+  """
+  column_id: ID!
+  """
+  The affected column type, when available.
+  """
+  column_type: String
+  """
+  The affected column title, when available.
+  """
+  title: String
+  """
+  Whether Publish applies this change. Schema columns missing from the board are never removed by Publish.
+  """
+  publishable: Boolean!
+}
+
+"""
+A publishable operation or informational difference between a board and the object schema it follows.
+"""
+enum ObjectSchemaColumnChangeType {
+  CREATE
+  UPDATE
+  MISSING_FROM_BOARD
+}
+
+"""
+Policy rules governing how an object schema column can be modified.
+"""
+type ObjectSchemaColumnPolicy {
+  """
+  List of column properties that can be overridden by board-level columns.
+  """
+  can_override: [String!]!
+  """
+  Whether this column is protected from deletion.
+  """
+  cannot_delete: Boolean!
+  """
+  Whether this column is read-only.
+  """
+  read_only: Boolean!
+  """
+  Policy-related messages, such as disabled reasons.
+  """
+  messages: JSON
+}
+
+"""
+Tags applied to an object schema column indicating its status or behavior.
+"""
+type ObjectSchemaColumnTags {
+  """
+  Deprecation info with a start timestamp, if the column is deprecated.
+  """
+  deprecated: JSON
+  """
+  Opt-in by default info with an optional end timestamp.
+  """
+  opt_in_by_default: JSON
+  """
+  Whether this column is inherited from a parent object schema.
+  """
+  inherited: Boolean
+}
+
+"""
+A board that follows an object schema.
+"""
+type ObjectSchemaConnectedBoard {
+  """
+  The board ID.
+  """
+  id: ID
+  """
+  The object schema the board follows.
+  """
+  object_schema_id: ID
+  """
+  True for the template's own board (and its subitems board), which clients exclude from instance lists and may link to as "the template".
+  """
+  is_template_editor: Boolean
+}
+
+"""
+A page of the boards that follow an object schema, ordered by board ID.
+"""
+type ObjectSchemaConnectedBoards {
+  items: [ObjectSchemaConnectedBoard!]!
+  pagination: ObjectSchemaConnectedBoardsPagination!
+}
+
+type ObjectSchemaConnectedBoardsPagination {
+  """
+  The page size that was applied.
+  """
+  limit: Int
+  """
+  How many boards follow the schema in total, after exclusions.
+  """
+  total_count: Int
+  """
+  Opaque cursor for the next page, or null on the last page.
+  """
+  next_cursor: String
+  """
+  Whether another page exists.
+  """
+  has_more: Boolean
+}
+
+"""
+Which board ↔ schema pair a surface describes: the root board or its classic subitems board.
+"""
+enum ObjectSchemaSurfaceKind {
+  ROOT
+  CLASSIC_SUBITEMS
+}
+
+"""
+Changes and current schema revision for one board ↔ object-schema pair.
+"""
+type ObjectSchemaSurfacePreview {
+  kind: ObjectSchemaSurfaceKind!
+  """
+  The board for this surface.
+  """
+  board_id: ID!
+  """
+  The object schema this board follows.
+  """
+  object_schema_id: ID!
+  """
+  The schema revision the changes were computed against. Pass it back as the expected revision on publish.
+  """
+  object_schema_revision: Int!
+  changes: [ObjectSchemaColumnChange!]!
+}
+
+"""
+The object schemas created from a board: the root schema and, for classic subitems, its companion.
+"""
+type ObjectSchemasFromBoard {
+  """
+  The object schema created from the root board, which is now attached to it.
+  """
+  root_object_schema: ObjectSchema!
+  """
+  The companion object schema created from the classic subitems board, attached to it. Null when the board has no subitems board.
+  """
+  subitems_object_schema: ObjectSchema
+}
+
+"""
+Policy messages that explain why certain actions are disabled on a column
+"""
+input PolicyMessagesInput {
+  """
+  Structured reasons for disabled actions
+  """
+  disabled_reason: DisabledReasonInput
+}
+
+"""
+Input for publishing a board's column changes to the object schema it follows.
+"""
+input PublishObjectSchemaFromBoardInput {
+  """
+  The template's board.
+  """
+  editor_board_id: ID!
+  """
+  The object schema the board follows.
+  """
+  object_schema_id: ID!
+  """
+  The root schema revision from object_schema_board_changes. Publish is refused if the schema moved.
+  """
+  expected_revision: Int!
+  """
+  The companion schema revision from the preview. Required when the preview had a CLASSIC_SUBITEMS surface.
+  """
+  expected_subitems_revision: Int
+}
+
+"""
+A standalone board-type data view source.
+"""
+type StandaloneBoardDataViewSource {
+  """
+  The source identifier.
+  """
+  source_id: DataViewSourceId
+  """
+  Whether this source has the main (items) or subitem relation type.
+  """
+  relation_type: DataViewSourceRelationType
+  """
+  The column mappings for this source.
+  """
+  mappings: [DataViewColumnMapping!]
+  """
+  The errors associated with this source.
+  """
+  errors: [DataViewSourceError!]
+  """
+  The live columns of this source. Populated by the automapping query.
+  """
+  columns: [DataViewSourceColumn!]
+}
+
+"""
+Input for configuring calculated capability settings on a status column
+"""
+input StatusCalculatedCapabilityInput {
+  """
+  Function to calculate the values. For status columns, only COUNT_KEYS function is supported.
+  """
+  function: StatusCalculatedFunction!
+}
+
+"""
+Available functions for calculating values in status column capabilities
+"""
+enum StatusCalculatedFunction {
+  """
+  Count the number of labels
+  """
+  COUNT_KEYS
+}
+
+"""
+Input for configuring status column capabilities during creation
+"""
+input StatusColumnCapabilitiesInput {
+  """
+  Calculated capability settings. If provided, enables calculated functionality for the status column.
+  """
+  calculated: StatusCalculatedCapabilityInput
+}
+
+enum StatusColumnColors {
+  working_orange
+  done_green
+  stuck_red
+  dark_blue
+  purple
+  explosive
+  grass_green
+  bright_blue
+  saladish
+  egg_yolk
+  blackish
+  dark_red
+  sofia_pink
+  lipstick
+  dark_purple
+  bright_green
+  chili_blue
+  american_gray
+  brown
+  dark_orange
+  sunset
+  bubble
+  peach
+  berry
+  winter
+  river
+  navy
+  aquamarine
+  indigo
+  dark_indigo
+  pecan
+  lavender
+  royal
+  steel
+  orchid
+  lilac
+  tan
+  sky
+  coffee
+  teal
+}
+
+type StatusColumnSettings {
+  type: ManagedColumnTypes
+  labels: [StatusLabel!]
+}
+
+type StatusLabel {
+  id: Int
+  label: String
+  color: StatusColumnColors
+  index: Int
+  description: String
+  is_deactivated: Boolean
+  is_done: Boolean
+}
+
+type StatusManagedColumn {
+  id: String
+  title: String
+  description: String
+  settings_json: JSON
+  created_by: ID
+  updated_by: ID
+  revision: Int
+  state: ManagedColumnState
+  """
+  The date and time of creation.
+  """
+  created_at: Date
+  """
+  The date and time of the last update.
+  """
+  updated_at: Date
+  settings: StatusColumnSettings
+}
+
+input UpdateDropdownColumnSettingsInput {
+  labels: [UpdateDropdownLabelInput!]!
+  """
+  Whether to limit the number of labels that can be selected
+  """
+  limit_select: Boolean
+  """
+  Maximum number of labels that can be selected when limit_select is enabled
+  """
+  label_limit_count: Int
+}
+
+input UpdateDropdownLabelInput {
+  label: String!
+  id: Int
+  is_deactivated: Boolean
+}
+
+"""
+Input for updating an existing column on an object schema
+"""
+input UpdateObjectSchemaColumnInput {
+  """
+  The ID of the column to update
+  """
+  column_id: ID!
+  """
+  The column title
+  """
+  title: String
+  """
+  Optional column description
+  """
+  description: String
+  """
+  For mirror/lookup columns only: the column type this mirror displays. May be any column type except another mirror/lookup (mirror-to-mirror is not supported).
+  """
+  sub_type: ColumnType
+  """
+  Type-specific configuration object containing column defaults and settings. Use get_column_type_schema query to see available properties and validation rules. Examples: status column labels, dropdown options, number formatting rules, date display preferences.
+  """
+  defaults: JSON
+  """
+  Whether this column should be opted-out by default on boards. If false, the column will be automatically included on all boards using this object schema (opt-in by default).
+  """
+  opt_out_by_default: Boolean
+  """
+  Policy rules controlling what can be done with the column
+  """
+  policy: ColumnPolicyInput
+}
+
+"""
+Input for the update_object_schema_columns action.
+"""
+input UpdateObjectSchemaColumnsActionInput {
+  """
+  Array of column updates.
+  """
+  columns: [UpdateObjectSchemaColumnInput!]!
+}
+
+input UpdateStatusColumnSettingsInput {
+  labels: [UpdateStatusLabelInput!]!
+}
+
+input UpdateStatusLabelInput {
+  label: String!
+  color: StatusColumnColors!
+  index: Int!
+  description: String
+  is_done: Boolean
+  id: Int
+  is_deactivated: Boolean
+}
+
+"""
 A chat message.
 """
 type Message {
@@ -13515,1160 +14913,6 @@ notification settings scope types, the options are account user defaults or user
 enum ScopeType {
   User
   AccountNewUserDefaults
-}
-
-"""
-A board-scope permission that can be required in addition to regular board read access.
-"""
-enum BoardPermission {
-  """
-  Permission to use the board in reporting.
-  """
-  BOARD_REPORTABILITY
-}
-
-"""
-Boost configuration for search results. Key-value pairs where key is strategy type and value is boost weight.
-"""
-input BoostConfigurationInput {
-  """
-  Boost strategies as key-value pairs (strategy: weight). Empty object {} disables all boosts.
-  """
-  boosts: JSON
-}
-
-"""
-Filter: creation and last-update time window. All provided bounds must be satisfied (AND).
-"""
-input CrossEntityDateRangeInput {
-  """
-  Filter: created at or before this date-time (inclusive).
-  """
-  created_before: ISO8601DateTime
-  """
-  Filter: created at or after this date-time (inclusive).
-  """
-  created_after: ISO8601DateTime
-  """
-  Filter: last updated at or before this date-time (inclusive).
-  """
-  updated_before: ISO8601DateTime
-  """
-  Filter: last updated at or after this date-time (inclusive).
-  """
-  updated_after: ISO8601DateTime
-}
-
-"""
-Lookup namespace. Each field looks up a single entity type by name.
-"""
-type LookupNamespace {
-  """
-  Lookup boards by name.
-  """
-  boards(query: String!, limit: Int = 10, workspace_ids: [ID!]): SearchBoardResults!
-}
-
-"""
-A recorded meeting with its metadata, transcript, and insights.
-"""
-type Meeting {
-  """
-  The unique identifier of the meeting.
-  """
-  id: ID!
-  """
-  The title of the meeting.
-  """
-  title: String!
-  """
-  The start time of the meeting.
-  """
-  start_time: Date!
-  """
-  The end time of the meeting.
-  """
-  end_time: Date!
-  """
-  The duration of the recording in seconds.
-  """
-  recording_duration: Int
-  """
-  The type of access the current user has to this meeting.
-  """
-  access_type: MeetingAccess!
-  """
-  The URL to view the meeting in the notetaker.
-  """
-  meeting_link: String!
-  """
-  The list of participants in the meeting.
-  """
-  participants: [Participant!]!
-  """
-  A concise AI-generated gist of the meeting.
-  """
-  gist: String
-  """
-  The search relevance score. Set for meeting (gist) search; null for content search and the list path.
-  """
-  relevance: Float
-  """
-  The matched content slices. Populated only for content search (when search_in is provided).
-  """
-  matches: [MeetingMatch!]!
-  """
-  The AI-generated summary of the meeting.
-  """
-  summary: String
-  """
-  The topics discussed during the meeting.
-  """
-  topics: [Topic!]
-  """
-  The action items from the meeting.
-  """
-  action_items: [ActionItem!]
-  """
-  The transcript entries for the meeting.
-  """
-  transcript: [TranscriptEntry!]
-}
-
-"""
-Controls which meetings are returned based on ownership and sharing scope.
-"""
-enum MeetingSearchAccess {
-  """
-  Only meetings owned by the caller.
-  """
-  OWN
-  """
-  Meetings shared directly with the caller.
-  """
-  SHARED_WITH_ME
-  """
-  Meetings shared with the caller's account.
-  """
-  SHARED_WITH_ACCOUNT
-  """
-  All accessible meetings (default).
-  """
-  ALL
-}
-
-"""
-Specifies which indexed meeting fields to include in the search. Set a field to true to search it. If the entire object is omitted, all fields are searched.
-"""
-input MeetingSearchFieldsInput {
-  """
-  Meeting title.
-  """
-  title: Boolean
-  """
-  AI-generated meeting gist/summary.
-  """
-  gist: Boolean
-  """
-  Meeting summary text.
-  """
-  summary: Boolean
-  """
-  Meeting talking points and topics.
-  """
-  talking_points: Boolean
-  """
-  Action items from the meeting.
-  """
-  action_points: Boolean
-  """
-  Names of meeting participants.
-  """
-  attendee_names: Boolean
-}
-
-"""
-Date range filter for meetings based on start time.
-"""
-input MeetingsDateRangeInput {
-  """
-  Return meetings that start on or after this date.
-  """
-  from: ISO8601DateTime
-  """
-  Return meetings that start on or before this date.
-  """
-  to: ISO8601DateTime
-}
-
-"""
-Persons filter for search queries
-"""
-input PersonsInput {
-  """
-  List of person IDs to filter by
-  """
-  person_ids: [ID!]
-  """
-  List of team IDs to filter by
-  """
-  team_ids: [ID!]
-  """
-  List of person names to filter by (searches in multiple-person columns)
-  """
-  person_names: [String!]
-}
-
-"""
-Algorithms for reranking results.
-"""
-enum RerankingStrategy {
-  """
-  Use cross-encoder model for reranking results.
-  """
-  CROSS_ENCODER
-}
-
-"""
-Available search modes.
-"""
-enum Search {
-  """
-  Keyword-based search using text matching.
-  """
-  LEXICAL
-  """
-  Vector-based search using semantic similarity.
-  """
-  SEMANTIC
-  """
-  Combined lexical and semantic search with reranking.
-  """
-  HYBRID
-}
-
-"""
-A single board search result with indexed and live data.
-"""
-type SearchBoardResult {
-  """
-  Unique identifier of the board.
-  """
-  id: ID!
-  """
-  Board data from the search index.
-  """
-  indexed_data: SearchIndexedBoard!
-  """
-  Live board data via federation. Null when the referenced board cannot be resolved by the owning subgraph (e.g. deleted, not accessible to the caller, or indexing lag).
-  """
-  live_data: Board
-}
-
-"""
-Wrapper for a list of board search results.
-"""
-type SearchBoardResults {
-  """
-  List of board search results.
-  """
-  results: [SearchBoardResult!]!
-}
-
-"""
-Date range filter for search queries
-"""
-input SearchDateRangeInput {
-  """
-  Filter items created before this date
-  """
-  created_before: ISO8601DateTime
-  """
-  Filter items created after this date
-  """
-  created_after: ISO8601DateTime
-  """
-  Filter items updated before this date
-  """
-  updated_before: ISO8601DateTime
-  """
-  Filter items updated after this date
-  """
-  updated_after: ISO8601DateTime
-  """
-  Filter items with a date column having a value before this date
-  """
-  column_value_before: ISO8601DateTime
-  """
-  Filter items with a date column having a value after this date
-  """
-  column_value_after: ISO8601DateTime
-}
-
-"""
-Date range filter for search queries
-"""
-input SearchDateRangeLegacyInput {
-  """
-  Filter items created before this date
-  """
-  createdBefore: ISO8601DateTime
-  """
-  Filter items created after this date
-  """
-  createdAfter: ISO8601DateTime
-  """
-  Filter items updated before this date
-  """
-  updatedBefore: ISO8601DateTime
-  """
-  Filter items updated after this date
-  """
-  updatedAfter: ISO8601DateTime
-}
-
-"""
-Matched text snippets per searchable document field.
-"""
-type SearchDocHighlights {
-  """
-  Highlighted fragments from the document name with <em> tags around matched terms. Non-empty only for lexical matches.
-  """
-  name: [String!]
-  """
-  Highlighted fragments from the document content with <em> tags around matched terms. Non-empty only for lexical matches.
-  """
-  content: [String!]
-}
-
-"""
-A single doc search result with indexed and live data.
-"""
-type SearchDocResult {
-  """
-  Unique identifier of the doc.
-  """
-  id: ID!
-  """
-  Doc data from the search index.
-  """
-  indexed_data: SearchIndexedDoc!
-  """
-  Live doc data via federation. Null when the referenced doc cannot be resolved by the owning subgraph (e.g. deleted, not accessible to the caller, or indexing lag).
-  """
-  live_data: Document
-}
-
-"""
-Wrapper for a list of doc search results.
-"""
-type SearchDocResults {
-  """
-  List of doc search results.
-  """
-  results: [SearchDocResult!]!
-}
-
-"""
-Board data stored in the search index.
-"""
-type SearchIndexedBoard {
-  """
-  Board ID.
-  """
-  id: ID!
-  """
-  Board name.
-  """
-  name: String!
-  """
-  Board description.
-  """
-  description: String
-  """
-  ID of the workspace containing this board.
-  """
-  workspace_id: ID
-  """
-  ID of the user who created this board.
-  """
-  creator_id: ID
-  """
-  URL to view this board.
-  """
-  url: String!
-}
-
-"""
-Document data stored in the search index.
-"""
-type SearchIndexedDoc {
-  """
-  Document ID.
-  """
-  id: ID!
-  """
-  Document name.
-  """
-  name: String!
-  """
-  ID of the workspace containing this document.
-  """
-  workspace_id: ID
-  """
-  Matched text snippets per searchable field. Null for non-lexical results.
-  """
-  highlights: SearchDocHighlights
-}
-
-"""
-Item data stored in the search index.
-"""
-type SearchIndexedItem {
-  """
-  Item ID.
-  """
-  id: ID!
-  """
-  Item name.
-  """
-  name: String!
-  """
-  URL to view this item.
-  """
-  url: String!
-  """
-  ID of the board containing this item.
-  """
-  board_id: ID
-  """
-  ID of the workspace containing this item.
-  """
-  workspace_id: ID
-}
-
-"""
-Meeting data stored in the search index.
-"""
-type SearchIndexedMeeting {
-  """
-  Meeting ID (UUID).
-  """
-  id: ID!
-  """
-  Meeting title.
-  """
-  title: String
-  """
-  Calendar provider (e.g. google_calendar, outlook_calendar).
-  """
-  meeting_provider: String
-  """
-  ISO timestamp when the meeting started.
-  """
-  start_time: String
-  """
-  ISO timestamp when the meeting ended.
-  """
-  end_time: String
-  """
-  Email addresses of meeting participants.
-  """
-  attendee_emails: [String!]
-  """
-  Names of meeting participants.
-  """
-  attendee_names: [String!]
-  """
-  AI-generated meeting gist.
-  """
-  gist: String
-  """
-  AI-generated meeting summary.
-  """
-  summary: String
-  """
-  Meeting talking points and topics.
-  """
-  talking_points: String
-  """
-  Action items from the meeting.
-  """
-  action_points: String
-  """
-  Matched text snippets per field. Keys are field names, values are arrays of highlighted text fragments with <em> tags around matched terms.
-  """
-  highlights: JSON
-}
-
-"""
-Action-item data stored in the search index.
-"""
-type SearchIndexedMeetingActionItem {
-  """
-  ID of the meeting the artifact belongs to.
-  """
-  meeting_id: ID!
-  """
-  Title of the meeting.
-  """
-  meeting_title: String
-  """
-  When the meeting started.
-  """
-  meeting_start_time: ISO8601DateTime
-  """
-  The action item.
-  """
-  content: String!
-  """
-  Owner of the action item as the notetaker names them — free text, not a monday user ID.
-  """
-  owner_name: String
-  """
-  When the action item is due.
-  """
-  due_date: ISO8601DateTime
-  """
-  Matched text snippets. Null when the action item was returned by filters alone.
-  """
-  highlights: SearchMeetingActionItemHighlights
-}
-
-"""
-Talking-point data stored in the search index.
-"""
-type SearchIndexedMeetingTalkingPoint {
-  """
-  ID of the meeting the artifact belongs to.
-  """
-  meeting_id: ID!
-  """
-  Title of the meeting.
-  """
-  meeting_title: String
-  """
-  When the meeting started.
-  """
-  meeting_start_time: ISO8601DateTime
-  """
-  Title of the topic the talking point belongs to.
-  """
-  topic_title: String
-  """
-  The talking point.
-  """
-  content: String!
-  """
-  Where in the meeting the talking point was raised, as the notetaker reports it.
-  """
-  timestamp_seconds: Float
-  """
-  Matched text snippets. Null when the talking point was returned by filters alone.
-  """
-  highlights: SearchMeetingTalkingPointHighlights
-}
-
-"""
-Overview (dashboard) data stored in the search index.
-"""
-type SearchIndexedOverview {
-  """
-  Overview ID.
-  """
-  id: ID!
-  """
-  Overview name.
-  """
-  name: String!
-  """
-  Overview kind (public or private).
-  """
-  kind: String!
-  """
-  Overview state (active, archived, or deleted).
-  """
-  state: String!
-  """
-  Workspace ID this overview belongs to.
-  """
-  workspace_id: ID
-  """
-  ID of the user who created the overview.
-  """
-  created_by: ID
-  """
-  Creation timestamp.
-  """
-  created_at: String
-  """
-  Last update timestamp.
-  """
-  updated_at: String
-}
-
-"""
-Timeline item data stored in the search index.
-"""
-type SearchIndexedTimelineItem {
-  """
-  Timeline item ID.
-  """
-  id: ID!
-  """
-  ID of the account owning this timeline item.
-  """
-  account_id: ID!
-  """
-  ID of the item this timeline item belongs to.
-  """
-  item_id: ID!
-  """
-  ID of the board containing this timeline item.
-  """
-  board_id: ID
-  """
-  Timeline item type (e.g. email, googleCalendar).
-  """
-  type: String!
-  """
-  Product kind the timeline item originates from (e.g. service, crm).
-  """
-  product_kind: String!
-  """
-  Timeline item title.
-  """
-  title: String!
-  """
-  Timeline item summary.
-  """
-  summary: String!
-  """
-  Timeline item full content body.
-  """
-  content: String!
-  """
-  ISO timestamp when the timeline item was created.
-  """
-  created_at: ISO8601DateTime!
-  """
-  ISO timestamp when the timeline item was last modified.
-  """
-  updated_at: ISO8601DateTime!
-}
-
-"""
-Update data stored in the search index.
-"""
-type SearchIndexedUpdate {
-  """
-  Update ID.
-  """
-  id: ID!
-  """
-  Update content (HTML formatted).
-  """
-  body: String!
-  """
-  ID of the user who created the update.
-  """
-  creator_id: ID!
-  """
-  ID of the item this update belongs to.
-  """
-  item_id: ID!
-  """
-  ID of the board containing this update.
-  """
-  board_id: ID!
-  """
-  ISO timestamp when the update was created.
-  """
-  created_at: String!
-  """
-  ISO timestamp when the update was last modified.
-  """
-  updated_at: String!
-}
-
-"""
-User data stored in the search index.
-"""
-type SearchIndexedUser {
-  """
-  User ID.
-  """
-  id: ID!
-  """
-  The user's full name.
-  """
-  name: String!
-  """
-  The user's email address.
-  """
-  email: String!
-}
-
-"""
-Workspace data stored in the search index.
-"""
-type SearchIndexedWorkspace {
-  """
-  Workspace ID.
-  """
-  id: ID!
-  """
-  Workspace name.
-  """
-  name: String!
-  """
-  Workspace kind (open or closed).
-  """
-  kind: String!
-  """
-  Workspace description.
-  """
-  description: String
-  """
-  Workspace state (active, archived, or deleted).
-  """
-  state: String!
-}
-
-"""
-A single item search result with indexed and live data.
-"""
-type SearchItemResult {
-  """
-  Unique identifier of the item.
-  """
-  id: ID!
-  """
-  Item data from the search index.
-  """
-  indexed_data: SearchIndexedItem!
-  """
-  Live item data via federation. Null when the referenced item cannot be resolved by the owning subgraph (e.g. deleted, not accessible to the caller, or indexing lag).
-  """
-  live_data: Item
-}
-
-"""
-Wrapper for a list of item search results.
-"""
-type SearchItemResults {
-  """
-  List of item search results.
-  """
-  results: [SearchItemResult!]!
-}
-
-"""
-Matched text snippets per searchable action-item field.
-"""
-type SearchMeetingActionItemHighlights {
-  """
-  Fragments from the action-item content. Null when the field did not match lexically, an empty list for a semantic match, otherwise the matched fragments with <em> tags around matched terms.
-  """
-  content: [String!]
-}
-
-"""
-A single action item search result, citable without fetching its meeting.
-"""
-type SearchMeetingActionItemResult {
-  """
-  Unique identifier of the action item. Opaque — do not parse.
-  """
-  id: ID!
-  """
-  The action item data from the search index.
-  """
-  indexed_data: SearchIndexedMeetingActionItem!
-}
-
-"""
-Wrapper for a list of action item search results.
-"""
-type SearchMeetingActionItemResults {
-  """
-  List of action item search results.
-  """
-  results: [SearchMeetingActionItemResult!]!
-}
-
-"""
-A single meeting search result with indexed and live data.
-"""
-type SearchMeetingResult {
-  """
-  Unique identifier of the meeting.
-  """
-  id: ID!
-  """
-  Meeting data from the search index.
-  """
-  indexed_data: SearchIndexedMeeting!
-}
-
-"""
-Wrapper for a list of meeting search results.
-"""
-type SearchMeetingResults {
-  """
-  List of meeting search results.
-  """
-  results: [SearchMeetingResult!]!
-  """
-  Total number of matching meetings in the index (before limit is applied).
-  """
-  total_count: Int
-}
-
-"""
-Matched text snippets per searchable talking-point field.
-"""
-type SearchMeetingTalkingPointHighlights {
-  """
-  Fragments from the topic title. Null when the field did not match lexically, an empty list for a semantic match, otherwise the matched fragments with <em> tags around matched terms.
-  """
-  topic_title: [String!]
-  """
-  Fragments from the talking-point content. Null when the field did not match lexically, an empty list for a semantic match, otherwise the matched fragments with <em> tags around matched terms.
-  """
-  content: [String!]
-}
-
-"""
-A single talking point search result, citable without fetching its meeting.
-"""
-type SearchMeetingTalkingPointResult {
-  """
-  Unique identifier of the talking point. Opaque — do not parse.
-  """
-  id: ID!
-  """
-  The talking point data from the search index.
-  """
-  indexed_data: SearchIndexedMeetingTalkingPoint!
-}
-
-"""
-Wrapper for a list of talking point search results.
-"""
-type SearchMeetingTalkingPointResults {
-  """
-  List of talking point search results.
-  """
-  results: [SearchMeetingTalkingPointResult!]!
-}
-
-"""
-Per-entity search namespace. Each field searches a single entity type.
-"""
-type SearchNamespace {
-  """
-  Search for items. All provided filters must be satisfied (AND).
-  """
-  items(query: String!, limit: Int = 10, date_range: CrossEntityDateRangeInput, strategy: SearchStrategy, board_ids: [ID!], workspace_ids: [ID!]): SearchItemResults!
-  """
-  Search for boards.
-  """
-  boards(query: String!, limit: Int = 10, date_range: CrossEntityDateRangeInput, strategy: SearchStrategy, board_ids: [ID!], workspace_ids: [ID!]): SearchBoardResults!
-  """
-  Search for documents.
-  """
-  docs(query: String!, limit: Int = 10, date_range: CrossEntityDateRangeInput, strategy: SearchStrategy, workspace_ids: [ID!], ids: [ID!]): SearchDocResults!
-  """
-  Search for overviews (dashboards).
-  """
-  overviews(query: String!, limit: Int = 10, date_range: CrossEntityDateRangeInput, strategy: SearchStrategy, workspace_ids: [ID!], kinds: [String!], creator_ids: [ID!]): SearchOverviewResults!
-  """
-  Search for updates.
-  """
-  updates(query: String!, limit: Int = 10, date_range: CrossEntityDateRangeInput, strategy: SearchStrategy, board_ids: [ID!], workspace_ids: [ID!], creator_ids: [ID!]): SearchUpdateResults!
-  """
-  Search for users.
-  """
-  users(query: String!, limit: Int = 10, date_range: CrossEntityDateRangeInput, strategy: SearchStrategy): SearchUserResults!
-  """
-  Search for workspaces.
-  """
-  workspaces(query: String!, limit: Int = 10, date_range: CrossEntityDateRangeInput, strategy: SearchStrategy, workspace_ids: [ID!], kind: String): SearchWorkspaceResults!
-  """
-  Search for timeline items.
-  """
-  timeline_items(query: String!, limit: Int = 10, strategy: SearchStrategy = BALANCED, date_range: CrossEntityDateRangeInput, board_ids: [ID!], workspace_ids: [ID!], item_ids: [ID!], type: TimelineItemKind, product_kind: TimelineItemProductKind): SearchTimelineItemResults!
-}
-
-"""
-A single overview search result with indexed and live data.
-"""
-type SearchOverviewResult {
-  """
-  Unique identifier of the overview.
-  """
-  id: ID!
-  """
-  Overview data from the search index.
-  """
-  indexed_data: SearchIndexedOverview!
-  """
-  Live overview data via federation. Null when the referenced overview cannot be resolved by the owning subgraph (e.g. deleted, not accessible to the caller, or indexing lag).
-  """
-  live_data: Overview
-}
-
-"""
-Wrapper for a list of overview search results.
-"""
-type SearchOverviewResults {
-  """
-  List of overview search results.
-  """
-  results: [SearchOverviewResult!]!
-}
-
-"""
-Controls the trade-off between search quality and response time.
-"""
-enum SearchStrategy {
-  """
-  Faster results with lower search quality.
-  """
-  SPEED
-  """
-  Good search quality with reasonable response time. Default.
-  """
-  BALANCED
-  """
-  Best search quality with higher response time.
-  """
-  QUALITY
-}
-
-"""
-A single timelineitem search result with indexed and live data.
-"""
-type SearchTimelineItemResult {
-  """
-  Unique identifier of the timelineitem.
-  """
-  id: ID!
-  """
-  TimelineItem data from the search index.
-  """
-  indexed_data: SearchIndexedTimelineItem!
-  """
-  Live timelineitem data via federation. Null when the referenced timelineitem cannot be resolved by the owning subgraph (e.g. deleted, not accessible to the caller, or indexing lag).
-  """
-  live_data: TimelineItem
-}
-
-"""
-Wrapper for a list of timelineitem search results.
-"""
-type SearchTimelineItemResults {
-  """
-  List of timelineitem search results.
-  """
-  results: [SearchTimelineItemResult!]!
-}
-
-"""
-A single update search result with indexed and live data.
-"""
-type SearchUpdateResult {
-  """
-  Unique identifier of the update.
-  """
-  id: ID!
-  """
-  Update data from the search index.
-  """
-  indexed_data: SearchIndexedUpdate!
-  """
-  Live update data via federation. Null when the referenced update cannot be resolved by the owning subgraph (e.g. deleted, not accessible to the caller, or indexing lag).
-  """
-  live_data: Update
-}
-
-"""
-Wrapper for a list of update search results.
-"""
-type SearchUpdateResults {
-  """
-  List of update search results.
-  """
-  results: [SearchUpdateResult!]!
-}
-
-"""
-A single user search result with indexed and live data.
-"""
-type SearchUserResult {
-  """
-  Unique identifier of the user.
-  """
-  id: ID!
-  """
-  User data from the search index.
-  """
-  indexed_data: SearchIndexedUser!
-  """
-  Live user data via federation. Null when the referenced user cannot be resolved by the owning subgraph (e.g. deleted, not accessible to the caller, or indexing lag).
-  """
-  live_data: User
-}
-
-"""
-Wrapper for a list of user search results.
-"""
-type SearchUserResults {
-  """
-  List of user search results.
-  """
-  results: [SearchUserResult!]!
-}
-
-"""
-A single workspace search result.
-"""
-type SearchWorkspaceResult {
-  """
-  Unique identifier of the workspace.
-  """
-  id: ID!
-  """
-  Workspace data from the search index.
-  """
-  indexed_data: SearchIndexedWorkspace!
-  """
-  Live workspace data via federation. Null when the referenced workspace cannot be resolved by the owning subgraph (e.g. deleted, not accessible to the caller, or indexing lag).
-  """
-  live_data: Workspace
-}
-
-"""
-Wrapper for a list of workspace search results.
-"""
-type SearchWorkspaceResults {
-  """
-  List of workspace search results.
-  """
-  results: [SearchWorkspaceResult!]!
-}
-
-"""
-Kind of timeline item.
-"""
-enum TimelineItemKind {
-  """
-  Email communication
-  """
-  email
-  """
-  Google Calendar event
-  """
-  googleCalendar
-  """
-  Outlook Calendar event
-  """
-  outlookCalendar
-  """
-  Zoom meeting
-  """
-  zoom
-  """
-  General activity
-  """
-  activity
-  """
-  Custom activity
-  """
-  custom
-  """
-  Note
-  """
-  note
-  """
-  Video meeting
-  """
-  videoMeeting
-  """
-  Phone call
-  """
-  phoneCall
-  """
-  Meeting
-  """
-  meeting
-  """
-  AI assistant interaction
-  """
-  aiAssistant
-  """
-  AI-generated reply
-  """
-  aiReply
-  """
-  Portal interaction
-  """
-  portal
-  """
-  Demo email
-  """
-  demoEmail
-  """
-  AI-generated summary
-  """
-  aiSummary
-  """
-  Form submission
-  """
-  form
-  """
-  Portfolio status update
-  """
-  portfolio_status
-  """
-  Sequences email
-  """
-  sequencesEmail
-  """
-  Outreach expert phone call
-  """
-  outreachExpertPhoneCall
-  """
-  outreachExpertPhoneCallV2
-  """
-  outreachExpertPhoneCallV2
-  """
-  Merged tickets
-  """
-  mergedTickets
-  """
-  Custom internal app interaction
-  """
-  customInternalApp
-  """
-  Campaign event
-  """
-  campaigns
-}
-
-"""
-Product kind that owns the timeline item.
-"""
-enum TimelineItemProductKind {
-  """
-  Service product
-  """
-  service
-  """
-  CRM product
-  """
-  crm
 }
 
 """
@@ -21436,6 +21680,72 @@ type ActionItem {
 }
 
 """
+A recorded meeting with its metadata, transcript, and insights.
+"""
+type Meeting {
+  """
+  The unique identifier of the meeting.
+  """
+  id: ID!
+  """
+  The title of the meeting.
+  """
+  title: String!
+  """
+  The start time of the meeting.
+  """
+  start_time: Date!
+  """
+  The end time of the meeting.
+  """
+  end_time: Date!
+  """
+  The duration of the recording in seconds.
+  """
+  recording_duration: Int
+  """
+  The type of access the current user has to this meeting.
+  """
+  access_type: MeetingAccess!
+  """
+  The URL to view the meeting in the notetaker.
+  """
+  meeting_link: String!
+  """
+  The list of participants in the meeting.
+  """
+  participants: [Participant!]!
+  """
+  A concise AI-generated gist of the meeting.
+  """
+  gist: String
+  """
+  The search relevance score. Set for meeting (gist) search; null for content search and the list path.
+  """
+  relevance: Float
+  """
+  The matched content slices. Populated only for content search (when search_in is provided).
+  """
+  matches: [MeetingMatch!]!
+  """
+  The AI-generated summary of the meeting.
+  """
+  summary: String
+  """
+  The topics discussed during the meeting.
+  """
+  topics: [Topic!]
+  """
+  The action items from the meeting.
+  """
+  action_items: [ActionItem!]
+  """
+  The transcript entries for the meeting.
+  """
+  transcript: [TranscriptEntry!]
+}
+
+"""
 The type of access the current user has to a meeting.
 """
 enum MeetingAccess {
@@ -27656,1748 +27966,1216 @@ type UpdateCustomAgentPayload {
 }
 
 """
-The outcome of attaching one board within a bulk attach request. Boards are independent, so a request can return a mix of successes and failures and the successes are not undone.
-"""
-type AttachBoardToObjectSchemaResult {
-  """
-  The board this result describes.
-  """
-  board_id: ID
-  """
-  Whether this board (and its classic subitems board, if any) now follows the object schema.
-  """
-  success: Boolean
-  """
-  Human readable reason the board was not attached. For display fallback and logs, not branching.
-  """
-  error: String
-  """
-  Stable code for the refusal, for example templateTopologyMismatch or templateBoardAlreadyAttached. This is what clients should classify on to pick a message.
-  """
-  error_code: String
-}
-
-"""
-Represents a board and its connection to an object schema.
-"""
-type BoardConnection {
-  """
-  The unique identifier of the board.
-  """
-  id: ID
-  """
-  The object schema ID that this board is connected to.
-  """
-  object_schema_id: ID
-}
-
-"""
-Result of a single board detach operation within a bulk detach request.
-"""
-type BulkDetachBoardResult {
-  """
-  The board ID that was detached.
-  """
-  board_id: ID
-  """
-  Whether the detach operation succeeded.
-  """
-  success: Boolean
-  """
-  Error message if the detach failed.
-  """
-  error: String
-}
-
-"""
-Calculated capability settings for a column
-"""
-type CalculatedCapability {
-  """
-  Function to calculate the parent values
-  """
-  function: CalculatedFunction!
-  """
-  Type of the calculated value
-  """
-  calculated_type: ColumnType
-}
-
-"""
-Fields that can be overridden in a column policy
-"""
-enum CanOverrideField {
-  """
-  Allow overriding column settings
-  """
-  settings
-  """
-  Allow overriding column title
-  """
-  title
-  """
-  Allow overriding column description
-  """
-  description
-}
-
-"""
-A board-type data view source that is a child of a schema source.
-"""
-type ChildBoardDataViewSource {
-  """
-  The source identifier.
-  """
-  source_id: DataViewSourceId
-  """
-  Whether this source has the main (items) or subitem relation type.
-  """
-  relation_type: DataViewSourceRelationType
-  """
-  The parent schema source identifier.
-  """
-  parent_source_id: DataViewSourceId
-}
-
-"""
-Action to perform on an object schema column to change its active state. A column can be reactivated if it was previously deactivated.
-"""
-enum ColumnActiveStateAction {
-  """
-  Deprecate the column, preventing it from being used on new boards.
-  """
-  DEACTIVATE
-  """
-  Reactivate a deprecated column.
-  """
-  REACTIVATE
-}
-
-"""
-Capabilities available for a column
-"""
-type ColumnCapabilities {
-  """
-  Calculated capability settings
-  """
-  calculated: CalculatedCapability
-  """
-  Visibility capability settings
-  """
-  visibility: String
-}
-
-"""
-Policy rules that control what actions can be performed on a column
-"""
-input ColumnPolicyInput {
-  """
-  User-facing messages explaining why certain actions are disabled
-  """
-  messages: PolicyMessagesInput
-  """
-  List of fields that can be overridden
-  """
-  can_override: [CanOverrideField!]!
-  """
-  Whether the column cannot be deleted
-  """
-  cannot_delete: Boolean!
-}
-
-union ColumnSettings = StatusColumnSettings | DropdownColumnSettings
-
-input CreateDropdownColumnSettingsInput {
-  labels: [CreateDropdownLabelInput!]!
-  """
-  Whether to limit the number of labels that can be selected
-  """
-  limit_select: Boolean
-  """
-  Maximum number of labels that can be selected when limit_select is enabled
-  """
-  label_limit_count: Int
-}
-
-input CreateDropdownLabelInput {
-  label: String!
-}
-
-"""
-Input for creating a new column on an object schema
-"""
-input CreateObjectSchemaColumnInput {
-  """
-  The column type (e.g., "status", "dropdown", "text", "date")
-  """
-  type: ColumnType!
-  """
-  For mirror/lookup columns only: the column type this mirror displays. May be any column type except another mirror/lookup (mirror-to-mirror is not supported).
-  """
-  sub_type: ColumnType
-  """
-  The column title
-  """
-  title: String!
-  """
-  Optional column description
-  """
-  description: String
-  """
-  Type-specific configuration object containing column defaults and settings. Use get_column_type_schema query to see available properties and validation rules. Examples: status column labels, dropdown options, number formatting rules, date display preferences.
-  """
-  defaults: JSON
-  """
-  Whether this column should be opted-out by default on boards. If false or not provided, the column will be automatically included on all boards using this object schema (opt-in by default).
-  """
-  opt_out_by_default: Boolean
-  """
-  Policy rules controlling what can be done with the column
-  """
-  policy: ColumnPolicyInput!
-}
-
-"""
-Input for the create_object_schema_columns action.
-"""
-input CreateObjectSchemaColumnsActionInput {
-  """
-  Array of columns to create.
-  """
-  columns: [CreateObjectSchemaColumnInput!]!
-}
-
-"""
-Input for creating an account object schema from a board.
-"""
-input CreateObjectSchemaFromBoardInput {
-  """
-  The board whose columns seed the schema. It is attached to the result.
-  """
-  board_id: ID!
-  """
-  A unique object schema name.
-  """
-  name: String!
-  """
-  An optional description.
-  """
-  description: String
-}
-
-input CreateStatusColumnSettingsInput {
-  labels: [CreateStatusLabelInput!]!
-}
-
-input CreateStatusLabelInput {
-  label: String!
-  color: StatusColumnColors!
-  index: Int!
-  description: String
-  is_done: Boolean
-}
-
-"""
-The added target column plus the per-source mappings that were auto-created for it.
-"""
-type DataViewAddTargetColumnResult {
-  """
-  The column that was added to the target.
-  """
-  column: DataViewColumn
-  """
-  One entry per standalone source that the new column could be auto-mapped to. Sources with no matching column are omitted.
-  """
-  sources: [DataViewAddTargetColumnSourceMapping!]
-}
-
-"""
-A mapping auto-created for one source when the target column was added.
-"""
-type DataViewAddTargetColumnSourceMapping {
-  """
-  The source the mapping was created for.
-  """
-  source_id: DataViewSourceId
-  """
-  The mapping created between the source column and the new target column.
-  """
-  mapping: DataViewColumnMapping
-}
-
-"""
-The kind of object that authorizes access to a data view.
-"""
-enum DataViewAuthorizationKind {
-  """
-  A monday.com board.
-  """
-  BOARD
-  """
-  A monday.com overview.
-  """
-  OVERVIEW
-  VIBE_APP
-}
-
-"""
-The authorization object associated with a data view.
-"""
-type DataViewAuthorizationObject {
-  """
-  The identifier of the authorization object.
-  """
-  id: ID
-  """
-  The type of the authorization object.
-  """
-  type: String
-}
-
-"""
-The authorization object that gates access to the data view.
-"""
-input DataViewAuthorizationObjectInput {
-  """
-  The identifier of the authorization object.
-  """
-  id: ID!
-  """
-  The type of the authorization object.
-  """
-  type: DataViewAuthorizationKind!
-}
-
-"""
-The result of calculating a data view target schema and per-source column mappings.
-"""
-type DataViewAutomapping {
-  """
-  The calculated (or provided) target schema.
-  """
-  target: DataViewTarget
-  """
-  The calculated sources with their mappings and errors.
-  """
-  sources: DataViewAutomappingSources
-}
-
-"""
-The calculated sources of a data view automapping, each with its computed mappings and errors.
-"""
-type DataViewAutomappingSources {
-  """
-  The calculated sources.
-  """
-  items: [DataViewSource!]
-}
-
-"""
-A column definition within a data view target.
-"""
-type DataViewColumn {
-  """
-  The unique identifier of the column.
-  """
-  id: ID
-  """
-  The display title of the column.
-  """
-  title: String
-  """
-  The column type.
-  """
-  type: String
-  """
-  For mirror/lookup columns, the type of the column being displayed.
-  """
-  sub_type: String
-  """
-  The column settings.
-  """
-  settings: JSON
-  """
-  The column labels.
-  """
-  labels: JSON
-  """
-  The column label positions.
-  """
-  labels_positions_v2: JSON
-  """
-  Whether the column is archived.
-  """
-  archived: Boolean
-  """
-  The column description.
-  """
-  description: String
-  """
-  The column model identifier.
-  """
-  column_model_id: ID
-  """
-  The column model strategy.
-  """
-  column_model_strategy: String
-  """
-  The global column identifier.
-  """
-  global_column_id: ID
-  """
-  The numeric column unit settings.
-  """
-  unit: JSON
-}
-
-"""
-A column definition within a data view target.
-"""
-input DataViewColumnInput {
-  """
-  The unique identifier of the column.
-  """
-  id: ID!
-  """
-  The display title of the column.
-  """
-  title: String
-  """
-  The column type.
-  """
-  type: String
-  """
-  For mirror/lookup columns, the type of the column being displayed; `resource` for a resource connect-boards column.
-  """
-  sub_type: DataViewColumnSubType
-  """
-  The column settings.
-  """
-  settings: JSON
-  """
-  The column labels.
-  """
-  labels: JSON
-  """
-  The column label positions.
-  """
-  labels_positions_v2: JSON
-  """
-  Whether the column is archived.
-  """
-  archived: Boolean
-  """
-  The column description.
-  """
-  description: String
-  """
-  The column model identifier.
-  """
-  column_model_id: ID
-  """
-  The column model strategy.
-  """
-  column_model_strategy: String
-  """
-  The global column identifier.
-  """
-  global_column_id: ID
-  """
-  The numeric column unit settings.
-  """
-  unit: JSON
-}
-
-"""
-A column-level error indicating an issue with a specific column in the source.
-"""
-type DataViewColumnLevelError {
-  """
-  The error type discriminator.
-  """
-  type: String
-  """
-  The error code.
-  """
-  error: String
-  """
-  The identifier of the column with the error.
-  """
-  column_id: ID
-}
-
-"""
-A mapping between a source column and a target column.
-"""
-type DataViewColumnMapping {
-  """
-  The source column identifier.
-  """
-  source_column_id: ID
-  """
-  The target column identifier.
-  """
-  target_column_id: ID
-}
-
-"""
-A mapping between a source column and a target column.
-"""
-input DataViewColumnMappingInput {
-  """
-  The source column identifier.
-  """
-  source_column_id: ID!
-  """
-  The target column identifier.
-  """
-  target_column_id: ID!
-}
-
-"""
-The sub type of a data view column: for mirror/lookup columns, the type of the column being displayed; `resource` for a resource connect-boards column.
-"""
-enum DataViewColumnSubType {
-  auto_number
-  board_relation
-  button
-  checkbox
-  color_picker
-  country
-  creation_log
-  date
-  dependency
-  doc
-  dropdown
-  email
-  file
-  formula
-  group
-  hour
-  integration
-  item_assignees
-  item_id
-  last_updated
-  link
-  location
-  long_text
-  mirror
-  numbers
-  people
-  phone
-  progress
-  rating
-  status
-  tags
-  team
-  text
-  timeline
-  time_tracking
-  vote
-  week
-  world_clock
-  unsupported
-  name
-  person
-  direct_doc
-  subtasks
-  """
-  A resource connect-boards column.
-  """
-  resource
-}
-
-"""
-A column to add to a data view target. Unlike DataViewColumnInput, `id` is optional: when omitted the server generates one from the column type.
-"""
-input DataViewNewTargetColumnInput {
-  """
-  The column identifier. Generated by the server when omitted.
-  """
-  id: ID
-  """
-  The display title of the column.
-  """
-  title: String
-  """
-  The column type.
-  """
-  type: String
-  """
-  For mirror/lookup columns, the type of the column being displayed; `resource` for a resource connect-boards column.
-  """
-  sub_type: DataViewColumnSubType
-  """
-  The column settings.
-  """
-  settings: JSON
-  """
-  The column labels.
-  """
-  labels: JSON
-  """
-  The column label positions.
-  """
-  labels_positions_v2: JSON
-  """
-  Whether the column is archived.
-  """
-  archived: Boolean
-  """
-  The column description.
-  """
-  description: String
-  """
-  The column model identifier.
-  """
-  column_model_id: ID
-  """
-  The column model strategy.
-  """
-  column_model_strategy: String
-  """
-  The global column identifier.
-  """
-  global_column_id: ID
-  """
-  The numeric column unit settings.
-  """
-  unit: JSON
-}
-
-"""
-A paginated list of data view sources.
-"""
-type DataViewPaginatedSources {
-  """
-  The data view sources for the current page.
-  """
-  items: [DataViewSource!]
-  """
-  The pagination metadata.
-  """
-  pagination: DataViewPaginationMetadata
-}
-
-"""
-Pagination metadata for data view sources.
-"""
-type DataViewPaginationMetadata {
-  """
-  The current page number.
-  """
-  page: Int
-  """
-  The number of items per page.
-  """
-  page_size: Int
-  """
-  The total number of items.
-  """
-  total_count: Int
-  """
-  The total number of pages.
-  """
-  total_pages: Int
-}
-
-"""
-Why a source was not restored with its data view.
-"""
-enum DataViewRestoreDroppedReason {
-  """
-  The caller passed include_source_ids and this source was not among them.
-  """
-  NOT_INCLUDED
-  """
-  The board or entity behind the source no longer exists.
-  """
-  PROJECT_DELETED
-}
-
-"""
-A source that was on the deleted data view but was not restored with it.
-"""
-type DataViewRestoreDroppedSource {
-  """
-  The identifier of the source that was dropped.
-  """
-  source_id: DataViewSourceId
-  """
-  Why the source was dropped.
-  """
-  reason: DataViewRestoreDroppedReason
-}
-
-"""
-A mapping that could not be re-established on restore.
-"""
-type DataViewRestoreMappingError {
-  """
-  The source whose mapping could not be restored.
-  """
-  source_id: DataViewSourceId
-  """
-  The target column the mapping pointed at.
-  """
-  column_id: ID
-}
-
-"""
-The outcome of restoring a deleted data view.
-"""
-type DataViewRestoreResult {
-  """
-  The restored data view.
-  """
-  data_view: DataView
-  """
-  The sources that were not restored, and why. Empty when everything was restored.
-  """
-  dropped: [DataViewRestoreDroppedSource!]
-  """
-  The mappings that could not be re-established. Empty when every mapping was restored.
-  """
-  mapping_errors: [DataViewRestoreMappingError!]
-}
-
-"""
-A union of possible data view source types.
-"""
-union DataViewSource = StandaloneBoardDataViewSource | ChildBoardDataViewSource | EntityDataViewSource
-
-"""
-A column of a data view source, used to render source column options.
-"""
-type DataViewSourceColumn {
-  """
-  The column identifier.
-  """
-  id: ID
-  """
-  The column title.
-  """
-  title: String
-  """
-  The column type.
-  """
-  type: String
-  """
-  For a mirror column, the column type it displays (e.g. color, numeric, date, timerange, multiple-person). Null for every other column type.
-  """
-  sub_type: String
-  """
-  Set when the column is listed for context but cannot be mapped. Null when it can.
-  """
-  unavailable: DataViewSourceColumnUnavailable
-}
-
-"""
-Why a source column is listed but cannot be chosen for mapping.
-"""
-type DataViewSourceColumnUnavailable {
-  """
-  Why the column cannot be chosen. Clients should key off this, not the reason.
-  """
-  code: DataViewSourceColumnUnavailableCode
-  """
-  A human-readable detail of why. Not localized; clients should key off the code.
-  """
-  reason: String
-}
-
-"""
-Why a source column is listed but cannot be chosen for mapping.
-"""
-enum DataViewSourceColumnUnavailableCode {
-  """
-  The column was deleted from the board.
-  """
-  COLUMN_DELETED
-  """
-  The formula is not valid.
-  """
-  FORMULA_INVALID
-  """
-  The formula references a column that does not exist.
-  """
-  FORMULA_MISSING_COLUMN
-  """
-  The formula uses a function that cannot be materialized.
-  """
-  FORMULA_UNSUPPORTED_FUNCTION
-  """
-  The formula reads a column type that cannot be materialized.
-  """
-  FORMULA_UNSUPPORTED_COLUMN_TYPE
-  """
-  The formula depends on columns nested deeper than is supported.
-  """
-  FORMULA_MAX_DEPTH_EXCEEDED
-  """
-  The formula reads a column in a way that cannot be materialized.
-  """
-  FORMULA_UNSUPPORTED_REFERENCE
-}
-
-"""
-A union of possible source errors.
-"""
-union DataViewSourceError = DataViewColumnLevelError
-
-"""
-The identifier of a data view source, consisting of an id and type that uniquely identify the source
-"""
-type DataViewSourceId {
-  """
-  The object identifier.
-  """
-  object_id: ID
-  """
-  The object type.
-  """
-  object_type: String
-}
-
-"""
-The identifier of a data view source, consisting of an id and type that uniquely identify the source.
-"""
-input DataViewSourceIdInput {
-  """
-  The object identifier.
-  """
-  object_id: ID!
-  """
-  The object type.
-  """
-  object_type: DataViewSourceKind!
-}
-
-"""
-A source to include in a data view.
-"""
-input DataViewSourceInput {
-  """
-  The source identifier.
-  """
-  source_id: DataViewSourceIdInput!
-  """
-  main (default) or subitem — the source relation type.
-  """
-  relation_type: DataViewSourceRelationType
-  """
-  The column mappings for this source. If omitted, mappings are auto-calculated by the server.
-  """
-  mappings: [DataViewColumnMappingInput!]
-}
-
-"""
-The kind of object backing a data view source.
-"""
-enum DataViewSourceKind {
-  """
-  A monday.com board.
-  """
-  BOARD
-  """
-  A data entity (schema-type source).
-  """
-  DATA_ENTITY
-}
-
-"""
-The relation type of a data view source.
-"""
-enum DataViewSourceRelationType {
-  """
-  The main/items relation.
-  """
-  MAIN
-  """
-  The subitems relation.
-  """
-  SUBITEM
-}
-
-"""
-A source already attached to a data view, whose column mappings are being replaced. Unlike DataViewSourceInput, mappings are required: omitting them would leave the stored mappings untouched, making the update a no-op.
-"""
-input DataViewSourceUpdateInput {
-  """
-  The source identifier. Must already be attached to the data view.
-  """
-  source_id: DataViewSourceIdInput!
-  """
-  The full set of column mappings for this source. Replaces the stored mappings entirely.
-  """
-  mappings: [DataViewColumnMappingInput!]!
-}
-
-"""
-The structure of a data view: per source, the mapped columns and — for entities — the boards behind it. Deleted and archived boards are omitted.
-"""
-type DataViewStructure {
-  """
-  The sources of the data view, in the data view’s own order.
-  """
-  sources: [DataViewStructureSource!]
-}
-
-"""
-The resolved structure of a single data view source.
-"""
-type DataViewStructureSource {
-  """
-  The source identifier.
-  """
-  source_id: DataViewSourceId
-  """
-  How this source is grouped.
-  """
-  source_kind: DataViewStructureSourceKind
-  """
-  The boards implementing this entity. Present only when source_kind is ENTITY.
-  """
-  managed_board_ids: [ID!]
-  """
-  Only the source columns that are mapped into the target. Fields the structure lookup does not resolve — such as archived, description and the column model fields — are always null here.
-  """
-  columns: [DataViewColumn!]
-  """
-  The column mappings for this source.
-  """
-  mappings: [DataViewColumnMapping!]
-}
-
-"""
-How the structure endpoint groups a data view source.
-"""
-enum DataViewStructureSourceKind {
-  """
-  An entity, with its implementing boards listed in managed_board_ids.
-  """
-  ENTITY
-  """
-  A board attached directly to the data view.
-  """
-  STANDALONE_BOARD
-}
-
-"""
-The target schema of a data view, defining the unified column structure.
-"""
-type DataViewTarget {
-  """
-  The columns in the target schema.
-  """
-  columns: [DataViewColumn!]
-  """
-  The column configurations for the target.
-  """
-  column_configurations: JSON
-}
-
-"""
-The editable properties of an existing data view target column.
-"""
-input DataViewTargetColumnChangesInput {
-  """
-  The new display title.
-  """
-  title: String
-  """
-  The new description. Pass null to clear it.
-  """
-  description: String
-}
-
-"""
-The target schema of a data view, defining the unified column structure.
-"""
-input DataViewTargetInput {
-  """
-  The columns in the target schema.
-  """
-  columns: [DataViewColumnInput!]!
-  """
-  The column configurations for the target, keyed by column id.
-  """
-  column_configurations: JSON
-}
-
-"""
-Details of why a validation check did not pass.
-"""
-type DataViewValidationFailure {
-  """
-  The input field the failure relates to.
-  """
-  field: String
-  """
-  A human readable explanation of the failure.
-  """
-  reason: String
-  """
-  Present only when the failure is a sources limit breach.
-  """
-  limit_details: DataViewValidationLimitDetails
-}
-
-"""
-The counts behind a sources limit failure.
-"""
-type DataViewValidationLimitDetails {
-  """
-  The maximum number of sources allowed for this account.
-  """
-  limit: Int
-  """
-  The number of sources already on the data view.
-  """
-  current: Int
-  """
-  The number of sources the caller asked to add.
-  """
-  requested: Int
-}
-
-"""
-The outcome of a data view validation check.
-"""
-type DataViewValidationResult {
-  """
-  Whether the validation passed.
-  """
-  valid: Boolean
-  """
-  Present only when `valid` is false.
-  """
-  invalid_result: DataViewValidationFailure
-}
-
-"""
-Input for the delete_object_schema_columns action.
-"""
-input DeleteObjectSchemaColumnsActionInput {
-  """
-  The IDs of the columns to delete.
-  """
-  column_ids: [ID!]!
-}
-
-"""
-Reasons why specific actions are disabled on a column
-"""
-input DisabledReasonInput {
-  """
-  Reason why the column cannot be deleted
-  """
-  delete: String
-  """
-  Reason why the column title cannot be edited
-  """
-  edit_title: String
-  """
-  Reason why the column labels cannot be edited
-  """
-  edit_labels: String
-  """
-  Reason why the column settings cannot be edited
-  """
-  edit_settings: String
-  """
-  Reason why the column description cannot be edited
-  """
-  edit_description: String
-  """
-  Reason why the column label positions cannot be edited
-  """
-  edit_labels_positions_v2: String
-}
-
-input DiscardObjectSchemaBoardChangesInput {
-  """
-  The template's board.
-  """
-  editor_board_id: ID!
-  """
-  The object schema the board follows.
-  """
-  object_schema_id: ID!
-}
-
-type DropdownColumnSettings {
-  type: ManagedColumnTypes
-  labels: [DropdownLabel!]
-}
-
-type DropdownLabel {
-  id: Int
-  label: String
-  is_deactivated: Boolean
-}
-
-type DropdownManagedColumn {
-  id: String
-  title: String
-  description: String
-  settings_json: JSON
-  created_by: ID
-  updated_by: ID
-  revision: Int
-  state: ManagedColumnState
-  """
-  The date and time of creation.
-  """
-  created_at: Date
-  """
-  The date and time of the last update.
-  """
-  updated_at: Date
-  settings: DropdownColumnSettings
-}
-
-"""
-Overridable settings for dropdown columns attached to a managed column.
-"""
-input DropdownSettingsOverridesInput {
-  """
-  Whether to limit the number of selectable labels.
-  """
-  limit_select: Boolean
-  """
-  Maximum number of labels that can be selected when limit_select is enabled.
-  """
-  label_limit_count: Int
-}
-
-"""
-A schema-type data view source.
-"""
-type EntityDataViewSource {
-  """
-  The source identifier.
-  """
-  source_id: DataViewSourceId
-  """
-  Whether this source has the main (items) or subitem relation type.
-  """
-  relation_type: DataViewSourceRelationType
-  """
-  The column mappings for this source.
-  """
-  mappings: [DataViewColumnMapping!]
-  """
-  The errors associated with this source.
-  """
-  errors: [DataViewSourceError!]
-  """
-  The live columns of this source. Populated by the automapping query.
-  """
-  columns: [DataViewSourceColumn!]
-  """
-  Number of child board sources under this schema.
-  """
-  children_count: Int
-}
-
-type ManagedColumn {
-  id: String
-  title: String
-  description: String
-  settings_json: JSON
-  created_by: ID
-  updated_by: ID
-  revision: Int
-  state: ManagedColumnState
-  """
-  The date and time of creation.
-  """
-  created_at: Date
-  """
-  The date and time of the last update.
-  """
-  updated_at: Date
-  settings: ColumnSettings
-}
-
-enum ManagedColumnState {
-  active
-  deleted
-  inactive
-}
-
-enum ManagedColumnTypes {
-  status
-  dropdown
-}
-
-"""
-Represents an account-level object schema that can be customized per account.
-"""
-type ObjectSchema {
-  """
-  The unique identifier of the object schema.
-  """
-  id: ID!
-  """
-  The account ID this object schema belongs to.
-  """
-  account_id: ID!
-  """
-  The user ID who created this object schema.
-  """
-  created_by: ID!
-  """
-  The revision number for optimistic locking.
-  """
-  revision: Int!
-  """
-  The date and time of creation.
-  """
-  created_at: Date
-  """
-  The date and time of the last update.
-  """
-  updated_at: Date
-  """
-  The columns defined in this object schema.
-  """
-  columns: [ObjectSchemaColumn!]!
-  """
-  The ID of the parent object schema (typically a global object schema).
-  """
-  parent_id: ID
-  """
-  The name of this object schema.
-  """
-  name: String
-  """
-  The description for this object schema.
-  """
-  description: String
-  """
-  The number of boards connected to this object schema.
-  """
-  connected_boards_count: Int!
-}
-
-"""
-The type of column action to perform in a bulk object schema mutation.
-"""
-enum ObjectSchemaAction {
-  """
-  Create columns on an object schema
-  """
-  CREATE_OBJECT_SCHEMA_COLUMNS
-  """
-  Update columns on an object schema
-  """
-  UPDATE_OBJECT_SCHEMA_COLUMNS
-  """
-  Delete columns from an object schema
-  """
-  DELETE_OBJECT_SCHEMA_COLUMNS
-}
-
-"""
-A single action in a bulk object schema mutation. Provide the action type and the corresponding input field.
-"""
-input ObjectSchemaActionInput {
-  """
-  The type of action to perform.
-  """
-  action: ObjectSchemaAction!
-  """
-  Input for create_object_schema_columns action. Required when action is create_object_schema_columns.
-  """
-  create_object_schema_columns: CreateObjectSchemaColumnsActionInput
-  """
-  Input for update_object_schema_columns action. Required when action is update_object_schema_columns.
-  """
-  update_object_schema_columns: UpdateObjectSchemaColumnsActionInput
-  """
-  Input for delete_object_schema_columns action. Required when action is delete_object_schema_columns.
-  """
-  delete_object_schema_columns: DeleteObjectSchemaColumnsActionInput
-}
-
-"""
-Result of a single action within a bulk object schema mutation.
-"""
-type ObjectSchemaActionResult {
-  """
-  The type of action that was performed.
-  """
-  action: ObjectSchemaAction
-  """
-  The resulting object schema after the action.
-  """
-  object_schema: ObjectSchema
-}
-
-"""
-A board's pending column changes against the object schema it follows, per surface.
-"""
-type ObjectSchemaBoardChangesPreview {
-  """
-  Whether any surface has a publishable change.
-  """
-  has_changes: Boolean!
-  surfaces: [ObjectSchemaSurfacePreview!]!
-  """
-  True when the board has a classic subitems board that follows no schema. Publish covers the root only; create_object_schema_companion completes the setup.
-  """
-  subitems_surface_unavailable: Boolean!
-}
-
-"""
-A column definition within an object schema.
-"""
-type ObjectSchemaColumn {
-  """
-  The unique identifier of the column.
-  """
-  id: ID
-  """
-  The column's title.
-  """
-  title: String!
-  """
-  The column's type.
-  """
-  type: ColumnType
-  """
-  For mirror/lookup columns: the column type this mirror displays. Null when not set.
-  """
-  sub_type: ColumnType
-  """
-  The column's description.
-  """
-  description: String
-  """
-  The column's settings in a JSON form.
-  """
-  settings: JSON
-  """
-  Policy rules for this column.
-  """
-  policy: ObjectSchemaColumnPolicy
-  """
-  Tags indicating column status (deprecated, inherited, etc.).
-  """
-  tags: ObjectSchemaColumnTags
-}
-
-"""
-A column-level difference between the board and the schema.
-"""
-type ObjectSchemaColumnChange {
-  """
-  The operation Publish will apply, or MISSING_FROM_BOARD for a schema column the board lacks.
-  """
-  change_type: ObjectSchemaColumnChangeType!
-  """
-  The affected column ID.
-  """
-  column_id: ID!
-  """
-  The affected column type, when available.
-  """
-  column_type: String
-  """
-  The affected column title, when available.
-  """
-  title: String
-  """
-  Whether Publish applies this change. Schema columns missing from the board are never removed by Publish.
-  """
-  publishable: Boolean!
-}
-
-"""
-A publishable operation or informational difference between a board and the object schema it follows.
-"""
-enum ObjectSchemaColumnChangeType {
-  CREATE
-  UPDATE
-  MISSING_FROM_BOARD
-}
-
-"""
-Policy rules governing how an object schema column can be modified.
-"""
-type ObjectSchemaColumnPolicy {
-  """
-  List of column properties that can be overridden by board-level columns.
-  """
-  can_override: [String!]!
-  """
-  Whether this column is protected from deletion.
-  """
-  cannot_delete: Boolean!
-  """
-  Whether this column is read-only.
-  """
-  read_only: Boolean!
-  """
-  Policy-related messages, such as disabled reasons.
-  """
-  messages: JSON
-}
-
-"""
-Tags applied to an object schema column indicating its status or behavior.
-"""
-type ObjectSchemaColumnTags {
-  """
-  Deprecation info with a start timestamp, if the column is deprecated.
-  """
-  deprecated: JSON
-  """
-  Opt-in by default info with an optional end timestamp.
-  """
-  opt_in_by_default: JSON
-  """
-  Whether this column is inherited from a parent object schema.
-  """
-  inherited: Boolean
-}
-
-"""
-A board that follows an object schema.
-"""
-type ObjectSchemaConnectedBoard {
-  """
-  The board ID.
-  """
-  id: ID
-  """
-  The object schema the board follows.
-  """
-  object_schema_id: ID
-  """
-  True for the template's own board (and its subitems board), which clients exclude from instance lists and may link to as "the template".
-  """
-  is_template_editor: Boolean
-}
-
-"""
-A page of the boards that follow an object schema, ordered by board ID.
-"""
-type ObjectSchemaConnectedBoards {
-  items: [ObjectSchemaConnectedBoard!]!
-  pagination: ObjectSchemaConnectedBoardsPagination!
-}
-
-type ObjectSchemaConnectedBoardsPagination {
-  """
-  The page size that was applied.
-  """
-  limit: Int
-  """
-  How many boards follow the schema in total, after exclusions.
-  """
-  total_count: Int
-  """
-  Opaque cursor for the next page, or null on the last page.
-  """
-  next_cursor: String
-  """
-  Whether another page exists.
-  """
-  has_more: Boolean
-}
-
-"""
-Which board ↔ schema pair a surface describes: the root board or its classic subitems board.
-"""
-enum ObjectSchemaSurfaceKind {
-  ROOT
-  CLASSIC_SUBITEMS
-}
-
-"""
-Changes and current schema revision for one board ↔ object-schema pair.
-"""
-type ObjectSchemaSurfacePreview {
-  kind: ObjectSchemaSurfaceKind!
-  """
-  The board for this surface.
-  """
-  board_id: ID!
-  """
-  The object schema this board follows.
-  """
-  object_schema_id: ID!
-  """
-  The schema revision the changes were computed against. Pass it back as the expected revision on publish.
-  """
-  object_schema_revision: Int!
-  changes: [ObjectSchemaColumnChange!]!
-}
-
-"""
-The object schemas created from a board: the root schema and, for classic subitems, its companion.
-"""
-type ObjectSchemasFromBoard {
-  """
-  The object schema created from the root board, which is now attached to it.
-  """
-  root_object_schema: ObjectSchema!
-  """
-  The companion object schema created from the classic subitems board, attached to it. Null when the board has no subitems board.
-  """
-  subitems_object_schema: ObjectSchema
-}
-
-"""
-Policy messages that explain why certain actions are disabled on a column
-"""
-input PolicyMessagesInput {
-  """
-  Structured reasons for disabled actions
-  """
-  disabled_reason: DisabledReasonInput
-}
-
-"""
-Input for publishing a board's column changes to the object schema it follows.
-"""
-input PublishObjectSchemaFromBoardInput {
-  """
-  The template's board.
-  """
-  editor_board_id: ID!
-  """
-  The object schema the board follows.
-  """
-  object_schema_id: ID!
-  """
-  The root schema revision from object_schema_board_changes. Publish is refused if the schema moved.
-  """
-  expected_revision: Int!
-  """
-  The companion schema revision from the preview. Required when the preview had a CLASSIC_SUBITEMS surface.
-  """
-  expected_subitems_revision: Int
-}
-
-"""
-A standalone board-type data view source.
-"""
-type StandaloneBoardDataViewSource {
-  """
-  The source identifier.
-  """
-  source_id: DataViewSourceId
-  """
-  Whether this source has the main (items) or subitem relation type.
-  """
-  relation_type: DataViewSourceRelationType
-  """
-  The column mappings for this source.
-  """
-  mappings: [DataViewColumnMapping!]
-  """
-  The errors associated with this source.
-  """
-  errors: [DataViewSourceError!]
-  """
-  The live columns of this source. Populated by the automapping query.
-  """
-  columns: [DataViewSourceColumn!]
-}
-
-"""
-Input for configuring calculated capability settings on a status column
-"""
-input StatusCalculatedCapabilityInput {
-  """
-  Function to calculate the values. For status columns, only COUNT_KEYS function is supported.
-  """
-  function: StatusCalculatedFunction!
-}
-
-"""
-Available functions for calculating values in status column capabilities
-"""
-enum StatusCalculatedFunction {
-  """
-  Count the number of labels
-  """
-  COUNT_KEYS
-}
-
-"""
-Input for configuring status column capabilities during creation
-"""
-input StatusColumnCapabilitiesInput {
-  """
-  Calculated capability settings. If provided, enables calculated functionality for the status column.
-  """
-  calculated: StatusCalculatedCapabilityInput
-}
-
-enum StatusColumnColors {
-  working_orange
-  done_green
-  stuck_red
-  dark_blue
-  purple
-  explosive
-  grass_green
-  bright_blue
-  saladish
-  egg_yolk
-  blackish
-  dark_red
-  sofia_pink
-  lipstick
-  dark_purple
-  bright_green
-  chili_blue
-  american_gray
-  brown
-  dark_orange
-  sunset
-  bubble
-  peach
-  berry
-  winter
-  river
-  navy
-  aquamarine
-  indigo
-  dark_indigo
-  pecan
-  lavender
-  royal
-  steel
-  orchid
-  lilac
-  tan
-  sky
-  coffee
-  teal
-}
-
-type StatusColumnSettings {
-  type: ManagedColumnTypes
-  labels: [StatusLabel!]
-}
-
-type StatusLabel {
-  id: Int
-  label: String
-  color: StatusColumnColors
-  index: Int
-  description: String
-  is_deactivated: Boolean
-  is_done: Boolean
-}
-
-type StatusManagedColumn {
-  id: String
-  title: String
-  description: String
-  settings_json: JSON
-  created_by: ID
-  updated_by: ID
-  revision: Int
-  state: ManagedColumnState
-  """
-  The date and time of creation.
-  """
-  created_at: Date
-  """
-  The date and time of the last update.
-  """
-  updated_at: Date
-  settings: StatusColumnSettings
-}
-
-input UpdateDropdownColumnSettingsInput {
-  labels: [UpdateDropdownLabelInput!]!
-  """
-  Whether to limit the number of labels that can be selected
-  """
-  limit_select: Boolean
-  """
-  Maximum number of labels that can be selected when limit_select is enabled
-  """
-  label_limit_count: Int
-}
-
-input UpdateDropdownLabelInput {
-  label: String!
-  id: Int
-  is_deactivated: Boolean
-}
-
-"""
-Input for updating an existing column on an object schema
-"""
-input UpdateObjectSchemaColumnInput {
-  """
-  The ID of the column to update
-  """
-  column_id: ID!
-  """
-  The column title
-  """
-  title: String
-  """
-  Optional column description
-  """
-  description: String
-  """
-  For mirror/lookup columns only: the column type this mirror displays. May be any column type except another mirror/lookup (mirror-to-mirror is not supported).
-  """
-  sub_type: ColumnType
-  """
-  Type-specific configuration object containing column defaults and settings. Use get_column_type_schema query to see available properties and validation rules. Examples: status column labels, dropdown options, number formatting rules, date display preferences.
-  """
-  defaults: JSON
-  """
-  Whether this column should be opted-out by default on boards. If false, the column will be automatically included on all boards using this object schema (opt-in by default).
-  """
-  opt_out_by_default: Boolean
-  """
-  Policy rules controlling what can be done with the column
-  """
-  policy: ColumnPolicyInput
-}
-
-"""
-Input for the update_object_schema_columns action.
-"""
-input UpdateObjectSchemaColumnsActionInput {
-  """
-  Array of column updates.
-  """
-  columns: [UpdateObjectSchemaColumnInput!]!
-}
-
-input UpdateStatusColumnSettingsInput {
-  labels: [UpdateStatusLabelInput!]!
-}
-
-input UpdateStatusLabelInput {
-  label: String!
-  color: StatusColumnColors!
-  index: Int!
-  description: String
-  is_done: Boolean
-  id: Int
-  is_deactivated: Boolean
-}
-
-"""
 The results of the search for benchmark.
 """
 type SearchBenchmarkResults {
   data: String
+}
+
+"""
+A board-scope permission that can be required in addition to regular board read access.
+"""
+enum BoardPermission {
+  """
+  Permission to use the board in reporting.
+  """
+  BOARD_REPORTABILITY
+}
+
+"""
+Boost configuration for search results. Key-value pairs where key is strategy type and value is boost weight.
+"""
+input BoostConfigurationInput {
+  """
+  Boost strategies as key-value pairs (strategy: weight). Empty object {} disables all boosts.
+  """
+  boosts: JSON
+}
+
+"""
+Filter: creation and last-update time window. All provided bounds must be satisfied (AND).
+"""
+input CrossEntityDateRangeInput {
+  """
+  Filter: created at or before this date-time (inclusive).
+  """
+  created_before: ISO8601DateTime
+  """
+  Filter: created at or after this date-time (inclusive).
+  """
+  created_after: ISO8601DateTime
+  """
+  Filter: last updated at or before this date-time (inclusive).
+  """
+  updated_before: ISO8601DateTime
+  """
+  Filter: last updated at or after this date-time (inclusive).
+  """
+  updated_after: ISO8601DateTime
+}
+
+"""
+Lookup namespace. Each field looks up a single entity type by name.
+"""
+type LookupNamespace {
+  """
+  Lookup boards by name.
+  """
+  boards(query: String!, limit: Int = 10, workspace_ids: [ID!]): SearchBoardResults!
+}
+
+"""
+Selects the meeting fields to rank on. Set a field to true to match on it. At least one field must be true; omit match_by to search all indexed fields.
+"""
+input MeetingMatchByInput {
+  """
+  Meeting title.
+  """
+  title: Boolean
+  """
+  AI-generated one-sentence meeting gist.
+  """
+  gist: Boolean
+  """
+  AI-generated meeting summary.
+  """
+  summary: Boolean
+}
+
+"""
+Controls which meetings are returned based on ownership and sharing scope.
+"""
+enum MeetingSearchAccess {
+  """
+  Only meetings owned by the caller.
+  """
+  OWN
+  """
+  Meetings shared directly with the caller.
+  """
+  SHARED_WITH_ME
+  """
+  Meetings shared with the caller's account.
+  """
+  SHARED_WITH_ACCOUNT
+  """
+  All accessible meetings (default).
+  """
+  ALL
+}
+
+"""
+Specifies which indexed meeting fields to include in the search. Set a field to true to search it. If the entire object is omitted, all fields are searched.
+"""
+input MeetingSearchFieldsInput {
+  """
+  Meeting title.
+  """
+  title: Boolean
+  """
+  AI-generated meeting gist/summary.
+  """
+  gist: Boolean
+  """
+  Meeting summary text.
+  """
+  summary: Boolean
+  """
+  Meeting talking points and topics.
+  """
+  talking_points: Boolean
+  """
+  Action items from the meeting.
+  """
+  action_points: Boolean
+  """
+  Names of meeting participants.
+  """
+  attendee_names: Boolean
+}
+
+"""
+Date range filter for meetings based on start time.
+"""
+input MeetingsDateRangeInput {
+  """
+  Return meetings that start on or after this date.
+  """
+  from: ISO8601DateTime
+  """
+  Return meetings that start on or before this date.
+  """
+  to: ISO8601DateTime
+}
+
+"""
+Persons filter for search queries
+"""
+input PersonsInput {
+  """
+  List of person IDs to filter by
+  """
+  person_ids: [ID!]
+  """
+  List of team IDs to filter by
+  """
+  team_ids: [ID!]
+  """
+  List of person names to filter by (searches in multiple-person columns)
+  """
+  person_names: [String!]
+}
+
+"""
+Algorithms for reranking results.
+"""
+enum RerankingStrategy {
+  """
+  Use cross-encoder model for reranking results.
+  """
+  CROSS_ENCODER
+}
+
+"""
+Available search modes.
+"""
+enum Search {
+  """
+  Keyword-based search using text matching.
+  """
+  LEXICAL
+  """
+  Vector-based search using semantic similarity.
+  """
+  SEMANTIC
+  """
+  Combined lexical and semantic search with reranking.
+  """
+  HYBRID
+}
+
+"""
+A single board search result with indexed and live data.
+"""
+type SearchBoardResult {
+  """
+  Unique identifier of the board.
+  """
+  id: ID!
+  """
+  Board data from the search index.
+  """
+  indexed_data: SearchIndexedBoard!
+  """
+  Live board data via federation. Null when the referenced board cannot be resolved by the owning subgraph (e.g. deleted, not accessible to the caller, or indexing lag).
+  """
+  live_data: Board
+}
+
+"""
+Wrapper for a list of board search results.
+"""
+type SearchBoardResults {
+  """
+  List of board search results.
+  """
+  results: [SearchBoardResult!]!
+}
+
+"""
+Date range filter for search queries
+"""
+input SearchDateRangeInput {
+  """
+  Filter items created before this date
+  """
+  created_before: ISO8601DateTime
+  """
+  Filter items created after this date
+  """
+  created_after: ISO8601DateTime
+  """
+  Filter items updated before this date
+  """
+  updated_before: ISO8601DateTime
+  """
+  Filter items updated after this date
+  """
+  updated_after: ISO8601DateTime
+  """
+  Filter items with a date column having a value before this date
+  """
+  column_value_before: ISO8601DateTime
+  """
+  Filter items with a date column having a value after this date
+  """
+  column_value_after: ISO8601DateTime
+}
+
+"""
+Date range filter for search queries
+"""
+input SearchDateRangeLegacyInput {
+  """
+  Filter items created before this date
+  """
+  createdBefore: ISO8601DateTime
+  """
+  Filter items created after this date
+  """
+  createdAfter: ISO8601DateTime
+  """
+  Filter items updated before this date
+  """
+  updatedBefore: ISO8601DateTime
+  """
+  Filter items updated after this date
+  """
+  updatedAfter: ISO8601DateTime
+}
+
+"""
+Matched text snippets per searchable document field.
+"""
+type SearchDocHighlights {
+  """
+  Highlighted fragments from the document name with <em> tags around matched terms. Non-empty only for lexical matches.
+  """
+  name: [String!]
+  """
+  Highlighted fragments from the document content with <em> tags around matched terms. Non-empty only for lexical matches.
+  """
+  content: [String!]
+}
+
+"""
+A single doc search result with indexed and live data.
+"""
+type SearchDocResult {
+  """
+  Unique identifier of the doc.
+  """
+  id: ID!
+  """
+  Doc data from the search index.
+  """
+  indexed_data: SearchIndexedDoc!
+  """
+  Live doc data via federation. Null when the referenced doc cannot be resolved by the owning subgraph (e.g. deleted, not accessible to the caller, or indexing lag).
+  """
+  live_data: Document
+}
+
+"""
+Wrapper for a list of doc search results.
+"""
+type SearchDocResults {
+  """
+  List of doc search results.
+  """
+  results: [SearchDocResult!]!
+}
+
+"""
+Board data stored in the search index.
+"""
+type SearchIndexedBoard {
+  """
+  Board ID.
+  """
+  id: ID!
+  """
+  Board name.
+  """
+  name: String!
+  """
+  Board description.
+  """
+  description: String
+  """
+  ID of the workspace containing this board.
+  """
+  workspace_id: ID
+  """
+  ID of the user who created this board.
+  """
+  creator_id: ID
+  """
+  URL to view this board.
+  """
+  url: String!
+}
+
+"""
+Document data stored in the search index.
+"""
+type SearchIndexedDoc {
+  """
+  Document ID.
+  """
+  id: ID!
+  """
+  Document name.
+  """
+  name: String!
+  """
+  ID of the workspace containing this document.
+  """
+  workspace_id: ID
+  """
+  Matched text snippets per searchable field. Null for non-lexical results.
+  """
+  highlights: SearchDocHighlights
+}
+
+"""
+Item data stored in the search index.
+"""
+type SearchIndexedItem {
+  """
+  Item ID.
+  """
+  id: ID!
+  """
+  Item name.
+  """
+  name: String!
+  """
+  URL to view this item.
+  """
+  url: String!
+  """
+  ID of the board containing this item.
+  """
+  board_id: ID
+  """
+  ID of the workspace containing this item.
+  """
+  workspace_id: ID
+}
+
+"""
+Meeting data stored in the search index.
+"""
+type SearchIndexedMeeting {
+  """
+  Meeting ID (UUID).
+  """
+  id: ID!
+  """
+  Meeting title.
+  """
+  title: String
+  """
+  Calendar provider (e.g. google_calendar, outlook_calendar).
+  """
+  meeting_provider: String
+  """
+  ISO timestamp when the meeting started.
+  """
+  start_time: String
+  """
+  ISO timestamp when the meeting ended.
+  """
+  end_time: String
+  """
+  Email addresses of meeting participants.
+  """
+  attendee_emails: [String!]
+  """
+  Names of meeting participants.
+  """
+  attendee_names: [String!]
+  """
+  AI-generated meeting gist.
+  """
+  gist: String
+  """
+  AI-generated meeting summary.
+  """
+  summary: String
+  """
+  Meeting talking points and topics.
+  """
+  talking_points: String
+  """
+  Action items from the meeting.
+  """
+  action_points: String
+  """
+  Matched text snippets per field. Keys are field names, values are arrays of highlighted text fragments with <em> tags around matched terms.
+  """
+  highlights: JSON
+}
+
+"""
+Action-item data stored in the search index.
+"""
+type SearchIndexedMeetingActionItem {
+  """
+  ID of the meeting the artifact belongs to.
+  """
+  meeting_id: ID!
+  """
+  Title of the meeting.
+  """
+  meeting_title: String
+  """
+  When the meeting started.
+  """
+  meeting_start_time: ISO8601DateTime
+  """
+  The action item.
+  """
+  content: String!
+  """
+  Owner of the action item as the notetaker names them — free text, not a monday user ID.
+  """
+  owner_name: String
+  """
+  When the action item is due.
+  """
+  due_date: ISO8601DateTime
+  """
+  Matched text snippets. Null when the action item was returned by filters alone.
+  """
+  highlights: SearchMeetingActionItemHighlights
+}
+
+"""
+Talking-point data stored in the search index.
+"""
+type SearchIndexedMeetingTalkingPoint {
+  """
+  ID of the meeting the artifact belongs to.
+  """
+  meeting_id: ID!
+  """
+  Title of the meeting.
+  """
+  meeting_title: String
+  """
+  When the meeting started.
+  """
+  meeting_start_time: ISO8601DateTime
+  """
+  Title of the topic the talking point belongs to.
+  """
+  topic_title: String
+  """
+  The talking point.
+  """
+  content: String!
+  """
+  Where in the meeting the talking point was raised, as the notetaker reports it.
+  """
+  timestamp_seconds: Float
+  """
+  Matched text snippets. Null when the talking point was returned by filters alone.
+  """
+  highlights: SearchMeetingTalkingPointHighlights
+}
+
+"""
+Meeting data stored in the search index.
+"""
+type SearchIndexedMeetingV2 {
+  """
+  Meeting ID (UUID).
+  """
+  id: ID!
+  """
+  Meeting title.
+  """
+  title: String
+  """
+  Calendar provider (e.g. google_calendar, outlook_calendar).
+  """
+  meeting_provider: String
+  """
+  When the meeting started.
+  """
+  start_time: ISO8601DateTime
+  """
+  When the meeting ended.
+  """
+  end_time: ISO8601DateTime
+  """
+  Email addresses of meeting participants.
+  """
+  attendee_emails: [String!]
+  """
+  Names of meeting participants.
+  """
+  attendee_names: [String!]
+  """
+  AI-generated one-sentence meeting gist.
+  """
+  gist: String
+  """
+  AI-generated meeting summary, in full.
+  """
+  summary: String
+  """
+  Matched text snippets. Null when the meeting was returned by filters alone.
+  """
+  highlights: SearchMeetingHighlights
+}
+
+"""
+Overview (dashboard) data stored in the search index.
+"""
+type SearchIndexedOverview {
+  """
+  Overview ID.
+  """
+  id: ID!
+  """
+  Overview name.
+  """
+  name: String!
+  """
+  Overview kind (public or private).
+  """
+  kind: String!
+  """
+  Overview state (active, archived, or deleted).
+  """
+  state: String!
+  """
+  Workspace ID this overview belongs to.
+  """
+  workspace_id: ID
+  """
+  ID of the user who created the overview.
+  """
+  created_by: ID
+  """
+  Creation timestamp.
+  """
+  created_at: String
+  """
+  Last update timestamp.
+  """
+  updated_at: String
+}
+
+"""
+Timeline item data stored in the search index.
+"""
+type SearchIndexedTimelineItem {
+  """
+  Timeline item ID.
+  """
+  id: ID!
+  """
+  ID of the account owning this timeline item.
+  """
+  account_id: ID!
+  """
+  ID of the item this timeline item belongs to.
+  """
+  item_id: ID!
+  """
+  ID of the board containing this timeline item.
+  """
+  board_id: ID
+  """
+  Timeline item type (e.g. email, googleCalendar).
+  """
+  type: String!
+  """
+  Product kind the timeline item originates from (e.g. service, crm).
+  """
+  product_kind: String!
+  """
+  Timeline item title.
+  """
+  title: String!
+  """
+  Timeline item summary.
+  """
+  summary: String!
+  """
+  Timeline item full content body.
+  """
+  content: String!
+  """
+  ISO timestamp when the timeline item was created.
+  """
+  created_at: ISO8601DateTime!
+  """
+  ISO timestamp when the timeline item was last modified.
+  """
+  updated_at: ISO8601DateTime!
+}
+
+"""
+Update data stored in the search index.
+"""
+type SearchIndexedUpdate {
+  """
+  Update ID.
+  """
+  id: ID!
+  """
+  Update content (HTML formatted).
+  """
+  body: String!
+  """
+  ID of the user who created the update.
+  """
+  creator_id: ID!
+  """
+  ID of the item this update belongs to.
+  """
+  item_id: ID!
+  """
+  ID of the board containing this update.
+  """
+  board_id: ID!
+  """
+  ISO timestamp when the update was created.
+  """
+  created_at: String!
+  """
+  ISO timestamp when the update was last modified.
+  """
+  updated_at: String!
+}
+
+"""
+User data stored in the search index.
+"""
+type SearchIndexedUser {
+  """
+  User ID.
+  """
+  id: ID!
+  """
+  The user's full name.
+  """
+  name: String!
+  """
+  The user's email address.
+  """
+  email: String!
+}
+
+"""
+Workspace data stored in the search index.
+"""
+type SearchIndexedWorkspace {
+  """
+  Workspace ID.
+  """
+  id: ID!
+  """
+  Workspace name.
+  """
+  name: String!
+  """
+  Workspace kind (open or closed).
+  """
+  kind: String!
+  """
+  Workspace description.
+  """
+  description: String
+  """
+  Workspace state (active, archived, or deleted).
+  """
+  state: String!
+}
+
+"""
+A single item search result with indexed and live data.
+"""
+type SearchItemResult {
+  """
+  Unique identifier of the item.
+  """
+  id: ID!
+  """
+  Item data from the search index.
+  """
+  indexed_data: SearchIndexedItem!
+  """
+  Live item data via federation. Null when the referenced item cannot be resolved by the owning subgraph (e.g. deleted, not accessible to the caller, or indexing lag).
+  """
+  live_data: Item
+}
+
+"""
+Wrapper for a list of item search results.
+"""
+type SearchItemResults {
+  """
+  List of item search results.
+  """
+  results: [SearchItemResult!]!
+}
+
+"""
+Matched text snippets per searchable action-item field.
+"""
+type SearchMeetingActionItemHighlights {
+  """
+  Fragments from the action-item content. Null when the field did not match lexically, an empty list for a semantic match, otherwise the matched fragments with <em> tags around matched terms.
+  """
+  content: [String!]
+}
+
+"""
+A single action item search result, citable without fetching its meeting.
+"""
+type SearchMeetingActionItemResult {
+  """
+  Unique identifier of the action item. Opaque — do not parse.
+  """
+  id: ID!
+  """
+  The action item data from the search index.
+  """
+  indexed_data: SearchIndexedMeetingActionItem!
+}
+
+"""
+Wrapper for a list of action item search results.
+"""
+type SearchMeetingActionItemResults {
+  """
+  List of action item search results.
+  """
+  results: [SearchMeetingActionItemResult!]!
+}
+
+"""
+Matched text snippets per searchable meeting field. Each field is null when it did not match lexically, an empty list for a semantic match, otherwise the matched fragments with <em> tags around matched terms.
+"""
+type SearchMeetingHighlights {
+  """
+  Fragments from the meeting title.
+  """
+  title: [String!]
+  """
+  Fragments from the AI-generated gist.
+  """
+  gist: [String!]
+  """
+  Fragments from the AI-generated summary.
+  """
+  summary: [String!]
+  """
+  Fragments from the talking points. Searched only when match_by is omitted.
+  """
+  talking_points: [String!]
+  """
+  Fragments from the action items. Searched only when match_by is omitted.
+  """
+  action_points: [String!]
+  """
+  Fragments from the participant names. Searched only when match_by is omitted.
+  """
+  attendee_names: [String!]
+}
+
+"""
+A single meeting search result with indexed and live data.
+"""
+type SearchMeetingResult {
+  """
+  Unique identifier of the meeting.
+  """
+  id: ID!
+  """
+  Meeting data from the search index.
+  """
+  indexed_data: SearchIndexedMeeting!
+}
+
+"""
+A single meeting search result with indexed and live data.
+"""
+type SearchMeetingResultV2 {
+  """
+  Unique identifier of the meeting.
+  """
+  id: ID!
+  """
+  Meeting data from the search index.
+  """
+  indexed_data: SearchIndexedMeetingV2!
+}
+
+"""
+Wrapper for a list of meeting search results.
+"""
+type SearchMeetingResults {
+  """
+  List of meeting search results.
+  """
+  results: [SearchMeetingResult!]!
+  """
+  Total number of matching meetings in the index (before limit is applied).
+  """
+  total_count: Int
+}
+
+"""
+Wrapper for a list of meeting search results.
+"""
+type SearchMeetingResultsV2 {
+  """
+  List of meeting search results.
+  """
+  results: [SearchMeetingResultV2!]!
+}
+
+"""
+Matched text snippets per searchable talking-point field.
+"""
+type SearchMeetingTalkingPointHighlights {
+  """
+  Fragments from the topic title. Null when the field did not match lexically, an empty list for a semantic match, otherwise the matched fragments with <em> tags around matched terms.
+  """
+  topic_title: [String!]
+  """
+  Fragments from the talking-point content. Null when the field did not match lexically, an empty list for a semantic match, otherwise the matched fragments with <em> tags around matched terms.
+  """
+  content: [String!]
+}
+
+"""
+A single talking point search result, citable without fetching its meeting.
+"""
+type SearchMeetingTalkingPointResult {
+  """
+  Unique identifier of the talking point. Opaque — do not parse.
+  """
+  id: ID!
+  """
+  The talking point data from the search index.
+  """
+  indexed_data: SearchIndexedMeetingTalkingPoint!
+}
+
+"""
+Wrapper for a list of talking point search results.
+"""
+type SearchMeetingTalkingPointResults {
+  """
+  List of talking point search results.
+  """
+  results: [SearchMeetingTalkingPointResult!]!
+}
+
+"""
+Per-entity search namespace. Each field searches a single entity type.
+"""
+type SearchNamespace {
+  """
+  Search for items. All provided filters must be satisfied (AND).
+  """
+  items(query: String!, limit: Int = 10, date_range: CrossEntityDateRangeInput, strategy: SearchStrategy, board_ids: [ID!], workspace_ids: [ID!]): SearchItemResults!
+  """
+  Search for boards.
+  """
+  boards(query: String!, limit: Int = 10, date_range: CrossEntityDateRangeInput, strategy: SearchStrategy, board_ids: [ID!], workspace_ids: [ID!]): SearchBoardResults!
+  """
+  Search for documents.
+  """
+  docs(query: String!, limit: Int = 10, date_range: CrossEntityDateRangeInput, strategy: SearchStrategy, workspace_ids: [ID!], ids: [ID!]): SearchDocResults!
+  """
+  Search for overviews (dashboards).
+  """
+  overviews(query: String!, limit: Int = 10, date_range: CrossEntityDateRangeInput, strategy: SearchStrategy, workspace_ids: [ID!], kinds: [String!], creator_ids: [ID!]): SearchOverviewResults!
+  """
+  Search for updates.
+  """
+  updates(query: String!, limit: Int = 10, date_range: CrossEntityDateRangeInput, strategy: SearchStrategy, board_ids: [ID!], workspace_ids: [ID!], creator_ids: [ID!]): SearchUpdateResults!
+  """
+  Search for users.
+  """
+  users(query: String!, limit: Int = 10, date_range: CrossEntityDateRangeInput, strategy: SearchStrategy): SearchUserResults!
+  """
+  Search for workspaces.
+  """
+  workspaces(query: String!, limit: Int = 10, date_range: CrossEntityDateRangeInput, strategy: SearchStrategy, workspace_ids: [ID!], kind: String): SearchWorkspaceResults!
+  """
+  Search for timeline items.
+  """
+  timeline_items(query: String!, limit: Int = 10, strategy: SearchStrategy = BALANCED, date_range: CrossEntityDateRangeInput, board_ids: [ID!], workspace_ids: [ID!], item_ids: [ID!], type: TimelineItemKind, product_kind: TimelineItemProductKind): SearchTimelineItemResults!
+}
+
+"""
+A single overview search result with indexed and live data.
+"""
+type SearchOverviewResult {
+  """
+  Unique identifier of the overview.
+  """
+  id: ID!
+  """
+  Overview data from the search index.
+  """
+  indexed_data: SearchIndexedOverview!
+  """
+  Live overview data via federation. Null when the referenced overview cannot be resolved by the owning subgraph (e.g. deleted, not accessible to the caller, or indexing lag).
+  """
+  live_data: Overview
+}
+
+"""
+Wrapper for a list of overview search results.
+"""
+type SearchOverviewResults {
+  """
+  List of overview search results.
+  """
+  results: [SearchOverviewResult!]!
+}
+
+"""
+Controls the trade-off between search quality and response time.
+"""
+enum SearchStrategy {
+  """
+  Faster results with lower search quality.
+  """
+  SPEED
+  """
+  Good search quality with reasonable response time. Default.
+  """
+  BALANCED
+  """
+  Best search quality with higher response time.
+  """
+  QUALITY
+}
+
+"""
+A single timelineitem search result with indexed and live data.
+"""
+type SearchTimelineItemResult {
+  """
+  Unique identifier of the timelineitem.
+  """
+  id: ID!
+  """
+  TimelineItem data from the search index.
+  """
+  indexed_data: SearchIndexedTimelineItem!
+  """
+  Live timelineitem data via federation. Null when the referenced timelineitem cannot be resolved by the owning subgraph (e.g. deleted, not accessible to the caller, or indexing lag).
+  """
+  live_data: TimelineItem
+}
+
+"""
+Wrapper for a list of timelineitem search results.
+"""
+type SearchTimelineItemResults {
+  """
+  List of timelineitem search results.
+  """
+  results: [SearchTimelineItemResult!]!
+}
+
+"""
+A single update search result with indexed and live data.
+"""
+type SearchUpdateResult {
+  """
+  Unique identifier of the update.
+  """
+  id: ID!
+  """
+  Update data from the search index.
+  """
+  indexed_data: SearchIndexedUpdate!
+  """
+  Live update data via federation. Null when the referenced update cannot be resolved by the owning subgraph (e.g. deleted, not accessible to the caller, or indexing lag).
+  """
+  live_data: Update
+}
+
+"""
+Wrapper for a list of update search results.
+"""
+type SearchUpdateResults {
+  """
+  List of update search results.
+  """
+  results: [SearchUpdateResult!]!
+}
+
+"""
+A single user search result with indexed and live data.
+"""
+type SearchUserResult {
+  """
+  Unique identifier of the user.
+  """
+  id: ID!
+  """
+  User data from the search index.
+  """
+  indexed_data: SearchIndexedUser!
+  """
+  Live user data via federation. Null when the referenced user cannot be resolved by the owning subgraph (e.g. deleted, not accessible to the caller, or indexing lag).
+  """
+  live_data: User
+}
+
+"""
+Wrapper for a list of user search results.
+"""
+type SearchUserResults {
+  """
+  List of user search results.
+  """
+  results: [SearchUserResult!]!
+}
+
+"""
+A single workspace search result.
+"""
+type SearchWorkspaceResult {
+  """
+  Unique identifier of the workspace.
+  """
+  id: ID!
+  """
+  Workspace data from the search index.
+  """
+  indexed_data: SearchIndexedWorkspace!
+  """
+  Live workspace data via federation. Null when the referenced workspace cannot be resolved by the owning subgraph (e.g. deleted, not accessible to the caller, or indexing lag).
+  """
+  live_data: Workspace
+}
+
+"""
+Wrapper for a list of workspace search results.
+"""
+type SearchWorkspaceResults {
+  """
+  List of workspace search results.
+  """
+  results: [SearchWorkspaceResult!]!
+}
+
+"""
+Kind of timeline item.
+"""
+enum TimelineItemKind {
+  """
+  Email communication
+  """
+  email
+  """
+  Google Calendar event
+  """
+  googleCalendar
+  """
+  Outlook Calendar event
+  """
+  outlookCalendar
+  """
+  Zoom meeting
+  """
+  zoom
+  """
+  General activity
+  """
+  activity
+  """
+  Custom activity
+  """
+  custom
+  """
+  Note
+  """
+  note
+  """
+  Video meeting
+  """
+  videoMeeting
+  """
+  Phone call
+  """
+  phoneCall
+  """
+  Meeting
+  """
+  meeting
+  """
+  AI assistant interaction
+  """
+  aiAssistant
+  """
+  AI-generated reply
+  """
+  aiReply
+  """
+  Portal interaction
+  """
+  portal
+  """
+  Demo email
+  """
+  demoEmail
+  """
+  AI-generated summary
+  """
+  aiSummary
+  """
+  Form submission
+  """
+  form
+  """
+  Portfolio status update
+  """
+  portfolio_status
+  """
+  Sequences email
+  """
+  sequencesEmail
+  """
+  Outreach expert phone call
+  """
+  outreachExpertPhoneCall
+  """
+  outreachExpertPhoneCallV2
+  """
+  outreachExpertPhoneCallV2
+  """
+  Merged tickets
+  """
+  mergedTickets
+  """
+  Custom internal app interaction
+  """
+  customInternalApp
+  """
+  Campaign event
+  """
+  campaigns
+}
+
+"""
+Product kind that owns the timeline item.
+"""
+enum TimelineItemProductKind {
+  """
+  Service product
+  """
+  service
+  """
+  CRM product
+  """
+  crm
 }
 
 """

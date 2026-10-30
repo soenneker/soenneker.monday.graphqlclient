@@ -40,6 +40,11 @@ public enum DataViewSourceColumnUnavailableCode
     /// <summary>
     /// The formula reads a column in a way that cannot be materialized.
     /// </summary>
-    FORMULAUNSUPPORTEDREFERENCE
+    FORMULAUNSUPPORTEDREFERENCE,
+
+    /// <summary>
+    /// The formula uses a value that is not a column, such as the board or group name, which cannot be materialized.
+    /// </summary>
+    FORMULAUNSUPPORTEDSTATICREFERENCE
 
 }

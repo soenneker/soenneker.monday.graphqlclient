@@ -174,10 +174,6 @@ public sealed partial class MondayGraphQlClient
     public GetAggregateHistoryRequestBuilder GetAggregateHistory => new GetAggregateHistoryRequestBuilder(_graphQlClient);
 
     /// <summary>
-    /// Builds and executes requests for the 'ai_search' query.</summary>
-    public GetAiSearchRequestBuilder GetAiSearch => new GetAiSearchRequestBuilder(_graphQlClient);
-
-    /// <summary>
     /// Builds and executes requests for the 'all_widgets_schema' query.</summary>
     public GetAllWidgetsSchemaRequestBuilder GetAllWidgetsSchema => new GetAllWidgetsSchemaRequestBuilder(_graphQlClient);
 
