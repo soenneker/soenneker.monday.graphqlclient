@@ -12,52 +12,10 @@ namespace Soenneker.Monday.GraphQlClient;
 public sealed partial class User
 {
     /// <summary>
-    /// The user's account.
-    /// </summary>
-    [JsonPropertyName("account")]
-    public Account Account { get; init; } = null!;
-
-    /// <summary>
-    /// The products the user is assigned to.
-    /// </summary>
-    [JsonPropertyName("account_products")]
-    public List<AccountProduct>? AccountProducts { get; init; }
-
-    /// <summary>
-    /// The custom field metas of the user profile.
-    /// </summary>
-    [JsonPropertyName("custom_field_metas")]
-    public List<CustomFieldMetas>? CustomFieldMetas { get; init; }
-
-    /// <summary>
-    /// The custom field values of the user profile.
-    /// </summary>
-    [JsonPropertyName("custom_field_values")]
-    public List<CustomFieldValue>? CustomFieldValues { get; init; }
-
-    /// <summary>
     /// The user's unique identifier.
     /// </summary>
     [JsonPropertyName("id")]
     public string Id { get; init; } = null!;
-
-    /// <summary>
-    /// Last date &amp; time when user was active
-    /// </summary>
-    [JsonPropertyName("last_activity")]
-    public DateOnly? LastActivity { get; init; }
-
-    /// <summary>
-    /// The user's out of office status.
-    /// </summary>
-    [JsonPropertyName("out_of_office")]
-    public OutOfOffice? OutOfOffice { get; init; }
-
-    /// <summary>
-    /// The teams the user is a member in.
-    /// </summary>
-    [JsonPropertyName("teams")]
-    public List<Team>? Teams { get; init; }
 
     /// <summary>
     /// Activity log entries for the user
@@ -124,6 +82,48 @@ public sealed partial class User
     /// </summary>
     [JsonPropertyName("url")]
     public string Url { get; init; } = null!;
+
+    /// <summary>
+    /// The user's account.
+    /// </summary>
+    [JsonPropertyName("account")]
+    public Account Account { get; init; } = null!;
+
+    /// <summary>
+    /// The products the user is assigned to.
+    /// </summary>
+    [JsonPropertyName("account_products")]
+    public List<AccountProduct>? AccountProducts { get; init; }
+
+    /// <summary>
+    /// The custom field metas of the user profile.
+    /// </summary>
+    [JsonPropertyName("custom_field_metas")]
+    public List<CustomFieldMetas>? CustomFieldMetas { get; init; }
+
+    /// <summary>
+    /// The custom field values of the user profile.
+    /// </summary>
+    [JsonPropertyName("custom_field_values")]
+    public List<CustomFieldValue>? CustomFieldValues { get; init; }
+
+    /// <summary>
+    /// Last date &amp; time when user was active
+    /// </summary>
+    [JsonPropertyName("last_activity")]
+    public DateOnly? LastActivity { get; init; }
+
+    /// <summary>
+    /// The user's out of office status.
+    /// </summary>
+    [JsonPropertyName("out_of_office")]
+    public OutOfOffice? OutOfOffice { get; init; }
+
+    /// <summary>
+    /// The teams the user is a member in.
+    /// </summary>
+    [JsonPropertyName("teams")]
+    public List<Team>? Teams { get; init; }
 
     /// <summary>
     /// The department the user is a member of (if any)

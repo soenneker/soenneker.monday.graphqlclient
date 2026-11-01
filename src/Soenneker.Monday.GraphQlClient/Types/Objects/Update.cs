@@ -12,10 +12,10 @@ namespace Soenneker.Monday.GraphQlClient;
 public sealed partial class Update
 {
     /// <summary>
-    /// The update's assets/files.
+    /// The update's unique identifier.
     /// </summary>
-    [JsonPropertyName("assets")]
-    public List<Asset>? Assets { get; init; }
+    [JsonPropertyName("id")]
+    public string Id { get; init; } = null!;
 
     /// <summary>
     /// The update's html formatted body.
@@ -24,55 +24,19 @@ public sealed partial class Update
     public string Body { get; init; } = null!;
 
     /// <summary>
-    /// The update's creation date.
+    /// The unique identifier of the update creator.
     /// </summary>
-    [JsonPropertyName("created_at")]
-    public DateOnly? CreatedAt { get; init; }
+    [JsonPropertyName("creator_id")]
+    public string? CreatorId { get; init; }
+
+    [JsonPropertyName("edited_at")]
+    public DateOnly EditedAt { get; init; }
 
     /// <summary>
     /// The update's creator.
     /// </summary>
     [JsonPropertyName("creator")]
     public User? Creator { get; init; }
-
-    /// <summary>
-    /// The unique identifier of the update creator.
-    /// </summary>
-    [JsonPropertyName("creator_id")]
-    public string? CreatorId { get; init; }
-
-    /// <summary>
-    /// The update's unique identifier.
-    /// </summary>
-    [JsonPropertyName("id")]
-    public string Id { get; init; } = null!;
-
-    /// <summary>
-    /// The update's item ID.
-    /// </summary>
-    [JsonPropertyName("item_id")]
-    public string? ItemId { get; init; }
-
-    /// <summary>
-    /// The update's replies.
-    /// </summary>
-    [JsonPropertyName("replies")]
-    public List<Reply>? Replies { get; init; }
-
-    /// <summary>
-    /// The update's text body.
-    /// </summary>
-    [JsonPropertyName("text_body")]
-    public string? TextBody { get; init; }
-
-    /// <summary>
-    /// The update's last edit date.
-    /// </summary>
-    [JsonPropertyName("updated_at")]
-    public DateOnly? UpdatedAt { get; init; }
-
-    [JsonPropertyName("edited_at")]
-    public DateOnly EditedAt { get; init; }
 
     [JsonPropertyName("likes")]
     public List<Like> Likes { get; init; } = [];
@@ -84,6 +48,24 @@ public sealed partial class Update
     public List<Watcher> Viewers { get; init; } = [];
 
     /// <summary>
+    /// The update's creation date.
+    /// </summary>
+    [JsonPropertyName("created_at")]
+    public DateOnly? CreatedAt { get; init; }
+
+    /// <summary>
+    /// The update's last edit date.
+    /// </summary>
+    [JsonPropertyName("updated_at")]
+    public DateOnly? UpdatedAt { get; init; }
+
+    /// <summary>
+    /// The update's item ID.
+    /// </summary>
+    [JsonPropertyName("item_id")]
+    public string? ItemId { get; init; }
+
+    /// <summary>
     /// The original creation time of the update.
     /// </summary>
     [JsonPropertyName("original_creation_date")]
@@ -91,5 +73,23 @@ public sealed partial class Update
 
     [JsonPropertyName("item")]
     public Item? Item { get; init; }
+
+    /// <summary>
+    /// The update's replies.
+    /// </summary>
+    [JsonPropertyName("replies")]
+    public List<Reply>? Replies { get; init; }
+
+    /// <summary>
+    /// The update's assets/files.
+    /// </summary>
+    [JsonPropertyName("assets")]
+    public List<Asset>? Assets { get; init; }
+
+    /// <summary>
+    /// The update's text body.
+    /// </summary>
+    [JsonPropertyName("text_body")]
+    public string? TextBody { get; init; }
 
 }

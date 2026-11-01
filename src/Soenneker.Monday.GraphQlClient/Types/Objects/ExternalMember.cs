@@ -41,7 +41,7 @@ public sealed partial class ExternalMember
     public ExternalMembershipStatus Status { get; init; }
 
     /// <summary>
-    /// When the last invitation was sent
+    /// Last time an invitation or sign-in link was emailed to this guest.
     /// </summary>
     [JsonPropertyName("last_invitation_sent_at")]
     public DateOnly LastInvitationSentAt { get; init; }

@@ -22,7 +22,7 @@ public sealed partial class CreateWorkspaceRequestBuilder
     /// </summary>
     public ValueTask<GraphQlResponse<CreateWorkspaceData>> Execute(CreateWorkspaceVariables request, CancellationToken cancellationToken = default)
     {
-        const string gqlQuery = @"mutation CreateWorkspace($account_product_id: ID, $description: String, $kind: WorkspaceKind!, $name: String!) { create_workspace(account_product_id: $account_product_id, description: $description, kind: $kind, name: $name) { account_product { default_workspace_id id kind tier } created_at description id is_default_workspace kind name settings { icon { color image } } state } }";
+        const string gqlQuery = @"mutation CreateWorkspace($account_product_id: ID, $description: String, $kind: WorkspaceKind!, $name: String!) { create_workspace(account_product_id: $account_product_id, description: $description, kind: $kind, name: $name) { id account_product { default_workspace_id id kind tier } created_at description is_default_workspace kind name settings { icon { color image } } state } }";
         return _graphQlClient.Execute<CreateWorkspaceData>(gqlQuery, request, cancellationToken);
     }
 

@@ -23,7 +23,7 @@ public sealed partial class GetWorkspacesRequestBuilder
     /// </summary>
     public ValueTask<GraphQlResponse<GetWorkspacesData>> Execute(GetWorkspacesVariables request, CancellationToken cancellationToken = default)
     {
-        const string gqlQuery = @"query GetWorkspaces($ids: [ID!], $kind: WorkspaceKind, $limit: Int, $membership_kind: WorkspaceMembershipKind, $order_by: WorkspacesOrderBy, $page: Int, $query_params: WorkspacesQueryInput, $state: State) { workspaces(ids: $ids, kind: $kind, limit: $limit, membership_kind: $membership_kind, order_by: $order_by, page: $page, query_params: $query_params, state: $state) { account_product { default_workspace_id id kind tier } created_at description id is_default_workspace kind name settings { icon { color image } } state } }";
+        const string gqlQuery = @"query GetWorkspaces($ids: [ID!], $kind: WorkspaceKind, $limit: Int, $membership_kind: WorkspaceMembershipKind, $order_by: WorkspacesOrderBy, $page: Int, $query_params: WorkspacesQueryInput, $state: State) { workspaces(ids: $ids, kind: $kind, limit: $limit, membership_kind: $membership_kind, order_by: $order_by, page: $page, query_params: $query_params, state: $state) { id account_product { default_workspace_id id kind tier } created_at description is_default_workspace kind name settings { icon { color image } } state } }";
         return _graphQlClient.Execute<GetWorkspacesData>(gqlQuery, request, cancellationToken);
     }
 

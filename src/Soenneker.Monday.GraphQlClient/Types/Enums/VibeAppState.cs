@@ -23,6 +23,11 @@ public enum VibeAppState
     EXTERNAL,
 
     /// <summary>
+    /// App is published within the account and open to the external users invited to it
+    /// </summary>
+    INVITEONLY,
+
+    /// <summary>
     /// Legacy private app (pre-state migration)
     /// </summary>
     OLDPRIVATE,

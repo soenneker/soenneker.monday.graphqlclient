@@ -8,9 +8,9 @@ namespace Soenneker.Monday.GraphQlClient;
 public enum CalculatedFunction
 {
     /// <summary>
-    /// Count the number of labels
+    /// Calculate the minimum value
     /// </summary>
-    COUNTKEYS,
+    MIN,
 
     /// <summary>
     /// Calculate the maximum value
@@ -18,9 +18,9 @@ public enum CalculatedFunction
     MAX,
 
     /// <summary>
-    /// Calculate the minimum value
+    /// Calculate the sum of all values
     /// </summary>
-    MIN,
+    SUM,
 
     /// <summary>
     /// Calculate both minimum and maximum values for time ranges
@@ -33,8 +33,8 @@ public enum CalculatedFunction
     NONE,
 
     /// <summary>
-    /// Calculate the sum of all values
+    /// Count the number of labels
     /// </summary>
-    SUM
+    COUNTKEYS
 
 }

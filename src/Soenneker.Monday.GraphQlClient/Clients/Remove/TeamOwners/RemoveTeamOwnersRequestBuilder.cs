@@ -22,7 +22,7 @@ public sealed partial class RemoveTeamOwnersRequestBuilder
     /// </summary>
     public ValueTask<GraphQlResponse<RemoveTeamOwnersData>> Execute(RemoveTeamOwnersVariables request, CancellationToken cancellationToken = default)
     {
-        const string gqlQuery = @"mutation RemoveTeamOwners($team_id: ID!, $user_ids: [ID!]!) { remove_team_owners(team_id: $team_id, user_ids: $user_ids) { team { id name picture_url is_guest created_at } errors { message code user_id } } }";
+        const string gqlQuery = @"mutation RemoveTeamOwners($team_id: ID!, $user_ids: [ID!]!) { remove_team_owners(team_id: $team_id, user_ids: $user_ids) { team { id is_guest name created_at picture_url } errors { message code user_id } } }";
         return _graphQlClient.Execute<RemoveTeamOwnersData>(gqlQuery, request, cancellationToken);
     }
 

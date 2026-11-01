@@ -13,34 +13,9 @@ public enum ItemsQueryRuleOperator
     AnyOf,
 
     /// <summary>
-    /// Between the two values
+    /// None of the values
     /// </summary>
-    Between,
-
-    /// <summary>
-    /// Contains all the terms
-    /// </summary>
-    ContainsTerms,
-
-    /// <summary>
-    /// Contains the text
-    /// </summary>
-    ContainsText,
-
-    /// <summary>
-    /// Ends with the value
-    /// </summary>
-    EndsWith,
-
-    /// <summary>
-    /// Greater than the value
-    /// </summary>
-    GreaterThan,
-
-    /// <summary>
-    /// Greater than or equal to the value
-    /// </summary>
-    GreaterThanOrEquals,
+    NotAnyOf,
 
     /// <summary>
     /// Empty value
@@ -53,6 +28,26 @@ public enum ItemsQueryRuleOperator
     IsNotEmpty,
 
     /// <summary>
+    /// Within the last
+    /// </summary>
+    WithinTheLast,
+
+    /// <summary>
+    /// Within the next
+    /// </summary>
+    WithinTheNext,
+
+    /// <summary>
+    /// Greater than the value
+    /// </summary>
+    GreaterThan,
+
+    /// <summary>
+    /// Greater than or equal to the value
+    /// </summary>
+    GreaterThanOrEquals,
+
+    /// <summary>
     /// Lower than the value
     /// </summary>
     LowerThan,
@@ -63,14 +58,9 @@ public enum ItemsQueryRuleOperator
     LowerThanOrEqual,
 
     /// <summary>
-    /// None of the values
+    /// Between the two values
     /// </summary>
-    NotAnyOf,
-
-    /// <summary>
-    /// Does not contain the text
-    /// </summary>
-    NotContainsText,
+    Between,
 
     /// <summary>
     /// Starts with the value
@@ -78,13 +68,23 @@ public enum ItemsQueryRuleOperator
     StartsWith,
 
     /// <summary>
-    /// Within the last
+    /// Ends with the value
     /// </summary>
-    WithinTheLast,
+    EndsWith,
 
     /// <summary>
-    /// Within the next
+    /// Contains the text
     /// </summary>
-    WithinTheNext
+    ContainsText,
+
+    /// <summary>
+    /// Contains all the terms
+    /// </summary>
+    ContainsTerms,
+
+    /// <summary>
+    /// Does not contain the text
+    /// </summary>
+    NotContainsText
 
 }
