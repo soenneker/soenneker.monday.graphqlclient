@@ -40,6 +40,12 @@ public sealed partial class VibeAutomationRun
     public bool AutomationDeleted { get; init; }
 
     /// <summary>
+    /// Whether a user started the run, e.g. from chat, rather than its schedule
+    /// </summary>
+    [JsonPropertyName("is_manual")]
+    public bool IsManual { get; init; }
+
+    /// <summary>
     /// When the run was created, an ISO 8601 timestamp
     /// </summary>
     [JsonPropertyName("created_at")]

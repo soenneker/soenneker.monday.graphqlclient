@@ -23,9 +23,19 @@ public enum LLMModelInput
     CLAUDE5SONNET,
 
     /// <summary>
+    /// Anthropic Claude Sonnet 5.5
+    /// </summary>
+    CLAUDE55SONNET,
+
+    /// <summary>
     /// Anthropic Claude Haiku 4.5
     /// </summary>
     CLAUDEHAIKU45,
+
+    /// <summary>
+    /// Anthropic Claude Haiku 5.5
+    /// </summary>
+    CLAUDEHAIKU55,
 
     /// <summary>
     /// Anthropic Claude Opus 4.6

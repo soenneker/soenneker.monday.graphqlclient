@@ -47,6 +47,12 @@ public sealed partial class ExternalMember
     public DateOnly LastInvitationSentAt { get; init; }
 
     /// <summary>
+    /// When the person last signed in to the app. Null if they never have. Stamped at login only.
+    /// </summary>
+    [JsonPropertyName("last_accessed_at")]
+    public DateOnly? LastAccessedAt { get; init; }
+
+    /// <summary>
     /// User ID of the person who invited this external user
     /// </summary>
     [JsonPropertyName("invited_by_user_id")]

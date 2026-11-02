@@ -10,6 +10,12 @@ namespace Soenneker.Monday.GraphQlClient;
 public sealed partial class ScheduleConflict
 {
     /// <summary>
+    /// The board the task lives on: the project board, or its subitems board for a standard-board subitem.
+    /// </summary>
+    [JsonPropertyName("board_id")]
+    public string BoardId { get; init; } = null!;
+
+    /// <summary>
     /// The task with the conflict.
     /// </summary>
     [JsonPropertyName("pulse_id")]
