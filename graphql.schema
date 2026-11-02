@@ -5190,38 +5190,6 @@ type TimelineResponse {
 }
 
 """
-Result of promoting an existing asset to a workspace left-pane object
-"""
-type AddAssetToLeftPaneResult {
-  """
-  ID of the workspace object
-  """
-  object_id: ID
-  """
-  ID of the stream artifact row
-  """
-  artifact_id: ID
-}
-
-"""
-Generation status of an artifact across its create/update/finalize lifecycle
-"""
-enum ArtifactGenerationStatus {
-  """
-  No generation activity in flight
-  """
-  IDLE
-  """
-  The artifact is being generated (create/update in flight)
-  """
-  IN_PROGRESS
-  """
-  The agent run producing this artifact has completed
-  """
-  FINALIZED
-}
-
-"""
 The privacy kind for a board
 """
 enum BoardKindInput {
@@ -5756,6 +5724,38 @@ type UserActivityLogsPage {
   Cursor to pass to fetch the next page, null if this is the last page
   """
   cursor: String
+}
+
+"""
+Result of promoting an existing asset to a workspace left-pane object
+"""
+type AddAssetToLeftPaneResult {
+  """
+  ID of the workspace object
+  """
+  object_id: ID
+  """
+  ID of the stream artifact row
+  """
+  artifact_id: ID
+}
+
+"""
+Generation status of an artifact across its create/update/finalize lifecycle
+"""
+enum ArtifactGenerationStatus {
+  """
+  No generation activity in flight
+  """
+  IDLE
+  """
+  The artifact is being generated (create/update in flight)
+  """
+  IN_PROGRESS
+  """
+  The agent run producing this artifact has completed
+  """
+  FINALIZED
 }
 
 """
