@@ -123,6 +123,36 @@ public sealed partial class Mutation
     public ValidationRule? DeleteValidationRule { get; init; }
 
     /// <summary>
+    /// Asynchronously delete items on a board
+    /// </summary>
+    [JsonPropertyName("bulk_delete_items")]
+    public BulkDeleteInit? BulkDeleteItems { get; init; }
+
+    /// <summary>
+    /// Asynchronously archive items on a board
+    /// </summary>
+    [JsonPropertyName("bulk_archive_items")]
+    public BulkDeleteInit? BulkArchiveItems { get; init; }
+
+    /// <summary>
+    /// Initialize a backfill job for a board and group. Designed for data migrations with no side effects and a 20k row limit. Returns job ID and upload URL to begin the process.
+    /// </summary>
+    [JsonPropertyName("backfill_items")]
+    public UploadJobInit? BackfillItems { get; init; }
+
+    /// <summary>
+    /// Initialize an ingest job for a board and group. Designed for ongoing integrations with full side effects and a 10k row limit. Returns job ID and upload URL to begin the process.
+    /// </summary>
+    [JsonPropertyName("ingest_items")]
+    public UploadJobInit? IngestItems { get; init; }
+
+    /// <summary>
+    /// Undo a previously completed action, or cancel one still in flight
+    /// </summary>
+    [JsonPropertyName("undo_action")]
+    public UndoResult? UndoAction { get; init; }
+
+    /// <summary>
     /// Create a marketplace app discount
     /// </summary>
     [JsonPropertyName("create_marketplace_app_discount")]
@@ -603,36 +633,6 @@ public sealed partial class Mutation
     public CreateServiceUserResult? CreateServiceUser { get; init; }
 
     /// <summary>
-    /// Asynchronously delete items on a board
-    /// </summary>
-    [JsonPropertyName("bulk_delete_items")]
-    public BulkDeleteInit? BulkDeleteItems { get; init; }
-
-    /// <summary>
-    /// Asynchronously archive items on a board
-    /// </summary>
-    [JsonPropertyName("bulk_archive_items")]
-    public BulkDeleteInit? BulkArchiveItems { get; init; }
-
-    /// <summary>
-    /// Initialize a backfill job for a board and group. Designed for data migrations with no side effects and a 20k row limit. Returns job ID and upload URL to begin the process.
-    /// </summary>
-    [JsonPropertyName("backfill_items")]
-    public UploadJobInit? BackfillItems { get; init; }
-
-    /// <summary>
-    /// Initialize an ingest job for a board and group. Designed for ongoing integrations with full side effects and a 10k row limit. Returns job ID and upload URL to begin the process.
-    /// </summary>
-    [JsonPropertyName("ingest_items")]
-    public UploadJobInit? IngestItems { get; init; }
-
-    /// <summary>
-    /// Undo a previously completed action, or cancel one still in flight
-    /// </summary>
-    [JsonPropertyName("undo_action")]
-    public UndoResult? UndoAction { get; init; }
-
-    /// <summary>
     /// Updates a notification setting's enabled status.
     /// </summary>
     [JsonPropertyName("update_notification_setting")]
@@ -661,6 +661,12 @@ public sealed partial class Mutation
     /// </summary>
     [JsonPropertyName("update_favorite_position")]
     public UpdateFavoriteResultType? UpdateFavoritePosition { get; init; }
+
+    /// <summary>
+    /// Execute an integration block with the provided field values
+    /// </summary>
+    [JsonPropertyName("execute_integration_block")]
+    public IntegrationExecutionResult? ExecuteIntegrationBlock { get; init; }
 
     /// <summary>
     /// Export a board. Returns ExportFile (sync) or ExportAsyncJob (async) based on board size and server conditions. The server chooses which branch to return; the choice is not part of the contract and may be retuned without notice. Callers MUST handle both branches. Sync: use download_url directly. Async: poll export_job_status until COMPLETED, FAILED, or CANCELLED. The exported file is always CSV. Available to enterprise accounts only; other accounts receive FORBIDDEN_EXCEPTION.
@@ -1172,12 +1178,6 @@ public sealed partial class Mutation
     /// </summary>
     [JsonPropertyName("use_template")]
     public Template? UseTemplate { get; init; }
-
-    /// <summary>
-    /// Execute an integration block with the provided field values
-    /// </summary>
-    [JsonPropertyName("execute_integration_block")]
-    public IntegrationExecutionResult? ExecuteIntegrationBlock { get; init; }
 
     /// <summary>
     /// Assigns members to a department.

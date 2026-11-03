@@ -15,11 +15,6 @@ public enum WorkflowBuilderPrivacyKind
     /// <summary>
     /// Workflow is private and restricted
     /// </summary>
-    PRIVATE,
-
-    /// <summary>
-    /// Workflow is shareable with guests outside the account
-    /// </summary>
-    SHAREABLE
+    PRIVATE
 
 }

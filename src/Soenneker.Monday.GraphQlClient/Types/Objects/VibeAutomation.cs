@@ -36,6 +36,12 @@ public sealed partial class VibeAutomation
     public VibeAutomationStatus? Status { get; init; }
 
     /// <summary>
+    /// Why a needs-attention Automation needs it; null otherwise
+    /// </summary>
+    [JsonPropertyName("attention_reason")]
+    public VibeAutomationAttentionReason? AttentionReason { get; init; }
+
+    /// <summary>
     /// When the Automation runs, in words, e.g. "Every day at 09:00 (UTC)"
     /// </summary>
     [JsonPropertyName("schedule_summary")]

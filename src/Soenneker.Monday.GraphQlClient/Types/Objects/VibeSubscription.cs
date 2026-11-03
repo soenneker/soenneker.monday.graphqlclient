@@ -22,6 +22,12 @@ public sealed partial class VibeSubscription
     public int? MaxPublishedApps { get; init; }
 
     /// <summary>
+    /// Maximum number of boards that can be connected to a single app
+    /// </summary>
+    [JsonPropertyName("max_connected_boards")]
+    public int? MaxConnectedBoards { get; init; }
+
+    /// <summary>
     /// Whether the account is on the top-tier Vibe apps package. Accounts on a Vibe trial are never top-tier
     /// </summary>
     [JsonPropertyName("has_top_tier_vibe_apps_package")]

@@ -29,6 +29,12 @@ public sealed partial class VibePermissions
     public bool? CanCreateOrEditVibeApp { get; init; }
 
     /// <summary>
+    /// Permission to add and connect integrations in vibe apps. Account-level; on an existing app, read vibe.app_integration_policy, which also accounts for the app owner
+    /// </summary>
+    [JsonPropertyName("can_add_vibe_integrations")]
+    public bool? CanAddVibeIntegrations { get; init; }
+
+    /// <summary>
     /// Permission to publish vibe apps to the public web
     /// </summary>
     [JsonPropertyName("can_publish_to_public_web")]
