@@ -663,12 +663,6 @@ public sealed partial class Mutation
     public UpdateFavoriteResultType? UpdateFavoritePosition { get; init; }
 
     /// <summary>
-    /// Execute an integration block with the provided field values
-    /// </summary>
-    [JsonPropertyName("execute_integration_block")]
-    public IntegrationExecutionResult? ExecuteIntegrationBlock { get; init; }
-
-    /// <summary>
     /// Export a board. Returns ExportFile (sync) or ExportAsyncJob (async) based on board size and server conditions. The server chooses which branch to return; the choice is not part of the contract and may be retuned without notice. Callers MUST handle both branches. Sync: use download_url directly. Async: poll export_job_status until COMPLETED, FAILED, or CANCELLED. The exported file is always CSV. Available to enterprise accounts only; other accounts receive FORBIDDEN_EXCEPTION.
     /// </summary>
     [JsonPropertyName("create_board_export")]
@@ -1220,6 +1214,12 @@ public sealed partial class Mutation
     /// </summary>
     [JsonPropertyName("delete_department")]
     public Department? DeleteDepartment { get; init; }
+
+    /// <summary>
+    /// Execute an integration block with the provided field values
+    /// </summary>
+    [JsonPropertyName("execute_integration_block")]
+    public IntegrationExecutionResult? ExecuteIntegrationBlock { get; init; }
 
     /// <summary>
     /// Update attributes (Job Role, Skills, or Location) for multiple resources in the directory

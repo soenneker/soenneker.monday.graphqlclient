@@ -95,4 +95,10 @@ public sealed partial class VibeAutomation
     [JsonPropertyName("collections")]
     public List<string> Collections { get; init; } = [];
 
+    /// <summary>
+    /// Why it needs attention, on the automations list only: null for any other status, or when it could not be read
+    /// </summary>
+    [JsonPropertyName("attention")]
+    public VibeAutomationAttention? Attention { get; init; }
+
 }

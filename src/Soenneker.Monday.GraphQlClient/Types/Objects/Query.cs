@@ -361,6 +361,12 @@ public sealed partial class Query
     public List<Sprint>? Sprints { get; init; }
 
     /// <summary>
+    /// Search API. Each field searches a single entity type with tailored filters.
+    /// </summary>
+    [JsonPropertyName("search")]
+    public SearchNamespace Search { get; init; } = null!;
+
+    /// <summary>
     /// Namespace for all notetaker-related queries.
     /// </summary>
     [JsonPropertyName("notetaker")]
@@ -479,12 +485,6 @@ public sealed partial class Query
     /// </summary>
     [JsonPropertyName("knowledge_base_search")]
     public KnowledgeBaseAnswer? KnowledgeBaseSearch { get; init; }
-
-    /// <summary>
-    /// Search API. Each field searches a single entity type with tailored filters.
-    /// </summary>
-    [JsonPropertyName("search")]
-    public SearchNamespace Search { get; init; } = null!;
 
     /// <summary>
     /// Get the connected account's information.

@@ -3920,6 +3920,8 @@ namespace Soenneker.Monday.GraphQlClient;
 [JsonSerializable(typeof(GraphQlResponse<VibeAuthenticatedIntegration>))]
 [JsonSerializable(typeof(VibeAutomation))]
 [JsonSerializable(typeof(GraphQlResponse<VibeAutomation>))]
+[JsonSerializable(typeof(VibeAutomationAttention))]
+[JsonSerializable(typeof(GraphQlResponse<VibeAutomationAttention>))]
 [JsonSerializable(typeof(VibeAutomationAttentionReason))]
 [JsonSerializable(typeof(GraphQlResponse<VibeAutomationAttentionReason>))]
 [JsonSerializable(typeof(VibeAutomationBoard))]

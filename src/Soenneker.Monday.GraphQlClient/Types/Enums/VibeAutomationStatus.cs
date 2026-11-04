@@ -23,7 +23,7 @@ public enum VibeAutomationStatus
     PAUSED,
 
     /// <summary>
-    /// Stopped by the service until fixed (e.g. a disconnected integration); can only be paused
+    /// Held by the service until fixed (e.g. a disconnected integration, or repeated failed runs): still on its schedule, but not running. `attention` says why; turning it on re-checks it, or puts a saved fix live
     /// </summary>
     NEEDSATTENTION
 
