@@ -15,6 +15,11 @@ public enum AgentMembershipRole
     /// <summary>
     /// Member-level access to the agent.
     /// </summary>
-    MEMBER
+    MEMBER,
+
+    /// <summary>
+    /// Can use the agent and edit its configuration, but cannot share, delete, or change the agent's state.
+    /// </summary>
+    EDITOR
 
 }

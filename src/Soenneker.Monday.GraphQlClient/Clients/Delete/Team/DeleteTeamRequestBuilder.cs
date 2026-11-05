@@ -22,7 +22,7 @@ public sealed partial class DeleteTeamRequestBuilder
     /// </summary>
     public ValueTask<GraphQlResponse<DeleteTeamData>> Execute(DeleteTeamVariables request, CancellationToken cancellationToken = default)
     {
-        const string gqlQuery = @"mutation DeleteTeam($team_id: ID!) { delete_team(team_id: $team_id) { id is_guest name created_at picture_url } }";
+        const string gqlQuery = @"mutation DeleteTeam($team_id: ID!) { delete_team(team_id: $team_id) { id name picture_url is_guest created_at } }";
         return _graphQlClient.Execute<DeleteTeamData>(gqlQuery, request, cancellationToken);
     }
 

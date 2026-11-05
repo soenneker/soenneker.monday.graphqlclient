@@ -76,7 +76,7 @@ public sealed partial class VibeAutomationDetail
     public bool SendsSomething { get; init; }
 
     /// <summary>
-    /// Whether the latest version differs from the one that is on
+    /// Whether the latest version differs from the one that is on; while true, run_automation is refused, since the preview shows the latest
     /// </summary>
     [JsonPropertyName("has_pending_edit")]
     public bool HasPendingEdit { get; init; }

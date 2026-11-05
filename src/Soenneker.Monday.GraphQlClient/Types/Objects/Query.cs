@@ -143,24 +143,6 @@ public sealed partial class Query
     public List<ObjectRelation>? ObjectRelations { get; init; }
 
     /// <summary>
-    /// Get managed column data.
-    /// </summary>
-    [JsonPropertyName("managed_column")]
-    public List<ManagedColumn>? ManagedColumn { get; init; }
-
-    /// <summary>
-    /// Retrieves the JSON schema definition for a specific column type. Use this query before calling update_column mutation to understand the structure and validation rules for the defaults parameter. The schema defines what properties are available when updating columns of a specific type.
-    /// </summary>
-    [JsonPropertyName("get_column_type_schema")]
-    public string? GetColumnTypeSchema { get; init; }
-
-    /// <summary>
-    /// Retrieve active account object schemas by their IDs or names. Only returns account-level object schemas (not global). Object schemas define the structure and columns of boards. If no parameters are provided, all account object schemas are returned. Pass exclude_created_by_monday: true to omit the schemas seeded by monday.com and return only schemas created by users in this account. Results are paginated using page and limit parameters.
-    /// </summary>
-    [JsonPropertyName("get_object_schemas")]
-    public List<ObjectSchema>? GetObjectSchemas { get; init; }
-
-    /// <summary>
     /// Returns connections for the authenticated user. Supports filtering, pagination, ordering, and partial-scope options.
     /// </summary>
     [JsonPropertyName("connections")]
@@ -225,24 +207,6 @@ public sealed partial class Query
     /// </summary>
     [JsonPropertyName("export_markdown_from_doc")]
     public ExportMarkdownResult? ExportMarkdownFromDoc { get; init; }
-
-    /// <summary>
-    /// Get all roles for the account
-    /// </summary>
-    [JsonPropertyName("account_roles")]
-    public List<AccountRole>? AccountRoles { get; init; }
-
-    /// <summary>
-    /// Retrieves API tokens for the given service users.
-    /// </summary>
-    [JsonPropertyName("service_user_tokens")]
-    public List<ServiceUserToken>? ServiceUserTokens { get; init; }
-
-    /// <summary>
-    /// Retrieves all service users in the account with their token last activity.
-    /// </summary>
-    [JsonPropertyName("service_users")]
-    public List<ServiceUser>? ServiceUsers { get; init; }
 
     /// <summary>
     /// Get the status of an async job by its external ID
@@ -619,10 +583,46 @@ public sealed partial class Query
     public List<Workspace>? Workspaces { get; init; }
 
     /// <summary>
+    /// Get managed column data.
+    /// </summary>
+    [JsonPropertyName("managed_column")]
+    public List<ManagedColumn>? ManagedColumn { get; init; }
+
+    /// <summary>
+    /// Retrieves the JSON schema definition for a specific column type. Use this query before calling update_column mutation to understand the structure and validation rules for the defaults parameter. The schema defines what properties are available when updating columns of a specific type.
+    /// </summary>
+    [JsonPropertyName("get_column_type_schema")]
+    public string? GetColumnTypeSchema { get; init; }
+
+    /// <summary>
+    /// Retrieve active account object schemas by their IDs or names. Only returns account-level object schemas (not global). Object schemas define the structure and columns of boards. If no parameters are provided, all account object schemas are returned. Pass exclude_created_by_monday: true to omit the schemas seeded by monday.com and return only schemas created by users in this account. Results are paginated using page and limit parameters.
+    /// </summary>
+    [JsonPropertyName("get_object_schemas")]
+    public List<ObjectSchema>? GetObjectSchemas { get; init; }
+
+    /// <summary>
     /// Get account departments
     /// </summary>
     [JsonPropertyName("departments")]
     public List<Department>? Departments { get; init; }
+
+    /// <summary>
+    /// Get all roles for the account
+    /// </summary>
+    [JsonPropertyName("account_roles")]
+    public List<AccountRole>? AccountRoles { get; init; }
+
+    /// <summary>
+    /// Retrieves API tokens for the given service users.
+    /// </summary>
+    [JsonPropertyName("service_user_tokens")]
+    public List<ServiceUserToken>? ServiceUserTokens { get; init; }
+
+    /// <summary>
+    /// Retrieves all service users in the account with their token last activity.
+    /// </summary>
+    [JsonPropertyName("service_users")]
+    public List<ServiceUser>? ServiceUsers { get; init; }
 
     /// <summary>
     /// Fetch resources information from the resource directory

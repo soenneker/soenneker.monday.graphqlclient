@@ -23,7 +23,7 @@ public sealed partial class AddTeamsToBoardRequestBuilder
     /// </summary>
     public ValueTask<GraphQlResponse<AddTeamsToBoardData>> Execute(AddTeamsToBoardVariables request, CancellationToken cancellationToken = default)
     {
-        const string gqlQuery = @"mutation AddTeamsToBoard($board_id: ID!, $kind: BoardSubscriberKind, $team_ids: [ID!]!) { add_teams_to_board(board_id: $board_id, kind: $kind, team_ids: $team_ids) { id is_guest name created_at picture_url } }";
+        const string gqlQuery = @"mutation AddTeamsToBoard($board_id: ID!, $kind: BoardSubscriberKind, $team_ids: [ID!]!) { add_teams_to_board(board_id: $board_id, kind: $kind, team_ids: $team_ids) { id name picture_url is_guest created_at } }";
         return _graphQlClient.Execute<AddTeamsToBoardData>(gqlQuery, request, cancellationToken);
     }
 
