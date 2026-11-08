@@ -459,12 +459,6 @@ public sealed partial class Mutation
     public CreatePortfolioResult? CreatePortfolio { get; init; }
 
     /// <summary>
-    /// Execute an integration block with the provided field values
-    /// </summary>
-    [JsonPropertyName("execute_integration_block")]
-    public IntegrationExecutionResult? ExecuteIntegrationBlock { get; init; }
-
-    /// <summary>
     /// Create a new widget.
     /// </summary>
     [JsonPropertyName("create_widget")]
@@ -571,6 +565,12 @@ public sealed partial class Mutation
     /// </summary>
     [JsonPropertyName("set_form_password")]
     public ResponseForm? SetFormPassword { get; init; }
+
+    /// <summary>
+    /// Execute an integration block with the provided field values
+    /// </summary>
+    [JsonPropertyName("execute_integration_block")]
+    public IntegrationExecutionResult? ExecuteIntegrationBlock { get; init; }
 
     /// <summary>
     /// Add a file to a column value.

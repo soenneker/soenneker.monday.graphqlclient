@@ -125,6 +125,12 @@ public sealed partial class Query
     public string? GetViewSchemaByType { get; init; }
 
     /// <summary>
+    /// Search API. Each field searches a single entity type with tailored filters.
+    /// </summary>
+    [JsonPropertyName("search")]
+    public SearchNamespace Search { get; init; } = null!;
+
+    /// <summary>
     /// Retrieves a list of available object types that can be created or queried. Each object type is uniquely identified by an 'object_type_unique_key'. This key is required for mutations like 'create_object' and for filtering in the 'objects' query. Use this query to discover what types of objects are available in the system (e.g., 'workflows', 'projects') and get their corresponding unique keys. The structure of unique key is 'app_slug::app_feature_slug'.
     /// </summary>
     [JsonPropertyName("object_types_unique_keys")]
@@ -323,12 +329,6 @@ public sealed partial class Query
     /// </summary>
     [JsonPropertyName("sprints")]
     public List<Sprint>? Sprints { get; init; }
-
-    /// <summary>
-    /// Search API. Each field searches a single entity type with tailored filters.
-    /// </summary>
-    [JsonPropertyName("search")]
-    public SearchNamespace Search { get; init; } = null!;
 
     /// <summary>
     /// Namespace for all notetaker-related queries.

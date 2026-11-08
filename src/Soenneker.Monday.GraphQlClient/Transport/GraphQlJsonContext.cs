@@ -3150,6 +3150,8 @@ namespace Soenneker.Monday.GraphQlClient;
 [JsonSerializable(typeof(GraphQlResponse<SearchDateRangeInput>))]
 [JsonSerializable(typeof(SearchDateRangeLegacyInput))]
 [JsonSerializable(typeof(GraphQlResponse<SearchDateRangeLegacyInput>))]
+[JsonSerializable(typeof(SearchDocChunk))]
+[JsonSerializable(typeof(GraphQlResponse<SearchDocChunk>))]
 [JsonSerializable(typeof(SearchDocHighlights))]
 [JsonSerializable(typeof(GraphQlResponse<SearchDocHighlights>))]
 [JsonSerializable(typeof(SearchDocResult))]

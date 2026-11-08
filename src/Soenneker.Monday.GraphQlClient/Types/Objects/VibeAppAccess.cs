@@ -34,7 +34,7 @@ public sealed partial class VibeAppAccess
     public string? PublicLink { get; init; }
 
     /// <summary>
-    /// The lifecycle state of the app. Only EXTERNAL apps are reachable from the public web.
+    /// The lifecycle state of the app. EXTERNAL apps are reachable from the public web; INVITE_ONLY apps only by the external users invited to them.
     /// </summary>
     [JsonPropertyName("state")]
     public VibeAppState? State { get; init; }
