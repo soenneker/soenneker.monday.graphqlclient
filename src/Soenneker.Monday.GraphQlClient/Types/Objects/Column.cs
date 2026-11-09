@@ -7,12 +7,6 @@ namespace Soenneker.Monday.GraphQlClient;
 public sealed partial class Column
 {
     /// <summary>
-    /// The unique identifier of the column.
-    /// </summary>
-    [JsonPropertyName("id")]
-    public string Id { get; init; } = null!;
-
-    /// <summary>
     /// Is the column archived or not.
     /// </summary>
     [JsonPropertyName("archived")]
@@ -23,6 +17,12 @@ public sealed partial class Column
     /// </summary>
     [JsonPropertyName("description")]
     public string? Description { get; init; }
+
+    /// <summary>
+    /// The unique identifier of the column.
+    /// </summary>
+    [JsonPropertyName("id")]
+    public string Id { get; init; } = null!;
 
     /// <summary>
     /// The column's settings in a string form.

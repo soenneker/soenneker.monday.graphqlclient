@@ -22,7 +22,7 @@ public sealed partial class UpdateOverviewHierarchyRequestBuilder
     /// </summary>
     public ValueTask<GraphQlResponse<UpdateOverviewHierarchyData>> Execute(UpdateOverviewHierarchyVariables request, CancellationToken cancellationToken = default)
     {
-        const string gqlQuery = @"mutation UpdateOverviewHierarchy($attributes: UpdateOverviewHierarchyAttributesInput!, $overview_id: ID!) { update_overview_hierarchy(attributes: $attributes, overview_id: $overview_id) { message overview { id created_at creator { id last_activity title phone location birthday mobile_phone country_code current_language time_zone_identifier utc_hours_diff url account_id status invitation_method serial_number is_deleted became_active_at bb_visitor_id is_email_confirmed email name kind created_at } folder_id kind name state updated_at workspace_id } success } }";
+        const string gqlQuery = @"mutation UpdateOverviewHierarchy($attributes: UpdateOverviewHierarchyAttributesInput!, $overview_id: ID!) { update_overview_hierarchy(attributes: $attributes, overview_id: $overview_id) { message overview { created_at creator { id last_activity title phone location birthday mobile_phone country_code current_language time_zone_identifier utc_hours_diff url account_id status invitation_method serial_number is_deleted became_active_at bb_visitor_id is_email_confirmed email name kind created_at } folder_id id kind name state updated_at workspace_id } success } }";
         return _graphQlClient.Execute<UpdateOverviewHierarchyData>(gqlQuery, request, cancellationToken);
     }
 

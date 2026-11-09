@@ -8,13 +8,13 @@ namespace Soenneker.Monday.GraphQlClient;
 public enum ItemsQueryOperator
 {
     /// <summary>
-    /// Logical OR
-    /// </summary>
-    Or,
-
-    /// <summary>
     /// Logical AND
     /// </summary>
-    And
+    And,
+
+    /// <summary>
+    /// Logical OR
+    /// </summary>
+    Or
 
 }

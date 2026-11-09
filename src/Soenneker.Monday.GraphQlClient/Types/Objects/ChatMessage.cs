@@ -102,6 +102,12 @@ public sealed partial class ChatMessage
     public string? TurnId { get; init; }
 
     /// <summary>
+    /// Id the client sent with this user message (send_chat_message client_message_id), echoed back so it can match its local copy. Null for agent and system messages.
+    /// </summary>
+    [JsonPropertyName("client_message_id")]
+    public string? ClientMessageId { get; init; }
+
+    /// <summary>
     /// User feedback for this chat message
     /// </summary>
     [JsonPropertyName("feedbacks")]

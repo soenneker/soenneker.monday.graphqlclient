@@ -10,12 +10,6 @@ namespace Soenneker.Monday.GraphQlClient;
 public sealed partial class Overview
 {
     /// <summary>
-    /// The unique identifier of the overview.
-    /// </summary>
-    [JsonPropertyName("id")]
-    public string Id { get; init; } = null!;
-
-    /// <summary>
     /// The time the overview was created at.
     /// </summary>
     [JsonPropertyName("created_at")]
@@ -32,6 +26,12 @@ public sealed partial class Overview
     /// </summary>
     [JsonPropertyName("folder_id")]
     public string? FolderId { get; init; }
+
+    /// <summary>
+    /// The unique identifier of the overview.
+    /// </summary>
+    [JsonPropertyName("id")]
+    public string Id { get; init; } = null!;
 
     /// <summary>
     /// The overview's kind (public/private).

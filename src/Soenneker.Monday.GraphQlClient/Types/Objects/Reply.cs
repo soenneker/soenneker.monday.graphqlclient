@@ -12,10 +12,10 @@ namespace Soenneker.Monday.GraphQlClient;
 public sealed partial class Reply
 {
     /// <summary>
-    /// The reply's unique identifier.
+    /// The reply's assets/files.
     /// </summary>
-    [JsonPropertyName("id")]
-    public string Id { get; init; } = null!;
+    [JsonPropertyName("assets")]
+    public List<Asset>? Assets { get; init; }
 
     /// <summary>
     /// The reply's html formatted body.
@@ -23,8 +23,17 @@ public sealed partial class Reply
     [JsonPropertyName("body")]
     public string Body { get; init; } = null!;
 
-    [JsonPropertyName("kind")]
-    public string Kind { get; init; } = null!;
+    /// <summary>
+    /// The reply's creation date.
+    /// </summary>
+    [JsonPropertyName("created_at")]
+    public DateOnly? CreatedAt { get; init; }
+
+    /// <summary>
+    /// The reply's creator.
+    /// </summary>
+    [JsonPropertyName("creator")]
+    public User? Creator { get; init; }
 
     /// <summary>
     /// The unique identifier of the reply creator.
@@ -32,14 +41,29 @@ public sealed partial class Reply
     [JsonPropertyName("creator_id")]
     public string? CreatorId { get; init; }
 
-    [JsonPropertyName("edited_at")]
-    public DateOnly EditedAt { get; init; }
+    /// <summary>
+    /// The reply's unique identifier.
+    /// </summary>
+    [JsonPropertyName("id")]
+    public string Id { get; init; } = null!;
 
     /// <summary>
-    /// The reply's creator.
+    /// The reply's text body.
     /// </summary>
-    [JsonPropertyName("creator")]
-    public User? Creator { get; init; }
+    [JsonPropertyName("text_body")]
+    public string? TextBody { get; init; }
+
+    /// <summary>
+    /// The reply's last edit date.
+    /// </summary>
+    [JsonPropertyName("updated_at")]
+    public DateOnly? UpdatedAt { get; init; }
+
+    [JsonPropertyName("kind")]
+    public string Kind { get; init; } = null!;
+
+    [JsonPropertyName("edited_at")]
+    public DateOnly EditedAt { get; init; }
 
     [JsonPropertyName("likes")]
     public List<Like> Likes { get; init; } = [];
@@ -49,29 +73,5 @@ public sealed partial class Reply
 
     [JsonPropertyName("viewers")]
     public List<Watcher> Viewers { get; init; } = [];
-
-    /// <summary>
-    /// The reply's creation date.
-    /// </summary>
-    [JsonPropertyName("created_at")]
-    public DateOnly? CreatedAt { get; init; }
-
-    /// <summary>
-    /// The reply's last edit date.
-    /// </summary>
-    [JsonPropertyName("updated_at")]
-    public DateOnly? UpdatedAt { get; init; }
-
-    /// <summary>
-    /// The reply's assets/files.
-    /// </summary>
-    [JsonPropertyName("assets")]
-    public List<Asset>? Assets { get; init; }
-
-    /// <summary>
-    /// The reply's text body.
-    /// </summary>
-    [JsonPropertyName("text_body")]
-    public string? TextBody { get; init; }
 
 }

@@ -11,12 +11,6 @@ namespace Soenneker.Monday.GraphQlClient;
 public sealed partial class Asset
 {
     /// <summary>
-    /// The file's unique identifier.
-    /// </summary>
-    [JsonPropertyName("id")]
-    public string Id { get; init; } = null!;
-
-    /// <summary>
     /// The file's creation date.
     /// </summary>
     [JsonPropertyName("created_at")]
@@ -33,6 +27,12 @@ public sealed partial class Asset
     /// </summary>
     [JsonPropertyName("file_size")]
     public int FileSize { get; init; }
+
+    /// <summary>
+    /// The file's unique identifier.
+    /// </summary>
+    [JsonPropertyName("id")]
+    public string Id { get; init; } = null!;
 
     /// <summary>
     /// The file's name.

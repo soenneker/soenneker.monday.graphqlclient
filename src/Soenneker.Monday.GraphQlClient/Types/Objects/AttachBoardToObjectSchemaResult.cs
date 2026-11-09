@@ -28,7 +28,7 @@ public sealed partial class AttachBoardToObjectSchemaResult
     public string? Error { get; init; }
 
     /// <summary>
-    /// Stable code for the refusal, for example templateTopologyMismatch or templateBoardAlreadyAttached. This is what clients should classify on to pick a message.
+    /// Stable code for the refusal, for example templateTopologyMismatch, templateBoardAlreadyAttached, templateBoardIsTemplate (the board is itself a template) or templateBoardNotOwned. This is what clients should classify on to pick a message.
     /// </summary>
     [JsonPropertyName("error_code")]
     public string? ErrorCode { get; init; }

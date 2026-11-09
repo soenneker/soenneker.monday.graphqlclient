@@ -71,507 +71,6 @@ public sealed partial class Mutation
     [JsonPropertyName("promote_app")]
     public DeveloperAppVersion? PromoteApp { get; init; }
 
-    [JsonPropertyName("like_update")]
-    public Update? LikeUpdate { get; init; }
-
-    [JsonPropertyName("unlike_update")]
-    public Update UnlikeUpdate { get; init; } = null!;
-
-    [JsonPropertyName("delete_update")]
-    public Update? DeleteUpdate { get; init; }
-
-    [JsonPropertyName("edit_update")]
-    public Update EditUpdate { get; init; } = null!;
-
-    [JsonPropertyName("pin_to_top")]
-    public Update PinToTop { get; init; } = null!;
-
-    [JsonPropertyName("unpin_from_top")]
-    public Update UnpinFromTop { get; init; } = null!;
-
-    [JsonPropertyName("create_update")]
-    public Update? CreateUpdate { get; init; }
-
-    /// <summary>
-    /// Add a required column to a board
-    /// </summary>
-    [JsonPropertyName("add_required_column")]
-    public RequiredColumns? AddRequiredColumn { get; init; }
-
-    /// <summary>
-    /// Remove a required column from a board
-    /// </summary>
-    [JsonPropertyName("remove_required_column")]
-    public RequiredColumns? RemoveRequiredColumn { get; init; }
-
-    /// <summary>
-    /// Create a validation rule
-    /// </summary>
-    [JsonPropertyName("create_validation_rule")]
-    public ValidationRule? CreateValidationRule { get; init; }
-
-    /// <summary>
-    /// Update a validation rule
-    /// </summary>
-    [JsonPropertyName("update_validation_rule")]
-    public ValidationRule? UpdateValidationRule { get; init; }
-
-    /// <summary>
-    /// Delete a validation rule
-    /// </summary>
-    [JsonPropertyName("delete_validation_rule")]
-    public ValidationRule? DeleteValidationRule { get; init; }
-
-    /// <summary>
-    /// Asynchronously delete items on a board
-    /// </summary>
-    [JsonPropertyName("bulk_delete_items")]
-    public BulkDeleteInit? BulkDeleteItems { get; init; }
-
-    /// <summary>
-    /// Asynchronously archive items on a board
-    /// </summary>
-    [JsonPropertyName("bulk_archive_items")]
-    public BulkDeleteInit? BulkArchiveItems { get; init; }
-
-    /// <summary>
-    /// Initialize a backfill job for a board and group. Designed for data migrations with no side effects and a 20k row limit. Returns job ID and upload URL to begin the process.
-    /// </summary>
-    [JsonPropertyName("backfill_items")]
-    public UploadJobInit? BackfillItems { get; init; }
-
-    /// <summary>
-    /// Initialize an ingest job for a board and group. Designed for ongoing integrations with full side effects and a 10k row limit. Returns job ID and upload URL to begin the process.
-    /// </summary>
-    [JsonPropertyName("ingest_items")]
-    public UploadJobInit? IngestItems { get; init; }
-
-    /// <summary>
-    /// Undo a previously completed action, or cancel one still in flight
-    /// </summary>
-    [JsonPropertyName("undo_action")]
-    public UndoResult? UndoAction { get; init; }
-
-    /// <summary>
-    /// Create a marketplace app discount
-    /// </summary>
-    [JsonPropertyName("create_marketplace_app_discount")]
-    public CreateMarketplaceAppDiscountResult CreateMarketplaceAppDiscount { get; init; } = null!;
-
-    [JsonPropertyName("delete_marketplace_app_discount")]
-    public DeleteMarketplaceAppDiscountResult DeleteMarketplaceAppDiscount { get; init; } = null!;
-
-    [JsonPropertyName("grant_marketplace_app_discount")]
-    public GrantMarketplaceAppDiscountResult GrantMarketplaceAppDiscount { get; init; } = null!;
-
-    [JsonPropertyName("create_timeline_item")]
-    public TimelineItem? CreateTimelineItem { get; init; }
-
-    [JsonPropertyName("delete_timeline_item")]
-    public TimelineItem? DeleteTimelineItem { get; init; }
-
-    [JsonPropertyName("create_custom_activity")]
-    public CustomActivity? CreateCustomActivity { get; init; }
-
-    [JsonPropertyName("delete_custom_activity")]
-    public CustomActivity? DeleteCustomActivity { get; init; }
-
-    /// <summary>
-    /// Create a new table view
-    /// </summary>
-    [JsonPropertyName("create_view_table")]
-    public BoardView? CreateViewTable { get; init; }
-
-    /// <summary>
-    /// Create a view
-    /// </summary>
-    [JsonPropertyName("create_view")]
-    public BoardView? CreateView { get; init; }
-
-    /// <summary>
-    /// Update an existing board table view
-    /// </summary>
-    [JsonPropertyName("update_view_table")]
-    public BoardView? UpdateViewTable { get; init; }
-
-    /// <summary>
-    /// Update an existing view
-    /// </summary>
-    [JsonPropertyName("update_view")]
-    public BoardView? UpdateView { get; init; }
-
-    /// <summary>
-    /// Delete an existing board subset/view
-    /// </summary>
-    [JsonPropertyName("delete_view")]
-    public BoardView? DeleteView { get; init; }
-
-    /// <summary>
-    /// Change the privacy kind (public / private / shareable) of a board
-    /// </summary>
-    [JsonPropertyName("change_board_kind")]
-    public ChangeBoardKindResult? ChangeBoardKind { get; init; }
-
-    /// <summary>
-    /// Duplicate an existing board subset/view
-    /// </summary>
-    [JsonPropertyName("duplicate_view")]
-    public BoardView? DuplicateView { get; init; }
-
-    /// <summary>
-    /// Restore a deleted board subset/view
-    /// </summary>
-    [JsonPropertyName("restore_view")]
-    public BoardView? RestoreView { get; init; }
-
-    /// <summary>
-    /// Configures a column to categorize items based on content analysis.
-    /// </summary>
-    [JsonPropertyName("configure_categorize_ai_column")]
-    public AiColumnResult? ConfigureCategorizeAiColumn { get; init; }
-
-    /// <summary>
-    /// Configures a column to generate concise summaries of input text.
-    /// </summary>
-    [JsonPropertyName("configure_summarize_ai_column")]
-    public AiColumnResult? ConfigureSummarizeAiColumn { get; init; }
-
-    /// <summary>
-    /// Configures a column to translate text to a target language.
-    /// </summary>
-    [JsonPropertyName("configure_translate_ai_column")]
-    public AiColumnResult? ConfigureTranslateAiColumn { get; init; }
-
-    /// <summary>
-    /// Configures a column to rewrite or improve text quality.
-    /// </summary>
-    [JsonPropertyName("configure_improve_text_ai_column")]
-    public AiColumnResult? ConfigureImproveTextAiColumn { get; init; }
-
-    /// <summary>
-    /// Configures a column to extract structured information from text.
-    /// </summary>
-    [JsonPropertyName("configure_extract_ai_column")]
-    public AiColumnResult? ConfigureExtractAiColumn { get; init; }
-
-    /// <summary>
-    /// Configures a column with a custom AI prompt for complex or flexible operations.
-    /// </summary>
-    [JsonPropertyName("configure_open_block_ai_column")]
-    public AiColumnResult? ConfigureOpenBlockAiColumn { get; init; }
-
-    /// <summary>
-    /// Configures a column to generate new text content from a prompt.
-    /// </summary>
-    [JsonPropertyName("configure_write_me_ai_column")]
-    public AiColumnResult? ConfigureWriteMeAiColumn { get; init; }
-
-    /// <summary>
-    /// Configures a column to assign a person to items based on context.
-    /// </summary>
-    [JsonPropertyName("configure_person_assignment_ai_column")]
-    public AiColumnResult? ConfigurePersonAssignmentAiColumn { get; init; }
-
-    /// <summary>
-    /// Removes AI configuration from a column, deleting all associated automation recipes.
-    /// </summary>
-    [JsonPropertyName("remove_ai_from_column")]
-    public AiColumnRemoveResult? RemoveAiFromColumn { get; init; }
-
-    /// <summary>
-    /// Creates a new object in the Monday.com Objects Platform. The type of object created is determined by the object_type_unique_key parameter. This mutation can create boards, docs, dashboards, workflows, or specialized objects like CRM, capacity manager, etc. Under the hood, this creates a board with the corresponding app_feature_id.
-    /// </summary>
-    [JsonPropertyName("create_object")]
-    public Object? CreateObject { get; init; }
-
-    /// <summary>
-    /// Permanently deletes an object from the Monday.com Objects Platform. Unlike archiving, deletion is only reversible for 30 days and removes all associated data. This operation works for any object type including boards, docs, dashboards, workflows, and specialized objects (CRM, capacity manager, etc.). WARNING: This operation cannot be undone after 30 days.
-    /// </summary>
-    [JsonPropertyName("delete_object")]
-    public Object? DeleteObject { get; init; }
-
-    /// <summary>
-    /// Archives an object in the Monday.com Objects Platform, changing its state to "archived" while preserving all data. Archived objects remain in the system but are hidden from regular views. This operation works for any object type including boards, docs, dashboards, workflows, and specialized objects (CRM, capacity manager, etc.). Under the hood, this archives the board that represents this object.
-    /// </summary>
-    [JsonPropertyName("archive_object")]
-    public Object? ArchiveObject { get; init; }
-
-    /// <summary>
-    /// Adds users to an existing object as either subscribers or owners. Subscribers receive notifications about object changes, while owners have full control permissions. Works with any object type including boards, docs, dashboards, workflows, and specialized objects (CRM, capacity manager, etc.). Equivalent to the add_users_to_board mutation in the boards API.
-    /// </summary>
-    [JsonPropertyName("add_subscribers_to_object")]
-    public Object? AddSubscribersToObject { get; init; }
-
-    /// <summary>
-    /// Updates an object.
-    /// </summary>
-    [JsonPropertyName("update_object")]
-    public Object? UpdateObject { get; init; }
-
-    /// <summary>
-    /// Publishes object out of draft state. Returns {success: true} on success, {success: false} on failure.
-    /// </summary>
-    [JsonPropertyName("publish_object")]
-    public ObjectOperationResponse? PublishObject { get; init; }
-
-    /// <summary>
-    /// Unpublishes object from public state back to draft state. Returns {success: true} on success, {success: false} on failure.
-    /// </summary>
-    [JsonPropertyName("unpublish_object")]
-    public ObjectOperationResponse? UnpublishObject { get; init; }
-
-    /// <summary>
-    /// Create relations for an object
-    /// </summary>
-    [JsonPropertyName("create_object_relations")]
-    public List<ObjectRelation>? CreateObjectRelations { get; init; }
-
-    /// <summary>
-    /// Delete a specific object relation or all relations for an object. Returns the number of relations deleted.
-    /// </summary>
-    [JsonPropertyName("delete_object_relation")]
-    public int? DeleteObjectRelation { get; init; }
-
-    /// <summary>
-    /// Enroll multiple items to a single sequence. Maximum 50 items per request.
-    /// </summary>
-    [JsonPropertyName("enroll_items_to_sequence")]
-    public EnrollToSequenceResult? EnrollItemsToSequence { get; init; }
-
-    /// <summary>
-    /// Adds markdown content to an existing document by converting it into document blocks. Use this to append content to the end of a document or insert content after a specific block. The markdown will be parsed and converted into the appropriate document block types (text, headers, lists, etc.). Returns the IDs of the newly created blocks on success.
-    /// </summary>
-    [JsonPropertyName("add_content_to_doc_from_markdown")]
-    public DocBlocksFromMarkdownResult? AddContentToDocFromMarkdown { get; init; }
-
-    /// <summary>
-    /// Creates a new article in the specified workspace. Optionally accepts a name and folder ID. Returns the created article metadata.
-    /// </summary>
-    [JsonPropertyName("create_article")]
-    public ArticleMetadata? CreateArticle { get; init; }
-
-    /// <summary>
-    /// Creates multiple document blocks in a single operation for efficient content creation. Use this when adding substantial content like importing documents, creating structured content (articles, reports, guides), or building complex document sections. Supports all block types including text paragraphs, headers, bullet/numbered lists, images, tables, code blocks, and more. Much faster than creating blocks individually. Perfect for content migration, template creation, or generating documents from external data. Maximum 25 blocks per request.
-    /// </summary>
-    [JsonPropertyName("create_doc_blocks")]
-    public List<DocumentBlockV2>? CreateDocBlocks { get; init; }
-
-    /// <summary>
-    /// Deletes an article with the specified object ID
-    /// </summary>
-    [JsonPropertyName("delete_article")]
-    public ArticleMetadata? DeleteArticle { get; init; }
-
-    /// <summary>
-    /// Permanently deletes a document and all its content from the system. This action cannot be undone. The document will be removed from all user views and workspaces. Use with caution - ensure the document is no longer needed before deletion. Returns success status and the deleted document ID.
-    /// </summary>
-    [JsonPropertyName("delete_doc")]
-    public string? DeleteDoc { get; init; }
-
-    /// <summary>
-    /// Deletes multiple document blocks in a single operation. Maximum 100 blocks per request.
-    /// </summary>
-    [JsonPropertyName("delete_doc_blocks")]
-    public List<DeletedDocBlock>? DeleteDocBlocks { get; init; }
-
-    /// <summary>
-    /// Creates an exact copy of an existing document, including all content, structure, and formatting. Use this to create templates, backup documents before major changes, or create variations of existing documents. The duplicated document will have a new unique ID and can be modified independently. Returns the new document's ID on success.
-    /// </summary>
-    [JsonPropertyName("duplicate_doc")]
-    public string? DuplicateDoc { get; init; }
-
-    /// <summary>
-    /// Imports HTML content as a new document by converting it into document blocks. The HTML will be parsed and converted into the appropriate document block types (text, headers, lists, etc.). Returns the ID of the newly created document on success.
-    /// </summary>
-    [JsonPropertyName("import_doc_from_html")]
-    public ImportDocFromHtmlResult? ImportDocFromHtml { get; init; }
-
-    /// <summary>
-    /// Publishes an article with the specified object ID. Allows setting privacy level, target folder, and managing subscribers (users and teams). Returns the updated article metadata.
-    /// </summary>
-    [JsonPropertyName("publish_article")]
-    public ArticleMetadata? PublishArticle { get; init; }
-
-    /// <summary>
-    /// Updates the content of a specific article block. The block must belong to a draft article that the user has permission to edit. Cannot update blocks of published articles.
-    /// </summary>
-    [JsonPropertyName("update_article_block")]
-    public ArticleBlock? UpdateArticleBlock { get; init; }
-
-    /// <summary>
-    /// Update a document's name/title. Changes are applied immediately and visible to all users with access to the document.
-    /// </summary>
-    [JsonPropertyName("update_doc_name")]
-    public string? UpdateDocName { get; init; }
-
-    /// <summary>
-    /// Sets an item description document's content with new markdown data. This mutation converts the provided markdown into document blocks and replaces the existing content of the item's description. Returns the IDs of the newly created blocks on success. Note: Markdown does not support text colors or background highlights. Any existing colored or highlighted text will be lost after replacement.
-    /// </summary>
-    [JsonPropertyName("set_item_description_content")]
-    public DocBlocksFromMarkdownResult? SetItemDescriptionContent { get; init; }
-
-    /// <summary>
-    /// Updates a notification setting's enabled status.
-    /// </summary>
-    [JsonPropertyName("update_notification_setting")]
-    public List<NotificationSetting>? UpdateNotificationSetting { get; init; }
-
-    /// <summary>
-    /// Update mute notification settings for a board. Allows muting all notifications for all users, only for the current user, or setting mentions/assigns-only. Returns the updated mute state for the board. Requires appropriate permissions for muting all users.
-    /// </summary>
-    [JsonPropertyName("update_mute_board_settings")]
-    public List<BoardMuteSettings>? UpdateMuteBoardSettings { get; init; }
-
-    /// <summary>
-    /// Add workspace object to favorites
-    /// </summary>
-    [JsonPropertyName("create_favorite")]
-    public CreateFavoriteResultType? CreateFavorite { get; init; }
-
-    /// <summary>
-    /// Remove an object from favorites
-    /// </summary>
-    [JsonPropertyName("delete_favorite")]
-    public DeleteFavoriteInputResultType? DeleteFavorite { get; init; }
-
-    /// <summary>
-    /// Update the position of an object in favorites
-    /// </summary>
-    [JsonPropertyName("update_favorite_position")]
-    public UpdateFavoriteResultType? UpdateFavoritePosition { get; init; }
-
-    /// <summary>
-    /// Export a board. Returns ExportFile (sync) or ExportAsyncJob (async) based on board size and server conditions. The server chooses which branch to return; the choice is not part of the contract and may be retuned without notice. Callers MUST handle both branches. Sync: use download_url directly. Async: poll export_job_status until COMPLETED, FAILED, or CANCELLED. The exported file is always CSV. Available to enterprise accounts only; other accounts receive FORBIDDEN_EXCEPTION.
-    /// </summary>
-    [JsonPropertyName("create_board_export")]
-    public ExportResult? CreateBoardExport { get; init; }
-
-    /// <summary>
-    /// Connect an existing project to a portfolio. When a callback_url is provided the mutation returns immediately with a process_id, and the result is POSTed to that URL once the operation completes. The callback payload is: { is_success: boolean, process_id: string, portfolio_item_id?: string }.
-    /// </summary>
-    [JsonPropertyName("connect_project_to_portfolio")]
-    public ConnectProjectResult? ConnectProjectToPortfolio { get; init; }
-
-    /// <summary>
-    /// Create a new portfolio. When a callback_url is provided the mutation returns immediately with a process_id, and the portfolio_id is POSTed to that URL once the portfolio is actually created. The callback payload is: { is_success: boolean, process_id: string, portfolio_id?: number }.
-    /// </summary>
-    [JsonPropertyName("create_portfolio")]
-    public CreatePortfolioResult? CreatePortfolio { get; init; }
-
-    /// <summary>
-    /// Create a new widget.
-    /// </summary>
-    [JsonPropertyName("create_widget")]
-    public Widget? CreateWidget { get; init; }
-
-    /// <summary>
-    /// Delete an existing widget.
-    /// </summary>
-    [JsonPropertyName("delete_widget")]
-    public bool? DeleteWidget { get; init; }
-
-    /// <summary>
-    /// Create a new dashboard.
-    /// </summary>
-    [JsonPropertyName("create_dashboard")]
-    public Dashboard? CreateDashboard { get; init; }
-
-    /// <summary>
-    /// Update an existing dashboard.
-    /// </summary>
-    [JsonPropertyName("update_dashboard")]
-    public Dashboard? UpdateDashboard { get; init; }
-
-    /// <summary>
-    /// Delete an existing dashboard.
-    /// </summary>
-    [JsonPropertyName("delete_dashboard")]
-    public bool? DeleteDashboard { get; init; }
-
-    /// <summary>
-    /// Run a prompt against an AI model and return the completion response. For more advanced capabilities, use Models REST API.
-    /// </summary>
-    [JsonPropertyName("run_prompt")]
-    public RunPromptResult? RunPrompt { get; init; }
-
-    /// <summary>
-    /// Update form properties including title, description, or question order.
-    /// </summary>
-    [JsonPropertyName("update_form")]
-    public ResponseForm? UpdateForm { get; init; }
-
-    /// <summary>
-    /// Update form configuration including features, appearance, and accessibility options.
-    /// </summary>
-    [JsonPropertyName("update_form_settings")]
-    public ResponseForm? UpdateFormSettings { get; init; }
-
-    /// <summary>
-    /// Create a new question within a form. Returns the created question with auto-generated ID.
-    /// </summary>
-    [JsonPropertyName("create_form_question")]
-    public FormQuestion? CreateFormQuestion { get; init; }
-
-    /// <summary>
-    /// Update an existing question properties including title, type, or settings. Requires question ID.
-    /// </summary>
-    [JsonPropertyName("update_form_question")]
-    public FormQuestion? UpdateFormQuestion { get; init; }
-
-    /// <summary>
-    /// Permanently remove a question from a form. This action cannot be undone.
-    /// </summary>
-    [JsonPropertyName("delete_question")]
-    public bool? DeleteQuestion { get; init; }
-
-    /// <summary>
-    /// Activate a form to make it visible to users and accept new submissions.
-    /// </summary>
-    [JsonPropertyName("activate_form")]
-    public bool? ActivateForm { get; init; }
-
-    /// <summary>
-    /// Deactivate a form to hide it from users and stop accepting submissions. Form data is preserved.
-    /// </summary>
-    [JsonPropertyName("deactivate_form")]
-    public bool? DeactivateForm { get; init; }
-
-    /// <summary>
-    /// Shorten a URL for a form and store it in the form settings. Returns the shortened link object.
-    /// </summary>
-    [JsonPropertyName("shorten_form_url")]
-    public FormShortenedLink? ShortenFormUrl { get; init; }
-
-    /// <summary>
-    /// Create a new tag for a form. Tags are used to categorize and track responses. (e.g. UTM tags)
-    /// </summary>
-    [JsonPropertyName("create_form_tag")]
-    public FormTag? CreateFormTag { get; init; }
-
-    /// <summary>
-    /// Delete a tag from a form
-    /// </summary>
-    [JsonPropertyName("delete_form_tag")]
-    public bool? DeleteFormTag { get; init; }
-
-    /// <summary>
-    /// Create a new form with specified configuration. Returns the created form with its unique token.
-    /// </summary>
-    [JsonPropertyName("create_form")]
-    public DehydratedFormResponse? CreateForm { get; init; }
-
-    /// <summary>
-    /// Set a password on a form to restrict access. This will enable password protection for the form.
-    /// </summary>
-    [JsonPropertyName("set_form_password")]
-    public ResponseForm? SetFormPassword { get; init; }
-
-    /// <summary>
-    /// Execute an integration block with the provided field values
-    /// </summary>
-    [JsonPropertyName("execute_integration_block")]
-    public IntegrationExecutionResult? ExecuteIntegrationBlock { get; init; }
-
     /// <summary>
     /// Add a file to a column value.
     /// </summary>
@@ -963,6 +462,357 @@ public sealed partial class Mutation
     [JsonPropertyName("use_template")]
     public Template? UseTemplate { get; init; }
 
+    [JsonPropertyName("like_update")]
+    public Update? LikeUpdate { get; init; }
+
+    [JsonPropertyName("unlike_update")]
+    public Update UnlikeUpdate { get; init; } = null!;
+
+    [JsonPropertyName("delete_update")]
+    public Update? DeleteUpdate { get; init; }
+
+    [JsonPropertyName("edit_update")]
+    public Update EditUpdate { get; init; } = null!;
+
+    [JsonPropertyName("pin_to_top")]
+    public Update PinToTop { get; init; } = null!;
+
+    [JsonPropertyName("unpin_from_top")]
+    public Update UnpinFromTop { get; init; } = null!;
+
+    [JsonPropertyName("create_update")]
+    public Update? CreateUpdate { get; init; }
+
+    /// <summary>
+    /// Add a required column to a board
+    /// </summary>
+    [JsonPropertyName("add_required_column")]
+    public RequiredColumns? AddRequiredColumn { get; init; }
+
+    /// <summary>
+    /// Remove a required column from a board
+    /// </summary>
+    [JsonPropertyName("remove_required_column")]
+    public RequiredColumns? RemoveRequiredColumn { get; init; }
+
+    /// <summary>
+    /// Create a validation rule
+    /// </summary>
+    [JsonPropertyName("create_validation_rule")]
+    public ValidationRule? CreateValidationRule { get; init; }
+
+    /// <summary>
+    /// Update a validation rule
+    /// </summary>
+    [JsonPropertyName("update_validation_rule")]
+    public ValidationRule? UpdateValidationRule { get; init; }
+
+    /// <summary>
+    /// Delete a validation rule
+    /// </summary>
+    [JsonPropertyName("delete_validation_rule")]
+    public ValidationRule? DeleteValidationRule { get; init; }
+
+    /// <summary>
+    /// Asynchronously delete items on a board
+    /// </summary>
+    [JsonPropertyName("bulk_delete_items")]
+    public BulkDeleteInit? BulkDeleteItems { get; init; }
+
+    /// <summary>
+    /// Asynchronously archive items on a board
+    /// </summary>
+    [JsonPropertyName("bulk_archive_items")]
+    public BulkDeleteInit? BulkArchiveItems { get; init; }
+
+    /// <summary>
+    /// Initialize a backfill job for a board and group. Designed for data migrations with no side effects and a 20k row limit. Returns job ID and upload URL to begin the process.
+    /// </summary>
+    [JsonPropertyName("backfill_items")]
+    public UploadJobInit? BackfillItems { get; init; }
+
+    /// <summary>
+    /// Initialize an ingest job for a board and group. Designed for ongoing integrations with full side effects and a 10k row limit. Returns job ID and upload URL to begin the process.
+    /// </summary>
+    [JsonPropertyName("ingest_items")]
+    public UploadJobInit? IngestItems { get; init; }
+
+    /// <summary>
+    /// Undo a previously completed action, or cancel one still in flight
+    /// </summary>
+    [JsonPropertyName("undo_action")]
+    public UndoResult? UndoAction { get; init; }
+
+    /// <summary>
+    /// Create a marketplace app discount
+    /// </summary>
+    [JsonPropertyName("create_marketplace_app_discount")]
+    public CreateMarketplaceAppDiscountResult CreateMarketplaceAppDiscount { get; init; } = null!;
+
+    [JsonPropertyName("delete_marketplace_app_discount")]
+    public DeleteMarketplaceAppDiscountResult DeleteMarketplaceAppDiscount { get; init; } = null!;
+
+    [JsonPropertyName("grant_marketplace_app_discount")]
+    public GrantMarketplaceAppDiscountResult GrantMarketplaceAppDiscount { get; init; } = null!;
+
+    [JsonPropertyName("create_timeline_item")]
+    public TimelineItem? CreateTimelineItem { get; init; }
+
+    [JsonPropertyName("delete_timeline_item")]
+    public TimelineItem? DeleteTimelineItem { get; init; }
+
+    [JsonPropertyName("create_custom_activity")]
+    public CustomActivity? CreateCustomActivity { get; init; }
+
+    [JsonPropertyName("delete_custom_activity")]
+    public CustomActivity? DeleteCustomActivity { get; init; }
+
+    /// <summary>
+    /// Create a new table view
+    /// </summary>
+    [JsonPropertyName("create_view_table")]
+    public BoardView? CreateViewTable { get; init; }
+
+    /// <summary>
+    /// Create a view
+    /// </summary>
+    [JsonPropertyName("create_view")]
+    public BoardView? CreateView { get; init; }
+
+    /// <summary>
+    /// Update an existing board table view
+    /// </summary>
+    [JsonPropertyName("update_view_table")]
+    public BoardView? UpdateViewTable { get; init; }
+
+    /// <summary>
+    /// Update an existing view
+    /// </summary>
+    [JsonPropertyName("update_view")]
+    public BoardView? UpdateView { get; init; }
+
+    /// <summary>
+    /// Delete an existing board subset/view
+    /// </summary>
+    [JsonPropertyName("delete_view")]
+    public BoardView? DeleteView { get; init; }
+
+    /// <summary>
+    /// Change the privacy kind (public / private / shareable) of a board
+    /// </summary>
+    [JsonPropertyName("change_board_kind")]
+    public ChangeBoardKindResult? ChangeBoardKind { get; init; }
+
+    /// <summary>
+    /// Duplicate an existing board subset/view
+    /// </summary>
+    [JsonPropertyName("duplicate_view")]
+    public BoardView? DuplicateView { get; init; }
+
+    /// <summary>
+    /// Restore a deleted board subset/view
+    /// </summary>
+    [JsonPropertyName("restore_view")]
+    public BoardView? RestoreView { get; init; }
+
+    /// <summary>
+    /// Configures a column to categorize items based on content analysis.
+    /// </summary>
+    [JsonPropertyName("configure_categorize_ai_column")]
+    public AiColumnResult? ConfigureCategorizeAiColumn { get; init; }
+
+    /// <summary>
+    /// Configures a column to generate concise summaries of input text.
+    /// </summary>
+    [JsonPropertyName("configure_summarize_ai_column")]
+    public AiColumnResult? ConfigureSummarizeAiColumn { get; init; }
+
+    /// <summary>
+    /// Configures a column to translate text to a target language.
+    /// </summary>
+    [JsonPropertyName("configure_translate_ai_column")]
+    public AiColumnResult? ConfigureTranslateAiColumn { get; init; }
+
+    /// <summary>
+    /// Configures a column to rewrite or improve text quality.
+    /// </summary>
+    [JsonPropertyName("configure_improve_text_ai_column")]
+    public AiColumnResult? ConfigureImproveTextAiColumn { get; init; }
+
+    /// <summary>
+    /// Configures a column to extract structured information from text.
+    /// </summary>
+    [JsonPropertyName("configure_extract_ai_column")]
+    public AiColumnResult? ConfigureExtractAiColumn { get; init; }
+
+    /// <summary>
+    /// Configures a column with a custom AI prompt for complex or flexible operations.
+    /// </summary>
+    [JsonPropertyName("configure_open_block_ai_column")]
+    public AiColumnResult? ConfigureOpenBlockAiColumn { get; init; }
+
+    /// <summary>
+    /// Configures a column to generate new text content from a prompt.
+    /// </summary>
+    [JsonPropertyName("configure_write_me_ai_column")]
+    public AiColumnResult? ConfigureWriteMeAiColumn { get; init; }
+
+    /// <summary>
+    /// Configures a column to assign a person to items based on context.
+    /// </summary>
+    [JsonPropertyName("configure_person_assignment_ai_column")]
+    public AiColumnResult? ConfigurePersonAssignmentAiColumn { get; init; }
+
+    /// <summary>
+    /// Removes AI configuration from a column, deleting all associated automation recipes.
+    /// </summary>
+    [JsonPropertyName("remove_ai_from_column")]
+    public AiColumnRemoveResult? RemoveAiFromColumn { get; init; }
+
+    /// <summary>
+    /// Creates a new object in the Monday.com Objects Platform. The type of object created is determined by the object_type_unique_key parameter. This mutation can create boards, docs, dashboards, workflows, or specialized objects like CRM, capacity manager, etc. Under the hood, this creates a board with the corresponding app_feature_id.
+    /// </summary>
+    [JsonPropertyName("create_object")]
+    public Object? CreateObject { get; init; }
+
+    /// <summary>
+    /// Permanently deletes an object from the Monday.com Objects Platform. Unlike archiving, deletion is only reversible for 30 days and removes all associated data. This operation works for any object type including boards, docs, dashboards, workflows, and specialized objects (CRM, capacity manager, etc.). WARNING: This operation cannot be undone after 30 days.
+    /// </summary>
+    [JsonPropertyName("delete_object")]
+    public Object? DeleteObject { get; init; }
+
+    /// <summary>
+    /// Archives an object in the Monday.com Objects Platform, changing its state to "archived" while preserving all data. Archived objects remain in the system but are hidden from regular views. This operation works for any object type including boards, docs, dashboards, workflows, and specialized objects (CRM, capacity manager, etc.). Under the hood, this archives the board that represents this object.
+    /// </summary>
+    [JsonPropertyName("archive_object")]
+    public Object? ArchiveObject { get; init; }
+
+    /// <summary>
+    /// Adds users to an existing object as either subscribers or owners. Subscribers receive notifications about object changes, while owners have full control permissions. Works with any object type including boards, docs, dashboards, workflows, and specialized objects (CRM, capacity manager, etc.). Equivalent to the add_users_to_board mutation in the boards API.
+    /// </summary>
+    [JsonPropertyName("add_subscribers_to_object")]
+    public Object? AddSubscribersToObject { get; init; }
+
+    /// <summary>
+    /// Updates an object.
+    /// </summary>
+    [JsonPropertyName("update_object")]
+    public Object? UpdateObject { get; init; }
+
+    /// <summary>
+    /// Publishes object out of draft state. Returns {success: true} on success, {success: false} on failure.
+    /// </summary>
+    [JsonPropertyName("publish_object")]
+    public ObjectOperationResponse? PublishObject { get; init; }
+
+    /// <summary>
+    /// Unpublishes object from public state back to draft state. Returns {success: true} on success, {success: false} on failure.
+    /// </summary>
+    [JsonPropertyName("unpublish_object")]
+    public ObjectOperationResponse? UnpublishObject { get; init; }
+
+    /// <summary>
+    /// Create relations for an object
+    /// </summary>
+    [JsonPropertyName("create_object_relations")]
+    public List<ObjectRelation>? CreateObjectRelations { get; init; }
+
+    /// <summary>
+    /// Delete a specific object relation or all relations for an object. Returns the number of relations deleted.
+    /// </summary>
+    [JsonPropertyName("delete_object_relation")]
+    public int? DeleteObjectRelation { get; init; }
+
+    /// <summary>
+    /// Enroll multiple items to a single sequence. Maximum 50 items per request.
+    /// </summary>
+    [JsonPropertyName("enroll_items_to_sequence")]
+    public EnrollToSequenceResult? EnrollItemsToSequence { get; init; }
+
+    /// <summary>
+    /// Adds markdown content to an existing document by converting it into document blocks. Use this to append content to the end of a document or insert content after a specific block. The markdown will be parsed and converted into the appropriate document block types (text, headers, lists, etc.). Returns the IDs of the newly created blocks on success.
+    /// </summary>
+    [JsonPropertyName("add_content_to_doc_from_markdown")]
+    public DocBlocksFromMarkdownResult? AddContentToDocFromMarkdown { get; init; }
+
+    /// <summary>
+    /// Creates a new article in the specified workspace. Optionally accepts a name and folder ID. Returns the created article metadata.
+    /// </summary>
+    [JsonPropertyName("create_article")]
+    public ArticleMetadata? CreateArticle { get; init; }
+
+    /// <summary>
+    /// Creates multiple document blocks in a single operation for efficient content creation. Use this when adding substantial content like importing documents, creating structured content (articles, reports, guides), or building complex document sections. Supports all block types including text paragraphs, headers, bullet/numbered lists, images, tables, code blocks, and more. Much faster than creating blocks individually. Perfect for content migration, template creation, or generating documents from external data. Maximum 25 blocks per request.
+    /// </summary>
+    [JsonPropertyName("create_doc_blocks")]
+    public List<DocumentBlockV2>? CreateDocBlocks { get; init; }
+
+    /// <summary>
+    /// Deletes an article with the specified object ID
+    /// </summary>
+    [JsonPropertyName("delete_article")]
+    public ArticleMetadata? DeleteArticle { get; init; }
+
+    /// <summary>
+    /// Permanently deletes a document and all its content from the system. This action cannot be undone. The document will be removed from all user views and workspaces. Use with caution - ensure the document is no longer needed before deletion. Returns success status and the deleted document ID.
+    /// </summary>
+    [JsonPropertyName("delete_doc")]
+    public string? DeleteDoc { get; init; }
+
+    /// <summary>
+    /// Deletes multiple document blocks in a single operation. Maximum 100 blocks per request.
+    /// </summary>
+    [JsonPropertyName("delete_doc_blocks")]
+    public List<DeletedDocBlock>? DeleteDocBlocks { get; init; }
+
+    /// <summary>
+    /// Creates an exact copy of an existing document, including all content, structure, and formatting. Use this to create templates, backup documents before major changes, or create variations of existing documents. The duplicated document will have a new unique ID and can be modified independently. Returns the new document's ID on success.
+    /// </summary>
+    [JsonPropertyName("duplicate_doc")]
+    public string? DuplicateDoc { get; init; }
+
+    /// <summary>
+    /// Imports HTML content as a new document by converting it into document blocks. The HTML will be parsed and converted into the appropriate document block types (text, headers, lists, etc.). Returns the ID of the newly created document on success.
+    /// </summary>
+    [JsonPropertyName("import_doc_from_html")]
+    public ImportDocFromHtmlResult? ImportDocFromHtml { get; init; }
+
+    /// <summary>
+    /// Publishes an article with the specified object ID. Allows setting privacy level, target folder, and managing subscribers (users and teams). Returns the updated article metadata.
+    /// </summary>
+    [JsonPropertyName("publish_article")]
+    public ArticleMetadata? PublishArticle { get; init; }
+
+    /// <summary>
+    /// Updates the content of a specific article block. The block must belong to a draft article that the user has permission to edit. Cannot update blocks of published articles.
+    /// </summary>
+    [JsonPropertyName("update_article_block")]
+    public ArticleBlock? UpdateArticleBlock { get; init; }
+
+    /// <summary>
+    /// Update a document's name/title. Changes are applied immediately and visible to all users with access to the document.
+    /// </summary>
+    [JsonPropertyName("update_doc_name")]
+    public string? UpdateDocName { get; init; }
+
+    /// <summary>
+    /// Sets an item description document's content with new markdown data. This mutation converts the provided markdown into document blocks and replaces the existing content of the item's description. Returns the IDs of the newly created blocks on success. Note: Markdown does not support text colors or background highlights. Any existing colored or highlighted text will be lost after replacement.
+    /// </summary>
+    [JsonPropertyName("set_item_description_content")]
+    public DocBlocksFromMarkdownResult? SetItemDescriptionContent { get; init; }
+
+    /// <summary>
+    /// Updates a notification setting's enabled status.
+    /// </summary>
+    [JsonPropertyName("update_notification_setting")]
+    public List<NotificationSetting>? UpdateNotificationSetting { get; init; }
+
+    /// <summary>
+    /// Update mute notification settings for a board. Allows muting all notifications for all users, only for the current user, or setting mentions/assigns-only. Returns the updated mute state for the board. Requires appropriate permissions for muting all users.
+    /// </summary>
+    [JsonPropertyName("update_mute_board_settings")]
+    public List<BoardMuteSettings>? UpdateMuteBoardSettings { get; init; }
+
     /// <summary>
     /// Create managed column of type dropdown mutation.
     /// </summary>
@@ -1100,6 +950,156 @@ public sealed partial class Mutation
     /// </summary>
     [JsonPropertyName("bulk_object_schema_column_actions")]
     public List<ObjectSchemaActionResult>? BulkObjectSchemaColumnActions { get; init; }
+
+    /// <summary>
+    /// Add workspace object to favorites
+    /// </summary>
+    [JsonPropertyName("create_favorite")]
+    public CreateFavoriteResultType? CreateFavorite { get; init; }
+
+    /// <summary>
+    /// Remove an object from favorites
+    /// </summary>
+    [JsonPropertyName("delete_favorite")]
+    public DeleteFavoriteInputResultType? DeleteFavorite { get; init; }
+
+    /// <summary>
+    /// Update the position of an object in favorites
+    /// </summary>
+    [JsonPropertyName("update_favorite_position")]
+    public UpdateFavoriteResultType? UpdateFavoritePosition { get; init; }
+
+    /// <summary>
+    /// Export a board. Returns ExportFile (sync) or ExportAsyncJob (async) based on board size and server conditions. The server chooses which branch to return; the choice is not part of the contract and may be retuned without notice. Callers MUST handle both branches. Sync: use download_url directly. Async: poll export_job_status until COMPLETED, FAILED, or CANCELLED. The exported file is always CSV. Available to enterprise accounts only; other accounts receive FORBIDDEN_EXCEPTION.
+    /// </summary>
+    [JsonPropertyName("create_board_export")]
+    public ExportResult? CreateBoardExport { get; init; }
+
+    /// <summary>
+    /// Connect an existing project to a portfolio. When a callback_url is provided the mutation returns immediately with a process_id, and the result is POSTed to that URL once the operation completes. The callback payload is: { is_success: boolean, process_id: string, portfolio_item_id?: string }.
+    /// </summary>
+    [JsonPropertyName("connect_project_to_portfolio")]
+    public ConnectProjectResult? ConnectProjectToPortfolio { get; init; }
+
+    /// <summary>
+    /// Create a new portfolio. When a callback_url is provided the mutation returns immediately with a process_id, and the portfolio_id is POSTed to that URL once the portfolio is actually created. The callback payload is: { is_success: boolean, process_id: string, portfolio_id?: number }.
+    /// </summary>
+    [JsonPropertyName("create_portfolio")]
+    public CreatePortfolioResult? CreatePortfolio { get; init; }
+
+    /// <summary>
+    /// Create a new widget.
+    /// </summary>
+    [JsonPropertyName("create_widget")]
+    public Widget? CreateWidget { get; init; }
+
+    /// <summary>
+    /// Delete an existing widget.
+    /// </summary>
+    [JsonPropertyName("delete_widget")]
+    public bool? DeleteWidget { get; init; }
+
+    /// <summary>
+    /// Create a new dashboard.
+    /// </summary>
+    [JsonPropertyName("create_dashboard")]
+    public Dashboard? CreateDashboard { get; init; }
+
+    /// <summary>
+    /// Update an existing dashboard.
+    /// </summary>
+    [JsonPropertyName("update_dashboard")]
+    public Dashboard? UpdateDashboard { get; init; }
+
+    /// <summary>
+    /// Delete an existing dashboard.
+    /// </summary>
+    [JsonPropertyName("delete_dashboard")]
+    public bool? DeleteDashboard { get; init; }
+
+    /// <summary>
+    /// Run a prompt against an AI model and return the completion response. For more advanced capabilities, use Models REST API.
+    /// </summary>
+    [JsonPropertyName("run_prompt")]
+    public RunPromptResult? RunPrompt { get; init; }
+
+    /// <summary>
+    /// Execute an integration block with the provided field values
+    /// </summary>
+    [JsonPropertyName("execute_integration_block")]
+    public IntegrationExecutionResult? ExecuteIntegrationBlock { get; init; }
+
+    /// <summary>
+    /// Update form properties including title, description, or question order.
+    /// </summary>
+    [JsonPropertyName("update_form")]
+    public ResponseForm? UpdateForm { get; init; }
+
+    /// <summary>
+    /// Update form configuration including features, appearance, and accessibility options.
+    /// </summary>
+    [JsonPropertyName("update_form_settings")]
+    public ResponseForm? UpdateFormSettings { get; init; }
+
+    /// <summary>
+    /// Create a new question within a form. Returns the created question with auto-generated ID.
+    /// </summary>
+    [JsonPropertyName("create_form_question")]
+    public FormQuestion? CreateFormQuestion { get; init; }
+
+    /// <summary>
+    /// Update an existing question properties including title, type, or settings. Requires question ID.
+    /// </summary>
+    [JsonPropertyName("update_form_question")]
+    public FormQuestion? UpdateFormQuestion { get; init; }
+
+    /// <summary>
+    /// Permanently remove a question from a form. This action cannot be undone.
+    /// </summary>
+    [JsonPropertyName("delete_question")]
+    public bool? DeleteQuestion { get; init; }
+
+    /// <summary>
+    /// Activate a form to make it visible to users and accept new submissions.
+    /// </summary>
+    [JsonPropertyName("activate_form")]
+    public bool? ActivateForm { get; init; }
+
+    /// <summary>
+    /// Deactivate a form to hide it from users and stop accepting submissions. Form data is preserved.
+    /// </summary>
+    [JsonPropertyName("deactivate_form")]
+    public bool? DeactivateForm { get; init; }
+
+    /// <summary>
+    /// Shorten a URL for a form and store it in the form settings. Returns the shortened link object.
+    /// </summary>
+    [JsonPropertyName("shorten_form_url")]
+    public FormShortenedLink? ShortenFormUrl { get; init; }
+
+    /// <summary>
+    /// Create a new tag for a form. Tags are used to categorize and track responses. (e.g. UTM tags)
+    /// </summary>
+    [JsonPropertyName("create_form_tag")]
+    public FormTag? CreateFormTag { get; init; }
+
+    /// <summary>
+    /// Delete a tag from a form
+    /// </summary>
+    [JsonPropertyName("delete_form_tag")]
+    public bool? DeleteFormTag { get; init; }
+
+    /// <summary>
+    /// Create a new form with specified configuration. Returns the created form with its unique token.
+    /// </summary>
+    [JsonPropertyName("create_form")]
+    public DehydratedFormResponse? CreateForm { get; init; }
+
+    /// <summary>
+    /// Set a password on a form to restrict access. This will enable password protection for the form.
+    /// </summary>
+    [JsonPropertyName("set_form_password")]
+    public ResponseForm? SetFormPassword { get; init; }
 
     /// <summary>
     /// Assigns members to a department.

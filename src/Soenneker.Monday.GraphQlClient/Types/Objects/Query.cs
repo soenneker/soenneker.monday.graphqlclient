@@ -72,6 +72,138 @@ public sealed partial class Query
     public List<LifecycleSubscriptionKind>? GetAppLifecycleSubscriptions { get; init; }
 
     /// <summary>
+    /// Get the connected account's information.
+    /// </summary>
+    [JsonPropertyName("account")]
+    public Account? Account { get; init; }
+
+    /// <summary>
+    /// Get a collection of installs of an app.
+    /// </summary>
+    [JsonPropertyName("app_installs")]
+    public List<AppInstall>? AppInstalls { get; init; }
+
+    /// <summary>
+    /// Get the current app subscription. Note: This query does not work in the playground
+    /// </summary>
+    [JsonPropertyName("app_subscription")]
+    public List<AppSubscription>? AppSubscription { get; init; }
+
+    /// <summary>
+    /// Get operations counter current value
+    /// </summary>
+    [JsonPropertyName("app_subscription_operations")]
+    public AppSubscriptionOperationsCounter? AppSubscriptionOperations { get; init; }
+
+    /// <summary>
+    /// Get apps monetization information for an account
+    /// </summary>
+    [JsonPropertyName("apps_monetization_info")]
+    public AppsMonetizationInfo? AppsMonetizationInfo { get; init; }
+
+    /// <summary>
+    /// Get apps monetization status for an account
+    /// </summary>
+    [JsonPropertyName("apps_monetization_status")]
+    public AppMonetizationStatus? AppsMonetizationStatus { get; init; }
+
+    /// <summary>
+    /// Get a collection of assets by ids.
+    /// </summary>
+    [JsonPropertyName("assets")]
+    public List<Asset>? Assets { get; init; }
+
+    /// <summary>
+    /// Get a collection of boards.
+    /// </summary>
+    [JsonPropertyName("boards")]
+    public List<Board>? Boards { get; init; }
+
+    /// <summary>
+    /// Get the complexity data of your queries.
+    /// </summary>
+    [JsonPropertyName("complexity")]
+    public Complexity? Complexity { get; init; }
+
+    /// <summary>
+    /// Get a collection of docs.
+    /// </summary>
+    [JsonPropertyName("docs")]
+    public List<Document>? Docs { get; init; }
+
+    /// <summary>
+    /// Get a collection of folders. Note: This query won't return folders from closed workspaces to which you are not subscribed
+    /// </summary>
+    [JsonPropertyName("folders")]
+    public List<Folder>? Folders { get; init; }
+
+    /// <summary>
+    /// Get a collection of items.
+    /// </summary>
+    [JsonPropertyName("items")]
+    public List<Item>? Items { get; init; }
+
+    /// <summary>
+    /// Search items by multiple columns and values.
+    /// </summary>
+    [JsonPropertyName("items_page_by_column_values")]
+    public ItemsResponse ItemsPageByColumnValues { get; init; } = null!;
+
+    /// <summary>
+    /// Get the connected user's information.
+    /// </summary>
+    [JsonPropertyName("me")]
+    public User? Me { get; init; }
+
+    /// <summary>
+    /// Get next pages of board's items (rows) by cursor.
+    /// </summary>
+    [JsonPropertyName("next_items_page")]
+    public ItemsResponse NextItemsPage { get; init; } = null!;
+
+    /// <summary>
+    /// Get a collection of tags.
+    /// </summary>
+    [JsonPropertyName("tags")]
+    public List<Tag>? Tags { get; init; }
+
+    /// <summary>
+    /// Get a collection of teams.
+    /// </summary>
+    [JsonPropertyName("teams")]
+    public List<Team>? Teams { get; init; }
+
+    /// <summary>
+    /// Get the status of a use_template async operation. Returns null if the process_id is invalid, expired, or unauthorized.
+    /// </summary>
+    [JsonPropertyName("template_installation_status")]
+    public TemplateInstallationStatusResult? TemplateInstallationStatus { get; init; }
+
+    /// <summary>
+    /// Get the API version in use
+    /// </summary>
+    [JsonPropertyName("version")]
+    public Version Version { get; init; } = null!;
+
+    /// <summary>
+    /// Get a list containing the versions of the API
+    /// </summary>
+    [JsonPropertyName("versions")]
+    public List<Version>? Versions { get; init; }
+
+    /// <summary>
+    /// Get a collection of webhooks for the board
+    /// </summary>
+    [JsonPropertyName("webhooks")]
+    public List<Webhook>? Webhooks { get; init; }
+
+    /// <summary>
+    /// Get a collection of workspaces.
+    /// </summary>
+    [JsonPropertyName("workspaces")]
+    public List<Workspace>? Workspaces { get; init; }
+
+    /// <summary>
     /// Performs aggregation operations on board data
     /// </summary>
     [JsonPropertyName("aggregate")]
@@ -313,6 +445,24 @@ public sealed partial class Query
     public List<BoardMuteSettings>? MuteBoardSettings { get; init; }
 
     /// <summary>
+    /// Get managed column data.
+    /// </summary>
+    [JsonPropertyName("managed_column")]
+    public List<ManagedColumn>? ManagedColumn { get; init; }
+
+    /// <summary>
+    /// Retrieves the JSON schema definition for a specific column type. Use this query before calling update_column mutation to understand the structure and validation rules for the defaults parameter. The schema defines what properties are available when updating columns of a specific type.
+    /// </summary>
+    [JsonPropertyName("get_column_type_schema")]
+    public string? GetColumnTypeSchema { get; init; }
+
+    /// <summary>
+    /// Retrieve active account object schemas by their IDs or names. Only returns account-level object schemas (not global). Object schemas define the structure and columns of boards. If no parameters are provided, all account object schemas are returned. Pass exclude_created_by_monday: true to omit the schemas seeded by monday.com and return only schemas created by users in this account. Results are paginated using page and limit parameters.
+    /// </summary>
+    [JsonPropertyName("get_object_schemas")]
+    public List<ObjectSchema>? GetObjectSchemas { get; init; }
+
+    /// <summary>
     /// Get all personal list items by list ID
     /// </summary>
     [JsonPropertyName("favorites")]
@@ -449,156 +599,6 @@ public sealed partial class Query
     /// </summary>
     [JsonPropertyName("knowledge_base_search")]
     public KnowledgeBaseAnswer? KnowledgeBaseSearch { get; init; }
-
-    /// <summary>
-    /// Get the connected account's information.
-    /// </summary>
-    [JsonPropertyName("account")]
-    public Account? Account { get; init; }
-
-    /// <summary>
-    /// Get a collection of installs of an app.
-    /// </summary>
-    [JsonPropertyName("app_installs")]
-    public List<AppInstall>? AppInstalls { get; init; }
-
-    /// <summary>
-    /// Get the current app subscription. Note: This query does not work in the playground
-    /// </summary>
-    [JsonPropertyName("app_subscription")]
-    public List<AppSubscription>? AppSubscription { get; init; }
-
-    /// <summary>
-    /// Get operations counter current value
-    /// </summary>
-    [JsonPropertyName("app_subscription_operations")]
-    public AppSubscriptionOperationsCounter? AppSubscriptionOperations { get; init; }
-
-    /// <summary>
-    /// Get apps monetization information for an account
-    /// </summary>
-    [JsonPropertyName("apps_monetization_info")]
-    public AppsMonetizationInfo? AppsMonetizationInfo { get; init; }
-
-    /// <summary>
-    /// Get apps monetization status for an account
-    /// </summary>
-    [JsonPropertyName("apps_monetization_status")]
-    public AppMonetizationStatus? AppsMonetizationStatus { get; init; }
-
-    /// <summary>
-    /// Get a collection of assets by ids.
-    /// </summary>
-    [JsonPropertyName("assets")]
-    public List<Asset>? Assets { get; init; }
-
-    /// <summary>
-    /// Get a collection of boards.
-    /// </summary>
-    [JsonPropertyName("boards")]
-    public List<Board>? Boards { get; init; }
-
-    /// <summary>
-    /// Get the complexity data of your queries.
-    /// </summary>
-    [JsonPropertyName("complexity")]
-    public Complexity? Complexity { get; init; }
-
-    /// <summary>
-    /// Get a collection of docs.
-    /// </summary>
-    [JsonPropertyName("docs")]
-    public List<Document>? Docs { get; init; }
-
-    /// <summary>
-    /// Get a collection of folders. Note: This query won't return folders from closed workspaces to which you are not subscribed
-    /// </summary>
-    [JsonPropertyName("folders")]
-    public List<Folder>? Folders { get; init; }
-
-    /// <summary>
-    /// Get a collection of items.
-    /// </summary>
-    [JsonPropertyName("items")]
-    public List<Item>? Items { get; init; }
-
-    /// <summary>
-    /// Search items by multiple columns and values.
-    /// </summary>
-    [JsonPropertyName("items_page_by_column_values")]
-    public ItemsResponse ItemsPageByColumnValues { get; init; } = null!;
-
-    /// <summary>
-    /// Get the connected user's information.
-    /// </summary>
-    [JsonPropertyName("me")]
-    public User? Me { get; init; }
-
-    /// <summary>
-    /// Get next pages of board's items (rows) by cursor.
-    /// </summary>
-    [JsonPropertyName("next_items_page")]
-    public ItemsResponse NextItemsPage { get; init; } = null!;
-
-    /// <summary>
-    /// Get a collection of tags.
-    /// </summary>
-    [JsonPropertyName("tags")]
-    public List<Tag>? Tags { get; init; }
-
-    /// <summary>
-    /// Get a collection of teams.
-    /// </summary>
-    [JsonPropertyName("teams")]
-    public List<Team>? Teams { get; init; }
-
-    /// <summary>
-    /// Get the status of a use_template async operation. Returns null if the process_id is invalid, expired, or unauthorized.
-    /// </summary>
-    [JsonPropertyName("template_installation_status")]
-    public TemplateInstallationStatusResult? TemplateInstallationStatus { get; init; }
-
-    /// <summary>
-    /// Get the API version in use
-    /// </summary>
-    [JsonPropertyName("version")]
-    public Version Version { get; init; } = null!;
-
-    /// <summary>
-    /// Get a list containing the versions of the API
-    /// </summary>
-    [JsonPropertyName("versions")]
-    public List<Version>? Versions { get; init; }
-
-    /// <summary>
-    /// Get a collection of webhooks for the board
-    /// </summary>
-    [JsonPropertyName("webhooks")]
-    public List<Webhook>? Webhooks { get; init; }
-
-    /// <summary>
-    /// Get a collection of workspaces.
-    /// </summary>
-    [JsonPropertyName("workspaces")]
-    public List<Workspace>? Workspaces { get; init; }
-
-    /// <summary>
-    /// Get managed column data.
-    /// </summary>
-    [JsonPropertyName("managed_column")]
-    public List<ManagedColumn>? ManagedColumn { get; init; }
-
-    /// <summary>
-    /// Retrieves the JSON schema definition for a specific column type. Use this query before calling update_column mutation to understand the structure and validation rules for the defaults parameter. The schema defines what properties are available when updating columns of a specific type.
-    /// </summary>
-    [JsonPropertyName("get_column_type_schema")]
-    public string? GetColumnTypeSchema { get; init; }
-
-    /// <summary>
-    /// Retrieve active account object schemas by their IDs or names. Only returns account-level object schemas (not global). Object schemas define the structure and columns of boards. If no parameters are provided, all account object schemas are returned. Pass exclude_created_by_monday: true to omit the schemas seeded by monday.com and return only schemas created by users in this account. Results are paginated using page and limit parameters.
-    /// </summary>
-    [JsonPropertyName("get_object_schemas")]
-    public List<ObjectSchema>? GetObjectSchemas { get; init; }
 
     /// <summary>
     /// Get account departments

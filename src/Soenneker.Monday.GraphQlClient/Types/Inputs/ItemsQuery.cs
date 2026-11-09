@@ -8,22 +8,10 @@ namespace Soenneker.Monday.GraphQlClient;
 public sealed partial class ItemsQuery
 {
     /// <summary>
-    /// A list of rules
-    /// </summary>
-    [JsonPropertyName("rules")]
-    public List<ItemsQueryRule>? Rules { get; init; }
-
-    /// <summary>
     /// A list of rule groups
     /// </summary>
     [JsonPropertyName("groups")]
     public List<ItemsQueryGroup>? Groups { get; init; }
-
-    /// <summary>
-    /// The operator to use for the query rules or rule groups. Default: AND
-    /// </summary>
-    [JsonPropertyName("operator")]
-    public ItemsQueryOperator? @Operator { get; init; }
 
     /// <summary>
     /// A list of item IDs to fetch. Use this to fetch a specific set of items by their IDs. Limited to 100 IDs in ItemsQuery
@@ -32,9 +20,21 @@ public sealed partial class ItemsQuery
     public List<string>? Ids { get; init; }
 
     /// <summary>
+    /// The operator to use for the query rules or rule groups. Default: AND
+    /// </summary>
+    [JsonPropertyName("operator")]
+    public ItemsQueryOperator? @Operator { get; init; }
+
+    /// <summary>
     /// Sort the results by specified columns
     /// </summary>
     [JsonPropertyName("order_by")]
     public List<ItemsQueryOrderBy>? OrderBy { get; init; }
+
+    /// <summary>
+    /// A list of rules
+    /// </summary>
+    [JsonPropertyName("rules")]
+    public List<ItemsQueryRule>? Rules { get; init; }
 
 }

@@ -72,6 +72,12 @@ public sealed partial class VibeAutomation
     public DateOnly? NextRunAt { get; init; }
 
     /// <summary>
+    /// True only on set_automation_active's answer when turning a draft on was the app's first activation, so the settings tip is shown once per app; false otherwise and on every read
+    /// </summary>
+    [JsonPropertyName("first_activation_in_app")]
+    public bool FirstActivationInApp { get; init; }
+
+    /// <summary>
     /// How many times the Automation ran, skipped runs not counted. Null when unknown (e.g. right after set_automation_active), so hide it rather than show 0
     /// </summary>
     [JsonPropertyName("total_runs")]

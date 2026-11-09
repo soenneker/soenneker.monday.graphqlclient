@@ -17,7 +17,7 @@ public sealed partial class ItemDescription
     public List<DocumentBlock>? Blocks { get; init; }
 
     /// <summary>
-    /// The item's unique identifier.
+    /// The description's unique identifier.
     /// </summary>
     [JsonPropertyName("id")]
     public string? Id { get; init; }
