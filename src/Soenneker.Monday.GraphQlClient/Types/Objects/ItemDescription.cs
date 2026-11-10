@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 namespace Soenneker.Monday.GraphQlClient;
 
 /// <summary>
-/// An item description.
+/// An item's description, resolved by the monolith from the item id.
 /// </summary>
 public sealed partial class ItemDescription
 {

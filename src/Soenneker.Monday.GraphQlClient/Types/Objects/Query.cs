@@ -203,12 +203,6 @@ public sealed partial class Query
     [JsonPropertyName("workspaces")]
     public List<Workspace>? Workspaces { get; init; }
 
-    /// <summary>
-    /// Performs aggregation operations on board data
-    /// </summary>
-    [JsonPropertyName("aggregate")]
-    public AggregateQueryResult? Aggregate { get; init; }
-
     [JsonPropertyName("updates")]
     public List<Update>? Updates { get; init; }
 
@@ -429,21 +423,6 @@ public sealed partial class Query
     [JsonPropertyName("audit_event_catalogue")]
     public List<AuditEventCatalogueEntry>? AuditEventCatalogue { get; init; }
 
-    [JsonPropertyName("notifications")]
-    public List<NotificationV2>? Notifications { get; init; }
-
-    /// <summary>
-    /// Retrieves the current user's notification settings across all available channels.
-    /// </summary>
-    [JsonPropertyName("notifications_settings")]
-    public List<NotificationSetting>? NotificationsSettings { get; init; }
-
-    /// <summary>
-    /// Get mute board notification settings for the current user
-    /// </summary>
-    [JsonPropertyName("mute_board_settings")]
-    public List<BoardMuteSettings>? MuteBoardSettings { get; init; }
-
     /// <summary>
     /// Get managed column data.
     /// </summary>
@@ -600,11 +579,32 @@ public sealed partial class Query
     [JsonPropertyName("knowledge_base_search")]
     public KnowledgeBaseAnswer? KnowledgeBaseSearch { get; init; }
 
+    [JsonPropertyName("notifications")]
+    public List<NotificationV2>? Notifications { get; init; }
+
+    /// <summary>
+    /// Retrieves the current user's notification settings across all available channels.
+    /// </summary>
+    [JsonPropertyName("notifications_settings")]
+    public List<NotificationSetting>? NotificationsSettings { get; init; }
+
+    /// <summary>
+    /// Get mute board notification settings for the current user
+    /// </summary>
+    [JsonPropertyName("mute_board_settings")]
+    public List<BoardMuteSettings>? MuteBoardSettings { get; init; }
+
     /// <summary>
     /// Get account departments
     /// </summary>
     [JsonPropertyName("departments")]
     public List<Department>? Departments { get; init; }
+
+    /// <summary>
+    /// Performs aggregation operations on board data
+    /// </summary>
+    [JsonPropertyName("aggregate")]
+    public AggregateQueryResult? Aggregate { get; init; }
 
     /// <summary>
     /// Get all roles for the account

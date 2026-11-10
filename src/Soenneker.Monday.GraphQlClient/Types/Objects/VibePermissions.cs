@@ -35,6 +35,12 @@ public sealed partial class VibePermissions
     public bool? CanAddVibeIntegrations { get; init; }
 
     /// <summary>
+    /// Permission to create Automations in vibe apps. Account-level; the app role still applies
+    /// </summary>
+    [JsonPropertyName("can_create_vibe_automations")]
+    public bool? CanCreateVibeAutomations { get; init; }
+
+    /// <summary>
     /// Permission to publish vibe apps to the public web
     /// </summary>
     [JsonPropertyName("can_publish_to_public_web")]

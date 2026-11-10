@@ -462,6 +462,12 @@ public sealed partial class Mutation
     [JsonPropertyName("use_template")]
     public Template? UseTemplate { get; init; }
 
+    /// <summary>
+    /// Execute an integration block with the provided field values
+    /// </summary>
+    [JsonPropertyName("execute_integration_block")]
+    public IntegrationExecutionResult? ExecuteIntegrationBlock { get; init; }
+
     [JsonPropertyName("like_update")]
     public Update? LikeUpdate { get; init; }
 
@@ -802,18 +808,6 @@ public sealed partial class Mutation
     public DocBlocksFromMarkdownResult? SetItemDescriptionContent { get; init; }
 
     /// <summary>
-    /// Updates a notification setting's enabled status.
-    /// </summary>
-    [JsonPropertyName("update_notification_setting")]
-    public List<NotificationSetting>? UpdateNotificationSetting { get; init; }
-
-    /// <summary>
-    /// Update mute notification settings for a board. Allows muting all notifications for all users, only for the current user, or setting mentions/assigns-only. Returns the updated mute state for the board. Requires appropriate permissions for muting all users.
-    /// </summary>
-    [JsonPropertyName("update_mute_board_settings")]
-    public List<BoardMuteSettings>? UpdateMuteBoardSettings { get; init; }
-
-    /// <summary>
     /// Create managed column of type dropdown mutation.
     /// </summary>
     [JsonPropertyName("create_dropdown_managed_column")]
@@ -1024,12 +1018,6 @@ public sealed partial class Mutation
     public RunPromptResult? RunPrompt { get; init; }
 
     /// <summary>
-    /// Execute an integration block with the provided field values
-    /// </summary>
-    [JsonPropertyName("execute_integration_block")]
-    public IntegrationExecutionResult? ExecuteIntegrationBlock { get; init; }
-
-    /// <summary>
     /// Update form properties including title, description, or question order.
     /// </summary>
     [JsonPropertyName("update_form")]
@@ -1100,6 +1088,18 @@ public sealed partial class Mutation
     /// </summary>
     [JsonPropertyName("set_form_password")]
     public ResponseForm? SetFormPassword { get; init; }
+
+    /// <summary>
+    /// Updates a notification setting's enabled status.
+    /// </summary>
+    [JsonPropertyName("update_notification_setting")]
+    public List<NotificationSetting>? UpdateNotificationSetting { get; init; }
+
+    /// <summary>
+    /// Update mute notification settings for a board. Allows muting all notifications for all users, only for the current user, or setting mentions/assigns-only. Returns the updated mute state for the board. Requires appropriate permissions for muting all users.
+    /// </summary>
+    [JsonPropertyName("update_mute_board_settings")]
+    public List<BoardMuteSettings>? UpdateMuteBoardSettings { get; init; }
 
     /// <summary>
     /// Assigns members to a department.
