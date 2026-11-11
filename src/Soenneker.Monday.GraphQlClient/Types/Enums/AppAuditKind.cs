@@ -35,6 +35,11 @@ public enum AppAuditKind
     /// <summary>
     /// External access was killed by an admin
     /// </summary>
-    EXTERNALACCESSKILLEDBYADMIN
+    EXTERNALACCESSKILLEDBYADMIN,
+
+    /// <summary>
+    /// A user edited the app code by hand, in the editor or through MCP
+    /// </summary>
+    CODEMANUALEDIT
 
 }

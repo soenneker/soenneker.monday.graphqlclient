@@ -28,6 +28,16 @@ public enum VibeAutomationStepResultStatus
     AMBIGUOUS,
 
     /// <summary>
+    /// Started, no result yet, while the run is live
+    /// </summary>
+    RUNNING,
+
+    /// <summary>
+    /// The run was cancelled before the step finished
+    /// </summary>
+    CANCELLED,
+
+    /// <summary>
     /// A status this version of the API does not know yet
     /// </summary>
     UNKNOWN

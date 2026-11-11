@@ -4048,6 +4048,8 @@ namespace Soenneker.Monday.GraphQlClient;
 [JsonSerializable(typeof(GraphQlResponse<VibeAutomationRunDetailStatus>))]
 [JsonSerializable(typeof(VibeAutomationRunInProgress))]
 [JsonSerializable(typeof(GraphQlResponse<VibeAutomationRunInProgress>))]
+[JsonSerializable(typeof(VibeAutomationRunSource))]
+[JsonSerializable(typeof(GraphQlResponse<VibeAutomationRunSource>))]
 [JsonSerializable(typeof(VibeAutomationRunStarted))]
 [JsonSerializable(typeof(GraphQlResponse<VibeAutomationRunStarted>))]
 [JsonSerializable(typeof(VibeAutomationRunStats))]

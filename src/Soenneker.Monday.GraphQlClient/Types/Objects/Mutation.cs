@@ -462,12 +462,6 @@ public sealed partial class Mutation
     [JsonPropertyName("use_template")]
     public Template? UseTemplate { get; init; }
 
-    /// <summary>
-    /// Execute an integration block with the provided field values
-    /// </summary>
-    [JsonPropertyName("execute_integration_block")]
-    public IntegrationExecutionResult? ExecuteIntegrationBlock { get; init; }
-
     [JsonPropertyName("like_update")]
     public Update? LikeUpdate { get; init; }
 
@@ -1340,5 +1334,11 @@ public sealed partial class Mutation
     /// </summary>
     [JsonPropertyName("submit_api_feedback")]
     public SubmitApiFeedbackResult? SubmitApiFeedback { get; init; }
+
+    /// <summary>
+    /// Execute an integration block with the provided field values
+    /// </summary>
+    [JsonPropertyName("execute_integration_block")]
+    public IntegrationExecutionResult? ExecuteIntegrationBlock { get; init; }
 
 }
