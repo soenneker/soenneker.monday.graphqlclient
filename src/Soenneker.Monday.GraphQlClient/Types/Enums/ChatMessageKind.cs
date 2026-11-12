@@ -60,6 +60,11 @@ public enum ChatMessageKind
     /// <summary>
     /// One pipeline step (lint, build, deploy) with its status — copy is owned by the client
     /// </summary>
-    PROCESS
+    PROCESS,
+
+    /// <summary>
+    /// A run of an Automation started from its page or the settings panel
+    /// </summary>
+    RUNSTARTED
 
 }

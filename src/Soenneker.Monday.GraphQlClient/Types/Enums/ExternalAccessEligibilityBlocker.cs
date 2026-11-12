@@ -7,18 +7,44 @@ namespace Soenneker.Monday.GraphQlClient;
 /// </summary>
 public enum ExternalAccessEligibilityBlocker
 {
+    /// <summary>
+    /// The app does not exist
+    /// </summary>
     APPNOTFOUND,
 
+    /// <summary>
+    /// Inviting external users is not enabled for this account
+    /// </summary>
     FEATURENOTAVAILABLE,
 
+    /// <summary>
+    /// The caller may not open apps to people outside the account
+    /// </summary>
     NOPERMISSION,
 
+    /// <summary>
+    /// The caller does not own the app
+    /// </summary>
     NOTAPPOWNER,
 
+    /// <summary>
+    /// The app is password protected; remove the password first
+    /// </summary>
     PASSWORDPROTECTED,
 
+    /// <summary>
+    /// The app is not hosted on the platform that supports external users
+    /// </summary>
     NOTONCLOUDFLARE,
 
-    APPDISABLED
+    /// <summary>
+    /// The app is disabled
+    /// </summary>
+    APPDISABLED,
+
+    /// <summary>
+    /// The app has never been deployed; deploy it before inviting external users
+    /// </summary>
+    APPNOTDEPLOYED
 
 }

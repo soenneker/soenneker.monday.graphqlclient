@@ -72,6 +72,24 @@ public sealed partial class Mutation
     public DeveloperAppVersion? PromoteApp { get; init; }
 
     /// <summary>
+    /// Execute an integration block with the provided field values
+    /// </summary>
+    [JsonPropertyName("execute_integration_block")]
+    public IntegrationExecutionResult? ExecuteIntegrationBlock { get; init; }
+
+    /// <summary>
+    /// Connect an existing project to a portfolio. When a callback_url is provided the mutation returns immediately with a process_id, and the result is POSTed to that URL once the operation completes. The callback payload is: { is_success: boolean, process_id: string, portfolio_item_id?: string }.
+    /// </summary>
+    [JsonPropertyName("connect_project_to_portfolio")]
+    public ConnectProjectResult? ConnectProjectToPortfolio { get; init; }
+
+    /// <summary>
+    /// Create a new portfolio. When a callback_url is provided the mutation returns immediately with a process_id, and the portfolio_id is POSTed to that URL once the portfolio is actually created. The callback payload is: { is_success: boolean, process_id: string, portfolio_id?: number }.
+    /// </summary>
+    [JsonPropertyName("create_portfolio")]
+    public CreatePortfolioResult? CreatePortfolio { get; init; }
+
+    /// <summary>
     /// Add a file to a column value.
     /// </summary>
     [JsonPropertyName("add_file_to_column")]
@@ -964,18 +982,6 @@ public sealed partial class Mutation
     public ExportResult? CreateBoardExport { get; init; }
 
     /// <summary>
-    /// Connect an existing project to a portfolio. When a callback_url is provided the mutation returns immediately with a process_id, and the result is POSTed to that URL once the operation completes. The callback payload is: { is_success: boolean, process_id: string, portfolio_item_id?: string }.
-    /// </summary>
-    [JsonPropertyName("connect_project_to_portfolio")]
-    public ConnectProjectResult? ConnectProjectToPortfolio { get; init; }
-
-    /// <summary>
-    /// Create a new portfolio. When a callback_url is provided the mutation returns immediately with a process_id, and the portfolio_id is POSTed to that URL once the portfolio is actually created. The callback payload is: { is_success: boolean, process_id: string, portfolio_id?: number }.
-    /// </summary>
-    [JsonPropertyName("create_portfolio")]
-    public CreatePortfolioResult? CreatePortfolio { get; init; }
-
-    /// <summary>
     /// Create a new widget.
     /// </summary>
     [JsonPropertyName("create_widget")]
@@ -1334,11 +1340,5 @@ public sealed partial class Mutation
     /// </summary>
     [JsonPropertyName("submit_api_feedback")]
     public SubmitApiFeedbackResult? SubmitApiFeedback { get; init; }
-
-    /// <summary>
-    /// Execute an integration block with the provided field values
-    /// </summary>
-    [JsonPropertyName("execute_integration_block")]
-    public IntegrationExecutionResult? ExecuteIntegrationBlock { get; init; }
 
 }

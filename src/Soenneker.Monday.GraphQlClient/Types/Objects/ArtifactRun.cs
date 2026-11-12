@@ -58,4 +58,10 @@ public sealed partial class ArtifactRun
     [JsonPropertyName("updated_at")]
     public DateOnly? UpdatedAt { get; init; }
 
+    /// <summary>
+    /// User ID of the agent that produced this run
+    /// </summary>
+    [JsonPropertyName("agent_user_id")]
+    public string? AgentUserId { get; init; }
+
 }
