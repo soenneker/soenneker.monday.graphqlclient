@@ -12035,6 +12035,1098 @@ enum ValidationsEntityType {
 }
 
 """
+The account's export credits today: one pool, refilled at midnight UTC, that every user's exports draw from.
+"""
+type DataHubAccountCredits {
+  """
+  Credits the account gets per day.
+  """
+  daily_credits: Int
+  """
+  Credits used so far today.
+  """
+  used_today: Int
+  """
+  Credits left today.
+  """
+  remaining_today: Int
+  """
+  When the pool next refills.
+  """
+  resets_at: ISO8601DateTime
+}
+
+"""
+The outcome of starting the account's exports. A user skipped is an ordinary outcome, not a failed request: read `skipped`.
+"""
+type DataHubAccountExportRun {
+  """
+  When starting began.
+  """
+  started_at: ISO8601DateTime
+  """
+  When every user had been started or skipped.
+  """
+  finished_at: ISO8601DateTime
+  """
+  The exports that were started.
+  """
+  queued: [DataHubQueuedUserExport!]
+  """
+  The users whose export was not started, and why.
+  """
+  skipped: [DataHubSkippedUserExport!]
+}
+
+"""
+Why a user's export was not started.
+"""
+enum DataHubAccountExportSkipReason {
+  """
+  Their selection is empty: they opted out.
+  """
+  NO_WORKSPACES_SELECTED
+  """
+  They never saved a selection.
+  """
+  NO_SAVED_SELECTION
+  """
+  An export of theirs is already running.
+  """
+  JOB_ALREADY_RUNNING
+  """
+  Their monday connection is missing.
+  """
+  NO_CONNECTED_TOKEN
+  """
+  The start was refused.
+  """
+  REJECTED
+  """
+  The start failed.
+  """
+  FAILED
+}
+
+"""
+A user of the account who saved an export selection: one row of the Admin table.
+"""
+type DataHubAccountExportUser {
+  """
+  The monday user.
+  """
+  user_id: ID
+  """
+  The monday user, for their name and photo.
+  """
+  user: User
+  """
+  How many workspaces their selection names. 0 means they opted out.
+  """
+  workspace_count: Int
+  """
+  Their latest export run. Null when they never ran one.
+  """
+  latest_job: DataHubAccountExportUserJob
+  """
+  What their export costs, from their latest priced run.
+  """
+  last_cost: DataHubAccountExportUserCost
+  """
+  The most one of their exports may cost.
+  """
+  allowance: DataHubExportAllowance
+}
+
+"""
+What a user's export costs, from their latest priced run.
+"""
+type DataHubAccountExportUserCost {
+  """
+  The cost in credits.
+  """
+  credits: Int
+  """
+  When it was priced.
+  """
+  computed_at: ISO8601DateTime
+  """
+  Whether pricing stopped early, so the real cost is at least this.
+  """
+  is_lower_bound: Boolean
+}
+
+"""
+A user's latest export run, as the Admin table shows it.
+"""
+type DataHubAccountExportUserJob {
+  """
+  The run.
+  """
+  id: ID
+  """
+  Where the run is.
+  """
+  status: DataHubExportJobStatus
+  """
+  When it started.
+  """
+  created_at: ISO8601DateTime
+  """
+  When it ended. Null while it runs.
+  """
+  completed_at: ISO8601DateTime
+  """
+  How many boards it exports.
+  """
+  boards_count: Int
+  """
+  How many boards are still to export. Null when the live count can't be read right now: unknown, not 0.
+  """
+  boards_left: Int
+  """
+  Why the export budget stopped it, when it did.
+  """
+  failure_code: DataHubExportFailureCode
+}
+
+"""
+Whether an analytics query has been built into its table. Queries are only built by an export.
+"""
+enum DataHubAnalyticsBuildState {
+  """
+  Changed since the last export: builds on the next one.
+  """
+  PENDING
+  """
+  Its table exists.
+  """
+  BUILT
+  """
+  An export ran since it changed, and its table still does not exist.
+  """
+  NOT_BUILT
+  """
+  Could not be told right now.
+  """
+  UNKNOWN
+}
+
+"""
+One of the caller's analytics queries: a saved SELECT that each export builds into a table of the same name in their analytics layer.
+"""
+type DataHubAnalyticsTable {
+  """
+  The query, and the table it builds.
+  """
+  table_name: String
+  """
+  When it was created.
+  """
+  created_at: ISO8601DateTime
+  """
+  When it last changed.
+  """
+  updated_at: ISO8601DateTime
+  """
+  Whether it has been built into its table.
+  """
+  build_state: DataHubAnalyticsBuildState
+  """
+  Its SELECT. Null, with an error, when it could not be read.
+  """
+  select_sql: String
+  """
+  Other analytics queries that read this one, which break if it is renamed or deleted. Null, with an error, when any query's SQL could not be read, since that one might read it.
+  """
+  dependent_table_names: [String!]
+}
+
+"""
+A change to an analytics query. Its table changes on the next export, not now.
+"""
+type DataHubAnalyticsTableChange {
+  """
+  The query.
+  """
+  table_name: String
+  """
+  What was done.
+  """
+  status: String
+  """
+  More about it.
+  """
+  message: String
+}
+
+"""
+An analytics query that was renamed. The next export drops the old table and builds the new one.
+"""
+type DataHubAnalyticsTableRename {
+  """
+  Its old name.
+  """
+  previous_table_name: String
+  """
+  Its new name.
+  """
+  table_name: String
+  """
+  What was done.
+  """
+  status: String
+  """
+  More about it.
+  """
+  message: String
+  """
+  Other analytics queries that read the old name, and now need updating.
+  """
+  dependent_table_names: [String!]
+}
+
+"""
+What exporting one board costs.
+"""
+type DataHubBoardCredits {
+  """
+  The monday board.
+  """
+  board_id: ID
+  """
+  What exporting it costs.
+  """
+  credits: Int
+}
+
+"""
+What the caller can do in Data Hub, to decide what to offer them.
+"""
+type DataHubCapabilities {
+  """
+  Whether the caller holds the Data Hub admin grant: account-wide exports, credits, allowances and the schedule. Not the same as being a monday account admin.
+  """
+  is_admin: Boolean
+  """
+  Whether scheduled exports are available on the caller's account.
+  """
+  has_scheduled_exports: Boolean
+  """
+  Whether plain-language SQL generation is available on the caller's account.
+  """
+  has_sql_generation: Boolean
+  """
+  Whether the Snowflake integration is available on the caller's account.
+  """
+  has_snowflake_integration: Boolean
+}
+
+"""
+The most one of a user's exports may cost.
+"""
+type DataHubExportAllowance {
+  """
+  The allowance in credits.
+  """
+  credits: Int
+  """
+  Whether an admin set it, rather than it being the account's default share.
+  """
+  is_custom: Boolean
+}
+
+"""
+What one of the caller's exports may cost, and how exports are priced.
+"""
+type DataHubExportBudget {
+  """
+  The caller's allowance: the most one of their exports may cost. A run over it is stopped before it starts.
+  """
+  max_credits: Int
+  """
+  How a run is priced.
+  """
+  pricing: DataHubExportPricing
+  """
+  Where light, medium and heavy exports begin.
+  """
+  size_thresholds: DataHubExportSizeThresholds
+}
+
+"""
+A run's price in export credits.
+"""
+type DataHubExportCost {
+  """
+  What the run costs.
+  """
+  credits: Int
+  """
+  The most one of its owner's exports may cost, when the run was checked.
+  """
+  allowance: Int
+  """
+  Whether pricing stopped early, so `credits` is a lower bound.
+  """
+  is_partial: Boolean
+  """
+  How many boards were priced.
+  """
+  priced_boards: Int
+  """
+  The boards that cost the most, heaviest first.
+  """
+  heaviest_boards: [DataHubHeavyBoard!]
+}
+
+"""
+What a selection would cost to export now, without exporting it. Ask for it again by id until status is not RUNNING.
+"""
+type DataHubExportEstimate {
+  """
+  The estimate.
+  """
+  id: ID
+  """
+  Where the estimate is.
+  """
+  status: DataHubExportEstimateStatus
+  """
+  Identifies the selection that was priced. Compare with requested_fingerprint: an estimate already running for an earlier selection is answered instead of a new one.
+  """
+  fingerprint: String
+  """
+  Identifies the selection this request asked to price.
+  """
+  requested_fingerprint: String
+  """
+  When pricing started.
+  """
+  started_at: ISO8601DateTime
+  """
+  When it finished. Null while running.
+  """
+  finished_at: ISO8601DateTime
+  """
+  What exporting the selection would cost. Null until priced.
+  """
+  credits: Int
+  """
+  Whether pricing stopped early, so `credits` is a lower bound.
+  """
+  is_partial: Boolean
+  """
+  How many boards the selection covers.
+  """
+  boards_count: Int
+  """
+  The most one of the selection owner's exports may cost.
+  """
+  allowance: Int
+  """
+  The boards that cost the most, heaviest first.
+  """
+  heaviest_boards: [DataHubHeavyBoard!]
+  """
+  What each priced board costs.
+  """
+  board_credits: [DataHubBoardCredits!]
+  """
+  How far it has got, while running.
+  """
+  progress: DataHubExportEstimateProgress
+  """
+  Why it failed, when it did.
+  """
+  failure: DataHubExportEstimateFailure
+}
+
+"""
+Why an estimate failed.
+"""
+enum DataHubExportEstimateFailure {
+  """
+  The boards could not be priced.
+  """
+  PRICING_FAILED
+  """
+  Pricing took too long and was given up.
+  """
+  TIMED_OUT
+}
+
+"""
+How far a running estimate has got.
+"""
+type DataHubExportEstimateProgress {
+  """
+  Boards priced so far.
+  """
+  priced_boards: Int
+  """
+  Boards to price. Null until they are found.
+  """
+  boards_count: Int
+}
+
+"""
+Where an estimate is.
+"""
+enum DataHubExportEstimateStatus {
+  """
+  Still pricing; ask again.
+  """
+  RUNNING
+  """
+  Priced.
+  """
+  DONE
+  """
+  Could not be priced; see `failure`.
+  """
+  FAILED
+}
+
+"""
+Why the export budget stopped a run before it fetched anything.
+"""
+enum DataHubExportFailureCode {
+  """
+  The run costs more than its owner's allowance.
+  """
+  OVER_BUDGET
+  """
+  The account's credits for today could not cover the run.
+  """
+  CREDITS_EXHAUSTED
+  """
+  The run could not be priced, so it was not started.
+  """
+  COST_CHECK_FAILED
+}
+
+"""
+One export run: the Sync History row for it.
+"""
+type DataHubExportJob {
+  """
+  The run.
+  """
+  id: ID
+  """
+  Where the run is.
+  """
+  status: DataHubExportJobStatus
+  """
+  When the run started.
+  """
+  created_at: ISO8601DateTime
+  """
+  When it ended, whichever way. Null while it runs.
+  """
+  completed_at: ISO8601DateTime
+  """
+  The workspaces it covers.
+  """
+  workspace_ids: [ID!]
+  """
+  How many boards it exports. Null until they are found.
+  """
+  boards_count: Int
+  """
+  How many boards are still to export. Null when the live count can't be read right now: unknown, not 0.
+  """
+  boards_left: Int
+  """
+  Boards that could not be exported.
+  """
+  failed_board_ids: [ID!]
+  """
+  What it costs in export credits. Null until it is priced.
+  """
+  cost: DataHubExportCost
+  """
+  Why the export budget stopped it, when it did.
+  """
+  failure_code: DataHubExportFailureCode
+  """
+  Why it failed, in words for its owner: the export budget's reason when failure_code is set, otherwise "The export could not be completed."
+  """
+  failure_reason: String
+}
+
+"""
+Where an export run is.
+"""
+enum DataHubExportJobStatus {
+  """
+  Waiting for the user's data space to be created; runs once it exists.
+  """
+  PROVISIONING
+  """
+  Finding and pricing the boards.
+  """
+  INITIALIZING
+  """
+  Exporting boards.
+  """
+  IN_PROGRESS
+  """
+  Finished. Some boards may have failed.
+  """
+  COMPLETED
+  """
+  Cancelled before it finished.
+  """
+  ABORTED
+  """
+  Stopped without finishing.
+  """
+  FAILED
+}
+
+"""
+A page of export runs, newest first.
+"""
+type DataHubExportJobsPage {
+  """
+  The runs on this page.
+  """
+  data: [DataHubExportJob!]
+  """
+  Whether more follow, and the cursor for them.
+  """
+  page_info: DataHubPageInfo
+}
+
+"""
+How a run is priced: credits_per_board for every board, plus one credit per items_per_credit items, times linked_item_multiplier for a board with linked items.
+"""
+type DataHubExportPricing {
+  """
+  Credits each board costs.
+  """
+  credits_per_board: Int
+  """
+  Items one credit buys.
+  """
+  items_per_credit: Int
+  """
+  What item credits are multiplied by on a board with linked items.
+  """
+  linked_item_multiplier: Int
+}
+
+"""
+The account's export schedule: when users' exports run on their own.
+"""
+type DataHubExportSchedule {
+  """
+  The hours (0–23, in `timezone`) it runs at, once or twice a day.
+  """
+  hours_of_day: [Int!]
+  """
+  The IANA timezone of the hours.
+  """
+  timezone: String
+  """
+  Whose exports it runs.
+  """
+  user_scope: DataHubExportScheduleUserScope
+  """
+  The users it runs for, when user_scope is SELECTED. Empty for ALL.
+  """
+  user_ids: [ID!]
+  """
+  Whether it runs, or is paused.
+  """
+  is_enabled: Boolean
+  """
+  Pass as expected_version when saving, so a concurrent save is not overwritten.
+  """
+  version: Int
+  """
+  When it next runs. Null while paused.
+  """
+  next_run_at: ISO8601DateTime
+  """
+  Its most recent run. Null before the first.
+  """
+  last_run: DataHubExportScheduleLastRun
+  """
+  When it was last saved.
+  """
+  updated_at: ISO8601DateTime
+  """
+  The admin who last saved it.
+  """
+  updated_by: ID
+}
+
+"""
+The account's export schedule, to save.
+"""
+input DataHubExportScheduleInput {
+  """
+  One or two different hours (0–23) to run at, in `timezone`.
+  """
+  hours_of_day: [Int!]!
+  """
+  An IANA timezone, e.g. Europe/Berlin.
+  """
+  timezone: String!
+  """
+  Whose exports to run.
+  """
+  user_scope: DataHubExportScheduleUserScope!
+  """
+  The users to run for, when user_scope is SELECTED: 1 to 1,000.
+  """
+  user_ids: [ID!]
+  """
+  Run it, or keep it paused.
+  """
+  is_enabled: Boolean!
+  """
+  The version you read (0 if there is no schedule yet). Saving fails with CONFLICT if someone saved since.
+  """
+  expected_version: Int!
+}
+
+"""
+The schedule's most recent run.
+"""
+type DataHubExportScheduleLastRun {
+  """
+  The time it was scheduled for.
+  """
+  scheduled_at: ISO8601DateTime
+  """
+  What happened.
+  """
+  outcome: DataHubExportScheduleOutcome
+  """
+  Why it was missed or dropped.
+  """
+  reason: String
+  """
+  Exports started.
+  """
+  queued: Int
+  """
+  Users skipped.
+  """
+  skipped: Int
+  """
+  Exports that failed to start.
+  """
+  failed: Int
+  """
+  How late after scheduled_at it ran.
+  """
+  late_by_seconds: Int
+  """
+  When it finished.
+  """
+  finished_at: ISO8601DateTime
+}
+
+"""
+What happened at a scheduled run.
+"""
+enum DataHubExportScheduleOutcome {
+  """
+  The users' exports were started.
+  """
+  STARTED
+  """
+  The run came too late and was skipped.
+  """
+  MISSED
+  """
+  The run was not made, e.g. Data Hub or scheduled exports were off.
+  """
+  DROPPED
+}
+
+"""
+Whose exports a schedule runs.
+"""
+enum DataHubExportScheduleUserScope {
+  """
+  Every user with a saved selection, including users who save one later.
+  """
+  ALL
+  """
+  Only the users named in user_ids.
+  """
+  SELECTED
+}
+
+"""
+What the caller's exports cover: their standing selection of workspaces, folders and boards, used by every export of theirs.
+"""
+type DataHubExportSelection {
+  """
+  The workspaces selected. Empty when the caller has opted out, or never chose.
+  """
+  workspaces: [DataHubWorkspaceSelection!]
+  """
+  When the selection was last saved. Null when it never was.
+  """
+  updated_at: ISO8601DateTime
+}
+
+"""
+The credits where an export stops being light, and stops being medium.
+"""
+type DataHubExportSizeThresholds {
+  """
+  The most credits a light export costs.
+  """
+  light_max: Int
+  """
+  The most credits a medium export costs; above it is heavy.
+  """
+  medium_max: Int
+}
+
+"""
+One of the boards that cost the most credits.
+"""
+type DataHubHeavyBoard {
+  """
+  The monday board.
+  """
+  board_id: ID
+  """
+  The board's name when it was priced.
+  """
+  name: String
+  """
+  What exporting it costs.
+  """
+  credits: Int
+}
+
+"""
+A layer of the caller's own exported monday data.
+"""
+enum DataHubLayer {
+  """
+  The exported boards, items, users and workspaces, as exported.
+  """
+  TRUSTED
+  """
+  Tables built from the caller's analytics queries.
+  """
+  ANALYTICS
+}
+
+"""
+When the account's export schedule next exports the caller's selection.
+"""
+type DataHubNextExportRun {
+  """
+  When the next scheduled run starts. Null when none will run for the caller: no schedule, it is paused, it does not cover them, or scheduled exports are not available on the account.
+  """
+  next_run_at: ISO8601DateTime
+}
+
+"""
+Where a page of a cursor-paged list sits.
+"""
+type DataHubPageInfo {
+  """
+  Whether another page follows this one.
+  """
+  has_next_page: Boolean
+  """
+  Pass as `cursor` to get the next page. Opaque: do not parse or build one. Null on the last page.
+  """
+  end_cursor: String
+}
+
+"""
+A column of a query's results.
+"""
+type DataHubQueryColumn {
+  """
+  The column.
+  """
+  name: String
+  """
+  Its SQL type.
+  """
+  type: String
+}
+
+"""
+Where a query is and, once it has SUCCEEDED, a page of its rows. Ask again while it is QUEUED or RUNNING.
+"""
+type DataHubQueryResults {
+  """
+  Where the query is.
+  """
+  status: DataHubQueryStatus
+  """
+  Why it failed or was cancelled.
+  """
+  failure_reason: String
+  """
+  The results' columns. Empty until it has SUCCEEDED.
+  """
+  columns: [DataHubQueryColumn!]
+  """
+  This page of rows. Empty until it has SUCCEEDED.
+  """
+  rows: [DataHubQueryRow!]
+  """
+  Whether more rows follow, and the cursor for them.
+  """
+  page_info: DataHubPageInfo
+}
+
+"""
+One row of results.
+"""
+type DataHubQueryRow {
+  """
+  Its values as text, in the order of `columns`. Null for SQL NULL.
+  """
+  values: [String]!
+}
+
+"""
+A query that was started.
+"""
+type DataHubQueryStart {
+  """
+  The query: pass to data_hub_query_results.
+  """
+  id: ID
+}
+
+"""
+Where a query is.
+"""
+enum DataHubQueryStatus {
+  """
+  Waiting to run.
+  """
+  QUEUED
+  """
+  Running.
+  """
+  RUNNING
+  """
+  Finished; its rows can be read.
+  """
+  SUCCEEDED
+  """
+  Failed; see failure_reason.
+  """
+  FAILED
+  """
+  Cancelled.
+  """
+  CANCELLED
+}
+
+"""
+A user's export that was started.
+"""
+type DataHubQueuedUserExport {
+  """
+  The monday user.
+  """
+  user_id: ID
+  """
+  The run started for them; follow it with data_hub_account_export_users.
+  """
+  job_id: ID
+  """
+  Workspaces it covers.
+  """
+  workspace_count: Int
+}
+
+"""
+A user's export that was not started.
+"""
+type DataHubSkippedUserExport {
+  """
+  The monday user.
+  """
+  user_id: ID
+  """
+  Why it was not started.
+  """
+  reason: DataHubAccountExportSkipReason
+  """
+  More about why, for a refused start. Null for FAILED: the error behind it can name our infrastructure, so it is logged, not shown.
+  """
+  detail: String
+}
+
+"""
+A table the caller can query.
+"""
+type DataHubTable {
+  """
+  The table, as SQL names it.
+  """
+  name: String
+  """
+  Its columns.
+  """
+  columns: [DataHubTableColumn!]
+}
+
+"""
+A column of a table.
+"""
+type DataHubTableColumn {
+  """
+  The column.
+  """
+  name: String
+  """
+  Its SQL type.
+  """
+  type: String
+}
+
+"""
+A user's export run that was cancelled.
+"""
+type DataHubUserExportCancellation {
+  """
+  The monday user.
+  """
+  user_id: ID
+  """
+  The run.
+  """
+  job_id: ID
+}
+
+"""
+What a user's saved selection would cost to export now, as an admin sees it: the estimate, plus the account's daily credits and what is left of them today. Ask for it again by id until status is not RUNNING.
+"""
+type DataHubUserExportEstimate {
+  """
+  The estimate.
+  """
+  id: ID
+  """
+  Where the estimate is.
+  """
+  status: DataHubExportEstimateStatus
+  """
+  Identifies the selection that was priced. Compare with requested_fingerprint: an estimate already running for an earlier selection is answered instead of a new one.
+  """
+  fingerprint: String
+  """
+  Identifies the selection this request asked to price.
+  """
+  requested_fingerprint: String
+  """
+  When pricing started.
+  """
+  started_at: ISO8601DateTime
+  """
+  When it finished. Null while running.
+  """
+  finished_at: ISO8601DateTime
+  """
+  What exporting the selection would cost. Null until priced.
+  """
+  credits: Int
+  """
+  Whether pricing stopped early, so `credits` is a lower bound.
+  """
+  is_partial: Boolean
+  """
+  How many boards the selection covers.
+  """
+  boards_count: Int
+  """
+  The most one of the selection owner's exports may cost.
+  """
+  allowance: Int
+  """
+  The boards that cost the most, heaviest first.
+  """
+  heaviest_boards: [DataHubHeavyBoard!]
+  """
+  What each priced board costs.
+  """
+  board_credits: [DataHubBoardCredits!]
+  """
+  How far it has got, while running.
+  """
+  progress: DataHubExportEstimateProgress
+  """
+  Why it failed, when it did.
+  """
+  failure: DataHubExportEstimateFailure
+  """
+  The account's export credits per day when it was priced.
+  """
+  budget: Int
+  """
+  What the account had left of them today when it was priced: whether a run would start now.
+  """
+  remaining_today: Int
+}
+
+"""
+One workspace in an export selection, whole or in part.
+"""
+type DataHubWorkspaceSelection {
+  """
+  The monday workspace.
+  """
+  workspace_id: ID
+  """
+  Whether every board in the workspace is exported, including boards added later. When true, folder_ids and board_ids are empty.
+  """
+  include_all_boards: Boolean
+  """
+  Folders whose boards are exported, when not the whole workspace.
+  """
+  folder_ids: [ID!]
+  """
+  Individual boards exported, when not the whole workspace.
+  """
+  board_ids: [ID!]
+}
+
+"""
+One workspace to export, whole or in part.
+"""
+input DataHubWorkspaceSelectionInput {
+  """
+  The monday workspace.
+  """
+  workspace_id: ID!
+  """
+  Export every board in the workspace, including boards added later. When false, name at least one folder or board.
+  """
+  include_all_boards: Boolean!
+  """
+  Folders whose boards to export, when not the whole workspace.
+  """
+  folder_ids: [ID!]
+  """
+  Individual boards to export, when not the whole workspace.
+  """
+  board_ids: [ID!]
+}
+
+"""
 Initialization response for bulk delete containing job ID for polling
 """
 type BulkDeleteInit {
@@ -22923,1090 +24015,6 @@ type WidgetsSurface {
   The JSON Schema used as the data structure for widgets surface generation.
   """
   data_structure: JSON
-}
-
-"""
-The account's export credits today: one pool, refilled at midnight UTC, that every user's exports draw from.
-"""
-type DataHubAccountCredits {
-  """
-  Credits the account gets per day.
-  """
-  daily_credits: Int
-  """
-  Credits used so far today.
-  """
-  used_today: Int
-  """
-  Credits left today.
-  """
-  remaining_today: Int
-  """
-  When the pool next refills.
-  """
-  resets_at: ISO8601DateTime
-}
-
-"""
-The outcome of starting the account's exports. A user skipped is an ordinary outcome, not a failed request: read `skipped`.
-"""
-type DataHubAccountExportRun {
-  """
-  When starting began.
-  """
-  started_at: ISO8601DateTime
-  """
-  When every user had been started or skipped.
-  """
-  finished_at: ISO8601DateTime
-  """
-  The exports that were started.
-  """
-  queued: [DataHubQueuedUserExport!]
-  """
-  The users whose export was not started, and why.
-  """
-  skipped: [DataHubSkippedUserExport!]
-}
-
-"""
-Why a user's export was not started.
-"""
-enum DataHubAccountExportSkipReason {
-  """
-  Their selection is empty: they opted out.
-  """
-  NO_WORKSPACES_SELECTED
-  """
-  They never saved a selection.
-  """
-  NO_SAVED_SELECTION
-  """
-  An export of theirs is already running.
-  """
-  JOB_ALREADY_RUNNING
-  """
-  Their monday connection is missing.
-  """
-  NO_CONNECTED_TOKEN
-  """
-  The start was refused.
-  """
-  REJECTED
-  """
-  The start failed.
-  """
-  FAILED
-}
-
-"""
-A user of the account who saved an export selection: one row of the Admin table.
-"""
-type DataHubAccountExportUser {
-  """
-  The monday user.
-  """
-  user_id: ID
-  """
-  The monday user, for their name and photo.
-  """
-  user: User
-  """
-  How many workspaces their selection names. 0 means they opted out.
-  """
-  workspace_count: Int
-  """
-  Their latest export run. Null when they never ran one.
-  """
-  latest_job: DataHubAccountExportUserJob
-  """
-  What their export costs, from their latest priced run.
-  """
-  last_cost: DataHubAccountExportUserCost
-  """
-  The most one of their exports may cost.
-  """
-  allowance: DataHubExportAllowance
-}
-
-"""
-What a user's export costs, from their latest priced run.
-"""
-type DataHubAccountExportUserCost {
-  """
-  The cost in credits.
-  """
-  credits: Int
-  """
-  When it was priced.
-  """
-  computed_at: ISO8601DateTime
-  """
-  Whether pricing stopped early, so the real cost is at least this.
-  """
-  is_lower_bound: Boolean
-}
-
-"""
-A user's latest export run, as the Admin table shows it.
-"""
-type DataHubAccountExportUserJob {
-  """
-  The run.
-  """
-  id: ID
-  """
-  Where the run is.
-  """
-  status: DataHubExportJobStatus
-  """
-  When it started.
-  """
-  created_at: ISO8601DateTime
-  """
-  When it ended. Null while it runs.
-  """
-  completed_at: ISO8601DateTime
-  """
-  How many boards it exports.
-  """
-  boards_count: Int
-  """
-  How many boards are still to export. Null when the live count can't be read right now: unknown, not 0.
-  """
-  boards_left: Int
-  """
-  Why the export budget stopped it, when it did.
-  """
-  failure_code: DataHubExportFailureCode
-}
-
-"""
-Whether an analytics query has been built into its table. Queries are only built by an export.
-"""
-enum DataHubAnalyticsBuildState {
-  """
-  Changed since the last export: builds on the next one.
-  """
-  PENDING
-  """
-  Its table exists.
-  """
-  BUILT
-  """
-  An export ran since it changed, and its table still does not exist.
-  """
-  NOT_BUILT
-  """
-  Could not be told right now.
-  """
-  UNKNOWN
-}
-
-"""
-One of the caller's analytics queries: a saved SELECT that each export builds into a table of the same name in their analytics layer.
-"""
-type DataHubAnalyticsTable {
-  """
-  The query, and the table it builds.
-  """
-  table_name: String
-  """
-  When it was created.
-  """
-  created_at: ISO8601DateTime
-  """
-  When it last changed.
-  """
-  updated_at: ISO8601DateTime
-  """
-  Whether it has been built into its table.
-  """
-  build_state: DataHubAnalyticsBuildState
-  """
-  Its SELECT. Null, with an error, when it could not be read.
-  """
-  select_sql: String
-  """
-  Other analytics queries that read this one, which break if it is renamed or deleted. Null, with an error, when any query's SQL could not be read, since that one might read it.
-  """
-  dependent_table_names: [String!]
-}
-
-"""
-A change to an analytics query. Its table changes on the next export, not now.
-"""
-type DataHubAnalyticsTableChange {
-  """
-  The query.
-  """
-  table_name: String
-  """
-  What was done.
-  """
-  status: String
-  """
-  More about it.
-  """
-  message: String
-}
-
-"""
-An analytics query that was renamed. The next export drops the old table and builds the new one.
-"""
-type DataHubAnalyticsTableRename {
-  """
-  Its old name.
-  """
-  previous_table_name: String
-  """
-  Its new name.
-  """
-  table_name: String
-  """
-  What was done.
-  """
-  status: String
-  """
-  More about it.
-  """
-  message: String
-  """
-  Other analytics queries that read the old name, and now need updating.
-  """
-  dependent_table_names: [String!]
-}
-
-"""
-What exporting one board costs.
-"""
-type DataHubBoardCredits {
-  """
-  The monday board.
-  """
-  board_id: ID
-  """
-  What exporting it costs.
-  """
-  credits: Int
-}
-
-"""
-What the caller can do in Data Hub, to decide what to offer them.
-"""
-type DataHubCapabilities {
-  """
-  Whether the caller holds the Data Hub admin grant: account-wide exports, credits, allowances and the schedule. Not the same as being a monday account admin.
-  """
-  is_admin: Boolean
-  """
-  Whether scheduled exports are available on the caller's account.
-  """
-  has_scheduled_exports: Boolean
-}
-
-"""
-The most one of a user's exports may cost.
-"""
-type DataHubExportAllowance {
-  """
-  The allowance in credits.
-  """
-  credits: Int
-  """
-  Whether an admin set it, rather than it being the account's default share.
-  """
-  is_custom: Boolean
-}
-
-"""
-What one of the caller's exports may cost, and how exports are priced.
-"""
-type DataHubExportBudget {
-  """
-  The caller's allowance: the most one of their exports may cost. A run over it is stopped before it starts.
-  """
-  max_credits: Int
-  """
-  How a run is priced.
-  """
-  pricing: DataHubExportPricing
-  """
-  Where light, medium and heavy exports begin.
-  """
-  size_thresholds: DataHubExportSizeThresholds
-}
-
-"""
-A run's price in export credits.
-"""
-type DataHubExportCost {
-  """
-  What the run costs.
-  """
-  credits: Int
-  """
-  The most one of its owner's exports may cost, when the run was checked.
-  """
-  allowance: Int
-  """
-  Whether pricing stopped early, so `credits` is a lower bound.
-  """
-  is_partial: Boolean
-  """
-  How many boards were priced.
-  """
-  priced_boards: Int
-  """
-  The boards that cost the most, heaviest first.
-  """
-  heaviest_boards: [DataHubHeavyBoard!]
-}
-
-"""
-What a selection would cost to export now, without exporting it. Ask for it again by id until status is not RUNNING.
-"""
-type DataHubExportEstimate {
-  """
-  The estimate.
-  """
-  id: ID
-  """
-  Where the estimate is.
-  """
-  status: DataHubExportEstimateStatus
-  """
-  Identifies the selection that was priced. Compare with requested_fingerprint: an estimate already running for an earlier selection is answered instead of a new one.
-  """
-  fingerprint: String
-  """
-  Identifies the selection this request asked to price.
-  """
-  requested_fingerprint: String
-  """
-  When pricing started.
-  """
-  started_at: ISO8601DateTime
-  """
-  When it finished. Null while running.
-  """
-  finished_at: ISO8601DateTime
-  """
-  What exporting the selection would cost. Null until priced.
-  """
-  credits: Int
-  """
-  Whether pricing stopped early, so `credits` is a lower bound.
-  """
-  is_partial: Boolean
-  """
-  How many boards the selection covers.
-  """
-  boards_count: Int
-  """
-  The most one of the selection owner's exports may cost.
-  """
-  allowance: Int
-  """
-  The boards that cost the most, heaviest first.
-  """
-  heaviest_boards: [DataHubHeavyBoard!]
-  """
-  What each priced board costs.
-  """
-  board_credits: [DataHubBoardCredits!]
-  """
-  How far it has got, while running.
-  """
-  progress: DataHubExportEstimateProgress
-  """
-  Why it failed, when it did.
-  """
-  failure: DataHubExportEstimateFailure
-}
-
-"""
-Why an estimate failed.
-"""
-enum DataHubExportEstimateFailure {
-  """
-  The boards could not be priced.
-  """
-  PRICING_FAILED
-  """
-  Pricing took too long and was given up.
-  """
-  TIMED_OUT
-}
-
-"""
-How far a running estimate has got.
-"""
-type DataHubExportEstimateProgress {
-  """
-  Boards priced so far.
-  """
-  priced_boards: Int
-  """
-  Boards to price. Null until they are found.
-  """
-  boards_count: Int
-}
-
-"""
-Where an estimate is.
-"""
-enum DataHubExportEstimateStatus {
-  """
-  Still pricing; ask again.
-  """
-  RUNNING
-  """
-  Priced.
-  """
-  DONE
-  """
-  Could not be priced; see `failure`.
-  """
-  FAILED
-}
-
-"""
-Why the export budget stopped a run before it fetched anything.
-"""
-enum DataHubExportFailureCode {
-  """
-  The run costs more than its owner's allowance.
-  """
-  OVER_BUDGET
-  """
-  The account's credits for today could not cover the run.
-  """
-  CREDITS_EXHAUSTED
-  """
-  The run could not be priced, so it was not started.
-  """
-  COST_CHECK_FAILED
-}
-
-"""
-One export run: the Sync History row for it.
-"""
-type DataHubExportJob {
-  """
-  The run.
-  """
-  id: ID
-  """
-  Where the run is.
-  """
-  status: DataHubExportJobStatus
-  """
-  When the run started.
-  """
-  created_at: ISO8601DateTime
-  """
-  When it ended, whichever way. Null while it runs.
-  """
-  completed_at: ISO8601DateTime
-  """
-  The workspaces it covers.
-  """
-  workspace_ids: [ID!]
-  """
-  How many boards it exports. Null until they are found.
-  """
-  boards_count: Int
-  """
-  How many boards are still to export. Null when the live count can't be read right now: unknown, not 0.
-  """
-  boards_left: Int
-  """
-  Boards that could not be exported.
-  """
-  failed_board_ids: [ID!]
-  """
-  What it costs in export credits. Null until it is priced.
-  """
-  cost: DataHubExportCost
-  """
-  Why the export budget stopped it, when it did.
-  """
-  failure_code: DataHubExportFailureCode
-  """
-  Why it failed, in words for its owner: the export budget's reason when failure_code is set, otherwise "The export could not be completed."
-  """
-  failure_reason: String
-}
-
-"""
-Where an export run is.
-"""
-enum DataHubExportJobStatus {
-  """
-  Waiting for the user's data space to be created; runs once it exists.
-  """
-  PROVISIONING
-  """
-  Finding and pricing the boards.
-  """
-  INITIALIZING
-  """
-  Exporting boards.
-  """
-  IN_PROGRESS
-  """
-  Finished. Some boards may have failed.
-  """
-  COMPLETED
-  """
-  Cancelled before it finished.
-  """
-  ABORTED
-  """
-  Stopped without finishing.
-  """
-  FAILED
-}
-
-"""
-A page of export runs, newest first.
-"""
-type DataHubExportJobsPage {
-  """
-  The runs on this page.
-  """
-  data: [DataHubExportJob!]
-  """
-  Whether more follow, and the cursor for them.
-  """
-  page_info: DataHubPageInfo
-}
-
-"""
-How a run is priced: credits_per_board for every board, plus one credit per items_per_credit items, times linked_item_multiplier for a board with linked items.
-"""
-type DataHubExportPricing {
-  """
-  Credits each board costs.
-  """
-  credits_per_board: Int
-  """
-  Items one credit buys.
-  """
-  items_per_credit: Int
-  """
-  What item credits are multiplied by on a board with linked items.
-  """
-  linked_item_multiplier: Int
-}
-
-"""
-The account's export schedule: when users' exports run on their own.
-"""
-type DataHubExportSchedule {
-  """
-  The hours (0–23, in `timezone`) it runs at, once or twice a day.
-  """
-  hours_of_day: [Int!]
-  """
-  The IANA timezone of the hours.
-  """
-  timezone: String
-  """
-  Whose exports it runs.
-  """
-  user_scope: DataHubExportScheduleUserScope
-  """
-  The users it runs for, when user_scope is SELECTED. Empty for ALL.
-  """
-  user_ids: [ID!]
-  """
-  Whether it runs, or is paused.
-  """
-  is_enabled: Boolean
-  """
-  Pass as expected_version when saving, so a concurrent save is not overwritten.
-  """
-  version: Int
-  """
-  When it next runs. Null while paused.
-  """
-  next_run_at: ISO8601DateTime
-  """
-  Its most recent run. Null before the first.
-  """
-  last_run: DataHubExportScheduleLastRun
-  """
-  When it was last saved.
-  """
-  updated_at: ISO8601DateTime
-  """
-  The admin who last saved it.
-  """
-  updated_by: ID
-}
-
-"""
-The account's export schedule, to save.
-"""
-input DataHubExportScheduleInput {
-  """
-  One or two different hours (0–23) to run at, in `timezone`.
-  """
-  hours_of_day: [Int!]!
-  """
-  An IANA timezone, e.g. Europe/Berlin.
-  """
-  timezone: String!
-  """
-  Whose exports to run.
-  """
-  user_scope: DataHubExportScheduleUserScope!
-  """
-  The users to run for, when user_scope is SELECTED: 1 to 1,000.
-  """
-  user_ids: [ID!]
-  """
-  Run it, or keep it paused.
-  """
-  is_enabled: Boolean!
-  """
-  The version you read (0 if there is no schedule yet). Saving fails with CONFLICT if someone saved since.
-  """
-  expected_version: Int!
-}
-
-"""
-The schedule's most recent run.
-"""
-type DataHubExportScheduleLastRun {
-  """
-  The time it was scheduled for.
-  """
-  scheduled_at: ISO8601DateTime
-  """
-  What happened.
-  """
-  outcome: DataHubExportScheduleOutcome
-  """
-  Why it was missed or dropped.
-  """
-  reason: String
-  """
-  Exports started.
-  """
-  queued: Int
-  """
-  Users skipped.
-  """
-  skipped: Int
-  """
-  Exports that failed to start.
-  """
-  failed: Int
-  """
-  How late after scheduled_at it ran.
-  """
-  late_by_seconds: Int
-  """
-  When it finished.
-  """
-  finished_at: ISO8601DateTime
-}
-
-"""
-What happened at a scheduled run.
-"""
-enum DataHubExportScheduleOutcome {
-  """
-  The users' exports were started.
-  """
-  STARTED
-  """
-  The run came too late and was skipped.
-  """
-  MISSED
-  """
-  The run was not made, e.g. Data Hub or scheduled exports were off.
-  """
-  DROPPED
-}
-
-"""
-Whose exports a schedule runs.
-"""
-enum DataHubExportScheduleUserScope {
-  """
-  Every user with a saved selection, including users who save one later.
-  """
-  ALL
-  """
-  Only the users named in user_ids.
-  """
-  SELECTED
-}
-
-"""
-What the caller's exports cover: their standing selection of workspaces, folders and boards, used by every export of theirs.
-"""
-type DataHubExportSelection {
-  """
-  The workspaces selected. Empty when the caller has opted out, or never chose.
-  """
-  workspaces: [DataHubWorkspaceSelection!]
-  """
-  When the selection was last saved. Null when it never was.
-  """
-  updated_at: ISO8601DateTime
-}
-
-"""
-The credits where an export stops being light, and stops being medium.
-"""
-type DataHubExportSizeThresholds {
-  """
-  The most credits a light export costs.
-  """
-  light_max: Int
-  """
-  The most credits a medium export costs; above it is heavy.
-  """
-  medium_max: Int
-}
-
-"""
-One of the boards that cost the most credits.
-"""
-type DataHubHeavyBoard {
-  """
-  The monday board.
-  """
-  board_id: ID
-  """
-  The board's name when it was priced.
-  """
-  name: String
-  """
-  What exporting it costs.
-  """
-  credits: Int
-}
-
-"""
-A layer of the caller's own exported monday data.
-"""
-enum DataHubLayer {
-  """
-  The exported boards, items, users and workspaces, as exported.
-  """
-  TRUSTED
-  """
-  Tables built from the caller's analytics queries.
-  """
-  ANALYTICS
-}
-
-"""
-When the account's export schedule next exports the caller's selection.
-"""
-type DataHubNextExportRun {
-  """
-  When the next scheduled run starts. Null when none will run for the caller: no schedule, it is paused, it does not cover them, or scheduled exports are not available on the account.
-  """
-  next_run_at: ISO8601DateTime
-}
-
-"""
-Where a page of a cursor-paged list sits.
-"""
-type DataHubPageInfo {
-  """
-  Whether another page follows this one.
-  """
-  has_next_page: Boolean
-  """
-  Pass as `cursor` to get the next page. Opaque: do not parse or build one. Null on the last page.
-  """
-  end_cursor: String
-}
-
-"""
-A column of a query's results.
-"""
-type DataHubQueryColumn {
-  """
-  The column.
-  """
-  name: String
-  """
-  Its SQL type.
-  """
-  type: String
-}
-
-"""
-Where a query is and, once it has SUCCEEDED, a page of its rows. Ask again while it is QUEUED or RUNNING.
-"""
-type DataHubQueryResults {
-  """
-  Where the query is.
-  """
-  status: DataHubQueryStatus
-  """
-  Why it failed or was cancelled.
-  """
-  failure_reason: String
-  """
-  The results' columns. Empty until it has SUCCEEDED.
-  """
-  columns: [DataHubQueryColumn!]
-  """
-  This page of rows. Empty until it has SUCCEEDED.
-  """
-  rows: [DataHubQueryRow!]
-  """
-  Whether more rows follow, and the cursor for them.
-  """
-  page_info: DataHubPageInfo
-}
-
-"""
-One row of results.
-"""
-type DataHubQueryRow {
-  """
-  Its values as text, in the order of `columns`. Null for SQL NULL.
-  """
-  values: [String]!
-}
-
-"""
-A query that was started.
-"""
-type DataHubQueryStart {
-  """
-  The query: pass to data_hub_query_results.
-  """
-  id: ID
-}
-
-"""
-Where a query is.
-"""
-enum DataHubQueryStatus {
-  """
-  Waiting to run.
-  """
-  QUEUED
-  """
-  Running.
-  """
-  RUNNING
-  """
-  Finished; its rows can be read.
-  """
-  SUCCEEDED
-  """
-  Failed; see failure_reason.
-  """
-  FAILED
-  """
-  Cancelled.
-  """
-  CANCELLED
-}
-
-"""
-A user's export that was started.
-"""
-type DataHubQueuedUserExport {
-  """
-  The monday user.
-  """
-  user_id: ID
-  """
-  The run started for them; follow it with data_hub_account_export_users.
-  """
-  job_id: ID
-  """
-  Workspaces it covers.
-  """
-  workspace_count: Int
-}
-
-"""
-A user's export that was not started.
-"""
-type DataHubSkippedUserExport {
-  """
-  The monday user.
-  """
-  user_id: ID
-  """
-  Why it was not started.
-  """
-  reason: DataHubAccountExportSkipReason
-  """
-  More about why, for a refused start. Null for FAILED: the error behind it can name our infrastructure, so it is logged, not shown.
-  """
-  detail: String
-}
-
-"""
-A table the caller can query.
-"""
-type DataHubTable {
-  """
-  The table, as SQL names it.
-  """
-  name: String
-  """
-  Its columns.
-  """
-  columns: [DataHubTableColumn!]
-}
-
-"""
-A column of a table.
-"""
-type DataHubTableColumn {
-  """
-  The column.
-  """
-  name: String
-  """
-  Its SQL type.
-  """
-  type: String
-}
-
-"""
-A user's export run that was cancelled.
-"""
-type DataHubUserExportCancellation {
-  """
-  The monday user.
-  """
-  user_id: ID
-  """
-  The run.
-  """
-  job_id: ID
-}
-
-"""
-What a user's saved selection would cost to export now, as an admin sees it: the estimate, plus the account's daily credits and what is left of them today. Ask for it again by id until status is not RUNNING.
-"""
-type DataHubUserExportEstimate {
-  """
-  The estimate.
-  """
-  id: ID
-  """
-  Where the estimate is.
-  """
-  status: DataHubExportEstimateStatus
-  """
-  Identifies the selection that was priced. Compare with requested_fingerprint: an estimate already running for an earlier selection is answered instead of a new one.
-  """
-  fingerprint: String
-  """
-  Identifies the selection this request asked to price.
-  """
-  requested_fingerprint: String
-  """
-  When pricing started.
-  """
-  started_at: ISO8601DateTime
-  """
-  When it finished. Null while running.
-  """
-  finished_at: ISO8601DateTime
-  """
-  What exporting the selection would cost. Null until priced.
-  """
-  credits: Int
-  """
-  Whether pricing stopped early, so `credits` is a lower bound.
-  """
-  is_partial: Boolean
-  """
-  How many boards the selection covers.
-  """
-  boards_count: Int
-  """
-  The most one of the selection owner's exports may cost.
-  """
-  allowance: Int
-  """
-  The boards that cost the most, heaviest first.
-  """
-  heaviest_boards: [DataHubHeavyBoard!]
-  """
-  What each priced board costs.
-  """
-  board_credits: [DataHubBoardCredits!]
-  """
-  How far it has got, while running.
-  """
-  progress: DataHubExportEstimateProgress
-  """
-  Why it failed, when it did.
-  """
-  failure: DataHubExportEstimateFailure
-  """
-  The account's export credits per day when it was priced.
-  """
-  budget: Int
-  """
-  What the account had left of them today when it was priced: whether a run would start now.
-  """
-  remaining_today: Int
-}
-
-"""
-One workspace in an export selection, whole or in part.
-"""
-type DataHubWorkspaceSelection {
-  """
-  The monday workspace.
-  """
-  workspace_id: ID
-  """
-  Whether every board in the workspace is exported, including boards added later. When true, folder_ids and board_ids are empty.
-  """
-  include_all_boards: Boolean
-  """
-  Folders whose boards are exported, when not the whole workspace.
-  """
-  folder_ids: [ID!]
-  """
-  Individual boards exported, when not the whole workspace.
-  """
-  board_ids: [ID!]
-}
-
-"""
-One workspace to export, whole or in part.
-"""
-input DataHubWorkspaceSelectionInput {
-  """
-  The monday workspace.
-  """
-  workspace_id: ID!
-  """
-  Export every board in the workspace, including boards added later. When false, name at least one folder or board.
-  """
-  include_all_boards: Boolean!
-  """
-  Folders whose boards to export, when not the whole workspace.
-  """
-  folder_ids: [ID!]
-  """
-  Individual boards to export, when not the whole workspace.
-  """
-  board_ids: [ID!]
 }
 
 """

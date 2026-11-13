@@ -21,4 +21,16 @@ public sealed partial class DataHubCapabilities
     [JsonPropertyName("has_scheduled_exports")]
     public bool? HasScheduledExports { get; init; }
 
+    /// <summary>
+    /// Whether plain-language SQL generation is available on the caller's account.
+    /// </summary>
+    [JsonPropertyName("has_sql_generation")]
+    public bool? HasSqlGeneration { get; init; }
+
+    /// <summary>
+    /// Whether the Snowflake integration is available on the caller's account.
+    /// </summary>
+    [JsonPropertyName("has_snowflake_integration")]
+    public bool? HasSnowflakeIntegration { get; init; }
+
 }
