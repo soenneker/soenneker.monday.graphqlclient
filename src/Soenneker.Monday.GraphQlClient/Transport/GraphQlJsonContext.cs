@@ -1672,6 +1672,8 @@ namespace Soenneker.Monday.GraphQlClient;
 [JsonSerializable(typeof(GraphQlResponse<DirectoryResource>))]
 [JsonSerializable(typeof(DirectoryResourceAttribute))]
 [JsonSerializable(typeof(GraphQlResponse<DirectoryResourceAttribute>))]
+[JsonSerializable(typeof(DirectoryResourceAttributeValue))]
+[JsonSerializable(typeof(GraphQlResponse<DirectoryResourceAttributeValue>))]
 [JsonSerializable(typeof(DirectoryResourceKind))]
 [JsonSerializable(typeof(GraphQlResponse<DirectoryResourceKind>))]
 [JsonSerializable(typeof(DirectoryResourcesResponse))]

@@ -243,6 +243,42 @@ public sealed partial class Query
     public TimelineResponse? Timeline { get; init; }
 
     /// <summary>
+    /// Fetch resources information from the resource directory
+    /// </summary>
+    [JsonPropertyName("get_directory_resources")]
+    public DirectoryResourcesResponse? GetDirectoryResources { get; init; }
+
+    /// <summary>
+    /// Returns active work schedules for the caller's account
+    /// </summary>
+    [JsonPropertyName("work_schedules")]
+    public WorkSchedulePage? WorkSchedules { get; init; }
+
+    /// <summary>
+    /// Returns active time off schedules for the caller's account
+    /// </summary>
+    [JsonPropertyName("time_offs")]
+    public TimesOffPage? TimeOffs { get; init; }
+
+    /// <summary>
+    /// Returns resources availability: work schedule and time offs schedule for users and teams
+    /// </summary>
+    [JsonPropertyName("resources_availability")]
+    public ResourcesAvailability? ResourcesAvailability { get; init; }
+
+    /// <summary>
+    /// Returns the account-level default work schedule and time off schedule
+    /// </summary>
+    [JsonPropertyName("account_availability_defaults")]
+    public AccountAvailabilityDefaults? AccountAvailabilityDefaults { get; init; }
+
+    /// <summary>
+    /// Returns personal PTO collections for the requested users; maximum 100 user IDs per call
+    /// </summary>
+    [JsonPropertyName("user_pto")]
+    public List<UserPto>? UserPto { get; init; }
+
+    /// <summary>
     /// Retrieves the JSON schema definition for a specific create view type. 
     ///   Use this query before calling create_view mutation to understand the structure and validation rules for the settings parameter. 
     ///   The schema defines what properties are available when creating views of a specific type.
@@ -623,42 +659,6 @@ public sealed partial class Query
     /// </summary>
     [JsonPropertyName("service_users")]
     public List<ServiceUser>? ServiceUsers { get; init; }
-
-    /// <summary>
-    /// Fetch resources information from the resource directory
-    /// </summary>
-    [JsonPropertyName("get_directory_resources")]
-    public DirectoryResourcesResponse? GetDirectoryResources { get; init; }
-
-    /// <summary>
-    /// Returns active work schedules for the caller's account
-    /// </summary>
-    [JsonPropertyName("work_schedules")]
-    public WorkSchedulePage? WorkSchedules { get; init; }
-
-    /// <summary>
-    /// Returns active time off schedules for the caller's account
-    /// </summary>
-    [JsonPropertyName("time_offs")]
-    public TimesOffPage? TimeOffs { get; init; }
-
-    /// <summary>
-    /// Returns resources availability: work schedule and time offs schedule for users and teams
-    /// </summary>
-    [JsonPropertyName("resources_availability")]
-    public ResourcesAvailability? ResourcesAvailability { get; init; }
-
-    /// <summary>
-    /// Returns the account-level default work schedule and time off schedule
-    /// </summary>
-    [JsonPropertyName("account_availability_defaults")]
-    public AccountAvailabilityDefaults? AccountAvailabilityDefaults { get; init; }
-
-    /// <summary>
-    /// Returns personal PTO collections for the requested users; maximum 100 user IDs per call
-    /// </summary>
-    [JsonPropertyName("user_pto")]
-    public List<UserPto>? UserPto { get; init; }
 
     /// <summary>
     /// Get board candidates based on workspace and usage type

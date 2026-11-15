@@ -65,6 +65,11 @@ public enum ChatMessageKind
     /// <summary>
     /// A run of an Automation started from its page or the settings panel
     /// </summary>
-    RUNSTARTED
+    RUNSTARTED,
+
+    /// <summary>
+    /// A user's hand-written code save, with its steps (checks, security_review, build, deploy) as they run and how it ended
+    /// </summary>
+    MANUALEDIT
 
 }

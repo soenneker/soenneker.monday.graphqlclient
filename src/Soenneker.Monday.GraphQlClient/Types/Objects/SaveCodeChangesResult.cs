@@ -11,7 +11,7 @@ namespace Soenneker.Monday.GraphQlClient;
 public sealed partial class SaveCodeChangesResult
 {
     /// <summary>
-    /// VALIDATED: the changes passed the instant checks. Saving them is not wired yet
+    /// ACCEPTED: the changes passed every check and are being built and deployed. VALIDATING: the checks are still running; follow the app status and chat
     /// </summary>
     [JsonPropertyName("status")]
     public string? Status { get; init; }
