@@ -24,12 +24,6 @@ public sealed partial class Mutation
     public string BatchUpdateDependencyColumn { get; init; } = null!;
 
     /// <summary>
-    /// Delete a board automation by ID.
-    /// </summary>
-    [JsonPropertyName("delete_board_automation")]
-    public BoardAutomationDeleteResult DeleteBoardAutomation { get; init; } = null!;
-
-    /// <summary>
     /// Creates a new app with the specified configuration.
     /// </summary>
     [JsonPropertyName("create_app")]
@@ -578,6 +572,12 @@ public sealed partial class Mutation
 
     [JsonPropertyName("delete_custom_activity")]
     public CustomActivity? DeleteCustomActivity { get; init; }
+
+    /// <summary>
+    /// Delete a board automation by ID.
+    /// </summary>
+    [JsonPropertyName("delete_board_automation")]
+    public BoardAutomationDeleteResult DeleteBoardAutomation { get; init; } = null!;
 
     /// <summary>
     /// Update attributes (Job Role, Skills, or Location) for multiple resources in the directory

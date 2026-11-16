@@ -22,7 +22,7 @@ public sealed partial class UpdateWorkspaceRequestBuilder
     /// </summary>
     public ValueTask<GraphQlResponse<UpdateWorkspaceData>> Execute(UpdateWorkspaceVariables request, CancellationToken cancellationToken = default)
     {
-        const string gqlQuery = @"mutation UpdateWorkspace($attributes: UpdateWorkspaceAttributesInput!, $id: ID) { update_workspace(attributes: $attributes, id: $id) { id account_product { default_workspace_id id kind tier } created_at description is_default_workspace kind name settings { icon { color image } } state } }";
+        const string gqlQuery = @"mutation UpdateWorkspace($attributes: UpdateWorkspaceAttributesInput!, $id: ID) { update_workspace(attributes: $attributes, id: $id) { account_product { default_workspace_id id kind tier } created_at description id is_default_workspace kind name settings { icon { color image } } state } }";
         return _graphQlClient.Execute<UpdateWorkspaceData>(gqlQuery, request, cancellationToken);
     }
 

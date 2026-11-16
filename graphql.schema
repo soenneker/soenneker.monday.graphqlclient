@@ -868,10 +868,6 @@ type Mutation {
   """
   batch_update_dependency_column(boardId: String!, columnId: String!, values: [DependencyPulseValueInput!]!): JSON!
   """
-  Delete a board automation by ID.
-  """
-  delete_board_automation(id: ID!, board_id: ID!): BoardAutomationDeleteResult!
-  """
   Creates a new app with the specified configuration.
   """
   create_app(input: CreateAppInput!): CreateAppResponse
@@ -1225,6 +1221,10 @@ type Mutation {
   delete_timeline_item(id: String!): TimelineItem
   create_custom_activity(name: String!, icon_id: CustomActivityIcon!, color: CustomActivityColor!): CustomActivity
   delete_custom_activity(id: String!): CustomActivity
+  """
+  Delete a board automation by ID.
+  """
+  delete_board_automation(id: ID!, board_id: ID!): BoardAutomationDeleteResult!
   """
   Update attributes (Job Role, Skills, or Location) for multiple resources in the directory
   """
@@ -1778,10 +1778,6 @@ type Query {
   """
   would_create_mls_rollup_cycle(board_id: ID!, source_item_id: ID!, target_item_id: ID!): Boolean!
   """
-  Get board automations. Filter by ids (specific automation IDs) or board_ids (up to 1 board). Omit all filters to get all account automations.
-  """
-  board_automations(ids: [ID!], board_ids: [ID!], limit: Int, cursor: String): AutomationsPage!
-  """
   Get an app by ID or slug.
   """
   app(id: ID!): AppType
@@ -1902,6 +1898,10 @@ type Query {
   Fetches timeline items for a given item
   """
   timeline(id: ID!, skipConnectedItems: Boolean): TimelineResponse
+  """
+  Get board automations. Filter by ids (specific automation IDs) or board_ids (up to 1 board). Omit all filters to get all account automations.
+  """
+  board_automations(ids: [ID!], board_ids: [ID!], limit: Int, cursor: String): AutomationsPage!
   """
   Fetch resources information from the resource directory
   """
@@ -2285,408 +2285,6 @@ type Instance {
   The timestamp when the instance was soft-deleted, if applicable.
   """
   deletedAt: Date
-}
-
-"""
-A page of automations with cursor for pagination
-"""
-type AutomationsPage {
-  """
-  Opaque cursor for fetching the next page. Null if no more results.
-  """
-  cursor: String
-  """
-  The automations in this page
-  """
-  items: [BoardAutomation!]
-  """
-  Read-only automations on this board that were set up in an older way. These ARE automations on the user's board — always list and describe them together with `items`, never omit them. They cannot be activated, deactivated, edited, or deleted. Resolved only for board-scoped queries (null otherwise); best-effort, so it may carry an error marker instead of data.
-  """
-  legacy_automations: JSON
-}
-
-"""
-A board automation
-"""
-type BoardAutomation {
-  """
-  Automation ID
-  """
-  id: ID
-  """
-  Creator user ID
-  """
-  user_id: ID
-  """
-  Whether the automation is active
-  """
-  active: Boolean
-  """
-  Automation title
-  """
-  title: String
-  """
-  Automation description
-  """
-  description: String
-  """
-  Creation timestamp
-  """
-  created_at: String
-  """
-  Last update timestamp
-  """
-  updated_at: String
-  """
-  Host data (board ID and type)
-  """
-  workflow_host_data: JSON
-  """
-  Workflow block definitions
-  """
-  workflow_blocks: JSON
-  """
-  Workflow variable definitions
-  """
-  workflow_variables: JSON
-  """
-  Automation importance level
-  """
-  importance: Int
-  """
-  Notice message for the automation
-  """
-  notice_message: String
-  """
-  Template reference ID if created from template
-  """
-  template_reference_id: ID
-}
-
-"""
-Input for creating a board automation. Provide template_reference_id to create from a template, or workflow_blocks and workflow_variables for a direct creation.
-"""
-input BoardAutomationCreateInput {
-  """
-  Board ID to host the automation
-  """
-  board_id: String!
-  """
-  Automation title
-  """
-  title: String!
-  """
-  Automation description
-  """
-  description: String
-  """
-  Template reference ID (for template-based creation)
-  """
-  template_reference_id: ID
-  """
-  Automation block definitions (for direct creation)
-  """
-  workflow_blocks: JSON
-  """
-  Automation variable definitions (for direct creation)
-  """
-  workflow_variables: JSON
-  """
-  Template variable values (for template-based creation)
-  """
-  workflow_variables_values: JSON
-}
-
-"""
-Result of creating a board automation
-"""
-type BoardAutomationCreateResult {
-  """
-  The ID of the created automation
-  """
-  workflow_id: ID
-}
-
-"""
-Result of deleting a board automation
-"""
-type BoardAutomationDeleteResult {
-  """
-  Whether the deletion was successful
-  """
-  is_success: Boolean
-}
-
-"""
-Account context information.
-"""
-type AccountContext {
-  """
-  Unique account identifier.
-  """
-  id: ID
-  """
-  Account name.
-  """
-  name: String
-  """
-  Account industry. Examples: "Technology", "Healthcare", "Finance".
-  """
-  industry: String
-  """
-  Industry sector.
-  """
-  sector: String
-  """
-  Industry sub-sector.
-  """
-  sub_sector: String
-  """
-  Primary use cases for the account.
-  """
-  golden_use_cases: [String!]
-  """
-  Platform usage categories. Examples: "project_management", "crm", "marketing".
-  """
-  platform_usages: [String!]
-  """
-  Active monday.com products. Values: "core", "crm", "software", "marketing", "project_management", "service".
-  """
-  active_product_kinds: [String!]
-}
-
-"""
-A board where the user has item assignments.
-"""
-type AssignedBoard {
-  """
-  Board ID
-  """
-  board_id: ID
-  """
-  Number of items assigned to the user on this board
-  """
-  assignment_count: Int
-  """
-  Board details resolved via federation from the boards subgraph.
-  """
-  board: Board
-}
-
-"""
-Intelligence data.
-"""
-type Intelligence {
-  """
-  Top visited boards ranked by relevance (frequency + recency).
-  """
-  relevant_boards(limit: Int): [RelevantBoard!]
-  """
-  Top loaded docs ranked by relevance (frequency + recency).
-  """
-  relevant_docs(limit: Int): [RelevantDoc!]
-  """
-  Top related users ranked by relevance (multi-signal frequency + recency).
-  """
-  relevant_people(limit: Int): [RelevantPerson!]
-  """
-  Top workspaces ranked by relevance (activity on their boards and docs, plus favorites).
-  """
-  relevant_workspaces(limit: Int): [RelevantWorkspace!]
-  """
-  User and account context information.
-  """
-  context: UserContextResponse
-  """
-  Boards where the user has item assignments.
-  """
-  assigned_boards(user_id: ID, size: Int): [AssignedBoard!]
-}
-
-"""
-A board ranked by relevance based on visit frequency and recency.
-"""
-type RelevantBoard {
-  """
-  Board ID
-  """
-  id: ID
-  """
-  Board details resolved via federation from the boards subgraph.
-  """
-  board: Board
-}
-
-"""
-A doc ranked by relevance based on load frequency and recency.
-"""
-type RelevantDoc {
-  """
-  Document ID
-  """
-  id: ID
-  """
-  Document object ID — the identifier that appears in the doc's URL.
-  """
-  object_id: ID
-  """
-  Document details resolved via federation from the docs subgraph.
-  """
-  document: Document
-}
-
-"""
-A user ranked by relevance based on interaction frequency and recency.
-"""
-type RelevantPerson {
-  """
-  User ID
-  """
-  id: ID
-  """
-  User details resolved via federation from the users subgraph.
-  """
-  user: User
-}
-
-"""
-A workspace ranked by relevance based on the activity on its boards and docs. Returned most relevant first.
-"""
-type RelevantWorkspace {
-  """
-  Workspace ID. -1 is the main workspace.
-  """
-  id: ID
-  """
-  Workspace details resolved via federation from the workspaces subgraph. Null for the main workspace (id -1), which has no workspace entity.
-  """
-  workspace: Workspace
-  """
-  Whether the workspace is in the user's favorites.
-  """
-  is_favorite: Boolean
-}
-
-"""
-User context information.
-"""
-type UserContext {
-  """
-  Unique user identifier.
-  """
-  id: ID
-  """
-  User display name.
-  """
-  name: String
-  """
-  User job title.
-  """
-  title: String
-  """
-  User email address.
-  """
-  email: String
-  """
-  User type. Values: null (regular), "guest", "view_only", "portal_user".
-  """
-  kind: String
-  """
-  User job role. Examples: "project_manager", "marketing_manager", "ceo".
-  """
-  job_role: String
-  """
-  User job department. Examples: "engineering", "marketing", "sales", "hr".
-  """
-  job_department: String
-  """
-  Organizational department within the workspace.
-  """
-  department: String
-  """
-  User time zone. Examples: "America/New_York", "Europe/London".
-  """
-  time_zone: String
-  """
-  User locale for date and number formatting. Examples: "en-US", "de-DE".
-  """
-  locale: String
-  """
-  Number of days since the user became active.
-  """
-  tenure_days: Int
-}
-
-"""
-Combined user and account context.
-"""
-type UserContextResponse {
-  """
-  User context.
-  """
-  user: UserContext
-  """
-  Account context.
-  """
-  account: AccountContext
-}
-
-"""
-A monday.com workspace.
-"""
-type Workspace {
-  """
-  The workspace's unique identifier.
-  """
-  id: ID
-  """
-  The account product that contains workspace.
-  """
-  account_product: AccountProduct
-  """
-  The workspace's creation date.
-  """
-  created_at: Date
-  """
-  The workspace's description.
-  """
-  description: String
-  """
-  Returns true if it is the default workspace of the product or account
-  """
-  is_default_workspace: Boolean
-  """
-  The workspace's kind (open / closed / template).
-  """
-  kind: WorkspaceKind
-  """
-  The workspace's name.
-  """
-  name: String!
-  """
-  The workspace's user owners.
-  """
-  owners_subscribers(limit: Int = 25, page: Int = 1): [User]
-  """
-  The workspace's settings.
-  """
-  settings: WorkspaceSettings
-  """
-  The workspace's state (all / active / archived / deleted).
-  """
-  state: State
-  """
-  The workspace's team owners.
-  """
-  team_owners_subscribers(limit: Int = 25, page: Int = 1): [Team!]
-  """
-  The teams subscribed to the workspace.
-  """
-  teams_subscribers(limit: Int = 25, page: Int = 1): [Team]
-  """
-  The users subscribed to the workspace
-  """
-  users_subscribers(limit: Int = 25, page: Int = 1): [User]
 }
 
 """
@@ -7038,6 +6636,64 @@ enum WebhookEventType {
 }
 
 """
+A monday.com workspace.
+"""
+type Workspace {
+  """
+  The account product that contains workspace.
+  """
+  account_product: AccountProduct
+  """
+  The workspace's creation date.
+  """
+  created_at: Date
+  """
+  The workspace's description.
+  """
+  description: String
+  """
+  The workspace's unique identifier.
+  """
+  id: ID
+  """
+  Returns true if it is the default workspace of the product or account
+  """
+  is_default_workspace: Boolean
+  """
+  The workspace's kind (open / closed / template).
+  """
+  kind: WorkspaceKind
+  """
+  The workspace's name.
+  """
+  name: String!
+  """
+  The workspace's user owners.
+  """
+  owners_subscribers(limit: Int = 25, page: Int = 1): [User]
+  """
+  The workspace's settings.
+  """
+  settings: WorkspaceSettings
+  """
+  The workspace's state (all / active / archived / deleted).
+  """
+  state: State
+  """
+  The workspace's team owners.
+  """
+  team_owners_subscribers(limit: Int = 25, page: Int = 1): [Team!]
+  """
+  The teams subscribed to the workspace.
+  """
+  teams_subscribers(limit: Int = 25, page: Int = 1): [Team]
+  """
+  The users subscribed to the workspace
+  """
+  users_subscribers(limit: Int = 25, page: Int = 1): [User]
+}
+
+"""
 The workspace's icon.
 """
 type WorkspaceIcon {
@@ -9303,6 +8959,136 @@ type TimelineResponse {
   Paginated set of timeline items and a cursor to get the next page
   """
   timeline_items_page(cursor: String = null, limit: Int = 25): TimelineItemsPage!
+}
+
+"""
+A page of automations with cursor for pagination
+"""
+type AutomationsPage {
+  """
+  Opaque cursor for fetching the next page. Null if no more results.
+  """
+  cursor: String
+  """
+  The automations in this page
+  """
+  items: [BoardAutomation!]
+  """
+  Read-only automations on this board that were set up in an older way. These ARE automations on the user's board — always list and describe them together with `items`, never omit them. They cannot be activated, deactivated, edited, or deleted. Resolved only for board-scoped queries (null otherwise); best-effort, so it may carry an error marker instead of data.
+  """
+  legacy_automations: JSON
+}
+
+"""
+A board automation
+"""
+type BoardAutomation {
+  """
+  Automation ID
+  """
+  id: ID
+  """
+  Creator user ID
+  """
+  user_id: ID
+  """
+  Whether the automation is active
+  """
+  active: Boolean
+  """
+  Automation title
+  """
+  title: String
+  """
+  Automation description
+  """
+  description: String
+  """
+  Creation timestamp
+  """
+  created_at: String
+  """
+  Last update timestamp
+  """
+  updated_at: String
+  """
+  Host data (board ID and type)
+  """
+  workflow_host_data: JSON
+  """
+  Workflow block definitions
+  """
+  workflow_blocks: JSON
+  """
+  Workflow variable definitions
+  """
+  workflow_variables: JSON
+  """
+  Automation importance level
+  """
+  importance: Int
+  """
+  Notice message for the automation
+  """
+  notice_message: String
+  """
+  Template reference ID if created from template
+  """
+  template_reference_id: ID
+}
+
+"""
+Input for creating a board automation. Provide template_reference_id to create from a template, or workflow_blocks and workflow_variables for a direct creation.
+"""
+input BoardAutomationCreateInput {
+  """
+  Board ID to host the automation
+  """
+  board_id: String!
+  """
+  Automation title
+  """
+  title: String!
+  """
+  Automation description
+  """
+  description: String
+  """
+  Template reference ID (for template-based creation)
+  """
+  template_reference_id: ID
+  """
+  Automation block definitions (for direct creation)
+  """
+  workflow_blocks: JSON
+  """
+  Automation variable definitions (for direct creation)
+  """
+  workflow_variables: JSON
+  """
+  Template variable values (for template-based creation)
+  """
+  workflow_variables_values: JSON
+}
+
+"""
+Result of creating a board automation
+"""
+type BoardAutomationCreateResult {
+  """
+  The ID of the created automation
+  """
+  workflow_id: ID
+}
+
+"""
+Result of deleting a board automation
+"""
+type BoardAutomationDeleteResult {
+  """
+  Whether the deletion was successful
+  """
+  is_success: Boolean
 }
 
 """
@@ -20104,6 +19890,220 @@ input UpdateStatusLabelInput {
 }
 
 """
+Account context information.
+"""
+type AccountContext {
+  """
+  Unique account identifier.
+  """
+  id: ID
+  """
+  Account name.
+  """
+  name: String
+  """
+  Account industry. Examples: "Technology", "Healthcare", "Finance".
+  """
+  industry: String
+  """
+  Industry sector.
+  """
+  sector: String
+  """
+  Industry sub-sector.
+  """
+  sub_sector: String
+  """
+  Primary use cases for the account.
+  """
+  golden_use_cases: [String!]
+  """
+  Platform usage categories. Examples: "project_management", "crm", "marketing".
+  """
+  platform_usages: [String!]
+  """
+  Active monday.com products. Values: "core", "crm", "software", "marketing", "project_management", "service".
+  """
+  active_product_kinds: [String!]
+}
+
+"""
+A board where the user has item assignments.
+"""
+type AssignedBoard {
+  """
+  Board ID
+  """
+  board_id: ID
+  """
+  Number of items assigned to the user on this board
+  """
+  assignment_count: Int
+  """
+  Board details resolved via federation from the boards subgraph.
+  """
+  board: Board
+}
+
+"""
+Intelligence data.
+"""
+type Intelligence {
+  """
+  Top visited boards ranked by relevance (frequency + recency).
+  """
+  relevant_boards(limit: Int): [RelevantBoard!]
+  """
+  Top loaded docs ranked by relevance (frequency + recency).
+  """
+  relevant_docs(limit: Int): [RelevantDoc!]
+  """
+  Top related users ranked by relevance (multi-signal frequency + recency).
+  """
+  relevant_people(limit: Int): [RelevantPerson!]
+  """
+  Top workspaces ranked by relevance (activity on their boards and docs, plus favorites).
+  """
+  relevant_workspaces(limit: Int): [RelevantWorkspace!]
+  """
+  User and account context information.
+  """
+  context: UserContextResponse
+  """
+  Boards where the user has item assignments.
+  """
+  assigned_boards(user_id: ID, size: Int): [AssignedBoard!]
+}
+
+"""
+A board ranked by relevance based on visit frequency and recency.
+"""
+type RelevantBoard {
+  """
+  Board ID
+  """
+  id: ID
+  """
+  Board details resolved via federation from the boards subgraph.
+  """
+  board: Board
+}
+
+"""
+A doc ranked by relevance based on load frequency and recency.
+"""
+type RelevantDoc {
+  """
+  Document ID
+  """
+  id: ID
+  """
+  Document object ID — the identifier that appears in the doc's URL.
+  """
+  object_id: ID
+  """
+  Document details resolved via federation from the docs subgraph.
+  """
+  document: Document
+}
+
+"""
+A user ranked by relevance based on interaction frequency and recency.
+"""
+type RelevantPerson {
+  """
+  User ID
+  """
+  id: ID
+  """
+  User details resolved via federation from the users subgraph.
+  """
+  user: User
+}
+
+"""
+A workspace ranked by relevance based on the activity on its boards and docs. Returned most relevant first.
+"""
+type RelevantWorkspace {
+  """
+  Workspace ID. -1 is the main workspace.
+  """
+  id: ID
+  """
+  Workspace details resolved via federation from the workspaces subgraph. Null for the main workspace (id -1), which has no workspace entity.
+  """
+  workspace: Workspace
+  """
+  Whether the workspace is in the user's favorites.
+  """
+  is_favorite: Boolean
+}
+
+"""
+User context information.
+"""
+type UserContext {
+  """
+  Unique user identifier.
+  """
+  id: ID
+  """
+  User display name.
+  """
+  name: String
+  """
+  User job title.
+  """
+  title: String
+  """
+  User email address.
+  """
+  email: String
+  """
+  User type. Values: null (regular), "guest", "view_only", "portal_user".
+  """
+  kind: String
+  """
+  User job role. Examples: "project_manager", "marketing_manager", "ceo".
+  """
+  job_role: String
+  """
+  User job department. Examples: "engineering", "marketing", "sales", "hr".
+  """
+  job_department: String
+  """
+  Organizational department within the workspace.
+  """
+  department: String
+  """
+  User time zone. Examples: "America/New_York", "Europe/London".
+  """
+  time_zone: String
+  """
+  User locale for date and number formatting. Examples: "en-US", "de-DE".
+  """
+  locale: String
+  """
+  Number of days since the user became active.
+  """
+  tenure_days: Int
+}
+
+"""
+Combined user and account context.
+"""
+type UserContextResponse {
+  """
+  User context.
+  """
+  user: UserContext
+  """
+  Account context.
+  """
+  account: AccountContext
+}
+
+"""
 Input type for adding an object to a hierarchy list
 """
 input CreateFavoriteInput {
@@ -20750,38 +20750,6 @@ type SprintTimeline {
   user-editable complete date of the monday dev sprint timeline, may be different than the sprint complete date
   """
   to: Date
-}
-
-"""
-Result of enhancing a board with AI columns.
-"""
-type BoardEnhancementResult {
-  """
-  The ID of the board that was enhanced.
-  """
-  board_id: ID
-  """
-  The result of the AI column enhancement.
-  """
-  result: ConvertColumnsToAiResult
-}
-
-"""
-Result of enhancing columns with AI.
-"""
-type ConvertColumnsToAiResult {
-  """
-  Whether the conversion succeeded.
-  """
-  succeeded: Boolean
-  """
-  List of column IDs that were converted to AI columns.
-  """
-  converted_column_ids: [ID!]
-  """
-  List of column IDs that were added as new AI columns.
-  """
-  added_column_ids: [ID!]
 }
 
 """
@@ -24169,6 +24137,10 @@ type VibeAutomationFlowStep {
   The app an integration step runs in; null when the app's name isn't known
   """
   integration: VibeAutomationIntegration
+  """
+  Why the step won't run as things stand; null when it will
+  """
+  problem: VibeAutomationStepProblem
 }
 
 """
@@ -24524,6 +24496,24 @@ enum VibeAutomationStepKind {
 }
 
 """
+Why a step of an Automation won't run as things stand
+"""
+enum VibeAutomationStepProblem {
+  """
+  Its integration was removed from the app; it won't run until it's added back
+  """
+  INTEGRATION_REMOVED
+  """
+  No account is connected for its integration
+  """
+  NOT_CONNECTED
+  """
+  A setting of its integration still has to be chosen
+  """
+  NEEDS_CONFIGURATION
+}
+
+"""
 What a code step works on, by name
 """
 type VibeAutomationStepResource {
@@ -24605,6 +24595,28 @@ enum VibeAutomationStepResultStatus {
   A status this version of the API does not know yet
   """
   UNKNOWN
+}
+
+"""
+A vibe app Automation that has runs in a period, as the runs filter lists it
+"""
+type VibeAutomationWithRuns {
+  """
+  The Automation id
+  """
+  id: ID!
+  """
+  The Automation name
+  """
+  name: String!
+  """
+  Whether the Automation has been deleted since
+  """
+  deleted: Boolean!
+  """
+  When its latest run in the period was created, an ISO 8601 timestamp
+  """
+  latest_run_at: String!
 }
 
 """
@@ -25389,6 +25401,38 @@ enum WorkspacePermissionsSyncReason {
   No workspaces could be resolved, so the permitted workspaces were left unchanged
   """
   NO_WORKSPACES
+}
+
+"""
+Result of enhancing a board with AI columns.
+"""
+type BoardEnhancementResult {
+  """
+  The ID of the board that was enhanced.
+  """
+  board_id: ID
+  """
+  The result of the AI column enhancement.
+  """
+  result: ConvertColumnsToAiResult
+}
+
+"""
+Result of enhancing columns with AI.
+"""
+type ConvertColumnsToAiResult {
+  """
+  Whether the conversion succeeded.
+  """
+  succeeded: Boolean
+  """
+  List of column IDs that were converted to AI columns.
+  """
+  converted_column_ids: [ID!]
+  """
+  List of column IDs that were added as new AI columns.
+  """
+  added_column_ids: [ID!]
 }
 
 """

@@ -48,12 +48,6 @@ public sealed partial class Query
     public bool WouldCreateMlsRollupCycle { get; init; }
 
     /// <summary>
-    /// Get board automations. Filter by ids (specific automation IDs) or board_ids (up to 1 board). Omit all filters to get all account automations.
-    /// </summary>
-    [JsonPropertyName("board_automations")]
-    public AutomationsPage BoardAutomations { get; init; } = null!;
-
-    /// <summary>
     /// Get an app by ID or slug.
     /// </summary>
     [JsonPropertyName("app")]
@@ -241,6 +235,12 @@ public sealed partial class Query
     /// </summary>
     [JsonPropertyName("timeline")]
     public TimelineResponse? Timeline { get; init; }
+
+    /// <summary>
+    /// Get board automations. Filter by ids (specific automation IDs) or board_ids (up to 1 board). Omit all filters to get all account automations.
+    /// </summary>
+    [JsonPropertyName("board_automations")]
+    public AutomationsPage BoardAutomations { get; init; } = null!;
 
     /// <summary>
     /// Fetch resources information from the resource directory

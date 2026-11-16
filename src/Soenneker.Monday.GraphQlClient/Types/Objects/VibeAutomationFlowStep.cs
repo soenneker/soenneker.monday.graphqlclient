@@ -52,4 +52,10 @@ public sealed partial class VibeAutomationFlowStep
     [JsonPropertyName("integration")]
     public VibeAutomationIntegration? Integration { get; init; }
 
+    /// <summary>
+    /// Why the step won't run as things stand; null when it will
+    /// </summary>
+    [JsonPropertyName("problem")]
+    public VibeAutomationStepProblem? Problem { get; init; }
+
 }
