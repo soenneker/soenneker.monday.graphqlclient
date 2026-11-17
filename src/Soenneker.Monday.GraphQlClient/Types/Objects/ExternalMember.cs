@@ -58,4 +58,10 @@ public sealed partial class ExternalMember
     [JsonPropertyName("invited_by_user_id")]
     public string InvitedByUserId { get; init; } = null!;
 
+    /// <summary>
+    /// How many apps in the account this person is invited to or active on. Only set when listed with `as_admin`; null otherwise.
+    /// </summary>
+    [JsonPropertyName("apps_count")]
+    public int? AppsCount { get; init; }
+
 }

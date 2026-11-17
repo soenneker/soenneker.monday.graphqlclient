@@ -26,6 +26,13 @@ public sealed partial class Document
     public string Id { get; init; } = null!;
 
     /// <summary>
+    /// Identifier that appears in the doc's URL.
+    ///   Returned on creation, but DO NOT use it in API routes that expect a document ID.
+    /// </summary>
+    [JsonPropertyName("object_id")]
+    public string ObjectId { get; init; } = null!;
+
+    /// <summary>
     /// The document's content blocks
     /// </summary>
     [JsonPropertyName("blocks")]
@@ -60,13 +67,6 @@ public sealed partial class Document
     /// </summary>
     [JsonPropertyName("name")]
     public string Name { get; init; } = null!;
-
-    /// <summary>
-    /// Identifier that appears in the doc's URL.
-    ///   Returned on creation, but DO NOT use it in API routes that expect a document ID.
-    /// </summary>
-    [JsonPropertyName("object_id")]
-    public string ObjectId { get; init; } = null!;
 
     /// <summary>
     /// The document's relative url

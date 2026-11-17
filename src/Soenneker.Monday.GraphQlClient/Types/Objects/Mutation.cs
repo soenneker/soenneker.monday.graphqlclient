@@ -24,6 +24,36 @@ public sealed partial class Mutation
     public string BatchUpdateDependencyColumn { get; init; } = null!;
 
     /// <summary>
+    /// Asynchronously delete items on a board
+    /// </summary>
+    [JsonPropertyName("bulk_delete_items")]
+    public BulkDeleteInit? BulkDeleteItems { get; init; }
+
+    /// <summary>
+    /// Asynchronously archive items on a board
+    /// </summary>
+    [JsonPropertyName("bulk_archive_items")]
+    public BulkDeleteInit? BulkArchiveItems { get; init; }
+
+    /// <summary>
+    /// Initialize a backfill job for a board and group. Designed for data migrations with no side effects and a 20k row limit. Returns job ID and upload URL to begin the process.
+    /// </summary>
+    [JsonPropertyName("backfill_items")]
+    public UploadJobInit? BackfillItems { get; init; }
+
+    /// <summary>
+    /// Initialize an ingest job for a board and group. Designed for ongoing integrations with full side effects and a 10k row limit. Returns job ID and upload URL to begin the process.
+    /// </summary>
+    [JsonPropertyName("ingest_items")]
+    public UploadJobInit? IngestItems { get; init; }
+
+    /// <summary>
+    /// Undo a previously completed action, or cancel one still in flight
+    /// </summary>
+    [JsonPropertyName("undo_action")]
+    public UndoResult? UndoAction { get; init; }
+
+    /// <summary>
     /// Creates a new app with the specified configuration.
     /// </summary>
     [JsonPropertyName("create_app")]
@@ -66,6 +96,12 @@ public sealed partial class Mutation
     public DeveloperAppVersion? PromoteApp { get; init; }
 
     /// <summary>
+    /// Execute an integration block with the provided field values
+    /// </summary>
+    [JsonPropertyName("execute_integration_block")]
+    public IntegrationExecutionResult? ExecuteIntegrationBlock { get; init; }
+
+    /// <summary>
     /// Connect an existing project to a portfolio. When a callback_url is provided the mutation returns immediately with a process_id, and the result is POSTed to that URL once the operation completes. The callback payload is: { is_success: boolean, process_id: string, portfolio_item_id?: string }.
     /// </summary>
     [JsonPropertyName("connect_project_to_portfolio")]
@@ -76,397 +112,6 @@ public sealed partial class Mutation
     /// </summary>
     [JsonPropertyName("create_portfolio")]
     public CreatePortfolioResult? CreatePortfolio { get; init; }
-
-    /// <summary>
-    /// Add a file to a column value.
-    /// </summary>
-    [JsonPropertyName("add_file_to_column")]
-    public Asset? AddFileToColumn { get; init; }
-
-    /// <summary>
-    /// Add a file to an update.
-    /// </summary>
-    [JsonPropertyName("add_file_to_update")]
-    public Asset? AddFileToUpdate { get; init; }
-
-    /// <summary>
-    /// Add subscribers to a board.
-    /// </summary>
-    [JsonPropertyName("add_subscribers_to_board")]
-    public List<User>? AddSubscribersToBoard { get; init; }
-
-    /// <summary>
-    /// Add teams subscribers to a board.
-    /// </summary>
-    [JsonPropertyName("add_teams_to_board")]
-    public List<Team>? AddTeamsToBoard { get; init; }
-
-    /// <summary>
-    /// Add teams to a workspace.
-    /// </summary>
-    [JsonPropertyName("add_teams_to_workspace")]
-    public List<Team>? AddTeamsToWorkspace { get; init; }
-
-    /// <summary>
-    /// Add subscribers to a board.
-    /// </summary>
-    [JsonPropertyName("add_users_to_board")]
-    public List<User>? AddUsersToBoard { get; init; }
-
-    /// <summary>
-    /// Add users to team.
-    /// </summary>
-    [JsonPropertyName("add_users_to_team")]
-    public ChangeTeamMembershipsResult? AddUsersToTeam { get; init; }
-
-    /// <summary>
-    /// Add users to a workspace.
-    /// </summary>
-    [JsonPropertyName("add_users_to_workspace")]
-    public List<User>? AddUsersToWorkspace { get; init; }
-
-    /// <summary>
-    /// Archive a board.
-    /// </summary>
-    [JsonPropertyName("archive_board")]
-    public Board? ArchiveBoard { get; init; }
-
-    /// <summary>
-    /// Archives a group in a specific board.
-    /// </summary>
-    [JsonPropertyName("archive_group")]
-    public Group? ArchiveGroup { get; init; }
-
-    /// <summary>
-    /// Archive an item.
-    /// </summary>
-    [JsonPropertyName("archive_item")]
-    public Item? ArchiveItem { get; init; }
-
-    /// <summary>
-    /// Extends trial period of an application to selected accounts
-    /// </summary>
-    [JsonPropertyName("batch_extend_trial_period")]
-    public BatchExtendTrialPeriod? BatchExtendTrialPeriod { get; init; }
-
-    /// <summary>
-    /// Change a column's properties
-    /// </summary>
-    [JsonPropertyName("change_column_metadata")]
-    public Column? ChangeColumnMetadata { get; init; }
-
-    /// <summary>
-    /// Change a column's title
-    /// </summary>
-    [JsonPropertyName("change_column_title")]
-    public Column? ChangeColumnTitle { get; init; }
-
-    /// <summary>
-    /// Change an item's column value.
-    /// </summary>
-    [JsonPropertyName("change_column_value")]
-    public Item? ChangeColumnValue { get; init; }
-
-    /// <summary>
-    /// Change an item's position.
-    /// </summary>
-    [JsonPropertyName("change_item_position")]
-    public Item? ChangeItemPosition { get; init; }
-
-    /// <summary>
-    /// Changes the column values of a specific item.
-    /// </summary>
-    [JsonPropertyName("change_multiple_column_values")]
-    public Item? ChangeMultipleColumnValues { get; init; }
-
-    /// <summary>
-    /// Change an item's column with simple value.
-    /// </summary>
-    [JsonPropertyName("change_simple_column_value")]
-    public Item? ChangeSimpleColumnValue { get; init; }
-
-    /// <summary>
-    /// Clear an item's updates.
-    /// </summary>
-    [JsonPropertyName("clear_item_updates")]
-    public Item? ClearItemUpdates { get; init; }
-
-    /// <summary>
-    /// Get the complexity data of your mutations.
-    /// </summary>
-    [JsonPropertyName("complexity")]
-    public Complexity? Complexity { get; init; }
-
-    /// <summary>
-    /// Create a new board.
-    /// </summary>
-    [JsonPropertyName("create_board")]
-    public Board? CreateBoard { get; init; }
-
-    /// <summary>
-    /// Generic mutation for creating any column type with validation. Supports creating column with properties like title, description, and type-specific defaults/settings. The mutation validates input against the column type's schema before applying changes. Use get_column_type_schema query to understand available properties for each column type.
-    /// </summary>
-    [JsonPropertyName("create_column")]
-    public Column? CreateColumn { get; init; }
-
-    /// <summary>
-    /// Create a new doc.
-    /// </summary>
-    [JsonPropertyName("create_doc")]
-    public Document? CreateDoc { get; init; }
-
-    /// <summary>
-    /// Create new document block
-    /// </summary>
-    [JsonPropertyName("create_doc_block")]
-    public DocumentBlock? CreateDocBlock { get; init; }
-
-    /// <summary>
-    /// Creates a folder in a specific workspace.
-    /// </summary>
-    [JsonPropertyName("create_folder")]
-    public Folder? CreateFolder { get; init; }
-
-    /// <summary>
-    /// Creates a new group in a specific board.
-    /// </summary>
-    [JsonPropertyName("create_group")]
-    public Group? CreateGroup { get; init; }
-
-    /// <summary>
-    /// Create a new item.
-    /// </summary>
-    [JsonPropertyName("create_item")]
-    public Item? CreateItem { get; init; }
-
-    /// <summary>
-    /// Create a new notification.
-    /// </summary>
-    [JsonPropertyName("create_notification")]
-    public Notification? CreateNotification { get; init; }
-
-    /// <summary>
-    /// Create a new tag or get it if it already exists.
-    /// </summary>
-    [JsonPropertyName("create_or_get_tag")]
-    public Tag? CreateOrGetTag { get; init; }
-
-    /// <summary>
-    /// Create subitem.
-    /// </summary>
-    [JsonPropertyName("create_subitem")]
-    public Item? CreateSubitem { get; init; }
-
-    /// <summary>
-    /// Create a new webhook.
-    /// </summary>
-    [JsonPropertyName("create_webhook")]
-    public Webhook? CreateWebhook { get; init; }
-
-    /// <summary>
-    /// Create a new workspace.
-    /// </summary>
-    [JsonPropertyName("create_workspace")]
-    public Workspace? CreateWorkspace { get; init; }
-
-    /// <summary>
-    /// Delete a board.
-    /// </summary>
-    [JsonPropertyName("delete_board")]
-    public Board? DeleteBoard { get; init; }
-
-    /// <summary>
-    /// Delete a column.
-    /// </summary>
-    [JsonPropertyName("delete_column")]
-    public Column? DeleteColumn { get; init; }
-
-    /// <summary>
-    /// Delete a document block
-    /// </summary>
-    [JsonPropertyName("delete_doc_block")]
-    public DocumentBlockIdOnly? DeleteDocBlock { get; init; }
-
-    /// <summary>
-    /// Deletes a folder in a specific workspace.
-    /// </summary>
-    [JsonPropertyName("delete_folder")]
-    public Folder? DeleteFolder { get; init; }
-
-    /// <summary>
-    /// Deletes a group in a specific board.
-    /// </summary>
-    [JsonPropertyName("delete_group")]
-    public Group? DeleteGroup { get; init; }
-
-    /// <summary>
-    /// Delete an item.
-    /// </summary>
-    [JsonPropertyName("delete_item")]
-    public Item? DeleteItem { get; init; }
-
-    /// <summary>
-    /// Remove subscribers from the board.
-    /// </summary>
-    [JsonPropertyName("delete_subscribers_from_board")]
-    public List<User>? DeleteSubscribersFromBoard { get; init; }
-
-    /// <summary>
-    /// Remove team subscribers from the board.
-    /// </summary>
-    [JsonPropertyName("delete_teams_from_board")]
-    public List<Team>? DeleteTeamsFromBoard { get; init; }
-
-    /// <summary>
-    /// Delete teams from a workspace.
-    /// </summary>
-    [JsonPropertyName("delete_teams_from_workspace")]
-    public List<Team>? DeleteTeamsFromWorkspace { get; init; }
-
-    /// <summary>
-    /// Delete users from a workspace.
-    /// </summary>
-    [JsonPropertyName("delete_users_from_workspace")]
-    public List<User>? DeleteUsersFromWorkspace { get; init; }
-
-    /// <summary>
-    /// Delete a new webhook.
-    /// </summary>
-    [JsonPropertyName("delete_webhook")]
-    public Webhook? DeleteWebhook { get; init; }
-
-    /// <summary>
-    /// Delete workspace.
-    /// </summary>
-    [JsonPropertyName("delete_workspace")]
-    public Workspace? DeleteWorkspace { get; init; }
-
-    /// <summary>
-    /// Duplicate a board.
-    /// </summary>
-    [JsonPropertyName("duplicate_board")]
-    public BoardDuplication? DuplicateBoard { get; init; }
-
-    /// <summary>
-    /// Duplicate a group.
-    /// </summary>
-    [JsonPropertyName("duplicate_group")]
-    public Group? DuplicateGroup { get; init; }
-
-    /// <summary>
-    /// Duplicate an item.
-    /// </summary>
-    [JsonPropertyName("duplicate_item")]
-    public Item? DuplicateItem { get; init; }
-
-    /// <summary>
-    /// Increase operations counter
-    /// </summary>
-    [JsonPropertyName("increase_app_subscription_operations")]
-    public AppSubscriptionOperationsCounter? IncreaseAppSubscriptionOperations { get; init; }
-
-    /// <summary>
-    /// Move an item to a different board.
-    /// </summary>
-    [JsonPropertyName("move_item_to_board")]
-    public Item? MoveItemToBoard { get; init; }
-
-    /// <summary>
-    /// Move an item to a different group.
-    /// </summary>
-    [JsonPropertyName("move_item_to_group")]
-    public Item? MoveItemToGroup { get; init; }
-
-    /// <summary>
-    /// Remove mock app subscription for the current account
-    /// </summary>
-    [JsonPropertyName("remove_mock_app_subscription")]
-    public AppSubscription? RemoveMockAppSubscription { get; init; }
-
-    /// <summary>
-    /// Remove users from team.
-    /// </summary>
-    [JsonPropertyName("remove_users_from_team")]
-    public ChangeTeamMembershipsResult? RemoveUsersFromTeam { get; init; }
-
-    /// <summary>
-    /// Set or update the board's permission to specified role. This concept is also
-    ///   known as default board role, general access or board permission set.
-    /// </summary>
-    [JsonPropertyName("set_board_permission")]
-    public SetBoardPermissionResponse? SetBoardPermission { get; init; }
-
-    /// <summary>
-    /// Set mock app subscription for the current account
-    /// </summary>
-    [JsonPropertyName("set_mock_app_subscription")]
-    public AppSubscription? SetMockAppSubscription { get; init; }
-
-    /// <summary>
-    /// Update item column value by existing assets
-    /// </summary>
-    [JsonPropertyName("update_assets_on_item")]
-    public Item? UpdateAssetsOnItem { get; init; }
-
-    /// <summary>
-    /// Update Board attribute.
-    /// </summary>
-    [JsonPropertyName("update_board")]
-    public string? UpdateBoard { get; init; }
-
-    /// <summary>
-    /// Update a board's position, workspace, or account product.
-    /// </summary>
-    [JsonPropertyName("update_board_hierarchy")]
-    public UpdateBoardHierarchyResult? UpdateBoardHierarchy { get; init; }
-
-    /// <summary>
-    /// Update a document block
-    /// </summary>
-    [JsonPropertyName("update_doc_block")]
-    public DocumentBlock? UpdateDocBlock { get; init; }
-
-    /// <summary>
-    /// Updates a folder.
-    /// </summary>
-    [JsonPropertyName("update_folder")]
-    public Folder? UpdateFolder { get; init; }
-
-    /// <summary>
-    /// Update an existing group.
-    /// </summary>
-    [JsonPropertyName("update_group")]
-    public Group? UpdateGroup { get; init; }
-
-    /// <summary>
-    /// Update the position of a dashboard.
-    /// </summary>
-    [JsonPropertyName("update_overview_hierarchy")]
-    public UpdateOverviewHierarchy? UpdateOverviewHierarchy { get; init; }
-
-    /// <summary>
-    /// Update board roles for multiple teams.
-    /// </summary>
-    [JsonPropertyName("update_teams_board_role")]
-    public UpdateTeamsBoardRoleResponse? UpdateTeamsBoardRole { get; init; }
-
-    /// <summary>
-    /// Update board roles for multiple users.
-    /// </summary>
-    [JsonPropertyName("update_users_board_role")]
-    public UpdateUsersBoardRoleResponse? UpdateUsersBoardRole { get; init; }
-
-    /// <summary>
-    /// Update an existing workspace.
-    /// </summary>
-    [JsonPropertyName("update_workspace")]
-    public Workspace? UpdateWorkspace { get; init; }
-
-    /// <summary>
-    /// Use a template
-    /// </summary>
-    [JsonPropertyName("use_template")]
-    public Template? UseTemplate { get; init; }
 
     [JsonPropertyName("like_update")]
     public Update? LikeUpdate { get; init; }
@@ -520,36 +165,6 @@ public sealed partial class Mutation
     public ValidationRule? DeleteValidationRule { get; init; }
 
     /// <summary>
-    /// Asynchronously delete items on a board
-    /// </summary>
-    [JsonPropertyName("bulk_delete_items")]
-    public BulkDeleteInit? BulkDeleteItems { get; init; }
-
-    /// <summary>
-    /// Asynchronously archive items on a board
-    /// </summary>
-    [JsonPropertyName("bulk_archive_items")]
-    public BulkDeleteInit? BulkArchiveItems { get; init; }
-
-    /// <summary>
-    /// Initialize a backfill job for a board and group. Designed for data migrations with no side effects and a 20k row limit. Returns job ID and upload URL to begin the process.
-    /// </summary>
-    [JsonPropertyName("backfill_items")]
-    public UploadJobInit? BackfillItems { get; init; }
-
-    /// <summary>
-    /// Initialize an ingest job for a board and group. Designed for ongoing integrations with full side effects and a 10k row limit. Returns job ID and upload URL to begin the process.
-    /// </summary>
-    [JsonPropertyName("ingest_items")]
-    public UploadJobInit? IngestItems { get; init; }
-
-    /// <summary>
-    /// Undo a previously completed action, or cancel one still in flight
-    /// </summary>
-    [JsonPropertyName("undo_action")]
-    public UndoResult? UndoAction { get; init; }
-
-    /// <summary>
     /// Create a marketplace app discount
     /// </summary>
     [JsonPropertyName("create_marketplace_app_discount")]
@@ -578,108 +193,6 @@ public sealed partial class Mutation
     /// </summary>
     [JsonPropertyName("delete_board_automation")]
     public BoardAutomationDeleteResult DeleteBoardAutomation { get; init; } = null!;
-
-    /// <summary>
-    /// Update attributes (Job Role, Skills, or Location) for multiple resources in the directory
-    /// </summary>
-    [JsonPropertyName("update_directory_resources_attributes")]
-    public UpdateDirectoryResourceAttributesResponse? UpdateDirectoryResourcesAttributes { get; init; }
-
-    /// <summary>
-    /// Create one or more named work schedules for the account; maximum 100 inputs per call
-    /// </summary>
-    [JsonPropertyName("create_work_schedule")]
-    public List<WorkScheduleResult>? CreateWorkSchedule { get; init; }
-
-    /// <summary>
-    /// Update the name and/or working hours of an existing work schedule
-    /// </summary>
-    [JsonPropertyName("update_work_schedule")]
-    public WorkScheduleResult UpdateWorkSchedule { get; init; } = null!;
-
-    /// <summary>
-    /// Soft-delete one or more work schedules; maximum 100 IDs per call
-    /// </summary>
-    [JsonPropertyName("delete_work_schedule")]
-    public List<WorkScheduleDeleteResult>? DeleteWorkSchedule { get; init; }
-
-    /// <summary>
-    /// Assign a work schedule to multiple users and/or teams. Returns per-resource outcomes split by resource kind, allowing partial success. Pass the account default schedule ID to revert resources to the account default. Maximum 100 user IDs and 100 team IDs per call.
-    /// </summary>
-    [JsonPropertyName("assign_work_schedule")]
-    public AssignWorkScheduleResult? AssignWorkSchedule { get; init; }
-
-    /// <summary>
-    /// Remove explicit work schedule assignments from multiple users and/or teams. Returns per-resource outcomes split by resource kind, allowing partial success. Maximum 100 user IDs and 100 team IDs per call.
-    /// </summary>
-    [JsonPropertyName("unassign_work_schedule")]
-    public AssignWorkScheduleResult? UnassignWorkSchedule { get; init; }
-
-    /// <summary>
-    /// Create one or more named time off schedules for the account; maximum 100 inputs per call
-    /// </summary>
-    [JsonPropertyName("create_time_off")]
-    public List<TimeOffResult>? CreateTimeOff { get; init; }
-
-    /// <summary>
-    /// Update the name of a time off schedule
-    /// </summary>
-    [JsonPropertyName("update_time_off")]
-    public TimeOffResult? UpdateTimeOff { get; init; }
-
-    /// <summary>
-    /// Soft-delete one or more time off schedules; maximum 100 IDs per call
-    /// </summary>
-    [JsonPropertyName("delete_time_off")]
-    public List<TimeOffDeleteResult>? DeleteTimeOff { get; init; }
-
-    /// <summary>
-    /// Assign a time off schedule to multiple users and/or teams. Returns per-resource outcomes split by resource kind, allowing partial success. Pass the account default time off ID to revert resources to the account default. Maximum 100 user IDs and 100 team IDs per call.
-    /// </summary>
-    [JsonPropertyName("assign_time_off")]
-    public AssignTimeOffResult? AssignTimeOff { get; init; }
-
-    /// <summary>
-    /// Remove explicit time off assignments from multiple users and/or teams. Returns per-resource outcomes split by resource kind, allowing partial success. Maximum 100 user IDs and 100 team IDs per call.
-    /// </summary>
-    [JsonPropertyName("unassign_time_off")]
-    public AssignTimeOffResult UnassignTimeOff { get; init; } = null!;
-
-    /// <summary>
-    /// Add one or more non-working date entries to a time off schedule; maximum 100 inputs per call
-    /// </summary>
-    [JsonPropertyName("create_time_off_entry")]
-    public List<TimeOffEntryResult>? CreateTimeOffEntry { get; init; }
-
-    /// <summary>
-    /// Update the name or date range of one or more existing time off entries; maximum 100 inputs per call
-    /// </summary>
-    [JsonPropertyName("update_time_off_entry")]
-    public List<TimeOffEntryResult>? UpdateTimeOffEntry { get; init; }
-
-    /// <summary>
-    /// Soft-delete one or more time off entries; maximum 100 IDs per call
-    /// </summary>
-    [JsonPropertyName("delete_time_off_entry")]
-    public List<TimeOffEntryDeleteResult>? DeleteTimeOffEntry { get; init; }
-
-    /// <summary>
-    /// Create one or more PTO entries for users; maximum 100 inputs per call
-    /// </summary>
-    [JsonPropertyName("create_pto_entry")]
-    public List<TimeOffEntryResult>? CreatePtoEntry { get; init; }
-
-    /// <summary>
-    /// Update the name or date range of existing PTO entries; maximum 100 inputs per call
-    /// </summary>
-    [JsonPropertyName("update_pto_entry")]
-    public List<TimeOffEntryResult>? UpdatePtoEntry { get; init; }
-
-    /// <summary>
-    /// Soft-delete one or more PTO entries; maximum 100 IDs per call
-    /// </summary>
-    [JsonPropertyName("delete_pto_entry")]
-    public List<TimeOffEntryDeleteResult>? DeletePtoEntry { get; init; }
 
     /// <summary>
     /// Create a new table view
@@ -988,6 +501,12 @@ public sealed partial class Mutation
     public Column? CreateDropdownColumn { get; init; }
 
     /// <summary>
+    /// Generic mutation for creating any column type with validation. Supports creating column with properties like title, description, and type-specific defaults/settings. The mutation validates input against the column type's schema before applying changes. Use get_column_type_schema query to understand available properties for each column type.
+    /// </summary>
+    [JsonPropertyName("create_column")]
+    public Column? CreateColumn { get; init; }
+
+    /// <summary>
     /// Creates a new status column in a board that is linked to a managed column. The column data and settings are controlled by the managed column. Only title and description can be overridden locally.
     /// </summary>
     [JsonPropertyName("attach_status_managed_column")]
@@ -1078,10 +597,389 @@ public sealed partial class Mutation
     public ExportResult? CreateBoardExport { get; init; }
 
     /// <summary>
-    /// Execute an integration block with the provided field values
+    /// Add a file to a column value.
     /// </summary>
-    [JsonPropertyName("execute_integration_block")]
-    public IntegrationExecutionResult? ExecuteIntegrationBlock { get; init; }
+    [JsonPropertyName("add_file_to_column")]
+    public Asset? AddFileToColumn { get; init; }
+
+    /// <summary>
+    /// Add a file to an update.
+    /// </summary>
+    [JsonPropertyName("add_file_to_update")]
+    public Asset? AddFileToUpdate { get; init; }
+
+    /// <summary>
+    /// Add subscribers to a board.
+    /// </summary>
+    [JsonPropertyName("add_subscribers_to_board")]
+    public List<User>? AddSubscribersToBoard { get; init; }
+
+    /// <summary>
+    /// Add teams subscribers to a board.
+    /// </summary>
+    [JsonPropertyName("add_teams_to_board")]
+    public List<Team>? AddTeamsToBoard { get; init; }
+
+    /// <summary>
+    /// Add teams to a workspace.
+    /// </summary>
+    [JsonPropertyName("add_teams_to_workspace")]
+    public List<Team>? AddTeamsToWorkspace { get; init; }
+
+    /// <summary>
+    /// Add subscribers to a board.
+    /// </summary>
+    [JsonPropertyName("add_users_to_board")]
+    public List<User>? AddUsersToBoard { get; init; }
+
+    /// <summary>
+    /// Add users to team.
+    /// </summary>
+    [JsonPropertyName("add_users_to_team")]
+    public ChangeTeamMembershipsResult? AddUsersToTeam { get; init; }
+
+    /// <summary>
+    /// Add users to a workspace.
+    /// </summary>
+    [JsonPropertyName("add_users_to_workspace")]
+    public List<User>? AddUsersToWorkspace { get; init; }
+
+    /// <summary>
+    /// Archive a board.
+    /// </summary>
+    [JsonPropertyName("archive_board")]
+    public Board? ArchiveBoard { get; init; }
+
+    /// <summary>
+    /// Archives a group in a specific board.
+    /// </summary>
+    [JsonPropertyName("archive_group")]
+    public Group? ArchiveGroup { get; init; }
+
+    /// <summary>
+    /// Archive an item.
+    /// </summary>
+    [JsonPropertyName("archive_item")]
+    public Item? ArchiveItem { get; init; }
+
+    /// <summary>
+    /// Extends trial period of an application to selected accounts
+    /// </summary>
+    [JsonPropertyName("batch_extend_trial_period")]
+    public BatchExtendTrialPeriod? BatchExtendTrialPeriod { get; init; }
+
+    /// <summary>
+    /// Change a column's properties
+    /// </summary>
+    [JsonPropertyName("change_column_metadata")]
+    public Column? ChangeColumnMetadata { get; init; }
+
+    /// <summary>
+    /// Change a column's title
+    /// </summary>
+    [JsonPropertyName("change_column_title")]
+    public Column? ChangeColumnTitle { get; init; }
+
+    /// <summary>
+    /// Change an item's column value.
+    /// </summary>
+    [JsonPropertyName("change_column_value")]
+    public Item? ChangeColumnValue { get; init; }
+
+    /// <summary>
+    /// Change an item's position.
+    /// </summary>
+    [JsonPropertyName("change_item_position")]
+    public Item? ChangeItemPosition { get; init; }
+
+    /// <summary>
+    /// Changes the column values of a specific item.
+    /// </summary>
+    [JsonPropertyName("change_multiple_column_values")]
+    public Item? ChangeMultipleColumnValues { get; init; }
+
+    /// <summary>
+    /// Change an item's column with simple value.
+    /// </summary>
+    [JsonPropertyName("change_simple_column_value")]
+    public Item? ChangeSimpleColumnValue { get; init; }
+
+    /// <summary>
+    /// Clear an item's updates.
+    /// </summary>
+    [JsonPropertyName("clear_item_updates")]
+    public Item? ClearItemUpdates { get; init; }
+
+    /// <summary>
+    /// Get the complexity data of your mutations.
+    /// </summary>
+    [JsonPropertyName("complexity")]
+    public Complexity? Complexity { get; init; }
+
+    /// <summary>
+    /// Create a new board.
+    /// </summary>
+    [JsonPropertyName("create_board")]
+    public Board? CreateBoard { get; init; }
+
+    /// <summary>
+    /// Create a new doc.
+    /// </summary>
+    [JsonPropertyName("create_doc")]
+    public Document? CreateDoc { get; init; }
+
+    /// <summary>
+    /// Create new document block
+    /// </summary>
+    [JsonPropertyName("create_doc_block")]
+    public DocumentBlock? CreateDocBlock { get; init; }
+
+    /// <summary>
+    /// Creates a folder in a specific workspace.
+    /// </summary>
+    [JsonPropertyName("create_folder")]
+    public Folder? CreateFolder { get; init; }
+
+    /// <summary>
+    /// Creates a new group in a specific board.
+    /// </summary>
+    [JsonPropertyName("create_group")]
+    public Group? CreateGroup { get; init; }
+
+    /// <summary>
+    /// Create a new item.
+    /// </summary>
+    [JsonPropertyName("create_item")]
+    public Item? CreateItem { get; init; }
+
+    /// <summary>
+    /// Create a new notification.
+    /// </summary>
+    [JsonPropertyName("create_notification")]
+    public Notification? CreateNotification { get; init; }
+
+    /// <summary>
+    /// Create a new tag or get it if it already exists.
+    /// </summary>
+    [JsonPropertyName("create_or_get_tag")]
+    public Tag? CreateOrGetTag { get; init; }
+
+    /// <summary>
+    /// Create subitem.
+    /// </summary>
+    [JsonPropertyName("create_subitem")]
+    public Item? CreateSubitem { get; init; }
+
+    /// <summary>
+    /// Create a new webhook.
+    /// </summary>
+    [JsonPropertyName("create_webhook")]
+    public Webhook? CreateWebhook { get; init; }
+
+    /// <summary>
+    /// Create a new workspace.
+    /// </summary>
+    [JsonPropertyName("create_workspace")]
+    public Workspace? CreateWorkspace { get; init; }
+
+    /// <summary>
+    /// Delete a board.
+    /// </summary>
+    [JsonPropertyName("delete_board")]
+    public Board? DeleteBoard { get; init; }
+
+    /// <summary>
+    /// Delete a column.
+    /// </summary>
+    [JsonPropertyName("delete_column")]
+    public Column? DeleteColumn { get; init; }
+
+    /// <summary>
+    /// Delete a document block
+    /// </summary>
+    [JsonPropertyName("delete_doc_block")]
+    public DocumentBlockIdOnly? DeleteDocBlock { get; init; }
+
+    /// <summary>
+    /// Deletes a folder in a specific workspace.
+    /// </summary>
+    [JsonPropertyName("delete_folder")]
+    public Folder? DeleteFolder { get; init; }
+
+    /// <summary>
+    /// Deletes a group in a specific board.
+    /// </summary>
+    [JsonPropertyName("delete_group")]
+    public Group? DeleteGroup { get; init; }
+
+    /// <summary>
+    /// Delete an item.
+    /// </summary>
+    [JsonPropertyName("delete_item")]
+    public Item? DeleteItem { get; init; }
+
+    /// <summary>
+    /// Remove subscribers from the board.
+    /// </summary>
+    [JsonPropertyName("delete_subscribers_from_board")]
+    public List<User>? DeleteSubscribersFromBoard { get; init; }
+
+    /// <summary>
+    /// Remove team subscribers from the board.
+    /// </summary>
+    [JsonPropertyName("delete_teams_from_board")]
+    public List<Team>? DeleteTeamsFromBoard { get; init; }
+
+    /// <summary>
+    /// Delete teams from a workspace.
+    /// </summary>
+    [JsonPropertyName("delete_teams_from_workspace")]
+    public List<Team>? DeleteTeamsFromWorkspace { get; init; }
+
+    /// <summary>
+    /// Delete users from a workspace.
+    /// </summary>
+    [JsonPropertyName("delete_users_from_workspace")]
+    public List<User>? DeleteUsersFromWorkspace { get; init; }
+
+    /// <summary>
+    /// Delete a new webhook.
+    /// </summary>
+    [JsonPropertyName("delete_webhook")]
+    public Webhook? DeleteWebhook { get; init; }
+
+    /// <summary>
+    /// Delete workspace.
+    /// </summary>
+    [JsonPropertyName("delete_workspace")]
+    public Workspace? DeleteWorkspace { get; init; }
+
+    /// <summary>
+    /// Duplicate a board.
+    /// </summary>
+    [JsonPropertyName("duplicate_board")]
+    public BoardDuplication? DuplicateBoard { get; init; }
+
+    /// <summary>
+    /// Duplicate a group.
+    /// </summary>
+    [JsonPropertyName("duplicate_group")]
+    public Group? DuplicateGroup { get; init; }
+
+    /// <summary>
+    /// Duplicate an item.
+    /// </summary>
+    [JsonPropertyName("duplicate_item")]
+    public Item? DuplicateItem { get; init; }
+
+    /// <summary>
+    /// Increase operations counter
+    /// </summary>
+    [JsonPropertyName("increase_app_subscription_operations")]
+    public AppSubscriptionOperationsCounter? IncreaseAppSubscriptionOperations { get; init; }
+
+    /// <summary>
+    /// Move an item to a different board.
+    /// </summary>
+    [JsonPropertyName("move_item_to_board")]
+    public Item? MoveItemToBoard { get; init; }
+
+    /// <summary>
+    /// Move an item to a different group.
+    /// </summary>
+    [JsonPropertyName("move_item_to_group")]
+    public Item? MoveItemToGroup { get; init; }
+
+    /// <summary>
+    /// Remove mock app subscription for the current account
+    /// </summary>
+    [JsonPropertyName("remove_mock_app_subscription")]
+    public AppSubscription? RemoveMockAppSubscription { get; init; }
+
+    /// <summary>
+    /// Remove users from team.
+    /// </summary>
+    [JsonPropertyName("remove_users_from_team")]
+    public ChangeTeamMembershipsResult? RemoveUsersFromTeam { get; init; }
+
+    /// <summary>
+    /// Set or update the board's permission to specified role. This concept is also
+    ///   known as default board role, general access or board permission set.
+    /// </summary>
+    [JsonPropertyName("set_board_permission")]
+    public SetBoardPermissionResponse? SetBoardPermission { get; init; }
+
+    /// <summary>
+    /// Set mock app subscription for the current account
+    /// </summary>
+    [JsonPropertyName("set_mock_app_subscription")]
+    public AppSubscription? SetMockAppSubscription { get; init; }
+
+    /// <summary>
+    /// Update item column value by existing assets
+    /// </summary>
+    [JsonPropertyName("update_assets_on_item")]
+    public Item? UpdateAssetsOnItem { get; init; }
+
+    /// <summary>
+    /// Update Board attribute.
+    /// </summary>
+    [JsonPropertyName("update_board")]
+    public string? UpdateBoard { get; init; }
+
+    /// <summary>
+    /// Update a board's position, workspace, or account product.
+    /// </summary>
+    [JsonPropertyName("update_board_hierarchy")]
+    public UpdateBoardHierarchyResult? UpdateBoardHierarchy { get; init; }
+
+    /// <summary>
+    /// Update a document block
+    /// </summary>
+    [JsonPropertyName("update_doc_block")]
+    public DocumentBlock? UpdateDocBlock { get; init; }
+
+    /// <summary>
+    /// Updates a folder.
+    /// </summary>
+    [JsonPropertyName("update_folder")]
+    public Folder? UpdateFolder { get; init; }
+
+    /// <summary>
+    /// Update an existing group.
+    /// </summary>
+    [JsonPropertyName("update_group")]
+    public Group? UpdateGroup { get; init; }
+
+    /// <summary>
+    /// Update the position of a dashboard.
+    /// </summary>
+    [JsonPropertyName("update_overview_hierarchy")]
+    public UpdateOverviewHierarchy? UpdateOverviewHierarchy { get; init; }
+
+    /// <summary>
+    /// Update board roles for multiple teams.
+    /// </summary>
+    [JsonPropertyName("update_teams_board_role")]
+    public UpdateTeamsBoardRoleResponse? UpdateTeamsBoardRole { get; init; }
+
+    /// <summary>
+    /// Update board roles for multiple users.
+    /// </summary>
+    [JsonPropertyName("update_users_board_role")]
+    public UpdateUsersBoardRoleResponse? UpdateUsersBoardRole { get; init; }
+
+    /// <summary>
+    /// Update an existing workspace.
+    /// </summary>
+    [JsonPropertyName("update_workspace")]
+    public Workspace? UpdateWorkspace { get; init; }
+
+    /// <summary>
+    /// Use a template
+    /// </summary>
+    [JsonPropertyName("use_template")]
+    public Template? UseTemplate { get; init; }
 
     /// <summary>
     /// Create a new widget.
@@ -1202,6 +1100,108 @@ public sealed partial class Mutation
     /// </summary>
     [JsonPropertyName("update_mute_board_settings")]
     public List<BoardMuteSettings>? UpdateMuteBoardSettings { get; init; }
+
+    /// <summary>
+    /// Update attributes (Job Role, Skills, or Location) for multiple resources in the directory
+    /// </summary>
+    [JsonPropertyName("update_directory_resources_attributes")]
+    public UpdateDirectoryResourceAttributesResponse? UpdateDirectoryResourcesAttributes { get; init; }
+
+    /// <summary>
+    /// Create one or more named work schedules for the account; maximum 100 inputs per call
+    /// </summary>
+    [JsonPropertyName("create_work_schedule")]
+    public List<WorkScheduleResult>? CreateWorkSchedule { get; init; }
+
+    /// <summary>
+    /// Update the name and/or working hours of an existing work schedule
+    /// </summary>
+    [JsonPropertyName("update_work_schedule")]
+    public WorkScheduleResult UpdateWorkSchedule { get; init; } = null!;
+
+    /// <summary>
+    /// Soft-delete one or more work schedules; maximum 100 IDs per call
+    /// </summary>
+    [JsonPropertyName("delete_work_schedule")]
+    public List<WorkScheduleDeleteResult>? DeleteWorkSchedule { get; init; }
+
+    /// <summary>
+    /// Assign a work schedule to multiple users and/or teams. Returns per-resource outcomes split by resource kind, allowing partial success. Pass the account default schedule ID to revert resources to the account default. Maximum 100 user IDs and 100 team IDs per call.
+    /// </summary>
+    [JsonPropertyName("assign_work_schedule")]
+    public AssignWorkScheduleResult? AssignWorkSchedule { get; init; }
+
+    /// <summary>
+    /// Remove explicit work schedule assignments from multiple users and/or teams. Returns per-resource outcomes split by resource kind, allowing partial success. Maximum 100 user IDs and 100 team IDs per call.
+    /// </summary>
+    [JsonPropertyName("unassign_work_schedule")]
+    public AssignWorkScheduleResult? UnassignWorkSchedule { get; init; }
+
+    /// <summary>
+    /// Create one or more named time off schedules for the account; maximum 100 inputs per call
+    /// </summary>
+    [JsonPropertyName("create_time_off")]
+    public List<TimeOffResult>? CreateTimeOff { get; init; }
+
+    /// <summary>
+    /// Update the name of a time off schedule
+    /// </summary>
+    [JsonPropertyName("update_time_off")]
+    public TimeOffResult? UpdateTimeOff { get; init; }
+
+    /// <summary>
+    /// Soft-delete one or more time off schedules; maximum 100 IDs per call
+    /// </summary>
+    [JsonPropertyName("delete_time_off")]
+    public List<TimeOffDeleteResult>? DeleteTimeOff { get; init; }
+
+    /// <summary>
+    /// Assign a time off schedule to multiple users and/or teams. Returns per-resource outcomes split by resource kind, allowing partial success. Pass the account default time off ID to revert resources to the account default. Maximum 100 user IDs and 100 team IDs per call.
+    /// </summary>
+    [JsonPropertyName("assign_time_off")]
+    public AssignTimeOffResult? AssignTimeOff { get; init; }
+
+    /// <summary>
+    /// Remove explicit time off assignments from multiple users and/or teams. Returns per-resource outcomes split by resource kind, allowing partial success. Maximum 100 user IDs and 100 team IDs per call.
+    /// </summary>
+    [JsonPropertyName("unassign_time_off")]
+    public AssignTimeOffResult UnassignTimeOff { get; init; } = null!;
+
+    /// <summary>
+    /// Add one or more non-working date entries to a time off schedule; maximum 100 inputs per call
+    /// </summary>
+    [JsonPropertyName("create_time_off_entry")]
+    public List<TimeOffEntryResult>? CreateTimeOffEntry { get; init; }
+
+    /// <summary>
+    /// Update the name or date range of one or more existing time off entries; maximum 100 inputs per call
+    /// </summary>
+    [JsonPropertyName("update_time_off_entry")]
+    public List<TimeOffEntryResult>? UpdateTimeOffEntry { get; init; }
+
+    /// <summary>
+    /// Soft-delete one or more time off entries; maximum 100 IDs per call
+    /// </summary>
+    [JsonPropertyName("delete_time_off_entry")]
+    public List<TimeOffEntryDeleteResult>? DeleteTimeOffEntry { get; init; }
+
+    /// <summary>
+    /// Create one or more PTO entries for users; maximum 100 inputs per call
+    /// </summary>
+    [JsonPropertyName("create_pto_entry")]
+    public List<TimeOffEntryResult>? CreatePtoEntry { get; init; }
+
+    /// <summary>
+    /// Update the name or date range of existing PTO entries; maximum 100 inputs per call
+    /// </summary>
+    [JsonPropertyName("update_pto_entry")]
+    public List<TimeOffEntryResult>? UpdatePtoEntry { get; init; }
+
+    /// <summary>
+    /// Soft-delete one or more PTO entries; maximum 100 IDs per call
+    /// </summary>
+    [JsonPropertyName("delete_pto_entry")]
+    public List<TimeOffEntryDeleteResult>? DeletePtoEntry { get; init; }
 
     /// <summary>
     /// Assigns members to a department.

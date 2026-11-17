@@ -7,7 +7,7 @@ using System.Text.Json.Serialization;
 namespace Soenneker.Monday.GraphQlClient;
 
 /// <summary>
-/// A vibe app created by the AI app builder
+/// A vibe app, resolved from ai-app-builder.
 /// </summary>
 public sealed partial class VibeApp
 {

@@ -22,7 +22,7 @@ public sealed partial class ChangeColumnMetadataRequestBuilder
     /// </summary>
     public ValueTask<GraphQlResponse<ChangeColumnMetadataData>> Execute(ChangeColumnMetadataVariables request, CancellationToken cancellationToken = default)
     {
-        const string gqlQuery = @"mutation ChangeColumnMetadata($board_id: ID!, $column_id: String!, $column_property: ColumnProperty, $value: String) { change_column_metadata(board_id: $board_id, column_id: $column_id, column_property: $column_property, value: $value) { archived description id settings_str title type width settings revision capabilities { calculated { function calculated_type } visibility } } }";
+        const string gqlQuery = @"mutation ChangeColumnMetadata($board_id: ID!, $column_id: String!, $column_property: ColumnProperty, $value: String) { change_column_metadata(board_id: $board_id, column_id: $column_id, column_property: $column_property, value: $value) { id title description type width archived settings settings_str revision capabilities { calculated { function calculated_type } visibility } } }";
         return _graphQlClient.Execute<ChangeColumnMetadataData>(gqlQuery, request, cancellationToken);
     }
 

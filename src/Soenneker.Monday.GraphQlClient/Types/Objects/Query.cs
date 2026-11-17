@@ -48,6 +48,12 @@ public sealed partial class Query
     public bool WouldCreateMlsRollupCycle { get; init; }
 
     /// <summary>
+    /// Get the status of a backfill or ingest job
+    /// </summary>
+    [JsonPropertyName("fetch_job_status")]
+    public JobStatus FetchJobStatus { get; init; } = null!;
+
+    /// <summary>
     /// Get an app by ID or slug.
     /// </summary>
     [JsonPropertyName("app")]
@@ -65,138 +71,6 @@ public sealed partial class Query
     [JsonPropertyName("get_app_lifecycle_subscriptions")]
     public List<LifecycleSubscriptionKind>? GetAppLifecycleSubscriptions { get; init; }
 
-    /// <summary>
-    /// Get the connected account's information.
-    /// </summary>
-    [JsonPropertyName("account")]
-    public Account? Account { get; init; }
-
-    /// <summary>
-    /// Get a collection of installs of an app.
-    /// </summary>
-    [JsonPropertyName("app_installs")]
-    public List<AppInstall>? AppInstalls { get; init; }
-
-    /// <summary>
-    /// Get the current app subscription. Note: This query does not work in the playground
-    /// </summary>
-    [JsonPropertyName("app_subscription")]
-    public List<AppSubscription>? AppSubscription { get; init; }
-
-    /// <summary>
-    /// Get operations counter current value
-    /// </summary>
-    [JsonPropertyName("app_subscription_operations")]
-    public AppSubscriptionOperationsCounter? AppSubscriptionOperations { get; init; }
-
-    /// <summary>
-    /// Get apps monetization information for an account
-    /// </summary>
-    [JsonPropertyName("apps_monetization_info")]
-    public AppsMonetizationInfo? AppsMonetizationInfo { get; init; }
-
-    /// <summary>
-    /// Get apps monetization status for an account
-    /// </summary>
-    [JsonPropertyName("apps_monetization_status")]
-    public AppMonetizationStatus? AppsMonetizationStatus { get; init; }
-
-    /// <summary>
-    /// Get a collection of assets by ids.
-    /// </summary>
-    [JsonPropertyName("assets")]
-    public List<Asset>? Assets { get; init; }
-
-    /// <summary>
-    /// Get a collection of boards.
-    /// </summary>
-    [JsonPropertyName("boards")]
-    public List<Board>? Boards { get; init; }
-
-    /// <summary>
-    /// Get the complexity data of your queries.
-    /// </summary>
-    [JsonPropertyName("complexity")]
-    public Complexity? Complexity { get; init; }
-
-    /// <summary>
-    /// Get a collection of docs.
-    /// </summary>
-    [JsonPropertyName("docs")]
-    public List<Document>? Docs { get; init; }
-
-    /// <summary>
-    /// Get a collection of folders. Note: This query won't return folders from closed workspaces to which you are not subscribed
-    /// </summary>
-    [JsonPropertyName("folders")]
-    public List<Folder>? Folders { get; init; }
-
-    /// <summary>
-    /// Get a collection of items.
-    /// </summary>
-    [JsonPropertyName("items")]
-    public List<Item>? Items { get; init; }
-
-    /// <summary>
-    /// Search items by multiple columns and values.
-    /// </summary>
-    [JsonPropertyName("items_page_by_column_values")]
-    public ItemsResponse ItemsPageByColumnValues { get; init; } = null!;
-
-    /// <summary>
-    /// Get the connected user's information.
-    /// </summary>
-    [JsonPropertyName("me")]
-    public User? Me { get; init; }
-
-    /// <summary>
-    /// Get next pages of board's items (rows) by cursor.
-    /// </summary>
-    [JsonPropertyName("next_items_page")]
-    public ItemsResponse NextItemsPage { get; init; } = null!;
-
-    /// <summary>
-    /// Get a collection of tags.
-    /// </summary>
-    [JsonPropertyName("tags")]
-    public List<Tag>? Tags { get; init; }
-
-    /// <summary>
-    /// Get a collection of teams.
-    /// </summary>
-    [JsonPropertyName("teams")]
-    public List<Team>? Teams { get; init; }
-
-    /// <summary>
-    /// Get the status of a use_template async operation. Returns null if the process_id is invalid, expired, or unauthorized.
-    /// </summary>
-    [JsonPropertyName("template_installation_status")]
-    public TemplateInstallationStatusResult? TemplateInstallationStatus { get; init; }
-
-    /// <summary>
-    /// Get the API version in use
-    /// </summary>
-    [JsonPropertyName("version")]
-    public Version Version { get; init; } = null!;
-
-    /// <summary>
-    /// Get a list containing the versions of the API
-    /// </summary>
-    [JsonPropertyName("versions")]
-    public List<Version>? Versions { get; init; }
-
-    /// <summary>
-    /// Get a collection of webhooks for the board
-    /// </summary>
-    [JsonPropertyName("webhooks")]
-    public List<Webhook>? Webhooks { get; init; }
-
-    /// <summary>
-    /// Get a collection of workspaces.
-    /// </summary>
-    [JsonPropertyName("workspaces")]
-    public List<Workspace>? Workspaces { get; init; }
-
     [JsonPropertyName("updates")]
     public List<Update>? Updates { get; init; }
 
@@ -211,12 +85,6 @@ public sealed partial class Query
     /// </summary>
     [JsonPropertyName("validations")]
     public Validations? Validations { get; init; }
-
-    /// <summary>
-    /// Get the status of a backfill or ingest job
-    /// </summary>
-    [JsonPropertyName("fetch_job_status")]
-    public JobStatus FetchJobStatus { get; init; } = null!;
 
     [JsonPropertyName("marketplace_app_discounts")]
     public List<MarketplaceAppDiscount> MarketplaceAppDiscounts { get; init; } = [];
@@ -243,54 +111,12 @@ public sealed partial class Query
     public AutomationsPage BoardAutomations { get; init; } = null!;
 
     /// <summary>
-    /// Fetch resources information from the resource directory
-    /// </summary>
-    [JsonPropertyName("get_directory_resources")]
-    public DirectoryResourcesResponse? GetDirectoryResources { get; init; }
-
-    /// <summary>
-    /// Returns active work schedules for the caller's account
-    /// </summary>
-    [JsonPropertyName("work_schedules")]
-    public WorkSchedulePage? WorkSchedules { get; init; }
-
-    /// <summary>
-    /// Returns active time off schedules for the caller's account
-    /// </summary>
-    [JsonPropertyName("time_offs")]
-    public TimesOffPage? TimeOffs { get; init; }
-
-    /// <summary>
-    /// Returns resources availability: work schedule and time offs schedule for users and teams
-    /// </summary>
-    [JsonPropertyName("resources_availability")]
-    public ResourcesAvailability? ResourcesAvailability { get; init; }
-
-    /// <summary>
-    /// Returns the account-level default work schedule and time off schedule
-    /// </summary>
-    [JsonPropertyName("account_availability_defaults")]
-    public AccountAvailabilityDefaults? AccountAvailabilityDefaults { get; init; }
-
-    /// <summary>
-    /// Returns personal PTO collections for the requested users; maximum 100 user IDs per call
-    /// </summary>
-    [JsonPropertyName("user_pto")]
-    public List<UserPto>? UserPto { get; init; }
-
-    /// <summary>
     /// Retrieves the JSON schema definition for a specific create view type. 
     ///   Use this query before calling create_view mutation to understand the structure and validation rules for the settings parameter. 
     ///   The schema defines what properties are available when creating views of a specific type.
     /// </summary>
     [JsonPropertyName("get_view_schema_by_type")]
     public string? GetViewSchemaByType { get; init; }
-
-    /// <summary>
-    /// Search API. Each field searches a single entity type with tailored filters.
-    /// </summary>
-    [JsonPropertyName("search")]
-    public SearchNamespace Search { get; init; } = null!;
 
     /// <summary>
     /// Retrieves a list of available object types that can be created or queried. Each object type is uniquely identified by an 'object_type_unique_key'. This key is required for mutations like 'create_object' and for filtering in the 'objects' query. Use this query to discover what types of objects are available in the system (e.g., 'workflows', 'projects') and get their corresponding unique keys. The structure of unique key is 'app_slug::app_feature_slug'.
@@ -460,6 +286,42 @@ public sealed partial class Query
     public List<AuditEventCatalogueEntry>? AuditEventCatalogue { get; init; }
 
     /// <summary>
+    /// List trigger events with optional filters
+    /// </summary>
+    [JsonPropertyName("trigger_events")]
+    public TriggerEventsPage? TriggerEvents { get; init; }
+
+    /// <summary>
+    /// Fetch a single trigger event by UUID
+    /// </summary>
+    [JsonPropertyName("trigger_event")]
+    public TriggerEvent? TriggerEvent { get; init; }
+
+    /// <summary>
+    /// List block events for a given trigger UUID
+    /// </summary>
+    [JsonPropertyName("block_events")]
+    public BlockEventsPage? BlockEvents { get; init; }
+
+    /// <summary>
+    /// List tool events for a given trigger UUID
+    /// </summary>
+    [JsonPropertyName("tool_events")]
+    public ToolEventsPage? ToolEvents { get; init; }
+
+    /// <summary>
+    /// Get aggregated automation runs statistics in the account
+    /// </summary>
+    [JsonPropertyName("account_trigger_statistics")]
+    public AccountTriggerStatistics? AccountTriggerStatistics { get; init; }
+
+    /// <summary>
+    /// Get aggregated automation runs statistics grouped by entity Ids
+    /// </summary>
+    [JsonPropertyName("account_triggers_statistics_by_entity_id")]
+    public AccountTriggersByEntityId? AccountTriggersStatisticsByEntityId { get; init; }
+
+    /// <summary>
     /// Get managed column data.
     /// </summary>
     [JsonPropertyName("managed_column")]
@@ -496,46 +358,142 @@ public sealed partial class Query
     public List<Sprint>? Sprints { get; init; }
 
     /// <summary>
+    /// Get the connected account's information.
+    /// </summary>
+    [JsonPropertyName("account")]
+    public Account? Account { get; init; }
+
+    /// <summary>
+    /// Get a collection of installs of an app.
+    /// </summary>
+    [JsonPropertyName("app_installs")]
+    public List<AppInstall>? AppInstalls { get; init; }
+
+    /// <summary>
+    /// Get the current app subscription. Note: This query does not work in the playground
+    /// </summary>
+    [JsonPropertyName("app_subscription")]
+    public List<AppSubscription>? AppSubscription { get; init; }
+
+    /// <summary>
+    /// Get operations counter current value
+    /// </summary>
+    [JsonPropertyName("app_subscription_operations")]
+    public AppSubscriptionOperationsCounter? AppSubscriptionOperations { get; init; }
+
+    /// <summary>
+    /// Get apps monetization information for an account
+    /// </summary>
+    [JsonPropertyName("apps_monetization_info")]
+    public AppsMonetizationInfo? AppsMonetizationInfo { get; init; }
+
+    /// <summary>
+    /// Get apps monetization status for an account
+    /// </summary>
+    [JsonPropertyName("apps_monetization_status")]
+    public AppMonetizationStatus? AppsMonetizationStatus { get; init; }
+
+    /// <summary>
+    /// Get a collection of assets by ids.
+    /// </summary>
+    [JsonPropertyName("assets")]
+    public List<Asset>? Assets { get; init; }
+
+    /// <summary>
+    /// Get a collection of boards.
+    /// </summary>
+    [JsonPropertyName("boards")]
+    public List<Board>? Boards { get; init; }
+
+    /// <summary>
+    /// Get the complexity data of your queries.
+    /// </summary>
+    [JsonPropertyName("complexity")]
+    public Complexity? Complexity { get; init; }
+
+    /// <summary>
+    /// Get a collection of docs.
+    /// </summary>
+    [JsonPropertyName("docs")]
+    public List<Document>? Docs { get; init; }
+
+    /// <summary>
+    /// Get a collection of folders. Note: This query won't return folders from closed workspaces to which you are not subscribed
+    /// </summary>
+    [JsonPropertyName("folders")]
+    public List<Folder>? Folders { get; init; }
+
+    /// <summary>
+    /// Get a collection of items.
+    /// </summary>
+    [JsonPropertyName("items")]
+    public List<Item>? Items { get; init; }
+
+    /// <summary>
+    /// Search items by multiple columns and values.
+    /// </summary>
+    [JsonPropertyName("items_page_by_column_values")]
+    public ItemsResponse ItemsPageByColumnValues { get; init; } = null!;
+
+    /// <summary>
+    /// Get the connected user's information.
+    /// </summary>
+    [JsonPropertyName("me")]
+    public User? Me { get; init; }
+
+    /// <summary>
+    /// Get next pages of board's items (rows) by cursor.
+    /// </summary>
+    [JsonPropertyName("next_items_page")]
+    public ItemsResponse NextItemsPage { get; init; } = null!;
+
+    /// <summary>
+    /// Get a collection of tags.
+    /// </summary>
+    [JsonPropertyName("tags")]
+    public List<Tag>? Tags { get; init; }
+
+    /// <summary>
+    /// Get a collection of teams.
+    /// </summary>
+    [JsonPropertyName("teams")]
+    public List<Team>? Teams { get; init; }
+
+    /// <summary>
+    /// Get the status of a use_template async operation. Returns null if the process_id is invalid, expired, or unauthorized.
+    /// </summary>
+    [JsonPropertyName("template_installation_status")]
+    public TemplateInstallationStatusResult? TemplateInstallationStatus { get; init; }
+
+    /// <summary>
+    /// Get the API version in use
+    /// </summary>
+    [JsonPropertyName("version")]
+    public Version Version { get; init; } = null!;
+
+    /// <summary>
+    /// Get a list containing the versions of the API
+    /// </summary>
+    [JsonPropertyName("versions")]
+    public List<Version>? Versions { get; init; }
+
+    /// <summary>
+    /// Get a collection of webhooks for the board
+    /// </summary>
+    [JsonPropertyName("webhooks")]
+    public List<Webhook>? Webhooks { get; init; }
+
+    /// <summary>
+    /// Get a collection of workspaces.
+    /// </summary>
+    [JsonPropertyName("workspaces")]
+    public List<Workspace>? Workspaces { get; init; }
+
+    /// <summary>
     /// Namespace for all notetaker-related queries.
     /// </summary>
     [JsonPropertyName("notetaker")]
     public NotetakerQueries? Notetaker { get; init; }
-
-    /// <summary>
-    /// List trigger events with optional filters
-    /// </summary>
-    [JsonPropertyName("trigger_events")]
-    public TriggerEventsPage? TriggerEvents { get; init; }
-
-    /// <summary>
-    /// Fetch a single trigger event by UUID
-    /// </summary>
-    [JsonPropertyName("trigger_event")]
-    public TriggerEvent? TriggerEvent { get; init; }
-
-    /// <summary>
-    /// List block events for a given trigger UUID
-    /// </summary>
-    [JsonPropertyName("block_events")]
-    public BlockEventsPage? BlockEvents { get; init; }
-
-    /// <summary>
-    /// List tool events for a given trigger UUID
-    /// </summary>
-    [JsonPropertyName("tool_events")]
-    public ToolEventsPage? ToolEvents { get; init; }
-
-    /// <summary>
-    /// Get aggregated automation runs statistics in the account
-    /// </summary>
-    [JsonPropertyName("account_trigger_statistics")]
-    public AccountTriggerStatistics? AccountTriggerStatistics { get; init; }
-
-    /// <summary>
-    /// Get aggregated automation runs statistics grouped by entity Ids
-    /// </summary>
-    [JsonPropertyName("account_triggers_statistics_by_entity_id")]
-    public AccountTriggersByEntityId? AccountTriggersStatisticsByEntityId { get; init; }
 
     /// <summary>
     /// Returns all available widget schemas for documentation and validation purposes
@@ -629,6 +587,48 @@ public sealed partial class Query
     /// </summary>
     [JsonPropertyName("mute_board_settings")]
     public List<BoardMuteSettings>? MuteBoardSettings { get; init; }
+
+    /// <summary>
+    /// Fetch resources information from the resource directory
+    /// </summary>
+    [JsonPropertyName("get_directory_resources")]
+    public DirectoryResourcesResponse? GetDirectoryResources { get; init; }
+
+    /// <summary>
+    /// Returns active work schedules for the caller's account
+    /// </summary>
+    [JsonPropertyName("work_schedules")]
+    public WorkSchedulePage? WorkSchedules { get; init; }
+
+    /// <summary>
+    /// Returns active time off schedules for the caller's account
+    /// </summary>
+    [JsonPropertyName("time_offs")]
+    public TimesOffPage? TimeOffs { get; init; }
+
+    /// <summary>
+    /// Returns resources availability: work schedule and time offs schedule for users and teams
+    /// </summary>
+    [JsonPropertyName("resources_availability")]
+    public ResourcesAvailability? ResourcesAvailability { get; init; }
+
+    /// <summary>
+    /// Returns the account-level default work schedule and time off schedule
+    /// </summary>
+    [JsonPropertyName("account_availability_defaults")]
+    public AccountAvailabilityDefaults? AccountAvailabilityDefaults { get; init; }
+
+    /// <summary>
+    /// Returns personal PTO collections for the requested users; maximum 100 user IDs per call
+    /// </summary>
+    [JsonPropertyName("user_pto")]
+    public List<UserPto>? UserPto { get; init; }
+
+    /// <summary>
+    /// Search API. Each field searches a single entity type with tailored filters.
+    /// </summary>
+    [JsonPropertyName("search")]
+    public SearchNamespace Search { get; init; } = null!;
 
     /// <summary>
     /// Get account departments

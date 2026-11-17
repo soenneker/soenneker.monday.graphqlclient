@@ -68,6 +68,11 @@ public enum ChatMessageKind
     RUNSTARTED,
 
     /// <summary>
+    /// An Automation was deleted from the settings panel
+    /// </summary>
+    AUTOMATIONDELETED,
+
+    /// <summary>
     /// A user's hand-written code save, with its steps (checks, security_review, build, deploy) as they run and how it ended
     /// </summary>
     MANUALEDIT

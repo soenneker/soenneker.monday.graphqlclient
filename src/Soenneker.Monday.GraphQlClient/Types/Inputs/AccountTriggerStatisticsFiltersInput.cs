@@ -11,15 +11,15 @@ namespace Soenneker.Monday.GraphQlClient;
 public sealed partial class AccountTriggerStatisticsFiltersInput
 {
     /// <summary>
-    /// Filter by board Id
-    /// </summary>
-    [JsonPropertyName("board_id")]
-    public int? BoardId { get; init; }
-
-    /// <summary>
     /// Filter by multiple user Ids
     /// </summary>
     [JsonPropertyName("user_ids")]
     public List<int>? UserIds { get; init; }
+
+    /// <summary>
+    /// Filter by board Id
+    /// </summary>
+    [JsonPropertyName("board_id")]
+    public int? BoardId { get; init; }
 
 }

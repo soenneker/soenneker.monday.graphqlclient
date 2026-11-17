@@ -13,34 +13,9 @@ public enum ItemsQueryRuleOperator
     AnyOf,
 
     /// <summary>
-    /// Between the two values
+    /// None of the values
     /// </summary>
-    Between,
-
-    /// <summary>
-    /// Contains all the terms
-    /// </summary>
-    ContainsTerms,
-
-    /// <summary>
-    /// Contains the text
-    /// </summary>
-    ContainsText,
-
-    /// <summary>
-    /// Ends with the value
-    /// </summary>
-    EndsWith,
-
-    /// <summary>
-    /// Greater than the value
-    /// </summary>
-    GreaterThan,
-
-    /// <summary>
-    /// Greater than or equal to the value
-    /// </summary>
-    GreaterThanOrEquals,
+    NotAnyOf,
 
     /// <summary>
     /// Empty value
@@ -53,6 +28,16 @@ public enum ItemsQueryRuleOperator
     IsNotEmpty,
 
     /// <summary>
+    /// Greater than the value
+    /// </summary>
+    GreaterThan,
+
+    /// <summary>
+    /// Greater than or equal to the value
+    /// </summary>
+    GreaterThanOrEquals,
+
+    /// <summary>
     /// Lower than the value
     /// </summary>
     LowerThan,
@@ -63,9 +48,9 @@ public enum ItemsQueryRuleOperator
     LowerThanOrEqual,
 
     /// <summary>
-    /// None of the values
+    /// Between the two values
     /// </summary>
-    NotAnyOf,
+    Between,
 
     /// <summary>
     /// Does not contain the text
@@ -73,18 +58,33 @@ public enum ItemsQueryRuleOperator
     NotContainsText,
 
     /// <summary>
+    /// Contains the text
+    /// </summary>
+    ContainsText,
+
+    /// <summary>
+    /// Contains all the terms
+    /// </summary>
+    ContainsTerms,
+
+    /// <summary>
     /// Starts with the value
     /// </summary>
     StartsWith,
 
     /// <summary>
-    /// Within the last
+    /// Ends with the value
     /// </summary>
-    WithinTheLast,
+    EndsWith,
 
     /// <summary>
     /// Within the next
     /// </summary>
-    WithinTheNext
+    WithinTheNext,
+
+    /// <summary>
+    /// Within the last
+    /// </summary>
+    WithinTheLast
 
 }

@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 namespace Soenneker.Monday.GraphQlClient;
 
 /// <summary>
-/// Recurring weekly work-schedule mask for a resource. Does not account for time-offs or specific dates.
+/// Recurring weekly work-schedule mask for a resource, plus its company time off ranges. Personal time off (PTO) is not included.
 /// </summary>
 public sealed partial class ResourceWorkWeekday
 {
@@ -21,5 +21,11 @@ public sealed partial class ResourceWorkWeekday
     /// </summary>
     [JsonPropertyName("active_weekdays")]
     public List<bool> ActiveWeekdays { get; init; } = [];
+
+    /// <summary>
+    /// Inclusive date ranges of the resource assigned (or default) company time off schedule. Excludes PTO.
+    /// </summary>
+    [JsonPropertyName("company_time_off_ranges")]
+    public List<ResourceTimeOffRange> CompanyTimeOffRanges { get; init; } = [];
 
 }
