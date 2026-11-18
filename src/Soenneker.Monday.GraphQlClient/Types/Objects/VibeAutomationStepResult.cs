@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 namespace Soenneker.Monday.GraphQlClient;
 
 /// <summary>
-/// What happened to one step of a run. There is no error text, only a code
+/// What happened to one step of a run: a code, and for a failed step the summary and technical detail vibe-automations writes for the user
 /// </summary>
 public sealed partial class VibeAutomationStepResult
 {
@@ -32,5 +32,11 @@ public sealed partial class VibeAutomationStepResult
     /// </summary>
     [JsonPropertyName("error_code")]
     public string? ErrorCode { get; init; }
+
+    /// <summary>
+    /// Why the step failed, with a human-readable summary and suggested fixes; null when it did not
+    /// </summary>
+    [JsonPropertyName("failure")]
+    public VibeAutomationStepFailure? Failure { get; init; }
 
 }

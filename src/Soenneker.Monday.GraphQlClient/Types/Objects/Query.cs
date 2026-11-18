@@ -12,6 +12,42 @@ namespace Soenneker.Monday.GraphQlClient;
 public sealed partial class Query
 {
     /// <summary>
+    /// Fetch resources information from the resource directory
+    /// </summary>
+    [JsonPropertyName("get_directory_resources")]
+    public DirectoryResourcesResponse? GetDirectoryResources { get; init; }
+
+    /// <summary>
+    /// Returns active work schedules for the caller's account
+    /// </summary>
+    [JsonPropertyName("work_schedules")]
+    public WorkSchedulePage? WorkSchedules { get; init; }
+
+    /// <summary>
+    /// Returns active time off schedules for the caller's account
+    /// </summary>
+    [JsonPropertyName("time_offs")]
+    public TimesOffPage? TimeOffs { get; init; }
+
+    /// <summary>
+    /// Returns resources availability: work schedule and time offs schedule for users and teams
+    /// </summary>
+    [JsonPropertyName("resources_availability")]
+    public ResourcesAvailability? ResourcesAvailability { get; init; }
+
+    /// <summary>
+    /// Returns the account-level default work schedule and time off schedule
+    /// </summary>
+    [JsonPropertyName("account_availability_defaults")]
+    public AccountAvailabilityDefaults? AccountAvailabilityDefaults { get; init; }
+
+    /// <summary>
+    /// Returns personal PTO collections for the requested users; maximum 100 user IDs per call
+    /// </summary>
+    [JsonPropertyName("user_pto")]
+    public List<UserPto>? UserPto { get; init; }
+
+    /// <summary>
     /// Export the dependency graph for a specific board
     /// </summary>
     [JsonPropertyName("export_graph")]
@@ -358,6 +394,141 @@ public sealed partial class Query
     public List<Sprint>? Sprints { get; init; }
 
     /// <summary>
+    /// Namespace for all notetaker-related queries.
+    /// </summary>
+    [JsonPropertyName("notetaker")]
+    public NotetakerQueries? Notetaker { get; init; }
+
+    /// <summary>
+    /// Returns all available widget schemas for documentation and validation purposes
+    /// </summary>
+    [JsonPropertyName("all_widgets_schema")]
+    public List<WidgetSchemaInfo>? AllWidgetsSchema { get; init; }
+
+    /// <summary>
+    /// Search analytics events by identifier
+    /// </summary>
+    [JsonPropertyName("analytics_events")]
+    public CampaignsAnalyticsEventsResponse? AnalyticsEvents { get; init; }
+
+    /// <summary>
+    /// List email campaigns for the current account with optional filtering and sorting
+    /// </summary>
+    [JsonPropertyName("campaigns")]
+    public List<CampaignsEmailCampaign>? Campaigns { get; init; }
+
+    /// <summary>
+    /// Get a single email campaign by ID
+    /// </summary>
+    [JsonPropertyName("campaign")]
+    public CampaignsEmailCampaign? Campaign { get; init; }
+
+    /// <summary>
+    /// Get the brand kit for the current account
+    /// </summary>
+    [JsonPropertyName("brand_kit")]
+    public CampaignsBrandKit? BrandKit { get; init; }
+
+    /// <summary>
+    /// List market insights for the current account
+    /// </summary>
+    [JsonPropertyName("insights")]
+    public List<CampaignsInsight>? Insights { get; init; }
+
+    /// <summary>
+    /// Get a single market insight by ID
+    /// </summary>
+    [JsonPropertyName("insight")]
+    public CampaignsInsight? Insight { get; init; }
+
+    /// <summary>
+    /// List audience segments for the current account
+    /// </summary>
+    [JsonPropertyName("segments")]
+    public List<CampaignsSegment>? Segments { get; init; }
+
+    /// <summary>
+    /// Get a single audience segment by ID
+    /// </summary>
+    [JsonPropertyName("segment")]
+    public CampaignsSegment? Segment { get; init; }
+
+    /// <summary>
+    /// Get marketing channels settings for the current account
+    /// </summary>
+    [JsonPropertyName("settings")]
+    public CampaignsSettings? Settings { get; init; }
+
+    /// <summary>
+    /// Usage metrics for the current account
+    /// </summary>
+    [JsonPropertyName("usage")]
+    public CampaignsUsage? Usage { get; init; }
+
+    /// <summary>
+    /// Fetch a form by its token. The returned form includes all the details of the form such as its settings, questions, title, etc. Use this endpoint when you need to retrieve complete form data for display or processing. Requires that the requesting user has read access to the associated board.
+    /// </summary>
+    [JsonPropertyName("form")]
+    public ResponseForm? Form { get; init; }
+
+    /// <summary>
+    /// Search knowledge base snippets.
+    /// </summary>
+    [JsonPropertyName("knowledge_base_search")]
+    public KnowledgeBaseAnswer? KnowledgeBaseSearch { get; init; }
+
+    [JsonPropertyName("notifications")]
+    public List<NotificationV2>? Notifications { get; init; }
+
+    /// <summary>
+    /// Retrieves the current user's notification settings across all available channels.
+    /// </summary>
+    [JsonPropertyName("notifications_settings")]
+    public List<NotificationSetting>? NotificationsSettings { get; init; }
+
+    /// <summary>
+    /// Get mute board notification settings for the current user
+    /// </summary>
+    [JsonPropertyName("mute_board_settings")]
+    public List<BoardMuteSettings>? MuteBoardSettings { get; init; }
+
+    /// <summary>
+    /// Search API. Each field searches a single entity type with tailored filters.
+    /// </summary>
+    [JsonPropertyName("search")]
+    public SearchNamespace Search { get; init; } = null!;
+
+    /// <summary>
+    /// Get account departments
+    /// </summary>
+    [JsonPropertyName("departments")]
+    public List<Department>? Departments { get; init; }
+
+    /// <summary>
+    /// Performs aggregation operations on board data
+    /// </summary>
+    [JsonPropertyName("aggregate")]
+    public AggregateQueryResult? Aggregate { get; init; }
+
+    /// <summary>
+    /// Get all roles for the account
+    /// </summary>
+    [JsonPropertyName("account_roles")]
+    public List<AccountRole>? AccountRoles { get; init; }
+
+    /// <summary>
+    /// Retrieves API tokens for the given service users.
+    /// </summary>
+    [JsonPropertyName("service_user_tokens")]
+    public List<ServiceUserToken>? ServiceUserTokens { get; init; }
+
+    /// <summary>
+    /// Retrieves all service users in the account with their token last activity.
+    /// </summary>
+    [JsonPropertyName("service_users")]
+    public List<ServiceUser>? ServiceUsers { get; init; }
+
+    /// <summary>
     /// Get the connected account's information.
     /// </summary>
     [JsonPropertyName("account")]
@@ -488,177 +659,6 @@ public sealed partial class Query
     /// </summary>
     [JsonPropertyName("workspaces")]
     public List<Workspace>? Workspaces { get; init; }
-
-    /// <summary>
-    /// Namespace for all notetaker-related queries.
-    /// </summary>
-    [JsonPropertyName("notetaker")]
-    public NotetakerQueries? Notetaker { get; init; }
-
-    /// <summary>
-    /// Returns all available widget schemas for documentation and validation purposes
-    /// </summary>
-    [JsonPropertyName("all_widgets_schema")]
-    public List<WidgetSchemaInfo>? AllWidgetsSchema { get; init; }
-
-    /// <summary>
-    /// Search analytics events by identifier
-    /// </summary>
-    [JsonPropertyName("analytics_events")]
-    public CampaignsAnalyticsEventsResponse? AnalyticsEvents { get; init; }
-
-    /// <summary>
-    /// List email campaigns for the current account with optional filtering and sorting
-    /// </summary>
-    [JsonPropertyName("campaigns")]
-    public List<CampaignsEmailCampaign>? Campaigns { get; init; }
-
-    /// <summary>
-    /// Get a single email campaign by ID
-    /// </summary>
-    [JsonPropertyName("campaign")]
-    public CampaignsEmailCampaign? Campaign { get; init; }
-
-    /// <summary>
-    /// Get the brand kit for the current account
-    /// </summary>
-    [JsonPropertyName("brand_kit")]
-    public CampaignsBrandKit? BrandKit { get; init; }
-
-    /// <summary>
-    /// List market insights for the current account
-    /// </summary>
-    [JsonPropertyName("insights")]
-    public List<CampaignsInsight>? Insights { get; init; }
-
-    /// <summary>
-    /// Get a single market insight by ID
-    /// </summary>
-    [JsonPropertyName("insight")]
-    public CampaignsInsight? Insight { get; init; }
-
-    /// <summary>
-    /// List audience segments for the current account
-    /// </summary>
-    [JsonPropertyName("segments")]
-    public List<CampaignsSegment>? Segments { get; init; }
-
-    /// <summary>
-    /// Get a single audience segment by ID
-    /// </summary>
-    [JsonPropertyName("segment")]
-    public CampaignsSegment? Segment { get; init; }
-
-    /// <summary>
-    /// Get marketing channels settings for the current account
-    /// </summary>
-    [JsonPropertyName("settings")]
-    public CampaignsSettings? Settings { get; init; }
-
-    /// <summary>
-    /// Usage metrics for the current account
-    /// </summary>
-    [JsonPropertyName("usage")]
-    public CampaignsUsage? Usage { get; init; }
-
-    /// <summary>
-    /// Fetch a form by its token. The returned form includes all the details of the form such as its settings, questions, title, etc. Use this endpoint when you need to retrieve complete form data for display or processing. Requires that the requesting user has read access to the associated board.
-    /// </summary>
-    [JsonPropertyName("form")]
-    public ResponseForm? Form { get; init; }
-
-    /// <summary>
-    /// Search knowledge base snippets.
-    /// </summary>
-    [JsonPropertyName("knowledge_base_search")]
-    public KnowledgeBaseAnswer? KnowledgeBaseSearch { get; init; }
-
-    [JsonPropertyName("notifications")]
-    public List<NotificationV2>? Notifications { get; init; }
-
-    /// <summary>
-    /// Retrieves the current user's notification settings across all available channels.
-    /// </summary>
-    [JsonPropertyName("notifications_settings")]
-    public List<NotificationSetting>? NotificationsSettings { get; init; }
-
-    /// <summary>
-    /// Get mute board notification settings for the current user
-    /// </summary>
-    [JsonPropertyName("mute_board_settings")]
-    public List<BoardMuteSettings>? MuteBoardSettings { get; init; }
-
-    /// <summary>
-    /// Fetch resources information from the resource directory
-    /// </summary>
-    [JsonPropertyName("get_directory_resources")]
-    public DirectoryResourcesResponse? GetDirectoryResources { get; init; }
-
-    /// <summary>
-    /// Returns active work schedules for the caller's account
-    /// </summary>
-    [JsonPropertyName("work_schedules")]
-    public WorkSchedulePage? WorkSchedules { get; init; }
-
-    /// <summary>
-    /// Returns active time off schedules for the caller's account
-    /// </summary>
-    [JsonPropertyName("time_offs")]
-    public TimesOffPage? TimeOffs { get; init; }
-
-    /// <summary>
-    /// Returns resources availability: work schedule and time offs schedule for users and teams
-    /// </summary>
-    [JsonPropertyName("resources_availability")]
-    public ResourcesAvailability? ResourcesAvailability { get; init; }
-
-    /// <summary>
-    /// Returns the account-level default work schedule and time off schedule
-    /// </summary>
-    [JsonPropertyName("account_availability_defaults")]
-    public AccountAvailabilityDefaults? AccountAvailabilityDefaults { get; init; }
-
-    /// <summary>
-    /// Returns personal PTO collections for the requested users; maximum 100 user IDs per call
-    /// </summary>
-    [JsonPropertyName("user_pto")]
-    public List<UserPto>? UserPto { get; init; }
-
-    /// <summary>
-    /// Search API. Each field searches a single entity type with tailored filters.
-    /// </summary>
-    [JsonPropertyName("search")]
-    public SearchNamespace Search { get; init; } = null!;
-
-    /// <summary>
-    /// Get account departments
-    /// </summary>
-    [JsonPropertyName("departments")]
-    public List<Department>? Departments { get; init; }
-
-    /// <summary>
-    /// Performs aggregation operations on board data
-    /// </summary>
-    [JsonPropertyName("aggregate")]
-    public AggregateQueryResult? Aggregate { get; init; }
-
-    /// <summary>
-    /// Get all roles for the account
-    /// </summary>
-    [JsonPropertyName("account_roles")]
-    public List<AccountRole>? AccountRoles { get; init; }
-
-    /// <summary>
-    /// Retrieves API tokens for the given service users.
-    /// </summary>
-    [JsonPropertyName("service_user_tokens")]
-    public List<ServiceUserToken>? ServiceUserTokens { get; init; }
-
-    /// <summary>
-    /// Retrieves all service users in the account with their token last activity.
-    /// </summary>
-    [JsonPropertyName("service_users")]
-    public List<ServiceUser>? ServiceUsers { get; init; }
 
     /// <summary>
     /// Get board candidates based on workspace and usage type

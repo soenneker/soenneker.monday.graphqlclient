@@ -22,7 +22,7 @@ public sealed partial class AssignTeamOwnersRequestBuilder
     /// </summary>
     public ValueTask<GraphQlResponse<AssignTeamOwnersData>> Execute(AssignTeamOwnersVariables request, CancellationToken cancellationToken = default)
     {
-        const string gqlQuery = @"mutation AssignTeamOwners($team_id: ID!, $user_ids: [ID!]!) { assign_team_owners(team_id: $team_id, user_ids: $user_ids) { team { id name picture_url is_guest created_at } errors { message code user_id } } }";
+        const string gqlQuery = @"mutation AssignTeamOwners($team_id: ID!, $user_ids: [ID!]!) { assign_team_owners(team_id: $team_id, user_ids: $user_ids) { team { id is_guest name created_at picture_url } errors { message code user_id } } }";
         return _graphQlClient.Execute<AssignTeamOwnersData>(gqlQuery, request, cancellationToken);
     }
 

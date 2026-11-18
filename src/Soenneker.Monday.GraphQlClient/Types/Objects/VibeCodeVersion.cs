@@ -60,7 +60,7 @@ public sealed partial class VibeCodeVersion
     public List<CodeFile> Files { get; init; } = [];
 
     /// <summary>
-    /// Presigned URL for the app screenshot (generated on request)
+    /// Presigned URL for the app screenshot (generated on request). Null for callers other than the owner and members with full access to all connected boards/objects.
     /// </summary>
     [JsonPropertyName("screenshot_url")]
     public string? ScreenshotUrl { get; init; }

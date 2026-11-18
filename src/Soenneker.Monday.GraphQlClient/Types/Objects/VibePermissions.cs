@@ -53,6 +53,12 @@ public sealed partial class VibePermissions
     public bool? CanGeneratePublicVibeTemplates { get; init; }
 
     /// <summary>
+    /// Permission to invite external users to vibe apps. Account-level; the app role still applies
+    /// </summary>
+    [JsonPropertyName("can_invite_external_users")]
+    public bool? CanInviteExternalUsers { get; init; }
+
+    /// <summary>
     /// Permission to create views on the specified boards
     /// </summary>
     [JsonPropertyName("create_board_views")]

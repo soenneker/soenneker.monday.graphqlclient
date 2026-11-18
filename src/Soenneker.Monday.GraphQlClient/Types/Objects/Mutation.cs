@@ -12,6 +12,108 @@ namespace Soenneker.Monday.GraphQlClient;
 public sealed partial class Mutation
 {
     /// <summary>
+    /// Update attributes (Job Role, Skills, or Location) for multiple resources in the directory
+    /// </summary>
+    [JsonPropertyName("update_directory_resources_attributes")]
+    public UpdateDirectoryResourceAttributesResponse? UpdateDirectoryResourcesAttributes { get; init; }
+
+    /// <summary>
+    /// Create one or more named work schedules for the account; maximum 100 inputs per call
+    /// </summary>
+    [JsonPropertyName("create_work_schedule")]
+    public List<WorkScheduleResult>? CreateWorkSchedule { get; init; }
+
+    /// <summary>
+    /// Update the name and/or working hours of an existing work schedule
+    /// </summary>
+    [JsonPropertyName("update_work_schedule")]
+    public WorkScheduleResult UpdateWorkSchedule { get; init; } = null!;
+
+    /// <summary>
+    /// Soft-delete one or more work schedules; maximum 100 IDs per call
+    /// </summary>
+    [JsonPropertyName("delete_work_schedule")]
+    public List<WorkScheduleDeleteResult>? DeleteWorkSchedule { get; init; }
+
+    /// <summary>
+    /// Assign a work schedule to multiple users and/or teams. Returns per-resource outcomes split by resource kind, allowing partial success. Pass the account default schedule ID to revert resources to the account default. Maximum 100 user IDs and 100 team IDs per call.
+    /// </summary>
+    [JsonPropertyName("assign_work_schedule")]
+    public AssignWorkScheduleResult? AssignWorkSchedule { get; init; }
+
+    /// <summary>
+    /// Remove explicit work schedule assignments from multiple users and/or teams. Returns per-resource outcomes split by resource kind, allowing partial success. Maximum 100 user IDs and 100 team IDs per call.
+    /// </summary>
+    [JsonPropertyName("unassign_work_schedule")]
+    public AssignWorkScheduleResult? UnassignWorkSchedule { get; init; }
+
+    /// <summary>
+    /// Create one or more named time off schedules for the account; maximum 100 inputs per call
+    /// </summary>
+    [JsonPropertyName("create_time_off")]
+    public List<TimeOffResult>? CreateTimeOff { get; init; }
+
+    /// <summary>
+    /// Update the name of a time off schedule
+    /// </summary>
+    [JsonPropertyName("update_time_off")]
+    public TimeOffResult? UpdateTimeOff { get; init; }
+
+    /// <summary>
+    /// Soft-delete one or more time off schedules; maximum 100 IDs per call
+    /// </summary>
+    [JsonPropertyName("delete_time_off")]
+    public List<TimeOffDeleteResult>? DeleteTimeOff { get; init; }
+
+    /// <summary>
+    /// Assign a time off schedule to multiple users and/or teams. Returns per-resource outcomes split by resource kind, allowing partial success. Pass the account default time off ID to revert resources to the account default. Maximum 100 user IDs and 100 team IDs per call.
+    /// </summary>
+    [JsonPropertyName("assign_time_off")]
+    public AssignTimeOffResult? AssignTimeOff { get; init; }
+
+    /// <summary>
+    /// Remove explicit time off assignments from multiple users and/or teams. Returns per-resource outcomes split by resource kind, allowing partial success. Maximum 100 user IDs and 100 team IDs per call.
+    /// </summary>
+    [JsonPropertyName("unassign_time_off")]
+    public AssignTimeOffResult UnassignTimeOff { get; init; } = null!;
+
+    /// <summary>
+    /// Add one or more non-working date entries to a time off schedule; maximum 100 inputs per call
+    /// </summary>
+    [JsonPropertyName("create_time_off_entry")]
+    public List<TimeOffEntryResult>? CreateTimeOffEntry { get; init; }
+
+    /// <summary>
+    /// Update the name or date range of one or more existing time off entries; maximum 100 inputs per call
+    /// </summary>
+    [JsonPropertyName("update_time_off_entry")]
+    public List<TimeOffEntryResult>? UpdateTimeOffEntry { get; init; }
+
+    /// <summary>
+    /// Soft-delete one or more time off entries; maximum 100 IDs per call
+    /// </summary>
+    [JsonPropertyName("delete_time_off_entry")]
+    public List<TimeOffEntryDeleteResult>? DeleteTimeOffEntry { get; init; }
+
+    /// <summary>
+    /// Create one or more PTO entries for users; maximum 100 inputs per call
+    /// </summary>
+    [JsonPropertyName("create_pto_entry")]
+    public List<TimeOffEntryResult>? CreatePtoEntry { get; init; }
+
+    /// <summary>
+    /// Update the name or date range of existing PTO entries; maximum 100 inputs per call
+    /// </summary>
+    [JsonPropertyName("update_pto_entry")]
+    public List<TimeOffEntryResult>? UpdatePtoEntry { get; init; }
+
+    /// <summary>
+    /// Soft-delete one or more PTO entries; maximum 100 IDs per call
+    /// </summary>
+    [JsonPropertyName("delete_pto_entry")]
+    public List<TimeOffEntryDeleteResult>? DeletePtoEntry { get; init; }
+
+    /// <summary>
     /// Update the dependency column for a specific pulse
     /// </summary>
     [JsonPropertyName("update_dependency_column")]
@@ -94,12 +196,6 @@ public sealed partial class Mutation
     /// </summary>
     [JsonPropertyName("promote_app")]
     public DeveloperAppVersion? PromoteApp { get; init; }
-
-    /// <summary>
-    /// Execute an integration block with the provided field values
-    /// </summary>
-    [JsonPropertyName("execute_integration_block")]
-    public IntegrationExecutionResult? ExecuteIntegrationBlock { get; init; }
 
     /// <summary>
     /// Connect an existing project to a portfolio. When a callback_url is provided the mutation returns immediately with a process_id, and the result is POSTed to that URL once the operation completes. The callback payload is: { is_success: boolean, process_id: string, portfolio_item_id?: string }.
@@ -597,6 +693,252 @@ public sealed partial class Mutation
     public ExportResult? CreateBoardExport { get; init; }
 
     /// <summary>
+    /// Create a new widget.
+    /// </summary>
+    [JsonPropertyName("create_widget")]
+    public Widget? CreateWidget { get; init; }
+
+    /// <summary>
+    /// Delete an existing widget.
+    /// </summary>
+    [JsonPropertyName("delete_widget")]
+    public bool? DeleteWidget { get; init; }
+
+    /// <summary>
+    /// Create a new dashboard.
+    /// </summary>
+    [JsonPropertyName("create_dashboard")]
+    public Dashboard? CreateDashboard { get; init; }
+
+    /// <summary>
+    /// Update an existing dashboard.
+    /// </summary>
+    [JsonPropertyName("update_dashboard")]
+    public Dashboard? UpdateDashboard { get; init; }
+
+    /// <summary>
+    /// Delete an existing dashboard.
+    /// </summary>
+    [JsonPropertyName("delete_dashboard")]
+    public bool? DeleteDashboard { get; init; }
+
+    /// <summary>
+    /// Execute an integration block with the provided field values
+    /// </summary>
+    [JsonPropertyName("execute_integration_block")]
+    public IntegrationExecutionResult? ExecuteIntegrationBlock { get; init; }
+
+    /// <summary>
+    /// Run a prompt against an AI model and return the completion response. For more advanced capabilities, use Models REST API.
+    /// </summary>
+    [JsonPropertyName("run_prompt")]
+    public RunPromptResult? RunPrompt { get; init; }
+
+    /// <summary>
+    /// Update form properties including title, description, or question order.
+    /// </summary>
+    [JsonPropertyName("update_form")]
+    public ResponseForm? UpdateForm { get; init; }
+
+    /// <summary>
+    /// Update form configuration including features, appearance, and accessibility options.
+    /// </summary>
+    [JsonPropertyName("update_form_settings")]
+    public ResponseForm? UpdateFormSettings { get; init; }
+
+    /// <summary>
+    /// Create a new question within a form. Returns the created question with auto-generated ID.
+    /// </summary>
+    [JsonPropertyName("create_form_question")]
+    public FormQuestion? CreateFormQuestion { get; init; }
+
+    /// <summary>
+    /// Update an existing question properties including title, type, or settings. Requires question ID.
+    /// </summary>
+    [JsonPropertyName("update_form_question")]
+    public FormQuestion? UpdateFormQuestion { get; init; }
+
+    /// <summary>
+    /// Permanently remove a question from a form. This action cannot be undone.
+    /// </summary>
+    [JsonPropertyName("delete_question")]
+    public bool? DeleteQuestion { get; init; }
+
+    /// <summary>
+    /// Activate a form to make it visible to users and accept new submissions.
+    /// </summary>
+    [JsonPropertyName("activate_form")]
+    public bool? ActivateForm { get; init; }
+
+    /// <summary>
+    /// Deactivate a form to hide it from users and stop accepting submissions. Form data is preserved.
+    /// </summary>
+    [JsonPropertyName("deactivate_form")]
+    public bool? DeactivateForm { get; init; }
+
+    /// <summary>
+    /// Shorten a URL for a form and store it in the form settings. Returns the shortened link object.
+    /// </summary>
+    [JsonPropertyName("shorten_form_url")]
+    public FormShortenedLink? ShortenFormUrl { get; init; }
+
+    /// <summary>
+    /// Create a new tag for a form. Tags are used to categorize and track responses. (e.g. UTM tags)
+    /// </summary>
+    [JsonPropertyName("create_form_tag")]
+    public FormTag? CreateFormTag { get; init; }
+
+    /// <summary>
+    /// Delete a tag from a form
+    /// </summary>
+    [JsonPropertyName("delete_form_tag")]
+    public bool? DeleteFormTag { get; init; }
+
+    /// <summary>
+    /// Create a new form with specified configuration. Returns the created form with its unique token.
+    /// </summary>
+    [JsonPropertyName("create_form")]
+    public DehydratedFormResponse? CreateForm { get; init; }
+
+    /// <summary>
+    /// Set a password on a form to restrict access. This will enable password protection for the form.
+    /// </summary>
+    [JsonPropertyName("set_form_password")]
+    public ResponseForm? SetFormPassword { get; init; }
+
+    /// <summary>
+    /// Updates a notification setting's enabled status.
+    /// </summary>
+    [JsonPropertyName("update_notification_setting")]
+    public List<NotificationSetting>? UpdateNotificationSetting { get; init; }
+
+    /// <summary>
+    /// Update mute notification settings for a board. Allows muting all notifications for all users, only for the current user, or setting mentions/assigns-only. Returns the updated mute state for the board. Requires appropriate permissions for muting all users.
+    /// </summary>
+    [JsonPropertyName("update_mute_board_settings")]
+    public List<BoardMuteSettings>? UpdateMuteBoardSettings { get; init; }
+
+    /// <summary>
+    /// Assigns members to a department.
+    /// </summary>
+    [JsonPropertyName("assign_department_members")]
+    public AssignDepartmentMembersResult? AssignDepartmentMembers { get; init; }
+
+    /// <summary>
+    /// Clear users department
+    /// </summary>
+    [JsonPropertyName("clear_users_department")]
+    public ClearUsersDepartmentResult? ClearUsersDepartment { get; init; }
+
+    /// <summary>
+    /// Assigns an owner to a department.
+    /// </summary>
+    [JsonPropertyName("assign_department_owner")]
+    public AssignDepartmentOwnerResult? AssignDepartmentOwner { get; init; }
+
+    /// <summary>
+    /// Unassigns owners from a department.
+    /// </summary>
+    [JsonPropertyName("unassign_department_owners")]
+    public UnassignDepartmentOwnerResult? UnassignDepartmentOwners { get; init; }
+
+    /// <summary>
+    /// Creates a new department.
+    /// </summary>
+    [JsonPropertyName("create_department")]
+    public Department? CreateDepartment { get; init; }
+
+    /// <summary>
+    /// Updates a department.
+    /// </summary>
+    [JsonPropertyName("update_department")]
+    public Department? UpdateDepartment { get; init; }
+
+    /// <summary>
+    /// Deletes a department.
+    /// </summary>
+    [JsonPropertyName("delete_department")]
+    public Department? DeleteDepartment { get; init; }
+
+    /// <summary>
+    /// Creates a new team.
+    /// </summary>
+    [JsonPropertyName("create_team")]
+    public Team? CreateTeam { get; init; }
+
+    /// <summary>
+    /// Activates the specified users.
+    /// </summary>
+    [JsonPropertyName("activate_users")]
+    public ActivateUsersResult? ActivateUsers { get; init; }
+
+    /// <summary>
+    /// Deactivates the specified users.
+    /// </summary>
+    [JsonPropertyName("deactivate_users")]
+    public DeactivateUsersResult? DeactivateUsers { get; init; }
+
+    /// <summary>
+    /// Deletes the specified team.
+    /// </summary>
+    [JsonPropertyName("delete_team")]
+    public Team? DeleteTeam { get; init; }
+
+    /// <summary>
+    /// Updates the role of the specified users.
+    /// </summary>
+    [JsonPropertyName("update_users_role")]
+    public UpdateUsersRoleResult? UpdateUsersRole { get; init; }
+
+    /// <summary>
+    /// Assigns the specified users as owners of the specified team.
+    /// </summary>
+    [JsonPropertyName("assign_team_owners")]
+    public AssignTeamOwnersResult? AssignTeamOwners { get; init; }
+
+    /// <summary>
+    /// Removes the specified users as owners of the specified team.
+    /// </summary>
+    [JsonPropertyName("remove_team_owners")]
+    public RemoveTeamOwnersResult? RemoveTeamOwners { get; init; }
+
+    /// <summary>
+    /// Updates the email domain for the specified users.
+    /// </summary>
+    [JsonPropertyName("update_email_domain")]
+    public UpdateEmailDomainResult? UpdateEmailDomain { get; init; }
+
+    /// <summary>
+    /// Updates attributes for users.
+    /// </summary>
+    [JsonPropertyName("update_multiple_users")]
+    public UpdateUserAttributesResult? UpdateMultipleUsers { get; init; }
+
+    /// <summary>
+    /// Invite users to the account.
+    /// </summary>
+    [JsonPropertyName("invite_users")]
+    public InviteUsersResult? InviteUsers { get; init; }
+
+    /// <summary>
+    /// Revokes all API tokens for a service user.
+    /// </summary>
+    [JsonPropertyName("revoke_service_user_tokens")]
+    public bool? RevokeServiceUserTokens { get; init; }
+
+    /// <summary>
+    /// Revokes all existing tokens and generates a new API token for a service user.
+    /// </summary>
+    [JsonPropertyName("regenerate_service_user_token")]
+    public string? RegenerateServiceUserToken { get; init; }
+
+    /// <summary>
+    /// Creates a new service user.
+    /// </summary>
+    [JsonPropertyName("create_service_user")]
+    public CreateServiceUserResult? CreateServiceUser { get; init; }
+
+    /// <summary>
     /// Add a file to a column value.
     /// </summary>
     [JsonPropertyName("add_file_to_column")]
@@ -980,348 +1322,6 @@ public sealed partial class Mutation
     /// </summary>
     [JsonPropertyName("use_template")]
     public Template? UseTemplate { get; init; }
-
-    /// <summary>
-    /// Create a new widget.
-    /// </summary>
-    [JsonPropertyName("create_widget")]
-    public Widget? CreateWidget { get; init; }
-
-    /// <summary>
-    /// Delete an existing widget.
-    /// </summary>
-    [JsonPropertyName("delete_widget")]
-    public bool? DeleteWidget { get; init; }
-
-    /// <summary>
-    /// Create a new dashboard.
-    /// </summary>
-    [JsonPropertyName("create_dashboard")]
-    public Dashboard? CreateDashboard { get; init; }
-
-    /// <summary>
-    /// Update an existing dashboard.
-    /// </summary>
-    [JsonPropertyName("update_dashboard")]
-    public Dashboard? UpdateDashboard { get; init; }
-
-    /// <summary>
-    /// Delete an existing dashboard.
-    /// </summary>
-    [JsonPropertyName("delete_dashboard")]
-    public bool? DeleteDashboard { get; init; }
-
-    /// <summary>
-    /// Run a prompt against an AI model and return the completion response. For more advanced capabilities, use Models REST API.
-    /// </summary>
-    [JsonPropertyName("run_prompt")]
-    public RunPromptResult? RunPrompt { get; init; }
-
-    /// <summary>
-    /// Update form properties including title, description, or question order.
-    /// </summary>
-    [JsonPropertyName("update_form")]
-    public ResponseForm? UpdateForm { get; init; }
-
-    /// <summary>
-    /// Update form configuration including features, appearance, and accessibility options.
-    /// </summary>
-    [JsonPropertyName("update_form_settings")]
-    public ResponseForm? UpdateFormSettings { get; init; }
-
-    /// <summary>
-    /// Create a new question within a form. Returns the created question with auto-generated ID.
-    /// </summary>
-    [JsonPropertyName("create_form_question")]
-    public FormQuestion? CreateFormQuestion { get; init; }
-
-    /// <summary>
-    /// Update an existing question properties including title, type, or settings. Requires question ID.
-    /// </summary>
-    [JsonPropertyName("update_form_question")]
-    public FormQuestion? UpdateFormQuestion { get; init; }
-
-    /// <summary>
-    /// Permanently remove a question from a form. This action cannot be undone.
-    /// </summary>
-    [JsonPropertyName("delete_question")]
-    public bool? DeleteQuestion { get; init; }
-
-    /// <summary>
-    /// Activate a form to make it visible to users and accept new submissions.
-    /// </summary>
-    [JsonPropertyName("activate_form")]
-    public bool? ActivateForm { get; init; }
-
-    /// <summary>
-    /// Deactivate a form to hide it from users and stop accepting submissions. Form data is preserved.
-    /// </summary>
-    [JsonPropertyName("deactivate_form")]
-    public bool? DeactivateForm { get; init; }
-
-    /// <summary>
-    /// Shorten a URL for a form and store it in the form settings. Returns the shortened link object.
-    /// </summary>
-    [JsonPropertyName("shorten_form_url")]
-    public FormShortenedLink? ShortenFormUrl { get; init; }
-
-    /// <summary>
-    /// Create a new tag for a form. Tags are used to categorize and track responses. (e.g. UTM tags)
-    /// </summary>
-    [JsonPropertyName("create_form_tag")]
-    public FormTag? CreateFormTag { get; init; }
-
-    /// <summary>
-    /// Delete a tag from a form
-    /// </summary>
-    [JsonPropertyName("delete_form_tag")]
-    public bool? DeleteFormTag { get; init; }
-
-    /// <summary>
-    /// Create a new form with specified configuration. Returns the created form with its unique token.
-    /// </summary>
-    [JsonPropertyName("create_form")]
-    public DehydratedFormResponse? CreateForm { get; init; }
-
-    /// <summary>
-    /// Set a password on a form to restrict access. This will enable password protection for the form.
-    /// </summary>
-    [JsonPropertyName("set_form_password")]
-    public ResponseForm? SetFormPassword { get; init; }
-
-    /// <summary>
-    /// Updates a notification setting's enabled status.
-    /// </summary>
-    [JsonPropertyName("update_notification_setting")]
-    public List<NotificationSetting>? UpdateNotificationSetting { get; init; }
-
-    /// <summary>
-    /// Update mute notification settings for a board. Allows muting all notifications for all users, only for the current user, or setting mentions/assigns-only. Returns the updated mute state for the board. Requires appropriate permissions for muting all users.
-    /// </summary>
-    [JsonPropertyName("update_mute_board_settings")]
-    public List<BoardMuteSettings>? UpdateMuteBoardSettings { get; init; }
-
-    /// <summary>
-    /// Update attributes (Job Role, Skills, or Location) for multiple resources in the directory
-    /// </summary>
-    [JsonPropertyName("update_directory_resources_attributes")]
-    public UpdateDirectoryResourceAttributesResponse? UpdateDirectoryResourcesAttributes { get; init; }
-
-    /// <summary>
-    /// Create one or more named work schedules for the account; maximum 100 inputs per call
-    /// </summary>
-    [JsonPropertyName("create_work_schedule")]
-    public List<WorkScheduleResult>? CreateWorkSchedule { get; init; }
-
-    /// <summary>
-    /// Update the name and/or working hours of an existing work schedule
-    /// </summary>
-    [JsonPropertyName("update_work_schedule")]
-    public WorkScheduleResult UpdateWorkSchedule { get; init; } = null!;
-
-    /// <summary>
-    /// Soft-delete one or more work schedules; maximum 100 IDs per call
-    /// </summary>
-    [JsonPropertyName("delete_work_schedule")]
-    public List<WorkScheduleDeleteResult>? DeleteWorkSchedule { get; init; }
-
-    /// <summary>
-    /// Assign a work schedule to multiple users and/or teams. Returns per-resource outcomes split by resource kind, allowing partial success. Pass the account default schedule ID to revert resources to the account default. Maximum 100 user IDs and 100 team IDs per call.
-    /// </summary>
-    [JsonPropertyName("assign_work_schedule")]
-    public AssignWorkScheduleResult? AssignWorkSchedule { get; init; }
-
-    /// <summary>
-    /// Remove explicit work schedule assignments from multiple users and/or teams. Returns per-resource outcomes split by resource kind, allowing partial success. Maximum 100 user IDs and 100 team IDs per call.
-    /// </summary>
-    [JsonPropertyName("unassign_work_schedule")]
-    public AssignWorkScheduleResult? UnassignWorkSchedule { get; init; }
-
-    /// <summary>
-    /// Create one or more named time off schedules for the account; maximum 100 inputs per call
-    /// </summary>
-    [JsonPropertyName("create_time_off")]
-    public List<TimeOffResult>? CreateTimeOff { get; init; }
-
-    /// <summary>
-    /// Update the name of a time off schedule
-    /// </summary>
-    [JsonPropertyName("update_time_off")]
-    public TimeOffResult? UpdateTimeOff { get; init; }
-
-    /// <summary>
-    /// Soft-delete one or more time off schedules; maximum 100 IDs per call
-    /// </summary>
-    [JsonPropertyName("delete_time_off")]
-    public List<TimeOffDeleteResult>? DeleteTimeOff { get; init; }
-
-    /// <summary>
-    /// Assign a time off schedule to multiple users and/or teams. Returns per-resource outcomes split by resource kind, allowing partial success. Pass the account default time off ID to revert resources to the account default. Maximum 100 user IDs and 100 team IDs per call.
-    /// </summary>
-    [JsonPropertyName("assign_time_off")]
-    public AssignTimeOffResult? AssignTimeOff { get; init; }
-
-    /// <summary>
-    /// Remove explicit time off assignments from multiple users and/or teams. Returns per-resource outcomes split by resource kind, allowing partial success. Maximum 100 user IDs and 100 team IDs per call.
-    /// </summary>
-    [JsonPropertyName("unassign_time_off")]
-    public AssignTimeOffResult UnassignTimeOff { get; init; } = null!;
-
-    /// <summary>
-    /// Add one or more non-working date entries to a time off schedule; maximum 100 inputs per call
-    /// </summary>
-    [JsonPropertyName("create_time_off_entry")]
-    public List<TimeOffEntryResult>? CreateTimeOffEntry { get; init; }
-
-    /// <summary>
-    /// Update the name or date range of one or more existing time off entries; maximum 100 inputs per call
-    /// </summary>
-    [JsonPropertyName("update_time_off_entry")]
-    public List<TimeOffEntryResult>? UpdateTimeOffEntry { get; init; }
-
-    /// <summary>
-    /// Soft-delete one or more time off entries; maximum 100 IDs per call
-    /// </summary>
-    [JsonPropertyName("delete_time_off_entry")]
-    public List<TimeOffEntryDeleteResult>? DeleteTimeOffEntry { get; init; }
-
-    /// <summary>
-    /// Create one or more PTO entries for users; maximum 100 inputs per call
-    /// </summary>
-    [JsonPropertyName("create_pto_entry")]
-    public List<TimeOffEntryResult>? CreatePtoEntry { get; init; }
-
-    /// <summary>
-    /// Update the name or date range of existing PTO entries; maximum 100 inputs per call
-    /// </summary>
-    [JsonPropertyName("update_pto_entry")]
-    public List<TimeOffEntryResult>? UpdatePtoEntry { get; init; }
-
-    /// <summary>
-    /// Soft-delete one or more PTO entries; maximum 100 IDs per call
-    /// </summary>
-    [JsonPropertyName("delete_pto_entry")]
-    public List<TimeOffEntryDeleteResult>? DeletePtoEntry { get; init; }
-
-    /// <summary>
-    /// Assigns members to a department.
-    /// </summary>
-    [JsonPropertyName("assign_department_members")]
-    public AssignDepartmentMembersResult? AssignDepartmentMembers { get; init; }
-
-    /// <summary>
-    /// Clear users department
-    /// </summary>
-    [JsonPropertyName("clear_users_department")]
-    public ClearUsersDepartmentResult? ClearUsersDepartment { get; init; }
-
-    /// <summary>
-    /// Assigns an owner to a department.
-    /// </summary>
-    [JsonPropertyName("assign_department_owner")]
-    public AssignDepartmentOwnerResult? AssignDepartmentOwner { get; init; }
-
-    /// <summary>
-    /// Unassigns owners from a department.
-    /// </summary>
-    [JsonPropertyName("unassign_department_owners")]
-    public UnassignDepartmentOwnerResult? UnassignDepartmentOwners { get; init; }
-
-    /// <summary>
-    /// Creates a new department.
-    /// </summary>
-    [JsonPropertyName("create_department")]
-    public Department? CreateDepartment { get; init; }
-
-    /// <summary>
-    /// Updates a department.
-    /// </summary>
-    [JsonPropertyName("update_department")]
-    public Department? UpdateDepartment { get; init; }
-
-    /// <summary>
-    /// Deletes a department.
-    /// </summary>
-    [JsonPropertyName("delete_department")]
-    public Department? DeleteDepartment { get; init; }
-
-    /// <summary>
-    /// Creates a new team.
-    /// </summary>
-    [JsonPropertyName("create_team")]
-    public Team? CreateTeam { get; init; }
-
-    /// <summary>
-    /// Activates the specified users.
-    /// </summary>
-    [JsonPropertyName("activate_users")]
-    public ActivateUsersResult? ActivateUsers { get; init; }
-
-    /// <summary>
-    /// Deactivates the specified users.
-    /// </summary>
-    [JsonPropertyName("deactivate_users")]
-    public DeactivateUsersResult? DeactivateUsers { get; init; }
-
-    /// <summary>
-    /// Deletes the specified team.
-    /// </summary>
-    [JsonPropertyName("delete_team")]
-    public Team? DeleteTeam { get; init; }
-
-    /// <summary>
-    /// Updates the role of the specified users.
-    /// </summary>
-    [JsonPropertyName("update_users_role")]
-    public UpdateUsersRoleResult? UpdateUsersRole { get; init; }
-
-    /// <summary>
-    /// Assigns the specified users as owners of the specified team.
-    /// </summary>
-    [JsonPropertyName("assign_team_owners")]
-    public AssignTeamOwnersResult? AssignTeamOwners { get; init; }
-
-    /// <summary>
-    /// Removes the specified users as owners of the specified team.
-    /// </summary>
-    [JsonPropertyName("remove_team_owners")]
-    public RemoveTeamOwnersResult? RemoveTeamOwners { get; init; }
-
-    /// <summary>
-    /// Updates the email domain for the specified users.
-    /// </summary>
-    [JsonPropertyName("update_email_domain")]
-    public UpdateEmailDomainResult? UpdateEmailDomain { get; init; }
-
-    /// <summary>
-    /// Updates attributes for users.
-    /// </summary>
-    [JsonPropertyName("update_multiple_users")]
-    public UpdateUserAttributesResult? UpdateMultipleUsers { get; init; }
-
-    /// <summary>
-    /// Invite users to the account.
-    /// </summary>
-    [JsonPropertyName("invite_users")]
-    public InviteUsersResult? InviteUsers { get; init; }
-
-    /// <summary>
-    /// Revokes all API tokens for a service user.
-    /// </summary>
-    [JsonPropertyName("revoke_service_user_tokens")]
-    public bool? RevokeServiceUserTokens { get; init; }
-
-    /// <summary>
-    /// Revokes all existing tokens and generates a new API token for a service user.
-    /// </summary>
-    [JsonPropertyName("regenerate_service_user_token")]
-    public string? RegenerateServiceUserToken { get; init; }
-
-    /// <summary>
-    /// Creates a new service user.
-    /// </summary>
-    [JsonPropertyName("create_service_user")]
-    public CreateServiceUserResult? CreateServiceUser { get; init; }
 
     /// <summary>
     /// Convert an existing monday.com board into a project with enhanced project management capabilities. This mutation transforms a regular board by applying project-specific features and configurations through column mappings that define how existing board columns should be interpreted in the project context. The conversion process is asynchronous and returns a process_id for tracking completion. Optionally accepts a callback URL for notification when the conversion completes. Use this when you have an existing board with data that needs to be upgraded to a full project with advanced project management features like Resource Planner integration.

@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 namespace Soenneker.Monday.GraphQlClient;
 
 /// <summary>
-/// A run of a vibe app Automation and what happened to each of its steps. There is no error text
+/// A run of a vibe app Automation and what happened to each of its steps. Raw error text is never included, only codes and each failed step's failure
 /// </summary>
 public sealed partial class VibeAutomationRunDetail
 {

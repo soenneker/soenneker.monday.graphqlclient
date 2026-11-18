@@ -113,7 +113,7 @@ public sealed partial class VibeQueries
     public List<InspirationItem>? Inspirations { get; init; }
 
     /// <summary>
-    /// List vibe assets. When app_id is provided, returns assets scoped to that app; otherwise returns all assets for the current account.
+    /// List the assets of a vibe app. The caller must be a collaborator on the app; assets are never listed account-wide.
     /// </summary>
     [JsonPropertyName("assets")]
     public List<VibeAsset>? Assets { get; init; }

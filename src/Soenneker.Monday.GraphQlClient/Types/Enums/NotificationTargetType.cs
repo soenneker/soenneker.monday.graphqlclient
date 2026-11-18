@@ -8,13 +8,13 @@ namespace Soenneker.Monday.GraphQlClient;
 public enum NotificationTargetType
 {
     /// <summary>
-    /// Update
-    /// </summary>
-    Post,
-
-    /// <summary>
     /// Item or Board.
     /// </summary>
-    Project
+    Project,
+
+    /// <summary>
+    /// Update
+    /// </summary>
+    Post
 
 }

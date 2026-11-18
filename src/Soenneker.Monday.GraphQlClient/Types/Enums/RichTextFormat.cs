@@ -10,6 +10,14 @@ public enum RichTextFormat
     /// <summary>
     /// HTML.
     /// </summary>
-    Html
+    Html,
+
+    /// <summary>
+    /// Markdown. Reading converts the stored HTML and drops underline, text alignment
+    ///   and line breaks inside headings. Writing supports paragraphs, line breaks,
+    ///   headings (# to ######), bold, italic, strikethrough, lists and links, and
+    ///   keeps any other markdown as plain text.
+    /// </summary>
+    Markdown
 
 }

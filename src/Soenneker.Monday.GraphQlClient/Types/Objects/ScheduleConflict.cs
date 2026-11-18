@@ -16,6 +16,12 @@ public sealed partial class ScheduleConflict
     public string BoardId { get; init; } = null!;
 
     /// <summary>
+    /// The task's name.
+    /// </summary>
+    [JsonPropertyName("item_name")]
+    public string? ItemName { get; init; }
+
+    /// <summary>
     /// The task with the conflict.
     /// </summary>
     [JsonPropertyName("pulse_id")]

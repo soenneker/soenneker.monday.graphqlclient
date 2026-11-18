@@ -22,7 +22,7 @@ public sealed partial class CreateTeamRequestBuilder
     /// </summary>
     public ValueTask<GraphQlResponse<CreateTeamData>> Execute(CreateTeamVariables request, CancellationToken cancellationToken = default)
     {
-        const string gqlQuery = @"mutation CreateTeam($input: CreateTeamAttributesInput!, $options: CreateTeamOptionsInput) { create_team(input: $input, options: $options) { id name picture_url is_guest created_at } }";
+        const string gqlQuery = @"mutation CreateTeam($input: CreateTeamAttributesInput!, $options: CreateTeamOptionsInput) { create_team(input: $input, options: $options) { id is_guest name created_at picture_url } }";
         return _graphQlClient.Execute<CreateTeamData>(gqlQuery, request, cancellationToken);
     }
 

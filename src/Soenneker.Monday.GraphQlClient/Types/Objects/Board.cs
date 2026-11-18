@@ -41,6 +41,18 @@ public sealed partial class Board
     public List<Column>? Columns { get; init; }
 
     /// <summary>
+    /// Inferred metadata associated with this board
+    /// </summary>
+    [JsonPropertyName("inferred_metadata")]
+    public BoardInferredMetadata? InferredMetadata { get; init; }
+
+    /// <summary>
+    /// Manually set metadata associated with this board
+    /// </summary>
+    [JsonPropertyName("manual_metadata")]
+    public BoardManualMetadata? ManualMetadata { get; init; }
+
+    /// <summary>
     /// The user's permission level for this board (view / edit).
     /// </summary>
     [JsonPropertyName("access_level")]
@@ -238,17 +250,5 @@ public sealed partial class Board
     /// </summary>
     [JsonPropertyName("workspace_id")]
     public string? WorkspaceId { get; init; }
-
-    /// <summary>
-    /// Inferred metadata associated with this board
-    /// </summary>
-    [JsonPropertyName("inferred_metadata")]
-    public BoardInferredMetadata? InferredMetadata { get; init; }
-
-    /// <summary>
-    /// Manually set metadata associated with this board
-    /// </summary>
-    [JsonPropertyName("manual_metadata")]
-    public BoardManualMetadata? ManualMetadata { get; init; }
 
 }
