@@ -73,6 +73,11 @@ public enum ChatMessageKind
     AUTOMATIONDELETED,
 
     /// <summary>
+    /// An Automation was deactivated after consecutive run failures
+    /// </summary>
+    AUTOMATIONDEACTIVATED,
+
+    /// <summary>
     /// A user's hand-written code save, with its steps (checks, security_review, build, deploy) as they run and how it ended
     /// </summary>
     MANUALEDIT

@@ -12,42 +12,6 @@ namespace Soenneker.Monday.GraphQlClient;
 public sealed partial class Query
 {
     /// <summary>
-    /// Fetch resources information from the resource directory
-    /// </summary>
-    [JsonPropertyName("get_directory_resources")]
-    public DirectoryResourcesResponse? GetDirectoryResources { get; init; }
-
-    /// <summary>
-    /// Returns active work schedules for the caller's account
-    /// </summary>
-    [JsonPropertyName("work_schedules")]
-    public WorkSchedulePage? WorkSchedules { get; init; }
-
-    /// <summary>
-    /// Returns active time off schedules for the caller's account
-    /// </summary>
-    [JsonPropertyName("time_offs")]
-    public TimesOffPage? TimeOffs { get; init; }
-
-    /// <summary>
-    /// Returns resources availability: work schedule and time offs schedule for users and teams
-    /// </summary>
-    [JsonPropertyName("resources_availability")]
-    public ResourcesAvailability? ResourcesAvailability { get; init; }
-
-    /// <summary>
-    /// Returns the account-level default work schedule and time off schedule
-    /// </summary>
-    [JsonPropertyName("account_availability_defaults")]
-    public AccountAvailabilityDefaults? AccountAvailabilityDefaults { get; init; }
-
-    /// <summary>
-    /// Returns personal PTO collections for the requested users; maximum 100 user IDs per call
-    /// </summary>
-    [JsonPropertyName("user_pto")]
-    public List<UserPto>? UserPto { get; init; }
-
-    /// <summary>
     /// Export the dependency graph for a specific board
     /// </summary>
     [JsonPropertyName("export_graph")]
@@ -90,6 +54,12 @@ public sealed partial class Query
     public JobStatus FetchJobStatus { get; init; } = null!;
 
     /// <summary>
+    /// Search API. Each field searches a single entity type with tailored filters.
+    /// </summary>
+    [JsonPropertyName("search")]
+    public SearchNamespace Search { get; init; } = null!;
+
+    /// <summary>
     /// Get an app by ID or slug.
     /// </summary>
     [JsonPropertyName("app")]
@@ -127,6 +97,12 @@ public sealed partial class Query
 
     [JsonPropertyName("app_subscriptions")]
     public AppSubscriptions AppSubscriptions { get; init; } = null!;
+
+    /// <summary>
+    /// Namespace for all notetaker-related queries.
+    /// </summary>
+    [JsonPropertyName("notetaker")]
+    public NotetakerQueries? Notetaker { get; init; }
 
     [JsonPropertyName("custom_activity")]
     public List<CustomActivity>? CustomActivity { get; init; }
@@ -394,12 +370,6 @@ public sealed partial class Query
     public List<Sprint>? Sprints { get; init; }
 
     /// <summary>
-    /// Namespace for all notetaker-related queries.
-    /// </summary>
-    [JsonPropertyName("notetaker")]
-    public NotetakerQueries? Notetaker { get; init; }
-
-    /// <summary>
     /// Returns all available widget schemas for documentation and validation purposes
     /// </summary>
     [JsonPropertyName("all_widgets_schema")]
@@ -466,6 +436,42 @@ public sealed partial class Query
     public CampaignsUsage? Usage { get; init; }
 
     /// <summary>
+    /// Fetch resources information from the resource directory
+    /// </summary>
+    [JsonPropertyName("get_directory_resources")]
+    public DirectoryResourcesResponse? GetDirectoryResources { get; init; }
+
+    /// <summary>
+    /// Returns active work schedules for the caller's account
+    /// </summary>
+    [JsonPropertyName("work_schedules")]
+    public WorkSchedulePage? WorkSchedules { get; init; }
+
+    /// <summary>
+    /// Returns active time off schedules for the caller's account
+    /// </summary>
+    [JsonPropertyName("time_offs")]
+    public TimesOffPage? TimeOffs { get; init; }
+
+    /// <summary>
+    /// Returns resources availability: work schedule and time offs schedule for users and teams
+    /// </summary>
+    [JsonPropertyName("resources_availability")]
+    public ResourcesAvailability? ResourcesAvailability { get; init; }
+
+    /// <summary>
+    /// Returns the account-level default work schedule and time off schedule
+    /// </summary>
+    [JsonPropertyName("account_availability_defaults")]
+    public AccountAvailabilityDefaults? AccountAvailabilityDefaults { get; init; }
+
+    /// <summary>
+    /// Returns personal PTO collections for the requested users; maximum 100 user IDs per call
+    /// </summary>
+    [JsonPropertyName("user_pto")]
+    public List<UserPto>? UserPto { get; init; }
+
+    /// <summary>
     /// Fetch a form by its token. The returned form includes all the details of the form such as its settings, questions, title, etc. Use this endpoint when you need to retrieve complete form data for display or processing. Requires that the requesting user has read access to the associated board.
     /// </summary>
     [JsonPropertyName("form")]
@@ -491,12 +497,6 @@ public sealed partial class Query
     /// </summary>
     [JsonPropertyName("mute_board_settings")]
     public List<BoardMuteSettings>? MuteBoardSettings { get; init; }
-
-    /// <summary>
-    /// Search API. Each field searches a single entity type with tailored filters.
-    /// </summary>
-    [JsonPropertyName("search")]
-    public SearchNamespace Search { get; init; } = null!;
 
     /// <summary>
     /// Get account departments

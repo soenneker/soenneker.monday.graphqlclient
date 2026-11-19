@@ -13,7 +13,7 @@ public enum RestoreStatus
     Pending,
 
     /// <summary>
-    /// Every dependency of the package is restored, and the restore is waiting to start.
+    /// The restore is waiting to start, with nothing left to wait for: either every dependency of the package is restored, or the package is not ordered against any other.
     /// </summary>
     Ready,
 

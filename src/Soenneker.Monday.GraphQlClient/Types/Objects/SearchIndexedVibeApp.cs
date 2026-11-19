@@ -34,6 +34,12 @@ public sealed partial class SearchIndexedVibeApp
     public string? Description { get; init; }
 
     /// <summary>
+    /// URL to open this vibe app instance.
+    /// </summary>
+    [JsonPropertyName("app_instance_url")]
+    public string AppInstanceUrl { get; init; } = null!;
+
+    /// <summary>
     /// ID of the user who currently owns the app. Ownership can be transferred, so this is not necessarily the creator.
     /// </summary>
     [JsonPropertyName("owner_id")]

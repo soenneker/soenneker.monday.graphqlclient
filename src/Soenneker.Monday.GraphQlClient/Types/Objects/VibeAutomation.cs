@@ -24,6 +24,18 @@ public sealed partial class VibeAutomation
     public string? Name { get; init; }
 
     /// <summary>
+    /// Who created the Automation; null when unknown
+    /// </summary>
+    [JsonPropertyName("creator")]
+    public VibeAutomationCreator? Creator { get; init; }
+
+    /// <summary>
+    /// What the viewing user may do to the Automation
+    /// </summary>
+    [JsonPropertyName("viewer_can")]
+    public VibeAutomationViewerRights ViewerCan { get; init; } = null!;
+
+    /// <summary>
     /// What the Automation does, in words
     /// </summary>
     [JsonPropertyName("description")]

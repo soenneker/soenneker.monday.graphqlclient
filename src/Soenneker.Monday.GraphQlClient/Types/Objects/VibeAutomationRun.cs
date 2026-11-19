@@ -57,4 +57,10 @@ public sealed partial class VibeAutomationRun
     [JsonPropertyName("error_code")]
     public string? ErrorCode { get; init; }
 
+    /// <summary>
+    /// Plain-English description of why a failed run failed, produced by the service
+    /// </summary>
+    [JsonPropertyName("failure_summary")]
+    public string? FailureSummary { get; init; }
+
 }
