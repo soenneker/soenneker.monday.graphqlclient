@@ -1998,13 +1998,13 @@ type Query {
   """
   favorites: [GraphqlHierarchyObjectItem!]
   """
-  Fetch the status of an async board export job. Returns null for unknown or cross-account job IDs (a foreign-account job is indistinguishable from a missing one). Poll until status is COMPLETED (use download_url), FAILED (read failure_reason), or CANCELLED. Available to enterprise accounts only; other accounts receive FORBIDDEN_EXCEPTION.
-  """
-  export_job_status(job_id: ID!): ExportJobStatusInfo
-  """
   Get a collection of monday dev sprints
   """
   sprints(ids: [ID!]!): [Sprint!]
+  """
+  Fetch the status of an async board export job. Returns null for unknown job IDs. Poll until status is COMPLETED (use download_url), FAILED (read failure_reason), or CANCELLED. Available to enterprise accounts only; other accounts receive FORBIDDEN_EXCEPTION.
+  """
+  export_job_status(job_id: ID!): ExportJobStatusInfo
   """
   Returns all available widget schemas for documentation and validation purposes
   """
@@ -21823,6 +21823,170 @@ input UpdateObjectHierarchyPositionInput {
 }
 
 """
+A monday dev sprint.
+"""
+type Sprint {
+  """
+  monday dev sprint unique identifier
+  """
+  id: ID!
+  """
+  monday dev sprint name
+  """
+  name: String
+  """
+  items associated with the monday dev sprint
+  """
+  items: [Item!]
+  """
+  date at which the monday dev sprint start action was performed, null if the sprint was never started
+  """
+  start_date: Date
+  """
+  date at which the monday dev sprint complete action was performed, null if the sprint was never completed
+  """
+  end_date: Date
+  """
+  user-editable planned timeline for the monday dev sprint, which may differ from its start and complete dates
+  """
+  timeline: SprintTimeline
+  """
+  current state of the monday dev sprint
+  """
+  state: SprintState
+  """
+  snapshots of the monday dev sprint
+  """
+  snapshots(type: [SprintSnapshotKind!]): [SprintSnapshot!]
+}
+
+"""
+A monday dev sprint snapshot.
+"""
+type SprintSnapshot {
+  """
+  monday dev sprint snapshot unique identifier
+  """
+  id: ID
+  """
+  monday dev sprint snapshot kind
+  """
+  type: SprintSnapshotKind
+  """
+  monday dev sprint snapshot items
+  """
+  items: [SprintSnapshotItem!]
+  """
+  monday dev sprint snapshot columns metadata
+  """
+  columns_metadata: [SprintSnapshotColumnMetadata!]
+  """
+  monday dev sprint unique identifier
+  """
+  sprint_id: ID
+  """
+  date and time when the object was created
+  """
+  created_at: Date
+  """
+  date and time when the object was last updated
+  """
+  updated_at: Date
+}
+
+"""
+A monday dev sprint snapshot column metadata.
+"""
+type SprintSnapshotColumnMetadata {
+  """
+  monday dev sprint snapshot column id
+  """
+  id: String!
+  """
+  monday dev sprint snapshot status column done status indexes
+  """
+  done_status_indexes: [Int!]!
+}
+
+"""
+A monday dev sprint snapshot item.
+"""
+type SprintSnapshotItem {
+  """
+  monday dev sprint item unique identifier
+  """
+  id: ID!
+  """
+  monday dev sprint item column values
+  """
+  column_values: [SprintSnapshotItemColumnValue!]
+}
+
+"""
+A monday dev sprint snapshot item column value.
+"""
+type SprintSnapshotItemColumnValue {
+  """
+  monday dev sprint snapshot item column id
+  """
+  id: String!
+  """
+  monday dev sprint snapshot item column type
+  """
+  type: String!
+  """
+  monday dev sprint snapshot item column value
+  """
+  value: JSON
+}
+
+"""
+The kind of sprint snapshot.
+"""
+enum SprintSnapshotKind {
+  """
+  Sprint start snapshot kind.
+  """
+  START
+  """
+  Sprint complete snapshot kind.
+  """
+  COMPLETE
+}
+
+"""
+current state of the monday dev sprint.
+"""
+enum SprintState {
+  """
+  sprint is planned and not yet started.
+  """
+  PLANNED
+  """
+  sprint is active and in progress.
+  """
+  ACTIVE
+  """
+  sprint is completed.
+  """
+  COMPLETED
+}
+
+"""
+user-editable planned timeline for the monday dev sprint, which may differ from its start and complete dates
+"""
+type SprintTimeline {
+  """
+  user-editable start date of the monday dev sprint timeline, may be different than the sprint start date
+  """
+  from: Date
+  """
+  user-editable complete date of the monday dev sprint timeline, may be different than the sprint complete date
+  """
+  to: Date
+}
+
+"""
 Output format for connected items (Connect Boards) column values in CSV exports.
 """
 enum ConnectedItemColumnFormat {
@@ -22081,170 +22245,6 @@ enum PeopleColumnFormat {
   Use display names (e.g. "Jordan Lee, Marketing Team") instead of IDs.
   """
   NAME
-}
-
-"""
-A monday dev sprint.
-"""
-type Sprint {
-  """
-  monday dev sprint unique identifier
-  """
-  id: ID!
-  """
-  monday dev sprint name
-  """
-  name: String
-  """
-  items associated with the monday dev sprint
-  """
-  items: [Item!]
-  """
-  date at which the monday dev sprint start action was performed, null if the sprint was never started
-  """
-  start_date: Date
-  """
-  date at which the monday dev sprint complete action was performed, null if the sprint was never completed
-  """
-  end_date: Date
-  """
-  user-editable planned timeline for the monday dev sprint, which may differ from its start and complete dates
-  """
-  timeline: SprintTimeline
-  """
-  current state of the monday dev sprint
-  """
-  state: SprintState
-  """
-  snapshots of the monday dev sprint
-  """
-  snapshots(type: [SprintSnapshotKind!]): [SprintSnapshot!]
-}
-
-"""
-A monday dev sprint snapshot.
-"""
-type SprintSnapshot {
-  """
-  monday dev sprint snapshot unique identifier
-  """
-  id: ID
-  """
-  monday dev sprint snapshot kind
-  """
-  type: SprintSnapshotKind
-  """
-  monday dev sprint snapshot items
-  """
-  items: [SprintSnapshotItem!]
-  """
-  monday dev sprint snapshot columns metadata
-  """
-  columns_metadata: [SprintSnapshotColumnMetadata!]
-  """
-  monday dev sprint unique identifier
-  """
-  sprint_id: ID
-  """
-  date and time when the object was created
-  """
-  created_at: Date
-  """
-  date and time when the object was last updated
-  """
-  updated_at: Date
-}
-
-"""
-A monday dev sprint snapshot column metadata.
-"""
-type SprintSnapshotColumnMetadata {
-  """
-  monday dev sprint snapshot column id
-  """
-  id: String!
-  """
-  monday dev sprint snapshot status column done status indexes
-  """
-  done_status_indexes: [Int!]!
-}
-
-"""
-A monday dev sprint snapshot item.
-"""
-type SprintSnapshotItem {
-  """
-  monday dev sprint item unique identifier
-  """
-  id: ID!
-  """
-  monday dev sprint item column values
-  """
-  column_values: [SprintSnapshotItemColumnValue!]
-}
-
-"""
-A monday dev sprint snapshot item column value.
-"""
-type SprintSnapshotItemColumnValue {
-  """
-  monday dev sprint snapshot item column id
-  """
-  id: String!
-  """
-  monday dev sprint snapshot item column type
-  """
-  type: String!
-  """
-  monday dev sprint snapshot item column value
-  """
-  value: JSON
-}
-
-"""
-The kind of sprint snapshot.
-"""
-enum SprintSnapshotKind {
-  """
-  Sprint start snapshot kind.
-  """
-  START
-  """
-  Sprint complete snapshot kind.
-  """
-  COMPLETE
-}
-
-"""
-current state of the monday dev sprint.
-"""
-enum SprintState {
-  """
-  sprint is planned and not yet started.
-  """
-  PLANNED
-  """
-  sprint is active and in progress.
-  """
-  ACTIVE
-  """
-  sprint is completed.
-  """
-  COMPLETED
-}
-
-"""
-user-editable planned timeline for the monday dev sprint, which may differ from its start and complete dates
-"""
-type SprintTimeline {
-  """
-  user-editable start date of the monday dev sprint timeline, may be different than the sprint start date
-  """
-  from: Date
-  """
-  user-editable complete date of the monday dev sprint timeline, may be different than the sprint complete date
-  """
-  to: Date
 }
 
 """

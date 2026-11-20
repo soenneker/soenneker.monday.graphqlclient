@@ -358,16 +358,16 @@ public sealed partial class Query
     public List<GraphqlHierarchyObjectItem>? Favorites { get; init; }
 
     /// <summary>
-    /// Fetch the status of an async board export job. Returns null for unknown or cross-account job IDs (a foreign-account job is indistinguishable from a missing one). Poll until status is COMPLETED (use download_url), FAILED (read failure_reason), or CANCELLED. Available to enterprise accounts only; other accounts receive FORBIDDEN_EXCEPTION.
-    /// </summary>
-    [JsonPropertyName("export_job_status")]
-    public ExportJobStatusInfo? ExportJobStatus { get; init; }
-
-    /// <summary>
     /// Get a collection of monday dev sprints
     /// </summary>
     [JsonPropertyName("sprints")]
     public List<Sprint>? Sprints { get; init; }
+
+    /// <summary>
+    /// Fetch the status of an async board export job. Returns null for unknown job IDs. Poll until status is COMPLETED (use download_url), FAILED (read failure_reason), or CANCELLED. Available to enterprise accounts only; other accounts receive FORBIDDEN_EXCEPTION.
+    /// </summary>
+    [JsonPropertyName("export_job_status")]
+    public ExportJobStatusInfo? ExportJobStatus { get; init; }
 
     /// <summary>
     /// Returns all available widget schemas for documentation and validation purposes
