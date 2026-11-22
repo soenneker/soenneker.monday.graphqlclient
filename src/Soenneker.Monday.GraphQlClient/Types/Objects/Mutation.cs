@@ -54,12 +54,6 @@ public sealed partial class Mutation
     public UndoResult? UndoAction { get; init; }
 
     /// <summary>
-    /// Execute an integration block with the provided field values
-    /// </summary>
-    [JsonPropertyName("execute_integration_block")]
-    public IntegrationExecutionResult? ExecuteIntegrationBlock { get; init; }
-
-    /// <summary>
     /// Creates a new app with the specified configuration.
     /// </summary>
     [JsonPropertyName("create_app")]
@@ -175,6 +169,12 @@ public sealed partial class Mutation
 
     [JsonPropertyName("grant_marketplace_app_discount")]
     public GrantMarketplaceAppDiscountResult GrantMarketplaceAppDiscount { get; init; } = null!;
+
+    /// <summary>
+    /// Execute an integration block with the provided field values
+    /// </summary>
+    [JsonPropertyName("execute_integration_block")]
+    public IntegrationExecutionResult? ExecuteIntegrationBlock { get; init; }
 
     [JsonPropertyName("create_timeline_item")]
     public TimelineItem? CreateTimelineItem { get; init; }
@@ -939,6 +939,24 @@ public sealed partial class Mutation
     public CreateServiceUserResult? CreateServiceUser { get; init; }
 
     /// <summary>
+    /// Convert an existing monday.com board into a project with enhanced project management capabilities. This mutation transforms a regular board by applying project-specific features and configurations through column mappings that define how existing board columns should be interpreted in the project context. The conversion process is asynchronous and returns a process_id for tracking completion. Optionally accepts a callback URL for notification when the conversion completes. Use this when you have an existing board with data that needs to be upgraded to a full project with advanced project management features like Resource Planner integration.
+    /// </summary>
+    [JsonPropertyName("convert_board_to_project")]
+    public ConvertBoardToProjectResult? ConvertBoardToProject { get; init; }
+
+    /// <summary>
+    /// Create a new project in monday.com from scratch. This mutation initiates asynchronous project creation with comprehensive customization options including: privacy settings (private/public - share is currently not supported), optional companions like Resource Planner for enhanced project management capabilities, workspace assignment for organizational structure, folder placement for better organization, and template selection for predefined project structures. Since project creation is asynchronous, you can optionally provide a callback_url where the project ID will be sent via POST request once creation completes. The callback will receive: { is_success: boolean, process_id: string, project_id?: number }. Returns a process_id for tracking the creation request.
+    /// </summary>
+    [JsonPropertyName("create_project")]
+    public CreateProjectResult? CreateProject { get; init; }
+
+    /// <summary>
+    /// Report a bug, a missing capability, a documentation problem or general feedback about the monday API. Do NOT include any personally identifiable information (PII) such as names, email addresses, phone numbers, or any other personal data.
+    /// </summary>
+    [JsonPropertyName("submit_api_feedback")]
+    public SubmitApiFeedbackResult? SubmitApiFeedback { get; init; }
+
+    /// <summary>
     /// Add a file to a column value.
     /// </summary>
     [JsonPropertyName("add_file_to_column")]
@@ -1322,23 +1340,5 @@ public sealed partial class Mutation
     /// </summary>
     [JsonPropertyName("use_template")]
     public Template? UseTemplate { get; init; }
-
-    /// <summary>
-    /// Convert an existing monday.com board into a project with enhanced project management capabilities. This mutation transforms a regular board by applying project-specific features and configurations through column mappings that define how existing board columns should be interpreted in the project context. The conversion process is asynchronous and returns a process_id for tracking completion. Optionally accepts a callback URL for notification when the conversion completes. Use this when you have an existing board with data that needs to be upgraded to a full project with advanced project management features like Resource Planner integration.
-    /// </summary>
-    [JsonPropertyName("convert_board_to_project")]
-    public ConvertBoardToProjectResult? ConvertBoardToProject { get; init; }
-
-    /// <summary>
-    /// Create a new project in monday.com from scratch. This mutation initiates asynchronous project creation with comprehensive customization options including: privacy settings (private/public - share is currently not supported), optional companions like Resource Planner for enhanced project management capabilities, workspace assignment for organizational structure, folder placement for better organization, and template selection for predefined project structures. Since project creation is asynchronous, you can optionally provide a callback_url where the project ID will be sent via POST request once creation completes. The callback will receive: { is_success: boolean, process_id: string, project_id?: number }. Returns a process_id for tracking the creation request.
-    /// </summary>
-    [JsonPropertyName("create_project")]
-    public CreateProjectResult? CreateProject { get; init; }
-
-    /// <summary>
-    /// Report a bug, a missing capability, a documentation problem or general feedback about the monday API. Do NOT include any personally identifiable information (PII) such as names, email addresses, phone numbers, or any other personal data.
-    /// </summary>
-    [JsonPropertyName("submit_api_feedback")]
-    public SubmitApiFeedbackResult? SubmitApiFeedback { get; init; }
 
 }

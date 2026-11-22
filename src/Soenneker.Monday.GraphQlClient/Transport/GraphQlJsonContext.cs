@@ -3048,6 +3048,8 @@ namespace Soenneker.Monday.GraphQlClient;
 [JsonSerializable(typeof(GraphQlResponse<RelevantPromptSuggestion>))]
 [JsonSerializable(typeof(RelevantWorkspace))]
 [JsonSerializable(typeof(GraphQlResponse<RelevantWorkspace>))]
+[JsonSerializable(typeof(RemoteOptionsDependencySourceInput))]
+[JsonSerializable(typeof(GraphQlResponse<RemoteOptionsDependencySourceInput>))]
 [JsonSerializable(typeof(RemoteOptionsInput))]
 [JsonSerializable(typeof(GraphQlResponse<RemoteOptionsInput>))]
 [JsonSerializable(typeof(RemoteOptionsResponse))]

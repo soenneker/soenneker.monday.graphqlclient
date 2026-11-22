@@ -8,14 +8,19 @@ namespace Soenneker.Monday.GraphQlClient;
 public enum VersionKind
 {
     /// <summary>
+    /// Previous version. Migrate to current version as soon as possible
+    /// </summary>
+    Maintenance,
+
+    /// <summary>
     /// Current version
     /// </summary>
     Current,
 
     /// <summary>
-    /// No longer supported version. Migrate to current version as soon as possible
+    /// Next version
     /// </summary>
-    Deprecated,
+    ReleaseCandidate,
 
     /// <summary>
     /// Bleeding-edge rolling version that constantly changes
@@ -23,9 +28,9 @@ public enum VersionKind
     Dev,
 
     /// <summary>
-    /// Previous version. Migrate to current version as soon as possible
+    /// No longer supported version. Migrate to current version as soon as possible
     /// </summary>
-    Maintenance,
+    Deprecated,
 
     /// <summary>
     /// Old version that will be deprecated in January. Migrate to current version as soon as possible
@@ -40,11 +45,6 @@ public enum VersionKind
     /// <summary>
     /// Older version that will be deprecated in January. Migrate to current version as soon as possible
     /// </summary>
-    PreviousMaintenance,
-
-    /// <summary>
-    /// Next version
-    /// </summary>
-    ReleaseCandidate
+    PreviousMaintenance
 
 }

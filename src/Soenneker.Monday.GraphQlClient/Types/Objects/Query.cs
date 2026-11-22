@@ -98,12 +98,6 @@ public sealed partial class Query
     [JsonPropertyName("app_subscriptions")]
     public AppSubscriptions AppSubscriptions { get; init; } = null!;
 
-    /// <summary>
-    /// Namespace for all notetaker-related queries.
-    /// </summary>
-    [JsonPropertyName("notetaker")]
-    public NotetakerQueries? Notetaker { get; init; }
-
     [JsonPropertyName("custom_activity")]
     public List<CustomActivity>? CustomActivity { get; init; }
 
@@ -149,36 +143,6 @@ public sealed partial class Query
     public List<ObjectRelation>? ObjectRelations { get; init; }
 
     /// <summary>
-    /// Returns connections for the authenticated user. Supports filtering, pagination, ordering, and partial-scope options.
-    /// </summary>
-    [JsonPropertyName("connections")]
-    public List<Connection>? Connections { get; init; }
-
-    /// <summary>
-    /// Returns connections that belong to the authenticated user.
-    /// </summary>
-    [JsonPropertyName("user_connections")]
-    public List<Connection>? UserConnections { get; init; }
-
-    /// <summary>
-    /// Returns all connections for the account. Requires admin privileges.
-    /// </summary>
-    [JsonPropertyName("account_connections")]
-    public List<Connection>? AccountConnections { get; init; }
-
-    /// <summary>
-    /// Fetch a single connection by its unique ID.
-    /// </summary>
-    [JsonPropertyName("connection")]
-    public Connection? Connection { get; init; }
-
-    /// <summary>
-    /// Get board IDs that are linked to a specific connection.
-    /// </summary>
-    [JsonPropertyName("connection_board_ids")]
-    public List<string> ConnectionBoardIds { get; init; } = [];
-
-    /// <summary>
     /// Get sequences that the current user is allowed to enroll items to, that are connected to the provided board. Returns sequences owned by the user or sequences where the user has access to the sender connection.
     /// </summary>
     [JsonPropertyName("allowed_sequences_to_enroll")]
@@ -213,6 +177,42 @@ public sealed partial class Query
     /// </summary>
     [JsonPropertyName("export_markdown_from_doc")]
     public ExportMarkdownResult? ExportMarkdownFromDoc { get; init; }
+
+    /// <summary>
+    /// List trigger events with optional filters
+    /// </summary>
+    [JsonPropertyName("trigger_events")]
+    public TriggerEventsPage? TriggerEvents { get; init; }
+
+    /// <summary>
+    /// Fetch a single trigger event by UUID
+    /// </summary>
+    [JsonPropertyName("trigger_event")]
+    public TriggerEvent? TriggerEvent { get; init; }
+
+    /// <summary>
+    /// List block events for a given trigger UUID
+    /// </summary>
+    [JsonPropertyName("block_events")]
+    public BlockEventsPage? BlockEvents { get; init; }
+
+    /// <summary>
+    /// List tool events for a given trigger UUID
+    /// </summary>
+    [JsonPropertyName("tool_events")]
+    public ToolEventsPage? ToolEvents { get; init; }
+
+    /// <summary>
+    /// Get aggregated automation runs statistics in the account
+    /// </summary>
+    [JsonPropertyName("account_trigger_statistics")]
+    public AccountTriggerStatistics? AccountTriggerStatistics { get; init; }
+
+    /// <summary>
+    /// Get aggregated automation runs statistics grouped by entity Ids
+    /// </summary>
+    [JsonPropertyName("account_triggers_statistics_by_entity_id")]
+    public AccountTriggersByEntityId? AccountTriggersStatisticsByEntityId { get; init; }
 
     /// <summary>
     /// Get the status of an async job by its external ID
@@ -296,42 +296,6 @@ public sealed partial class Query
     /// </summary>
     [JsonPropertyName("audit_event_catalogue")]
     public List<AuditEventCatalogueEntry>? AuditEventCatalogue { get; init; }
-
-    /// <summary>
-    /// List trigger events with optional filters
-    /// </summary>
-    [JsonPropertyName("trigger_events")]
-    public TriggerEventsPage? TriggerEvents { get; init; }
-
-    /// <summary>
-    /// Fetch a single trigger event by UUID
-    /// </summary>
-    [JsonPropertyName("trigger_event")]
-    public TriggerEvent? TriggerEvent { get; init; }
-
-    /// <summary>
-    /// List block events for a given trigger UUID
-    /// </summary>
-    [JsonPropertyName("block_events")]
-    public BlockEventsPage? BlockEvents { get; init; }
-
-    /// <summary>
-    /// List tool events for a given trigger UUID
-    /// </summary>
-    [JsonPropertyName("tool_events")]
-    public ToolEventsPage? ToolEvents { get; init; }
-
-    /// <summary>
-    /// Get aggregated automation runs statistics in the account
-    /// </summary>
-    [JsonPropertyName("account_trigger_statistics")]
-    public AccountTriggerStatistics? AccountTriggerStatistics { get; init; }
-
-    /// <summary>
-    /// Get aggregated automation runs statistics grouped by entity Ids
-    /// </summary>
-    [JsonPropertyName("account_triggers_statistics_by_entity_id")]
-    public AccountTriggersByEntityId? AccountTriggersStatisticsByEntityId { get; init; }
 
     /// <summary>
     /// Get managed column data.
@@ -472,6 +436,36 @@ public sealed partial class Query
     public List<UserPto>? UserPto { get; init; }
 
     /// <summary>
+    /// Returns connections for the authenticated user. Supports filtering, pagination, ordering, and partial-scope options.
+    /// </summary>
+    [JsonPropertyName("connections")]
+    public List<Connection>? Connections { get; init; }
+
+    /// <summary>
+    /// Returns connections that belong to the authenticated user.
+    /// </summary>
+    [JsonPropertyName("user_connections")]
+    public List<Connection>? UserConnections { get; init; }
+
+    /// <summary>
+    /// Returns all connections for the account. Requires admin privileges.
+    /// </summary>
+    [JsonPropertyName("account_connections")]
+    public List<Connection>? AccountConnections { get; init; }
+
+    /// <summary>
+    /// Fetch a single connection by its unique ID.
+    /// </summary>
+    [JsonPropertyName("connection")]
+    public Connection? Connection { get; init; }
+
+    /// <summary>
+    /// Get board IDs that are linked to a specific connection.
+    /// </summary>
+    [JsonPropertyName("connection_board_ids")]
+    public List<string> ConnectionBoardIds { get; init; } = [];
+
+    /// <summary>
     /// Fetch a form by its token. The returned form includes all the details of the form such as its settings, questions, title, etc. Use this endpoint when you need to retrieve complete form data for display or processing. Requires that the requesting user has read access to the associated board.
     /// </summary>
     [JsonPropertyName("form")]
@@ -527,6 +521,55 @@ public sealed partial class Query
     /// </summary>
     [JsonPropertyName("service_users")]
     public List<ServiceUser>? ServiceUsers { get; init; }
+
+    /// <summary>
+    /// Get board candidates based on workspace and usage type
+    /// </summary>
+    [JsonPropertyName("board_candidates")]
+    public List<Board>? BoardCandidates { get; init; }
+
+    /// <summary>
+    /// Get all user configs for the account.
+    /// </summary>
+    [JsonPropertyName("user_configs")]
+    public List<UserConfig>? UserConfigs { get; init; }
+
+    /// <summary>
+    /// Get users.
+    /// </summary>
+    [JsonPropertyName("users")]
+    public List<User>? Users { get; init; }
+
+    /// <summary>
+    /// Namespace for all notetaker-related queries.
+    /// </summary>
+    [JsonPropertyName("notetaker")]
+    public NotetakerQueries? Notetaker { get; init; }
+
+    /// <summary>
+    /// Platform API data.
+    /// </summary>
+    [JsonPropertyName("platform_api")]
+    public PlatformApi? PlatformApi { get; init; }
+
+    /// <summary>
+    /// Get a list containing the versions of the API
+    /// </summary>
+    [JsonPropertyName("versions")]
+    public List<Version>? Versions { get; init; }
+
+    /// <summary>
+    /// Get the API version in use
+    /// </summary>
+    [JsonPropertyName("version")]
+    public Version Version { get; init; } = null!;
+
+    /// <summary>
+    /// Placeholder query field for automations-test microservice.
+    ///   This can be replaced with actual queries as the service evolves.
+    /// </summary>
+    [JsonPropertyName("empty")]
+    public string? Empty { get; init; }
 
     /// <summary>
     /// Get the connected account's information.
@@ -637,18 +680,6 @@ public sealed partial class Query
     public TemplateInstallationStatusResult? TemplateInstallationStatus { get; init; }
 
     /// <summary>
-    /// Get the API version in use
-    /// </summary>
-    [JsonPropertyName("version")]
-    public Version Version { get; init; } = null!;
-
-    /// <summary>
-    /// Get a list containing the versions of the API
-    /// </summary>
-    [JsonPropertyName("versions")]
-    public List<Version>? Versions { get; init; }
-
-    /// <summary>
     /// Get a collection of webhooks for the board
     /// </summary>
     [JsonPropertyName("webhooks")]
@@ -659,36 +690,5 @@ public sealed partial class Query
     /// </summary>
     [JsonPropertyName("workspaces")]
     public List<Workspace>? Workspaces { get; init; }
-
-    /// <summary>
-    /// Get board candidates based on workspace and usage type
-    /// </summary>
-    [JsonPropertyName("board_candidates")]
-    public List<Board>? BoardCandidates { get; init; }
-
-    /// <summary>
-    /// Get all user configs for the account.
-    /// </summary>
-    [JsonPropertyName("user_configs")]
-    public List<UserConfig>? UserConfigs { get; init; }
-
-    /// <summary>
-    /// Get users.
-    /// </summary>
-    [JsonPropertyName("users")]
-    public List<User>? Users { get; init; }
-
-    /// <summary>
-    /// Platform API data.
-    /// </summary>
-    [JsonPropertyName("platform_api")]
-    public PlatformApi? PlatformApi { get; init; }
-
-    /// <summary>
-    /// Placeholder query field for automations-test microservice.
-    ///   This can be replaced with actual queries as the service evolves.
-    /// </summary>
-    [JsonPropertyName("empty")]
-    public string? Empty { get; init; }
 
 }

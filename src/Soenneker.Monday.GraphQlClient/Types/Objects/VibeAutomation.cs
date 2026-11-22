@@ -48,7 +48,7 @@ public sealed partial class VibeAutomation
     public VibeAutomationStatus? Status { get; init; }
 
     /// <summary>
-    /// Why a needs-attention Automation needs it; null otherwise
+    /// Why an Automation needs attention: set when it needs attention, and for a draft or paused one with an open transfer reconnect issue; null otherwise
     /// </summary>
     [JsonPropertyName("attention_reason")]
     public VibeAutomationAttentionReason? AttentionReason { get; init; }
@@ -108,7 +108,7 @@ public sealed partial class VibeAutomation
     public List<string> Collections { get; init; } = [];
 
     /// <summary>
-    /// Why it needs attention, on the automations list only: null for any other status, or when it could not be read
+    /// Why it needs attention, on the automations list only: set when it needs attention, and for a draft or paused one with an open transfer reconnect issue; null otherwise, or when it could not be read
     /// </summary>
     [JsonPropertyName("attention")]
     public VibeAutomationAttention? Attention { get; init; }
