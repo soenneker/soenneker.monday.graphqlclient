@@ -54,6 +54,12 @@ public sealed partial class Mutation
     public UndoResult? UndoAction { get; init; }
 
     /// <summary>
+    /// Execute an integration block with the provided field values
+    /// </summary>
+    [JsonPropertyName("execute_integration_block")]
+    public IntegrationExecutionResult? ExecuteIntegrationBlock { get; init; }
+
+    /// <summary>
     /// Creates a new app with the specified configuration.
     /// </summary>
     [JsonPropertyName("create_app")]
@@ -169,12 +175,6 @@ public sealed partial class Mutation
 
     [JsonPropertyName("grant_marketplace_app_discount")]
     public GrantMarketplaceAppDiscountResult GrantMarketplaceAppDiscount { get; init; } = null!;
-
-    /// <summary>
-    /// Execute an integration block with the provided field values
-    /// </summary>
-    [JsonPropertyName("execute_integration_block")]
-    public IntegrationExecutionResult? ExecuteIntegrationBlock { get; init; }
 
     [JsonPropertyName("create_timeline_item")]
     public TimelineItem? CreateTimelineItem { get; init; }
@@ -297,60 +297,6 @@ public sealed partial class Mutation
     public AiColumnRemoveResult? RemoveAiFromColumn { get; init; }
 
     /// <summary>
-    /// Creates a new object in the Monday.com Objects Platform. The type of object created is determined by the object_type_unique_key parameter. This mutation can create boards, docs, dashboards, workflows, or specialized objects like CRM, capacity manager, etc. Under the hood, this creates a board with the corresponding app_feature_id.
-    /// </summary>
-    [JsonPropertyName("create_object")]
-    public Object? CreateObject { get; init; }
-
-    /// <summary>
-    /// Permanently deletes an object from the Monday.com Objects Platform. Unlike archiving, deletion is only reversible for 30 days and removes all associated data. This operation works for any object type including boards, docs, dashboards, workflows, and specialized objects (CRM, capacity manager, etc.). WARNING: This operation cannot be undone after 30 days.
-    /// </summary>
-    [JsonPropertyName("delete_object")]
-    public Object? DeleteObject { get; init; }
-
-    /// <summary>
-    /// Archives an object in the Monday.com Objects Platform, changing its state to "archived" while preserving all data. Archived objects remain in the system but are hidden from regular views. This operation works for any object type including boards, docs, dashboards, workflows, and specialized objects (CRM, capacity manager, etc.). Under the hood, this archives the board that represents this object.
-    /// </summary>
-    [JsonPropertyName("archive_object")]
-    public Object? ArchiveObject { get; init; }
-
-    /// <summary>
-    /// Adds users to an existing object as either subscribers or owners. Subscribers receive notifications about object changes, while owners have full control permissions. Works with any object type including boards, docs, dashboards, workflows, and specialized objects (CRM, capacity manager, etc.). Equivalent to the add_users_to_board mutation in the boards API.
-    /// </summary>
-    [JsonPropertyName("add_subscribers_to_object")]
-    public Object? AddSubscribersToObject { get; init; }
-
-    /// <summary>
-    /// Updates an object.
-    /// </summary>
-    [JsonPropertyName("update_object")]
-    public Object? UpdateObject { get; init; }
-
-    /// <summary>
-    /// Publishes object out of draft state. Returns {success: true} on success, {success: false} on failure.
-    /// </summary>
-    [JsonPropertyName("publish_object")]
-    public ObjectOperationResponse? PublishObject { get; init; }
-
-    /// <summary>
-    /// Unpublishes object from public state back to draft state. Returns {success: true} on success, {success: false} on failure.
-    /// </summary>
-    [JsonPropertyName("unpublish_object")]
-    public ObjectOperationResponse? UnpublishObject { get; init; }
-
-    /// <summary>
-    /// Create relations for an object
-    /// </summary>
-    [JsonPropertyName("create_object_relations")]
-    public List<ObjectRelation>? CreateObjectRelations { get; init; }
-
-    /// <summary>
-    /// Delete a specific object relation or all relations for an object. Returns the number of relations deleted.
-    /// </summary>
-    [JsonPropertyName("delete_object_relation")]
-    public int? DeleteObjectRelation { get; init; }
-
-    /// <summary>
     /// Enroll multiple items to a single sequence. Maximum 50 items per request.
     /// </summary>
     [JsonPropertyName("enroll_items_to_sequence")]
@@ -427,6 +373,60 @@ public sealed partial class Mutation
     /// </summary>
     [JsonPropertyName("set_item_description_content")]
     public DocBlocksFromMarkdownResult? SetItemDescriptionContent { get; init; }
+
+    /// <summary>
+    /// Creates a new object in the Monday.com Objects Platform. The type of object created is determined by the object_type_unique_key parameter. This mutation can create boards, docs, dashboards, workflows, or specialized objects like CRM, capacity manager, etc. Under the hood, this creates a board with the corresponding app_feature_id.
+    /// </summary>
+    [JsonPropertyName("create_object")]
+    public Object? CreateObject { get; init; }
+
+    /// <summary>
+    /// Permanently deletes an object from the Monday.com Objects Platform. Unlike archiving, deletion is only reversible for 30 days and removes all associated data. This operation works for any object type including boards, docs, dashboards, workflows, and specialized objects (CRM, capacity manager, etc.). WARNING: This operation cannot be undone after 30 days.
+    /// </summary>
+    [JsonPropertyName("delete_object")]
+    public Object? DeleteObject { get; init; }
+
+    /// <summary>
+    /// Archives an object in the Monday.com Objects Platform, changing its state to "archived" while preserving all data. Archived objects remain in the system but are hidden from regular views. This operation works for any object type including boards, docs, dashboards, workflows, and specialized objects (CRM, capacity manager, etc.). Under the hood, this archives the board that represents this object.
+    /// </summary>
+    [JsonPropertyName("archive_object")]
+    public Object? ArchiveObject { get; init; }
+
+    /// <summary>
+    /// Adds users to an existing object as either subscribers or owners. Subscribers receive notifications about object changes, while owners have full control permissions. Works with any object type including boards, docs, dashboards, workflows, and specialized objects (CRM, capacity manager, etc.). Equivalent to the add_users_to_board mutation in the boards API.
+    /// </summary>
+    [JsonPropertyName("add_subscribers_to_object")]
+    public Object? AddSubscribersToObject { get; init; }
+
+    /// <summary>
+    /// Updates an object.
+    /// </summary>
+    [JsonPropertyName("update_object")]
+    public Object? UpdateObject { get; init; }
+
+    /// <summary>
+    /// Publishes object out of draft state. Returns {success: true} on success, {success: false} on failure.
+    /// </summary>
+    [JsonPropertyName("publish_object")]
+    public ObjectOperationResponse? PublishObject { get; init; }
+
+    /// <summary>
+    /// Unpublishes object from public state back to draft state. Returns {success: true} on success, {success: false} on failure.
+    /// </summary>
+    [JsonPropertyName("unpublish_object")]
+    public ObjectOperationResponse? UnpublishObject { get; init; }
+
+    /// <summary>
+    /// Create relations for an object
+    /// </summary>
+    [JsonPropertyName("create_object_relations")]
+    public List<ObjectRelation>? CreateObjectRelations { get; init; }
+
+    /// <summary>
+    /// Delete a specific object relation or all relations for an object. Returns the number of relations deleted.
+    /// </summary>
+    [JsonPropertyName("delete_object_relation")]
+    public int? DeleteObjectRelation { get; init; }
 
     /// <summary>
     /// Create managed column of type dropdown mutation.

@@ -125,24 +125,6 @@ public sealed partial class Query
     public string? GetViewSchemaByType { get; init; }
 
     /// <summary>
-    /// Retrieves a list of available object types that can be created or queried. Each object type is uniquely identified by an 'object_type_unique_key'. This key is required for mutations like 'create_object' and for filtering in the 'objects' query. Use this query to discover what types of objects are available in the system (e.g., 'workflows', 'projects') and get their corresponding unique keys. The structure of unique key is 'app_slug::app_feature_slug'.
-    /// </summary>
-    [JsonPropertyName("object_types_unique_keys")]
-    public List<ObjectTypeUniqueKey>? ObjectTypesUniqueKeys { get; init; }
-
-    /// <summary>
-    /// Retrieves a list of objects from the Monday.com Objects Platform based on specified filters. This query can return any type of object (board, doc, dashboard, workflow, etc.) depending on the filter criteria. Use object_type_unique_keys to filter for specific object types.
-    /// </summary>
-    [JsonPropertyName("objects")]
-    public List<Object>? Objects { get; init; }
-
-    /// <summary>
-    /// Fetch relations for a specific object
-    /// </summary>
-    [JsonPropertyName("object_relations")]
-    public List<ObjectRelation>? ObjectRelations { get; init; }
-
-    /// <summary>
     /// Get sequences that the current user is allowed to enroll items to, that are connected to the provided board. Returns sequences owned by the user or sequences where the user has access to the sender connection.
     /// </summary>
     [JsonPropertyName("allowed_sequences_to_enroll")]
@@ -296,6 +278,24 @@ public sealed partial class Query
     /// </summary>
     [JsonPropertyName("audit_event_catalogue")]
     public List<AuditEventCatalogueEntry>? AuditEventCatalogue { get; init; }
+
+    /// <summary>
+    /// Retrieves a list of available object types that can be created or queried. Each object type is uniquely identified by an 'object_type_unique_key'. This key is required for mutations like 'create_object' and for filtering in the 'objects' query. Use this query to discover what types of objects are available in the system (e.g., 'workflows', 'projects') and get their corresponding unique keys. The structure of unique key is 'app_slug::app_feature_slug'.
+    /// </summary>
+    [JsonPropertyName("object_types_unique_keys")]
+    public List<ObjectTypeUniqueKey>? ObjectTypesUniqueKeys { get; init; }
+
+    /// <summary>
+    /// Retrieves a list of objects from the Monday.com Objects Platform based on specified filters. This query can return any type of object (board, doc, dashboard, workflow, etc.) depending on the filter criteria. Use object_type_unique_keys to filter for specific object types.
+    /// </summary>
+    [JsonPropertyName("objects")]
+    public List<Object>? Objects { get; init; }
+
+    /// <summary>
+    /// Fetch relations for a specific object
+    /// </summary>
+    [JsonPropertyName("object_relations")]
+    public List<ObjectRelation>? ObjectRelations { get; init; }
 
     /// <summary>
     /// Get managed column data.

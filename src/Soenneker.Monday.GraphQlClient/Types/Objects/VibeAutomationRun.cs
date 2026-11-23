@@ -63,4 +63,16 @@ public sealed partial class VibeAutomationRun
     [JsonPropertyName("failure_summary")]
     public string? FailureSummary { get; init; }
 
+    /// <summary>
+    /// Which limit the run hit, for a run that failed on one; null otherwise or for an older run
+    /// </summary>
+    [JsonPropertyName("limit")]
+    public VibeAutomationLimit? Limit { get; init; }
+
+    /// <summary>
+    /// Who created the Automation; null when unknown
+    /// </summary>
+    [JsonPropertyName("creator")]
+    public VibeAutomationCreator? Creator { get; init; }
+
 }

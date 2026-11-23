@@ -39,4 +39,10 @@ public sealed partial class VibeAutomationStepResult
     [JsonPropertyName("failure")]
     public VibeAutomationStepFailure? Failure { get; init; }
 
+    /// <summary>
+    /// Which limit the step hit, for a step that failed on one; null otherwise or for an older run
+    /// </summary>
+    [JsonPropertyName("limit")]
+    public VibeAutomationLimit? Limit { get; init; }
+
 }

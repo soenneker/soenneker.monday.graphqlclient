@@ -33,8 +33,23 @@ public enum RestoreStatus
     Failed,
 
     /// <summary>
-    /// The restore has been rolled back.
+    /// The restore has been rolled back: the target no longer holds the package.
     /// </summary>
-    Rollback
+    Rollback,
+
+    /// <summary>
+    /// A rollback of this restore has been planned and has not started yet. The package no longer counts as restored, so nothing that depends on it will be restored while it is in this status.
+    /// </summary>
+    RollbackRequested,
+
+    /// <summary>
+    /// The restore is currently being rolled back.
+    /// </summary>
+    RollingBack,
+
+    /// <summary>
+    /// The rollback failed part way through, so what the target still holds is unknown.
+    /// </summary>
+    RollbackFailed
 
 }

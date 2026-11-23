@@ -41,6 +41,12 @@ public sealed partial class VibeAutomationRunDetail
     public string? ErrorCode { get; init; }
 
     /// <summary>
+    /// Which limit the run hit: its own, or else that of the step that tripped one; null otherwise
+    /// </summary>
+    [JsonPropertyName("limit")]
+    public VibeAutomationLimit? Limit { get; init; }
+
+    /// <summary>
     /// Whether the run's step detail is no longer kept
     /// </summary>
     [JsonPropertyName("detail_expired")]

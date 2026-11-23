@@ -33,4 +33,10 @@ public sealed partial class VibeAutomationWithRuns
     [JsonPropertyName("latest_run_at")]
     public string LatestRunAt { get; init; } = null!;
 
+    /// <summary>
+    /// Who created the Automation; null when unknown
+    /// </summary>
+    [JsonPropertyName("creator")]
+    public VibeAutomationCreator? Creator { get; init; }
+
 }
