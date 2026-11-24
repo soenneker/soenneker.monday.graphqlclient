@@ -98,6 +98,21 @@ public sealed partial class Query
     [JsonPropertyName("app_subscriptions")]
     public AppSubscriptions AppSubscriptions { get; init; } = null!;
 
+    [JsonPropertyName("notifications")]
+    public List<NotificationV2>? Notifications { get; init; }
+
+    /// <summary>
+    /// Retrieves the current user's notification settings across all available channels.
+    /// </summary>
+    [JsonPropertyName("notifications_settings")]
+    public List<NotificationSetting>? NotificationsSettings { get; init; }
+
+    /// <summary>
+    /// Get mute board notification settings for the current user
+    /// </summary>
+    [JsonPropertyName("mute_board_settings")]
+    public List<BoardMuteSettings>? MuteBoardSettings { get; init; }
+
     [JsonPropertyName("custom_activity")]
     public List<CustomActivity>? CustomActivity { get; init; }
 
@@ -476,21 +491,6 @@ public sealed partial class Query
     /// </summary>
     [JsonPropertyName("knowledge_base_search")]
     public KnowledgeBaseAnswer? KnowledgeBaseSearch { get; init; }
-
-    [JsonPropertyName("notifications")]
-    public List<NotificationV2>? Notifications { get; init; }
-
-    /// <summary>
-    /// Retrieves the current user's notification settings across all available channels.
-    /// </summary>
-    [JsonPropertyName("notifications_settings")]
-    public List<NotificationSetting>? NotificationsSettings { get; init; }
-
-    /// <summary>
-    /// Get mute board notification settings for the current user
-    /// </summary>
-    [JsonPropertyName("mute_board_settings")]
-    public List<BoardMuteSettings>? MuteBoardSettings { get; init; }
 
     /// <summary>
     /// Get account departments

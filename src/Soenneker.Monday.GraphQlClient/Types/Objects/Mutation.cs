@@ -54,12 +54,6 @@ public sealed partial class Mutation
     public UndoResult? UndoAction { get; init; }
 
     /// <summary>
-    /// Execute an integration block with the provided field values
-    /// </summary>
-    [JsonPropertyName("execute_integration_block")]
-    public IntegrationExecutionResult? ExecuteIntegrationBlock { get; init; }
-
-    /// <summary>
     /// Creates a new app with the specified configuration.
     /// </summary>
     [JsonPropertyName("create_app")]
@@ -175,6 +169,18 @@ public sealed partial class Mutation
 
     [JsonPropertyName("grant_marketplace_app_discount")]
     public GrantMarketplaceAppDiscountResult GrantMarketplaceAppDiscount { get; init; } = null!;
+
+    /// <summary>
+    /// Updates a notification setting's enabled status.
+    /// </summary>
+    [JsonPropertyName("update_notification_setting")]
+    public List<NotificationSetting>? UpdateNotificationSetting { get; init; }
+
+    /// <summary>
+    /// Update mute notification settings for a board. Allows muting all notifications for all users, only for the current user, or setting mentions/assigns-only. Returns the updated mute state for the board. Requires appropriate permissions for muting all users.
+    /// </summary>
+    [JsonPropertyName("update_mute_board_settings")]
+    public List<BoardMuteSettings>? UpdateMuteBoardSettings { get; init; }
 
     [JsonPropertyName("create_timeline_item")]
     public TimelineItem? CreateTimelineItem { get; init; }
@@ -807,18 +813,6 @@ public sealed partial class Mutation
     public ResponseForm? SetFormPassword { get; init; }
 
     /// <summary>
-    /// Updates a notification setting's enabled status.
-    /// </summary>
-    [JsonPropertyName("update_notification_setting")]
-    public List<NotificationSetting>? UpdateNotificationSetting { get; init; }
-
-    /// <summary>
-    /// Update mute notification settings for a board. Allows muting all notifications for all users, only for the current user, or setting mentions/assigns-only. Returns the updated mute state for the board. Requires appropriate permissions for muting all users.
-    /// </summary>
-    [JsonPropertyName("update_mute_board_settings")]
-    public List<BoardMuteSettings>? UpdateMuteBoardSettings { get; init; }
-
-    /// <summary>
     /// Assigns members to a department.
     /// </summary>
     [JsonPropertyName("assign_department_members")]
@@ -955,6 +949,12 @@ public sealed partial class Mutation
     /// </summary>
     [JsonPropertyName("submit_api_feedback")]
     public SubmitApiFeedbackResult? SubmitApiFeedback { get; init; }
+
+    /// <summary>
+    /// Execute an integration block with the provided field values
+    /// </summary>
+    [JsonPropertyName("execute_integration_block")]
+    public IntegrationExecutionResult? ExecuteIntegrationBlock { get; init; }
 
     /// <summary>
     /// Add a file to a column value.

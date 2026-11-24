@@ -102,6 +102,12 @@ public sealed partial class VibeApp
     public VibeAppConfig Config { get; init; } = null!;
 
     /// <summary>
+    /// Whether the "monday vibe" badge can be hidden on the published app. Only apps served by Cloudflare Workers for Platforms support it, on accounts with the top-tier (Growth and above) Vibe apps package. Reads the app's code versions and the account's license, so request it for a single app, not in a list.
+    /// </summary>
+    [JsonPropertyName("can_hide_watermark")]
+    public bool? CanHideWatermark { get; init; }
+
+    /// <summary>
     /// The date when the vibe app was published
     /// </summary>
     [JsonPropertyName("published_at")]

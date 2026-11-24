@@ -15,4 +15,10 @@ public sealed partial class VibeAppConfig
     [JsonPropertyName("auto_promote")]
     public bool? AutoPromote { get; init; }
 
+    /// <summary>
+    /// Whether the "monday vibe" badge is hidden on the published app
+    /// </summary>
+    [JsonPropertyName("hide_watermark")]
+    public bool? HideWatermark { get; init; }
+
 }
