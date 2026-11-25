@@ -95,18 +95,6 @@ public sealed partial class Mutation
     [JsonPropertyName("promote_app")]
     public DeveloperAppVersion? PromoteApp { get; init; }
 
-    /// <summary>
-    /// Connect an existing project to a portfolio. When a callback_url is provided the mutation returns immediately with a process_id, and the result is POSTed to that URL once the operation completes. The callback payload is: { is_success: boolean, process_id: string, portfolio_item_id?: string }.
-    /// </summary>
-    [JsonPropertyName("connect_project_to_portfolio")]
-    public ConnectProjectResult? ConnectProjectToPortfolio { get; init; }
-
-    /// <summary>
-    /// Create a new portfolio. When a callback_url is provided the mutation returns immediately with a process_id, and the portfolio_id is POSTed to that URL once the portfolio is actually created. The callback payload is: { is_success: boolean, process_id: string, portfolio_id?: number }.
-    /// </summary>
-    [JsonPropertyName("create_portfolio")]
-    public CreatePortfolioResult? CreatePortfolio { get; init; }
-
     [JsonPropertyName("like_update")]
     public Update? LikeUpdate { get; init; }
 
@@ -127,6 +115,30 @@ public sealed partial class Mutation
 
     [JsonPropertyName("create_update")]
     public Update? CreateUpdate { get; init; }
+
+    /// <summary>
+    /// Create a marketplace app discount
+    /// </summary>
+    [JsonPropertyName("create_marketplace_app_discount")]
+    public CreateMarketplaceAppDiscountResult CreateMarketplaceAppDiscount { get; init; } = null!;
+
+    [JsonPropertyName("delete_marketplace_app_discount")]
+    public DeleteMarketplaceAppDiscountResult DeleteMarketplaceAppDiscount { get; init; } = null!;
+
+    [JsonPropertyName("grant_marketplace_app_discount")]
+    public GrantMarketplaceAppDiscountResult GrantMarketplaceAppDiscount { get; init; } = null!;
+
+    /// <summary>
+    /// Updates a notification setting's enabled status.
+    /// </summary>
+    [JsonPropertyName("update_notification_setting")]
+    public List<NotificationSetting>? UpdateNotificationSetting { get; init; }
+
+    /// <summary>
+    /// Update mute notification settings for a board. Allows muting all notifications for all users, only for the current user, or setting mentions/assigns-only. Returns the updated mute state for the board. Requires appropriate permissions for muting all users.
+    /// </summary>
+    [JsonPropertyName("update_mute_board_settings")]
+    public List<BoardMuteSettings>? UpdateMuteBoardSettings { get; init; }
 
     /// <summary>
     /// Add a required column to a board
@@ -157,30 +169,6 @@ public sealed partial class Mutation
     /// </summary>
     [JsonPropertyName("delete_validation_rule")]
     public ValidationRule? DeleteValidationRule { get; init; }
-
-    /// <summary>
-    /// Create a marketplace app discount
-    /// </summary>
-    [JsonPropertyName("create_marketplace_app_discount")]
-    public CreateMarketplaceAppDiscountResult CreateMarketplaceAppDiscount { get; init; } = null!;
-
-    [JsonPropertyName("delete_marketplace_app_discount")]
-    public DeleteMarketplaceAppDiscountResult DeleteMarketplaceAppDiscount { get; init; } = null!;
-
-    [JsonPropertyName("grant_marketplace_app_discount")]
-    public GrantMarketplaceAppDiscountResult GrantMarketplaceAppDiscount { get; init; } = null!;
-
-    /// <summary>
-    /// Updates a notification setting's enabled status.
-    /// </summary>
-    [JsonPropertyName("update_notification_setting")]
-    public List<NotificationSetting>? UpdateNotificationSetting { get; init; }
-
-    /// <summary>
-    /// Update mute notification settings for a board. Allows muting all notifications for all users, only for the current user, or setting mentions/assigns-only. Returns the updated mute state for the board. Requires appropriate permissions for muting all users.
-    /// </summary>
-    [JsonPropertyName("update_mute_board_settings")]
-    public List<BoardMuteSettings>? UpdateMuteBoardSettings { get; init; }
 
     [JsonPropertyName("create_timeline_item")]
     public TimelineItem? CreateTimelineItem { get; init; }
@@ -301,6 +289,18 @@ public sealed partial class Mutation
     /// </summary>
     [JsonPropertyName("remove_ai_from_column")]
     public AiColumnRemoveResult? RemoveAiFromColumn { get; init; }
+
+    /// <summary>
+    /// Connect an existing project to a portfolio. When a callback_url is provided the mutation returns immediately with a process_id, and the result is POSTed to that URL once the operation completes. The callback payload is: { is_success: boolean, process_id: string, portfolio_item_id?: string }.
+    /// </summary>
+    [JsonPropertyName("connect_project_to_portfolio")]
+    public ConnectProjectResult? ConnectProjectToPortfolio { get; init; }
+
+    /// <summary>
+    /// Create a new portfolio. When a callback_url is provided the mutation returns immediately with a process_id, and the portfolio_id is POSTed to that URL once the portfolio is actually created. The callback payload is: { is_success: boolean, process_id: string, portfolio_id?: number }.
+    /// </summary>
+    [JsonPropertyName("create_portfolio")]
+    public CreatePortfolioResult? CreatePortfolio { get; init; }
 
     /// <summary>
     /// Enroll multiple items to a single sequence. Maximum 50 items per request.
@@ -813,6 +813,12 @@ public sealed partial class Mutation
     public ResponseForm? SetFormPassword { get; init; }
 
     /// <summary>
+    /// Execute an integration block with the provided field values
+    /// </summary>
+    [JsonPropertyName("execute_integration_block")]
+    public IntegrationExecutionResult? ExecuteIntegrationBlock { get; init; }
+
+    /// <summary>
     /// Assigns members to a department.
     /// </summary>
     [JsonPropertyName("assign_department_members")]
@@ -949,12 +955,6 @@ public sealed partial class Mutation
     /// </summary>
     [JsonPropertyName("submit_api_feedback")]
     public SubmitApiFeedbackResult? SubmitApiFeedback { get; init; }
-
-    /// <summary>
-    /// Execute an integration block with the provided field values
-    /// </summary>
-    [JsonPropertyName("execute_integration_block")]
-    public IntegrationExecutionResult? ExecuteIntegrationBlock { get; init; }
 
     /// <summary>
     /// Add a file to a column value.

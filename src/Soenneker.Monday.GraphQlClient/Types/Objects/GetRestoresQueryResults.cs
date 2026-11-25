@@ -28,6 +28,12 @@ public sealed partial class GetRestoresQueryResults
     public string EntityId { get; init; } = null!;
 
     /// <summary>
+    /// The entity id of the parent entity this restore's entity was discovered under as a child. Null for the requested entity, its ancestors, and any entity whose parent was not known when the restore was created.
+    /// </summary>
+    [JsonPropertyName("parent_entity_id")]
+    public string? ParentEntityId { get; init; }
+
+    /// <summary>
     /// The unique identifier of the migration job.
     /// </summary>
     [JsonPropertyName("migrationJobId")]

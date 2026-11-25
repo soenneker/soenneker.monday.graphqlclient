@@ -86,12 +86,6 @@ public sealed partial class Query
     [JsonPropertyName("replies")]
     public List<Reply>? Replies { get; init; }
 
-    /// <summary>
-    /// Get validations configuration for a board
-    /// </summary>
-    [JsonPropertyName("validations")]
-    public Validations? Validations { get; init; }
-
     [JsonPropertyName("marketplace_app_discounts")]
     public List<MarketplaceAppDiscount> MarketplaceAppDiscounts { get; init; } = [];
 
@@ -112,6 +106,12 @@ public sealed partial class Query
     /// </summary>
     [JsonPropertyName("mute_board_settings")]
     public List<BoardMuteSettings>? MuteBoardSettings { get; init; }
+
+    /// <summary>
+    /// Get validations configuration for a board
+    /// </summary>
+    [JsonPropertyName("validations")]
+    public Validations? Validations { get; init; }
 
     [JsonPropertyName("custom_activity")]
     public List<CustomActivity>? CustomActivity { get; init; }
@@ -349,6 +349,12 @@ public sealed partial class Query
     public ExportJobStatusInfo? ExportJobStatus { get; init; }
 
     /// <summary>
+    /// Search knowledge base snippets.
+    /// </summary>
+    [JsonPropertyName("knowledge_base_search")]
+    public KnowledgeBaseAnswer? KnowledgeBaseSearch { get; init; }
+
+    /// <summary>
     /// Returns all available widget schemas for documentation and validation purposes
     /// </summary>
     [JsonPropertyName("all_widgets_schema")]
@@ -485,12 +491,6 @@ public sealed partial class Query
     /// </summary>
     [JsonPropertyName("form")]
     public ResponseForm? Form { get; init; }
-
-    /// <summary>
-    /// Search knowledge base snippets.
-    /// </summary>
-    [JsonPropertyName("knowledge_base_search")]
-    public KnowledgeBaseAnswer? KnowledgeBaseSearch { get; init; }
 
     /// <summary>
     /// Get account departments
