@@ -30,6 +30,24 @@ public sealed partial class VibeApp
     public VibeAppStatus? Status { get; init; }
 
     /// <summary>
+    /// Whether the app is busy: its status is not effectively idle after the stuck-status release
+    /// </summary>
+    [JsonPropertyName("is_busy")]
+    public bool IsBusy { get; init; }
+
+    /// <summary>
+    /// Link to the app in the Vibe editor, or null when the account slug is unknown
+    /// </summary>
+    [JsonPropertyName("editor_link")]
+    public string? EditorLink { get; init; }
+
+    /// <summary>
+    /// Whether the caller may read the app content (chat messages, code versions, code files). False for editors without board view, whose content fields return blank.
+    /// </summary>
+    [JsonPropertyName("can_read_content")]
+    public bool CanReadContent { get; init; }
+
+    /// <summary>
     /// Whether the current version returned to the user is preview of a draft or live version
     /// </summary>
     [JsonPropertyName("is_preview_mode")]
@@ -102,10 +120,16 @@ public sealed partial class VibeApp
     public VibeAppConfig Config { get; init; } = null!;
 
     /// <summary>
-    /// Whether the "monday vibe" badge can be hidden on the published app. Only apps served by Cloudflare Workers for Platforms support it, on accounts with the top-tier (Growth and above) Vibe apps package. Reads the app's code versions and the account's license, so request it for a single app, not in a list.
+    /// Whether the "monday vibe" badge can be hidden on the published app: true only when watermark_availability is AVAILABLE. Reads the app's code versions and the account's license, so request it for a single app, not in a list.
     /// </summary>
     [JsonPropertyName("can_hide_watermark")]
     public bool? CanHideWatermark { get; init; }
+
+    /// <summary>
+    /// Whether the "Vibe label" setting is hidden, shown disabled (the app needs a new version to move to Cloudflare), or enabled. Reads the app's code versions and the account's license, so request it for a single app, not in a list.
+    /// </summary>
+    [JsonPropertyName("watermark_availability")]
+    public VibeWatermarkAvailability WatermarkAvailability { get; init; }
 
     /// <summary>
     /// The date when the vibe app was published
@@ -178,6 +202,18 @@ public sealed partial class VibeApp
     /// </summary>
     [JsonPropertyName("live_code_version")]
     public VibeCodeVersion? LiveCodeVersion { get; init; }
+
+    /// <summary>
+    /// A code version selected for reading: by version_id (wins when both are given; unknown id errors with CODE_VERSION_NOT_FOUND), else the latest in version_status, else the current version. Null when no version matches or the caller cannot read content.
+    /// </summary>
+    [JsonPropertyName("code_version_for_read")]
+    public VibeCodeVersion? CodeVersionForRead { get; init; }
+
+    /// <summary>
+    /// Version history as the MCP tools list it: newest created first, including versions without a version number, capped at limit.
+    /// </summary>
+    [JsonPropertyName("mcp_code_versions")]
+    public List<VibeCodeVersion> McpCodeVersions { get; init; } = [];
 
     /// <summary>
     /// Paginated display-eligible version history for the linear version history panel. Always applies history eligibility on the server (checkpoint, INTERRUPTED, current, and LIVE).

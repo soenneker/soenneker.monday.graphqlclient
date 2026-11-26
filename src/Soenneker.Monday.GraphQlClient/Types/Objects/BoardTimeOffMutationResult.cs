@@ -11,7 +11,7 @@ namespace Soenneker.Monday.GraphQlClient;
 public sealed partial class BoardTimeOffMutationResult
 {
     /// <summary>
-    /// Time off calendars assigned to the board after the operation, empty if the operation failed
+    /// Time off calendars assigned to the board after the operation; on BOARD_TIME_OFF_ALREADY_ASSIGNED the calendars currently assigned, empty on any other failure
     /// </summary>
     [JsonPropertyName("time_offs")]
     public List<BoardTimeOff> TimeOffs { get; init; } = [];

@@ -12,6 +12,42 @@ namespace Soenneker.Monday.GraphQlClient;
 public sealed partial class Query
 {
     /// <summary>
+    /// Fetch resources information from the resource directory
+    /// </summary>
+    [JsonPropertyName("get_directory_resources")]
+    public DirectoryResourcesResponse? GetDirectoryResources { get; init; }
+
+    /// <summary>
+    /// Returns active work schedules for the caller's account
+    /// </summary>
+    [JsonPropertyName("work_schedules")]
+    public WorkSchedulePage? WorkSchedules { get; init; }
+
+    /// <summary>
+    /// Returns active time off schedules for the caller's account
+    /// </summary>
+    [JsonPropertyName("time_offs")]
+    public TimesOffPage? TimeOffs { get; init; }
+
+    /// <summary>
+    /// Returns resources availability: work schedule and time offs schedule for users and teams
+    /// </summary>
+    [JsonPropertyName("resources_availability")]
+    public ResourcesAvailability? ResourcesAvailability { get; init; }
+
+    /// <summary>
+    /// Returns the account-level default work schedule and time off schedule
+    /// </summary>
+    [JsonPropertyName("account_availability_defaults")]
+    public AccountAvailabilityDefaults? AccountAvailabilityDefaults { get; init; }
+
+    /// <summary>
+    /// Returns personal PTO collections for the requested users; maximum 100 user IDs per call
+    /// </summary>
+    [JsonPropertyName("user_pto")]
+    public List<UserPto>? UserPto { get; init; }
+
+    /// <summary>
     /// Export the dependency graph for a specific board
     /// </summary>
     [JsonPropertyName("export_graph")]
@@ -58,24 +94,6 @@ public sealed partial class Query
     /// </summary>
     [JsonPropertyName("search")]
     public SearchNamespace Search { get; init; } = null!;
-
-    /// <summary>
-    /// Get an app by ID or slug.
-    /// </summary>
-    [JsonPropertyName("app")]
-    public AppType? App { get; init; }
-
-    /// <summary>
-    /// Query the monday.com apps documentation using AI. Returns an AI-generated answer based on the documentation.
-    /// </summary>
-    [JsonPropertyName("ask_developer_docs")]
-    public AppDocumentationAiResponse? AskDeveloperDocs { get; init; }
-
-    /// <summary>
-    /// Get lifecycle subscriptions for all entity types in a specific app version. If version_id is not provided, resolves the active version (user testing version, live, or latest).
-    /// </summary>
-    [JsonPropertyName("get_app_lifecycle_subscriptions")]
-    public List<LifecycleSubscriptionKind>? GetAppLifecycleSubscriptions { get; init; }
 
     [JsonPropertyName("updates")]
     public List<Update>? Updates { get; init; }
@@ -130,6 +148,54 @@ public sealed partial class Query
     /// </summary>
     [JsonPropertyName("board_automations")]
     public AutomationsPage BoardAutomations { get; init; } = null!;
+
+    /// <summary>
+    /// Returns connections for the authenticated user. Supports filtering, pagination, ordering, and partial-scope options.
+    /// </summary>
+    [JsonPropertyName("connections")]
+    public List<Connection>? Connections { get; init; }
+
+    /// <summary>
+    /// Returns connections that belong to the authenticated user.
+    /// </summary>
+    [JsonPropertyName("user_connections")]
+    public List<Connection>? UserConnections { get; init; }
+
+    /// <summary>
+    /// Returns all connections for the account. Requires admin privileges.
+    /// </summary>
+    [JsonPropertyName("account_connections")]
+    public List<Connection>? AccountConnections { get; init; }
+
+    /// <summary>
+    /// Fetch a single connection by its unique ID.
+    /// </summary>
+    [JsonPropertyName("connection")]
+    public Connection? Connection { get; init; }
+
+    /// <summary>
+    /// Get board IDs that are linked to a specific connection.
+    /// </summary>
+    [JsonPropertyName("connection_board_ids")]
+    public List<string> ConnectionBoardIds { get; init; } = [];
+
+    /// <summary>
+    /// Get an app by ID or slug.
+    /// </summary>
+    [JsonPropertyName("app")]
+    public AppType? App { get; init; }
+
+    /// <summary>
+    /// Query the monday.com apps documentation using AI. Returns an AI-generated answer based on the documentation.
+    /// </summary>
+    [JsonPropertyName("ask_developer_docs")]
+    public AppDocumentationAiResponse? AskDeveloperDocs { get; init; }
+
+    /// <summary>
+    /// Get lifecycle subscriptions for all entity types in a specific app version. If version_id is not provided, resolves the active version (user testing version, live, or latest).
+    /// </summary>
+    [JsonPropertyName("get_app_lifecycle_subscriptions")]
+    public List<LifecycleSubscriptionKind>? GetAppLifecycleSubscriptions { get; init; }
 
     /// <summary>
     /// Retrieves the JSON schema definition for a specific create view type. 
@@ -337,12 +403,6 @@ public sealed partial class Query
     public List<GraphqlHierarchyObjectItem>? Favorites { get; init; }
 
     /// <summary>
-    /// Get a collection of monday dev sprints
-    /// </summary>
-    [JsonPropertyName("sprints")]
-    public List<Sprint>? Sprints { get; init; }
-
-    /// <summary>
     /// Fetch the status of an async board export job. Returns null for unknown job IDs. Poll until status is COMPLETED (use download_url), FAILED (read failure_reason), or CANCELLED. Available to enterprise accounts only; other accounts receive FORBIDDEN_EXCEPTION.
     /// </summary>
     [JsonPropertyName("export_job_status")]
@@ -421,76 +481,16 @@ public sealed partial class Query
     public CampaignsUsage? Usage { get; init; }
 
     /// <summary>
-    /// Fetch resources information from the resource directory
-    /// </summary>
-    [JsonPropertyName("get_directory_resources")]
-    public DirectoryResourcesResponse? GetDirectoryResources { get; init; }
-
-    /// <summary>
-    /// Returns active work schedules for the caller's account
-    /// </summary>
-    [JsonPropertyName("work_schedules")]
-    public WorkSchedulePage? WorkSchedules { get; init; }
-
-    /// <summary>
-    /// Returns active time off schedules for the caller's account
-    /// </summary>
-    [JsonPropertyName("time_offs")]
-    public TimesOffPage? TimeOffs { get; init; }
-
-    /// <summary>
-    /// Returns resources availability: work schedule and time offs schedule for users and teams
-    /// </summary>
-    [JsonPropertyName("resources_availability")]
-    public ResourcesAvailability? ResourcesAvailability { get; init; }
-
-    /// <summary>
-    /// Returns the account-level default work schedule and time off schedule
-    /// </summary>
-    [JsonPropertyName("account_availability_defaults")]
-    public AccountAvailabilityDefaults? AccountAvailabilityDefaults { get; init; }
-
-    /// <summary>
-    /// Returns personal PTO collections for the requested users; maximum 100 user IDs per call
-    /// </summary>
-    [JsonPropertyName("user_pto")]
-    public List<UserPto>? UserPto { get; init; }
-
-    /// <summary>
-    /// Returns connections for the authenticated user. Supports filtering, pagination, ordering, and partial-scope options.
-    /// </summary>
-    [JsonPropertyName("connections")]
-    public List<Connection>? Connections { get; init; }
-
-    /// <summary>
-    /// Returns connections that belong to the authenticated user.
-    /// </summary>
-    [JsonPropertyName("user_connections")]
-    public List<Connection>? UserConnections { get; init; }
-
-    /// <summary>
-    /// Returns all connections for the account. Requires admin privileges.
-    /// </summary>
-    [JsonPropertyName("account_connections")]
-    public List<Connection>? AccountConnections { get; init; }
-
-    /// <summary>
-    /// Fetch a single connection by its unique ID.
-    /// </summary>
-    [JsonPropertyName("connection")]
-    public Connection? Connection { get; init; }
-
-    /// <summary>
-    /// Get board IDs that are linked to a specific connection.
-    /// </summary>
-    [JsonPropertyName("connection_board_ids")]
-    public List<string> ConnectionBoardIds { get; init; } = [];
-
-    /// <summary>
     /// Fetch a form by its token. The returned form includes all the details of the form such as its settings, questions, title, etc. Use this endpoint when you need to retrieve complete form data for display or processing. Requires that the requesting user has read access to the associated board.
     /// </summary>
     [JsonPropertyName("form")]
     public ResponseForm? Form { get; init; }
+
+    /// <summary>
+    /// Get a collection of monday dev sprints
+    /// </summary>
+    [JsonPropertyName("sprints")]
+    public List<Sprint>? Sprints { get; init; }
 
     /// <summary>
     /// Get account departments

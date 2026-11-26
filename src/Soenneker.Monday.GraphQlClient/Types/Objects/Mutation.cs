@@ -12,6 +12,108 @@ namespace Soenneker.Monday.GraphQlClient;
 public sealed partial class Mutation
 {
     /// <summary>
+    /// Update attributes (Job Role, Skills, or Location) for multiple resources in the directory
+    /// </summary>
+    [JsonPropertyName("update_directory_resources_attributes")]
+    public UpdateDirectoryResourceAttributesResponse? UpdateDirectoryResourcesAttributes { get; init; }
+
+    /// <summary>
+    /// Create one or more named work schedules for the account; maximum 100 inputs per call
+    /// </summary>
+    [JsonPropertyName("create_work_schedule")]
+    public List<WorkScheduleResult>? CreateWorkSchedule { get; init; }
+
+    /// <summary>
+    /// Update the name and/or working hours of an existing work schedule
+    /// </summary>
+    [JsonPropertyName("update_work_schedule")]
+    public WorkScheduleResult UpdateWorkSchedule { get; init; } = null!;
+
+    /// <summary>
+    /// Soft-delete one or more work schedules; maximum 100 IDs per call
+    /// </summary>
+    [JsonPropertyName("delete_work_schedule")]
+    public List<WorkScheduleDeleteResult>? DeleteWorkSchedule { get; init; }
+
+    /// <summary>
+    /// Assign a work schedule to multiple users and/or teams. Returns per-resource outcomes split by resource kind, allowing partial success. Pass the account default schedule ID to revert resources to the account default. Maximum 100 user IDs and 100 team IDs per call.
+    /// </summary>
+    [JsonPropertyName("assign_work_schedule")]
+    public AssignWorkScheduleResult? AssignWorkSchedule { get; init; }
+
+    /// <summary>
+    /// Remove explicit work schedule assignments from multiple users and/or teams. Returns per-resource outcomes split by resource kind, allowing partial success. Maximum 100 user IDs and 100 team IDs per call.
+    /// </summary>
+    [JsonPropertyName("unassign_work_schedule")]
+    public AssignWorkScheduleResult? UnassignWorkSchedule { get; init; }
+
+    /// <summary>
+    /// Create one or more named time off schedules for the account; maximum 100 inputs per call
+    /// </summary>
+    [JsonPropertyName("create_time_off")]
+    public List<TimeOffResult>? CreateTimeOff { get; init; }
+
+    /// <summary>
+    /// Update the name of a time off schedule
+    /// </summary>
+    [JsonPropertyName("update_time_off")]
+    public TimeOffResult? UpdateTimeOff { get; init; }
+
+    /// <summary>
+    /// Soft-delete one or more time off schedules; maximum 100 IDs per call
+    /// </summary>
+    [JsonPropertyName("delete_time_off")]
+    public List<TimeOffDeleteResult>? DeleteTimeOff { get; init; }
+
+    /// <summary>
+    /// Assign a time off schedule to multiple users and/or teams. Returns per-resource outcomes split by resource kind, allowing partial success. Pass the account default time off ID to revert resources to the account default. Maximum 100 user IDs and 100 team IDs per call.
+    /// </summary>
+    [JsonPropertyName("assign_time_off")]
+    public AssignTimeOffResult? AssignTimeOff { get; init; }
+
+    /// <summary>
+    /// Remove explicit time off assignments from multiple users and/or teams. Returns per-resource outcomes split by resource kind, allowing partial success. Maximum 100 user IDs and 100 team IDs per call.
+    /// </summary>
+    [JsonPropertyName("unassign_time_off")]
+    public AssignTimeOffResult UnassignTimeOff { get; init; } = null!;
+
+    /// <summary>
+    /// Add one or more non-working date entries to a time off schedule; maximum 100 inputs per call
+    /// </summary>
+    [JsonPropertyName("create_time_off_entry")]
+    public List<TimeOffEntryResult>? CreateTimeOffEntry { get; init; }
+
+    /// <summary>
+    /// Update the name or date range of one or more existing time off entries; maximum 100 inputs per call
+    /// </summary>
+    [JsonPropertyName("update_time_off_entry")]
+    public List<TimeOffEntryResult>? UpdateTimeOffEntry { get; init; }
+
+    /// <summary>
+    /// Soft-delete one or more time off entries; maximum 100 IDs per call
+    /// </summary>
+    [JsonPropertyName("delete_time_off_entry")]
+    public List<TimeOffEntryDeleteResult>? DeleteTimeOffEntry { get; init; }
+
+    /// <summary>
+    /// Create one or more PTO entries for users; maximum 100 inputs per call
+    /// </summary>
+    [JsonPropertyName("create_pto_entry")]
+    public List<TimeOffEntryResult>? CreatePtoEntry { get; init; }
+
+    /// <summary>
+    /// Update the name or date range of existing PTO entries; maximum 100 inputs per call
+    /// </summary>
+    [JsonPropertyName("update_pto_entry")]
+    public List<TimeOffEntryResult>? UpdatePtoEntry { get; init; }
+
+    /// <summary>
+    /// Soft-delete one or more PTO entries; maximum 100 IDs per call
+    /// </summary>
+    [JsonPropertyName("delete_pto_entry")]
+    public List<TimeOffEntryDeleteResult>? DeletePtoEntry { get; init; }
+
+    /// <summary>
     /// Update the dependency column for a specific pulse
     /// </summary>
     [JsonPropertyName("update_dependency_column")]
@@ -52,48 +154,6 @@ public sealed partial class Mutation
     /// </summary>
     [JsonPropertyName("undo_action")]
     public UndoResult? UndoAction { get; init; }
-
-    /// <summary>
-    /// Creates a new app with the specified configuration.
-    /// </summary>
-    [JsonPropertyName("create_app")]
-    public CreateAppResponse? CreateApp { get; init; }
-
-    /// <summary>
-    /// Updates an existing app. If the app latest version is live, a new draft version is automatically created and updated.
-    /// </summary>
-    [JsonPropertyName("update_app")]
-    public AppType? UpdateApp { get; init; }
-
-    /// <summary>
-    /// Update an app feature.
-    /// </summary>
-    [JsonPropertyName("update_app_feature")]
-    public AppFeatureType? UpdateAppFeature { get; init; }
-
-    /// <summary>
-    /// Create a new app feature.
-    /// </summary>
-    [JsonPropertyName("create_app_feature")]
-    public AppFeatureType? CreateAppFeature { get; init; }
-
-    /// <summary>
-    /// Update (or create) lifecycle subscriptions for an entity. This will soft delete all existing subscriptions for this entity_identifier and create new ones.
-    /// </summary>
-    [JsonPropertyName("update_app_lifecycle_subscription")]
-    public List<LifecycleSubscriptionKind>? UpdateAppLifecycleSubscription { get; init; }
-
-    /// <summary>
-    /// Delete all lifecycle subscriptions for an entity. Returns true if deleted successfully or if no subscriptions exist.
-    /// </summary>
-    [JsonPropertyName("delete_app_lifecycle_subscription")]
-    public bool? DeleteAppLifecycleSubscription { get; init; }
-
-    /// <summary>
-    /// Promotes the latest draft app version of an app to live. Promotion is asynchronous — poll the returned version's status field (via the app query) until it transitions to LIVE. Only app collaborators can perform this action.
-    /// </summary>
-    [JsonPropertyName("promote_app")]
-    public DeveloperAppVersion? PromoteApp { get; init; }
 
     [JsonPropertyName("like_update")]
     public Update? LikeUpdate { get; init; }
@@ -187,6 +247,48 @@ public sealed partial class Mutation
     /// </summary>
     [JsonPropertyName("delete_board_automation")]
     public BoardAutomationDeleteResult DeleteBoardAutomation { get; init; } = null!;
+
+    /// <summary>
+    /// Creates a new app with the specified configuration.
+    /// </summary>
+    [JsonPropertyName("create_app")]
+    public CreateAppResponse? CreateApp { get; init; }
+
+    /// <summary>
+    /// Updates an existing app. If the app latest version is live, a new draft version is automatically created and updated.
+    /// </summary>
+    [JsonPropertyName("update_app")]
+    public AppType? UpdateApp { get; init; }
+
+    /// <summary>
+    /// Update an app feature.
+    /// </summary>
+    [JsonPropertyName("update_app_feature")]
+    public AppFeatureType? UpdateAppFeature { get; init; }
+
+    /// <summary>
+    /// Create a new app feature.
+    /// </summary>
+    [JsonPropertyName("create_app_feature")]
+    public AppFeatureType? CreateAppFeature { get; init; }
+
+    /// <summary>
+    /// Update (or create) lifecycle subscriptions for an entity. This will soft delete all existing subscriptions for this entity_identifier and create new ones.
+    /// </summary>
+    [JsonPropertyName("update_app_lifecycle_subscription")]
+    public List<LifecycleSubscriptionKind>? UpdateAppLifecycleSubscription { get; init; }
+
+    /// <summary>
+    /// Delete all lifecycle subscriptions for an entity. Returns true if deleted successfully or if no subscriptions exist.
+    /// </summary>
+    [JsonPropertyName("delete_app_lifecycle_subscription")]
+    public bool? DeleteAppLifecycleSubscription { get; init; }
+
+    /// <summary>
+    /// Promotes the latest draft app version of an app to live. Promotion is asynchronous — poll the returned version's status field (via the app query) until it transitions to LIVE. Only app collaborators can perform this action.
+    /// </summary>
+    [JsonPropertyName("promote_app")]
+    public DeveloperAppVersion? PromoteApp { get; init; }
 
     /// <summary>
     /// Create a new table view
@@ -637,108 +739,6 @@ public sealed partial class Mutation
     /// </summary>
     [JsonPropertyName("run_prompt")]
     public RunPromptResult? RunPrompt { get; init; }
-
-    /// <summary>
-    /// Update attributes (Job Role, Skills, or Location) for multiple resources in the directory
-    /// </summary>
-    [JsonPropertyName("update_directory_resources_attributes")]
-    public UpdateDirectoryResourceAttributesResponse? UpdateDirectoryResourcesAttributes { get; init; }
-
-    /// <summary>
-    /// Create one or more named work schedules for the account; maximum 100 inputs per call
-    /// </summary>
-    [JsonPropertyName("create_work_schedule")]
-    public List<WorkScheduleResult>? CreateWorkSchedule { get; init; }
-
-    /// <summary>
-    /// Update the name and/or working hours of an existing work schedule
-    /// </summary>
-    [JsonPropertyName("update_work_schedule")]
-    public WorkScheduleResult UpdateWorkSchedule { get; init; } = null!;
-
-    /// <summary>
-    /// Soft-delete one or more work schedules; maximum 100 IDs per call
-    /// </summary>
-    [JsonPropertyName("delete_work_schedule")]
-    public List<WorkScheduleDeleteResult>? DeleteWorkSchedule { get; init; }
-
-    /// <summary>
-    /// Assign a work schedule to multiple users and/or teams. Returns per-resource outcomes split by resource kind, allowing partial success. Pass the account default schedule ID to revert resources to the account default. Maximum 100 user IDs and 100 team IDs per call.
-    /// </summary>
-    [JsonPropertyName("assign_work_schedule")]
-    public AssignWorkScheduleResult? AssignWorkSchedule { get; init; }
-
-    /// <summary>
-    /// Remove explicit work schedule assignments from multiple users and/or teams. Returns per-resource outcomes split by resource kind, allowing partial success. Maximum 100 user IDs and 100 team IDs per call.
-    /// </summary>
-    [JsonPropertyName("unassign_work_schedule")]
-    public AssignWorkScheduleResult? UnassignWorkSchedule { get; init; }
-
-    /// <summary>
-    /// Create one or more named time off schedules for the account; maximum 100 inputs per call
-    /// </summary>
-    [JsonPropertyName("create_time_off")]
-    public List<TimeOffResult>? CreateTimeOff { get; init; }
-
-    /// <summary>
-    /// Update the name of a time off schedule
-    /// </summary>
-    [JsonPropertyName("update_time_off")]
-    public TimeOffResult? UpdateTimeOff { get; init; }
-
-    /// <summary>
-    /// Soft-delete one or more time off schedules; maximum 100 IDs per call
-    /// </summary>
-    [JsonPropertyName("delete_time_off")]
-    public List<TimeOffDeleteResult>? DeleteTimeOff { get; init; }
-
-    /// <summary>
-    /// Assign a time off schedule to multiple users and/or teams. Returns per-resource outcomes split by resource kind, allowing partial success. Pass the account default time off ID to revert resources to the account default. Maximum 100 user IDs and 100 team IDs per call.
-    /// </summary>
-    [JsonPropertyName("assign_time_off")]
-    public AssignTimeOffResult? AssignTimeOff { get; init; }
-
-    /// <summary>
-    /// Remove explicit time off assignments from multiple users and/or teams. Returns per-resource outcomes split by resource kind, allowing partial success. Maximum 100 user IDs and 100 team IDs per call.
-    /// </summary>
-    [JsonPropertyName("unassign_time_off")]
-    public AssignTimeOffResult UnassignTimeOff { get; init; } = null!;
-
-    /// <summary>
-    /// Add one or more non-working date entries to a time off schedule; maximum 100 inputs per call
-    /// </summary>
-    [JsonPropertyName("create_time_off_entry")]
-    public List<TimeOffEntryResult>? CreateTimeOffEntry { get; init; }
-
-    /// <summary>
-    /// Update the name or date range of one or more existing time off entries; maximum 100 inputs per call
-    /// </summary>
-    [JsonPropertyName("update_time_off_entry")]
-    public List<TimeOffEntryResult>? UpdateTimeOffEntry { get; init; }
-
-    /// <summary>
-    /// Soft-delete one or more time off entries; maximum 100 IDs per call
-    /// </summary>
-    [JsonPropertyName("delete_time_off_entry")]
-    public List<TimeOffEntryDeleteResult>? DeleteTimeOffEntry { get; init; }
-
-    /// <summary>
-    /// Create one or more PTO entries for users; maximum 100 inputs per call
-    /// </summary>
-    [JsonPropertyName("create_pto_entry")]
-    public List<TimeOffEntryResult>? CreatePtoEntry { get; init; }
-
-    /// <summary>
-    /// Update the name or date range of existing PTO entries; maximum 100 inputs per call
-    /// </summary>
-    [JsonPropertyName("update_pto_entry")]
-    public List<TimeOffEntryResult>? UpdatePtoEntry { get; init; }
-
-    /// <summary>
-    /// Soft-delete one or more PTO entries; maximum 100 IDs per call
-    /// </summary>
-    [JsonPropertyName("delete_pto_entry")]
-    public List<TimeOffEntryDeleteResult>? DeletePtoEntry { get; init; }
 
     /// <summary>
     /// Update form properties including title, description, or question order.
