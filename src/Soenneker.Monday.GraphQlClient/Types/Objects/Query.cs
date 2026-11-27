@@ -180,24 +180,6 @@ public sealed partial class Query
     public List<string> ConnectionBoardIds { get; init; } = [];
 
     /// <summary>
-    /// Get an app by ID or slug.
-    /// </summary>
-    [JsonPropertyName("app")]
-    public AppType? App { get; init; }
-
-    /// <summary>
-    /// Query the monday.com apps documentation using AI. Returns an AI-generated answer based on the documentation.
-    /// </summary>
-    [JsonPropertyName("ask_developer_docs")]
-    public AppDocumentationAiResponse? AskDeveloperDocs { get; init; }
-
-    /// <summary>
-    /// Get lifecycle subscriptions for all entity types in a specific app version. If version_id is not provided, resolves the active version (user testing version, live, or latest).
-    /// </summary>
-    [JsonPropertyName("get_app_lifecycle_subscriptions")]
-    public List<LifecycleSubscriptionKind>? GetAppLifecycleSubscriptions { get; init; }
-
-    /// <summary>
     /// Retrieves the JSON schema definition for a specific create view type. 
     ///   Use this query before calling create_view mutation to understand the structure and validation rules for the settings parameter. 
     ///   The schema defines what properties are available when creating views of a specific type.
@@ -407,6 +389,24 @@ public sealed partial class Query
     /// </summary>
     [JsonPropertyName("export_job_status")]
     public ExportJobStatusInfo? ExportJobStatus { get; init; }
+
+    /// <summary>
+    /// Get an app by ID or slug.
+    /// </summary>
+    [JsonPropertyName("app")]
+    public AppType? App { get; init; }
+
+    /// <summary>
+    /// Query the monday.com apps documentation using AI. Returns an AI-generated answer based on the documentation.
+    /// </summary>
+    [JsonPropertyName("ask_developer_docs")]
+    public AppDocumentationAiResponse? AskDeveloperDocs { get; init; }
+
+    /// <summary>
+    /// Get lifecycle subscriptions for all entity types in a specific app version. If version_id is not provided, resolves the active version (user testing version, live, or latest).
+    /// </summary>
+    [JsonPropertyName("get_app_lifecycle_subscriptions")]
+    public List<LifecycleSubscriptionKind>? GetAppLifecycleSubscriptions { get; init; }
 
     /// <summary>
     /// Search knowledge base snippets.

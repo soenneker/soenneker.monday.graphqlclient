@@ -1080,34 +1080,6 @@ type Mutation {
   """
   delete_board_automation(id: ID!, board_id: ID!): BoardAutomationDeleteResult!
   """
-  Creates a new app with the specified configuration.
-  """
-  create_app(input: CreateAppInput!): CreateAppResponse
-  """
-  Updates an existing app. If the app latest version is live, a new draft version is automatically created and updated.
-  """
-  update_app(id: ID!, input: UpdateAppInput!): AppType
-  """
-  Update an app feature.
-  """
-  update_app_feature(id: ID!, input: UpdateAppFeatureInput!): AppFeatureType
-  """
-  Create a new app feature.
-  """
-  create_app_feature(name: String, slug: String!, app_id: ID!, app_version_id: ID, type: AppFeatureTypeE!, data: JSON, deployment: AppFeatureReleaseInput): AppFeatureType
-  """
-  Update (or create) lifecycle subscriptions for an entity. This will soft delete all existing subscriptions for this entity_identifier and create new ones.
-  """
-  update_app_lifecycle_subscription(entity_identifier: ID!, entity_type: String!, input: UpdateLifecycleSubscriptionsInput!): [LifecycleSubscriptionKind!]
-  """
-  Delete all lifecycle subscriptions for an entity. Returns true if deleted successfully or if no subscriptions exist.
-  """
-  delete_app_lifecycle_subscription(entity_identifier: ID!, entity_type: String!): Boolean
-  """
-  Promotes the latest draft app version of an app to live. Promotion is asynchronous — poll the returned version's status field (via the app query) until it transitions to LIVE. Only app collaborators can perform this action.
-  """
-  promote_app(app_id: ID!, app_version_id: ID): DeveloperAppVersion
-  """
   Create a new table view
   """
   create_view_table(board_id: ID!, name: String, context: ViewContext = BOARD, filter_user_id: ID, filter_team_id: ID, filter: ItemsQueryGroup, sort: [ItemsQueryOrderBy!], tags: [String!], conditional_formatting_settings: [ConditionalFormattingConditionInput!], settings: TableViewSettingsInput): BoardView
@@ -1383,6 +1355,34 @@ type Mutation {
   Export a board. Returns ExportFile (sync) or ExportAsyncJob (async) based on board size and server conditions. The server chooses which branch to return; the choice is not part of the contract and may be retuned without notice. Callers MUST handle both branches. Sync: use download_url directly. Async: poll export_job_status until COMPLETED, FAILED, or CANCELLED. The exported file is always CSV. Available to enterprise accounts only; other accounts receive FORBIDDEN_EXCEPTION.
   """
   create_board_export(board_id: ID!, export_options: CreateBoardExportOptionsInput, time_zone: String): ExportResult
+  """
+  Creates a new app with the specified configuration.
+  """
+  create_app(input: CreateAppInput!): CreateAppResponse
+  """
+  Updates an existing app. If the app latest version is live, a new draft version is automatically created and updated.
+  """
+  update_app(id: ID!, input: UpdateAppInput!): AppType
+  """
+  Update an app feature.
+  """
+  update_app_feature(id: ID!, input: UpdateAppFeatureInput!): AppFeatureType
+  """
+  Create a new app feature.
+  """
+  create_app_feature(name: String, slug: String!, app_id: ID!, app_version_id: ID, type: AppFeatureTypeE!, data: JSON, deployment: AppFeatureReleaseInput): AppFeatureType
+  """
+  Update (or create) lifecycle subscriptions for an entity. This will soft delete all existing subscriptions for this entity_identifier and create new ones.
+  """
+  update_app_lifecycle_subscription(entity_identifier: ID!, entity_type: String!, input: UpdateLifecycleSubscriptionsInput!): [LifecycleSubscriptionKind!]
+  """
+  Delete all lifecycle subscriptions for an entity. Returns true if deleted successfully or if no subscriptions exist.
+  """
+  delete_app_lifecycle_subscription(entity_identifier: ID!, entity_type: String!): Boolean
+  """
+  Promotes the latest draft app version of an app to live. Promotion is asynchronous — poll the returned version's status field (via the app query) until it transitions to LIVE. Only app collaborators can perform this action.
+  """
+  promote_app(app_id: ID!, app_version_id: ID): DeveloperAppVersion
   """
   Create a new widget.
   """
@@ -1975,18 +1975,6 @@ type Query {
   """
   connection_board_ids(connection_id: ID!): [ID!]!
   """
-  Get an app by ID or slug.
-  """
-  app(id: ID!): AppType
-  """
-  Query the monday.com apps documentation using AI. Returns an AI-generated answer based on the documentation.
-  """
-  ask_developer_docs(query: String!, retrieval_only: Boolean = false): AppDocumentationAiResponse
-  """
-  Get lifecycle subscriptions for all entity types in a specific app version. If version_id is not provided, resolves the active version (user testing version, live, or latest).
-  """
-  get_app_lifecycle_subscriptions(app_id: ID!, version_id: ID): [LifecycleSubscriptionKind!]
-  """
   Retrieves the JSON schema definition for a specific create view type. 
     Use this query before calling create_view mutation to understand the structure and validation rules for the settings parameter. 
     The schema defines what properties are available when creating views of a specific type.
@@ -2145,6 +2133,18 @@ type Query {
   Fetch the status of an async board export job. Returns null for unknown job IDs. Poll until status is COMPLETED (use download_url), FAILED (read failure_reason), or CANCELLED. Available to enterprise accounts only; other accounts receive FORBIDDEN_EXCEPTION.
   """
   export_job_status(job_id: ID!): ExportJobStatusInfo
+  """
+  Get an app by ID or slug.
+  """
+  app(id: ID!): AppType
+  """
+  Query the monday.com apps documentation using AI. Returns an AI-generated answer based on the documentation.
+  """
+  ask_developer_docs(query: String!, retrieval_only: Boolean = false): AppDocumentationAiResponse
+  """
+  Get lifecycle subscriptions for all entity types in a specific app version. If version_id is not provided, resolves the active version (user testing version, live, or latest).
+  """
+  get_app_lifecycle_subscriptions(app_id: ID!, version_id: ID): [LifecycleSubscriptionKind!]
   """
   Search knowledge base snippets.
   """
@@ -10924,852 +10924,6 @@ enum WorkflowCutoffNode {
 }
 
 """
-Response object for app deletion operations
-"""
-type AppDeletionResponse {
-  """
-  Whether the deletion was successful
-  """
-  success: Boolean
-  """
-  Deletion result message
-  """
-  message: String
-}
-
-"""
-Response from querying the apps documentation AI.
-"""
-type AppDocumentationAiResponse {
-  """
-  Unique identifier for this query response.
-  """
-  id: ID
-  """
-  The original question that was asked.
-  """
-  question: String
-  """
-  The AI-generated answer based on the documentation.
-  """
-  answer: String!
-  """
-  The conversation ID for follow-up queries.
-  """
-  conversation_id: ID
-}
-
-"""
-Represents a relation between two app features in an app version.
-"""
-type AppFeatureRelation {
-  """
-  Unique identifier of the app feature relation.
-  """
-  id: ID!
-  """
-  Date when the relation was created.
-  """
-  created_at: Date!
-  """
-  Date when the relation was last updated.
-  """
-  updated_at: Date!
-  """
-  The ID of the source app feature for this relation.
-  """
-  source_id: ID
-  """
-  The reference ID of the target app feature for this relation.
-  """
-  target_reference_id: ID
-  """
-  The name of the app feature relation.
-  """
-  name: String
-  """
-  The type of the app feature relation.
-  """
-  type: AppFeatureRelationKind
-  """
-  Additional metadata for this app feature relation.
-  """
-  data: JSON
-}
-
-"""
-The kind of the app feature relation.
-"""
-enum AppFeatureRelationKind {
-  """
-  Dependency relation between app features.
-  """
-  DEPENDENCY
-  """
-  Hosting relation between app features.
-  """
-  HOSTING
-}
-
-"""
-Input for app feature release data.
-"""
-input AppFeatureReleaseDataInput {
-  """
-  The URL for the release.
-  """
-  url: String
-}
-
-"""
-Input for updating an app feature release.
-"""
-input AppFeatureReleaseInput {
-  """
-  The hosting type for the release. The app release category will be automatically determined based on this value.
-  """
-  kind: AppFeatureReleaseKind
-  """
-  The data of the release.
-  """
-  data: AppFeatureReleaseDataInput
-}
-
-"""
-The hosting type for the app feature release
-"""
-enum AppFeatureReleaseKind {
-  """
-  Server-side application hosted on monday code infrastructure
-  """
-  SERVER_SIDE_CODE
-  """
-  Client-side application deployed via monday.com CLI
-  """
-  CLIENT_SIDE_CODE
-  """
-  Externally hosted application loaded via iframe
-  """
-  EXTERNAL_HOSTING
-}
-
-type AppFeatureType {
-  id: ID!
-  created_at: Date
-  updated_at: Date
-  """
-  The name of the app feature
-  """
-  name: String
-  """
-  The app feature app id
-  """
-  app_id: ID
-  """
-  The reference ID of the app feature
-  """
-  reference_id: ID
-  """
-  The type of the app feature
-  """
-  type: String
-  """
-  The data of the app feature. Icon/logo fields (iconUrl, logoUrl, etc., including nested headerConfig.*.iconUrl) must be HTTPS URLs or Vibe icon names.
-  """
-  data: JSON
-  """
-  The deployment information for the app feature
-  """
-  deployment: JSON
-}
-
-"""
-The type of the app feature.
-"""
-enum AppFeatureTypeE {
-  """
-  OAUTH
-  """
-  OAUTH
-  """
-  BOARD_VIEW
-  """
-  BOARD_VIEW
-  """
-  INTEGRATION
-  """
-  INTEGRATION
-  """
-  SOLUTION
-  """
-  SOLUTION
-  """
-  ITEM_VIEW
-  """
-  ITEM_VIEW
-  """
-  DASHBOARD_WIDGET
-  """
-  DASHBOARD_WIDGET
-  """
-  ACCOUNT_SETTINGS_VIEW
-  """
-  ACCOUNT_SETTINGS_VIEW
-  """
-  DOC_ACTIONS
-  """
-  DOC_ACTIONS
-  """
-  OBJECT
-  """
-  OBJECT
-  """
-  WORKSPACE_VIEW
-  """
-  WORKSPACE_VIEW
-  """
-  AI
-  """
-  AI
-  """
-  AI_BOARD_MAIN_MENU_HEADER
-  """
-  AI_BOARD_MAIN_MENU_HEADER
-  """
-  AI_ITEM_UPDATE_ACTIONS
-  """
-  AI_ITEM_UPDATE_ACTIONS
-  """
-  AI_DOC_SLASH_COMMAND
-  """
-  AI_DOC_SLASH_COMMAND
-  """
-  AI_DOC_CONTEXTUAL_MENU
-  """
-  AI_DOC_CONTEXTUAL_MENU
-  """
-  AI_DOC_QUICK_START
-  """
-  AI_DOC_QUICK_START
-  """
-  AI_DOC_TOP_BAR
-  """
-  AI_DOC_TOP_BAR
-  """
-  COLUMN_TEMPLATE
-  """
-  COLUMN_TEMPLATE
-  """
-  AI_IC_ASSISTANT_HELP_CENTER
-  """
-  AI_IC_ASSISTANT_HELP_CENTER
-  """
-  APP_WIZARD
-  """
-  APP_WIZARD
-  """
-  GROUP_MENU_ACTION
-  """
-  GROUP_MENU_ACTION
-  """
-  ITEM_MENU_ACTION
-  """
-  ITEM_MENU_ACTION
-  """
-  NOTIFICATION_KIND
-  """
-  NOTIFICATION_KIND
-  """
-  NOTIFICATION_SETTING_KIND
-  """
-  NOTIFICATION_SETTING_KIND
-  """
-  BLOCK
-  """
-  BLOCK
-  """
-  ITEM_BATCH_ACTION
-  """
-  ITEM_BATCH_ACTION
-  """
-  AI_FORMULA
-  """
-  AI_FORMULA
-  """
-  AI_ITEM_EMAILS_AND_ACTIVITIES_ACTIONS
-  """
-  AI_ITEM_EMAILS_AND_ACTIVITIES_ACTIONS
-  """
-  AI_EMAILS_AND_ACTIVITIES_HEADER_ACTIONS
-  """
-  AI_EMAILS_AND_ACTIVITIES_HEADER_ACTIONS
-  """
-  FIELD_TYPE
-  """
-  FIELD_TYPE
-  """
-  PRODUCT
-  """
-  PRODUCT
-  """
-  PRODUCT_VIEW
-  """
-  PRODUCT_VIEW
-  """
-  BOARD_COLUMN_ACTION
-  """
-  BOARD_COLUMN_ACTION
-  """
-  BOARD_COLUMN_EXTENSION
-  """
-  BOARD_COLUMN_EXTENSION
-  """
-  PACKAGED_BLOCK
-  """
-  PACKAGED_BLOCK
-  """
-  CREDENTIALS
-  """
-  CREDENTIALS
-  """
-  TOPBAR
-  """
-  TOPBAR
-  """
-  WORKFLOW_TEMPLATE
-  """
-  WORKFLOW_TEMPLATE
-  """
-  COLUMN
-  """
-  COLUMN
-  """
-  SUB_WORKFLOW
-  """
-  SUB_WORKFLOW
-  """
-  BOARD_HEADER_ACTION
-  """
-  BOARD_HEADER_ACTION
-  """
-  DIALOG
-  """
-  DIALOG
-  """
-  DATA_ENTITY
-  """
-  DATA_ENTITY
-  """
-  SYNCABLE_RESOURCE
-  """
-  SYNCABLE_RESOURCE
-  """
-  AI_AGENT
-  """
-  AI_AGENT
-  """
-  SURFACE_VIEW
-  """
-  SURFACE_VIEW
-  """
-  GROWTH_CONFIG
-  """
-  GROWTH_CONFIG
-  """
-  MODAL
-  """
-  MODAL
-  """
-  ADMIN_VIEW
-  """
-  ADMIN_VIEW
-  """
-  DIGITAL_WORKER
-  """
-  DIGITAL_WORKER
-  """
-  AI_AGENT_SKILL
-  """
-  AI_AGENT_SKILL
-  """
-  SKILL
-  """
-  SKILL
-  """
-  MCP_SERVER
-  """
-  MCP_SERVER
-  """
-  VIBE_OBJECT
-  """
-  VIBE_OBJECT
-  """
-  VIBE_ITEM_VIEW
-  """
-  VIBE_ITEM_VIEW
-  """
-  AI_PLATFORM_AGENT
-  """
-  AI_PLATFORM_AGENT
-}
-
-"""
-The visibility type of an app
-"""
-enum AppKind {
-  """
-  App is private and only visible to the account that created it
-  """
-  PRIVATE
-  """
-  App is public and can be shared and installed by other accounts
-  """
-  PUBLIC
-}
-
-"""
-Permitted OAuth scopes for apps
-"""
-enum AppPermission {
-  """
-  Permission scope: me:read
-  """
-  ME_READ
-  """
-  Permission scope: boards:read
-  """
-  BOARDS_READ
-  """
-  Permission scope: boards:write
-  """
-  BOARDS_WRITE
-  """
-  Permission scope: workspaces:read
-  """
-  WORKSPACES_READ
-  """
-  Permission scope: workspaces:write
-  """
-  WORKSPACES_WRITE
-  """
-  Permission scope: users:read
-  """
-  USERS_READ
-  """
-  Permission scope: users:write
-  """
-  USERS_WRITE
-  """
-  Permission scope: account:read
-  """
-  ACCOUNT_READ
-  """
-  Permission scope: updates:read
-  """
-  UPDATES_READ
-  """
-  Permission scope: updates:write
-  """
-  UPDATES_WRITE
-  """
-  Permission scope: tags:read
-  """
-  TAGS_READ
-  """
-  Permission scope: assets:read
-  """
-  ASSETS_READ
-  """
-  Permission scope: teams:read
-  """
-  TEAMS_READ
-  """
-  Permission scope: teams:write
-  """
-  TEAMS_WRITE
-  """
-  Permission scope: departments:read
-  """
-  DEPARTMENTS_READ
-  """
-  Permission scope: departments:write
-  """
-  DEPARTMENTS_WRITE
-  """
-  Permission scope: notifications:write
-  """
-  NOTIFICATIONS_WRITE
-  """
-  Permission scope: webhooks:write
-  """
-  WEBHOOKS_WRITE
-  """
-  Permission scope: webhooks:read
-  """
-  WEBHOOKS_READ
-  """
-  Permission scope: docs:read
-  """
-  DOCS_READ
-  """
-  Permission scope: docs:write
-  """
-  DOCS_WRITE
-}
-
-"""
-The current state of an app based on its version status
-"""
-enum AppStatus {
-  """
-  App is in draft state and not yet published
-  """
-  DRAFT
-  """
-  App has a live published version
-  """
-  LIVE
-}
-
-type AppType {
-  id: ID!
-  created_at: Date
-  updated_at: Date
-  """
-  The app name
-  """
-  name: String
-  """
-  The API app ID
-  """
-  api_app_id: ID
-  """
-  The client ID used to identify the app for OAuth and API access
-  """
-  client_id: String
-  """
-  The app photo URL
-  """
-  photo_url: String
-  """
-  The app photo URL for small size
-  """
-  photo_url_small: String
-  """
-  The app kind
-  """
-  kind: AppKind
-  """
-  All versions of this app with their current status. Use this to poll promotion progress.
-  """
-  versions: [DeveloperAppVersion!]
-  """
-  The app status (i.e. is live?)
-  """
-  status: AppStatus
-  """
-  The latest version type
-  """
-  version_type: String
-  """
-  The description of the app
-  """
-  description: String
-  """
-  The URL-friendly identifier
-  """
-  slug: String
-  """
-  The array of permission scopes
-  """
-  permissions: [String!]
-  """
-  The webhook endpoint URL
-  """
-  webhook_url: String
-  """
-  The user who created the app
-  """
-  created_by: ID
-  """
-  The app account ID
-  """
-  account_id: ID
-  """
-  The app collaborators
-  """
-  collaborators: [User!]
-  """
-  The apps' features
-  """
-  features(live_version_only: Boolean = false, limit: Int = 25, page: Int = 1): [AppFeatureType!]
-}
-
-"""
-The lifecycle status of an app version
-"""
-enum AppVersionStatus {
-  """
-  Version is in development and not yet live
-  """
-  DRAFT
-  """
-  Version is live and available to users
-  """
-  LIVE
-  """
-  Version has been superseded by a newer version
-  """
-  DEPRECATED
-  """
-  Version is in the process of being promoted
-  """
-  PROMOTING
-}
-
-"""
-Input for creating an app feature relation.
-"""
-input CreateAppFeatureRelationInput {
-  """
-  The ID of the source app feature for this relation.
-  """
-  app_feature_id: ID!
-  """
-  The app feature full slug of the target app feature.
-  """
-  target_app_feature_slug: String!
-  """
-  The type of the app feature relation.
-  """
-  type: AppFeatureRelationKind!
-  """
-  The name of the relation.
-  """
-  name: String
-  """
-  Additional metadata for this relation.
-  """
-  data: JSON
-}
-
-"""
-Input for creating an app with its configuration data.
-"""
-input CreateAppInput {
-  """
-  The display name of the app
-  """
-  name: String!
-  """
-  App visibility type
-  """
-  kind: AppKind
-  """
-  Detailed description of the app
-  """
-  description: String
-  """
-  URL-friendly identifier in the format {account_slug}_{app_slug}. Must contain only letters, numbers, dashes, and underscores. Example: "account-slug_my-scheduler"
-  """
-  slug: String
-  """
-  Array of permission scopes
-  """
-  permissions: [AppPermission!]
-  """
-  Webhook endpoint URL
-  """
-  webhook_url: String
-  """
-  Array of user IDs with access
-  """
-  collaborators: [ID!]
-}
-
-"""
-Response object for app creation operations, including app data and API credentials
-"""
-type CreateAppResponse {
-  """
-  The app's ID
-  """
-  id: ID
-  """
-  The app's API app ID
-  """
-  api_app_id: ID
-  """
-  The app's client ID
-  """
-  client_id: String
-  """
-  The app's client secret
-  """
-  client_secret: String
-  """
-  The app's signing secret used for webhook signature verification
-  """
-  signing_secret: String
-}
-
-"""
-An app version
-"""
-type DeveloperAppVersion {
-  """
-  The unique identifier of the app version
-  """
-  id: ID
-  """
-  The current lifecycle status of this app version
-  """
-  status: AppVersionStatus
-}
-
-"""
-Input for installing an app on the current account.
-"""
-input InstallAppInput {
-  """
-  The app identifier (numeric ID or slug)
-  """
-  app_identifier: ID!
-  """
-  Optional list of workspace IDs to restrict app access to specific workspaces
-  """
-  permitted_workspaces: [ID!]
-}
-
-"""
-Response object for app installation
-"""
-type InstallAppResponse {
-  """
-  The installed app identifier
-  """
-  app_id: ID
-  """
-  Whether a new install was created (false if app was already installed)
-  """
-  created: Boolean
-}
-
-"""
-Input for a single lifecycle event subscription
-"""
-input LifecycleEventInput {
-  """
-  The lifecycle event type (e.g., "AppFeatureColumn:create")
-  """
-  event_type: String!
-  """
-  The webhook URL for this event (max 2048 characters)
-  """
-  webhook_url: String!
-  """
-  Whether the subscription is synchronous (defaults to false)
-  """
-  is_sync: Boolean
-}
-
-"""
-A lifecycle subscription configuration for an entity
-"""
-type LifecycleSubscriptionKind {
-  """
-  The subscription ID
-  """
-  id: ID
-  """
-  The entity ID (e.g., app feature ID)
-  """
-  entity_id: ID
-  """
-  The type of entity (e.g., "appFeature")
-  """
-  entity_type: String
-  """
-  The lifecycle event type (e.g., "AppFeatureColumn:create")
-  """
-  event_type: String
-  """
-  The webhook URL for notifications
-  """
-  webhook_url: String
-  """
-  Whether the subscription is synchronous
-  """
-  is_sync: Boolean
-  """
-  When the subscription was created
-  """
-  created_at: Date
-  """
-  When the subscription was last updated
-  """
-  updated_at: Date
-}
-
-"""
-Input for updating an app feature with its associated data and release information.
-"""
-input UpdateAppFeatureInput {
-  """
-  The app feature data to update. Structure is dynamic per feature type. Any iconUrl/logoUrl/thumbnailUrl (including nested under headerConfig) must be an HTTPS URL or Vibe icon name.
-  """
-  data: JSON
-  """
-  The deployment data to update. https://developer.monday.com/apps/docs/deploy-your-app
-  """
-  deployment: AppFeatureReleaseInput
-}
-
-"""
-Input for updating an existing app. Creates draft version for live apps.
-"""
-input UpdateAppInput {
-  """
-  The display name of the app
-  """
-  name: String
-  """
-  App visibility type
-  """
-  kind: AppKind
-  """
-  Detailed description of the app
-  """
-  description: String
-  """
-  URL-friendly identifier (only settable if app has no existing slug)
-  """
-  slug: String
-  """
-  Array of permission scopes (replaces existing permissions)
-  """
-  permissions: [AppPermission!]
-  """
-  Webhook endpoint URL
-  """
-  webhook_url: String
-  """
-  Array of user IDs with access (replaces existing collaborators)
-  """
-  collaborators: [ID!]
-}
-
-"""
-Input for updating lifecycle subscriptions for an entity
-"""
-input UpdateLifecycleSubscriptionsInput {
-  """
-  List of lifecycle event configurations (must have unique eventType values)
-  """
-  lifecycle_events: [LifecycleEventInput!]!
-}
-
-"""
 The privacy kind for a board
 """
 enum BoardKindInput {
@@ -19442,6 +18596,852 @@ type ConvertColumnsToAiResult {
   List of column IDs that were added as new AI columns.
   """
   added_column_ids: [ID!]
+}
+
+"""
+Response object for app deletion operations
+"""
+type AppDeletionResponse {
+  """
+  Whether the deletion was successful
+  """
+  success: Boolean
+  """
+  Deletion result message
+  """
+  message: String
+}
+
+"""
+Response from querying the apps documentation AI.
+"""
+type AppDocumentationAiResponse {
+  """
+  Unique identifier for this query response.
+  """
+  id: ID
+  """
+  The original question that was asked.
+  """
+  question: String
+  """
+  The AI-generated answer based on the documentation.
+  """
+  answer: String!
+  """
+  The conversation ID for follow-up queries.
+  """
+  conversation_id: ID
+}
+
+"""
+Represents a relation between two app features in an app version.
+"""
+type AppFeatureRelation {
+  """
+  Unique identifier of the app feature relation.
+  """
+  id: ID!
+  """
+  Date when the relation was created.
+  """
+  created_at: Date!
+  """
+  Date when the relation was last updated.
+  """
+  updated_at: Date!
+  """
+  The ID of the source app feature for this relation.
+  """
+  source_id: ID
+  """
+  The reference ID of the target app feature for this relation.
+  """
+  target_reference_id: ID
+  """
+  The name of the app feature relation.
+  """
+  name: String
+  """
+  The type of the app feature relation.
+  """
+  type: AppFeatureRelationKind
+  """
+  Additional metadata for this app feature relation.
+  """
+  data: JSON
+}
+
+"""
+The kind of the app feature relation.
+"""
+enum AppFeatureRelationKind {
+  """
+  Dependency relation between app features.
+  """
+  DEPENDENCY
+  """
+  Hosting relation between app features.
+  """
+  HOSTING
+}
+
+"""
+Input for app feature release data.
+"""
+input AppFeatureReleaseDataInput {
+  """
+  The URL for the release.
+  """
+  url: String
+}
+
+"""
+Input for updating an app feature release.
+"""
+input AppFeatureReleaseInput {
+  """
+  The hosting type for the release. The app release category will be automatically determined based on this value.
+  """
+  kind: AppFeatureReleaseKind
+  """
+  The data of the release.
+  """
+  data: AppFeatureReleaseDataInput
+}
+
+"""
+The hosting type for the app feature release
+"""
+enum AppFeatureReleaseKind {
+  """
+  Server-side application hosted on monday code infrastructure
+  """
+  SERVER_SIDE_CODE
+  """
+  Client-side application deployed via monday.com CLI
+  """
+  CLIENT_SIDE_CODE
+  """
+  Externally hosted application loaded via iframe
+  """
+  EXTERNAL_HOSTING
+}
+
+type AppFeatureType {
+  id: ID!
+  created_at: Date
+  updated_at: Date
+  """
+  The name of the app feature
+  """
+  name: String
+  """
+  The app feature app id
+  """
+  app_id: ID
+  """
+  The reference ID of the app feature
+  """
+  reference_id: ID
+  """
+  The type of the app feature
+  """
+  type: String
+  """
+  The data of the app feature. Icon/logo fields (iconUrl, logoUrl, etc., including nested headerConfig.*.iconUrl) must be HTTPS URLs or Vibe icon names.
+  """
+  data: JSON
+  """
+  The deployment information for the app feature
+  """
+  deployment: JSON
+}
+
+"""
+The type of the app feature.
+"""
+enum AppFeatureTypeE {
+  """
+  OAUTH
+  """
+  OAUTH
+  """
+  BOARD_VIEW
+  """
+  BOARD_VIEW
+  """
+  INTEGRATION
+  """
+  INTEGRATION
+  """
+  SOLUTION
+  """
+  SOLUTION
+  """
+  ITEM_VIEW
+  """
+  ITEM_VIEW
+  """
+  DASHBOARD_WIDGET
+  """
+  DASHBOARD_WIDGET
+  """
+  ACCOUNT_SETTINGS_VIEW
+  """
+  ACCOUNT_SETTINGS_VIEW
+  """
+  DOC_ACTIONS
+  """
+  DOC_ACTIONS
+  """
+  OBJECT
+  """
+  OBJECT
+  """
+  WORKSPACE_VIEW
+  """
+  WORKSPACE_VIEW
+  """
+  AI
+  """
+  AI
+  """
+  AI_BOARD_MAIN_MENU_HEADER
+  """
+  AI_BOARD_MAIN_MENU_HEADER
+  """
+  AI_ITEM_UPDATE_ACTIONS
+  """
+  AI_ITEM_UPDATE_ACTIONS
+  """
+  AI_DOC_SLASH_COMMAND
+  """
+  AI_DOC_SLASH_COMMAND
+  """
+  AI_DOC_CONTEXTUAL_MENU
+  """
+  AI_DOC_CONTEXTUAL_MENU
+  """
+  AI_DOC_QUICK_START
+  """
+  AI_DOC_QUICK_START
+  """
+  AI_DOC_TOP_BAR
+  """
+  AI_DOC_TOP_BAR
+  """
+  COLUMN_TEMPLATE
+  """
+  COLUMN_TEMPLATE
+  """
+  AI_IC_ASSISTANT_HELP_CENTER
+  """
+  AI_IC_ASSISTANT_HELP_CENTER
+  """
+  APP_WIZARD
+  """
+  APP_WIZARD
+  """
+  GROUP_MENU_ACTION
+  """
+  GROUP_MENU_ACTION
+  """
+  ITEM_MENU_ACTION
+  """
+  ITEM_MENU_ACTION
+  """
+  NOTIFICATION_KIND
+  """
+  NOTIFICATION_KIND
+  """
+  NOTIFICATION_SETTING_KIND
+  """
+  NOTIFICATION_SETTING_KIND
+  """
+  BLOCK
+  """
+  BLOCK
+  """
+  ITEM_BATCH_ACTION
+  """
+  ITEM_BATCH_ACTION
+  """
+  AI_FORMULA
+  """
+  AI_FORMULA
+  """
+  AI_ITEM_EMAILS_AND_ACTIVITIES_ACTIONS
+  """
+  AI_ITEM_EMAILS_AND_ACTIVITIES_ACTIONS
+  """
+  AI_EMAILS_AND_ACTIVITIES_HEADER_ACTIONS
+  """
+  AI_EMAILS_AND_ACTIVITIES_HEADER_ACTIONS
+  """
+  FIELD_TYPE
+  """
+  FIELD_TYPE
+  """
+  PRODUCT
+  """
+  PRODUCT
+  """
+  PRODUCT_VIEW
+  """
+  PRODUCT_VIEW
+  """
+  BOARD_COLUMN_ACTION
+  """
+  BOARD_COLUMN_ACTION
+  """
+  BOARD_COLUMN_EXTENSION
+  """
+  BOARD_COLUMN_EXTENSION
+  """
+  PACKAGED_BLOCK
+  """
+  PACKAGED_BLOCK
+  """
+  CREDENTIALS
+  """
+  CREDENTIALS
+  """
+  TOPBAR
+  """
+  TOPBAR
+  """
+  WORKFLOW_TEMPLATE
+  """
+  WORKFLOW_TEMPLATE
+  """
+  COLUMN
+  """
+  COLUMN
+  """
+  SUB_WORKFLOW
+  """
+  SUB_WORKFLOW
+  """
+  BOARD_HEADER_ACTION
+  """
+  BOARD_HEADER_ACTION
+  """
+  DIALOG
+  """
+  DIALOG
+  """
+  DATA_ENTITY
+  """
+  DATA_ENTITY
+  """
+  SYNCABLE_RESOURCE
+  """
+  SYNCABLE_RESOURCE
+  """
+  AI_AGENT
+  """
+  AI_AGENT
+  """
+  SURFACE_VIEW
+  """
+  SURFACE_VIEW
+  """
+  GROWTH_CONFIG
+  """
+  GROWTH_CONFIG
+  """
+  MODAL
+  """
+  MODAL
+  """
+  ADMIN_VIEW
+  """
+  ADMIN_VIEW
+  """
+  DIGITAL_WORKER
+  """
+  DIGITAL_WORKER
+  """
+  AI_AGENT_SKILL
+  """
+  AI_AGENT_SKILL
+  """
+  SKILL
+  """
+  SKILL
+  """
+  MCP_SERVER
+  """
+  MCP_SERVER
+  """
+  VIBE_OBJECT
+  """
+  VIBE_OBJECT
+  """
+  VIBE_ITEM_VIEW
+  """
+  VIBE_ITEM_VIEW
+  """
+  AI_PLATFORM_AGENT
+  """
+  AI_PLATFORM_AGENT
+}
+
+"""
+The visibility type of an app
+"""
+enum AppKind {
+  """
+  App is private and only visible to the account that created it
+  """
+  PRIVATE
+  """
+  App is public and can be shared and installed by other accounts
+  """
+  PUBLIC
+}
+
+"""
+Permitted OAuth scopes for apps
+"""
+enum AppPermission {
+  """
+  Permission scope: me:read
+  """
+  ME_READ
+  """
+  Permission scope: boards:read
+  """
+  BOARDS_READ
+  """
+  Permission scope: boards:write
+  """
+  BOARDS_WRITE
+  """
+  Permission scope: workspaces:read
+  """
+  WORKSPACES_READ
+  """
+  Permission scope: workspaces:write
+  """
+  WORKSPACES_WRITE
+  """
+  Permission scope: users:read
+  """
+  USERS_READ
+  """
+  Permission scope: users:write
+  """
+  USERS_WRITE
+  """
+  Permission scope: account:read
+  """
+  ACCOUNT_READ
+  """
+  Permission scope: updates:read
+  """
+  UPDATES_READ
+  """
+  Permission scope: updates:write
+  """
+  UPDATES_WRITE
+  """
+  Permission scope: tags:read
+  """
+  TAGS_READ
+  """
+  Permission scope: assets:read
+  """
+  ASSETS_READ
+  """
+  Permission scope: teams:read
+  """
+  TEAMS_READ
+  """
+  Permission scope: teams:write
+  """
+  TEAMS_WRITE
+  """
+  Permission scope: departments:read
+  """
+  DEPARTMENTS_READ
+  """
+  Permission scope: departments:write
+  """
+  DEPARTMENTS_WRITE
+  """
+  Permission scope: notifications:write
+  """
+  NOTIFICATIONS_WRITE
+  """
+  Permission scope: webhooks:write
+  """
+  WEBHOOKS_WRITE
+  """
+  Permission scope: webhooks:read
+  """
+  WEBHOOKS_READ
+  """
+  Permission scope: docs:read
+  """
+  DOCS_READ
+  """
+  Permission scope: docs:write
+  """
+  DOCS_WRITE
+}
+
+"""
+The current state of an app based on its version status
+"""
+enum AppStatus {
+  """
+  App is in draft state and not yet published
+  """
+  DRAFT
+  """
+  App has a live published version
+  """
+  LIVE
+}
+
+type AppType {
+  id: ID!
+  created_at: Date
+  updated_at: Date
+  """
+  The app name
+  """
+  name: String
+  """
+  The API app ID
+  """
+  api_app_id: ID
+  """
+  The client ID used to identify the app for OAuth and API access
+  """
+  client_id: String
+  """
+  The app photo URL
+  """
+  photo_url: String
+  """
+  The app photo URL for small size
+  """
+  photo_url_small: String
+  """
+  The app kind
+  """
+  kind: AppKind
+  """
+  All versions of this app with their current status. Use this to poll promotion progress.
+  """
+  versions: [DeveloperAppVersion!]
+  """
+  The app status (i.e. is live?)
+  """
+  status: AppStatus
+  """
+  The latest version type
+  """
+  version_type: String
+  """
+  The description of the app
+  """
+  description: String
+  """
+  The URL-friendly identifier
+  """
+  slug: String
+  """
+  The array of permission scopes
+  """
+  permissions: [String!]
+  """
+  The webhook endpoint URL
+  """
+  webhook_url: String
+  """
+  The user who created the app
+  """
+  created_by: ID
+  """
+  The app account ID
+  """
+  account_id: ID
+  """
+  The app collaborators
+  """
+  collaborators: [User!]
+  """
+  The apps' features
+  """
+  features(live_version_only: Boolean = false, limit: Int = 25, page: Int = 1): [AppFeatureType!]
+}
+
+"""
+The lifecycle status of an app version
+"""
+enum AppVersionStatus {
+  """
+  Version is in development and not yet live
+  """
+  DRAFT
+  """
+  Version is live and available to users
+  """
+  LIVE
+  """
+  Version has been superseded by a newer version
+  """
+  DEPRECATED
+  """
+  Version is in the process of being promoted
+  """
+  PROMOTING
+}
+
+"""
+Input for creating an app feature relation.
+"""
+input CreateAppFeatureRelationInput {
+  """
+  The ID of the source app feature for this relation.
+  """
+  app_feature_id: ID!
+  """
+  The app feature full slug of the target app feature.
+  """
+  target_app_feature_slug: String!
+  """
+  The type of the app feature relation.
+  """
+  type: AppFeatureRelationKind!
+  """
+  The name of the relation.
+  """
+  name: String
+  """
+  Additional metadata for this relation.
+  """
+  data: JSON
+}
+
+"""
+Input for creating an app with its configuration data.
+"""
+input CreateAppInput {
+  """
+  The display name of the app
+  """
+  name: String!
+  """
+  App visibility type
+  """
+  kind: AppKind
+  """
+  Detailed description of the app
+  """
+  description: String
+  """
+  URL-friendly identifier in the format {account_slug}_{app_slug}. Must contain only letters, numbers, dashes, and underscores. Example: "account-slug_my-scheduler"
+  """
+  slug: String
+  """
+  Array of permission scopes
+  """
+  permissions: [AppPermission!]
+  """
+  Webhook endpoint URL
+  """
+  webhook_url: String
+  """
+  Array of user IDs with access
+  """
+  collaborators: [ID!]
+}
+
+"""
+Response object for app creation operations, including app data and API credentials
+"""
+type CreateAppResponse {
+  """
+  The app's ID
+  """
+  id: ID
+  """
+  The app's API app ID
+  """
+  api_app_id: ID
+  """
+  The app's client ID
+  """
+  client_id: String
+  """
+  The app's client secret
+  """
+  client_secret: String
+  """
+  The app's signing secret used for webhook signature verification
+  """
+  signing_secret: String
+}
+
+"""
+An app version
+"""
+type DeveloperAppVersion {
+  """
+  The unique identifier of the app version
+  """
+  id: ID
+  """
+  The current lifecycle status of this app version
+  """
+  status: AppVersionStatus
+}
+
+"""
+Input for installing an app on the current account.
+"""
+input InstallAppInput {
+  """
+  The app identifier (numeric ID or slug)
+  """
+  app_identifier: ID!
+  """
+  Optional list of workspace IDs to restrict app access to specific workspaces
+  """
+  permitted_workspaces: [ID!]
+}
+
+"""
+Response object for app installation
+"""
+type InstallAppResponse {
+  """
+  The installed app identifier
+  """
+  app_id: ID
+  """
+  Whether a new install was created (false if app was already installed)
+  """
+  created: Boolean
+}
+
+"""
+Input for a single lifecycle event subscription
+"""
+input LifecycleEventInput {
+  """
+  The lifecycle event type (e.g., "AppFeatureColumn:create")
+  """
+  event_type: String!
+  """
+  The webhook URL for this event (max 2048 characters)
+  """
+  webhook_url: String!
+  """
+  Whether the subscription is synchronous (defaults to false)
+  """
+  is_sync: Boolean
+}
+
+"""
+A lifecycle subscription configuration for an entity
+"""
+type LifecycleSubscriptionKind {
+  """
+  The subscription ID
+  """
+  id: ID
+  """
+  The entity ID (e.g., app feature ID)
+  """
+  entity_id: ID
+  """
+  The type of entity (e.g., "appFeature")
+  """
+  entity_type: String
+  """
+  The lifecycle event type (e.g., "AppFeatureColumn:create")
+  """
+  event_type: String
+  """
+  The webhook URL for notifications
+  """
+  webhook_url: String
+  """
+  Whether the subscription is synchronous
+  """
+  is_sync: Boolean
+  """
+  When the subscription was created
+  """
+  created_at: Date
+  """
+  When the subscription was last updated
+  """
+  updated_at: Date
+}
+
+"""
+Input for updating an app feature with its associated data and release information.
+"""
+input UpdateAppFeatureInput {
+  """
+  The app feature data to update. Structure is dynamic per feature type. Any iconUrl/logoUrl/thumbnailUrl (including nested under headerConfig) must be an HTTPS URL or Vibe icon name.
+  """
+  data: JSON
+  """
+  The deployment data to update. https://developer.monday.com/apps/docs/deploy-your-app
+  """
+  deployment: AppFeatureReleaseInput
+}
+
+"""
+Input for updating an existing app. Creates draft version for live apps.
+"""
+input UpdateAppInput {
+  """
+  The display name of the app
+  """
+  name: String
+  """
+  App visibility type
+  """
+  kind: AppKind
+  """
+  Detailed description of the app
+  """
+  description: String
+  """
+  URL-friendly identifier (only settable if app has no existing slug)
+  """
+  slug: String
+  """
+  Array of permission scopes (replaces existing permissions)
+  """
+  permissions: [AppPermission!]
+  """
+  Webhook endpoint URL
+  """
+  webhook_url: String
+  """
+  Array of user IDs with access (replaces existing collaborators)
+  """
+  collaborators: [ID!]
+}
+
+"""
+Input for updating lifecycle subscriptions for an entity
+"""
+input UpdateLifecycleSubscriptionsInput {
+  """
+  List of lifecycle event configurations (must have unique eventType values)
+  """
+  lifecycle_events: [LifecycleEventInput!]!
 }
 
 """
